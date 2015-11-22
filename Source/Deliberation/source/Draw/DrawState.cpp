@@ -7,6 +7,9 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
+namespace deliberation
+{
+
 DrawState::DrawState():
     m_primitive(gl::GL_TRIANGLES),
     m_provokingVertex(gl::GL_FIRST_VERTEX_CONVENTION)
@@ -152,5 +155,7 @@ std::string DrawState::toString() const
         "StencilState: " << m_stencilState.toString() << std::endl;
 
     return stream.str();
+}
+
 }
 

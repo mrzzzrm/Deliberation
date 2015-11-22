@@ -29,6 +29,8 @@ public:
     std::string toString() const;
 
 private:
+    friend class Draw;
+    friend class GLVertexAttributeBinder;
     friend class BufferUploadExecution;
     friend class Context;
 

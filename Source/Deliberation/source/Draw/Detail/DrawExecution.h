@@ -1,13 +1,21 @@
 #pragma once
 
-class DrawCommand;
+namespace deliberation
+{
+
+class Draw;
 class GLStateManager;
+
+namespace detail
+{
+
+class DrawImpl;
 
 class DrawExecution final
 {
 public:
     DrawExecution(GLStateManager & glStateManager,
-                  const DrawCommand & command);
+                  const Draw & draw);
 
     void perform();
 
@@ -29,6 +37,11 @@ private:
 
 private:
     GLStateManager & m_glStateManager;
-    const DrawCommand & m_command;
+    const DrawImpl & m_drawImpl;
 };
+
+}
+
+}
+
 

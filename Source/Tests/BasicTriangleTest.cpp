@@ -2,6 +2,7 @@
 
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
+#include <glbinding/gl/bitfield.h>
 
 #include <globjects/globjects.h>
 
@@ -44,6 +45,31 @@ int main
 
     globjects::init();
 
+    glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
+    glbinding::setAfterCallback([](const glbinding::FunctionCall & call)
+    {
+        glbinding::setCallbackMask(glbinding::CallbackMask::None);
+//        gl::GLenum error;
+//        while((error = gl::glGetError()) != gl::GL_NO_ERROR)
+//        {
+//            std::cout << "GL Error: " << error << std::endl;
+//            std::cout << "  after calling ";
+            std::cout << call.function->name() << "(";
+            for (unsigned i = 0; i < call.parameters.size(); ++i)
+            {
+                std::cout << call.parameters[i]->asString();
+                if (i < call.parameters.size() - 1)
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << ")";
+            std::cout << std::endl;
+//            assert(false);
+//        }
+        glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
+    });
+
     deliberation::Context context;
 
     struct Vertex
@@ -69,15 +95,23 @@ int main
     deliberation::Program program = context.createProgram({"Data/BasicTriangleTest.vert", "Data/BasicTriangleTest.frag"});
 
     deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
-//    draw.addVertexBuffer(buffer);
+    draw.addVertexBuffer(buffer);
+    draw.state().setDepthState(deliberation::DepthState(false, false));
+    draw.state().setCullState(deliberation::CullState::disabled());
+    Assert(draw.isComplete(), draw.toString());
+
 //
 //    deliberation::Clear clear = context.createClear();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        gl::glClearColor(0.2, 0.2f, 0.2f, 0.0f);
+        gl::glClear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+
 //        clear.schedule();
-//        draw.schedule();
+        draw.schedule();
+//       break;
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

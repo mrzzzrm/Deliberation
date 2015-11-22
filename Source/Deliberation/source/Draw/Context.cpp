@@ -7,6 +7,7 @@
 #include <Deliberation/Draw/Buffer.h>
 
 #include "Detail/BufferImpl.h"
+#include "Detail/DrawExecution.h"
 #include "Detail/DrawImpl.h"
 #include "Detail/ProgramImpl.h"
 #include "BufferUploadExecution.h"
@@ -31,28 +32,22 @@ Program Context::createProgram(const std::vector<std::string> & paths)
     return program;
 }
 
-Draw Context::createDraw(const Program & program, gl::GLenum primitive, const std::string & name)
+Draw Context::createDraw(Program & program, gl::GLenum primitive, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
     impl->state.setPrimitive(primitive);
     impl->name = name;
 
-    Draw draw;
-    draw.impl = impl;
-
-    return draw;
+    return Draw(impl);
 }
 
-Draw Context::createDraw(const Program & program, const DrawState & drawState, const std::string & name = std::string());
+Draw Context::createDraw(Program & program, const DrawState & drawState, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
     impl->state = drawState;
     impl->name = name;
 
-    Draw draw;
-    draw.impl = impl;
-
-    return draw;
+    return Draw(impl);
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)
@@ -91,9 +86,51 @@ void Context::scheduleBufferUpload(const BufferUpload & upload)
 //   }
 }
 
+void Context::scheduleDraw(const Draw & draw)
+{
+//    switch(m_mode)
+//    {
+//    case Mode::Immediate:
+        executeDraw(draw);
+//        break;
+//    case Mode::Deferred:
+//        m_drawCommands.push_back(command);
+//        m_commands.push_back(CommandType::Draw);
+//        break;
+//    default:
+//        Fail("");
+//    }
+}
+
 void Context::executeBufferUpload(const BufferUpload & upload)
 {
     BufferUploadExecution(m_glStateManager, upload).perform();
+}
+
+void Context::executeDraw(const Draw & draw)
+{
+//    if (!command.hasOutput())
+//    {
+//        command.setOutput(m_defaultOutput);
+//    }
+
+//    if (!command.state().hasViewport())
+//    {
+//        if (command.output().mode() == DrawOutputConfig::ToMultipleRenderTarget)
+//        {
+//           command.state().setViewport({0, 0, command.output().mrt().width(), command.output().mrt().height()});
+//        }
+//        else
+//        {
+//           command.state().setViewport({0, 0, 640, 480});
+//        }
+//    }
+
+//    DrawVerification verification(command);
+//    Assert(verification.passed(), verification.toString());
+
+    gl::glViewport(0, 0, 640, 480);
+    detail::DrawExecution(m_glStateManager, draw).perform();
 }
 
 };

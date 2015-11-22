@@ -1,8 +1,8 @@
-#include "StencilState.h"
+#include <Deliberation/Draw/StencilState.h>
 
 #include <glbinding/gl/functions.h>
 
-#include "Core/Assert.h"
+#include <Deliberation/Core/Assert.h>
 
 namespace
 {
@@ -37,6 +37,9 @@ unsigned int faceToIndex(gl::GLenum face)
 }
 
 }
+
+namespace deliberation
+{
 
 StencilState::Face::Face() = default;
 
@@ -270,5 +273,7 @@ void StencilState::setDPPass(gl::GLenum dppass, gl::GLenum face)
 std::string StencilState::toString() const
 {
     return "Unimplemented";
+}
+
 }
 

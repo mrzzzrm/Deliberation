@@ -4,7 +4,8 @@
 
 #include <glbinding/gl/types.h>
 
-n
+namespace deliberation
+{
 
 class RasterizerState final
 {
@@ -25,4 +26,6 @@ private:
     gl::GLfloat m_pointSize;
     gl::GLfloat m_lineWidth;
 };
+
+}
 

@@ -4,7 +4,7 @@
 
 #include "GL/GLSLValue.h"
 
-class DrawCommand;
+class Draw;
 
 class UniformHandle
 {
@@ -13,7 +13,7 @@ private:
     void set(const T & value);
 
 private:
-    friend class DrawCommand;
+    friend class Draw;
 
 private:
     UniformHandle(std::shared_ptr<GLSLValue> & value);

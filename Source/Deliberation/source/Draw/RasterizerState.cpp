@@ -1,6 +1,9 @@
-#include "RasterizerState.h"
+#include <Deliberation/Draw/RasterizerState.h>
 
 #include <glbinding/gl/functions.h>
+
+namespace deliberation
+{
 
 RasterizerState::RasterizerState():
     m_pointSize(1.0f),
@@ -40,5 +43,7 @@ void RasterizerState::setLineWidth(gl::GLfloat lineWidth)
 std::string RasterizerState::toString() const
 {
     return "PointSize: " + std::to_string(m_pointSize) + "; LineWidth: " + std::to_string(m_lineWidth);
+}
+
 }
 

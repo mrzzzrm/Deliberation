@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <glbinding/gl/types.h>
+
 namespace deliberation
 {
 
@@ -9,14 +11,19 @@ namespace detail
 {
     class DrawExecution;
     class DrawImpl;
+    struct BufferBinding;
 }
 
+class Buffer;
+class BufferLayoutField;
 class Context;
 class DrawState;
 
 class Draw final
 {
 public:
+    bool isComplete() const;
+
     const std::string & name() const;
 
 //    bool hasOutput() const;
@@ -44,13 +51,25 @@ public:
 
 private:
     friend class Context;
-    friend class DrawExecution;
+    friend class detail::DrawExecution;
     friend class DrawVerification;
 
 private:
     Draw(const std::shared_ptr<detail::DrawImpl> & impl);
 
-    void init();
+    bool isBuild() const;
+
+    void build();
+
+    void verifyVertexBuffer(const Buffer & buffer) const;
+    void verifyInstanceBuffer(const Buffer & buffer) const;
+
+    const BufferLayoutField * bufferField(const std::string & name,
+                                          detail::BufferBinding ** o_binding,
+                                          gl::GLuint * o_divisor,
+                                          unsigned int * o_count) const;
+
+    std::string statusString() const;
 
 private:
     std::shared_ptr<detail::DrawImpl> m_impl;

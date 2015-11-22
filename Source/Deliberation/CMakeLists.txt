@@ -14,6 +14,7 @@ include_directories(
     BEFORE
 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/source
 
     ${GLBINDING_INCLUDE_DIR}
     ${GLOBJECTS_INCLUDE_DIR}
@@ -39,6 +40,10 @@ set(sources
     ${source_path}/Draw/GL/GLStateManager.cpp
     ${source_path}/Draw/GL/GLSLValue.cpp
     ${source_path}/Draw/GL/GLSLValue.h
+    ${source_path}/Draw/GL/GLVertexAttributeBinder.cpp
+    ${source_path}/Draw/GL/GLVertexAttributeBinder.h
+    ${source_path}/Draw/GL/GLVertexAttributeFormat.cpp
+    ${source_path}/Draw/GL/GLVertexAttributeFormat.h
     ${source_path}/Draw/BlendState.cpp
     ${source_path}/Draw/Buffer.cpp
     ${source_path}/Draw/BufferLayout.cpp

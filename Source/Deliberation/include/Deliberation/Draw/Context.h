@@ -48,8 +48,8 @@ public:
 
     Program createProgram(const std::vector<std::string> & paths);
 
-    Draw createDraw(const Program & program, gl::GLenum primitive, const std::string & name = std::string());
-    Draw createDraw(const Program & program, const DrawState & drawState, const std::string & name = std::string());
+    Draw createDraw(Program & program, gl::GLenum primitive, const std::string & name = std::string());
+    Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     /*
         TODO
@@ -58,9 +58,11 @@ public:
     void allocateBuffer(detail::BufferImpl & buffer);
     void deallocateBuffer(detail::BufferImpl & buffer);
     void scheduleBufferUpload(const BufferUpload & upload);
+    void scheduleDraw(const Draw & draw);
 
 private:
     void executeBufferUpload(const BufferUpload & upload);
+    void executeDraw(const Draw & draw);
 
 private:
     GLStateManager m_glStateManager;

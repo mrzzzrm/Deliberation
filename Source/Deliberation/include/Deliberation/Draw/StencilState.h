@@ -5,6 +5,9 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
+namespace deliberation
+{
+
 class StencilState final
 {
 public:
@@ -75,4 +78,6 @@ private:
     uint32_t m_differentFrontAndBackBits;
     Face m_faces[2];
 };
+
+}
 
