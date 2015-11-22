@@ -3,6 +3,8 @@
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
 
+#include <globjects/globjects.h>
+
 #include <glm/glm.hpp>
 
 #define GLFW_INCLUDE_NONE
@@ -40,6 +42,8 @@ int main
     glfwMakeContextCurrent(window);
     glbinding::Binding::initialize();
 
+    globjects::init();
+
     deliberation::Context context;
 
     struct Vertex
@@ -62,10 +66,9 @@ int main
         {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}
     });
     context.createBufferUpload(buffer, vertices).schedule();
-
     deliberation::Program program = context.createProgram({"Data/BasicTriangleTest.vert", "Data/BasicTriangleTest.frag"});
 
-//    deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
+    deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
 //    draw.addVertexBuffer(buffer);
 //
 //    deliberation::Clear clear = context.createClear();

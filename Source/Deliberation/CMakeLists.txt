@@ -24,11 +24,22 @@ include_directories(
 set(sources
     ${source_path}/Core/Assert.cpp
     ${source_path}/Core/Blob.cpp
+    ${source_path}/Core/StringUtils.cpp
+    ${source_path}/Core/Viewport.cpp
 
     ${source_path}/Draw/Detail/BufferImpl.cpp
     ${source_path}/Draw/Detail/BufferImpl.h
+    ${source_path}/Draw/Detail/DrawExecution.cpp
+    ${source_path}/Draw/Detail/DrawExecution.h
+    ${source_path}/Draw/Detail/DrawImpl.cpp
+    ${source_path}/Draw/Detail/DrawImpl.h
+    ${source_path}/Draw/Detail/ProgramImpl.cpp
+    ${source_path}/Draw/Detail/ProgramImpl.h
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
+    ${source_path}/Draw/GL/GLSLValue.cpp
+    ${source_path}/Draw/GL/GLSLValue.h
+    ${source_path}/Draw/BlendState.cpp
     ${source_path}/Draw/Buffer.cpp
     ${source_path}/Draw/BufferLayout.cpp
     ${source_path}/Draw/BufferLayoutField.cpp
@@ -36,6 +47,20 @@ set(sources
     ${source_path}/Draw/BufferUploadExecution.cpp
     ${source_path}/Draw/BufferUploadExecution.h
     ${source_path}/Draw/Context.cpp
+    ${source_path}/Draw/CullState.cpp
+    ${source_path}/Draw/DepthState.cpp
+    ${source_path}/Draw/Draw.cpp
+    ${source_path}/Draw/DrawVerification.cpp
+    ${source_path}/Draw/DrawVerification.h
+    ${source_path}/Draw/DrawState.cpp
+    ${source_path}/Draw/Program.cpp
+    ${source_path}/Draw/ProgramInterface.cpp
+    ${source_path}/Draw/ProgramInterfaceFragmentOutput.cpp
+    ${source_path}/Draw/ProgramInterfaceUniform.cpp
+    ${source_path}/Draw/ProgramInterfaceVertexAttribute.cpp
+    ${source_path}/Draw/RasterizerState.cpp
+    ${source_path}/Draw/StencilState.cpp
+    ${source_path}/Draw/UniformHandle.cpp
 )
 
 # api_includes
@@ -48,6 +73,10 @@ set(api_includes
     ${include_path}/Core/Blob.inl
     ${include_path}/Core/OffsetOf.h
     ${include_path}/Core/OffsetOf.inl
+    ${include_path}/Core/Optional.h
+    ${include_path}/Core/Optional.inl
+    ${include_path}/Core/StringUtils.h
+    ${include_path}/Core/Viewport.h
 
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
@@ -57,12 +86,27 @@ set(api_includes
     ${include_path}/Draw/GL/GLStateManager.h
     ${include_path}/Draw/GL/GLSLTypeOf.h
     ${include_path}/Draw/GL/GLSLTypeOf.inl
+    ${include_path}/Draw/BlendState.h
     ${include_path}/Draw/Buffer.h
     ${include_path}/Draw/BufferLayout.h
     ${include_path}/Draw/BufferLayoutField.h
     ${include_path}/Draw/BufferUpload.h
     ${include_path}/Draw/Context.h
     ${include_path}/Draw/Context.inl
+    ${include_path}/Draw/CullState.h
+    ${include_path}/Draw/DepthState.h
+    ${include_path}/Draw/Draw.h
+    ${include_path}/Draw/Draw.inl
+    ${include_path}/Draw/DrawState.h
+    ${include_path}/Draw/Program.h
+    ${include_path}/Draw/ProgramInterface.h
+    ${include_path}/Draw/ProgramInterfaceFragmentOutput.h
+    ${include_path}/Draw/ProgramInterfaceUniform.h
+    ${include_path}/Draw/ProgramInterfaceVertexAttribute.h
+    ${include_path}/Draw/RasterizerState.h
+    ${include_path}/Draw/StencilState.h
+    ${include_path}/Draw/UniformHandle.h
+    ${include_path}/Draw/UniformHandle.inl
 )
 
 # libs

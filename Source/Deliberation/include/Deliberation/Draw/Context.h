@@ -9,6 +9,9 @@
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
+#include <Deliberation/Draw/Draw.h>
+#include <Deliberation/Draw/DrawState.h>
+#include <Deliberation/Draw/Program.h>
 
 namespace deliberation
 {
@@ -42,6 +45,11 @@ public:
 
     template<typename T>
     BufferUpload createRawBufferUpload(Buffer & buffer, const std::vector<T> && data, unsigned int count);
+
+    Program createProgram(const std::vector<std::string> & paths);
+
+    Draw createDraw(const Program & program, gl::GLenum primitive, const std::string & name = std::string());
+    Draw createDraw(const Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     /*
         TODO

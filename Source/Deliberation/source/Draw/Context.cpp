@@ -7,6 +7,8 @@
 #include <Deliberation/Draw/Buffer.h>
 
 #include "Detail/BufferImpl.h"
+#include "Detail/DrawImpl.h"
+#include "Detail/ProgramImpl.h"
 #include "BufferUploadExecution.h"
 
 namespace deliberation
@@ -20,6 +22,37 @@ Context::Context()
 Buffer Context::createBuffer(const BufferLayout & layout)
 {
     return Buffer(*this, layout);
+}
+
+Program Context::createProgram(const std::vector<std::string> & paths)
+{
+    Program program;
+    program.m_impl = std::make_shared<detail::ProgramImpl>(paths);
+    return program;
+}
+
+Draw Context::createDraw(const Program & program, gl::GLenum primitive, const std::string & name)
+{
+    auto impl = std::make_shared<detail::DrawImpl>(*this, program);
+    impl->state.setPrimitive(primitive);
+    impl->name = name;
+
+    Draw draw;
+    draw.impl = impl;
+
+    return draw;
+}
+
+Draw Context::createDraw(const Program & program, const DrawState & drawState, const std::string & name = std::string());
+{
+    auto impl = std::make_shared<detail::DrawImpl>(*this, program);
+    impl->state = drawState;
+    impl->name = name;
+
+    Draw draw;
+    draw.impl = impl;
+
+    return draw;
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)
