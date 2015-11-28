@@ -5,6 +5,12 @@
 namespace deliberation
 {
 
+Buffer::Buffer():
+    m_impl(nullptr)
+{
+
+}
+
 const BufferLayout & Buffer::layout() const
 {
     return m_impl->layout;

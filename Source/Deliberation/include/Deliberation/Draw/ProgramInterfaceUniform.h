@@ -12,9 +12,9 @@ class ProgramInterfaceUniform final
 {
 public:
     ProgramInterfaceUniform(const std::string & name,
-                         gl::GLenum type,
-                         gl::GLint location,
-                         gl::GLuint size);
+                            gl::GLenum type,
+                            gl::GLint location,
+                            gl::GLuint size);
 
     const std::string & name() const;
     gl::GLenum type() const;

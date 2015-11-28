@@ -4,6 +4,8 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/Uniform.h>
+
 namespace deliberation
 {
 
@@ -22,6 +24,8 @@ class DrawState;
 class Draw final
 {
 public:
+    Draw();
+
     bool isComplete() const;
 
     const std::string & name() const;
@@ -32,7 +36,7 @@ public:
     DrawState & state();
     const DrawState & state() const;
 
-//    UniformHandle uniform(const std::string & name);
+    Uniform uniform(const std::string & name);
 //    TextureHandle texture(const std::string & name);
 
 //    void setOutput(const DrawOutputConfig & output);

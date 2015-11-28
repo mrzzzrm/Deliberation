@@ -1,4 +1,6 @@
-#version 330
+#version 430
+
+layout(location = 5) uniform vec3 BaseColor;
 
 in vec3 f_Color;
 
@@ -6,6 +8,6 @@ out vec3 o_Color;
 
 void main()
 {
-	o_Color = vec3(1.0f, 0.0f, 0.0f) + f_Color;
+	o_Color = BaseColor + f_Color;
 }
 

@@ -16,7 +16,6 @@ BufferUpload::BufferUpload(Context & context, Buffer & buffer, const std::vector
     m_blob(data),
     m_count(data.size())
 {
-
 }
 
 template<typename T>

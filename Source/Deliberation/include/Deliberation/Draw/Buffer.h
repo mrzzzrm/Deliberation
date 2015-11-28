@@ -23,6 +23,8 @@ class Context;
 class Buffer final
 {
 public:
+    Buffer();
+
     unsigned int count() const;
     const BufferLayout & layout() const;
 

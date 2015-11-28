@@ -6,9 +6,8 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/Detail/UniformImpl.h>
 #include <Deliberation/Draw/DrawState.h>
-
-#include "Draw/GL/GLSLValue.h"
 
 #include "BufferBinding.h"
 
@@ -38,17 +37,15 @@ public:
     Program & program;
     std::string name;
     const Buffer * indexBuffer;
-//    std::vector<GLSLValue> m_uniforms;
     std::vector<BufferBinding> vertexBuffers;
     std::vector<BufferBinding> instanceBuffers;
     DrawState state;
     gl::GLuint glVertexArray;
 
-
-public:
-    std::unordered_set<unsigned int> d_unsetUniformLocations;
+    std::vector<UniformImpl> uniforms;
 };
 
 }
 
 }
+

@@ -1,5 +1,10 @@
 #include "DrawImpl.h"
 
+#include <algorithm>
+
+#include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/ProgramInterface.h>
+
 namespace deliberation
 {
 
@@ -13,6 +18,14 @@ DrawImpl::DrawImpl(Context & context,
     indexBuffer(nullptr),
     glVertexArray(0u)
 {
+    // Create UniformHandleImpls
+    {
+        uniforms.reserve(program.interface().uniforms().size());
+        for (auto & uniform : program.interface().uniforms())
+        {
+            uniforms.emplace_back(uniform.type(),uniform.location());
+        }
+    }
 }
 
 }

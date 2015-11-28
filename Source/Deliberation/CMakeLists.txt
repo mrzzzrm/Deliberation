@@ -21,8 +21,17 @@ include_directories(
     ${GLM_INCLUDE_DIR}
 )
 
+# library type
+if (OPTION_BUILD_STATIC)
+    add_definitions("-DDELIBERATION_STATIC")
+else()
+    add_definitions("-DDELIBERATION_EXPORTS")
+endif()
+
 # sources
 set(sources
+    ${source_path}/Deliberation.cpp
+
     ${source_path}/Core/Assert.cpp
     ${source_path}/Core/Blob.cpp
     ${source_path}/Core/StringUtils.cpp
@@ -36,10 +45,9 @@ set(sources
     ${source_path}/Draw/Detail/DrawImpl.h
     ${source_path}/Draw/Detail/ProgramImpl.cpp
     ${source_path}/Draw/Detail/ProgramImpl.h
+    ${source_path}/Draw/Detail/UniformImpl.cpp
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
-    ${source_path}/Draw/GL/GLSLValue.cpp
-    ${source_path}/Draw/GL/GLSLValue.h
     ${source_path}/Draw/GL/GLVertexAttributeBinder.cpp
     ${source_path}/Draw/GL/GLVertexAttributeBinder.h
     ${source_path}/Draw/GL/GLVertexAttributeFormat.cpp
@@ -65,11 +73,12 @@ set(sources
     ${source_path}/Draw/ProgramInterfaceVertexAttribute.cpp
     ${source_path}/Draw/RasterizerState.cpp
     ${source_path}/Draw/StencilState.cpp
-    ${source_path}/Draw/UniformHandle.cpp
+    ${source_path}/Draw/Uniform.cpp
 )
 
 # api_includes
 set(api_includes
+    ${include_path}/Deliberation.h
     ${include_path}/Deliberation_API.h
 
     ${include_path}/Core/Detail/IBlobImpl.h
@@ -87,6 +96,7 @@ set(api_includes
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
     ${include_path}/Draw/Detail/NamedDataMemberOf.h
     ${include_path}/Draw/Detail/NamedDataMemberOf.inl
+    ${include_path}/Draw/Detail/UniformImpl.h
     ${include_path}/Draw/GL/GLSLSizeOf.h
     ${include_path}/Draw/GL/GLStateManager.h
     ${include_path}/Draw/GL/GLSLTypeOf.h
@@ -110,8 +120,8 @@ set(api_includes
     ${include_path}/Draw/ProgramInterfaceVertexAttribute.h
     ${include_path}/Draw/RasterizerState.h
     ${include_path}/Draw/StencilState.h
-    ${include_path}/Draw/UniformHandle.h
-    ${include_path}/Draw/UniformHandle.inl
+    ${include_path}/Draw/Uniform.h
+    ${include_path}/Draw/Uniform.inl
 )
 
 # libs

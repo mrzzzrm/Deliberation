@@ -99,8 +99,9 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
             if (location >= (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
             {
                 m_uniformIndexByLocation.resize(location + 1, (unsigned int)-1);
-                m_uniformIndexByLocation[location] = u;
             }
+
+            m_uniformIndexByLocation[location] = u;
 
             m_uniforms.push_back({name, (gl::GLenum)uniformTypes[u], location, (gl::GLuint)uniformSizes[u]});
             m_uniformIndexByName[name] = u;

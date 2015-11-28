@@ -11,6 +11,17 @@ class Blob final
 {
 public:
     template<typename T>
+    static Blob fromValue(const T & value);
+
+public:
+    Blob();
+
+    /*
+        TODO
+            port all these to static, named builders
+    */
+
+    template<typename T>
     Blob(const std::vector<T> & value);
 
     template<typename T>

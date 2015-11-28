@@ -3,25 +3,30 @@
 namespace deliberation
 {
 
+Blob::Blob():
+    m_impl(nullptr)
+{
+}
+
 Blob::Blob(const Blob & blob):
-    m_impl(blob.m_impl->clone())
+    m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
 {
 }
 
 Blob::Blob(Blob && blob):
-    m_impl(blob.m_impl->clone())
+    m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
 {
 
 }
 
 std::size_t Blob::size() const
 {
-    return m_impl->size();
+    return m_impl ? m_impl->size() : 0u;
 }
 
 const void * Blob::ptr() const
 {
-    return m_impl->ptr();
+    return m_impl ? m_impl->ptr() : nullptr;
 }
 
 Blob & Blob::operator=(Blob && blob)

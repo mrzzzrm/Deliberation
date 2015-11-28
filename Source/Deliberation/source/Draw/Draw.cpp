@@ -21,6 +21,12 @@
 namespace deliberation
 {
 
+Draw::Draw():
+    m_impl(nullptr)
+{
+
+}
+
 const std::string & Draw::name() const
 {
     return m_impl->name;
@@ -45,6 +51,21 @@ DrawState & Draw::state()
 const DrawState & Draw::state() const
 {
     return m_impl->state;
+}
+
+Uniform Draw::uniform(const std::string & name)
+{
+    auto location = m_impl->program.interface().uniform(name).location();
+
+    for (auto & uniform : m_impl->uniforms)
+    {
+        if (uniform.location == location)
+        {
+            return Uniform(uniform);
+        }
+    }
+
+    Fail("");
 }
 
 void Draw::setIndexBuffer(const Buffer & buffer)

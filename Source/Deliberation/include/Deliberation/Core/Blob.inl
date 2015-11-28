@@ -2,6 +2,45 @@ namespace deliberation
 {
 
 template<typename T>
+Blob Blob::fromValue(const T & value)
+{
+    Blob result;
+
+    class Impl:
+        public detail::IBlobImpl
+    {
+    public:
+        Impl(const T & value):
+            m_value(value)
+        {
+
+        }
+
+        virtual std::unique_ptr<IBlobImpl> clone() const override
+        {
+            return std::unique_ptr<IBlobImpl>(new Impl(m_value));
+        }
+
+        virtual const void * ptr() const override
+        {
+            return &m_value;
+        }
+
+        virtual std::size_t size() const override
+        {
+            return sizeof(T);
+        }
+
+    private:
+        T m_value;
+    };
+
+    result.m_impl = std::unique_ptr<detail::IBlobImpl>(new Impl(value));
+
+    return result;
+}
+
+template<typename T>
 Blob::Blob(const std::vector<T> & value)
 {
     class Impl:

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
@@ -7,10 +8,12 @@
 #include <globjects/globjects.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include <Deliberation/Deliberation.h>
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
@@ -45,31 +48,6 @@ int main
 
     globjects::init();
 
-    glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
-    glbinding::setAfterCallback([](const glbinding::FunctionCall & call)
-    {
-        glbinding::setCallbackMask(glbinding::CallbackMask::None);
-//        gl::GLenum error;
-//        while((error = gl::glGetError()) != gl::GL_NO_ERROR)
-//        {
-//            std::cout << "GL Error: " << error << std::endl;
-//            std::cout << "  after calling ";
-            std::cout << call.function->name() << "(";
-            for (unsigned i = 0; i < call.parameters.size(); ++i)
-            {
-                std::cout << call.parameters[i]->asString();
-                if (i < call.parameters.size() - 1)
-                {
-                    std::cout << ", ";
-                }
-            }
-            std::cout << ")";
-            std::cout << std::endl;
-//            assert(false);
-//        }
-        glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
-    });
-
     deliberation::Context context;
 
     struct Vertex
@@ -87,12 +65,12 @@ int main
     deliberation::Buffer buffer = context.createBuffer(layout);
 
     auto vertices = std::vector<Vertex>({
-        {{0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+        {{-0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
         {{0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
         {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}
     });
     context.createBufferUpload(buffer, vertices).schedule();
-    deliberation::Program program = context.createProgram({"Data/BasicTriangleTest.vert", "Data/BasicTriangleTest.frag"});
+    deliberation::Program program = context.createProgram({"../Data/BasicTriangleTest.vert", "../Data/BasicTriangleTest.frag"});
 
     deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
     draw.addVertexBuffer(buffer);
@@ -100,12 +78,21 @@ int main
     draw.state().setCullState(deliberation::CullState::disabled());
     Assert(draw.isComplete(), draw.toString());
 
-//
+    auto transform = draw.uniform("T");
+
+    auto begin = std::chrono::system_clock::now();
+
 //    deliberation::Clear clear = context.createClear();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        auto seconds = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::system_clock::now() - begin);
+
+        draw.uniform("BaseColor").set(glm::vec3(std::sin(seconds.count()), std::cos(seconds.count()), 1.0f));
+
+        transform.set(glm::rotate(glm::pi<float>()/2.0f * seconds.count(), glm::vec3(0, 0, -1)));
+
         gl::glClearColor(0.2, 0.2f, 0.2f, 0.0f);
         gl::glClear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
 
