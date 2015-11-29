@@ -3,9 +3,8 @@
 
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
+#include <glbinding/gl/functions.h>
 #include <glbinding/gl/bitfield.h>
-
-#include <globjects/globjects.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -46,8 +45,6 @@ int main
     glfwMakeContextCurrent(window);
     glbinding::Binding::initialize();
 
-    globjects::init();
-
     deliberation::Context context;
 
     struct Vertex
@@ -73,9 +70,11 @@ int main
     deliberation::Program program = context.createProgram({"../Data/BasicTriangleTest.vert", "../Data/BasicTriangleTest.frag"});
 
     deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
+
     draw.addVertexBuffer(buffer);
     draw.state().setDepthState(deliberation::DepthState(false, false));
     draw.state().setCullState(deliberation::CullState::disabled());
+
     Assert(draw.isComplete(), draw.toString());
 
     auto transform = draw.uniform("T");

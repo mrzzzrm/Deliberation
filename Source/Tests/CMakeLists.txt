@@ -18,7 +18,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 
     ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
@@ -35,7 +34,6 @@ set(libs
     Deliberation
     ${GLFW_LIBRARY}
     ${GLBINDING_LIBRARY}
-    ${GLOBJECTS_LIBRARY}
 )
 
 # executable

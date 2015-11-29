@@ -6,7 +6,6 @@ set(source_path 	"${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 # packages
 find_package(glbinding  REQUIRED)
-find_package(globjects  REQUIRED)
 find_package(GLM        REQUIRED)
 
 # include
@@ -17,7 +16,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
     ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
 )
 
@@ -34,6 +32,7 @@ set(sources
 
     ${source_path}/Core/Assert.cpp
     ${source_path}/Core/Blob.cpp
+    ${source_path}/Core/FileUtils.cpp
     ${source_path}/Core/StringUtils.cpp
     ${source_path}/Core/Viewport.cpp
 
@@ -48,6 +47,8 @@ set(sources
     ${source_path}/Draw/Detail/UniformImpl.cpp
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
+    ${source_path}/Draw/GL/GLUtils.cpp
+    ${source_path}/Draw/GL/GLUtils.h
     ${source_path}/Draw/GL/GLVertexAttributeBinder.cpp
     ${source_path}/Draw/GL/GLVertexAttributeBinder.h
     ${source_path}/Draw/GL/GLVertexAttributeFormat.cpp
@@ -85,6 +86,7 @@ set(api_includes
     ${include_path}/Core/Assert.h
     ${include_path}/Core/Blob.h
     ${include_path}/Core/Blob.inl
+    ${include_path}/Core/FileUtils.h
     ${include_path}/Core/OffsetOf.h
     ${include_path}/Core/OffsetOf.inl
     ${include_path}/Core/Optional.h
@@ -127,7 +129,6 @@ set(api_includes
 # libs
 set(libs
     ${GLBINDING_LIBRARY}
-    ${GLOBJECTS_LIBRARY}
 )
 
 # library

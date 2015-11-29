@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <globjects/base/ref_ptr.h>
+#include <glbinding/gl/types.h>
 
 #include <Deliberation/Draw/ProgramInterface.h>
 
@@ -23,7 +23,7 @@ class ProgramImpl final
 public:
     ProgramImpl(const std::vector<std::string> & paths);
 
-    globjects::ref_ptr<globjects::Program> globjectsProgram;
+    gl::GLuint glProgramName;
     ProgramInterface interface;
 };
 

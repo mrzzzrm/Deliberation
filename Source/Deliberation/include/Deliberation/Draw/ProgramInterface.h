@@ -3,14 +3,11 @@
 #include <unordered_map>
 #include <vector>
 
+#include <glbinding/gl/types.h>
+
 #include <Deliberation/Draw/ProgramInterfaceFragmentOutput.h>
 #include <Deliberation/Draw/ProgramInterfaceUniform.h>
 #include <Deliberation/Draw/ProgramInterfaceVertexAttribute.h>
-
-namespace globjects
-{
-    class Program;
-}
 
 namespace deliberation
 {
@@ -19,7 +16,7 @@ class ProgramInterface final
 {
 public:
     ProgramInterface();
-    ProgramInterface(const globjects::Program & program);
+    ProgramInterface(gl::GLuint glProgramName);
 
     const ProgramInterfaceVertexAttribute & attribute(const std::string & name) const;
     const ProgramInterfaceUniform & uniform(const std::string & name) const;

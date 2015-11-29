@@ -6,9 +6,6 @@
 #include <glbinding/gl/functions.h>
 #include <glbinding/Meta.h>
 
-#include <globjects/Program.h>
-#include <globjects/Sampler.h>
-
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/GL/GLStateManager.h>
@@ -43,7 +40,7 @@ void DrawExecution::perform()
     applyStencilState();
 
 //    m_draw.m_state.apply();
-    m_drawImpl.program.m_impl->globjectsProgram->use();
+    gl::glUseProgram(m_drawImpl.program.m_impl->glProgramName);
 
     // Setup texture units
 //    for (auto u = 0u; u < m_draw.m_textureUnitBindings.size(); u++)
@@ -75,8 +72,6 @@ void DrawExecution::perform()
             TODO
                 Port to GLStateManager
         */
-
-        m_drawImpl.program.m_impl->globjectsProgram->use();
         //gl::glUseProgram(m_drawImpl.program.m_impl->globjectsProgram->id());
 
         for (auto & uniform : m_drawImpl.uniforms)

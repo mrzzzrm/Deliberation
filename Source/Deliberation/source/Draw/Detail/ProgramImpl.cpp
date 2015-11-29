@@ -1,13 +1,14 @@
 #include "ProgramImpl.h"
 
+#include <iostream>
 #include <map>
 
+#include <glbinding/gl/boolean.h>
 #include <glbinding/gl/enum.h>
-
-#include <globjects/Shader.h>
-#include <globjects/Program.h>
+#include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/FileUtils.h>
 
 namespace deliberation
 {
@@ -15,9 +16,11 @@ namespace deliberation
 namespace detail
 {
 
-ProgramImpl::ProgramImpl(const std::vector<std::string> & paths)
+ProgramImpl::ProgramImpl(const std::vector<std::string> & paths):
+    glProgramName(0u)
 {
-    globjectsProgram = globjects::make_ref<globjects::Program>();
+    glProgramName = gl::glCreateProgram();
+    Assert(glProgramName != 0, "Failed to create GL program");
 
     auto typeByExtension = std::map<std::string, gl::GLenum>();
 
@@ -33,15 +36,66 @@ ProgramImpl::ProgramImpl(const std::vector<std::string> & paths)
 
         auto extension = path.substr(dotPos + 1, std::string::npos);
 
+        auto shaderSource = FileToString(path);
+        auto * shaderSourceCStr = shaderSource.c_str();
+        gl::GLint length = shaderSource.size();
+
         auto iter = typeByExtension.find(extension);
         Assert(iter != typeByExtension.end(), "Unknown shader extension '" + extension + "'");
 
-        globjectsProgram->attach(globjects::Shader::fromFile(iter->second, path));
+        auto glShaderName = glCreateShader(iter->second);
+        Assert(glShaderName > 0, "Failed to create shader");
+
+        gl::glShaderSource(glShaderName, 1, &shaderSourceCStr, &length);
+        gl::glCompileShader(glShaderName);
+
+        gl::GLint compileStatus;
+        gl::glGetShaderiv(glShaderName, gl::GL_COMPILE_STATUS, &compileStatus);
+        if ((gl::GLboolean)compileStatus != gl::GL_TRUE)
+        {
+            std::cout << iter->second << " '" << path << "' compilation error:" << std::endl;
+
+            gl::GLint infoLogLength;
+            gl::glGetShaderiv(glShaderName, gl::GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            std::vector<char> infoLogBuf(infoLogLength + 1);
+            gl::glGetShaderInfoLog(glShaderName, infoLogBuf.size(), NULL, infoLogBuf.data());
+
+            std::string infoLog(infoLogBuf.data(), infoLogBuf.size() - 1);
+            std::cout << infoLog << std::endl;
+
+            Fail("");
+        }
+
+        gl::glAttachShader(glProgramName, glShaderName);
     }
 
-    globjectsProgram->link();
+    gl::glLinkProgram(glProgramName);
 
-    interface = ProgramInterface(*globjectsProgram);
+    gl::GLint linkStatus;
+    gl::glGetProgramiv(glProgramName, gl::GL_LINK_STATUS, &linkStatus);
+    if ((gl::GLboolean)linkStatus != gl::GL_TRUE)
+    {
+        std::cout << "Program (";
+        for (auto & path : paths)
+        {
+            std::cout << path << ", ";
+        }
+        std::cout << ") link error: " << std::endl;
+
+        gl::GLint infoLogLength;
+        gl::glGetProgramiv(glProgramName, gl::GL_INFO_LOG_LENGTH, &infoLogLength);
+
+        std::vector<char> infoLogBuf(infoLogLength + 1);
+        gl::glGetProgramInfoLog(glProgramName, infoLogBuf.size(), NULL, infoLogBuf.data());
+
+        std::string infoLog(infoLogBuf.data(), infoLogBuf.size() - 1);
+        std::cout << infoLog << std::endl;
+
+        Fail("");
+    }
+
+    interface = ProgramInterface(glProgramName);
 }
 
 }

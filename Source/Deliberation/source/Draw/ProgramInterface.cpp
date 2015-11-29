@@ -6,23 +6,24 @@
 #include <sstream>
 
 #include <glbinding/gl/enum.h>
-
-#include <globjects/Program.h>
+#include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/StringUtils.h>
+
+#include "GL/GLUtils.h"
 
 namespace deliberation
 {
 
 ProgramInterface::ProgramInterface() = default;
 
-ProgramInterface::ProgramInterface(const globjects::Program & program)
+ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 {
     // Vertex attributes
     {
-        auto numAttributes = program.get(gl::GL_ACTIVE_ATTRIBUTES);
-        auto maxNameLength = program.get(gl::GL_ACTIVE_ATTRIBUTE_MAX_LENGTH);
+        auto numAttributes = GLGetProgram(glProgramName, gl::GL_ACTIVE_ATTRIBUTES);
+        auto maxNameLength = GLGetProgram(glProgramName, gl::GL_ACTIVE_ATTRIBUTE_MAX_LENGTH);
 
         auto namev = std::vector<gl::GLchar>{};
         namev.resize(maxNameLength);
@@ -40,7 +41,7 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
 
         for (auto a = 0; a < numAttributes; a++)
         {
-            program.getActiveAttrib(a, namev.size(), &length, &size, &type, namev.data());
+            gl::glGetActiveAttrib(glProgramName, a, namev.size(), &length, &size, &type, namev.data());
             name = std::string(namev.data(), length);
 
             if (StringStartsWith(name, "gl_"))
@@ -48,7 +49,7 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
                 continue;
             }
 
-            location = program.getAttributeLocation(name);
+            location = gl::glGetAttribLocation(glProgramName, name.c_str());
 
             if (location >= (gl::GLint)m_attributeIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
             {
@@ -65,7 +66,7 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
 
     // Uniforms
     {
-        auto numUniforms = program.get(gl::GL_ACTIVE_UNIFORMS);
+        auto numUniforms = GLGetProgram(glProgramName, gl::GL_ACTIVE_UNIFORMS);
 
         std::vector<gl::GLuint> uniformIndices(numUniforms);
         for (auto u = 0; u < numUniforms; u++)
@@ -78,10 +79,10 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
         //std::vector<gl::GLuint> uniformNameLengths(numUniforms);
         std::vector<gl::GLint> uniformBlockIndex(numUniforms);
 
-        program.getActiveUniforms(numUniforms, uniformIndices.data(), gl::GL_UNIFORM_TYPE, uniformTypes.data());
-        program.getActiveUniforms(numUniforms, uniformIndices.data(), gl::GL_UNIFORM_SIZE, uniformSizes.data());
-        //program.getActiveUniforms(numUniforms, uniformIndices.data(), gl::GL_UNIFORM_NAME_LENGTH, uniformNameLength.data());
-        program.getActiveUniforms(numUniforms, uniformIndices.data(), gl::GL_UNIFORM_BLOCK_INDEX, uniformBlockIndex.data());
+        gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_TYPE, uniformTypes.data());
+        gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_SIZE, uniformSizes.data());
+        //gl::glGetActiveUniformsiv(numUniforms, uniformIndices.data(), gl::GL_UNIFORM_NAME_LENGTH, uniformNameLength.data());
+        gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_BLOCK_INDEX, uniformBlockIndex.data());
 
         m_uniforms.reserve(numUniforms);
 
@@ -93,8 +94,8 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
                 continue;
             }
 
-            auto name = program.getActiveUniformName(u);
-            auto location = program.getUniformLocation(name.c_str());
+            auto name = GLGetActiveUniformName(glProgramName, u);
+            auto location = gl::glGetUniformLocation(glProgramName, name.c_str());
 
             if (location >= (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
             {
@@ -113,8 +114,8 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
         auto activeResources = gl::GLint{};
         auto maxNameLength = gl::GLint{};
 
-        program.getInterface(gl::GL_PROGRAM_OUTPUT, gl::GL_ACTIVE_RESOURCES, &activeResources);
-        program.getInterface(gl::GL_PROGRAM_OUTPUT, gl::GL_MAX_NAME_LENGTH, &maxNameLength);
+        gl::glGetProgramInterfaceiv(glProgramName, gl::GL_PROGRAM_OUTPUT, gl::GL_ACTIVE_RESOURCES, &activeResources);
+        gl::glGetProgramInterfaceiv(glProgramName, gl::GL_PROGRAM_OUTPUT, gl::GL_MAX_NAME_LENGTH, &maxNameLength);
 
         std::vector<char> nameData(maxNameLength);
 
@@ -125,7 +126,7 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
             auto props =  std::vector<gl::GLenum>({gl::GL_NAME_LENGTH, gl::GL_TYPE, gl::GL_ARRAY_SIZE, gl::GL_LOCATION, gl::GL_LOCATION_INDEX});
             auto params = std::vector<gl::GLint>( {gl::GLint{},        gl::GLint{}, gl::GLint{},       gl::GLint{},     gl::GLint{}});
 
-            program.getResource(gl::GL_PROGRAM_OUTPUT, r, props.size(), props.data(), params.size(), nullptr, params.data());
+            gl::glGetProgramResourceiv(glProgramName, gl::GL_PROGRAM_OUTPUT, r, props.size(), props.data(), params.size(), nullptr, params.data());
 
             auto nameLength = params[0];
             Assert(nameLength > 1, "Program output " + std::to_string(r) + " has no characters in its name. That shouldn't be the case");
@@ -137,7 +138,7 @@ ProgramInterface::ProgramInterface(const globjects::Program & program)
             auto arraySize = params[2];
             auto locationIndex = params[4];
 
-            program.getResourceName(gl::GL_PROGRAM_OUTPUT, r, nameData.size(), nullptr, nameData.data());
+            gl::glGetProgramResourceName(glProgramName, gl::GL_PROGRAM_OUTPUT, r, nameData.size(), nullptr, nameData.data());
 
             std::string name(nameData.data(), nameLength - 1);
 
