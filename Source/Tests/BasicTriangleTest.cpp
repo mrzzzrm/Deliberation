@@ -17,7 +17,7 @@
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Context.h>
-//#include <Deliberation/Clear.h>
+#include <Deliberation/Draw/Clear.h>
 //#include <Deliberation/Draw.h>
 //#include <Deliberation/Program.h>
 
@@ -81,7 +81,8 @@ int main
 
     auto begin = std::chrono::system_clock::now();
 
-//    deliberation::Clear clear = context.createClear();
+    deliberation::Clear clear = context.createClear();
+    clear.setColor({0.2, 0.2f, 0.2f, 0.0f});
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -92,8 +93,7 @@ int main
 
         transform.set(glm::rotate(glm::pi<float>()/2.0f * seconds.count(), glm::vec3(0, 0, -1)));
 
-        gl::glClearColor(0.2, 0.2f, 0.2f, 0.0f);
-        gl::glClear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+    //    clear.schedule();
 
 //        clear.schedule();
         draw.schedule();

@@ -9,6 +9,7 @@
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
+#include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/DrawState.h>
 #include <Deliberation/Draw/Program.h>
@@ -51,18 +52,22 @@ public:
     Draw createDraw(Program & program, gl::GLenum primitive, const std::string & name = std::string());
     Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
 
+    Clear createClear();
+
     /*
         TODO
-            move these to private:, they shouldn't be called by anyone other than Deliberation/Draw
+            move these to private: they shouldn't be called by anyone else than Deliberation/Draw
     */
     void allocateBuffer(detail::BufferImpl & buffer);
     void deallocateBuffer(detail::BufferImpl & buffer);
     void scheduleBufferUpload(const BufferUpload & upload);
     void scheduleDraw(const Draw & draw);
+    void scheduleClear(const Clear & clear);
 
 private:
     void executeBufferUpload(const BufferUpload & upload);
     void executeDraw(const Draw & draw);
+    void executeClear(const Clear & draw);
 
 private:
     GLStateManager m_glStateManager;

@@ -23,7 +23,13 @@ GLStateManager::GLStateManager():
     m_glCullFaceMode(GL_INVALID_ENUM),
     m_glPointSize(1.0f),
     m_glLineWidth(1.0f),
-    m_glStencilTest(false)
+    m_glStencilTest(false),
+    m_glClearColorRed(0.0f),
+    m_glClearColorGreen(0.0f),
+    m_glClearColorBlue(0.0f),
+    m_glClearColorAlpha(0.0f),
+    m_glClearDepth(1.0f),
+    m_glClearStencil(0.0f)
 {
     m_glStencilFunc[0] = GL_ALWAYS;
     m_glStencilFunc[1] = GL_ALWAYS;
@@ -328,6 +334,39 @@ void GLStateManager::deleteBuffer(gl::GLuint buffer)
     }
 
     glDeleteBuffers(1, &buffer);
+}
+
+void GLStateManager::setClearColor(gl::GLclampf red, gl::GLclampf green, gl::GLclampf blue, gl::GLclampf alpha)
+{
+    if (red != m_glClearColorRed || green != m_glClearColorGreen || blue != m_glClearColorBlue || alpha != m_glClearColorAlpha)
+    {
+        glClearColor(red, green, blue, alpha);
+
+        m_glClearColorRed = red;
+        m_glClearColorGreen = green;
+        m_glClearColorBlue = blue;
+        m_glClearColorAlpha = alpha;
+    }
+}
+
+void GLStateManager::setClearDepth(gl::GLclampd depth)
+{
+    if (m_glClearDepth != depth)
+    {
+        glClearDepth(depth);
+
+        m_glClearDepth = depth;
+    }
+}
+
+void GLStateManager::setClearStencil(gl::GLint s)
+{
+    if (m_glClearStencil != s)
+    {
+        glClearStencil(s);
+
+        m_glClearStencil = s;
+    }
 }
 
 }

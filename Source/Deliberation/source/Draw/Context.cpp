@@ -7,10 +7,12 @@
 #include <Deliberation/Draw/Buffer.h>
 
 #include "Detail/BufferImpl.h"
+#include "Detail/ClearImpl.h"
 #include "Detail/DrawExecution.h"
 #include "Detail/DrawImpl.h"
 #include "Detail/ProgramImpl.h"
 #include "BufferUploadExecution.h"
+#include "ClearExecution.h"
 
 namespace deliberation
 {
@@ -48,6 +50,14 @@ Draw Context::createDraw(Program & program, const DrawState & drawState, const s
     impl->name = name;
 
     return Draw(impl);
+}
+
+Clear Context::createClear()
+{
+    Clear clear;
+    clear.m_impl = std::make_shared<detail::ClearImpl>(*this);
+
+    return clear;
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)
@@ -102,6 +112,21 @@ void Context::scheduleDraw(const Draw & draw)
 //    }
 }
 
+void Context::scheduleClear(const Clear & clear)
+{
+//    switch(m_mode)
+//    {
+//    case Mode::Immediate:
+        executeClear(clear);
+//        break;
+//    case Mode::Deferred:
+//          Fail("");
+//        break;
+//    default:
+//        Fail("");
+//    }
+}
+
 void Context::executeBufferUpload(const BufferUpload & upload)
 {
     BufferUploadExecution(m_glStateManager, upload).perform();
@@ -131,6 +156,11 @@ void Context::executeDraw(const Draw & draw)
 
     gl::glViewport(0, 0, 640, 480);
     detail::DrawExecution(m_glStateManager, draw).perform();
+}
+
+void Context::executeClear(const Clear & clear)
+{
+    ClearExecution(m_glStateManager, clear).perform();
 }
 
 };

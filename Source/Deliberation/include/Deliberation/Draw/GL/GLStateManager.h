@@ -30,6 +30,9 @@ public:
     void setStencilFuncSeparate(gl::GLenum face, gl::GLenum func, int ref, unsigned int mask);
     void setStencilMaskSeparate(gl::GLenum face, unsigned int mask);
     void setStencilOpSeparate(gl::GLenum face, gl::GLenum sfail, gl::GLenum dpfail, gl::GLenum dppass);
+    void setClearColor(gl::GLclampf red, gl::GLclampf green, gl::GLclampf blue, gl::GLclampf alpha);
+    void setClearDepth(gl::GLclampd depth);
+    void setClearStencil(gl::GLint s);
 
     void bindBuffer(gl::GLenum target, gl::GLuint buffer);
     void deleteBuffer(gl::GLuint buffer);
@@ -74,6 +77,12 @@ private:
     gl::GLenum m_glStencilDPFail[2];
     gl::GLenum m_glStencilDPPass[2];
     std::array<gl::GLuint, BufferTargetCount> m_boundBuffers;
+    gl::GLclampf m_glClearColorRed;
+    gl::GLclampf m_glClearColorGreen;
+    gl::GLclampf m_glClearColorBlue;
+    gl::GLclampf m_glClearColorAlpha;
+    gl::GLclampd m_glClearDepth;
+    gl::GLint m_glClearStencil;
 };
 
 }

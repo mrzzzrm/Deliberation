@@ -1,0 +1,24 @@
+#include "ClearImpl.h"
+
+namespace deliberation
+{
+
+namespace detail
+{
+
+ClearImpl::ClearImpl(Context & context):
+    context(context),
+    color({0.0f, 0.0f, 0.0f, 0.0f}),
+    depth(1.0f),
+    stencil(0),
+    clearColor(true),
+    clearDepth(true),
+    clearStencil(true)
+{
+
+}
+
+}
+
+}
+

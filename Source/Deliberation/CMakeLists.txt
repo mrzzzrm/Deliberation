@@ -36,6 +36,8 @@ set(sources
     ${source_path}/Core/StringUtils.cpp
     ${source_path}/Core/Viewport.cpp
 
+    ${source_path}/Draw/Detail/ClearImpl.cpp
+    ${source_path}/Draw/Detail/ClearImpl.h
     ${source_path}/Draw/Detail/BufferImpl.cpp
     ${source_path}/Draw/Detail/BufferImpl.h
     ${source_path}/Draw/Detail/DrawExecution.cpp
@@ -60,6 +62,9 @@ set(sources
     ${source_path}/Draw/BufferUpload.cpp
     ${source_path}/Draw/BufferUploadExecution.cpp
     ${source_path}/Draw/BufferUploadExecution.h
+    ${source_path}/Draw/Clear.cpp
+    ${source_path}/Draw/ClearExecution.cpp
+    ${source_path}/Draw/ClearExecution.h
     ${source_path}/Draw/Context.cpp
     ${source_path}/Draw/CullState.cpp
     ${source_path}/Draw/DepthState.cpp
@@ -108,6 +113,7 @@ set(api_includes
     ${include_path}/Draw/BufferLayout.h
     ${include_path}/Draw/BufferLayoutField.h
     ${include_path}/Draw/BufferUpload.h
+    ${include_path}/Draw/Clear.h
     ${include_path}/Draw/Context.h
     ${include_path}/Draw/Context.inl
     ${include_path}/Draw/CullState.h
