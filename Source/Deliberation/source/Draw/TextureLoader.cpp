@@ -1,9 +1,9 @@
 #include <Deliberation/Draw/TextureLoader.h>
 
-#include "Detail/TextureLoaderCubeFilesImpl.h"
-#include "Detail/TextureLoaderDataImpl.h"
-#include "Detail/TextureLoaderFileImpl.h"
-#include "Detail/TextureLoaderSDLSurfaceImpl.h"
+#include "TextureLoaderCubeFilesImpl.h"
+#include "TextureLoaderDataImpl.h"
+#include "TextureLoaderFileImpl.h"
+#include "TextureLoaderSDLSurfaceImpl.h"
 
 namespace deliberation
 {

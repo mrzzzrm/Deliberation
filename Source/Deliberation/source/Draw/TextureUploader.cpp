@@ -11,6 +11,8 @@
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/TextureBinary.h>
 
+#include "Detail/TextureImpl.h"
+
 namespace deliberation
 {
 
@@ -65,7 +67,12 @@ Texture TextureUploader::uploadSurfaces(gl::GLenum type)
                          surface.pixels().data());
     }
 
-    return Texture(glName, m_textureBinary.width(), m_textureBinary.height(), m_textureBinary.numFaces());
+    auto impl = std::make_shared<detail::TextureImpl>(glName,
+                                                      m_textureBinary.width(),
+                                                      m_textureBinary.height(),
+                                                      m_textureBinary.numFaces());
+
+    return Texture(impl);
 }
 
 gl::GLenum TextureUploader::faceTarget(gl::GLenum type, unsigned int face) const

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Draw/Surface.h>
@@ -10,11 +12,14 @@ namespace deliberation
 namespace detail
 {
     class DrawExecution;
+    class TextureImpl;
 }
 
 class Texture final
 {
 public:
+    ~Texture();
+
     unsigned int width() const;
     unsigned int height() const;
 
@@ -26,11 +31,7 @@ public:
 //    const Surface & surface(unsigned int face) const;
 
 private:
-    Texture(gl::GLuint glName,
-            unsigned int width,
-            unsigned int height,
-            unsigned int numFaces/*,
-            const std::vector<Surface> & surfaces*/);
+    Texture(const std::shared_ptr<detail::TextureImpl> & impl);
 
 private:
     friend class Context;
@@ -38,13 +39,7 @@ private:
     friend class detail::DrawExecution;
 
 private:
-    // Not using impl for these (yet), might happen at some point
-    gl::GLuint m_glName;
-    unsigned int m_width;
-    unsigned int m_height;
-    unsigned int m_numFaces;
-    gl::GLenum m_type;
-//    std::vector<Surface> m_surfaces;
+    std::shared_ptr<detail::TextureImpl> m_impl;
 };
 
 }

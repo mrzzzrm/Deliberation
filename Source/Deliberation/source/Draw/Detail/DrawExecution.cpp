@@ -15,6 +15,7 @@
 
 #include "DrawImpl.h"
 #include "ProgramImpl.h"
+#include "TextureImpl.h"
 
 namespace deliberation
 {
@@ -51,7 +52,7 @@ void DrawExecution::perform()
         Assert(texture, "");
 
         gl::glActiveTexture(gl::GL_TEXTURE0 + b);
-        gl::glBindTexture(texture->type(), texture->m_glName);
+        gl::glBindTexture(texture->type(), texture->m_impl->glName);
         gl::glUniform1i(binding.location, b);
     }
 

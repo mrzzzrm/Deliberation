@@ -48,22 +48,12 @@ set(sources
     ${source_path}/Draw/Detail/DrawExecution.h
     ${source_path}/Draw/Detail/DrawImpl.cpp
     ${source_path}/Draw/Detail/DrawImpl.h
-    ${source_path}/Draw/Detail/ILUtils.cpp
-    ${source_path}/Draw/Detail/ILUtils.h
-    ${source_path}/Draw/Detail/ITextureLoaderImpl.cpp
-    ${source_path}/Draw/Detail/ITextureLoaderImpl.h
     ${source_path}/Draw/Detail/ProgramImpl.cpp
     ${source_path}/Draw/Detail/ProgramImpl.h
     ${source_path}/Draw/Detail/TextureBindingImpl.cpp
     ${source_path}/Draw/Detail/TextureBindingImpl.h
-    ${source_path}/Draw/Detail/TextureLoaderCubeFilesImpl.cpp
-    ${source_path}/Draw/Detail/TextureLoaderCubeFilesImpl.h
-    ${source_path}/Draw/Detail/TextureLoaderDataImpl.cpp
-    ${source_path}/Draw/Detail/TextureLoaderDataImpl.h
-    ${source_path}/Draw/Detail/TextureLoaderFileImpl.cpp
-    ${source_path}/Draw/Detail/TextureLoaderFileImpl.h
-    ${source_path}/Draw/Detail/TextureLoaderSDLSurfaceImpl.cpp
-    ${source_path}/Draw/Detail/TextureLoaderSDLSurfaceImpl.h
+    ${source_path}/Draw/Detail/TextureImpl.cpp
+    ${source_path}/Draw/Detail/TextureImpl.h
     ${source_path}/Draw/Detail/UniformImpl.cpp
     
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
@@ -92,6 +82,10 @@ set(sources
     ${source_path}/Draw/DrawVerification.cpp
     ${source_path}/Draw/DrawVerification.h
     ${source_path}/Draw/DrawState.cpp
+    ${source_path}/Draw/ILUtils.cpp
+    ${source_path}/Draw/ILUtils.h
+    ${source_path}/Draw/ITextureLoaderImpl.cpp
+    ${source_path}/Draw/ITextureLoaderImpl.h
     ${source_path}/Draw/PixelFormat.cpp
     ${source_path}/Draw/Program.cpp
     ${source_path}/Draw/ProgramInterface.cpp
@@ -108,6 +102,14 @@ set(sources
     ${source_path}/Draw/TextureBinary.cpp
     ${source_path}/Draw/TextureBinding.cpp
     ${source_path}/Draw/TextureLoader.cpp
+    ${source_path}/Draw/TextureLoaderCubeFilesImpl.cpp
+    ${source_path}/Draw/TextureLoaderCubeFilesImpl.h
+    ${source_path}/Draw/TextureLoaderDataImpl.cpp
+    ${source_path}/Draw/TextureLoaderDataImpl.h
+    ${source_path}/Draw/TextureLoaderFileImpl.cpp
+    ${source_path}/Draw/TextureLoaderFileImpl.h
+    ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.cpp
+    ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.h
     ${source_path}/Draw/TextureUploader.cpp
     ${source_path}/Draw/Uniform.cpp
 )

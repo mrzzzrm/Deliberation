@@ -4,27 +4,31 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include "Detail/TextureImpl.h"
+
 namespace deliberation
 {
 
+Texture::~Texture() = default;
+
 unsigned int Texture::width() const
 {
-    return m_width;
+    return m_impl->width;
 }
 
 unsigned int Texture::height() const
 {
-    return m_height;
+    return m_impl->height;
 }
 
 unsigned int Texture::numFaces() const
 {
-    return m_numFaces;
+    return m_impl->numFaces;
 }
 
 gl::GLenum Texture::type() const
 {
-    return m_type;
+    return m_impl->type;
 }
 
 //Surface & Texture::surface(unsigned int face)
@@ -39,27 +43,10 @@ gl::GLenum Texture::type() const
 //    return m_surfaces[face];
 //}
 
-Texture::Texture(gl::GLuint glName,
-                 unsigned int width,
-                 unsigned int height,
-                 unsigned int numFaces
-                 /*const std::vector<Surface> & surfaces*/):
-    m_glName(glName),
-    m_width(width),
-    m_height(height),
-    m_numFaces(numFaces)/*,
-    m_surfaces(surfaces)*/
+Texture::Texture(const std::shared_ptr<detail::TextureImpl> & impl):
+    m_impl(impl)
 {
-    if (m_numFaces == 1)
-    {
-        m_type = gl::GL_TEXTURE_2D;
-    }
-    else
-    {
-        Assert(m_numFaces == 6, "");
-        m_type = gl::GL_TEXTURE_CUBE_MAP;
-    }
-
 }
 
 }
+
