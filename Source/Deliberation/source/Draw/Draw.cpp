@@ -57,11 +57,36 @@ Uniform Draw::uniform(const std::string & name)
 {
     auto location = m_impl->program.interface().uniform(name).location();
 
+    /*
+        TODO
+            O(n) complexity? You can do better!
+    */
+
     for (auto & uniform : m_impl->uniforms)
     {
         if (uniform.location == location)
         {
             return Uniform(uniform);
+        }
+    }
+
+    Fail("");
+}
+
+TextureBinding Draw::texture(const std::string & name)
+{
+    auto location = m_impl->program.interface().sampler(name).location();
+
+    /*
+        TODO
+            O(n) complexity? You can do better!
+    */
+
+    for (auto & textureBinding : m_impl->textureBindings)
+    {
+        if (textureBinding.location == location)
+        {
+            return TextureBinding(textureBinding);
         }
     }
 

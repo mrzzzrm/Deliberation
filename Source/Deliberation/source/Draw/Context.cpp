@@ -5,6 +5,8 @@
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Draw/Buffer.h>
+#include <Deliberation/Draw/TextureLoader.h>
+#include <Deliberation/Draw/TextureUploader.h>
 
 #include "Detail/BufferImpl.h"
 #include "Detail/ClearImpl.h"
@@ -24,6 +26,12 @@ Context::Context()
 
 Buffer Context::createBuffer(const BufferLayout & layout)
 {
+    return Buffer(*this, layout);
+}
+
+Buffer Context::createIndexBuffer32()
+{
+    BufferLayout layout({BufferLayoutField("Index", sizeof(gl::GLuint), gl::GL_UNSIGNED_INT, 0)});
     return Buffer(*this, layout);
 }
 
@@ -58,6 +66,14 @@ Clear Context::createClear()
     clear.m_impl = std::make_shared<detail::ClearImpl>(*this);
 
     return clear;
+}
+
+Texture Context::createTexture(const std::string & path)
+{
+    auto binary = TextureLoader(path).load();
+    auto texture = TextureUploader(*this, binary).upload();
+
+    return texture;
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)

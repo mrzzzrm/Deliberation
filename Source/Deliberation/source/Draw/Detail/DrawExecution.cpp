@@ -43,25 +43,17 @@ void DrawExecution::perform()
     gl::glUseProgram(m_drawImpl.program.m_impl->glProgramName);
 
     // Setup texture units
-//    for (auto u = 0u; u < m_draw.m_textureUnitBindings.size(); u++)
-//    {
-//        auto & binding = m_command.m_textureUnitBindings[u];
-//        auto * texture = binding.texture;
-//        auto * sampler = binding.sampler;
-//
-//        Assert(texture, "No texture set for unit " + std::to_string(u));
-//
-//        texture->bindActive(gl::GL_TEXTURE0 + u);
-//
-//        if (sampler)
-//        {
-//            sampler->bind(u);
-//        }
-//        else
-//        {
-//            globjects::Sampler::unbind(u);
-//        }
-//    }
+    for (auto b = 0u; b < m_drawImpl.textureBindings.size(); b++)
+    {
+        auto & binding = m_drawImpl.textureBindings[b];
+        auto * texture = binding.texture;
+
+        Assert(texture, "");
+
+        gl::glActiveTexture(gl::GL_TEXTURE0 + b);
+        gl::glBindTexture(texture->type(), texture->m_glName);
+        gl::glUniform1i(binding.location, b);
+    }
 
     // Setup MRT
 //    m_command.m_output.get().apply();
@@ -72,7 +64,6 @@ void DrawExecution::perform()
             TODO
                 Port to GLStateManager
         */
-        //gl::glUseProgram(m_drawImpl.program.m_impl->globjectsProgram->id());
 
         for (auto & uniform : m_drawImpl.uniforms)
         {
@@ -193,7 +184,9 @@ void DrawExecution::drawArraysInstanced() const
 
 unsigned int DrawExecution::elementCount() const
 {
-    assert(m_drawImpl.indexBuffer);
+    Assert(m_drawImpl.indexBuffer, "No index buffer set");
+    Assert(m_drawImpl.indexBuffer->count() > 0, "Index buffer is empty");
+
     return m_drawImpl.indexBuffer->count();
 }
 
@@ -205,13 +198,15 @@ unsigned int DrawExecution::vertexCount() const
                m_drawImpl.vertexBuffers[0].count :
                m_drawImpl.vertexBuffers[0].buffer.get().count();
 
+    Assert(ref > 0, "Vertex buffer is empty");
+
     {
         for (auto b = 1u; b < m_drawImpl.vertexBuffers.size(); b++)
         {
             auto cmp = m_drawImpl.vertexBuffers[b].ranged ?
                        m_drawImpl.vertexBuffers[b].count :
                        m_drawImpl.vertexBuffers[b].buffer.get().count();
-            assert(cmp == ref);
+            Assert(cmp == ref, "");
         }
     }
 
@@ -224,6 +219,9 @@ unsigned int DrawExecution::instanceCount() const
 
     auto & buffer = m_drawImpl.instanceBuffers[0].buffer.get();
     auto divisor = m_drawImpl.instanceBuffers[0].divisor;
+
+    Assert(buffer.count() > 0, "Instance buffer is empty");
+    Assert(divisor > 0, "Divisor of instance buffer is zero");
 
     auto ref = buffer.count() * divisor;
 

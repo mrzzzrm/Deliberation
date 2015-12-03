@@ -10,6 +10,7 @@
 #include <Deliberation/Draw/DrawState.h>
 
 #include "BufferBinding.h"
+#include "TextureBindingImpl.h"
 
 namespace deliberation
 {
@@ -41,8 +42,8 @@ public:
     std::vector<BufferBinding> instanceBuffers;
     DrawState state;
     gl::GLuint glVertexArray;
-
     std::vector<UniformImpl> uniforms;
+    std::vector<TextureBindingImpl> textureBindings;
 };
 
 }

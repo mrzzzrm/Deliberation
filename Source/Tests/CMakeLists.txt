@@ -43,3 +43,8 @@ target_link_libraries(${target} ${libs})
 # BasicTriangleTest
 add_executable(BasicTriangleTest BasicTriangleTest.cpp)
 target_link_libraries(BasicTriangleTest ${libs})
+
+# BasicTextureTest
+add_executable(BasicTextureTest BasicTextureTest.cpp)
+target_link_libraries(BasicTextureTest ${libs})
+

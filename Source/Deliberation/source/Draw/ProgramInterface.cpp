@@ -64,7 +64,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
         }
     }
 
-    // Uniforms
+    // Uniforms & samplers
     {
         auto numUniforms = GLGetProgram(glProgramName, gl::GL_ACTIVE_UNIFORMS);
 
@@ -96,16 +96,44 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             auto name = GLGetActiveUniformName(glProgramName, u);
             auto location = gl::glGetUniformLocation(glProgramName, name.c_str());
+            auto type = (gl::GLenum)uniformTypes[u];
 
-            if (location >= (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
+            auto isSampler = false;
+            switch (type)
             {
-                m_uniformIndexByLocation.resize(location + 1, (unsigned int)-1);
+                case gl::GL_SAMPLER_1D: case gl::GL_SAMPLER_2D: case gl::GL_SAMPLER_3D: case gl::GL_SAMPLER_CUBE:
+                case gl::GL_SAMPLER_1D_SHADOW: case gl::GL_SAMPLER_2D_SHADOW: case gl::GL_SAMPLER_2D_RECT:
+                case gl::GL_SAMPLER_2D_RECT_SHADOW:
+                    isSampler = true;
+                    break;
+                default:
+                    isSampler = false;
+                    break;
             }
 
-            m_uniformIndexByLocation[location] = u;
+            if (isSampler)
+            {
+                if (location >= (gl::GLint)m_samplerIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
+                {
+                    m_samplerIndexByLocation.resize(location + 1, (unsigned int)-1);
+                }
 
-            m_uniforms.push_back({name, (gl::GLenum)uniformTypes[u], location, (gl::GLuint)uniformSizes[u]});
-            m_uniformIndexByName[name] = u;
+                m_samplerIndexByLocation[location] = m_samplers.size();
+                m_samplerIndexByName[name] = m_samplers.size();
+                m_samplers.emplace_back(name, type, location, (gl::GLuint)uniformSizes[u]);
+            }
+            else
+            {
+                if (location >= (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
+                {
+                    m_uniformIndexByLocation.resize(location + 1, (unsigned int)-1);
+                }
+
+                m_uniformIndexByLocation[location] = m_uniforms.size();
+                m_uniformIndexByName[name] = m_uniforms.size();
+                m_uniforms.emplace_back(name, type, location, (gl::GLuint)uniformSizes[u]);
+            }
+
         }
     }
 
@@ -169,6 +197,14 @@ const ProgramInterfaceUniform & ProgramInterface::uniform(const std::string & na
     return m_uniforms[iter->second];
 }
 
+const ProgramInterfaceSampler & ProgramInterface::sampler(const std::string & name) const
+{
+    auto iter = m_samplerIndexByName.find(name);
+    Assert (iter != m_samplerIndexByName.end(), "No such sampler '" + name + "'");
+
+    return m_samplers[iter->second];
+}
+
 const ProgramInterfaceVertexAttribute & ProgramInterface::attributeByLocation(unsigned int location) const
 {
     Assert(location < m_attributeIndexByLocation.size(), "No such attribute location " + std::to_string(location));
@@ -189,6 +225,16 @@ const ProgramInterfaceUniform & ProgramInterface::uniformByLocation(unsigned int
     return m_uniforms[index];
 }
 
+const ProgramInterfaceSampler & ProgramInterface::samplerByLocation(unsigned int location) const
+{
+    Assert(location < m_samplerIndexByLocation.size(), "No such sampler location " + std::to_string(location));
+
+    auto index = m_samplerIndexByLocation[location];
+    Assert(index != (unsigned int)-1, "No such sampler location " + std::to_string(location));
+
+    return m_samplers[index];
+}
+
 const std::vector<ProgramInterfaceVertexAttribute> & ProgramInterface::attributes() const
 {
     return m_attributes;
@@ -197,6 +243,11 @@ const std::vector<ProgramInterfaceVertexAttribute> & ProgramInterface::attribute
 const std::vector<ProgramInterfaceUniform> & ProgramInterface::uniforms() const
 {
     return m_uniforms;
+}
+
+const std::vector<ProgramInterfaceSampler> & ProgramInterface::samplers() const
+{
+    return m_samplers;
 }
 
 const std::vector<ProgramInterfaceFragmentOutput> & ProgramInterface::fragmentOutputs() const
@@ -214,6 +265,12 @@ bool ProgramInterface::hasUniform(const std::string & name)
 {
     auto iter = m_uniformIndexByName.find(name);
     return iter != m_uniformIndexByName.end();
+}
+
+bool ProgramInterface::hasSampler(const std::string & name)
+{
+    auto iter = m_samplerIndexByName.find(name);
+    return iter != m_samplerIndexByName.end();
 }
 
 bool ProgramInterface::operator==(const ProgramInterface & other) const
@@ -266,6 +323,12 @@ std::string ProgramInterface::toString() const
     for (auto & uniform : m_uniforms)
     {
         stream << "  " << uniform.toString() << std::endl;
+    }
+
+    stream << "Samplers: " << m_samplers.size() << std::endl;
+    for (auto & sampler : m_samplers)
+    {
+        stream << "  " << sampler.toString() << std::endl;
     }
 
     stream << "Fragment outputs: " << m_fragmentOutputs.size() << std::endl;

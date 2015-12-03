@@ -6,6 +6,7 @@
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Draw/ProgramInterfaceFragmentOutput.h>
+#include <Deliberation/Draw/ProgramInterfaceSampler.h>
 #include <Deliberation/Draw/ProgramInterfaceUniform.h>
 #include <Deliberation/Draw/ProgramInterfaceVertexAttribute.h>
 
@@ -20,18 +21,20 @@ public:
 
     const ProgramInterfaceVertexAttribute & attribute(const std::string & name) const;
     const ProgramInterfaceUniform & uniform(const std::string & name) const;
+    const ProgramInterfaceSampler & sampler(const std::string & name) const;
 
     const ProgramInterfaceVertexAttribute & attributeByLocation(unsigned int location) const;
     const ProgramInterfaceUniform & uniformByLocation(unsigned int location) const;
+    const ProgramInterfaceSampler & samplerByLocation(unsigned int location) const;
 
     const std::vector<ProgramInterfaceVertexAttribute> & attributes() const;
     const std::vector<ProgramInterfaceUniform> & uniforms() const;
+    const std::vector<ProgramInterfaceSampler> & samplers() const;
     const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs() const;
 
     bool hasAttribute(const std::string & name);
     bool hasUniform(const std::string & name);
-
-    void addAttribute(const ProgramInterfaceVertexAttribute & field);
+    bool hasSampler(const std::string & name);
 
     bool operator==(const ProgramInterface & other) const;
     bool operator!=(const ProgramInterface & other) const;
@@ -46,6 +49,10 @@ private:
     std::vector<ProgramInterfaceUniform> m_uniforms;
     std::unordered_map<std::string, decltype(m_uniforms)::size_type> m_uniformIndexByName;
     std::vector<unsigned int> m_uniformIndexByLocation;
+
+    std::vector<ProgramInterfaceSampler> m_samplers;
+    std::unordered_map<std::string, decltype(m_samplers)::size_type> m_samplerIndexByName;
+    std::vector<unsigned int> m_samplerIndexByLocation;
 
     std::vector<ProgramInterfaceFragmentOutput> m_fragmentOutputs;
 };

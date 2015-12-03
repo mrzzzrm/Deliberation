@@ -3,12 +3,27 @@
 #include <iostream>
 #include <cassert>
 
+#include <IL/il.h>
+#include <IL/ilu.h>
+
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
 namespace deliberation
 {
+
+void init()
+{
+    ilInit();
+    ilEnable(IL_ORIGIN_SET);
+    iluInit();
+}
+
+void shutdown()
+{
+
+}
 
 void EnableGLErrorChecks()
 {

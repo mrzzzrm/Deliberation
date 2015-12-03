@@ -34,6 +34,7 @@ public:
     BufferLayout createPackedBufferLayout(const std::vector<std::string> & names);
 
     Buffer createBuffer(const BufferLayout & layout);
+    Buffer createIndexBuffer32();
 
     template<typename T>
     BufferUpload createBufferUpload(Buffer & buffer, const std::vector<T> & data);
@@ -53,6 +54,8 @@ public:
     Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     Clear createClear();
+
+    Texture createTexture(const std::string & path);
 
     /*
         TODO

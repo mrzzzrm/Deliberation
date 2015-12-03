@@ -5,6 +5,8 @@
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Draw/Uniform.h>
+#include <Deliberation/Draw/Texture.h>
+#include <Deliberation/Draw/TextureBinding.h>
 
 namespace deliberation
 {
@@ -37,7 +39,8 @@ public:
     const DrawState & state() const;
 
     Uniform uniform(const std::string & name);
-//    TextureHandle texture(const std::string & name);
+
+    TextureBinding texture(const std::string & name);
 
 //    void setOutput(const DrawOutputConfig & output);
 

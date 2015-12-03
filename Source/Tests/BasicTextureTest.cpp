@@ -52,28 +52,37 @@ int main
     struct Vertex
     {
         glm::vec2 position;
-        glm::vec3 color;
+        glm::vec2 uv;
     };
 
-    deliberation::BufferLayout layout = context.createBufferLayout<Vertex>({
+    auto layout = context.createBufferLayout<Vertex>({
         {"Position", &Vertex::position},
-        {"Color", &Vertex::color},
+        {"UV", &Vertex::uv},
     });
-
-    std::cout << layout.toString() << std::endl;
-    deliberation::Buffer buffer = context.createBuffer(layout);
-
+    auto vbuffer = context.createBuffer(layout);
     auto vertices = std::vector<Vertex>({
-        {{-0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-        {{0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-        {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+        {{-0.5f, 0.0f}, {0.0f, 0.0f}},
+        {{0.5f, 0.0f}, {1.0f, 0.0f}},
+        {{0.0f, 0.5f}, {1.0f, 1.0f}},
+        {{-1.0f, 0.5f}, {0.0f, 1.0f}}
     });
-    context.createBufferUpload(buffer, vertices).schedule();
-    deliberation::Program program = context.createProgram({"../Data/BasicTriangleTest.vert", "../Data/BasicTriangleTest.frag"});
+    context.createBufferUpload(vbuffer, vertices).schedule();
 
-    deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
+    auto ibuffer = context.createIndexBuffer32();
+    auto indices = std::vector<unsigned int>({
+        0, 1, 2,
+        0, 2, 3
+    });
+    context.createBufferUpload(ibuffer, indices).schedule();
 
-    draw.addVertexBuffer(buffer);
+    auto program = context.createProgram({"../Data/BasicTextureTest.vert", "../Data/BasicTextureTest.frag"});
+
+    auto texture = context.createTexture("../Data/testimage.png");
+
+    auto draw = context.createDraw(program, gl::GL_TRIANGLES);
+    draw.texture("Texture").set(texture);
+    draw.addVertexBuffer(vbuffer);
+    draw.setIndexBuffer(ibuffer);
     draw.state().setDepthState(deliberation::DepthState(false, false));
     draw.state().setCullState(deliberation::CullState::disabled());
 
@@ -83,15 +92,13 @@ int main
 
     auto begin = std::chrono::system_clock::now();
 
-    deliberation::Clear clear = context.createClear();
+    auto clear = context.createClear();
     clear.setColor({0.2, 0.2f, 0.2f, 0.0f});
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         auto seconds = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::system_clock::now() - begin);
-
-        draw.uniform("BaseColor").set(glm::vec3(std::sin(seconds.count()), std::cos(seconds.count()), 1.0f));
 
         transform.set(glm::rotate(glm::pi<float>()/2.0f * seconds.count(), glm::vec3(0, 0, -1)));
 
