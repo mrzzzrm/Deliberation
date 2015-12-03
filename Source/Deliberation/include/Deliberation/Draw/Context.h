@@ -34,6 +34,8 @@ public:
     BufferLayout createPackedBufferLayout(const std::vector<std::string> & names);
 
     Buffer createBuffer(const BufferLayout & layout);
+    Buffer createIndexBuffer8();
+    Buffer createIndexBuffer16();
     Buffer createIndexBuffer32();
 
     template<typename T>

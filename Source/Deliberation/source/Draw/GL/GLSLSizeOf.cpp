@@ -14,8 +14,13 @@ gl::GLint GLSLSizeOf(gl::GLenum type)
 {
     switch(type)
     {
+    case gl::GL_BYTE:              return sizeof(gl::GLbyte);
+    case gl::GL_UNSIGNED_BYTE:     return sizeof(gl::GLubyte);
+    case gl::GL_SHORT:             return sizeof(gl::GLshort);
+    case gl::GL_UNSIGNED_SHORT:    return sizeof(gl::GLushort);
     case gl::GL_INT:               return sizeof(gl::GLint);
     case gl::GL_UNSIGNED_INT:      return sizeof(gl::GLuint);
+
     case gl::GL_FLOAT:             return sizeof(gl::GLfloat);
 
     case gl::GL_INT_VEC2:          return sizeof(glm::ivec2);

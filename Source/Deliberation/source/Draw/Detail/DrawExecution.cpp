@@ -151,7 +151,7 @@ void DrawExecution::drawElementsInstanced() const
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
     gl::glDrawElementsInstanced(m_drawImpl.state.primitive(),
                                 elementCount(),
-                                gl::GL_UNSIGNED_INT,
+                                elementType(),
                                 nullptr,
                                 instanceCount());
 }
@@ -161,7 +161,7 @@ void DrawExecution::drawElements() const
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
     gl::glDrawElements(m_drawImpl.state.primitive(),
                        elementCount(),
-                       gl::GL_UNSIGNED_INT,
+                       elementType(),
                        nullptr);
 }
 
@@ -236,6 +236,14 @@ unsigned int DrawExecution::instanceCount() const
     }
 
     return ref;
+}
+
+gl::GLenum DrawExecution::elementType() const
+{
+    Assert(m_drawImpl.indexBuffer, "No index buffer set");
+    Assert(m_drawImpl.indexBuffer->layout().fields().size() == 1u, "Invalid index buffer layout");
+
+    return m_drawImpl.indexBuffer->layout().fields()[0].type();
 }
 
 void DrawExecution::applyDepthState()

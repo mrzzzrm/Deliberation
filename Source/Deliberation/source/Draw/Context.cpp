@@ -29,9 +29,21 @@ Buffer Context::createBuffer(const BufferLayout & layout)
     return Buffer(*this, layout);
 }
 
+Buffer Context::createIndexBuffer8()
+{
+    BufferLayout layout({BufferLayoutField("Index8", sizeof(gl::GLubyte), gl::GL_UNSIGNED_BYTE, 0)});
+    return Buffer(*this, layout);
+}
+
+Buffer Context::createIndexBuffer16()
+{
+    BufferLayout layout({BufferLayoutField("Index16", sizeof(gl::GLushort), gl::GL_UNSIGNED_SHORT, 0)});
+    return Buffer(*this, layout);
+}
+
 Buffer Context::createIndexBuffer32()
 {
-    BufferLayout layout({BufferLayoutField("Index", sizeof(gl::GLuint), gl::GL_UNSIGNED_INT, 0)});
+    BufferLayout layout({BufferLayoutField("Index32", sizeof(gl::GLuint), gl::GL_UNSIGNED_INT, 0)});
     return Buffer(*this, layout);
 }
 

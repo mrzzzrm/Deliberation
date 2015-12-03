@@ -143,6 +143,7 @@ set(api_includes
     ${include_path}/Draw/BufferLayout.h
     ${include_path}/Draw/BufferLayoutField.h
     ${include_path}/Draw/BufferUpload.h
+    ${include_path}/Draw/BufferUpload.inl
     ${include_path}/Draw/Clear.h
     ${include_path}/Draw/Context.h
     ${include_path}/Draw/Context.inl

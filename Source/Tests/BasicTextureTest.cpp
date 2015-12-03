@@ -68,12 +68,14 @@ int main
     });
     context.createBufferUpload(vbuffer, vertices).schedule();
 
-    auto ibuffer = context.createIndexBuffer32();
-    auto indices = std::vector<unsigned int>({
+    auto ibuffer = context.createIndexBuffer8();
+    auto indices = std::vector<gl::GLbyte>({
         0, 1, 2,
         0, 2, 3
     });
     context.createBufferUpload(ibuffer, indices).schedule();
+
+    std::cout << "Buffer has " << ibuffer.count() << " indices" << std::endl;
 
     auto program = context.createProgram({"../Data/BasicTextureTest.vert", "../Data/BasicTextureTest.frag"});
 

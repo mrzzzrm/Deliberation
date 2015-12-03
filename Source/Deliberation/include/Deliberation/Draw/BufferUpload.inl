@@ -16,6 +16,9 @@ BufferUpload::BufferUpload(Context & context, Buffer & buffer, const std::vector
     m_blob(data),
     m_count(data.size())
 {
+    Assert(sizeof(T) == m_buffer.layout().stride(),
+           "BufferLayout stride " + std::to_string(m_buffer.layout().stride()) +
+           " differs from data size " + std::to_string(sizeof(T)));
 }
 
 template<typename T>
@@ -23,6 +26,10 @@ BufferUpload::BufferUpload(Context & context, Buffer & buffer, std::vector<T> &&
     m_context(context),
     m_buffer(buffer)
 {
+    Assert(sizeof(T) == m_buffer.layout().stride(),
+           "BufferLayout stride " + std::to_string(m_buffer.layout().stride()) +
+           " differs from data size " + std::to_string(sizeof(T)));
+
     m_count = data.size();
     m_blob = Blob(std::move(data));
 }
@@ -34,10 +41,14 @@ BufferUpload::BufferUpload(Context & context, Buffer & buffer, const std::vector
     m_blob(data),
     m_count(count)
 {
-    Assert(sizeof(T) == m_buffer.layout().stride(),
-           "BufferLayout stride " + std::to_string(m_buffer.layout().stride()) +
-           " differs from data size " + std::to_string(sizeof(T)));
+    /*
+        TODO
+            This Assert is broken
+    */
 
+//    Assert(sizeof(T) == m_buffer.layout().stride(),
+//           "BufferLayout stride " + std::to_string(m_buffer.layout().stride()) +
+//           " differs from data size " + std::to_string(sizeof(T)));
 }
 
 template<typename T>
@@ -47,9 +58,14 @@ BufferUpload::BufferUpload(Context & context, Buffer & buffer, std::vector<T> &&
     m_blob(std::move(data)),
     m_count(count)
 {
-    Assert(sizeof(T) == m_buffer.layout().stride(),
-           "BufferLayout stride " + std::to_string(m_buffer.layout().stride()) +
-           " differs from data size " + std::to_string(sizeof(T)));
+    /*
+        TODO
+            This Assert is broken
+    */
+
+//    Assert(sizeof(T) == m_buffer.layout().stride(),
+//           "BufferLayout stride " + std::to_string(m_buffer.layout().stride()) +
+//           " differs from data size " + std::to_string(sizeof(T)));
 }
 
 }

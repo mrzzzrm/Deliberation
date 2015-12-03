@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glbinding/gl/types.h>
+
 namespace deliberation
 {
 
@@ -28,6 +30,8 @@ private:
     unsigned int elementCount() const;
     unsigned int vertexCount() const;
     unsigned int instanceCount() const;
+
+    gl::GLenum elementType() const;
 
     void applyDepthState();
     void applyBlendState();
