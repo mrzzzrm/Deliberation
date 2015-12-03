@@ -13,7 +13,7 @@ namespace detail
 class TextureBindingImpl
 {
 public:
-    TextureBindingImpl(gl::GLenum type, gl::GLuint location);
+    TextureBindingImpl(gl::GLenum uniformType, gl::GLuint location);
 
     gl::GLenum type;
     gl::GLuint location;

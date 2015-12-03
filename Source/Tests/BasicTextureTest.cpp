@@ -80,6 +80,7 @@ int main
     auto program = context.createProgram({"../Data/BasicTextureTest.vert", "../Data/BasicTextureTest.frag"});
 
     auto texture = context.createTexture("../Data/testimage.png");
+    std::cout << "Texture resolution: " << texture.width() << "x" << texture.height() << std::endl;
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
     draw.texture("Texture").set(texture);
