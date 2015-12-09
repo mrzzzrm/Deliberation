@@ -10,19 +10,42 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
+#include <SDL2/SDL_ttf.h>
+
 namespace deliberation
 {
 
 void init()
 {
-    ilInit();
-    ilEnable(IL_ORIGIN_SET);
-    iluInit();
+    // DevIL
+    {
+        /*
+            TODO
+                Error checking
+        */
+
+        ilInit();
+        ilEnable(IL_ORIGIN_SET);
+        iluInit();
+    }
+
+    // SDL_ttf
+    {
+        auto r = TTF_Init();
+        if (r)
+        {
+            std::cout << "Failed to init SDL_ttf: '" << TTF_GetError() << "'" << std::endl;
+        }
+    }
 }
 
 void shutdown()
 {
-
+    // SDL_ttf
+    if (TTF_WasInit())
+    {
+        TTF_Quit();
+    }
 }
 
 void EnableGLErrorChecks()

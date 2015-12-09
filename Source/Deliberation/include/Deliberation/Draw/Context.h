@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <SDL2/SDL.h>
+
 #include <Deliberation/Deliberation_API.h>
 
 #include <Deliberation/Draw/Detail/NamedDataMemberOf.h>
@@ -56,8 +58,10 @@ public:
     Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     Clear createClear();
+    Clear createClear(const glm::vec4 & color);
 
     Texture createTexture(const std::string & path);
+    Texture createTexture(SDL_Surface * surface);
 
     /*
         TODO

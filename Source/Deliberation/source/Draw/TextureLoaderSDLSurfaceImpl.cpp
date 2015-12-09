@@ -3,7 +3,16 @@
 #include <cassert>
 #include <iostream>
 
+#include <Deliberation/Core/Assert.h>
+
 #include <Deliberation/Draw/PixelFormat.h>
+
+/*
+    TODO
+        Support non-8bit SDL Formats
+        Don't create copy of surface if you don't have to
+        Don't store in 32F Texture if you don't have to
+*/
 
 namespace deliberation
 {
@@ -11,7 +20,20 @@ namespace deliberation
 TextureLoaderSDLSurfaceImpl::TextureLoaderSDLSurfaceImpl(SDL_Surface * surface):
     m_surface(nullptr)
 {
-    m_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+    auto format = surface->format->format;
+
+    switch (format)
+    {
+    case SDL_PIXELFORMAT_RGB888:
+        m_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+        break;
+    case SDL_PIXELFORMAT_RGBA8888:
+    case SDL_PIXELFORMAT_ARGB8888:
+        m_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
+        break;
+    default:
+        Fail(std::string("Yet unsupported SDL Format: ") + SDL_GetPixelFormatName(format));
+    }
 }
 
 TextureLoaderSDLSurfaceImpl::~TextureLoaderSDLSurfaceImpl()
@@ -22,6 +44,28 @@ TextureLoaderSDLSurfaceImpl::~TextureLoaderSDLSurfaceImpl()
 TextureBinary TextureLoaderSDLSurfaceImpl::load()
 {
     std::vector<float> pixels;
+    std::size_t numChannels = 0;
+    auto format = PixelFormat_None;
+
+    switch (m_surface->format->format)
+    {
+    case SDL_PIXELFORMAT_RGB888:
+        numChannels = 3;
+        format = PixelFormat_RGB_32F;
+        break;
+    case SDL_PIXELFORMAT_RGBA8888:
+        numChannels = 4;
+        format = PixelFormat_RGBA_32F;
+        break;
+    default:
+        Fail("Yet unsupported SDL Format");
+    }
+
+    std::size_t numPixels = m_surface->w * m_surface->h * numChannels;
+
+    pixels.reserve(numPixels);
+
+    Uint8 r, g, b, a;
 
     for (auto y = m_surface->h - 1; y >= 0; y--)
     {
@@ -29,14 +73,33 @@ TextureBinary TextureLoaderSDLSurfaceImpl::load()
         {
             auto offset = y * m_surface->pitch + x * m_surface->format->BytesPerPixel;
             uint8_t * pixel = &((uint8_t*)m_surface->pixels)[offset];
+            uint32_t value = *(uint32_t*)pixel;
 
-            pixels.push_back(pixel[0]/255.0f);
-            pixels.push_back(pixel[1]/255.0f);
-            pixels.push_back(pixel[2]/255.0f);
+            switch (m_surface->format->format)
+            {
+            case SDL_PIXELFORMAT_RGB888:
+                SDL_GetRGB(value, m_surface->format, &r, &g, &b);
+                pixels.push_back(r/255.0f);
+                pixels.push_back(g/255.0f);
+                pixels.push_back(b/255.0f);
+                break;
+            case SDL_PIXELFORMAT_RGBA8888:
+            case SDL_PIXELFORMAT_ARGB8888:
+                SDL_GetRGBA(value, m_surface->format, &r, &g, &b, &a);
+
+                pixels.push_back(r/255.0f);
+                pixels.push_back(g/255.0f);
+                pixels.push_back(b/255.0f);
+                pixels.push_back(a/255.0f);
+                break;
+            default:
+                Fail(std::string("Yet unsupported SDL Format: ") + SDL_GetPixelFormatName(format));
+
+            }
         }
     }
 
-    return TextureBinary(std::move(pixels), m_surface->w, m_surface->h, PixelFormat_RGB_32F);
+    return TextureBinary(std::move(pixels), m_surface->w, m_surface->h, format);
 }
 
 }

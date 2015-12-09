@@ -10,6 +10,7 @@ find_package(GLM        REQUIRED)
 FIND_PACKAGE(IL		    REQUIRED)
 FIND_PACKAGE(ILU	    REQUIRED)
 FIND_PACKAGE(SDL2	    REQUIRED)
+FIND_PACKAGE(SDL2_ttf   REQUIRED)
 
 # include
 include_directories(
@@ -18,6 +19,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
+    ${SDL2TTF_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${IL_INCLUDE_DIR}
@@ -112,6 +114,8 @@ set(sources
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.h
     ${source_path}/Draw/TextureUploader.cpp
     ${source_path}/Draw/Uniform.cpp
+    
+    ${source_path}/Font/Font.cpp
 )
 
 # api_includes
@@ -172,6 +176,8 @@ set(api_includes
     ${include_path}/Draw/TextureUploader.h    
     ${include_path}/Draw/Uniform.h
     ${include_path}/Draw/Uniform.inl
+    
+    ${include_path}/Font/Font.h
 )
 
 # libs
@@ -180,6 +186,7 @@ set(libs
     ${IL_LIBRARIES}
     ${ILU_LIBRARIES}
     ${SDL2_LIBRARY}
+    ${SDL2TTF_LIBRARY}
 )
 
 # library

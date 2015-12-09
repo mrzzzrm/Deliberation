@@ -80,9 +80,25 @@ Clear Context::createClear()
     return clear;
 }
 
+Clear Context::createClear(const glm::vec4 & color)
+{
+    auto clear = createClear();
+    clear.setColor(color);
+
+    return clear;
+}
+
 Texture Context::createTexture(const std::string & path)
 {
     auto binary = TextureLoader(path).load();
+    auto texture = TextureUploader(*this, binary).upload();
+
+    return texture;
+}
+
+Texture Context::createTexture(SDL_Surface * surface)
+{
+    auto binary = TextureLoader(surface).load();
     auto texture = TextureUploader(*this, binary).upload();
 
     return texture;

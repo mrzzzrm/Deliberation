@@ -27,6 +27,8 @@ int main
     char * argv[]
 )
 {
+    std::cout << "---- BasicTriangleTest ----" << std::endl;
+
     GLFWwindow* window;
 
     /* Initialize the library */

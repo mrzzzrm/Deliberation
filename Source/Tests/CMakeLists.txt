@@ -48,3 +48,7 @@ target_link_libraries(BasicTriangleTest ${libs})
 add_executable(BasicTextureTest BasicTextureTest.cpp)
 target_link_libraries(BasicTextureTest ${libs})
 
+# BasicFontTest
+add_executable(BasicFontTest BasicFontTest.cpp)
+target_link_libraries(BasicFontTest ${libs})
+

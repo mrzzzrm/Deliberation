@@ -40,7 +40,6 @@ void DrawExecution::perform()
     applyRasterizerState();
     applyStencilState();
 
-//    m_draw.m_state.apply();
     gl::glUseProgram(m_drawImpl.program.m_impl->glProgramName);
 
     // Setup texture units
