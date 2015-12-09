@@ -9,6 +9,8 @@
 namespace deliberation
 {
 
+Texture::Texture() = default;
+
 Texture::~Texture() = default;
 
 unsigned int Texture::width() const

@@ -8,7 +8,6 @@
 
 #include <Deliberation/Draw/Detail/NamedDataMemberOf.h>
 #include <Deliberation/Draw/GL/GLStateManager.h>
-#include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Clear.h>
@@ -29,6 +28,10 @@ class DELIBERATION_API Context final
 public:
     Context();
 
+    /*
+        TODO
+            The BufferLayout has no connection to the Context - why should one need the Context have to create it?
+    */
     template<typename T>
     BufferLayout createBufferLayout(const std::vector<detail::NamedDataMemberOf<T>> & members);
 
@@ -39,18 +42,6 @@ public:
     Buffer createIndexBuffer8();
     Buffer createIndexBuffer16();
     Buffer createIndexBuffer32();
-
-    template<typename T>
-    BufferUpload createBufferUpload(Buffer & buffer, const std::vector<T> & data);
-
-    template<typename T>
-    BufferUpload createBufferUpload(Buffer & buffer, const std::vector<T> && data);
-
-    template<typename T>
-    BufferUpload createRawBufferUpload(Buffer & buffer, const std::vector<T> & data, unsigned int count);
-
-    template<typename T>
-    BufferUpload createRawBufferUpload(Buffer & buffer, const std::vector<T> && data, unsigned int count);
 
     Program createProgram(const std::vector<std::string> & paths);
 

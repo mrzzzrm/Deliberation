@@ -18,6 +18,7 @@ namespace detail
 class Texture final
 {
 public:
+    Texture();
     ~Texture();
 
     unsigned int width() const;

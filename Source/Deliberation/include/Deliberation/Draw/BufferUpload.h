@@ -13,23 +13,8 @@ class Context;
 class BufferUpload final
 {
 public:
-    /*
-        TODO
-            Context takes the template work, it could also generate the Blob and pass
-            it to BufferUpload, so BufferUpload doesn't need another set of template-
-            constructors
-    */
-    template<typename T>
-    BufferUpload(Context & context, Buffer & buffer, const std::vector<T> & data);
-
-    template<typename T>
-    BufferUpload(Context & context, Buffer & buffer, std::vector<T> && data);
-
-    template<typename T>
-    BufferUpload(Context & context, Buffer & buffer, const std::vector<T> & data, unsigned int count);
-
-    template<typename T>
-    BufferUpload(Context & context, Buffer & buffer, std::vector<T> && data, unsigned int count);
+    BufferUpload(Context & context, Buffer & buffer, const Blob & data);
+    BufferUpload(Context & context, Buffer & buffer, const Blob & data, unsigned int count);
 
     Buffer & buffer() const;
     const Blob & data() const;
@@ -46,4 +31,4 @@ private:
 
 }
 
-#include <Deliberation/Draw/BufferUpload.inl>
+

@@ -15,6 +15,8 @@ class Draw;
 class Uniform
 {
 public:
+    Uniform();
+
     template<typename T>
     void set(const T & value);
 
@@ -25,7 +27,7 @@ private:
     Uniform(detail::UniformImpl & impl);
 
 private:
-    detail::UniformImpl & m_impl;
+    detail::UniformImpl * m_impl;
 };
 
 }

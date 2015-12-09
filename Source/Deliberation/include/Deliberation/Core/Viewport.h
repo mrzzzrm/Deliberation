@@ -23,6 +23,9 @@ public:
     void setWidth(unsigned int width);
     void setHeight(unsigned int height);
 
+    bool operator==(const Viewport & other) const;
+    bool operator!=(const Viewport & other) const;
+
     std::string toString() const;
 
 private:

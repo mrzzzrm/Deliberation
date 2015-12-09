@@ -14,6 +14,8 @@
 
 #include <Deliberation/Deliberation.h>
 
+#include <Deliberation/Core/Viewport.h>
+
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
@@ -21,6 +23,8 @@
 #include <Deliberation/Draw/Clear.h>
 
 #include <Deliberation/Font/Font.h>
+#include <Deliberation/Font/Label.h>
+#include <Deliberation/Font/LabelRenderer.h>
 
 GLFWwindow * window;
 
@@ -47,14 +51,14 @@ void run
         {{ 0.5f,  0.5f}, {1.0f, 1.0f}},
         {{ 0.5f, -0.5f}, {1.0f, 0.0f}}
     });
-    context.createBufferUpload(vbuffer, vertices).schedule();
+    vbuffer.createUpload(vertices).schedule();
 
     auto ibuffer = context.createIndexBuffer8();
     auto indices = std::vector<gl::GLbyte>({
         0, 1, 2,
         0, 2, 3
     });
-    context.createBufferUpload(ibuffer, indices).schedule();
+    ibuffer.createUpload(indices).schedule();
 
     std::cout << "Buffer has " << ibuffer.count() << " indices" << std::endl;
 
@@ -64,6 +68,12 @@ void run
 
     auto texture = font.render("Hello Font World", 64, glm::vec4(0.2f, 0.4f, 0.6f, 0.8f));
     std::cout << "Texture resolution: " << texture.width() << "x" << texture.height() << std::endl;
+
+    deliberation::LabelRenderer labelRenderer(context);
+    deliberation::Label label(font);
+    label.setText("Bonjour!");
+    label.setPosition({-0.5f, 0.8f});
+    label.setColor({1.0f, 1.0f, 0.0f});
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
     draw.texture("Texture").set(texture);
@@ -82,6 +92,8 @@ void run
     {
         clear.schedule();
         draw.schedule();
+
+        labelRenderer.render(label, deliberation::Viewport(0, 0, 640, 480));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

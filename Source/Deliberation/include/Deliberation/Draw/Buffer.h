@@ -3,7 +3,10 @@
 #include <memory>
 #include <vector>
 
+#include <Deliberation/Core/Blob.h>
+
 #include <Deliberation/Draw/BufferLayout.h>
+#include <Deliberation/Draw/BufferUpload.h>
 
 /*
     TODO
@@ -28,6 +31,9 @@ public:
     unsigned int count() const;
     const BufferLayout & layout() const;
 
+    BufferUpload createUpload(const Blob & data);
+    BufferUpload createRawUpload(const Blob & data, unsigned int count);
+
     std::string toString() const;
 
 private:
@@ -44,4 +50,6 @@ private:
 };
 
 }
+
+
 

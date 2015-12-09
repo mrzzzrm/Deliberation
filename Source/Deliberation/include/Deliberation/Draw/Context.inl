@@ -61,29 +61,5 @@ BufferLayout Context::createBufferLayout(const std::vector<detail::NamedDataMemb
     return BufferLayout(fields, sizeof(T));
 }
 
-template<typename T>
-BufferUpload Context::createBufferUpload(Buffer & buffer, const std::vector<T> & data)
-{
-    return BufferUpload(*this, buffer, data);
-}
-
-template<typename T>
-BufferUpload Context::createBufferUpload(Buffer & buffer, const std::vector<T> && data)
-{
-    return BufferUpload(*this, buffer, std::move(data));
-}
-
-template<typename T>
-BufferUpload Context::createRawBufferUpload(Buffer & buffer, const std::vector<T> & data, unsigned int count)
-{
-    return BufferUpload(*this, buffer, data, count);
-}
-
-template<typename T>
-BufferUpload Context::createRawBufferUpload(Buffer & buffer, const std::vector<T> && data, unsigned int count)
-{
-    return BufferUpload(*this, buffer, std::move(data), count);
-}
-
 }
 

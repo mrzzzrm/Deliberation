@@ -55,6 +55,19 @@ void Viewport::setHeight(unsigned int height)
     m_height = height;
 }
 
+bool Viewport::operator==(const Viewport & other) const
+{
+    return m_x == other.m_x &&
+           m_y == other.m_y &&
+           m_width == other.m_width &&
+           m_height == other.m_height;
+}
+
+bool Viewport::operator!=(const Viewport & other) const
+{
+    return !operator==(other);
+}
+
 std::string Viewport::toString() const
 {
     return "(" + std::to_string(m_x) + " " +

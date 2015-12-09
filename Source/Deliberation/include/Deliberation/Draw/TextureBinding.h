@@ -13,6 +13,8 @@ class Texture;
 class TextureBinding
 {
 public:
+    TextureBinding();
+
     void set(const Texture & texture);
 
 private:
@@ -22,7 +24,7 @@ private:
     TextureBinding(detail::TextureBindingImpl & impl);
 
 private:
-    detail::TextureBindingImpl & m_impl;
+    detail::TextureBindingImpl * m_impl;
 };
 
 }

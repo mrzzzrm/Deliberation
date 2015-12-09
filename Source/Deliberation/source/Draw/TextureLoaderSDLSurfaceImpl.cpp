@@ -12,6 +12,7 @@
         Support non-8bit SDL Formats
         Don't create copy of surface if you don't have to
         Don't store in 32F Texture if you don't have to
+        (Probably just copy the SDL source for converting a SDL_Surface into a texture)
 */
 
 namespace deliberation

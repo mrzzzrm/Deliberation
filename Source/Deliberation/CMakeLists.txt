@@ -116,6 +116,8 @@ set(sources
     ${source_path}/Draw/Uniform.cpp
     
     ${source_path}/Font/Font.cpp
+    ${source_path}/Font/Label.cpp
+    ${source_path}/Font/LabelRenderer.cpp
 )
 
 # api_includes
@@ -133,6 +135,8 @@ set(api_includes
     ${include_path}/Core/Optional.h
     ${include_path}/Core/Optional.inl
     ${include_path}/Core/StringUtils.h
+    ${include_path}/Core/StreamUtils.h
+    ${include_path}/Core/StreamUtils.inl
     ${include_path}/Core/Viewport.h
 
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
@@ -149,7 +153,6 @@ set(api_includes
     ${include_path}/Draw/BufferLayout.h
     ${include_path}/Draw/BufferLayoutField.h
     ${include_path}/Draw/BufferUpload.h
-    ${include_path}/Draw/BufferUpload.inl
     ${include_path}/Draw/Clear.h
     ${include_path}/Draw/Context.h
     ${include_path}/Draw/Context.inl
@@ -178,6 +181,8 @@ set(api_includes
     ${include_path}/Draw/Uniform.inl
     
     ${include_path}/Font/Font.h
+    ${include_path}/Font/Label.h
+    ${include_path}/Font/LabelRenderer.h
 )
 
 # libs

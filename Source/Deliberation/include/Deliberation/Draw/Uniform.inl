@@ -12,10 +12,11 @@ namespace deliberation
 template<typename T>
 void Uniform::set(const T & value)
 {
-    Assert(GLSLTypeOf<T>::value == m_impl.type, "Uniform type mismatch");
+    Assert(m_impl, "Hollow Uniform can't be set");
+    Assert(GLSLTypeOf<T>::value == m_impl->type, "Uniform type mismatch");
 
-    m_impl.blob = Blob::fromValue(value);
-    m_impl.isAssigned = true;
+    m_impl->blob = Blob::fromValue(value);
+    m_impl->isAssigned = true;
 }
 
 }

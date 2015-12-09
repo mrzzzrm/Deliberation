@@ -34,5 +34,15 @@ Buffer::Buffer(Context & context, const BufferLayout & layout)
     m_impl->layout = layout;
 }
 
+BufferUpload Buffer::createUpload(const Blob & data)
+{
+    return BufferUpload(m_impl->context, *this, data);
+}
+
+BufferUpload Buffer::createRawUpload(const Blob & data, unsigned int count)
+{
+    return BufferUpload(m_impl->context, *this, data, count);
+}
+
 }
 

@@ -9,15 +9,22 @@
 namespace deliberation
 {
 
+TextureBinding::TextureBinding():
+    m_impl(nullptr)
+{
+
+}
+
 void TextureBinding::set(const Texture & texture)
 {
-    Assert(texture.type() == m_impl.type, "Texture type mismatch");
+    Assert(m_impl, "Hollow TextureBinding can't be set");
+    Assert(texture.type() == m_impl->type, "Texture type mismatch");
 
-    m_impl.texture = &texture;
+    m_impl->texture = &texture;
 }
 
 TextureBinding::TextureBinding(detail::TextureBindingImpl & impl):
-    m_impl(impl)
+    m_impl(&impl)
 {
 
 }

@@ -50,7 +50,7 @@ Font::~Font() = default;
 
 Texture Font::render(const std::string & text,
                      unsigned int size,
-                     const glm::vec4 & color)
+                     const glm::vec4 & color) const
 {
     Assert(m_context, "");
 

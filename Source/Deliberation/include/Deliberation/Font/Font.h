@@ -27,13 +27,13 @@ public:
     Font(Context & context, const std::string & path);
     ~Font();
 
-    Texture render(const std::string & text, unsigned int size, const glm::vec4 & color);
+    Texture render(const std::string & text, unsigned int size, const glm::vec4 & color) const;
 
 private:
     Context * m_context;
     std::string m_path;
-    std::unordered_map<unsigned int,
-                       std::unique_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;
+    mutable std::unordered_map<unsigned int,
+                               std::unique_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;
 };
 
 }
