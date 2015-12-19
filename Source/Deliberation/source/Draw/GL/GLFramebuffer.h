@@ -28,4 +28,3 @@ private:
 
 }
 
-#include "GLFramebuffer.inl"

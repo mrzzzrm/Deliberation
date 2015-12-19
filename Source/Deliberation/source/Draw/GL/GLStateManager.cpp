@@ -6,6 +6,10 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
+
+#include "Draw/GL/GLFramebuffer.h"
+
 using namespace gl;
 
 namespace deliberation

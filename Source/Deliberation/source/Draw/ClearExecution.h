@@ -14,6 +14,10 @@ public:
     void perform();
 
 private:
+    void clearBackbuffer();
+    void clearFramebuffer();
+
+private:
     GLStateManager & m_glStateManager;
     const Clear & m_clear;
 };

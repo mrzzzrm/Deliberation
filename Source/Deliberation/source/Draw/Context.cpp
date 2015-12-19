@@ -126,7 +126,8 @@ Texture Context::createTexture(SDL_Surface * surface)
 
 Texture Context::createTexture2D(unsigned int width,
                                  unsigned int height,
-                                 PixelFormat format)
+                                 PixelFormat format,
+                                 bool clear)
 {
     /*
         TODO
@@ -165,6 +166,13 @@ Texture Context::createTexture2D(unsigned int width,
     impl->maxLevel = 0;
     impl->minFilter = gl::GL_LINEAR;
     impl->maxFilter = gl::GL_LINEAR;
+
+    if (clear)
+    {
+        auto c = createClear();
+        c.setSurfaces({&impl->surfaces.front()});
+        c.schedule();
+    }
 
     return Texture(impl);
 }

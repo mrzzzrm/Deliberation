@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <glbinding/gl/types.h>
 
@@ -16,9 +17,13 @@ namespace detail
     class ClearImpl;
 }
 
+class Surface;
+
 class DELIBERATION_API Clear
 {
 public:
+    void setSurfaces(const std::vector<Surface*> & surfaces);
+
     void setColor(const glm::vec4 & color);
     void disableColor();
 

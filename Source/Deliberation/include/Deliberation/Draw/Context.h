@@ -34,10 +34,6 @@ public:
 
     void setBackbufferResolution(unsigned int width, unsigned height);
 
-    /*
-        TODO
-            The BufferLayout has no connection to the Context - why should one need the Context have to create it?
-    */
     template<typename T>
     BufferLayout createBufferLayout(const std::vector<detail::NamedDataMemberOf<T>> & members);
 
@@ -61,7 +57,8 @@ public:
     Texture createTexture(SDL_Surface * surface);
     Texture createTexture2D(unsigned int width,
                             unsigned int height,
-                            PixelFormat format);
+                            PixelFormat format,
+                            bool clear = true);
 
     /*
         TODO

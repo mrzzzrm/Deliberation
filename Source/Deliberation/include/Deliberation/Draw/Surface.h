@@ -11,6 +11,7 @@ namespace deliberation
 
 namespace detail
 {
+    class Framebuffer;
     class TextureImpl;
 }
 
@@ -30,7 +31,7 @@ public:
 private:
     friend class Context;
     friend class DrawOutput;
-    friend class GLFramebuffer;
+    friend class detail::Framebuffer;
     friend class TextureUploader;
 
 private:

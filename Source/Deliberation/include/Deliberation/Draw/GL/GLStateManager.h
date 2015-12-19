@@ -7,11 +7,11 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Draw/GL/GLFramebuffer.h>
-#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
-
 namespace deliberation
 {
+
+class GLFramebuffer;
+class GLFramebufferDesc;
 
 class GLStateManager final
 {

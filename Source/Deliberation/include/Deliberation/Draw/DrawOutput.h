@@ -6,7 +6,8 @@
 
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Draw/GL/GLFramebuffer.h>
+#include <Deliberation/Draw/Detail/Framebuffer.h>
+
 #include <Deliberation/Draw/GL/GLFramebufferDesc.h>
 
 namespace deliberation
@@ -38,18 +39,7 @@ private:
     friend class detail::DrawExecution;
 
 private:
-    void updateFramebufferDesc() const;
-    void updateResolution() const;
-
-private:
-    bool                                    m_isBackbuffer;
-    std::vector<Surface*>                   m_renderTargets;
-    mutable Optional<GLFramebufferDesc>     m_glFramebufferDesc;
-    mutable bool                            m_glFramebufferDirty;
-    mutable std::shared_ptr<GLFramebuffer>  m_glFramebuffer;
-    mutable unsigned int                    m_width;
-    mutable unsigned int                    m_height;
-    mutable bool                            m_resolutionDirty;
+    detail::Framebuffer m_framebuffer;
 };
 
 }

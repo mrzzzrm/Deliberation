@@ -51,6 +51,7 @@ set(sources
     ${source_path}/Draw/Detail/DrawExecution.h
     ${source_path}/Draw/Detail/DrawImpl.cpp
     ${source_path}/Draw/Detail/DrawImpl.h
+    ${source_path}/Draw/Detail/Framebuffer.cpp
     ${source_path}/Draw/Detail/ProgramImpl.cpp
     ${source_path}/Draw/Detail/ProgramImpl.h
     ${source_path}/Draw/Detail/SamplerImpl.cpp
@@ -59,8 +60,9 @@ set(sources
     ${source_path}/Draw/Detail/TextureImpl.h
     ${source_path}/Draw/Detail/UniformImpl.cpp
     
-    ${source_path}/Draw/GL/GLFramebuffer.cpp
     ${source_path}/Draw/GL/GLFramebufferDesc.cpp
+    ${source_path}/Draw/GL/GLFramebuffer.cpp
+    ${source_path}/Draw/GL/GLFramebuffer.h
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
     ${source_path}/Draw/GL/GLUtils.cpp
@@ -145,14 +147,13 @@ set(api_includes
     ${include_path}/Core/StreamUtils.inl
     ${include_path}/Core/Viewport.h
 
+    ${include_path}/Draw/Detail/Framebuffer.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
     ${include_path}/Draw/Detail/NamedDataMemberOf.h
     ${include_path}/Draw/Detail/NamedDataMemberOf.inl    
     ${include_path}/Draw/Detail/UniformImpl.h
     
-    ${include_path}/Draw/GL/GLFramebuffer.h
-    ${include_path}/Draw/GL/GLFramebuffer.inl
     ${include_path}/Draw/GL/GLFramebufferDesc.h
     ${include_path}/Draw/GL/GLSLSizeOf.h
     ${include_path}/Draw/GL/GLStateManager.h

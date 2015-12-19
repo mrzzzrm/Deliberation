@@ -1,4 +1,4 @@
-#include <Deliberation/Draw/GL/GLFramebuffer.h>
+#include "GLFramebuffer.h"
 
 #include <glbinding/gl/bitfield.h>
 #include <glbinding/gl/enum.h>
@@ -6,6 +6,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
 namespace deliberation
@@ -74,4 +75,3 @@ void GLFramebuffer::bind()
 }
 
 }
-

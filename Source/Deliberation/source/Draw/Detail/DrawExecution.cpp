@@ -71,25 +71,7 @@ void DrawExecution::perform()
     }
 
     // Setup RenderTarget / Framebuffer
-    {
-        auto & output = m_drawImpl.output;
-
-        if (output.isBackbuffer())
-        {
-            m_glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, 0);
-        }
-        else
-        {
-            if (output.m_glFramebufferDirty)
-            {
-                output.updateFramebufferDesc();
-                output.m_glFramebuffer = m_glStateManager.framebuffer(output.m_glFramebufferDesc.get());
-                output.m_glFramebufferDirty = false;
-            }
-
-            output.m_glFramebuffer->bind();
-        }
-    }
+    m_drawImpl.output.m_framebuffer.bind(m_glStateManager);
 
     // Set uniforms
     {
