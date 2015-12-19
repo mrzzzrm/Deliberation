@@ -53,9 +53,6 @@ public:
 
     void setViewport(const Viewport & viewport);
 
-    void apply() const;
-    void undo() const;
-
     std::string toString() const;
 
 private:

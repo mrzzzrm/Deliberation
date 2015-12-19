@@ -62,21 +62,24 @@ void run
 
     std::cout << "Buffer has " << ibuffer.count() << " indices" << std::endl;
 
-    auto program = context.createProgram({"../Data/BasicFontTest.vert", "../Data/BasicFontTest.frag"});
+    auto program = context.createProgram({deliberation::dataPath("Data/BasicFontTest.vert"), deliberation::dataPath("Data/BasicFontTest.frag")});
 
-    deliberation::Font font(context, "../Data/Xolonium.ttf");
+    deliberation::Font font(context, deliberation::dataPath("Data/Xolonium.ttf"));
 
     auto texture = font.render("Hello Font World", 64, glm::vec4(0.2f, 0.4f, 0.6f, 0.8f));
     std::cout << "Texture resolution: " << texture.width() << "x" << texture.height() << std::endl;
 
-    deliberation::LabelRenderer labelRenderer(context);
+    deliberation::LabelRenderer labelRenderer;
+    labelRenderer = deliberation::LabelRenderer(context);
+//    deliberation::LabelRenderer labelRenderer(context);
     deliberation::Label label(font);
     label.setText("Bonjour!");
-    label.setPosition({-0.5f, 0.8f});
+    label.setPosition({-1.0f, 0.0f});
+    label.setCenter({-1.0f, 0.0f});
     label.setColor({1.0f, 1.0f, 0.0f});
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
-    draw.texture("Texture").set(texture);
+    draw.sampler("Texture").setTexture(texture);
     draw.addVertexBuffer(vbuffer);
     draw.setIndexBuffer(ibuffer);
     draw.state().setDepthState(deliberation::DepthState(false, false));
@@ -109,7 +112,7 @@ int main
     char * argv[]
 )
 {
-    std::cout << "---- BasicTextureTest ----" << std::endl;
+    std::cout << "---- BasicFontTest ----" << std::endl;
 
     /* Initialize the library */
     if (!glfwInit())
@@ -128,6 +131,7 @@ int main
     glbinding::Binding::initialize();
 
     deliberation::init();
+    deliberation::setPrefixPath("..");
 
     run();
 

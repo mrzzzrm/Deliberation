@@ -54,9 +54,9 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             if (location >= (gl::GLint)m_attributeIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
             {
                 m_attributeIndexByLocation.resize(location + 1, (unsigned int)-1);
-                m_attributeIndexByLocation[location] = i;
             }
 
+            m_attributeIndexByLocation[location] = i;
             m_attributeIndexByName[name] = i;
             m_attributes.push_back({name, location, type, size});
 
@@ -170,6 +170,13 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             std::string name(nameData.data(), nameLength - 1);
 
+            if (location >= (gl::GLint)m_fragmentOutputIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
+            {
+                m_fragmentOutputIndexByLocation.resize(location + 1, (unsigned int)-1);
+            }
+
+            m_fragmentOutputIndexByLocation[location] = m_fragmentOutputs.size();
+            m_fragmentOutputIndexByName[name] = m_fragmentOutputs.size();
             m_fragmentOutputs.push_back({name, type, (unsigned int)location});
         }
     }
@@ -205,34 +212,75 @@ const ProgramInterfaceSampler & ProgramInterface::sampler(const std::string & na
     return m_samplers[iter->second];
 }
 
-const ProgramInterfaceVertexAttribute & ProgramInterface::attributeByLocation(unsigned int location) const
+const ProgramInterfaceFragmentOutput & ProgramInterface::fragmentOutput(const std::string & name) const
 {
-    Assert(location < m_attributeIndexByLocation.size(), "No such attribute location " + std::to_string(location));
+    auto iter = m_fragmentOutputIndexByName.find(name);
+    Assert (iter != m_fragmentOutputIndexByName.end(), "No such fragmentOutput '" + name + "'");
+
+    return m_fragmentOutputs[iter->second];
+}
+
+const ProgramInterfaceVertexAttribute * ProgramInterface::attributeByLocation(unsigned int location) const
+{
+    if (location >= m_attributeIndexByLocation.size())
+    {
+        return nullptr;
+    }
 
     auto index = m_attributeIndexByLocation[location];
-    Assert(index != (unsigned int)-1, "No such attribute location " + std::to_string(location));
+    if (index == (unsigned int)-1)
+    {
+        return nullptr;
+    }
 
-    return m_attributes[index];
+    return &m_attributes[index];
 }
 
-const ProgramInterfaceUniform & ProgramInterface::uniformByLocation(unsigned int location) const
+const ProgramInterfaceUniform * ProgramInterface::uniformByLocation(unsigned int location) const
 {
-    Assert(location < m_uniformIndexByLocation.size(), "No such uniform location " + std::to_string(location));
+    if (location >= m_uniformIndexByLocation.size())
+    {
+        return nullptr;
+    }
 
     auto index = m_uniformIndexByLocation[location];
-    Assert(index != (unsigned int)-1, "No such uniform location " + std::to_string(location));
+    if (index == (unsigned int)-1)
+    {
+        return nullptr;
+    }
 
-    return m_uniforms[index];
+    return &m_uniforms[index];
 }
 
-const ProgramInterfaceSampler & ProgramInterface::samplerByLocation(unsigned int location) const
+const ProgramInterfaceSampler * ProgramInterface::samplerByLocation(unsigned int location) const
 {
-    Assert(location < m_samplerIndexByLocation.size(), "No such sampler location " + std::to_string(location));
-
+    if (location >= m_samplerIndexByLocation.size())
+    {
+        return nullptr;
+    }
     auto index = m_samplerIndexByLocation[location];
-    Assert(index != (unsigned int)-1, "No such sampler location " + std::to_string(location));
+    if (index == (unsigned int)-1)
+    {
+        return nullptr;
+    }
 
-    return m_samplers[index];
+    return &m_samplers[index];
+}
+
+const ProgramInterfaceFragmentOutput * ProgramInterface::fragmentOutputByLocation(unsigned int location) const
+{
+    if (location >= m_fragmentOutputIndexByLocation.size())
+    {
+        return nullptr;
+    }
+
+    auto index = m_fragmentOutputIndexByLocation[location];
+    if (index == (unsigned int)-1)
+    {
+        return nullptr;
+    }
+
+    return &m_fragmentOutputs[index];
 }
 
 const std::vector<ProgramInterfaceVertexAttribute> & ProgramInterface::attributes() const
@@ -255,22 +303,28 @@ const std::vector<ProgramInterfaceFragmentOutput> & ProgramInterface::fragmentOu
     return m_fragmentOutputs;
 }
 
-bool ProgramInterface::hasAttribute(const std::string & name)
+bool ProgramInterface::hasAttribute(const std::string & name) const
 {
     auto iter = m_attributeIndexByName.find(name);
     return iter != m_attributeIndexByName.end();
 }
 
-bool ProgramInterface::hasUniform(const std::string & name)
+bool ProgramInterface::hasUniform(const std::string & name) const
 {
     auto iter = m_uniformIndexByName.find(name);
     return iter != m_uniformIndexByName.end();
 }
 
-bool ProgramInterface::hasSampler(const std::string & name)
+bool ProgramInterface::hasSampler(const std::string & name) const
 {
     auto iter = m_samplerIndexByName.find(name);
     return iter != m_samplerIndexByName.end();
+}
+
+bool ProgramInterface::hasFragmentOutput(const std::string & name) const
+{
+    auto iter = m_fragmentOutputIndexByName.find(name);
+    return iter != m_fragmentOutputIndexByName.end();
 }
 
 bool ProgramInterface::operator==(const ProgramInterface & other) const
@@ -281,6 +335,16 @@ bool ProgramInterface::operator==(const ProgramInterface & other) const
     }
 
     if (m_uniforms.size() != other.m_uniforms.size())
+    {
+        return false;
+    }
+
+    if (m_samplers.size() != other.m_samplers.size())
+    {
+        return false;
+    }
+
+    if (m_fragmentOutputs.size() != other.m_fragmentOutputs.size())
     {
         return false;
     }
@@ -296,6 +360,22 @@ bool ProgramInterface::operator==(const ProgramInterface & other) const
     for (auto u = 0u; u < m_uniforms.size(); u++)
     {
         if (m_uniforms[u] != other.m_uniforms[u])
+        {
+            return false;
+        }
+    }
+
+    for (auto s = 0u; s < m_samplers.size(); s++)
+    {
+        if (m_samplers[s] != other.m_samplers[s])
+        {
+            return false;
+        }
+    }
+
+    for (auto fo = 0u; fo < m_samplers.size(); fo++)
+    {
+        if (m_fragmentOutputs[fo] != other.m_fragmentOutputs[fo])
         {
             return false;
         }

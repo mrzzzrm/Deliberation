@@ -1,9 +1,14 @@
 #pragma once
 
 #include <array>
+#include <memory>
+#include <unordered_map>
 
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
+
+#include <Deliberation/Draw/GL/GLFramebuffer.h>
+#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
 
 namespace deliberation
 {
@@ -13,6 +18,9 @@ class GLStateManager final
 public:
     GLStateManager();
 
+    /*
+        Raw OpenGL calls
+    */
     void enableTextureCubeMapSeamless(bool enabled);
     void enableDepthTest(bool enabled);
     void setDepthMask(bool enabled);
@@ -33,9 +41,17 @@ public:
     void setClearColor(gl::GLclampf red, gl::GLclampf green, gl::GLclampf blue, gl::GLclampf alpha);
     void setClearDepth(gl::GLclampd depth);
     void setClearStencil(gl::GLint s);
-
+    void genFramebuffers(gl::GLsizei n, gl::GLuint * ids);
+    void deleteFramebuffers(gl::GLsizei n, gl::GLuint * framebuffers);
+    void bindFramebuffer(gl::GLenum target, gl::GLuint framebuffer);
+    void framebufferTexture2D(gl::GLenum target, gl::GLenum attachment, gl::GLenum textarget, gl::GLuint texture, gl::GLint level);
     void bindBuffer(gl::GLenum target, gl::GLuint buffer);
     void deleteBuffer(gl::GLuint buffer);
+
+    /*
+        Framebuffer caching
+    */
+    std::shared_ptr<GLFramebuffer> framebuffer(const GLFramebufferDesc & desc);
 
 private:
     void applyEnableDisableState(gl::GLenum state, bool & current, bool target);
@@ -56,33 +72,53 @@ private:
         BufferTargetCount
     };
 
+    enum FramebufferTarget
+    {
+        ReadFramebufferTarget = 0,
+        DrawFramebufferTarget,
+
+        FramebufferTargetCount
+    };
+
 private:
-    bool m_glTextureCubeMapSeamless;
-    bool m_glDepthTest;
-    bool m_glDepthMask;
-    bool m_glBlend;
-    gl::GLenum m_glBlendEquation;
-    gl::GLenum m_glBlendFuncSFactor;
-    gl::GLenum m_glBlendFuncDFactor;
-    bool m_glCullFace;
-    gl::GLenum m_glCullFaceMode;
-    float m_glPointSize;
-    float m_glLineWidth;
-    bool m_glStencilTest;
-    gl::GLenum m_glStencilFunc[2];
-    int m_glStencilRef[2];
-    unsigned int m_glStencilReadMask[2];
-    unsigned int m_glStencilWriteMask[2];
-    gl::GLenum m_glStencilSFail[2];
-    gl::GLenum m_glStencilDPFail[2];
-    gl::GLenum m_glStencilDPPass[2];
-    std::array<gl::GLuint, BufferTargetCount> m_boundBuffers;
-    gl::GLclampf m_glClearColorRed;
-    gl::GLclampf m_glClearColorGreen;
-    gl::GLclampf m_glClearColorBlue;
-    gl::GLclampf m_glClearColorAlpha;
-    gl::GLclampd m_glClearDepth;
-    gl::GLint m_glClearStencil;
+    /*
+        Raw OpenGL State
+    */
+    bool                                m_glTextureCubeMapSeamless;
+    bool                                m_glDepthTest;
+    bool                                m_glDepthMask;
+    bool                                m_glBlend;
+    gl::GLenum                          m_glBlendEquation;
+    gl::GLenum                          m_glBlendFuncSFactor;
+    gl::GLenum                          m_glBlendFuncDFactor;
+    bool                                m_glCullFace;
+    gl::GLenum                          m_glCullFaceMode;
+    float                               m_glPointSize;
+    float                               m_glLineWidth;
+    bool                                m_glStencilTest;
+    gl::GLenum                          m_glStencilFunc[2];
+    int                                 m_glStencilRef[2];
+    unsigned int                        m_glStencilReadMask[2];
+    unsigned int                        m_glStencilWriteMask[2];
+    gl::GLenum                          m_glStencilSFail[2];
+    gl::GLenum                          m_glStencilDPFail[2];
+    gl::GLenum                          m_glStencilDPPass[2];
+    std::array<gl::GLuint,
+               BufferTargetCount>       m_boundBuffers;
+    gl::GLclampf                        m_glClearColorRed;
+    gl::GLclampf                        m_glClearColorGreen;
+    gl::GLclampf                        m_glClearColorBlue;
+    gl::GLclampf                        m_glClearColorAlpha;
+    gl::GLclampd                        m_glClearDepth;
+    gl::GLint                           m_glClearStencil;
+    std::array<gl::GLuint,
+               FramebufferTargetCount>  m_boundFramebuffer;
+
+    /*
+
+    */
+    std::unordered_map<std::size_t,
+                       std::weak_ptr<GLFramebuffer>> m_glFramebuffers;
 };
 
 }

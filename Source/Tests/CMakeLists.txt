@@ -39,16 +39,3 @@ set(libs
 # executable
 add_executable(${target} ${sources})
 target_link_libraries(${target} ${libs})
-
-# BasicTriangleTest
-add_executable(BasicTriangleTest BasicTriangleTest.cpp)
-target_link_libraries(BasicTriangleTest ${libs})
-
-# BasicTextureTest
-add_executable(BasicTextureTest BasicTextureTest.cpp)
-target_link_libraries(BasicTextureTest ${libs})
-
-# BasicFontTest
-add_executable(BasicFontTest BasicFontTest.cpp)
-target_link_libraries(BasicFontTest ${libs})
-

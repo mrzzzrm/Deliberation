@@ -38,6 +38,7 @@ Texture TextureUploader::uploadSurfaces(gl::GLenum type)
     /*
         TODO
             GLStateManager
+            This code is duplicated in Context!!!
     */
 
     gl::GLuint glName;
@@ -46,11 +47,6 @@ Texture TextureUploader::uploadSurfaces(gl::GLenum type)
     Assert(glName != 0, "glGenTextures() failed");
 
     gl::glBindTexture(type, glName);
-
-    gl::glTexParameteri(type, gl::GL_TEXTURE_BASE_LEVEL, 0);
-    gl::glTexParameteri(type, gl::GL_TEXTURE_MAX_LEVEL, 0);
-    gl::glTexParameteri(type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)gl::GL_LINEAR);
-    gl::glTexParameteri(type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)gl::GL_LINEAR);
 
     for (auto f = 0u; f < m_textureBinary.numFaces(); f++)
     {
@@ -72,6 +68,19 @@ Texture TextureUploader::uploadSurfaces(gl::GLenum type)
                                                       m_textureBinary.height(),
                                                       m_textureBinary.numFaces());
 
+    std::vector<Surface> surfaces;
+    for (auto f = 0u; f < m_textureBinary.numFaces(); f++)
+    {
+        surfaces.push_back({impl, 0});
+    }
+
+    impl->surfaces = surfaces;
+
+    impl->baseLevel = 0;
+    impl->maxLevel = 0;
+    impl->minFilter = gl::GL_LINEAR;
+    impl->maxFilter = gl::GL_LINEAR;
+
     return Texture(impl);
 }
 
@@ -85,7 +94,12 @@ gl::GLenum TextureUploader::faceTarget(gl::GLenum type, unsigned int face) const
     case gl::GL_TEXTURE_CUBE_MAP:
     {
         Assert(face <= 6u, "");
-        gl::GLenum targets[] =
+
+        /*
+            TODO
+                This is duplicated in DrawOutput!
+        */
+        static gl::GLenum targets[] =
         {
             gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
             gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,

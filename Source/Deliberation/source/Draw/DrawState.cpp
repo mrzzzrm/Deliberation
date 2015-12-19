@@ -127,21 +127,6 @@ void DrawState::setViewport(const Viewport & viewport)
     m_viewport.reset(viewport);
 }
 
-void DrawState::apply() const
-{
-    gl::glProvokingVertex(m_provokingVertex);
-
-    if (m_viewport.engaged())
-    {
-        gl::glViewport(m_viewport.get().x(), m_viewport.get().y(),
-                       m_viewport.get().width(), m_viewport.get().height());
-    }
-}
-
-void DrawState::undo() const
-{
-}
-
 std::string DrawState::toString() const
 {
     std::stringstream stream;

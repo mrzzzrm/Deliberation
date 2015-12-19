@@ -12,6 +12,13 @@
 
 #include <SDL2/SDL_ttf.h>
 
+namespace
+{
+
+std::string prefixPath;
+
+}
+
 namespace deliberation
 {
 
@@ -46,6 +53,21 @@ void shutdown()
     {
         TTF_Quit();
     }
+}
+
+const std::string & prefixPath()
+{
+    return ::prefixPath;
+}
+
+void setPrefixPath(const std::string & prefixPath)
+{
+    ::prefixPath = prefixPath;
+}
+
+std::string dataPath(const std::string path)
+{
+    return prefixPath() + "/" + path;
 }
 
 void EnableGLErrorChecks()

@@ -33,7 +33,7 @@ private:
     Context * m_context;
     std::string m_path;
     mutable std::unordered_map<unsigned int,
-                               std::unique_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;
+                               std::shared_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;
 };
 
 }

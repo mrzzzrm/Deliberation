@@ -27,7 +27,7 @@ int main
     char * argv[]
 )
 {
-    std::cout << "---- BasicTriangleTest ----" << std::endl;
+    std::cout << "---- BasicTriangleExample ----" << std::endl;
 
     GLFWwindow* window;
 
@@ -36,7 +36,7 @@ int main
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "BasicTriangleExample", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -48,6 +48,7 @@ int main
     glbinding::Binding::initialize();
 
     deliberation::init();
+    deliberation::setPrefixPath("..");
 
     deliberation::Context context;
 
@@ -70,8 +71,8 @@ int main
         {{0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
         {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}
     });
-    context.createBufferUpload(buffer, vertices).schedule();
-    deliberation::Program program = context.createProgram({"../Data/BasicTriangleTest.vert", "../Data/BasicTriangleTest.frag"});
+    buffer.createUpload(vertices).schedule();
+    deliberation::Program program = context.createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"), deliberation::dataPath("Data/BasicTriangleTest.frag")});
 
     deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
 

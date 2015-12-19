@@ -15,6 +15,7 @@
 
 #include "Detail/BufferImpl.h"
 #include "Detail/DrawImpl.h"
+#include "Detail/ProgramImpl.h"
 
 #include "GL/GLVertexAttributeBinder.h"
 
@@ -29,33 +30,45 @@ Draw::Draw():
 
 const std::string & Draw::name() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->name;
 }
 
-//bool Draw::hasOutput() const
-//{
-//    return m_output.engaged();
-//}
-//
-//const DrawOutputConfig & Draw::output() const
-//{
-//    Assert(hasOutput(), "");
-//    return m_output.get();
-//}
-//
+Program Draw::program() const
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    return Program(m_impl->program);
+}
+
 DrawState & Draw::state()
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->state;
 }
 
 const DrawState & Draw::state() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->state;
+}
+
+DrawOutput & Draw::output()
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    return m_impl->output;
+}
+
+const DrawOutput & Draw::output() const
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    return m_impl->output;
 }
 
 Uniform Draw::uniform(const std::string & name)
 {
-    auto location = m_impl->program.interface().uniform(name).location();
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto location = m_impl->program->interface.uniform(name).location();
 
     /*
         TODO
@@ -70,62 +83,75 @@ Uniform Draw::uniform(const std::string & name)
         }
     }
 
-    Fail("");
+    Fail("No such uniform");
 }
 
-TextureBinding Draw::texture(const std::string & name)
+Sampler Draw::sampler(const std::string & name)
 {
-    auto location = m_impl->program.interface().sampler(name).location();
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto location = m_impl->program->interface.sampler(name).location();
 
     /*
         TODO
             O(n) complexity? You can do better!
     */
 
-    for (auto & textureBinding : m_impl->textureBindings)
+    for (auto & sampler : m_impl->samplers)
     {
-        if (textureBinding.location == location)
+        if (sampler.location == location)
         {
-            return TextureBinding(textureBinding);
+            return Sampler(sampler);
         }
     }
 
-    Fail("");
+    Fail("sampler");
 }
 
 void Draw::setIndexBuffer(const Buffer & buffer)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
     Assert(!m_impl->indexBuffer, "Re-setting index buffer not supported (yet)");
 
-    m_impl->indexBuffer = &buffer;
+    m_impl->indexBuffer = buffer.m_impl;
 }
 
 void Draw::addVertexBuffer(const Buffer & buffer)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     verifyVertexBuffer(buffer);
-    m_impl->vertexBuffers.push_back(detail::BufferBinding{std::cref(buffer), false, 0u, 0u, 0u});
+    m_impl->vertexBuffers.push_back(detail::BufferBinding{buffer.m_impl, false, 0u, 0u, 0u});
 }
 
 void Draw::addVertexBufferRange(const Buffer & buffer, unsigned int first, unsigned int count)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     verifyVertexBuffer(buffer);
-    m_impl->vertexBuffers.push_back(detail::BufferBinding{std::cref(buffer), true, first, count, 0u});
+    m_impl->vertexBuffers.push_back(detail::BufferBinding{buffer.m_impl, true, first, count, 0u});
 }
 
 void Draw::addInstanceBuffer(const Buffer & buffer, unsigned int divisor)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     verifyInstanceBuffer(buffer);
-    m_impl->instanceBuffers.push_back(detail::BufferBinding{std::cref(buffer), false, 0u, 0u, divisor});
+    m_impl->instanceBuffers.push_back(detail::BufferBinding{buffer.m_impl, false, 0u, 0u, divisor});
 }
 
 void Draw::addInstanceBufferRange(const Buffer & buffer, unsigned int first, unsigned int count, unsigned int divisor)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     verifyInstanceBuffer(buffer);
-    m_impl->instanceBuffers.push_back(detail::BufferBinding{std::cref(buffer), true, first, count, divisor});
+    m_impl->instanceBuffers.push_back(detail::BufferBinding{buffer.m_impl, true, first, count, divisor});
 }
 
 void Draw::schedule()
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     if (!isBuild())
     {
         build();
@@ -134,87 +160,24 @@ void Draw::schedule()
     m_impl->context.scheduleDraw(*this);
 }
 
-
-//void Draw::setTexture(const std::string & name, const globjects::Texture & texture)
-//{
-//    auto & uniform = m_program.layout().uniform(name);
-//
-//    Assert(gladv::GLSLType(uniform.type()).isSampler(), "Uniform " + uniform.name() + " is no sampler");
-//
-//    auto location = uniform.location();
-//
-//    decltype(m_textureUnitCounter) unit;
-//
-//    auto i = m_textureUnitByLocation.find(location);
-//    if (i == m_textureUnitByLocation.end())
-//    {
-//        unit = m_textureUnitBindings.size();
-//        m_textureUnitBindings.push_back(TextureUnitBinding{&texture, nullptr});
-//        m_textureUnitByLocation[location] = unit;
-//    }
-//    else
-//    {
-//        unit = i->second;
-//        m_textureUnitBindings[unit].texture = &texture;
-//    }
-//
-//    if ((int)m_uniforms.size() <= location)
-//    {
-//        m_uniforms.resize(location + 1);
-//    }
-//
-//    // Sampler uniform has to be set to an int, not a uint
-//    m_uniforms[location] = gladv::GLSLValue((int)unit);
-//
-//    d_unsetUniformLocations.erase(location);
-//}
-//
-//void Draw::setSampler(const std::string & name, const globjects::Sampler & sampler)
-//{
-//    auto & uniform = m_program.layout().uniform(name);
-//
-//    Assert(gladv::GLSLType(uniform.type()).isSampler(), "Uniform " + uniform.name() + " is no sampler");
-//
-//    auto location = uniform.location();
-//
-//    decltype(m_textureUnitCounter) unit;
-//
-//    auto i = m_textureUnitByLocation.find(location);
-//    if (i == m_textureUnitByLocation.end())
-//    {
-//        unit = m_textureUnitBindings.size();
-//        m_textureUnitBindings.push_back(TextureUnitBinding{nullptr, &sampler});
-//        m_textureUnitByLocation[location] = unit;
-//    }
-//    else
-//    {
-//        unit = i->second;
-//        m_textureUnitBindings[unit].sampler = &sampler;
-//    }
-//
-//    if ((int)m_uniforms.size() <= location)
-//    {
-//        m_uniforms.resize(location + 1);
-//    }
-//
-//    // Sampler uniform has to be set to an int, not a uint
-//    m_uniforms[location] = gladv::GLSLValue((int)unit);
-//
-//    d_unsetUniformLocations.erase(location);
-//}
-//
-//void Draw::setOutput(const DrawOutputConfig & output)
-//{
-//    m_output.reset(output);
-//}
-
 void Draw::setState(const DrawState & state)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     m_impl->state = state;
+}
+
+void Draw::setOutput(const DrawOutput & output)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    m_impl->output = output;
 }
 
 std::string Draw::toString() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     std::stringstream stream;
     stream << statusString() << std::endl;
 //    stream << "Draw:" << std::endl;
@@ -253,17 +216,21 @@ Draw::Draw(const std::shared_ptr<detail::DrawImpl> & impl):
 
 bool Draw::isBuild() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     return m_impl->glVertexArray != 0u;
 }
 
 bool Draw::isComplete() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     if (isBuild())
     {
         return true;
     }
 
-    for (auto & attribute : m_impl->program.interface().attributes())
+    for (auto & attribute : m_impl->program->interface.attributes())
     {
         auto count = 0u;
         bufferField(attribute.name(), nullptr, nullptr, &count);
@@ -279,6 +246,8 @@ bool Draw::isComplete() const
 
 void Draw::build()
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     Assert(isComplete(), statusString());
 
     /*
@@ -289,7 +258,7 @@ void Draw::build()
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);
     Assert(m_impl->glVertexArray != 0u, "");
 
-    for (auto & programField : m_impl->program.interface().attributes())
+    for (auto & programField : m_impl->program->interface.attributes())
     {
         auto count = 0u;
         auto binding = (detail::BufferBinding*)nullptr;
@@ -299,24 +268,26 @@ void Draw::build()
         Assert(count == 1u, "");
         Assert(binding, "");
 
-        auto baseoffset = binding->ranged ? binding->first * binding->buffer.get().layout().stride() : 0;
+        auto baseoffset = binding->ranged ? binding->first * binding->buffer->layout.stride() : 0;
 
-        GLVertexAttributeBinder binder(m_impl->glVertexArray, m_impl->program.interface(), binding->buffer.get(), divisor);
+        GLVertexAttributeBinder binder(m_impl->glVertexArray, m_impl->program->interface, *binding->buffer, divisor);
         binder.bind(bufferField->name(), baseoffset);
     }
 
     if (m_impl->indexBuffer)
     {
         gl::glBindVertexArray(m_impl->glVertexArray);
-        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBuffer->m_impl->glName);
+        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBuffer->glName);
     }
 }
 
 void Draw::verifyVertexBuffer(const Buffer & buffer) const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     {
         auto iter = std::find_if(m_impl->vertexBuffers.begin(), m_impl->vertexBuffers.end(),
-                                 [&buffer] (const detail::BufferBinding & other) { return &other.buffer.get() == &buffer; });
+                                 [&buffer] (const detail::BufferBinding & other) { return other.buffer.get() == buffer.m_impl.get(); });
         Assert(iter == m_impl->vertexBuffers.end(), "Duplicate buffer");
     }
 
@@ -324,15 +295,17 @@ void Draw::verifyVertexBuffer(const Buffer & buffer) const
         !isComplete(),
         "Can't add vertex buffer, is already complete.\n"
         "Buffer: " + buffer.toString() + "\n"
-        "ProgramInterface: " + m_impl->program.interface().toString()
+        "ProgramInterface: " + m_impl->program->interface.toString()
     );
 }
 
 void Draw::verifyInstanceBuffer(const Buffer & buffer) const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     {
         auto iter = std::find_if(m_impl->instanceBuffers.begin(), m_impl->instanceBuffers.end(),
-                                 [&buffer] (const detail::BufferBinding & other) { return &other.buffer.get() == &buffer; });
+                                 [&buffer] (const detail::BufferBinding & other) { return other.buffer.get() == buffer.m_impl.get(); });
         Assert(iter == m_impl->instanceBuffers.end(), "Duplicate buffer");
     }
 
@@ -348,6 +321,8 @@ const BufferLayoutField * Draw::bufferField(const std::string & name,
                                                      gl::GLuint * o_divisor,
                                                      unsigned int * o_count) const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
     if (o_count)
     {
         *o_count = 0u;
@@ -361,9 +336,9 @@ const BufferLayoutField * Draw::bufferField(const std::string & name,
                             m_impl->vertexBuffers[b] :
                             m_impl->instanceBuffers[b - m_impl->vertexBuffers.size()];
 
-        auto & buffer = binding.buffer.get();
+        auto & buffer = *binding.buffer;
 
-        for (auto & bufferField : buffer.layout().fields())
+        for (auto & bufferField : buffer.layout.fields())
         {
             if (bufferField.name() == name)
             {
@@ -392,23 +367,25 @@ const BufferLayoutField * Draw::bufferField(const std::string & name,
 
 std::string Draw::statusString() const
 {
-  std::stringstream stream;
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    std::stringstream stream;
 
     if (isBuild())
     {
-        stream << "VertexArray is build (" << m_impl->program.interface().attributes().size() << " attributes), glName = " << m_impl->glVertexArray << std::endl;
+        stream << "VertexArray is build (" << m_impl->program->interface.attributes().size() << " attributes), glName = " << m_impl->glVertexArray << std::endl;
     }
     else
     {
-        stream << "VertexArray is not build (" << m_impl->program.interface().attributes().size() << " attributes)" << std::endl;
+        stream << "VertexArray is not build (" << m_impl->program->interface.attributes().size() << " attributes)" << std::endl;
     }
 
-    for (auto & attribute :  m_impl->program.interface().attributes())
+    for (auto & attribute :  m_impl->program->interface.attributes())
     {
         stream << "  " << attribute.name() << std::endl;
     }
 
-    for (auto & programField :  m_impl->program.interface().attributes())
+    for (auto & programField :  m_impl->program->interface.attributes())
     {
         auto count = 0u;
 

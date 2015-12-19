@@ -13,6 +13,7 @@
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/DrawState.h>
+#include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Program.h>
 
 namespace deliberation
@@ -27,6 +28,11 @@ class DELIBERATION_API Context final
 {
 public:
     Context();
+
+    unsigned int backbufferWidth() const;
+    unsigned int backbufferHeight() const;
+
+    void setBackbufferResolution(unsigned int width, unsigned height);
 
     /*
         TODO
@@ -53,6 +59,9 @@ public:
 
     Texture createTexture(const std::string & path);
     Texture createTexture(SDL_Surface * surface);
+    Texture createTexture2D(unsigned int width,
+                            unsigned int height,
+                            PixelFormat format);
 
     /*
         TODO
@@ -70,6 +79,8 @@ private:
     void executeClear(const Clear & draw);
 
 private:
+    unsigned int m_backbufferWidth;
+    unsigned int m_backbufferHeight;
     GLStateManager m_glStateManager;
     std::vector<BufferUpload> m_bufferUploads;
 };

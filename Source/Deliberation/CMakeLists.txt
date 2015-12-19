@@ -44,6 +44,7 @@ set(sources
 
     ${source_path}/Draw/Detail/ClearImpl.cpp
     ${source_path}/Draw/Detail/ClearImpl.h
+    ${source_path}/Draw/Detail/BufferBinding.h
     ${source_path}/Draw/Detail/BufferImpl.cpp
     ${source_path}/Draw/Detail/BufferImpl.h
     ${source_path}/Draw/Detail/DrawExecution.cpp
@@ -52,12 +53,14 @@ set(sources
     ${source_path}/Draw/Detail/DrawImpl.h
     ${source_path}/Draw/Detail/ProgramImpl.cpp
     ${source_path}/Draw/Detail/ProgramImpl.h
-    ${source_path}/Draw/Detail/TextureBindingImpl.cpp
-    ${source_path}/Draw/Detail/TextureBindingImpl.h
+    ${source_path}/Draw/Detail/SamplerImpl.cpp
+    ${source_path}/Draw/Detail/SamplerImpl.h
     ${source_path}/Draw/Detail/TextureImpl.cpp
     ${source_path}/Draw/Detail/TextureImpl.h
     ${source_path}/Draw/Detail/UniformImpl.cpp
     
+    ${source_path}/Draw/GL/GLFramebuffer.cpp
+    ${source_path}/Draw/GL/GLFramebufferDesc.cpp
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
     ${source_path}/Draw/GL/GLUtils.cpp
@@ -81,6 +84,7 @@ set(sources
     ${source_path}/Draw/CullState.cpp
     ${source_path}/Draw/DepthState.cpp
     ${source_path}/Draw/Draw.cpp
+    ${source_path}/Draw/DrawOutput.cpp
     ${source_path}/Draw/DrawVerification.cpp
     ${source_path}/Draw/DrawVerification.h
     ${source_path}/Draw/DrawState.cpp
@@ -96,13 +100,13 @@ set(sources
     ${source_path}/Draw/ProgramInterfaceUniform.cpp
     ${source_path}/Draw/ProgramInterfaceVertexAttribute.cpp
     ${source_path}/Draw/RasterizerState.cpp
+    ${source_path}/Draw/Sampler.cpp
     ${source_path}/Draw/StencilState.cpp
     ${source_path}/Draw/StencilState.cpp
     ${source_path}/Draw/Surface.cpp
     ${source_path}/Draw/SurfaceBinary.cpp
     ${source_path}/Draw/Texture.cpp
     ${source_path}/Draw/TextureBinary.cpp
-    ${source_path}/Draw/TextureBinding.cpp
     ${source_path}/Draw/TextureLoader.cpp
     ${source_path}/Draw/TextureLoaderCubeFilesImpl.cpp
     ${source_path}/Draw/TextureLoaderCubeFilesImpl.h
@@ -130,6 +134,8 @@ set(api_includes
     ${include_path}/Core/Blob.h
     ${include_path}/Core/Blob.inl
     ${include_path}/Core/FileUtils.h
+    ${include_path}/Core/HashUtils.h
+    ${include_path}/Core/HashUtils.inl
     ${include_path}/Core/OffsetOf.h
     ${include_path}/Core/OffsetOf.inl
     ${include_path}/Core/Optional.h
@@ -142,12 +148,17 @@ set(api_includes
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
     ${include_path}/Draw/Detail/NamedDataMemberOf.h
-    ${include_path}/Draw/Detail/NamedDataMemberOf.inl
+    ${include_path}/Draw/Detail/NamedDataMemberOf.inl    
     ${include_path}/Draw/Detail/UniformImpl.h
+    
+    ${include_path}/Draw/GL/GLFramebuffer.h
+    ${include_path}/Draw/GL/GLFramebuffer.inl
+    ${include_path}/Draw/GL/GLFramebufferDesc.h
     ${include_path}/Draw/GL/GLSLSizeOf.h
     ${include_path}/Draw/GL/GLStateManager.h
     ${include_path}/Draw/GL/GLSLTypeOf.h
     ${include_path}/Draw/GL/GLSLTypeOf.inl
+    
     ${include_path}/Draw/BlendState.h
     ${include_path}/Draw/Buffer.h
     ${include_path}/Draw/BufferLayout.h
@@ -160,6 +171,7 @@ set(api_includes
     ${include_path}/Draw/DepthState.h
     ${include_path}/Draw/Draw.h
     ${include_path}/Draw/Draw.inl
+    ${include_path}/Draw/DrawOutput.h
     ${include_path}/Draw/DrawState.h
     ${include_path}/Draw/PixelFormat.h
     ${include_path}/Draw/Program.h
@@ -169,12 +181,12 @@ set(api_includes
     ${include_path}/Draw/ProgramInterfaceSampler.h
     ${include_path}/Draw/ProgramInterfaceVertexAttribute.h
     ${include_path}/Draw/RasterizerState.h
+    ${include_path}/Draw/Sampler.h
     ${include_path}/Draw/StencilState.h
     ${include_path}/Draw/Surface.h
     ${include_path}/Draw/SurfaceBinary.h
     ${include_path}/Draw/Texture.h
     ${include_path}/Draw/TextureBinary.h
-    ${include_path}/Draw/TextureBinding.h
     ${include_path}/Draw/TextureLoader.h
     ${include_path}/Draw/TextureUploader.h    
     ${include_path}/Draw/Uniform.h

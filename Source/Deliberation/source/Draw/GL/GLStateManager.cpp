@@ -369,5 +369,51 @@ void GLStateManager::setClearStencil(gl::GLint s)
     }
 }
 
+void GLStateManager::genFramebuffers(gl::GLsizei n, gl::GLuint * ids)
+{
+    glGenFramebuffers(n, ids);
+}
+
+void GLStateManager::deleteFramebuffers(gl::GLsizei n, gl::GLuint * framebuffers)
+{
+    glDeleteFramebuffers(n, framebuffers);
+}
+
+void GLStateManager::bindFramebuffer(gl::GLenum target, gl::GLuint framebuffer)
+{
+    glBindFramebuffer(target, framebuffer);
+}
+
+void GLStateManager::framebufferTexture2D(gl::GLenum target, gl::GLenum attachment, gl::GLenum textarget, gl::GLuint texture, gl::GLint level)
+{
+    glFramebufferTexture2D(target, attachment, textarget, texture, level);
+}
+
+std::shared_ptr<GLFramebuffer> GLStateManager::framebuffer(const GLFramebufferDesc & desc)
+{
+    auto i = m_glFramebuffers.find(desc.hash());
+    if (i != m_glFramebuffers.end())
+    {
+        if (!i->second.lock())
+        {
+            i = m_glFramebuffers.end();
+        }
+    }
+
+    std::shared_ptr<GLFramebuffer> result;
+
+    if (i == m_glFramebuffers.end())
+    {
+        result = std::make_shared<GLFramebuffer>(*this, desc);
+        m_glFramebuffers[desc.hash()] = result;
+    }
+    else
+    {
+        result = i->second.lock();
+    }
+
+    return result;
+}
+
 }
 

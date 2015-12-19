@@ -1,4 +1,4 @@
-#include "TextureBindingImpl.h"
+#include "SamplerImpl.h"
 
 #include <glbinding/gl/enum.h>
 
@@ -10,7 +10,8 @@ namespace deliberation
 namespace detail
 {
 
-TextureBindingImpl::TextureBindingImpl(gl::GLenum uniformType, gl::GLuint location):
+SamplerImpl::SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLuint location):
+    glName(glName),
     type(gl::GL_NONE),
     location(location),
     texture(nullptr)
@@ -23,6 +24,10 @@ TextureBindingImpl::TextureBindingImpl(gl::GLenum uniformType, gl::GLuint locati
     default:
         Fail("Unsupported sampler type");
     }
+
+    wrap[0] = gl::GL_REPEAT;
+    wrap[1] = gl::GL_REPEAT;
+    wrap[2] = gl::GL_REPEAT;
 }
 
 }

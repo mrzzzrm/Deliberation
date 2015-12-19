@@ -10,9 +10,11 @@
 
 #include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/Buffer.h>
+#include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Program.h>
 
+#include "BufferImpl.h"
 #include "DrawImpl.h"
 #include "ProgramImpl.h"
 #include "TextureImpl.h"
@@ -34,29 +36,60 @@ void DrawExecution::perform()
 {
     m_glStateManager.enableTextureCubeMapSeamless(true);
 
+    // Apply State
     applyDepthState();
     applyBlendState();
     applyCullState();
     applyRasterizerState();
     applyStencilState();
+    applyViewport();
 
-    gl::glUseProgram(m_drawImpl.program.m_impl->glProgramName);
+    gl::glUseProgram(m_drawImpl.program->glProgramName);
 
     // Setup texture units
-    for (auto b = 0u; b < m_drawImpl.textureBindings.size(); b++)
+    for (auto b = 0u; b < m_drawImpl.samplers.size(); b++)
     {
-        auto & binding = m_drawImpl.textureBindings[b];
-        auto * texture = binding.texture;
+        auto & sampler = m_drawImpl.samplers[b];
+        auto * texture = sampler.texture;
 
         Assert(texture, "");
 
         gl::glActiveTexture(gl::GL_TEXTURE0 + b);
-        gl::glBindTexture(texture->type(), texture->m_impl->glName);
-        gl::glUniform1i(binding.location, b);
+        gl::glBindTexture(texture->type, texture->glName);
+
+        gl::glTexParameteri(texture->type, gl::GL_TEXTURE_BASE_LEVEL, texture->baseLevel);
+        gl::glTexParameteri(texture->type, gl::GL_TEXTURE_MAX_LEVEL, texture->maxLevel);
+
+        gl::glBindSampler(b, sampler.glName);
+        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_WRAP_S, (gl::GLint)sampler.wrap[0]);
+        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_WRAP_T, (gl::GLint)sampler.wrap[1]);
+        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_WRAP_R, (gl::GLint)sampler.wrap[2]);
+        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)texture->minFilter);
+        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)texture->maxFilter);
+
+        gl::glUniform1i(sampler.location, b);
     }
 
-    // Setup MRT
-//    m_command.m_output.get().apply();
+    // Setup RenderTarget / Framebuffer
+    {
+        auto & output = m_drawImpl.output;
+
+        if (output.isBackbuffer())
+        {
+            m_glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, 0);
+        }
+        else
+        {
+            if (output.m_glFramebufferDirty)
+            {
+                output.updateFramebufferDesc();
+                output.m_glFramebuffer = m_glStateManager.framebuffer(output.m_glFramebufferDesc.get());
+                output.m_glFramebufferDirty = false;
+            }
+
+            output.m_glFramebuffer->bind();
+        }
+    }
 
     // Set uniforms
     {
@@ -67,7 +100,7 @@ void DrawExecution::perform()
 
         for (auto & uniform : m_drawImpl.uniforms)
         {
-            Assert(uniform.isAssigned, "Uniform " + m_drawImpl.program.interface().uniformByLocation(uniform.location).name() + " not set");
+            Assert(uniform.isAssigned, "Uniform " + m_drawImpl.program->interface.uniformByLocation(uniform.location)->name() + " not set");
 
             auto * data = uniform.blob.ptr();
             auto location = uniform.location;
@@ -184,10 +217,10 @@ void DrawExecution::drawArraysInstanced() const
 
 unsigned int DrawExecution::elementCount() const
 {
-    Assert(m_drawImpl.indexBuffer, "No index buffer set");
-    Assert(m_drawImpl.indexBuffer->count() > 0, "Index buffer is empty");
+    Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
+    Assert(m_drawImpl.indexBuffer->count > 0, "Index buffer is empty");
 
-    return m_drawImpl.indexBuffer->count();
+    return m_drawImpl.indexBuffer->count;
 }
 
 unsigned int DrawExecution::vertexCount() const
@@ -196,7 +229,7 @@ unsigned int DrawExecution::vertexCount() const
 
     auto ref = m_drawImpl.vertexBuffers[0].ranged ?
                m_drawImpl.vertexBuffers[0].count :
-               m_drawImpl.vertexBuffers[0].buffer.get().count();
+               m_drawImpl.vertexBuffers[0].buffer->count;
 
     Assert(ref > 0, "Vertex buffer is empty");
 
@@ -205,7 +238,7 @@ unsigned int DrawExecution::vertexCount() const
         {
             auto cmp = m_drawImpl.vertexBuffers[b].ranged ?
                        m_drawImpl.vertexBuffers[b].count :
-                       m_drawImpl.vertexBuffers[b].buffer.get().count();
+                       m_drawImpl.vertexBuffers[0].buffer->count;
             Assert(cmp == ref, "");
         }
     }
@@ -217,20 +250,20 @@ unsigned int DrawExecution::instanceCount() const
 {
     assert(!m_drawImpl.instanceBuffers.empty());
 
-    auto & buffer = m_drawImpl.instanceBuffers[0].buffer.get();
+    auto & buffer = *m_drawImpl.instanceBuffers[0].buffer;
     auto divisor = m_drawImpl.instanceBuffers[0].divisor;
 
-    Assert(buffer.count() > 0, "Instance buffer is empty");
+    Assert(buffer.count > 0, "Instance buffer is empty");
     Assert(divisor > 0, "Divisor of instance buffer is zero");
 
-    auto ref = buffer.count() * divisor;
+    auto ref = buffer.count * divisor;
 
     for (auto b = 1u; b < m_drawImpl.instanceBuffers.size(); b++)
     {
-        auto & buffer = m_drawImpl.instanceBuffers[b].buffer.get();
+        auto & buffer = *m_drawImpl.instanceBuffers[b].buffer;
         auto divisor = m_drawImpl.instanceBuffers[b].divisor;
 
-        auto test = buffer.count() * divisor;
+        auto test = buffer.count * divisor;
 
         Assert(test == ref, "Differing instance count in buffer " + std::to_string(b) + ": " + std::to_string(test) + " != " + std::to_string(ref));
     }
@@ -240,10 +273,10 @@ unsigned int DrawExecution::instanceCount() const
 
 gl::GLenum DrawExecution::elementType() const
 {
-    Assert(m_drawImpl.indexBuffer, "No index buffer set");
-    Assert(m_drawImpl.indexBuffer->layout().fields().size() == 1u, "Invalid index buffer layout");
+    Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
+    Assert(m_drawImpl.indexBuffer->layout.fields().size() == 1u, "Invalid index buffer layout");
 
-    return m_drawImpl.indexBuffer->layout().fields()[0].type();
+    return m_drawImpl.indexBuffer->layout.fields()[0].type();
 }
 
 void DrawExecution::applyDepthState()
@@ -335,6 +368,32 @@ void DrawExecution::applyStencilState()
     else
     {
         m_glStateManager.setStencilOp(state.sfail(), state.dpfail(), state.dppass());
+    }
+}
+
+void DrawExecution::applyViewport()
+{
+    auto & state = m_drawImpl.state;
+    auto & output = m_drawImpl.output;
+    //gl::glProvokingVertex(m_provokingVertex);
+
+    if (state.hasViewport())
+    {
+        gl::glViewport(state.viewport().x(), state.viewport().y(),
+                       state.viewport().width(), state.viewport().height());
+    }
+    else
+    {
+        if (output.isBackbuffer())
+        {
+            gl::glViewport(0, 0, m_drawImpl.context.backbufferWidth(),
+                                 m_drawImpl.context.backbufferHeight());
+        }
+        else
+        {
+            gl::glViewport(0, 0, output.width(),
+                                 output.height());
+        }
     }
 }
 

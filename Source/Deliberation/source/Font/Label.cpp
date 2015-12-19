@@ -140,14 +140,9 @@ void Label::renderText() const
 
 void Label::updateTransform(const Viewport & viewport) const
 {
-    std::cout << viewport.toString() << std::endl;
-
     Assert(viewport.width() != 0 && viewport.height() != 0, "Invalid viewport");
 
     auto align = glm::translate(glm::mat4(1.0f), glm::vec3(-m_center, 0.0f));
-
-    std::cout << viewport.x() << " " << viewport.y() << std::endl;
-    std::cout << texture().width() << " " << texture().height() << std::endl;
 
     auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(float(texture().width()) / viewport.width(),
                                                        float(texture().height()) / viewport.height(),
@@ -156,8 +151,6 @@ void Label::updateTransform(const Viewport & viewport) const
     auto translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_position, 0.0f));
 
     m_transform = translate * scale * align;
-
-    std::cout << "Transform " << m_transform << std::endl;
 
     m_transformDirty = false;
     m_transformCachedViewport = viewport;

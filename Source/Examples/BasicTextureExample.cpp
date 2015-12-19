@@ -27,16 +27,16 @@ int main
     char * argv[]
 )
 {
-    std::cout << "---- BasicTextureTest ----" << std::endl;
+    std::cout << "---- BasicTextureExample ----" << std::endl;
 
-    GLFWwindow* window;
+    GLFWwindow * window;
 
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "BasicTextureExample", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -48,6 +48,7 @@ int main
     glbinding::Binding::initialize();
 
     deliberation::init();
+    deliberation::setPrefixPath("..");
 
     deliberation::Context context;
 
@@ -68,24 +69,24 @@ int main
         {{0.0f, 0.5f}, {1.0f, 1.0f}},
         {{-1.0f, 0.5f}, {0.0f, 1.0f}}
     });
-    context.createBufferUpload(vbuffer, vertices).schedule();
+    vbuffer.createUpload(vertices).schedule();
 
     auto ibuffer = context.createIndexBuffer8();
     auto indices = std::vector<gl::GLbyte>({
         0, 1, 2,
         0, 2, 3
     });
-    context.createBufferUpload(ibuffer, indices).schedule();
+    ibuffer.createUpload(indices).schedule();
 
     std::cout << "Buffer has " << ibuffer.count() << " indices" << std::endl;
 
-    auto program = context.createProgram({"../Data/BasicTextureTest.vert", "../Data/BasicTextureTest.frag"});
+    auto program = context.createProgram({deliberation::dataPath("Data/BasicTextureTest.vert"), deliberation::dataPath("Data/BasicTextureTest.frag")});
 
-    auto texture = context.createTexture("../Data/testimage.png");
+    auto texture = context.createTexture(deliberation::dataPath("Data/testimage.png"));
     std::cout << "Texture resolution: " << texture.width() << "x" << texture.height() << std::endl;
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
-    draw.texture("Texture").set(texture);
+    draw.sampler("Texture").setTexture(texture);
     draw.addVertexBuffer(vbuffer);
     draw.setIndexBuffer(ibuffer);
     draw.state().setDepthState(deliberation::DepthState(false, false));

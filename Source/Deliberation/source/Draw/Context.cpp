@@ -5,6 +5,7 @@
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Draw/Buffer.h>
+#include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/TextureLoader.h>
 #include <Deliberation/Draw/TextureUploader.h>
 
@@ -12,16 +13,36 @@
 #include "Detail/ClearImpl.h"
 #include "Detail/DrawExecution.h"
 #include "Detail/DrawImpl.h"
+#include "Detail/TextureImpl.h"
 #include "Detail/ProgramImpl.h"
 #include "BufferUploadExecution.h"
 #include "ClearExecution.h"
+#include "DrawVerification.h"
 
 namespace deliberation
 {
 
-Context::Context()
+Context::Context():
+    m_backbufferWidth(640u),
+    m_backbufferHeight(480u)
 {
     std::cout << "Creating Deliberation Context" << std::endl;
+}
+
+unsigned int Context::backbufferWidth() const
+{
+    return m_backbufferWidth;
+}
+
+unsigned int Context::backbufferHeight() const
+{
+    return m_backbufferHeight;
+}
+
+void Context::setBackbufferResolution(unsigned int width, unsigned height)
+{
+    m_backbufferWidth = width;
+    m_backbufferHeight = height;
 }
 
 Buffer Context::createBuffer(const BufferLayout & layout)
@@ -49,8 +70,7 @@ Buffer Context::createIndexBuffer32()
 
 Program Context::createProgram(const std::vector<std::string> & paths)
 {
-    Program program;
-    program.m_impl = std::make_shared<detail::ProgramImpl>(paths);
+    Program program(std::make_shared<detail::ProgramImpl>(paths));
     return program;
 }
 
@@ -102,6 +122,51 @@ Texture Context::createTexture(SDL_Surface * surface)
     auto texture = TextureUploader(*this, binary).upload();
 
     return texture;
+}
+
+Texture Context::createTexture2D(unsigned int width,
+                                 unsigned int height,
+                                 PixelFormat format)
+{
+    /*
+        TODO
+            GLStateManager
+            This code is duplicated in TextureUploader!!!
+    */
+
+    gl::GLuint glName;
+
+    gl::glGenTextures(1, &glName);
+    Assert(glName != 0, "glGenTextures() failed");
+
+    gl::glBindTexture(gl::GL_TEXTURE_2D, glName);
+
+    gl::glTexImage2D(gl::GL_TEXTURE_2D,
+                     0,
+                     (gl::GLint)PixelFormatToGLInternalFormat(format),
+                     width,
+                     height,
+                     0,
+                     PixelFormatToGLFormat(format),
+                     gl::GL_FLOAT,
+                     nullptr);
+
+    auto impl = std::make_shared<detail::TextureImpl>(glName,
+                                                      width,
+                                                      height,
+                                                      1);
+
+    std::vector<Surface> surfaces;
+    surfaces.push_back({impl, 0});
+
+    impl->surfaces = surfaces;
+
+    impl->baseLevel = 0;
+    impl->maxLevel = 0;
+    impl->minFilter = gl::GL_LINEAR;
+    impl->maxFilter = gl::GL_LINEAR;
+
+    return Texture(impl);
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)
@@ -195,10 +260,9 @@ void Context::executeDraw(const Draw & draw)
 //        }
 //    }
 
-//    DrawVerification verification(command);
-//    Assert(verification.passed(), verification.toString());
+    DrawVerification verification(draw);
+    Assert(verification.passed(), verification.toString());
 
-    gl::glViewport(0, 0, 640, 480);
     detail::DrawExecution(m_glStateManager, draw).perform();
 }
 

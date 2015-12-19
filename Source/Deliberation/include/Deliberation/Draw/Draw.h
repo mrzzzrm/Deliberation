@@ -6,7 +6,8 @@
 
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Texture.h>
-#include <Deliberation/Draw/TextureBinding.h>
+#include <Deliberation/Draw/Sampler.h>
+#include <Deliberation/Draw/Program.h>
 
 namespace deliberation
 {
@@ -21,6 +22,7 @@ namespace detail
 class Buffer;
 class BufferLayoutField;
 class Context;
+class DrawOutput;
 class DrawState;
 
 class Draw final
@@ -32,19 +34,19 @@ public:
 
     const std::string & name() const;
 
-//    bool hasOutput() const;
-//    const DrawOutputConfig & output() const;
+    Program program() const;
 
     DrawState & state();
     const DrawState & state() const;
 
+    DrawOutput & output();
+    const DrawOutput & output() const;
+
     Uniform uniform(const std::string & name);
-
-    TextureBinding texture(const std::string & name);
-
-//    void setOutput(const DrawOutputConfig & output);
+    Sampler sampler(const std::string & name);
 
     void setState(const DrawState & state);
+    void setOutput(const DrawOutput & output);
 
     void setIndexBuffer(const Buffer & buffer);
     void addVertexBuffer(const Buffer & buffer);

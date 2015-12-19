@@ -1,99 +1,115 @@
-//#include "DrawVerification.h"
-//
-//#include "Draw.h"
-//
-//DrawVerification::DrawVerification(const Draw & command):
-//    m_command(command),
-//    m_dirty(true),
-//    m_passed(false)
-//{
-//
-//}
-//
-//bool DrawVerification::passed() const
-//{
-//    if (m_dirty)
-//    {
-//        perform();
-//    }
-//
-//    return m_passed;
-//}
-//
-//std::string DrawVerification::toString() const
-//{
-//    if (m_dirty)
-//    {
-//        perform();
-//    }
-//
-//    return m_report;
-//}
-//
-//void DrawVerification::perform() const
-//{
-//    if (!m_dirty)
-//    {
-//        return;
-//    }
-//
-//    m_passed = true;
+#include "DrawVerification.h"
+
+#include <Deliberation/Draw/Draw.h>
+#include <Deliberation/Draw/DrawOutput.h>
+#include <Deliberation/Draw/ProgramInterface.h>
+
+namespace deliberation
+{
+
+DrawVerification::DrawVerification(const Draw & draw):
+    m_draw(draw),
+    m_dirty(true),
+    m_passed(false)
+{
+
+}
+
+bool DrawVerification::passed() const
+{
+    if (m_dirty)
+    {
+        perform();
+    }
+
+    return m_passed;
+}
+
+std::string DrawVerification::toString() const
+{
+    if (m_dirty)
+    {
+        perform();
+    }
+
+    return m_report;
+}
+
+void DrawVerification::perform() const
+{
+    if (!m_dirty)
+    {
+        return;
+    }
+
+    m_passed = true;
 //    m_passed &= verifyProgram();
 //    m_passed &= verifyVAO();
 //    m_passed &= m_command.m_state.hasViewport();
-//    m_passed &= verifyOutput();
+    m_passed &= verifyOutput();
 //    m_passed &= verifyUniforms();
-//
-//    if (!m_passed)
-//    {
-//        m_reportStream << "Draw '" << m_command.name() << "' failed verification" << std::endl;
-//
-//        m_report = m_reportStream.str();
-//    }
-//
-//    m_dirty = false;
-//}
-//
-//bool DrawVerification::verifyOutput() const
-//{
-//    if (!m_command.m_output.engaged())
-//    {
-//        return false;
-//    }
-//
-//    auto & output = m_command.m_output.get();
-//    auto & fragmentOutputs = m_command.m_program.layout().fragmentOutputs();
-//
-//    if (output.mode() == DrawOutputConfig::ToBackbuffer)
-//    {
-//        if (fragmentOutputs.size() == 1)
-//        {
-//            return true;
-//        }
-//        else
-//        {
-//            m_reportStream << fragmentOutputs.size() << " outputs in draw to backbuffer" << std::endl;
-//            return false;
-//        }
-//    }
-//    else
-//    {
-//        bool passed = true;
-//
-//        for (auto & fragmentOutput : fragmentOutputs)
-//        {
-//            auto location = fragmentOutput.location();
-//
-//            if (location >= output.rts().size())
-//            {
-//                m_reportStream << "Fragment output " << fragmentOutput.toString() << " not mapped to render target" << std::endl;
-//                passed = false;
-//            }
-//        }
-//
-//        return passed;
-//    }
-//}
+
+    if (!m_passed)
+    {
+        m_reportStream << "Draw '" << m_draw.name() << "' failed verification" << std::endl;
+
+        m_report = m_reportStream.str();
+    }
+
+    m_dirty = false;
+}
+
+bool DrawVerification::verifyOutput() const
+{
+    auto & output = m_draw.output();
+    auto & fragmentOutputs = m_draw.program().interface().fragmentOutputs();
+
+    if (output.isBackbuffer())
+    {
+        if (fragmentOutputs.size() == 1)
+        {
+            return true;
+        }
+        else
+        {
+            m_reportStream << fragmentOutputs.size() << " outputs in draw to backbuffer" << std::endl;
+            return false;
+        }
+    }
+    else
+    {
+        bool passed = true;
+
+        // Check if every fragmentOutput has a render target mapped to it
+        for (auto & fragmentOutput : fragmentOutputs)
+        {
+            auto location = fragmentOutput.location();
+
+            if (!output.renderTarget(location))
+            {
+                m_reportStream << "Fragment output " << fragmentOutput.toString() << " not mapped to render target" << std::endl;
+                passed = false;
+            }
+        }
+
+        // Check if every renderTarget is being written to
+        for (auto rt = 0u; rt < output.renderTargets().size(); rt++)
+        {
+            if (!output.renderTarget(rt))
+            {
+                continue;
+            }
+
+            if (!m_draw.program().interface().fragmentOutputByLocation(rt))
+            {
+                m_reportStream << "RenderTarget " << std::to_string(rt) << " has no FragmentOutput mapped to it" << std::endl;
+                passed = false;
+            }
+        }
+
+        return passed;
+    }
+}
 //
 //bool DrawVerification::verifyProgram() const
 //{
@@ -138,4 +154,6 @@
 //
 //    return false;
 //}
-//
+
+}
+

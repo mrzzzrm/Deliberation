@@ -1,5 +1,7 @@
 #include <Deliberation/Draw/Buffer.h>
 
+#include <Deliberation/Core/Assert.h>
+
 #include "Detail/BufferImpl.h"
 
 namespace deliberation
@@ -13,11 +15,15 @@ Buffer::Buffer():
 
 const BufferLayout & Buffer::layout() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
     return m_impl->layout;
 }
 
 unsigned int Buffer::count() const
 {
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
     return m_impl->count;
 }
 
@@ -36,11 +42,15 @@ Buffer::Buffer(Context & context, const BufferLayout & layout)
 
 BufferUpload Buffer::createUpload(const Blob & data)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
     return BufferUpload(m_impl->context, *this, data);
 }
 
 BufferUpload Buffer::createRawUpload(const Blob & data, unsigned int count)
 {
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
     return BufferUpload(m_impl->context, *this, data, count);
 }
 

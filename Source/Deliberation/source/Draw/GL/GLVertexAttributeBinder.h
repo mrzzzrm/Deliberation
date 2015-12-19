@@ -11,12 +11,17 @@ class Buffer;
 namespace deliberation
 {
 
+namespace detail
+{
+    class BufferImpl;
+}
+
 class GLVertexAttributeBinder final
 {
 public:
     GLVertexAttributeBinder(gl::GLuint vao,
                             const ProgramInterface & programInterface,
-                            const Buffer & buffer,
+                            const detail::BufferImpl & buffer,
                             gl::GLuint divisor = 0);
 
     void bind(const std::string & name, gl::GLint baseoffset = 0);
@@ -25,7 +30,7 @@ public:
 private:
     gl::GLuint m_vao;
     const ProgramInterface & m_programInterface;
-    const Buffer & m_buffer;
+    const detail::BufferImpl & m_buffer;
     gl::GLuint m_divisor;
 };
 

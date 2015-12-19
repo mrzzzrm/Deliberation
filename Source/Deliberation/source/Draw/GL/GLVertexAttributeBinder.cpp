@@ -17,7 +17,7 @@ namespace deliberation
 
 GLVertexAttributeBinder::GLVertexAttributeBinder(gl::GLuint vao,
                                                  const ProgramInterface & programInterface,
-                                                 const Buffer & buffer,
+                                                 const detail::BufferImpl & buffer,
                                                  gl::GLuint divisor):
     m_vao(vao),
     m_programInterface(programInterface),
@@ -29,7 +29,7 @@ GLVertexAttributeBinder::GLVertexAttributeBinder(gl::GLuint vao,
 void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffset)
 {
     auto programAttribute = m_programInterface.attribute(name);
-    auto bufferField = m_buffer.layout().field(name);
+    auto bufferField = m_buffer.layout.field(name);
 
     if (programAttribute.type() != bufferField.type())
     {
@@ -48,7 +48,7 @@ void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffse
     */
 
     gl::glBindVertexArray(m_vao);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, m_buffer.m_impl->glName);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, m_buffer.glName);
 
     Assert(format.numLocations() == 1, "Implement this");
 
@@ -63,11 +63,11 @@ void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffse
         switch (format.call())
         {
         case GLVertexAttributeFormatType::Format:
-            gl::glVertexAttribPointer(l, format.size(), format.type(), gl::GL_FALSE, m_buffer.layout().stride(), (const gl::GLvoid*)(baseoffset + offset));
+            gl::glVertexAttribPointer(l, format.size(), format.type(), gl::GL_FALSE, m_buffer.layout.stride(), (const gl::GLvoid*)(baseoffset + offset));
 //            binding->setFormat(format.size(), format.type(), gl::GL_FALSE, offset);
             break;
         case GLVertexAttributeFormatType::IFormat:
-            gl::glVertexAttribIPointer(l, format.size(), format.type(), m_buffer.layout().stride(), (const gl::GLvoid*)(baseoffset + offset));
+            gl::glVertexAttribIPointer(l, format.size(), format.type(), m_buffer.layout.stride(), (const gl::GLvoid*)(baseoffset + offset));
 //            binding->setIFormat(format.size(), format.type(), offset);
             break;
 //        case VertexAttributeFormatCall::LFormat:
@@ -79,7 +79,7 @@ void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffse
 
 void GLVertexAttributeBinder::bindAll(gl::GLint baseoffset)
 {
-    for (auto & field : m_buffer.layout().fields())
+    for (auto & field : m_buffer.layout.fields())
     {
         bind(field.name(), baseoffset);
     }

@@ -38,6 +38,7 @@ private:
     void applyCullState();
     void applyRasterizerState();
     void applyStencilState();
+    void applyViewport();
 
 private:
     GLStateManager & m_glStateManager;

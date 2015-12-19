@@ -22,19 +22,22 @@ public:
     const ProgramInterfaceVertexAttribute & attribute(const std::string & name) const;
     const ProgramInterfaceUniform & uniform(const std::string & name) const;
     const ProgramInterfaceSampler & sampler(const std::string & name) const;
+    const ProgramInterfaceFragmentOutput & fragmentOutput(const std::string & name) const;
 
-    const ProgramInterfaceVertexAttribute & attributeByLocation(unsigned int location) const;
-    const ProgramInterfaceUniform & uniformByLocation(unsigned int location) const;
-    const ProgramInterfaceSampler & samplerByLocation(unsigned int location) const;
+    const ProgramInterfaceVertexAttribute * attributeByLocation(unsigned int location) const;
+    const ProgramInterfaceUniform * uniformByLocation(unsigned int location) const;
+    const ProgramInterfaceSampler * samplerByLocation(unsigned int location) const;
+    const ProgramInterfaceFragmentOutput * fragmentOutputByLocation(unsigned int location) const;
 
     const std::vector<ProgramInterfaceVertexAttribute> & attributes() const;
     const std::vector<ProgramInterfaceUniform> & uniforms() const;
     const std::vector<ProgramInterfaceSampler> & samplers() const;
     const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs() const;
 
-    bool hasAttribute(const std::string & name);
-    bool hasUniform(const std::string & name);
-    bool hasSampler(const std::string & name);
+    bool hasAttribute(const std::string & name) const;
+    bool hasUniform(const std::string & name) const;
+    bool hasSampler(const std::string & name) const;
+    bool hasFragmentOutput(const std::string & name) const;
 
     bool operator==(const ProgramInterface & other) const;
     bool operator!=(const ProgramInterface & other) const;
@@ -43,18 +46,20 @@ public:
 
 private:
     std::vector<ProgramInterfaceVertexAttribute> m_attributes;
-    std::unordered_map<std::string, decltype(m_attributes)::size_type> m_attributeIndexByName;
+    std::unordered_map<std::string, std::size_t> m_attributeIndexByName;
     std::vector<unsigned int> m_attributeIndexByLocation;
 
     std::vector<ProgramInterfaceUniform> m_uniforms;
-    std::unordered_map<std::string, decltype(m_uniforms)::size_type> m_uniformIndexByName;
+    std::unordered_map<std::string, std::size_t> m_uniformIndexByName;
     std::vector<unsigned int> m_uniformIndexByLocation;
 
     std::vector<ProgramInterfaceSampler> m_samplers;
-    std::unordered_map<std::string, decltype(m_samplers)::size_type> m_samplerIndexByName;
+    std::unordered_map<std::string, std::size_t> m_samplerIndexByName;
     std::vector<unsigned int> m_samplerIndexByLocation;
 
     std::vector<ProgramInterfaceFragmentOutput> m_fragmentOutputs;
+    std::unordered_map<std::string, std::size_t> m_fragmentOutputIndexByName;
+    std::vector<unsigned int> m_fragmentOutputIndexByLocation;
 };
 
 }

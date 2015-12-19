@@ -5,14 +5,14 @@
 namespace deliberation
 {
 
-class Buffer;
-	
 namespace detail
 {
-	
+
+class BufferImpl;
+
 struct BufferBinding
 {
-	std::reference_wrapper<const Buffer> buffer;
+	std::shared_ptr<BufferImpl> buffer;
 	bool ranged;
 	unsigned int first;
 	unsigned int count;

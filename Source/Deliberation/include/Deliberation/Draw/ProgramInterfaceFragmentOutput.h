@@ -20,6 +20,9 @@ public:
 
     std::string toString() const;
 
+    bool operator==(const ProgramInterfaceFragmentOutput & other) const;
+    bool operator!=(const ProgramInterfaceFragmentOutput & other) const;
+
 private:
     std::string m_name;
     gl::GLenum m_type;
