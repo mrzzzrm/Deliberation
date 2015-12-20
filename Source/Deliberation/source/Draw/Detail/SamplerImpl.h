@@ -18,11 +18,11 @@ class SamplerImpl
 public:
     SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLuint location);
 
-    gl::GLuint glName;
-    gl::GLenum type;
-    gl::GLuint location;
+    gl::GLuint          glName;
+    gl::GLenum          type;
+    gl::GLuint          location;
     const TextureImpl * texture;
-    gl::GLenum wrap[3];
+    gl::GLenum          wrap[3];
 };
 
 }

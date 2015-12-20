@@ -6,6 +6,8 @@
 
 #include <SDL2/SDL.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 #include <Deliberation/Draw/TextureBinary.h>
 
 namespace deliberation
@@ -13,7 +15,7 @@ namespace deliberation
 
 class ITextureLoaderImpl;
 
-class TextureLoader final
+class DELIBERATION_API TextureLoader final
 {
 public:
     // Single face

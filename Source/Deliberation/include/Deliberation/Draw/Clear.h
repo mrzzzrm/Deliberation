@@ -22,6 +22,8 @@ class Surface;
 class DELIBERATION_API Clear
 {
 public:
+    Clear();
+
     void setSurfaces(const std::vector<Surface*> & surfaces);
 
     void setColor(const glm::vec4 & color);
@@ -38,6 +40,9 @@ public:
 private:
     friend class Context;
     friend class ClearExecution;
+
+private:
+    Clear(const std::shared_ptr<detail::ClearImpl> & impl);
 
 private:
     std::shared_ptr<detail::ClearImpl> m_impl;

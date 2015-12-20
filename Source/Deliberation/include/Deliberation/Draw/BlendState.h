@@ -4,10 +4,12 @@
 
 #include <glbinding/gl/enum.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class BlendState final
+class DELIBERATION_API BlendState final
 {
 public:
     static BlendState disabled();

@@ -12,7 +12,10 @@ namespace deliberation
 class DELIBERATION_API BufferLayoutField final
 {
 public:
-    BufferLayoutField(const std::string & name, gl::GLint size, gl::GLenum type, gl::GLuint offset);
+    BufferLayoutField(const std::string & name,
+                      gl::GLint size,
+                      gl::GLenum type,
+                      gl::GLuint offset);
 
     const std::string & name() const;
     gl::GLint size() const;
@@ -25,10 +28,10 @@ public:
     void setOffset(const gl::GLuint offset);
 
 private:
-    std::string m_name;
-    gl::GLint m_size;
-    gl::GLenum m_type;
-    gl::GLuint m_offset;
+    std::string     m_name;
+    gl::GLint       m_size;
+    gl::GLenum      m_type;
+    gl::GLuint      m_offset;
 };
 
 }

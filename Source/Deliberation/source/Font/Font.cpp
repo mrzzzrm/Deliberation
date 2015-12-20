@@ -3,6 +3,7 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/TextureLoader.h>
 
 namespace deliberation
 {
@@ -73,7 +74,7 @@ Texture Font::render(const std::string & text,
 
     auto * surface = TTF_RenderText_Blended(font->font, text.c_str(), sdlColor);
 
-    auto texture = m_context->createTexture(surface);
+    auto texture = m_context->createTexture(TextureLoader(surface).load());
 
     SDL_FreeSurface(surface);
 

@@ -118,7 +118,9 @@ set(sources
     ${source_path}/Draw/TextureLoaderFileImpl.h
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.cpp
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.h
-    ${source_path}/Draw/TextureUploader.cpp
+    ${source_path}/Draw/TextureUpload.cpp
+    ${source_path}/Draw/TextureUploadExecution.cpp
+    ${source_path}/Draw/TextureUploadExecution.h
     ${source_path}/Draw/Uniform.cpp
     
     ${source_path}/Font/Font.cpp
@@ -189,7 +191,7 @@ set(api_includes
     ${include_path}/Draw/Texture.h
     ${include_path}/Draw/TextureBinary.h
     ${include_path}/Draw/TextureLoader.h
-    ${include_path}/Draw/TextureUploader.h    
+    ${include_path}/Draw/TextureUpload.h    
     ${include_path}/Draw/Uniform.h
     ${include_path}/Draw/Uniform.inl
     

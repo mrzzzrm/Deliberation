@@ -4,10 +4,12 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class ProgramInterfaceVertexAttribute final
+class DELIBERATION_API ProgramInterfaceVertexAttribute final
 {
 public:
     ProgramInterfaceVertexAttribute();
@@ -27,10 +29,10 @@ public:
     std::string toString() const;
 
 private:
-    std::string m_name;
-    gl::GLint m_location;
-    gl::GLenum m_type;
-    gl::GLint m_size;
+    std::string     m_name;
+    gl::GLint       m_location;
+    gl::GLenum      m_type;
+    gl::GLint       m_size;
 };
 
 }

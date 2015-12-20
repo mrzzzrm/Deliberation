@@ -128,7 +128,7 @@ void Framebuffer::updateFramebufferDesc() const
 
                 /*
                     TODO
-                        This is duplicated in TextureUploader!
+                        This is duplicated in TextureUploadExecution!
                 */
                 static gl::GLenum targets[] =
                 {

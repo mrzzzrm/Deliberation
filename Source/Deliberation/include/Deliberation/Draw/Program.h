@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
@@ -14,7 +16,7 @@ namespace detail
 
 class ProgramInterface;
 
-class Program
+class DELIBERATION_API Program
 {
 public:
     Program();

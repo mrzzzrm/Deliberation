@@ -16,7 +16,6 @@ namespace detail
 }
 
 class Context;
-class TextureUploader;
 
 class DELIBERATION_API Surface final
 {
@@ -29,18 +28,17 @@ public:
     unsigned int height() const;
 
 private:
-    friend class Context;
     friend class DrawOutput;
     friend class detail::Framebuffer;
-    friend class TextureUploader;
+    friend class detail::TextureImpl;
 
 private:
     Surface(const std::shared_ptr<detail::TextureImpl> & texture,
             unsigned int face);
 
 private:
-    std::shared_ptr<detail::TextureImpl> m_texture;
-    unsigned int m_face;
+    std::shared_ptr<detail::TextureImpl>    m_texture;
+    unsigned int                            m_face;
 };
 
 }

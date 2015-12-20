@@ -1,14 +1,16 @@
 #pragma once
 
-#include <glbinding/gl/types.h>
-
 #include <vector>
 #include <functional>
+
+#include <glbinding/gl/types.h>
+
+#include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
 
-class GLFramebufferDesc final
+class DELIBERATION_API GLFramebufferDesc final
 {
 public:
     struct ColorAttachment

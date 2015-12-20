@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
@@ -12,7 +14,7 @@ namespace detail
 
 class Draw;
 
-class Uniform
+class DELIBERATION_API Uniform
 {
 public:
     Uniform();

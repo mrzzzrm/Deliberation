@@ -8,7 +8,7 @@
 namespace deliberation
 {
 
-gl::GLint GLSLSizeOf(gl::GLenum type);
+gl::GLint DELIBERATION_API GLSLSizeOf(gl::GLenum type);
 
 }
 

@@ -4,10 +4,12 @@
 
 #include <string>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class ProgramInterfaceFragmentOutput final
+class DELIBERATION_API ProgramInterfaceFragmentOutput final
 {
 public:
     ProgramInterfaceFragmentOutput(const std::string & name,
@@ -24,9 +26,9 @@ public:
     bool operator!=(const ProgramInterfaceFragmentOutput & other) const;
 
 private:
-    std::string m_name;
-    gl::GLenum m_type;
-    unsigned int m_location;
+    std::string     m_name;
+    gl::GLenum      m_type;
+    unsigned int    m_location;
 };
 
 }

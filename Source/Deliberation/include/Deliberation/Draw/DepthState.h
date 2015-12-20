@@ -2,10 +2,12 @@
 
 #include <string>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class DepthState final
+class DELIBERATION_API DepthState final
 {
 public:
     DepthState();

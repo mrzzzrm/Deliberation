@@ -5,10 +5,12 @@
 
 #include <glbinding/gl/enum.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class CullState final
+class DELIBERATION_API CullState final
 {
 public:
     static CullState disabled();

@@ -34,10 +34,9 @@ std::string Buffer::toString() const
         "Count: " + std::to_string(count());
 }
 
-Buffer::Buffer(Context & context, const BufferLayout & layout)
+Buffer::Buffer(const std::shared_ptr<detail::BufferImpl> & impl):
+    m_impl(impl)
 {
-    m_impl = std::make_shared<detail::BufferImpl>(context);
-    m_impl->layout = layout;
 }
 
 BufferUpload Buffer::createUpload(const Blob & data)

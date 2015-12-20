@@ -7,6 +7,20 @@
 namespace deliberation
 {
 
+TextureBinary TextureBinary::emptyTexture2D(unsigned int width,
+                                            unsigned int height,
+                                            PixelFormat format)
+{
+    TextureBinary binary;
+
+    binary.m_width = width;
+    binary.m_height = height;
+    binary.m_type = gl::GL_TEXTURE_2D;
+    binary.m_faces = {SurfaceBinary::empty(width, height, format)};
+
+    return binary;
+}
+
 TextureBinary::TextureBinary():
     m_type(gl::GL_NONE)
 {

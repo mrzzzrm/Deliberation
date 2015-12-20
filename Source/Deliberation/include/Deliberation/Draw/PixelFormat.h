@@ -2,6 +2,8 @@
 
 #include <glbinding/gl/enum.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
@@ -15,11 +17,11 @@ enum PixelFormat
     _PixelFormat_Count_
 };
 
-unsigned int PixelFormatChannelsPerPixel(PixelFormat format);
-unsigned int PixelFormatBytesPerPixel(PixelFormat format);
-gl::GLenum PixelFormatToGLFormat(PixelFormat format);
-gl::GLenum PixelFormatToGLInternalFormat(PixelFormat format);
-const char * PixelFormatToString(PixelFormat format);
+unsigned int DELIBERATION_API PixelFormatChannelsPerPixel(PixelFormat format);
+unsigned int DELIBERATION_API PixelFormatBytesPerPixel(PixelFormat format);
+gl::GLenum DELIBERATION_API PixelFormatToGLFormat(PixelFormat format);
+gl::GLenum DELIBERATION_API PixelFormatToGLInternalFormat(PixelFormat format);
+const char * DELIBERATION_API PixelFormatToString(PixelFormat format);
 
 }
 

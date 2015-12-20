@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include <Deliberation/Deliberation_API.h>
+
 #include <Deliberation/Core/Blob.h>
 
 #include <Deliberation/Draw/BufferLayout.h>
@@ -23,7 +25,7 @@ namespace detail
 
 class Context;
 
-class Buffer final
+class DELIBERATION_API Buffer final
 {
 public:
     Buffer();
@@ -37,13 +39,13 @@ public:
     std::string toString() const;
 
 private:
-    friend class Draw;
-    friend class GLVertexAttributeBinder;
     friend class BufferUploadExecution;
     friend class Context;
+    friend class Draw;
+    friend class GLVertexAttributeBinder;
 
 private:
-    Buffer(Context & context, const BufferLayout & layout);
+    Buffer(const std::shared_ptr<detail::BufferImpl> & impl);
 
 private:
     std::shared_ptr<detail::BufferImpl> m_impl;

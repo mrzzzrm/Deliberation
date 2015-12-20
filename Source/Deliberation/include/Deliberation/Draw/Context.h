@@ -15,6 +15,7 @@
 #include <Deliberation/Draw/DrawState.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/TextureUpload.h>
 
 namespace deliberation
 {
@@ -53,8 +54,7 @@ public:
     Clear createClear();
     Clear createClear(const glm::vec4 & color);
 
-    Texture createTexture(const std::string & path);
-    Texture createTexture(SDL_Surface * surface);
+    Texture createTexture(const TextureBinary & binary);
     Texture createTexture2D(unsigned int width,
                             unsigned int height,
                             PixelFormat format,
@@ -67,11 +67,13 @@ public:
     void allocateBuffer(detail::BufferImpl & buffer);
     void deallocateBuffer(detail::BufferImpl & buffer);
     void scheduleBufferUpload(const BufferUpload & upload);
+    void scheduleTextureUpload(const TextureUpload & upload);
     void scheduleDraw(const Draw & draw);
     void scheduleClear(const Clear & clear);
 
 private:
     void executeBufferUpload(const BufferUpload & upload);
+    void executeTextureUpload(const TextureUpload & upload);
     void executeDraw(const Draw & draw);
     void executeClear(const Clear & draw);
 

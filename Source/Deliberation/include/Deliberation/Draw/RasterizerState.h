@@ -4,10 +4,12 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class RasterizerState final
+class DELIBERATION_API RasterizerState final
 {
 public:
     RasterizerState();

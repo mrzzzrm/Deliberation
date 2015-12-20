@@ -1,14 +1,22 @@
 #pragma once
 
+#include <memory>
 #include <vector>
+
+#include <Deliberation/Deliberation_API.h>
 
 #include <Deliberation/Draw/PixelFormat.h>
 
 namespace deliberation
 {
 
-class SurfaceBinary final
+class DELIBERATION_API SurfaceBinary final
 {
+public:
+    static SurfaceBinary empty(unsigned int width,
+                               unsigned int height,
+                               PixelFormat format);
+
 public:
     SurfaceBinary();
     SurfaceBinary(std::vector<float> && pixels,
@@ -22,7 +30,7 @@ public:
     PixelFormat format() const;
 
 private:
-    std::vector<float> m_pixels;
+    std::shared_ptr<std::vector<float>> m_pixels;
     unsigned int m_width;
     unsigned int m_height;
     PixelFormat m_format;

@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <Deliberation/Deliberation_API.h>
+
 #include <Deliberation/Core/Optional.h>
 
 #include <Deliberation/Draw/GL/GLFramebufferDesc.h>
@@ -16,7 +18,7 @@ class Surface;
 namespace detail
 {
 
-class Framebuffer final
+class DELIBERATION_API Framebuffer final
 {
 public:
     Framebuffer();

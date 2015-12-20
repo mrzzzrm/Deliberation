@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <Deliberation/Deliberation_API.h>
+
 #include <Deliberation/Core/Blob.h>
 
 namespace deliberation
@@ -10,7 +12,7 @@ namespace deliberation
 class Buffer;
 class Context;
 
-class BufferUpload final
+class DELIBERATION_API BufferUpload final
 {
 public:
     BufferUpload(Context & context, Buffer & buffer, const Blob & data);
@@ -23,10 +25,10 @@ public:
     void schedule();
 
 private:
-    Context & m_context;
-    Buffer & m_buffer;
-    Blob m_blob;
-    unsigned int m_count;
+    Context &       m_context;
+    Buffer &        m_buffer;
+    Blob            m_blob;
+    unsigned int    m_count;
 };
 
 }

@@ -63,5 +63,11 @@ void Clear::schedule()
     m_impl->context.scheduleClear(*this);
 }
 
+Clear::Clear(const std::shared_ptr<detail::ClearImpl> & impl):
+    m_impl(impl)
+{
+
+}
+
 }
 

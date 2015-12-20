@@ -4,6 +4,8 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/Sampler.h>
@@ -25,7 +27,7 @@ class Context;
 class DrawOutput;
 class DrawState;
 
-class Draw final
+class DELIBERATION_API Draw final
 {
 public:
     Draw();

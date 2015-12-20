@@ -5,10 +5,12 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class ProgramInterfaceUniform final
+class DELIBERATION_API ProgramInterfaceUniform final
 {
 public:
     ProgramInterfaceUniform(const std::string & name,
@@ -28,9 +30,9 @@ public:
 
 private:
     std::string m_name;
-    gl::GLenum m_type;
-    gl::GLint m_location;
-    gl::GLuint m_size;
+    gl::GLenum  m_type;
+    gl::GLint   m_location;
+    gl::GLuint  m_size;
 };
 
 }

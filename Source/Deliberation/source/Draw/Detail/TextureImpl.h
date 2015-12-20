@@ -9,33 +9,38 @@
 namespace deliberation
 {
 
+class Context;
+
 namespace detail
 {
 
 class TextureImpl final
 {
 public:
-    TextureImpl(gl::GLuint glName,
-                unsigned int width,
-                unsigned int height,
-                unsigned int numFaces);
+    static std::shared_ptr<TextureImpl> build(Context & context, unsigned int numFaces);
 
-    gl::GLuint glName;
+public:
+    TextureImpl(Context & context, unsigned int numFaces);
 
-    unsigned int width;
-    unsigned int height;
+    Context &               context;
 
-    unsigned int numFaces;
-    gl::GLenum type;
+    gl::GLuint              glName;
 
-    gl::GLuint baseLevel;
-    gl::GLuint maxLevel;
-    gl::GLenum minFilter;
-    gl::GLenum maxFilter;
+    unsigned int            width;
+    unsigned int            height;
 
-    std::vector<Surface> surfaces;
+    unsigned int            numFaces;
+    gl::GLenum              type;
+
+    gl::GLuint              baseLevel;
+    gl::GLuint              maxLevel;
+    gl::GLenum              minFilter;
+    gl::GLenum              maxFilter;
+
+    std::vector<Surface>    surfaces;
 };
 
 }
 
 }
+

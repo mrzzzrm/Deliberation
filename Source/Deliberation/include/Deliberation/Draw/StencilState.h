@@ -5,10 +5,12 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class StencilState final
+class DELIBERATION_API StencilState final
 {
 public:
     struct Face

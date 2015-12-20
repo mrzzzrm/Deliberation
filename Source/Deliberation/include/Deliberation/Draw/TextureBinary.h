@@ -3,14 +3,21 @@
 #include <array>
 #include <vector>
 
+#include <Deliberation/Deliberation_API.h>
+
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/SurfaceBinary.h>
 
 namespace deliberation
 {
 
-class TextureBinary final
+class DELIBERATION_API TextureBinary final
 {
+public:
+    static TextureBinary emptyTexture2D(unsigned int width,
+                                        unsigned int height,
+                                        PixelFormat format);
+
 public:
     TextureBinary();
     TextureBinary(std::vector<float> && pixels,

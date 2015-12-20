@@ -5,10 +5,12 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class ProgramInterfaceSampler final
+class DELIBERATION_API ProgramInterfaceSampler final
 {
 public:
     ProgramInterfaceSampler(const std::string & name,

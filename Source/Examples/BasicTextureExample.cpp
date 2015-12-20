@@ -18,9 +18,7 @@
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Clear.h>
-//#include <Deliberation/Draw.h>
-//#include <Deliberation/Program.h>
-
+#include <Deliberation/Draw/TextureLoader.h>
 int main
 (
     int argc,
@@ -82,7 +80,7 @@ int main
 
     auto program = context.createProgram({deliberation::dataPath("Data/BasicTextureTest.vert"), deliberation::dataPath("Data/BasicTextureTest.frag")});
 
-    auto texture = context.createTexture(deliberation::dataPath("Data/testimage.png"));
+    auto texture = context.createTexture(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/testimage.png")).load());
     std::cout << "Texture resolution: " << texture.width() << "x" << texture.height() << std::endl;
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
@@ -91,10 +89,17 @@ int main
     draw.setIndexBuffer(ibuffer);
     draw.state().setDepthState(deliberation::DepthState(false, false));
     draw.state().setCullState(deliberation::CullState::disabled());
-
     Assert(draw.isComplete(), draw.toString());
 
     auto transform = draw.uniform("T");
+
+    std::vector<deliberation::TextureBinary> binaries;
+    binaries.push_back(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/0.png")).load());
+    binaries.push_back(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/1.png")).load());
+    binaries.push_back(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/2.png")).load());
+    unsigned int currentBinaryIndex = 0u;
+    auto morphingTexture = context.createTexture(binaries.front());
+    auto lastTextureMorph = std::chrono::system_clock::now();
 
     auto begin = std::chrono::system_clock::now();
 
@@ -104,20 +109,25 @@ int main
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        auto seconds = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::system_clock::now() - begin);
-
-        transform.set(glm::rotate(glm::pi<float>()/2.0f * seconds.count(), glm::vec3(0, 0, -1)));
-
         clear.schedule();
 
-//        clear.schedule();
+        auto seconds = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::system_clock::now() - begin);
+        transform.set(glm::rotate(glm::pi<float>()/2.0f * seconds.count(), glm::vec3(0, 0, -1)));
+        draw.sampler("Texture").setTexture(texture);
         draw.schedule();
-//       break;
 
-        /* Swap front and back buffers */
+        if (std::chrono::system_clock::now() - lastTextureMorph > std::chrono::seconds(1))
+        {
+            currentBinaryIndex++;
+            currentBinaryIndex %= binaries.size();
+            morphingTexture.createUpload(binaries[currentBinaryIndex]).schedule();
+            lastTextureMorph = std::chrono::system_clock::now();
+        }
+        transform.set(glm::scale(glm::mat4(1.0f), glm::vec3(0.8f)));
+        draw.sampler("Texture").setTexture(morphingTexture);
+        draw.schedule();
+
         glfwSwapBuffers(window);
-
-        /* Poll for and process events */
         glfwPollEvents();
     }
 

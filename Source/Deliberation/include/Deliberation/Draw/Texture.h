@@ -4,6 +4,10 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Deliberation_API.h>
+
+#include <Deliberation/Draw/TextureUpload.h>
+
 namespace deliberation
 {
 
@@ -14,8 +18,9 @@ namespace detail
 }
 
 class Surface;
+class TextureBinary;
 
-class Texture final
+class DELIBERATION_API Texture final
 {
 public:
     Texture();
@@ -31,10 +36,12 @@ public:
     Surface & surface(unsigned int face = 0);
     const Surface & surface(unsigned int face = 0) const;
 
+    TextureUpload createUpload(const TextureBinary & binary);
+
 private:
     friend class Context;
     friend class detail::DrawExecution;
-    friend class TextureUploader;
+    friend class TextureUploadExecution;
     friend class Sampler;
     friend class Surface;
 

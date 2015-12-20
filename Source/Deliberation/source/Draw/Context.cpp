@@ -7,7 +7,6 @@
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/TextureLoader.h>
-#include <Deliberation/Draw/TextureUploader.h>
 
 #include "Detail/BufferImpl.h"
 #include "Detail/ClearImpl.h"
@@ -18,6 +17,7 @@
 #include "BufferUploadExecution.h"
 #include "ClearExecution.h"
 #include "DrawVerification.h"
+#include "TextureUploadExecution.h"
 
 namespace deliberation
 {
@@ -47,25 +47,25 @@ void Context::setBackbufferResolution(unsigned int width, unsigned height)
 
 Buffer Context::createBuffer(const BufferLayout & layout)
 {
-    return Buffer(*this, layout);
+    return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Buffer Context::createIndexBuffer8()
 {
     BufferLayout layout({BufferLayoutField("Index8", sizeof(gl::GLubyte), gl::GL_UNSIGNED_BYTE, 0)});
-    return Buffer(*this, layout);
+    return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Buffer Context::createIndexBuffer16()
 {
     BufferLayout layout({BufferLayoutField("Index16", sizeof(gl::GLushort), gl::GL_UNSIGNED_SHORT, 0)});
-    return Buffer(*this, layout);
+    return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Buffer Context::createIndexBuffer32()
 {
     BufferLayout layout({BufferLayoutField("Index32", sizeof(gl::GLuint), gl::GL_UNSIGNED_INT, 0)});
-    return Buffer(*this, layout);
+    return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Program Context::createProgram(const std::vector<std::string> & paths)
@@ -94,10 +94,7 @@ Draw Context::createDraw(Program & program, const DrawState & drawState, const s
 
 Clear Context::createClear()
 {
-    Clear clear;
-    clear.m_impl = std::make_shared<detail::ClearImpl>(*this);
-
-    return clear;
+    return Clear(std::make_shared<detail::ClearImpl>(*this));
 }
 
 Clear Context::createClear(const glm::vec4 & color)
@@ -108,18 +105,10 @@ Clear Context::createClear(const glm::vec4 & color)
     return clear;
 }
 
-Texture Context::createTexture(const std::string & path)
+Texture Context::createTexture(const TextureBinary & binary)
 {
-    auto binary = TextureLoader(path).load();
-    auto texture = TextureUploader(*this, binary).upload();
-
-    return texture;
-}
-
-Texture Context::createTexture(SDL_Surface * surface)
-{
-    auto binary = TextureLoader(surface).load();
-    auto texture = TextureUploader(*this, binary).upload();
+    auto texture = Texture(detail::TextureImpl::build(*this, 1));
+    texture.createUpload(binary).schedule();
 
     return texture;
 }
@@ -129,52 +118,18 @@ Texture Context::createTexture2D(unsigned int width,
                                  PixelFormat format,
                                  bool clear)
 {
-    /*
-        TODO
-            GLStateManager
-            This code is duplicated in TextureUploader!!!
-    */
-
-    gl::GLuint glName;
-
-    gl::glGenTextures(1, &glName);
-    Assert(glName != 0, "glGenTextures() failed");
-
-    gl::glBindTexture(gl::GL_TEXTURE_2D, glName);
-
-    gl::glTexImage2D(gl::GL_TEXTURE_2D,
-                     0,
-                     (gl::GLint)PixelFormatToGLInternalFormat(format),
-                     width,
-                     height,
-                     0,
-                     PixelFormatToGLFormat(format),
-                     gl::GL_FLOAT,
-                     nullptr);
-
-    auto impl = std::make_shared<detail::TextureImpl>(glName,
-                                                      width,
-                                                      height,
-                                                      1);
-
-    std::vector<Surface> surfaces;
-    surfaces.push_back({impl, 0});
-
-    impl->surfaces = surfaces;
-
-    impl->baseLevel = 0;
-    impl->maxLevel = 0;
-    impl->minFilter = gl::GL_LINEAR;
-    impl->maxFilter = gl::GL_LINEAR;
+    auto binary = TextureBinary::emptyTexture2D(width, height, format);
+    auto texture = Texture(detail::TextureImpl::build(*this, 1));
+    texture.createUpload(binary).schedule();
 
     if (clear)
     {
         auto c = createClear();
-        c.setSurfaces({&impl->surfaces.front()});
+        c.setSurfaces({&texture.surface()});
         c.schedule();
     }
 
-    return Texture(impl);
+    return texture;
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)
@@ -213,6 +168,11 @@ void Context::scheduleBufferUpload(const BufferUpload & upload)
 //   }
 }
 
+void Context::scheduleTextureUpload(const TextureUpload & upload)
+{
+    executeTextureUpload(upload);
+}
+
 void Context::scheduleDraw(const Draw & draw)
 {
 //    switch(m_mode)
@@ -247,6 +207,11 @@ void Context::scheduleClear(const Clear & clear)
 void Context::executeBufferUpload(const BufferUpload & upload)
 {
     BufferUploadExecution(m_glStateManager, upload).perform();
+}
+
+void Context::executeTextureUpload(const TextureUpload & upload)
+{
+    TextureUploadExecution(m_glStateManager, upload).perform();
 }
 
 void Context::executeDraw(const Draw & draw)

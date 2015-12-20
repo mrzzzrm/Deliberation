@@ -51,6 +51,12 @@ const Surface & Texture::surface(unsigned int face) const
     return m_impl->surfaces[face];
 }
 
+TextureUpload Texture::createUpload(const TextureBinary & binary)
+{
+    Assert(m_impl.get(), "Texture is hollow");
+    return TextureUpload(m_impl->context, *this, binary);
+}
+
 Texture::Texture(const std::shared_ptr<detail::TextureImpl> & impl):
     m_impl(impl)
 {
