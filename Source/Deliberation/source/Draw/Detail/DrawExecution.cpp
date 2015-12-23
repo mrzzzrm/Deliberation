@@ -361,20 +361,20 @@ void DrawExecution::applyViewport()
 
     if (state.hasViewport())
     {
-        gl::glViewport(state.viewport().x(), state.viewport().y(),
-                       state.viewport().width(), state.viewport().height());
+        m_glStateManager.setViewport(state.viewport().x(), state.viewport().y(),
+                                     state.viewport().width(), state.viewport().height());
     }
     else
     {
         if (output.isBackbuffer())
         {
-            gl::glViewport(0, 0, m_drawImpl.context.backbufferWidth(),
-                                 m_drawImpl.context.backbufferHeight());
+            m_glStateManager.setViewport(0, 0, m_drawImpl.context.backbufferWidth(),
+                                               m_drawImpl.context.backbufferHeight());
         }
         else
         {
-            gl::glViewport(0, 0, output.width(),
-                                 output.height());
+            m_glStateManager.setViewport(0, 0, output.width(),
+                                               output.height());
         }
     }
 }

@@ -49,6 +49,7 @@ public:
     void framebufferTexture2D(gl::GLenum target, gl::GLenum attachment, gl::GLenum textarget, gl::GLuint texture, gl::GLint level);
     void bindBuffer(gl::GLenum target, gl::GLuint buffer);
     void deleteBuffer(gl::GLuint buffer);
+    void setViewport(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
 
     /*
         Framebuffer caching
@@ -114,7 +115,11 @@ private:
     gl::GLclampd                        m_glClearDepth;
     gl::GLint                           m_glClearStencil;
     std::array<gl::GLuint,
-               FramebufferTargetCount>  m_boundFramebuffer;
+               FramebufferTargetCount>  m_boundFramebuffers;
+    gl::GLint                           m_glViewportX;
+ 	gl::GLint                           m_glViewportY;
+ 	gl::GLsizei                         m_glViewportWidth;
+ 	gl::GLsizei                         m_glViewportHeight;
 
     /*
 

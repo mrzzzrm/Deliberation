@@ -18,10 +18,10 @@ public:
     BufferImpl(Context & context, const BufferLayout & layout);
     ~BufferImpl();
 
-    Context & context;
-    gl::GLuint glName;
-    unsigned int count;
-    BufferLayout layout;
+    Context &       context;
+    gl::GLuint      glName;
+    unsigned int    count;
+    BufferLayout    layout;
 };
 
 }

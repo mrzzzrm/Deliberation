@@ -21,7 +21,8 @@ SurfaceBinary SurfaceBinary::empty(unsigned int width,
 SurfaceBinary::SurfaceBinary():
     m_width(0u),
     m_height(0u),
-    m_format(PixelFormat_None)
+    m_format(PixelFormat_None),
+    m_pixels(std::make_shared<std::vector<float>>())
 {
 }
 

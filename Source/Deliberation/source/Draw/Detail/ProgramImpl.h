@@ -23,8 +23,8 @@ class ProgramImpl final
 public:
     ProgramImpl(const std::vector<std::string> & paths);
 
-    gl::GLuint glProgramName;
-    ProgramInterface interface;
+    gl::GLuint          glProgramName;
+    ProgramInterface    interface;
 };
 
 }

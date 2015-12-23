@@ -126,6 +126,13 @@ set(sources
     ${source_path}/Font/Font.cpp
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
+    
+    ${source_path}/Math/GLMUtils.cpp
+    ${source_path}/Math/Rect3D.cpp
+    ${source_path}/Math/Plane.cpp
+    
+    ${source_path}/Scene/Camera3D.cpp
+    ${source_path}/Scene/Transform3D.cpp
 )
 
 # api_includes
@@ -198,6 +205,13 @@ set(api_includes
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
+    
+    ${include_path}/Math/GLMUtils.h
+    ${include_path}/Math/Rect3D.h
+    ${include_path}/Math/Plane.h
+    
+    ${include_path}/Scene/Camera3D.h
+    ${include_path}/Scene/Transform3D.h
 )
 
 # libs

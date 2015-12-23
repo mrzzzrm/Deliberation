@@ -33,7 +33,11 @@ GLStateManager::GLStateManager():
     m_glClearColorBlue(0.0f),
     m_glClearColorAlpha(0.0f),
     m_glClearDepth(1.0f),
-    m_glClearStencil(0.0f)
+    m_glClearStencil(0.0f),
+    m_glViewportX(0),
+    m_glViewportY(0),
+    m_glViewportWidth(640),
+    m_glViewportHeight(480)
 {
     m_glStencilFunc[0] = GL_ALWAYS;
     m_glStencilFunc[1] = GL_ALWAYS;
@@ -60,10 +64,16 @@ GLStateManager::GLStateManager():
     glStencilFunc(m_glStencilFunc[0], m_glStencilRef[0], m_glStencilReadMask[0]);
     glStencilMask(m_glStencilWriteMask[0]);
     glStencilOp(m_glStencilSFail[0], m_glStencilDPFail[0], m_glStencilDPPass[0]);
+    glViewport(m_glViewportX, m_glViewportY, m_glViewportWidth, m_glViewportHeight);
 
     for (auto & boundBuffer : m_boundBuffers)
     {
         boundBuffer = 0;
+    }
+
+    for (auto & boundFramebuffer : m_boundFramebuffers)
+    {
+        boundFramebuffer = 0;
     }
 }
 
@@ -340,6 +350,21 @@ void GLStateManager::deleteBuffer(gl::GLuint buffer)
     glDeleteBuffers(1, &buffer);
 }
 
+void GLStateManager::setViewport(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height)
+{
+    if (x == m_glViewportX && y == m_glViewportY && width == m_glViewportWidth && height == m_glViewportHeight)
+    {
+        return;
+    }
+
+    glViewport(x, y, width, height);
+
+    m_glViewportX = x;
+    m_glViewportY = y;
+    m_glViewportWidth = width;
+    m_glViewportHeight = height;
+}
+
 void GLStateManager::setClearColor(gl::GLclampf red, gl::GLclampf green, gl::GLclampf blue, gl::GLclampf alpha)
 {
     if (red != m_glClearColorRed || green != m_glClearColorGreen || blue != m_glClearColorBlue || alpha != m_glClearColorAlpha)
@@ -380,12 +405,44 @@ void GLStateManager::genFramebuffers(gl::GLsizei n, gl::GLuint * ids)
 
 void GLStateManager::deleteFramebuffers(gl::GLsizei n, gl::GLuint * framebuffers)
 {
+    /*
+        TODO
+            Make sure no used m_glFramebuffers is around anymore!
+    */
+
+    for (auto f = 0u; f < n; f++)
+    {
+        for (auto t = 0u; t < FramebufferTargetCount; t++)
+        {
+            if (m_boundFramebuffers[t] == framebuffers[f])
+            {
+                m_boundFramebuffers[t] = 0;
+            }
+        }
+    }
+
     glDeleteFramebuffers(n, framebuffers);
 }
 
 void GLStateManager::bindFramebuffer(gl::GLenum target, gl::GLuint framebuffer)
 {
-    glBindFramebuffer(target, framebuffer);
+    if (target == GL_DRAW_FRAMEBUFFER || target == GL_FRAMEBUFFER)
+    {
+        if (m_boundFramebuffers[DrawFramebufferTarget] != framebuffer)
+        {
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+            m_boundFramebuffers[DrawFramebufferTarget] = framebuffer;
+        }
+    }
+
+    if (target == GL_READ_FRAMEBUFFER || target == GL_FRAMEBUFFER)
+    {
+        if (m_boundFramebuffers[ReadFramebufferTarget] != framebuffer)
+        {
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+            m_boundFramebuffers[ReadFramebufferTarget] = framebuffer;
+        }
+    }
 }
 
 void GLStateManager::framebufferTexture2D(gl::GLenum target, gl::GLenum attachment, gl::GLenum textarget, gl::GLuint texture, gl::GLint level)
