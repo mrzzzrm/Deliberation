@@ -166,13 +166,13 @@ void Draw::setState(const DrawState & state)
 
     m_impl->state = state;
 }
-
-void Draw::setOutput(const DrawOutput & output)
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    m_impl->output = output;
-}
+//
+//void Draw::setOutput(const DrawOutput & output)
+//{
+//    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+//
+//    m_impl->output = output;
+//}
 
 std::string Draw::toString() const
 {

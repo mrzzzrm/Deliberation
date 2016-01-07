@@ -87,6 +87,18 @@ void Framebuffer::setSurface(unsigned int index, Surface * surface)
     m_isBackbuffer = false;
 }
 
+void Framebuffer::setDepthSurface(Surface * surface)
+{
+    if (m_depthSurface == surface)
+    {
+        return;
+    }
+
+    m_depthSurface = surface;
+    m_glFramebufferDirty = true;
+    m_isBackbuffer = false;
+}
+
 void Framebuffer::bind(GLStateManager & glStateManager) const
 {
     if (m_isBackbuffer)

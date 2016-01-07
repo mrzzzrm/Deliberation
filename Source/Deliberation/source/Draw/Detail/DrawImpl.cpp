@@ -22,7 +22,8 @@ DrawImpl::DrawImpl(Context & context,
     context(context),
     program(program.m_impl),
     indexBuffer(nullptr),
-    glVertexArray(0u)
+    glVertexArray(0u),
+    output(*program.m_impl)
 {
     /*
         TODO

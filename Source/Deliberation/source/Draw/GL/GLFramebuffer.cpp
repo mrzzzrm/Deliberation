@@ -34,6 +34,8 @@ GLFramebuffer::GLFramebuffer(GLStateManager & glStateManager,
                                                 desc.colorAttachments()[a].glName,
                                                 0);
             numBoundColorAttachments++;
+
+
         }
     }
 

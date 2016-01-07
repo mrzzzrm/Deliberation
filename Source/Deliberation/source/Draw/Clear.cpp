@@ -9,6 +9,8 @@
 namespace deliberation
 {
 
+Clear::Clear() = default;
+
 void Clear::setSurfaces(const std::vector<Surface*> & surfaces)
 {
     Assert(m_impl.get(), "Clear is hollow");

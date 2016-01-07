@@ -24,6 +24,8 @@
 
 deliberation::Camera3D camera;
 deliberation::Transform3D transform;
+deliberation::Texture depthBuffer;
+deliberation::Texture colorBuffer;
 GLFWwindow * window;
 
 struct Vertex
@@ -194,6 +196,8 @@ deliberation::Draw createDraw(deliberation::Context & context)
     result.addVertexBuffer(vertexBuffer);
     result.setIndexBuffer(indexBuffer);
     result.state().setCullState(deliberation::CullState::disabled());
+//    result.output().setDepthTarget(&depthBuffer.surface());
+//    result.output().setRenderTarget("Color", &colorBuffer.surface());
 
     return result;
 }
@@ -223,6 +227,9 @@ int main(int argc, char * argv[])
     deliberation::setPrefixPath("..");
 
     deliberation::Context context;
+
+//    depthBuffer = context.createTexture2D(640, 480, deliberation::PixelFormat_Depth_32F);
+//    colorBuffer = context.createTexture2D(640, 480, deliberation::PixelFormat_RGB_32F);
 
     camera.setPosition({0.0f, 1.0f, 3.0f});
     camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));

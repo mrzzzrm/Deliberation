@@ -48,7 +48,7 @@ public:
     Sampler sampler(const std::string & name);
 
     void setState(const DrawState & state);
-    void setOutput(const DrawOutput & output);
+//    void setOutput(const DrawOutput & output);
 
     void setIndexBuffer(const Buffer & buffer);
     void addVertexBuffer(const Buffer & buffer);

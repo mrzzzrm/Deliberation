@@ -33,6 +33,8 @@ public:
 
     void setSurface(unsigned int index, Surface * surface);
 
+    void setDepthSurface(Surface * surface);
+
     void bind(GLStateManager & glStateManager) const;
 
 private:
@@ -42,6 +44,7 @@ private:
 private:
     bool                                    m_isBackbuffer;
     std::vector<Surface*>                   m_surfaces;
+    Surface *                               m_depthSurface;
     mutable Optional<GLFramebufferDesc>     m_glFramebufferDesc;
     mutable bool                            m_glFramebufferDirty;
     mutable std::shared_ptr<GLFramebuffer>  m_glFramebuffer;

@@ -180,8 +180,6 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             m_fragmentOutputs.push_back({name, type, (unsigned int)location});
         }
     }
-
-    std::cout << "Layout: " << toString() << std::endl;
 }
 
 const ProgramInterfaceVertexAttribute & ProgramInterface::attribute(const std::string & name) const

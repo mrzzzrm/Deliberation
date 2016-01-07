@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
@@ -16,6 +17,8 @@ namespace deliberation
 namespace detail
 {
     class DrawExecution;
+    class DrawImpl;
+    class ProgramImpl;
 }
 
 class Surface;
@@ -23,7 +26,7 @@ class Surface;
 class DELIBERATION_API DrawOutput
 {
 public:
-    DrawOutput();
+    DrawOutput(const DrawOutput & other);
 
     unsigned int width() const;
     unsigned int height() const;
@@ -34,12 +37,20 @@ public:
     const std::vector<Surface*> & renderTargets() const;
 
     void setRenderTarget(unsigned int index, Surface * surface);
+    void setRenderTarget(const std::string & name, Surface * surface);
+
+    void setDepthTarget(Surface * surface);
 
 private:
     friend class detail::DrawExecution;
+    friend class detail::DrawImpl;
 
 private:
-    detail::Framebuffer m_framebuffer;
+    DrawOutput(const detail::ProgramImpl & program);
+
+private:
+    const detail::ProgramImpl & m_program;
+    detail::Framebuffer         m_framebuffer;
 };
 
 }

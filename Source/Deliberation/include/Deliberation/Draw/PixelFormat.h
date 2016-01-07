@@ -10,10 +10,14 @@ namespace deliberation
 enum PixelFormat
 {
     PixelFormat_None,
+
     PixelFormat_RGB_32F,
     PixelFormat_BGR_32F,
     PixelFormat_RGBA_32F,
     PixelFormat_BGRA_32F,
+
+    PixelFormat_Depth_32F,
+
     _PixelFormat_Count_
 };
 
