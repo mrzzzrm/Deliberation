@@ -9,19 +9,16 @@ namespace deliberation
 
 CullState CullState::disabled()
 {
-    return CullState(false, gl::GL_BACK);
+    CullState cullState;
+    cullState.setEnabled(false);
+
+    return cullState;
 }
 
-CullState::CullState():
+CullState::CullState(gl::GLenum cullFace, gl::GLenum frontFace):
     m_enabled(true),
-    m_mode(gl::GL_BACK)
-{
-
-}
-
-CullState::CullState(bool enabled, gl::GLenum mode):
-    m_enabled(enabled),
-    m_mode(mode)
+    m_cullFace(cullFace),
+    m_frontFace(frontFace)
 {
 
 }
@@ -31,9 +28,14 @@ bool CullState::enabled() const
     return m_enabled;
 }
 
-gl::GLenum CullState::mode() const
+gl::GLenum CullState::cullFace() const
 {
-    return m_mode;
+    return m_cullFace;
+}
+
+gl::GLenum CullState::frontFace() const
+{
+    return m_frontFace;
 }
 
 void CullState::setEnabled(bool enabled)
@@ -41,9 +43,14 @@ void CullState::setEnabled(bool enabled)
     m_enabled = enabled;
 }
 
-void CullState::setMode(gl::GLenum mode)
+void CullState::setCullFace(gl::GLenum cullFace)
 {
-    m_mode = mode;
+    m_cullFace = cullFace;
+}
+
+void CullState::setFrontFace(gl::GLenum frontFace)
+{
+    m_frontFace = frontFace;
 }
 
 std::string CullState::toString() const
@@ -54,7 +61,8 @@ std::string CullState::toString() const
     }
 
     std::stringstream stream;
-    stream << "Mode: " << m_mode;
+    stream << "CullFace: " << m_cullFace;
+    stream << "FrontFace: " << m_frontFace;
 
     return stream.str();
 }

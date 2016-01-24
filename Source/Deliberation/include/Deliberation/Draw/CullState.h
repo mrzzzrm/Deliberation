@@ -16,20 +16,22 @@ public:
     static CullState disabled();
 
 public:
-    CullState();
-    CullState(bool enabled, gl::GLenum mode);
+    CullState(gl::GLenum cullFace = gl::GL_BACK, gl::GLenum frontFace = gl::GL_CCW);
 
     bool enabled() const;
-    gl::GLenum mode() const;
+    gl::GLenum cullFace() const;
+    gl::GLenum frontFace() const;
 
     void setEnabled(bool enabled);
-    void setMode(gl::GLenum mode);
+    void setCullFace(gl::GLenum cullFace);
+    void setFrontFace(gl::GLenum frontFace);
 
     std::string toString() const;
 
 private:
-    bool m_enabled;
-    gl::GLenum m_mode;
+    bool        m_enabled;
+    gl::GLenum  m_cullFace;
+    gl::GLenum  m_frontFace;
 };
 
 }

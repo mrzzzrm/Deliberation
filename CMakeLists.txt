@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(Deliberation C CXX)
 
 # Configuration options
-option(OPTION_BUILD_STATIC "Build static libraries" OFF)
+option(OPTION_BUILD_STATIC 	"Build static libraries" OFF)
 
 if(OPTION_BUILD_STATIC)
    set(BUILD_SHARED_LIBS OFF)

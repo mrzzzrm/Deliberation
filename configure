@@ -2,10 +2,15 @@
 
 # Default options
 BUILD_DIR="build"
-CMAKE_GENERATOR="Unix Makefiles"
-BUILD_TYPE="Release"
+CMAKE_GENERATOR="CodeBlocks - Unix Makefiles"
+BUILD_TYPE="Debug"
 INSTALL_OPTIONS=""
 EXTRA_OPTIONS=""
+
+CMAKE_OPTIONS="${CMAKE_OPTIONS} -DIL_INCLUDE_DIR=$PWD/../DevIL/DevIL/include"
+CMAKE_OPTIONS="${CMAKE_OPTIONS} -DGLM_INCLUDE_DIR=$PWD/../glm/"
+CMAKE_OPTIONS="${CMAKE_OPTIONS} -DCMAKE_VERBOSE_MAKEFILE=TRUE"
+
 
 # Create default configs
 if [ ! -d "./.localconfig" ]
@@ -18,11 +23,11 @@ then
     echo "# Default configuration for configure (is always sourced)" >> ".localconfig/default"
     echo "" >> ".localconfig/default"
     echo "# CMake generator" >> ".localconfig/default"
-    echo "CMAKE_GENERATOR=\"Unix Makefiles\"" >> ".localconfig/default"
+    echo "CMAKE_GENERATOR=\"$CMAKE_GENERATOR\"" >> ".localconfig/default"
     echo "" >> ".localconfig/default"
     echo "# Build directory and build type" >> ".localconfig/default"
     echo "BUILD_DIR=\"build\"" >> ".localconfig/default"
-    echo "BUILD_TYPE=\"Release\"" >> ".localconfig/default"
+    echo "BUILD_TYPE=\"$BUILD_TYPE\"" >> ".localconfig/default"
     echo "" >> ".localconfig/default"
     echo "# CMake installation options" >> ".localconfig/default"
     echo "INSTALL_OPTIONS=\"\"" >> ".localconfig/default"
@@ -30,10 +35,14 @@ then
     echo "# Additional CMake options" >> ".localconfig/default"
     echo "EXTRA_OPTIONS=\"\"" >> ".localconfig/default"
     echo "" >> ".localconfig/default"
+	echo "CMAKE_OPTIONS=\"\${CMAKE_OPTIONS} -DIL_LIBRARIES=\$PWD/../DevIL/DevIL/lib/.libs/libIL.so\"" >> ".localconfig/default"
+	echo "CMAKE_OPTIONS=\"\${CMAKE_OPTIONS} -DILU_LIBRARIES=\$PWD/../DevIL/DevIL/lib/.libs/libILU.so\"" >> ".localconfig/default"
+	echo "CMAKE_OPTIONS=\"\${CMAKE_OPTIONS} -DILUT_LIBRARIES=\$PWD/../DevIL/DevIL/lib/.libs/libILUT.so\"" >> ".localconfig/default"
+    echo "" >> ".localconfig/default"
     echo "# Environment variables (e.g., search paths for external libraries)" >> ".localconfig/default"
     echo "#export CMAKE_PREFIX_PATH=\"/opt/Qt5.2.1/5.2.1/gcc_64/\"" >> ".localconfig/default"
-    echo "#export GMOCK_HOME=/opt/gmock-1.7.0" >> ".localconfig/default"
-    echo "#export GTEST_HOME=/opt/gtest-1.7.0" >> ".localconfig/default"
+    echo "export CMAKE_PREFIX_PATH=\"\${CMAKE_PREFIX_PATH}:\$PWD/../\"" >> ".localconfig/default"
+    echo "export GLFW_HOME=\"\$PWD/../glfw/\"" >> ".localconfig/default"
 
     touch ".localconfig/debug"
     echo "#!/bin/bash" >> ".localconfig/debug"
@@ -86,7 +95,7 @@ fi
 
 # Configure project
 cd $BUILD_DIR
-cmake -G "$CMAKE_GENERATOR" "-DCMAKE_BUILD_TYPE=$BUILD_TYPE" $INSTALL_OPTIONS $EXTRA_OPTIONS ..
+cmake -G "$CMAKE_GENERATOR" "-DCMAKE_BUILD_TYPE=$BUILD_TYPE" $CMAKE_OPTIONS $INSTALL_OPTIONS $EXTRA_OPTIONS ..
 if [ $? == 0 ]
 then
     echo "Project configured. To build the project, use";

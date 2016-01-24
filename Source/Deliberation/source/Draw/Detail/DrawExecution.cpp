@@ -297,7 +297,7 @@ void DrawExecution::applyCullState()
         return;
     }
 
-    m_glStateManager.setCullFace(state.mode());
+    m_glStateManager.setCullFace(state.cullFace());
 }
 
 void DrawExecution::applyRasterizerState()

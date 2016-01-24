@@ -90,7 +90,7 @@ Blob::Blob(std::vector<T> && value)
 
         virtual std::unique_ptr<IBlobImpl> clone() const override
         {
-            return std::unique_ptr<IBlobImpl>(new Impl(m_value));
+            return std::unique_ptr<IBlobImpl>(new Impl(std::vector<T>(m_value)));
         }
 
         virtual const void * ptr() const override
@@ -107,7 +107,7 @@ Blob::Blob(std::vector<T> && value)
         std::vector<T> m_value;
     };
 
-    m_impl = std::unique_ptr<detail::IBlobImpl>(new Impl(value));
+    m_impl = std::unique_ptr<detail::IBlobImpl>(new Impl(std::move(value)));
 }
 
 }

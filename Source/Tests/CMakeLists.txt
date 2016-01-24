@@ -7,7 +7,6 @@ set(target BanditTest)
 find_package(BANDIT     REQUIRED)
 find_package(GLFW       REQUIRED)
 find_package(glbinding  REQUIRED)
-find_package(globjects  REQUIRED)
 find_package(GLM        REQUIRED)
 
 # includes

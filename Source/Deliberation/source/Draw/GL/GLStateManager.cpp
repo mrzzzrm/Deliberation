@@ -58,6 +58,7 @@ GLStateManager::GLStateManager():
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
     glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
     glPointSize(1.0f);
     glLineWidth(1.0f);
     glDisable(GL_STENCIL_TEST);
@@ -142,6 +143,8 @@ void GLStateManager::setCullFace(gl::GLenum mode)
     }
 
     m_glCullFaceMode = mode;
+
+    glCullFace(mode);
 }
 
 void GLStateManager::setPointSize(float size)

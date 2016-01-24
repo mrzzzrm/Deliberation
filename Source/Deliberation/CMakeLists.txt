@@ -11,6 +11,7 @@ FIND_PACKAGE(IL		    REQUIRED)
 FIND_PACKAGE(ILU	    REQUIRED)
 FIND_PACKAGE(SDL2	    REQUIRED)
 FIND_PACKAGE(SDL2_ttf   REQUIRED)
+find_package(GLFW       REQUIRED)
 
 # include
 include_directories(
@@ -23,6 +24,7 @@ include_directories(
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${IL_INCLUDE_DIR}
+    ${GLFW_INCLUDE_DIR}
 )
 
 # library type
@@ -39,6 +41,9 @@ set(sources
     ${source_path}/Core/Assert.cpp
     ${source_path}/Core/Blob.cpp
     ${source_path}/Core/FileUtils.cpp
+    ${source_path}/Core/InputAdapterBase.cpp
+    ${source_path}/Core/LapTimer.cpp
+    ${source_path}/Core/MainLoop.cpp
     ${source_path}/Core/StringUtils.cpp
     ${source_path}/Core/Viewport.cpp
 
@@ -59,7 +64,7 @@ set(sources
     ${source_path}/Draw/Detail/TextureImpl.cpp
     ${source_path}/Draw/Detail/TextureImpl.h
     ${source_path}/Draw/Detail/UniformImpl.cpp
-    
+
     ${source_path}/Draw/GL/GLFramebufferDesc.cpp
     ${source_path}/Draw/GL/GLFramebuffer.cpp
     ${source_path}/Draw/GL/GLFramebuffer.h
@@ -71,7 +76,7 @@ set(sources
     ${source_path}/Draw/GL/GLVertexAttributeBinder.h
     ${source_path}/Draw/GL/GLVertexAttributeFormat.cpp
     ${source_path}/Draw/GL/GLVertexAttributeFormat.h
-    
+
     ${source_path}/Draw/BlendState.cpp
     ${source_path}/Draw/Buffer.cpp
     ${source_path}/Draw/BufferLayout.cpp
@@ -122,16 +127,18 @@ set(sources
     ${source_path}/Draw/TextureUploadExecution.cpp
     ${source_path}/Draw/TextureUploadExecution.h
     ${source_path}/Draw/Uniform.cpp
-    
+
     ${source_path}/Font/Font.cpp
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
-    
+
     ${source_path}/Math/GLMUtils.cpp
     ${source_path}/Math/Rect3D.cpp
     ${source_path}/Math/Plane.cpp
-    
+
     ${source_path}/Scene/Camera3D.cpp
+    ${source_path}/Scene/DebugCameraNavigator3D.cpp
+    ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/Transform3D.cpp
 )
 
@@ -147,6 +154,9 @@ set(api_includes
     ${include_path}/Core/FileUtils.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl
+    ${include_path}/Core/InputAdapterBase.h
+    ${include_path}/Core/LapTimer.h
+    ${include_path}/Core/MainLoop.h
     ${include_path}/Core/OffsetOf.h
     ${include_path}/Core/OffsetOf.inl
     ${include_path}/Core/Optional.h
@@ -160,15 +170,15 @@ set(api_includes
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
     ${include_path}/Draw/Detail/NamedDataMemberOf.h
-    ${include_path}/Draw/Detail/NamedDataMemberOf.inl    
+    ${include_path}/Draw/Detail/NamedDataMemberOf.inl
     ${include_path}/Draw/Detail/UniformImpl.h
-    
+
     ${include_path}/Draw/GL/GLFramebufferDesc.h
     ${include_path}/Draw/GL/GLSLSizeOf.h
     ${include_path}/Draw/GL/GLStateManager.h
     ${include_path}/Draw/GL/GLSLTypeOf.h
     ${include_path}/Draw/GL/GLSLTypeOf.inl
-    
+
     ${include_path}/Draw/BlendState.h
     ${include_path}/Draw/Buffer.h
     ${include_path}/Draw/BufferLayout.h
@@ -198,24 +208,27 @@ set(api_includes
     ${include_path}/Draw/Texture.h
     ${include_path}/Draw/TextureBinary.h
     ${include_path}/Draw/TextureLoader.h
-    ${include_path}/Draw/TextureUpload.h    
+    ${include_path}/Draw/TextureUpload.h
     ${include_path}/Draw/Uniform.h
     ${include_path}/Draw/Uniform.inl
-    
+
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
-    
+
     ${include_path}/Math/GLMUtils.h
     ${include_path}/Math/Rect3D.h
     ${include_path}/Math/Plane.h
-    
+
     ${include_path}/Scene/Camera3D.h
+    ${include_path}/Scene/DebugCameraNavigator3D.h
+    ${include_path}/Scene/DebugGrid3DRenderer.h
     ${include_path}/Scene/Transform3D.h
 )
 
 # libs
 set(libs
+    ${GLFW_LIBRARY}
     ${GLBINDING_LIBRARY}
     ${IL_LIBRARIES}
     ${ILU_LIBRARIES}

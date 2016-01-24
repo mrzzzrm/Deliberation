@@ -22,9 +22,9 @@
 namespace deliberation
 {
 
-Context::Context():
-    m_backbufferWidth(640u),
-    m_backbufferHeight(480u)
+Context::Context(unsigned int backbufferWidth, unsigned int backbufferHeight):
+    m_backbufferWidth(backbufferWidth),
+    m_backbufferHeight(backbufferHeight)
 {
     std::cout << "Creating Deliberation Context" << std::endl;
 }

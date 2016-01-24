@@ -20,6 +20,7 @@
 #include <Deliberation/Draw/PixelFormat.h>
 
 #include <Deliberation/Scene/Camera3D.h>
+#include <Deliberation/Scene/DebugGrid3DRenderer.h>
 #include <Deliberation/Scene/Transform3D.h>
 
 deliberation::Camera3D camera;
@@ -228,6 +229,8 @@ int main(int argc, char * argv[])
 
     deliberation::Context context;
 
+    deliberation::DebugGrid3DRenderer grid(context, 0.5f, camera);
+
 //    depthBuffer = context.createTexture2D(640, 480, deliberation::PixelFormat_Depth_32F);
 //    colorBuffer = context.createTexture2D(640, 480, deliberation::PixelFormat_RGB_32F);
 
@@ -256,6 +259,7 @@ int main(int argc, char * argv[])
 
         clear.schedule();
         draw.schedule();
+        grid.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

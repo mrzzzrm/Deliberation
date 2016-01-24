@@ -28,7 +28,7 @@ namespace detail
 class DELIBERATION_API Context final
 {
 public:
-    Context();
+    Context(unsigned int backbufferWidth = 640u, unsigned int backbufferHeight = 480u);
 
     unsigned int backbufferWidth() const;
     unsigned int backbufferHeight() const;

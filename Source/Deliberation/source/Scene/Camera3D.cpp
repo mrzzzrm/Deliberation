@@ -13,7 +13,7 @@ Camera3D::Camera3D():
     m_orientation({0.0f, 0.0f, 0.0f}),
     m_zNear(0.1f),
     m_zFar(1000.0f),
-    m_yFoV(glm::radians(90.0f)),
+    m_yFoV(glm::radians(70.0f)),
     m_aspectRatio(1.0f),
     m_viewDirty(true),
     m_projectionDirty(true)
@@ -100,7 +100,7 @@ const glm::mat4 & Camera3D::view() const
     {
         m_view = glm::lookAt(m_position,
                              m_position + m_orientation * glm::vec3(0.0f, 0.0f, -1.0f),
-                             m_position + m_orientation * glm::vec3(0.0f, 1.0f, 0.0f));
+                             m_orientation * glm::vec3(0.0f, 1.0f, 0.0f));
         m_viewDirty = false;
     }
 
