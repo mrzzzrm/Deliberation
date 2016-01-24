@@ -1,5 +1,7 @@
 #include <Deliberation/Core/StringUtils.h>
 
+#include <Deliberation/Core/Assert.h>
+
 namespace deliberation
 {
 
@@ -39,6 +41,19 @@ bool StringEndsWith(const std::string & str, const std::string testStr)
     }
 
     return true;
+}
+
+std::string & StringRErase(std::string & str, std::size_t num)
+{
+    Assert(str.size() >= num, "");
+    str.resize(str.size() - num);
+    return str;
+}
+
+std::string StringRErased(const std::string & str, std::size_t num)
+{
+    auto cpy = str;
+    return StringRErase(cpy, num);
 }
 
 }
