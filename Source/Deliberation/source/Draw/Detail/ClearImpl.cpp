@@ -1,5 +1,7 @@
 #include "ClearImpl.h"
 
+#include <Deliberation/Draw/Context.h>
+
 namespace deliberation
 {
 
@@ -13,7 +15,8 @@ ClearImpl::ClearImpl(Context & context):
     stencil(0),
     clearColor(true),
     clearDepth(true),
-    clearStencil(true)
+    clearStencil(true),
+    framebuffer(context.backbuffer())
 {
 
 }

@@ -11,13 +11,22 @@ namespace deliberation
 
 Clear::Clear() = default;
 
-void Clear::setSurfaces(const std::vector<Surface*> & surfaces)
+Framebuffer & Clear::framebuffer()
 {
     Assert(m_impl.get(), "Clear is hollow");
-    for (auto s = 0u; s < surfaces.size(); s++)
-    {
-        m_impl->framebuffer.setSurface(s, surfaces[s]);
-    }
+    return m_impl->framebuffer;
+}
+
+const Framebuffer & Clear::framebuffer() const
+{
+    Assert(m_impl.get(), "Clear is hollow");
+    return m_impl->framebuffer;
+}
+
+void Clear::setFramebuffer(Framebuffer & framebuffer)
+{
+    Assert(m_impl.get(), "Clear is hollow");
+    m_impl->framebuffer = framebuffer;
 }
 
 void Clear::setColor(const glm::vec4 & color)

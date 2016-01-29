@@ -6,6 +6,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
@@ -22,8 +23,7 @@ DrawImpl::DrawImpl(Context & context,
     context(context),
     program(program.m_impl),
     indexBuffer(nullptr),
-    glVertexArray(0u),
-    output(*program.m_impl)
+    glVertexArray(0u)
 {
     /*
         TODO
@@ -55,15 +55,12 @@ DrawImpl::DrawImpl(Context & context,
             samplers.emplace_back(glNames[s], sampler.type(), sampler.location());
         }
     }
+
+    // Create framebuffer
+    framebuffer = context.backbuffer();
 }
 
 }
 
 }
 
-
-
-//    for (auto & uniform : m_program.layout().uniforms())
-//    {
-//        d_unsetUniformLocations.insert(uniform.location());
-//    }

@@ -17,14 +17,17 @@ namespace detail
     class ClearImpl;
 }
 
-class Surface;
+class Framebuffer;
 
-class DELIBERATION_API Clear
+class DELIBERATION_API Clear final
 {
 public:
     Clear();
 
-    void setSurfaces(const std::vector<Surface*> & surfaces);
+    Framebuffer & framebuffer();
+    const Framebuffer & framebuffer() const;
+
+    void setFramebuffer(Framebuffer & framebuffer);
 
     void setColor(const glm::vec4 & color);
     void disableColor();

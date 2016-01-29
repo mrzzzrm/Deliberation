@@ -2,6 +2,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Texture.h>
 
 #include "Detail/TextureImpl.h"
@@ -14,6 +15,12 @@ Surface::Surface():
     m_face(0u)
 {
 
+}
+
+Surface::Surface(const Surface & other):
+    m_texture(other.m_texture),
+    m_face(other.m_face)
+{
 }
 
 Texture Surface::texture() const
@@ -38,6 +45,22 @@ unsigned int Surface::height() const
 {
     Assert(m_texture.get(), "Surface object is hollow");
     return m_texture->height; // No mipmaps yet
+}
+
+SurfaceDownload Surface::download() const
+{
+    Assert(m_texture.get(), "Surface object is hollow");
+    return m_texture->context.createSurfaceDownload(*this);
+}
+
+bool Surface::operator==(const Surface & other) const
+{
+    return m_texture.get() == other.m_texture.get() && m_face == other.m_face;
+}
+
+bool Surface::operator!=(const Surface & other) const
+{
+    return !operator==(other);
 }
 
 Surface::Surface(const std::shared_ptr<detail::TextureImpl> & texture,

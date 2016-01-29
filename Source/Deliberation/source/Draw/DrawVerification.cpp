@@ -1,7 +1,7 @@
 #include "DrawVerification.h"
 
 #include <Deliberation/Draw/Draw.h>
-#include <Deliberation/Draw/DrawOutput.h>
+#include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
 namespace deliberation
@@ -46,7 +46,7 @@ void DrawVerification::perform() const
 //    m_passed &= verifyProgram();
 //    m_passed &= verifyVAO();
 //    m_passed &= m_command.m_state.hasViewport();
-    m_passed &= verifyOutput();
+    m_passed &= verifyFramebuffer();
 //    m_passed &= verifyUniforms();
 
     if (!m_passed)
@@ -59,12 +59,12 @@ void DrawVerification::perform() const
     m_dirty = false;
 }
 
-bool DrawVerification::verifyOutput() const
+bool DrawVerification::verifyFramebuffer() const
 {
-    auto & output = m_draw.output();
+    auto & framebuffer = m_draw.framebuffer();
     auto & fragmentOutputs = m_draw.program().interface().fragmentOutputs();
 
-    if (output.isBackbuffer())
+    if (framebuffer.isBackbuffer())
     {
         if (fragmentOutputs.size() == 1)
         {
@@ -85,7 +85,7 @@ bool DrawVerification::verifyOutput() const
         {
             auto location = fragmentOutput.location();
 
-            if (!output.renderTarget(location))
+            if (!framebuffer.renderTarget(location))
             {
                 m_reportStream << "Fragment output " << fragmentOutput.toString() << " not mapped to render target" << std::endl;
                 passed = false;
@@ -93,9 +93,9 @@ bool DrawVerification::verifyOutput() const
         }
 
         // Check if every renderTarget is being written to
-        for (auto rt = 0u; rt < output.renderTargets().size(); rt++)
+        for (auto rt = 0u; rt < framebuffer.renderTargets().size(); rt++)
         {
-            if (!output.renderTarget(rt))
+            if (!framebuffer.renderTarget(rt))
             {
                 continue;
             }

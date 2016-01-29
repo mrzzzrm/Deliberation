@@ -30,13 +30,15 @@ public:
     unsigned int height() const;
     unsigned int numFaces() const;
     gl::GLenum type() const;
+    PixelFormat format() const;
     const SurfaceBinary & surface(unsigned int face) const;
 
 private:
-    unsigned int m_width;
-    unsigned int m_height;
-    gl::GLenum m_type;
-    std::vector<SurfaceBinary> m_faces;
+    unsigned int                m_width;
+    unsigned int                m_height;
+    gl::GLenum                  m_type;
+    PixelFormat                 m_format;
+    std::vector<SurfaceBinary>  m_faces;
 };
 
 }

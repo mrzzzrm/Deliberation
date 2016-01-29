@@ -4,6 +4,7 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Surface.h>
 
 namespace deliberation
@@ -17,20 +18,28 @@ namespace detail
 class TextureImpl final
 {
 public:
-    static std::shared_ptr<TextureImpl> build(Context & context, unsigned int numFaces);
+    static std::shared_ptr<TextureImpl> build(Context & context,
+                                              unsigned int width,
+                                              unsigned int height,
+                                              unsigned int numFaces,
+                                              PixelFormat format);
 
 public:
     TextureImpl(Context & context, unsigned int numFaces);
 
+    void allocate() const;
+    void upload(const TextureBinary & binary);
+
     Context &               context;
 
-    gl::GLuint              glName;
+    mutable gl::GLuint      glName;
 
     unsigned int            width;
     unsigned int            height;
 
     unsigned int            numFaces;
     gl::GLenum              type;
+    PixelFormat             format;
 
     gl::GLuint              baseLevel;
     gl::GLuint              maxLevel;
@@ -38,6 +47,11 @@ public:
     gl::GLenum              maxFilter;
 
     std::vector<Surface>    surfaces;
+
+    void bind() const;
+
+private:
+    void texImage2DAllFaces(const TextureBinary * binary) const;
 };
 
 }

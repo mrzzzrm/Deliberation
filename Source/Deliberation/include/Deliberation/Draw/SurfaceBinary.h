@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
@@ -29,11 +30,13 @@ public:
     unsigned int height() const;
     PixelFormat format() const;
 
+    std::string toString() const;
+
 private:
     std::shared_ptr<std::vector<float>> m_pixels;
-    unsigned int m_width;
-    unsigned int m_height;
-    PixelFormat m_format;
+    unsigned int                        m_width;
+    unsigned int                        m_height;
+    PixelFormat                         m_format;
 };
 
 }

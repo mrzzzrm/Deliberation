@@ -20,10 +20,11 @@ GLFramebuffer::GLFramebuffer(GLStateManager & glStateManager,
 
     bind();
 
+    /*
+        Setup color attachments
+    */
     Assert(desc.colorAttachments().size() > 0, "");
-
     auto numBoundColorAttachments = 0u;
-
     for (auto a = 0u; a < desc.colorAttachments().size(); a++)
     {
         if (desc.colorAttachments()[a].glName != 0)
@@ -34,12 +35,22 @@ GLFramebuffer::GLFramebuffer(GLStateManager & glStateManager,
                                                 desc.colorAttachments()[a].glName,
                                                 0);
             numBoundColorAttachments++;
-
-
         }
     }
 
-    Assert(numBoundColorAttachments > 0, "");
+    /*
+        Setup depth attachments
+    */
+    if (desc.depthAttachment().glName != 0)
+    {
+        glStateManager.framebufferTexture2D(gl::GL_DRAW_FRAMEBUFFER,
+                                            gl::GL_DEPTH_ATTACHMENT,
+                                            gl::GL_TEXTURE_2D,
+                                            desc.depthAttachment().glName,
+                                            0);
+    }
+
+    Assert(numBoundColorAttachments > 0 || desc.depthAttachment().glName, "");
 
     // Framebuffer should be complete now
     auto status = glCheckFramebufferStatus(gl::GL_DRAW_FRAMEBUFFER);
@@ -62,7 +73,6 @@ GLFramebuffer::GLFramebuffer(GLStateManager & glStateManager,
             m_drawBuffers.push_back(gl::GL_COLOR_ATTACHMENT0 + a);
         }
     }
-
 }
 
 GLFramebuffer::~GLFramebuffer()

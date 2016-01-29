@@ -13,8 +13,10 @@
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/DrawState.h>
+#include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/SurfaceDownload.h>
 #include <Deliberation/Draw/TextureUpload.h>
 
 namespace deliberation
@@ -30,8 +32,8 @@ class DELIBERATION_API Context final
 public:
     Context(unsigned int backbufferWidth = 640u, unsigned int backbufferHeight = 480u);
 
-    unsigned int backbufferWidth() const;
-    unsigned int backbufferHeight() const;
+    Framebuffer backbuffer();
+    const Framebuffer & backbuffer() const;
 
     void setBackbufferResolution(unsigned int width, unsigned height);
 
@@ -60,6 +62,8 @@ public:
                             PixelFormat format,
                             bool clear = true);
 
+    SurfaceDownload createSurfaceDownload(const Surface & surface);
+
     /*
         TODO
             move these to private: they shouldn't be called by anyone else than Deliberation/Draw
@@ -72,16 +76,18 @@ public:
     void scheduleClear(const Clear & clear);
 
 private:
+    friend class SurfaceDownloadImpl;
+
+private:
     void executeBufferUpload(const BufferUpload & upload);
     void executeTextureUpload(const TextureUpload & upload);
     void executeDraw(const Draw & draw);
     void executeClear(const Clear & draw);
 
 private:
-    unsigned int m_backbufferWidth;
-    unsigned int m_backbufferHeight;
-    GLStateManager m_glStateManager;
-    std::vector<BufferUpload> m_bufferUploads;
+    Framebuffer                 m_backbuffer;
+    GLStateManager              m_glStateManager;
+    std::vector<BufferUpload>   m_bufferUploads;
 };
 
 };

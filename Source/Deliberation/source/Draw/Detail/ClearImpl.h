@@ -6,8 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Draw/Surface.h>
-#include <Deliberation/Draw/Detail/Framebuffer.h>
+#include <Deliberation/Draw/Framebuffer.h>
 
 namespace deliberation
 {
@@ -23,14 +22,14 @@ public:
     ClearImpl(Context & context);
 
 public:
-    Context &           context;
-    glm::vec4           color;
-    float               depth;
-    gl::GLint           stencil;
-    bool                clearColor;
-    bool                clearDepth;
-    bool                clearStencil;
-    detail::Framebuffer framebuffer;
+    Context &   context;
+    glm::vec4   color;
+    float       depth;
+    gl::GLint   stencil;
+    bool        clearColor;
+    bool        clearDepth;
+    bool        clearStencil;
+    Framebuffer framebuffer;
 };
 
 }

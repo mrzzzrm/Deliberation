@@ -46,10 +46,28 @@ const T & Optional<T>::get() const
     return *reinterpret_cast<const T*>(m_data);
 }
 
+
+template<typename T>
+T * Optional<T>::ptr()
+{
+    return m_engaged ? &get() : nullptr;
+}
+
+template<typename T>
+const T * Optional<T>::ptr() const
+{
+    return m_engaged ? &get() : nullptr;
+}
+
 template<typename T>
 template<typename ... Args>
 void Optional<T>::reset(Args && ... args) const
 {
+    if (m_engaged)
+    {
+        disengage();
+    }
+
     m_engaged = true;
     new(m_data) T(std::forward<Args>(args)...);
 }
@@ -57,9 +75,52 @@ void Optional<T>::reset(Args && ... args) const
 template<typename T>
 void Optional<T>::disengage()
 {
+    if (!m_engaged)
+    {
+        return;
+    }
 
     m_engaged = false;
     ((T*)m_data)->~T();
+}
+
+template<typename T>
+bool Optional<T>::operator==(const T * other) const
+{
+    if (!other && !m_engaged)
+    {
+        return true;
+    }
+
+    if ((other && !m_engaged) || (!other && m_engaged))
+    {
+        return false;
+    }
+
+    return *other == get();
+}
+
+template<typename T>
+bool Optional<T>::operator!=(const T * other) const
+{
+    return !operator==(other);
+}
+
+template<typename T>
+bool Optional<T>::operator==(const T & other) const
+{
+    if (!m_engaged)
+    {
+        return false;
+    }
+
+    return *other == get();
+}
+
+template<typename T>
+bool Optional<T>::operator!=(const T & other) const
+{
+    return !operator==(other);
 }
 
 }

@@ -6,6 +6,7 @@
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/Sampler.h>
@@ -24,7 +25,7 @@ namespace detail
 class Buffer;
 class BufferLayoutField;
 class Context;
-class DrawOutput;
+class Framebuffer;
 class DrawState;
 
 class DELIBERATION_API Draw final
@@ -41,20 +42,27 @@ public:
     DrawState & state();
     const DrawState & state() const;
 
-    DrawOutput & output();
-    const DrawOutput & output() const;
+    Framebuffer & framebuffer();
+    const Framebuffer & framebuffer() const;
 
     Uniform uniform(const std::string & name);
     Sampler sampler(const std::string & name);
 
     void setState(const DrawState & state);
-//    void setOutput(const DrawOutput & output);
+
+    Buffer setIndices8(const Blob & data);
+    Buffer setIndices16(const Blob & data);
+    Buffer setIndices32(const Blob & data);
+    Buffer addVertices(const BufferLayout & layout, const Blob & data);
+    Buffer addInstances(const BufferLayout & layout, const Blob & data, unsigned int divisor = 1u);
 
     void setIndexBuffer(const Buffer & buffer);
     void addVertexBuffer(const Buffer & buffer);
     void addVertexBufferRange(const Buffer & buffer, unsigned int first, unsigned int count);
     void addInstanceBuffer(const Buffer & buffer, unsigned int divisor = 1u);
     void addInstanceBufferRange(const Buffer & buffer, unsigned int first, unsigned int count, unsigned int divisor = 1u);
+
+    void setRenderTarget(const std::string & name, Surface * surface);
 
     void schedule();
 
