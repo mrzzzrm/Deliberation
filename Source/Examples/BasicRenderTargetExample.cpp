@@ -44,7 +44,7 @@ deliberation::Draw createOffscreenDraw(deliberation::Context & context)
 
     auto depth = context.createTexture2D(300, 300, deliberation::PixelFormat_Depth_32F, false);
     auto texture0 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_32F);
-    auto texture1 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_32F);
+    auto texture1 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_8U);
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
     draw.addVertices(layout, compiler.vertices());
@@ -179,7 +179,7 @@ int main(int argc, char * argv[])
                 std::cout << download.get().result().toString() << std::endl;
 
                 auto & surfaceBinary = download.get().result();
-                deliberation::TextureBinary textureBinary(std::vector<float>(surfaceBinary.pixels()), surfaceBinary.width(), surfaceBinary.height(), surfaceBinary.format());
+                deliberation::TextureBinary textureBinary(surfaceBinary);
                 auto texture = context.createTexture(textureBinary);
 
                 downloadedDraw.reset(createOnscreenDraw(context, texture.surface(), 2));

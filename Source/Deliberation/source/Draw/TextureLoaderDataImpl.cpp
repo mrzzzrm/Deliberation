@@ -35,7 +35,7 @@ TextureBinary TextureLoaderDataImpl::load()
         if (r == IL_FALSE)
         {
             std::cout << "Failed to load texture: " << iluErrorString(ilGetError()) << std::endl;
-            return TextureBinary({}, 0u, 0u, PixelFormat_None);
+            return TextureBinary();
         }
 
         width = ilGetInteger(IL_IMAGE_WIDTH);
@@ -48,7 +48,7 @@ TextureBinary TextureLoaderDataImpl::load()
         ilDeleteImage(ilName);
     }
 
-    return TextureBinary(std::move(pixels), width, height, PixelFormat_RGB_32F);
+    return TextureBinary(SurfaceBinary(std::move(pixels), width, height, PixelFormat_RGB_32F));
 }
 
 }

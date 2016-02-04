@@ -1,8 +1,14 @@
 #include "DrawVerification.h"
 
+#include <iostream>
+
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/ProgramInterface.h>
+
+#include "Detail/DrawImpl.h"
+#include "Detail/ProgramImpl.h"
+#include "Detail/TextureImpl.h"
 
 namespace deliberation
 {
@@ -47,6 +53,7 @@ void DrawVerification::perform() const
 //    m_passed &= verifyVAO();
 //    m_passed &= m_command.m_state.hasViewport();
     m_passed &= verifyFramebuffer();
+    m_passed &= verifySamplers();
 //    m_passed &= verifyUniforms();
 
     if (!m_passed)
@@ -107,9 +114,57 @@ bool DrawVerification::verifyFramebuffer() const
             }
         }
 
+        // Check if fragmentOutput PixelFormat and render target PixelFormat match
+        for (auto & fragmentOutput : fragmentOutputs)
+        {
+            auto location = fragmentOutput.location();
+            auto * rt = framebuffer.renderTarget(location);
+
+            if (rt)
+            {
+                if (PixelFormatToGLFragmentOutputType(rt->texture().format()) != fragmentOutput.type())
+                {
+                    m_reportStream << "Fragment output " << fragmentOutput.name() << "(" << fragmentOutput.type() << ") and RenderTarget (" <<
+                                      PixelFormatToString(rt->texture().format()) << " = " << PixelFormatToGLFragmentOutputType(rt->texture().format()) << ") are incompatible" << std::endl;
+                    passed = false;
+                }
+            }
+        }
+
         return passed;
     }
 }
+
+bool DrawVerification::verifySamplers() const
+{
+    auto passed = true;
+    auto & impl = *m_draw.m_impl;
+
+    // Verify every sampler has a texture bound to it
+    // Verify texture and sampler formats are compatible
+    for (auto & sampler : impl.samplers)
+    {
+        auto * samplerInterface = impl.program->interface.samplerByLocation(sampler.location);
+        Assert(samplerInterface, "");
+
+        if (!sampler.texture)
+        {
+            m_reportStream << "Sampler '" << samplerInterface->name() << "' has no texture bound to it" << std::endl;
+            passed = false;
+        }
+        else
+        {
+            if (sampler.type != PixelFormatToGLSamplerType(sampler.texture->format))
+            {
+                m_reportStream << "Sampler '" << samplerInterface->name() << "' (" << sampler.type << ") isn't compatible with texture of format '" << PixelFormatToString(sampler.texture->format) << "'" << std::endl;
+                passed = false;
+            }
+        }
+    }
+
+    return passed;
+}
+
 //
 //bool DrawVerification::verifyProgram() const
 //{

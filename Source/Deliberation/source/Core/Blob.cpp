@@ -29,6 +29,12 @@ const void * Blob::ptr() const
     return m_impl ? m_impl->ptr() : nullptr;
 }
 
+Blob & Blob::operator=(const Blob & blob)
+{
+    m_impl = blob.m_impl.get() ? blob.m_impl->clone() : nullptr;
+    return *this;
+}
+
 Blob & Blob::operator=(Blob && blob)
 {
     m_impl = std::move(blob.m_impl);

@@ -20,10 +20,7 @@ public:
 
 public:
     TextureBinary();
-    TextureBinary(std::vector<float> && pixels,
-                  unsigned int width,
-                  unsigned int height,
-                  PixelFormat format);
+    TextureBinary(const SurfaceBinary & binary);
     TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces);
 
     unsigned int width() const;

@@ -23,7 +23,7 @@ GLFramebuffer::GLFramebuffer(GLStateManager & glStateManager,
     /*
         Setup color attachments
     */
-    Assert(desc.colorAttachments().size() > 0, "");
+    Assert(desc.colorAttachments().size() > 0 || desc.depthAttachment().glName != 0, "");
     auto numBoundColorAttachments = 0u;
     for (auto a = 0u; a < desc.colorAttachments().size(); a++)
     {

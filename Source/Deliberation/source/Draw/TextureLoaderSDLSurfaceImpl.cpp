@@ -100,7 +100,7 @@ TextureBinary TextureLoaderSDLSurfaceImpl::load()
         }
     }
 
-    return TextureBinary(std::move(pixels), m_surface->w, m_surface->h, format);
+    return TextureBinary(SurfaceBinary(std::move(pixels), m_surface->w, m_surface->h, format));
 }
 
 }

@@ -6,6 +6,8 @@
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Core/Blob.h>
+
 #include <Deliberation/Draw/PixelFormat.h>
 
 namespace deliberation
@@ -20,23 +22,27 @@ public:
 
 public:
     SurfaceBinary();
-    SurfaceBinary(std::vector<float> && pixels,
+    SurfaceBinary(Blob && data,
                   unsigned int width,
                   unsigned int height,
                   PixelFormat format);
 
-    const std::vector<float> & pixels() const;
+    const void * data() const;
     unsigned int width() const;
     unsigned int height() const;
     PixelFormat format() const;
 
+    uint8_t byte(unsigned int x, unsigned int y, unsigned int channel) const;
+
+    uint32_t pixelHex(unsigned int x, unsigned y) const;
+
     std::string toString() const;
 
 private:
-    std::shared_ptr<std::vector<float>> m_pixels;
-    unsigned int                        m_width;
-    unsigned int                        m_height;
-    PixelFormat                         m_format;
+    Blob            m_data;
+    unsigned int    m_width;
+    unsigned int    m_height;
+    PixelFormat     m_format;
 };
 
 }

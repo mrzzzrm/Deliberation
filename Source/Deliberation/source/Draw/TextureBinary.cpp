@@ -28,16 +28,13 @@ TextureBinary::TextureBinary():
 {
 }
 
-TextureBinary::TextureBinary(std::vector<float> && pixels,
-                             unsigned int width,
-                             unsigned int height,
-                             PixelFormat format):
+TextureBinary::TextureBinary(const SurfaceBinary & binary):
     m_type(gl::GL_TEXTURE_2D),
-    m_width(width),
-    m_height(height),
-    m_format(format)
+    m_width(binary.width()),
+    m_height(binary.height()),
+    m_format(binary.format())
 {
-    m_faces.push_back(SurfaceBinary(std::move(pixels), m_width, m_height, format));
+    m_faces.push_back(binary);
 }
 
 TextureBinary::TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces):

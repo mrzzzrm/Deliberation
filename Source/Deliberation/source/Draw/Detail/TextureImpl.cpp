@@ -140,8 +140,8 @@ void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
                          binarySurface ? binarySurface->height() : height,
                          0,
                          PixelFormatToGLFormat(format),
-                         gl::GL_FLOAT,
-                         binarySurface ? binarySurface->pixels().data() : nullptr);
+                         PixelFormatToGLType(format),
+                         binarySurface ? binarySurface->data() : nullptr);
     }
 }
 
