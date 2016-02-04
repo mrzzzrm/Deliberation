@@ -12,8 +12,10 @@
 #include "Detail/ClearImpl.h"
 #include "Detail/DrawExecution.h"
 #include "Detail/DrawImpl.h"
-#include "Detail/TextureImpl.h"
+#include "Detail/FramebufferImpl.h"
 #include "Detail/ProgramImpl.h"
+#include "Detail/SurfaceDownloadImpl.h"
+#include "Detail/TextureImpl.h"
 #include "BufferUploadExecution.h"
 #include "ClearExecution.h"
 #include "DrawVerification.h"
@@ -22,27 +24,31 @@
 namespace deliberation
 {
 
-Context::Context(unsigned int backbufferWidth, unsigned int backbufferHeight):
-    m_backbufferWidth(backbufferWidth),
-    m_backbufferHeight(backbufferHeight)
+Context::Context(unsigned int backbufferWidth, unsigned int backbufferHeight)
 {
     std::cout << "Creating Deliberation Context" << std::endl;
+
+    m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(backbufferWidth, backbufferHeight));
 }
 
-unsigned int Context::backbufferWidth() const
+Framebuffer Context::backbuffer()
 {
-    return m_backbufferWidth;
+    return Framebuffer(detail::FramebufferImpl::backbuffer(m_backbuffer.width(), m_backbuffer.height()));
 }
 
-unsigned int Context::backbufferHeight() const
+const Framebuffer & Context::backbuffer() const
 {
-    return m_backbufferHeight;
+    return m_backbuffer;
 }
 
 void Context::setBackbufferResolution(unsigned int width, unsigned height)
 {
-    m_backbufferWidth = width;
-    m_backbufferHeight = height;
+    if (m_backbuffer.width() == width && m_backbuffer.height() == height)
+    {
+        return;
+    }
+
+    m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(width, height));
 }
 
 Buffer Context::createBuffer(const BufferLayout & layout)
@@ -107,7 +113,7 @@ Clear Context::createClear(const glm::vec4 & color)
 
 Texture Context::createTexture(const TextureBinary & binary)
 {
-    auto texture = Texture(detail::TextureImpl::build(*this, 1));
+    auto texture = Texture(detail::TextureImpl::build(*this, binary.width(), binary.height(), 1, binary.format()));
     texture.createUpload(binary).schedule();
 
     return texture;
@@ -118,18 +124,26 @@ Texture Context::createTexture2D(unsigned int width,
                                  PixelFormat format,
                                  bool clear)
 {
-    auto binary = TextureBinary::emptyTexture2D(width, height, format);
-    auto texture = Texture(detail::TextureImpl::build(*this, 1));
-    texture.createUpload(binary).schedule();
+    auto texture = Texture(detail::TextureImpl::build(*this, width, height, 1, format));
 
     if (clear)
     {
         auto c = createClear();
-        c.setSurfaces({&texture.surface()});
+        if (PixelFormatType(format) == PixelFormatType_Color) {
+            c.framebuffer().setRenderTarget(0, &texture.surface());
+        }
+        else {
+            c.framebuffer().setDepthTarget(&texture.surface());
+        }
         c.schedule();
     }
 
     return texture;
+}
+
+SurfaceDownload Context::createSurfaceDownload(const Surface & surface)
+{
+    return SurfaceDownload(std::make_shared<SurfaceDownloadImpl>(surface));
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)

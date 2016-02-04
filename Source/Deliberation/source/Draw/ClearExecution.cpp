@@ -9,6 +9,7 @@
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
 #include "Detail/ClearImpl.h"
+#include "Detail/FramebufferImpl.h"
 
 namespace deliberation
 {
@@ -21,7 +22,10 @@ ClearExecution::ClearExecution(GLStateManager & glStateManager, const Clear & cl
 
 void ClearExecution::perform()
 {
-    m_clear.m_impl->framebuffer.bind(m_glStateManager);
+    Assert(m_clear.m_impl.get(), "");
+    Assert(m_clear.m_impl->framebuffer.m_impl.get(), "");
+
+    m_clear.m_impl->framebuffer.m_impl->bind(m_glStateManager);
 
     m_glStateManager.setDepthMask(true);
     m_glStateManager.setStencilMask(~0);
@@ -66,9 +70,31 @@ void ClearExecution::clearBackbuffer()
 
 void ClearExecution::clearFramebuffer()
 {
-    for (auto b = 0u; b < m_clear.m_impl->framebuffer.surfaces().size(); b++)
+    if (m_clear.m_impl->clearColor)
     {
-        gl::glClearBufferfv(gl::GL_COLOR, b, &m_clear.m_impl->color[0]);
+        for (auto b = 0u; b < m_clear.m_impl->framebuffer.renderTargets().size(); b++)
+        {
+            if (m_clear.m_impl->framebuffer.renderTarget(b))
+            {
+                gl::glClearBufferfv(gl::GL_COLOR, b, &m_clear.m_impl->color[0]);
+            }
+        }
+    }
+
+    if (m_clear.m_impl->clearDepth)
+    {
+        if (m_clear.m_impl->framebuffer.depthTarget())
+        {
+            gl::glClearBufferfv(gl::GL_DEPTH, 0, &m_clear.m_impl->depth);
+        }
+    }
+
+    if (m_clear.m_impl->clearStencil)
+    {
+        if (m_clear.m_impl->framebuffer.depthTarget())
+        {
+            gl::glClearBufferiv(gl::GL_STENCIL, 0, &m_clear.m_impl->stencil);
+        }
     }
 }
 

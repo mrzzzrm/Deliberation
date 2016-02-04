@@ -20,7 +20,16 @@ public:
     T & get();
     const T & get() const;
 
+    T * ptr();
+    const T * ptr() const;
+
     void disengage();
+
+    bool operator==(const T * other) const;
+    bool operator!=(const T * other) const;
+
+    bool operator==(const T & other) const;
+    bool operator!=(const T & other) const;
 
 private:
     template<typename ... Args>

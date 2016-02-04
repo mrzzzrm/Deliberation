@@ -16,13 +16,15 @@ TextureBinary TextureBinary::emptyTexture2D(unsigned int width,
     binary.m_width = width;
     binary.m_height = height;
     binary.m_type = gl::GL_TEXTURE_2D;
+    binary.m_format = format;
     binary.m_faces = {SurfaceBinary::empty(width, height, format)};
 
     return binary;
 }
 
 TextureBinary::TextureBinary():
-    m_type(gl::GL_NONE)
+    m_type(gl::GL_NONE),
+    m_format(PixelFormat_None)
 {
 }
 
@@ -32,7 +34,8 @@ TextureBinary::TextureBinary(std::vector<float> && pixels,
                              PixelFormat format):
     m_type(gl::GL_TEXTURE_2D),
     m_width(width),
-    m_height(height)
+    m_height(height),
+    m_format(format)
 {
     m_faces.push_back(SurfaceBinary(std::move(pixels), m_width, m_height, format));
 }
@@ -69,6 +72,11 @@ unsigned int TextureBinary::numFaces() const
 gl::GLenum TextureBinary::type() const
 {
     return m_type;
+}
+
+PixelFormat TextureBinary::format() const
+{
+    return m_format;
 }
 
 const SurfaceBinary & TextureBinary::surface(unsigned int face) const

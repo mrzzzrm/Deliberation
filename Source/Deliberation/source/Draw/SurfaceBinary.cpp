@@ -60,5 +60,10 @@ PixelFormat SurfaceBinary::format() const
     return m_format;
 }
 
+std::string SurfaceBinary::toString() const
+{
+    return std::string("SurfaceBinary {") + std::to_string(m_width) + "x" + std::to_string(m_height) + ": " + PixelFormatToString(m_format) + "}";
+}
+
 }
 

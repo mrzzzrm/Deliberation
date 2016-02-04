@@ -16,6 +16,7 @@
 
 #include "BufferImpl.h"
 #include "DrawImpl.h"
+#include "FramebufferImpl.h"
 #include "ProgramImpl.h"
 #include "TextureImpl.h"
 
@@ -54,6 +55,11 @@ void DrawExecution::perform()
 
         Assert(texture, "");
 
+        if (texture->glName == 0)
+        {
+            texture->allocate();
+        }
+
         gl::glActiveTexture(gl::GL_TEXTURE0 + b);
         gl::glBindTexture(texture->type, texture->glName);
 
@@ -71,7 +77,8 @@ void DrawExecution::perform()
     }
 
     // Setup RenderTarget / Framebuffer
-    m_drawImpl.output.m_framebuffer.bind(m_glStateManager);
+    Assert(m_drawImpl.framebuffer.m_impl.get(), "");
+    m_drawImpl.framebuffer.m_impl->bind(m_glStateManager);
 
     // Set uniforms
     {
@@ -356,7 +363,7 @@ void DrawExecution::applyStencilState()
 void DrawExecution::applyViewport()
 {
     auto & state = m_drawImpl.state;
-    auto & output = m_drawImpl.output;
+    auto & framebuffer = m_drawImpl.framebuffer;
     //gl::glProvokingVertex(m_provokingVertex);
 
     if (state.hasViewport())
@@ -366,15 +373,15 @@ void DrawExecution::applyViewport()
     }
     else
     {
-        if (output.isBackbuffer())
+        if (framebuffer.isBackbuffer())
         {
-            m_glStateManager.setViewport(0, 0, m_drawImpl.context.backbufferWidth(),
-                                               m_drawImpl.context.backbufferHeight());
+            m_glStateManager.setViewport(0, 0, m_drawImpl.context.backbuffer().width(),
+                                               m_drawImpl.context.backbuffer().height());
         }
         else
         {
-            m_glStateManager.setViewport(0, 0, output.width(),
-                                               output.height());
+            m_glStateManager.setViewport(0, 0, framebuffer.width(),
+                                               framebuffer.height());
         }
     }
 }

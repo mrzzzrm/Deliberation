@@ -20,7 +20,7 @@ public:
     void perform() const;
 
 private:
-    bool verifyOutput() const;
+    bool verifyFramebuffer() const;
 //    bool verifyProgram() const;
 //    bool verifyVAO() const;
 //    bool verifyUniforms() const;

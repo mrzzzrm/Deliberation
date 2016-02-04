@@ -56,11 +56,14 @@ set(sources
     ${source_path}/Draw/Detail/DrawExecution.h
     ${source_path}/Draw/Detail/DrawImpl.cpp
     ${source_path}/Draw/Detail/DrawImpl.h
-    ${source_path}/Draw/Detail/Framebuffer.cpp
+    ${source_path}/Draw/Detail/FramebufferImpl.cpp
+    ${source_path}/Draw/Detail/FramebufferImpl.h
     ${source_path}/Draw/Detail/ProgramImpl.cpp
     ${source_path}/Draw/Detail/ProgramImpl.h
     ${source_path}/Draw/Detail/SamplerImpl.cpp
     ${source_path}/Draw/Detail/SamplerImpl.h
+    ${source_path}/Draw/Detail/SurfaceDownloadImpl.cpp
+    ${source_path}/Draw/Detail/SurfaceDownloadImpl.h
     ${source_path}/Draw/Detail/TextureImpl.cpp
     ${source_path}/Draw/Detail/TextureImpl.h
     ${source_path}/Draw/Detail/UniformImpl.cpp
@@ -91,10 +94,10 @@ set(sources
     ${source_path}/Draw/CullState.cpp
     ${source_path}/Draw/DepthState.cpp
     ${source_path}/Draw/Draw.cpp
-    ${source_path}/Draw/DrawOutput.cpp
     ${source_path}/Draw/DrawVerification.cpp
     ${source_path}/Draw/DrawVerification.h
     ${source_path}/Draw/DrawState.cpp
+    ${source_path}/Draw/Framebuffer.cpp
     ${source_path}/Draw/ILUtils.cpp
     ${source_path}/Draw/ILUtils.h
     ${source_path}/Draw/ITextureLoaderImpl.cpp
@@ -112,6 +115,7 @@ set(sources
     ${source_path}/Draw/StencilState.cpp
     ${source_path}/Draw/Surface.cpp
     ${source_path}/Draw/SurfaceBinary.cpp
+    ${source_path}/Draw/SurfaceDownload.cpp
     ${source_path}/Draw/Texture.cpp
     ${source_path}/Draw/TextureBinary.cpp
     ${source_path}/Draw/TextureLoader.cpp
@@ -140,6 +144,7 @@ set(sources
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/Transform3D.cpp
+    ${source_path}/Scene/UVSphere.cpp
 )
 
 # api_includes
@@ -169,7 +174,6 @@ set(api_includes
     ${include_path}/Core/StreamUtils.inl
     ${include_path}/Core/Viewport.h
 
-    ${include_path}/Draw/Detail/Framebuffer.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
     ${include_path}/Draw/Detail/NamedDataMemberOf.h
@@ -194,8 +198,8 @@ set(api_includes
     ${include_path}/Draw/DepthState.h
     ${include_path}/Draw/Draw.h
     ${include_path}/Draw/Draw.inl
-    ${include_path}/Draw/DrawOutput.h
     ${include_path}/Draw/DrawState.h
+    ${include_path}/Draw/Framebuffer.h
     ${include_path}/Draw/PixelFormat.h
     ${include_path}/Draw/Program.h
     ${include_path}/Draw/ProgramInterface.h
@@ -208,6 +212,7 @@ set(api_includes
     ${include_path}/Draw/StencilState.h
     ${include_path}/Draw/Surface.h
     ${include_path}/Draw/SurfaceBinary.h
+    ${include_path}/Draw/SurfaceDownload.h
     ${include_path}/Draw/Texture.h
     ${include_path}/Draw/TextureBinary.h
     ${include_path}/Draw/TextureLoader.h
@@ -226,7 +231,12 @@ set(api_includes
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
+    ${include_path}/Scene/Mesh.h
+    ${include_path}/Scene/Mesh.inl
+    ${include_path}/Scene/MeshCompiler.h
+    ${include_path}/Scene/MeshCompiler.inl
     ${include_path}/Scene/Transform3D.h
+    ${include_path}/Scene/UVSphere.h
 )
 
 # libs

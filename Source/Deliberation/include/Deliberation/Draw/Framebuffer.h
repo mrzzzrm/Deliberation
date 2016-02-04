@@ -1,15 +1,13 @@
 #pragma once
 
-#include <string>
+#include <memory>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
 
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Draw/Detail/Framebuffer.h>
-
-#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
+#include <Deliberation/Draw/Surface.h>
 
 namespace deliberation
 {
@@ -19,14 +17,18 @@ namespace detail
     class DrawExecution;
     class DrawImpl;
     class ProgramImpl;
+    class FramebufferImpl;
 }
 
+class ClearExecution;
+class Context;
 class Surface;
 
-class DELIBERATION_API DrawOutput
+class DELIBERATION_API Framebuffer final
 {
 public:
-    DrawOutput(const DrawOutput & other);
+    Framebuffer();
+    ~Framebuffer();
 
     unsigned int width() const;
     unsigned int height() const;
@@ -34,23 +36,25 @@ public:
     bool isBackbuffer() const;
 
     const Surface * renderTarget(unsigned int index) const;
-    const std::vector<Surface*> & renderTargets() const;
+    const std::vector<Optional<Surface>> & renderTargets() const;
+
+    Surface * depthTarget() const;
 
     void setRenderTarget(unsigned int index, Surface * surface);
-    void setRenderTarget(const std::string & name, Surface * surface);
 
     void setDepthTarget(Surface * surface);
 
 private:
+    friend class Context;
+    friend class ClearExecution;
     friend class detail::DrawExecution;
     friend class detail::DrawImpl;
 
 private:
-    DrawOutput(const detail::ProgramImpl & program);
+    Framebuffer(const std::shared_ptr<detail::FramebufferImpl> & impl);
 
 private:
-    const detail::ProgramImpl & m_program;
-    detail::Framebuffer         m_framebuffer;
+    std::shared_ptr<detail::FramebufferImpl> m_impl;
 };
 
 }

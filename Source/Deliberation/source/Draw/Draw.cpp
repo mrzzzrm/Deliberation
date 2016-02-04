@@ -52,16 +52,16 @@ const DrawState & Draw::state() const
     return m_impl->state;
 }
 
-DrawOutput & Draw::output()
+Framebuffer & Draw::framebuffer()
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    return m_impl->output;
+    return m_impl->framebuffer;
 }
 
-const DrawOutput & Draw::output() const
+const Framebuffer & Draw::framebuffer() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    return m_impl->output;
+    return m_impl->framebuffer;
 }
 
 Uniform Draw::uniform(const std::string & name)
@@ -108,6 +108,66 @@ Sampler Draw::sampler(const std::string & name)
     Fail("sampler");
 }
 
+Buffer Draw::setIndices8(const Blob & data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto & context = m_impl->context;
+    auto buffer = context.createIndexBuffer8();
+    buffer.createUpload(data).schedule();
+    setIndexBuffer(buffer);
+
+    return buffer;
+}
+
+Buffer Draw::setIndices16(const Blob & data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto & context = m_impl->context;
+    auto buffer = context.createIndexBuffer16();
+    buffer.createUpload(data).schedule();
+    setIndexBuffer(buffer);
+
+    return buffer;
+}
+
+Buffer Draw::setIndices32(const Blob & data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto & context = m_impl->context;
+    auto buffer = context.createIndexBuffer32();
+    buffer.createUpload(data).schedule();
+    setIndexBuffer(buffer);
+
+    return buffer;
+}
+
+Buffer Draw::addVertices(const BufferLayout & layout, const Blob & data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto & context = m_impl->context;
+    auto buffer = context.createBuffer(layout);
+    buffer.createUpload(data).schedule();
+    addVertexBuffer(buffer);
+
+    return buffer;
+}
+
+Buffer Draw::addInstances(const BufferLayout & layout, const Blob & data, unsigned int divisor)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto & context = m_impl->context;
+    auto buffer = context.createBuffer(layout);
+    buffer.createUpload(data).schedule();
+    addInstanceBuffer(buffer, divisor);
+
+    return buffer;
+}
+
 void Draw::setIndexBuffer(const Buffer & buffer)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
@@ -148,6 +208,14 @@ void Draw::addInstanceBufferRange(const Buffer & buffer, unsigned int first, uns
     m_impl->instanceBuffers.push_back(detail::BufferBinding{buffer.m_impl, true, first, count, divisor});
 }
 
+void Draw::setRenderTarget(const std::string & name, Surface * surface)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    auto index = m_impl->program->interface.fragmentOutput(name).location();
+    m_impl->framebuffer.setRenderTarget(index, surface);
+}
+
 void Draw::schedule()
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
@@ -166,13 +234,6 @@ void Draw::setState(const DrawState & state)
 
     m_impl->state = state;
 }
-//
-//void Draw::setOutput(const DrawOutput & output)
-//{
-//    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-//
-//    m_impl->output = output;
-//}
 
 std::string Draw::toString() const
 {
