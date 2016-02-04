@@ -14,12 +14,15 @@ namespace detail
     class ProgramImpl;
 }
 
+class Context;
 class ProgramInterface;
 
-class DELIBERATION_API Program
+class DELIBERATION_API Program final
 {
 public:
     Program();
+
+    Context & context() const;
 
     const ProgramInterface & interface() const;
 

@@ -16,7 +16,8 @@ namespace deliberation
 namespace detail
 {
 
-ProgramImpl::ProgramImpl(const std::vector<std::string> & paths):
+ProgramImpl::ProgramImpl(Context & context, const std::vector<std::string> & paths):
+    context(context),
     glProgramName(0u)
 {
     glProgramName = gl::glCreateProgram();

@@ -156,6 +156,9 @@ set(api_includes
     ${include_path}/Core/HashUtils.inl
     ${include_path}/Core/InputAdapterBase.h
     ${include_path}/Core/LapTimer.h
+    ${include_path}/Core/LinearMap.h
+    ${include_path}/Core/LinearMap.inl
+    ${include_path}/Core/LapTimer.h
     ${include_path}/Core/MainLoop.h
     ${include_path}/Core/OffsetOf.h
     ${include_path}/Core/OffsetOf.inl

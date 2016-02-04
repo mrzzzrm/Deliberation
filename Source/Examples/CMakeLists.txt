@@ -35,6 +35,10 @@ set(libs
     ${GLBINDING_LIBRARY}
 )
 
+# BasicCoreExample
+add_executable(BasicCoreExample BasicCoreExample.cpp)
+target_link_libraries(BasicCoreExample ${libs})
+
 # BasicTriangleExample
 add_executable(BasicTriangleExample BasicTriangleExample.cpp)
 target_link_libraries(BasicTriangleExample ${libs})

@@ -70,7 +70,7 @@ Buffer Context::createIndexBuffer32()
 
 Program Context::createProgram(const std::vector<std::string> & paths)
 {
-    Program program(std::make_shared<detail::ProgramImpl>(paths));
+    Program program(std::make_shared<detail::ProgramImpl>(*this, paths));
     return program;
 }
 
