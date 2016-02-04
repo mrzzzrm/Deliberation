@@ -5,7 +5,7 @@
 namespace deliberation
 {
 
-bool StringStartsWith(const std::string & str, const std::string testStr)
+bool StringStartsWith(const std::string & str, const std::string & testStr)
 {
     if (testStr.size() > str.size())
     {
@@ -23,7 +23,7 @@ bool StringStartsWith(const std::string & str, const std::string testStr)
     return true;
 }
 
-bool StringEndsWith(const std::string & str, const std::string testStr)
+bool StringEndsWith(const std::string & str, const std::string & testStr)
 {
     if (testStr.size() > str.size())
     {
@@ -41,6 +41,11 @@ bool StringEndsWith(const std::string & str, const std::string testStr)
     }
 
     return true;
+}
+
+bool StringContains(const std::string & str, const std::string & testStr)
+{
+    return str.find(testStr) != std::string::npos;
 }
 
 std::string & StringRErase(std::string & str, std::size_t num)

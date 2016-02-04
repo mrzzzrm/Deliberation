@@ -9,9 +9,16 @@ namespace deliberation
 
 Program::Program() = default;
 
+Context & Program::context() const
+{
+    Assert(m_impl.get(), "Program is hollow");
+
+    return m_impl->context;
+}
+
 const ProgramInterface & Program::interface() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
+    Assert(m_impl.get(), "Program is hollow");
 
     return m_impl->interface;
 }
