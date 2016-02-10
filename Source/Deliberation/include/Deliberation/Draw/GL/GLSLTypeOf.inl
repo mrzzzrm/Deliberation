@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Core/Color.h>
+
 namespace deliberation
 {
 
@@ -24,6 +26,8 @@ template<> struct GLSLTypeOf<glm::quat>    { static constexpr gl::GLenum value =
 template<> struct GLSLTypeOf<glm::mat2>    { static constexpr gl::GLenum value = gl::GL_FLOAT_MAT2;        };
 template<> struct GLSLTypeOf<glm::mat3>    { static constexpr gl::GLenum value = gl::GL_FLOAT_MAT3;        };
 template<> struct GLSLTypeOf<glm::mat4>    { static constexpr gl::GLenum value = gl::GL_FLOAT_MAT4;        };
+
+template<> struct GLSLTypeOf<Color>        { static constexpr gl::GLenum value = gl::GL_UNSIGNED_INT_VEC4; };
 
 }
 

@@ -39,7 +39,9 @@ set(sources
     ${source_path}/Deliberation.cpp
 
     ${source_path}/Core/Assert.cpp
+    ${source_path}/Core/BitUtils.cpp
     ${source_path}/Core/Blob.cpp
+    ${source_path}/Core/Color.cpp
     ${source_path}/Core/FileUtils.cpp
     ${source_path}/Core/InputAdapterBase.cpp
     ${source_path}/Core/LapTimer.cpp
@@ -136,9 +138,13 @@ set(sources
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
 
+    ${source_path}/Math/AABB.cpp
     ${source_path}/Math/GLMUtils.cpp
+    ${source_path}/Math/Morton.cpp
+    ${source_path}/Math/Ray3D.cpp
     ${source_path}/Math/Rect3D.cpp
     ${source_path}/Math/Plane.cpp
+    ${source_path}/Math/Sphere.cpp
 
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
@@ -156,13 +162,19 @@ set(api_includes
     ${include_path}/Core/Assert.h
     ${include_path}/Core/Blob.h
     ${include_path}/Core/Blob.inl
+    ${include_path}/Core/BitUtils.h
+    ${include_path}/Core/BitUtils.inl
+    ${include_path}/Core/Color.h
     ${include_path}/Core/FileUtils.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl
+    ${include_path}/Core/IntTypes.h
     ${include_path}/Core/InputAdapterBase.h
     ${include_path}/Core/LapTimer.h
     ${include_path}/Core/LinearMap.h
     ${include_path}/Core/LinearMap.inl
+    ${include_path}/Core/LinearOctree.h
+    ${include_path}/Core/LinearOctree.inl
     ${include_path}/Core/LapTimer.h
     ${include_path}/Core/MainLoop.h
     ${include_path}/Core/OffsetOf.h
@@ -224,9 +236,14 @@ set(api_includes
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
 
+    ${include_path}/Math/AABB.h
     ${include_path}/Math/GLMUtils.h
-    ${include_path}/Math/Rect3D.h
+    ${include_path}/Math/Morton.h
+    ${include_path}/Math/Morton.inl
     ${include_path}/Math/Plane.h
+    ${include_path}/Math/Ray3D.h
+    ${include_path}/Math/Rect3D.h
+    ${include_path}/Math/Sphere.h
 
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h

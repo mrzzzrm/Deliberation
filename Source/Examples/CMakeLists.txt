@@ -39,6 +39,10 @@ set(libs
 add_executable(BasicCoreExample BasicCoreExample.cpp)
 target_link_libraries(BasicCoreExample ${libs})
 
+# BasicMathExample
+add_executable(BasicMathExample BasicMathExample.cpp)
+target_link_libraries(BasicMathExample ${libs})
+
 # BasicTriangleExample
 add_executable(BasicTriangleExample BasicTriangleExample.cpp)
 target_link_libraries(BasicTriangleExample ${libs})

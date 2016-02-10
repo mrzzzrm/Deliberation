@@ -7,6 +7,15 @@ namespace deliberation
 {
 
 template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::uvec2 & v);
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::uvec3 & v);
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::uvec4 & v);
+
+template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::vec2 & v);
 
 template<typename StreamType>

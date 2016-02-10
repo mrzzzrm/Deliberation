@@ -2,6 +2,27 @@ namespace deliberation
 {
 
 template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::uvec2 & v)
+{
+    os << "(" << v.x << "/" << v.y << ")";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::uvec3 & v)
+{
+    os << "(" << v.x << "/" << v.y << "/" << v.z << ")";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::uvec4 & v)
+{
+    os << "(" << v.x << "/" << v.y << "/" << v.z << "/" << v.w << ")";
+    return os;
+}
+
+template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::vec2 & v)
 {
     os << "(" << v.x << "/" << v.y << ")";
