@@ -1,8 +1,8 @@
-#include <Deliberation/Math/Sphere.h>
+#include <Deliberation/Core/Math/Sphere.h>
 
 #include <cassert>
 
-#include <Deliberation/Math/AABB.h>
+#include <Deliberation/Core/Math/AABB.h>
 
 namespace deliberation
 {

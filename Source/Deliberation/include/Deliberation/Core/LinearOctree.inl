@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Math/Morton.h>
+#include <Deliberation/Core/Math/Morton.h>
 
 namespace deliberation
 {

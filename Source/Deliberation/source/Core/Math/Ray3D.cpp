@@ -1,10 +1,10 @@
-#include <Deliberation/Math/Ray3D.h>
+#include <Deliberation/Core/Math/Ray3D.h>
 
 #include <cmath>
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Math/Sphere.h>
+#include <Deliberation/Core/Math/Sphere.h>
 
 namespace deliberation
 {

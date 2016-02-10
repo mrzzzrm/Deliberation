@@ -1,4 +1,4 @@
-#include <Deliberation/Math/AABB.h>
+#include <Deliberation/Core/Math/AABB.h>
 
 #include <algorithm>
 #include <cassert>
@@ -6,7 +6,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Math/Sphere.h>
+#include <Deliberation/Core/Math/Sphere.h>
 
 namespace deliberation
 {

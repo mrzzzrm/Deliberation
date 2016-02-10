@@ -47,4 +47,4 @@ private:
 
 }
 
-#include <Deliberation/Math/Morton.inl>
+#include <Deliberation/Core/Math/Morton.inl>

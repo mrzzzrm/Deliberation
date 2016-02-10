@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <Deliberation/Math/Rect3D.h>
+#include <Deliberation/Core/Math/Rect3D.h>
 
 namespace deliberation
 {

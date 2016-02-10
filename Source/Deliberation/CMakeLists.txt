@@ -49,6 +49,14 @@ set(sources
     ${source_path}/Core/StringUtils.cpp
     ${source_path}/Core/Viewport.cpp
 
+    ${source_path}/Core/Math/AABB.cpp
+    ${source_path}/Core/Math/GLMUtils.cpp
+    ${source_path}/Core/Math/Morton.cpp
+    ${source_path}/Core/Math/Ray3D.cpp
+    ${source_path}/Core/Math/Rect3D.cpp
+    ${source_path}/Core/Math/Plane.cpp
+    ${source_path}/Core/Math/Sphere.cpp
+
     ${source_path}/Draw/Detail/ClearImpl.cpp
     ${source_path}/Draw/Detail/ClearImpl.h
     ${source_path}/Draw/Detail/BufferBinding.h
@@ -138,14 +146,6 @@ set(sources
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
 
-    ${source_path}/Math/AABB.cpp
-    ${source_path}/Math/GLMUtils.cpp
-    ${source_path}/Math/Morton.cpp
-    ${source_path}/Math/Ray3D.cpp
-    ${source_path}/Math/Rect3D.cpp
-    ${source_path}/Math/Plane.cpp
-    ${source_path}/Math/Sphere.cpp
-
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
@@ -185,6 +185,15 @@ set(api_includes
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl
     ${include_path}/Core/Viewport.h
+
+    ${include_path}/Core/Math/AABB.h
+    ${include_path}/Core/Math/GLMUtils.h
+    ${include_path}/Core/Math/Morton.h
+    ${include_path}/Core/Math/Morton.inl
+    ${include_path}/Core/Math/Plane.h
+    ${include_path}/Core/Math/Ray3D.h
+    ${include_path}/Core/Math/Rect3D.h
+    ${include_path}/Core/Math/Sphere.h
 
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
@@ -235,15 +244,6 @@ set(api_includes
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
-
-    ${include_path}/Math/AABB.h
-    ${include_path}/Math/GLMUtils.h
-    ${include_path}/Math/Morton.h
-    ${include_path}/Math/Morton.inl
-    ${include_path}/Math/Plane.h
-    ${include_path}/Math/Ray3D.h
-    ${include_path}/Math/Rect3D.h
-    ${include_path}/Math/Sphere.h
 
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h

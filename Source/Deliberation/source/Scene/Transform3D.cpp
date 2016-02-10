@@ -6,7 +6,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Math/GLMUtils.h>
+#include <Deliberation/Core/Math/GLMUtils.h>
 
 namespace deliberation
 {
