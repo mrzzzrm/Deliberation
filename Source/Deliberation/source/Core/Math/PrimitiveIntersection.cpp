@@ -1,17 +1,20 @@
-#include "primitive_intersection.h"
+#include <Deliberation/Core/Math/PrimitiveIntersection.h>
 
 #include <cassert>
 #include <cmath>
 
-#include "Plane.h"
-#include "Ray.h"
-#include "Rect3D.h"
-#include "Sphere.h"
+#include <Deliberation/Core/Math/Plane.h>
+#include <Deliberation/Core/Math/Ray3D.h>
+#include <Deliberation/Core/Math/Rect3D.h>
+#include <Deliberation/Core/Math/Sphere.h>
 
-bool NormalizedRaySphereIntersection(const glm::vec3 & origin,
-                                     const glm::vec3 & delta,
-                                     const glm::vec3 & center,
-                                     float radius)
+namespace deliberation
+{
+
+bool NormalizedRay3DSphereIntersection(const glm::vec3 & origin,
+                                       const glm::vec3 & delta,
+                                       const glm::vec3 & center,
+                                       float radius)
 {
     assert(std::abs(glm::length(delta) - 1.0f) < 0.001f); // Whatever
 
@@ -51,11 +54,11 @@ bool HalfspaceContainsSphere(const glm::vec3 & normal,
     return distance > radius;
 }
 
-bool PlaneRayIntersection(const glm::vec3 & normal,
-                          float d,
-                          const glm::vec3 & origin,
-                          const glm::vec3 & delta,
-                          float & t)
+bool PlaneRay3DIntersection(const glm::vec3 & normal,
+                            float d,
+                            const glm::vec3 & origin,
+                            const glm::vec3 & delta,
+                            float & t)
 {
     auto l = glm::dot(delta, normal);
     if (l == 0.0f) // TODO: some epsilon that floats can handle being divided by
@@ -70,14 +73,14 @@ bool PlaneRayIntersection(const glm::vec3 & normal,
     }
 }
 
-glm::vec3 PlaneRayIntersectionPoint(const glm::vec3 & normal,
-                                    float d,
-                                    const glm::vec3 & origin,
-                                    const glm::vec3 & delta,
-                                    bool & valid)
+glm::vec3 PlaneRay3DIntersectionPoint(const glm::vec3 & normal,
+                                      float d,
+                                      const glm::vec3 & origin,
+                                      const glm::vec3 & delta,
+                                      bool & valid)
 {
     float t;
-    if (!PlaneRayIntersection(normal, d, origin, delta, t))
+    if (!PlaneRay3DIntersection(normal, d, origin, delta, t))
     {
         valid = false;
         return {};
@@ -88,15 +91,15 @@ glm::vec3 PlaneRayIntersectionPoint(const glm::vec3 & normal,
     }
 }
 
-bool Rect3DRayIntersection(const glm::vec3 & base,
-                           const glm::vec3 & right,
-                           const glm::vec3 & up,
-                           const glm::vec3 & origin,
-                           const glm::vec3 & dir,
-                           float & t)
+bool Rect3DRay3DIntersection(const glm::vec3 & base,
+                             const glm::vec3 & right,
+                             const glm::vec3 & up,
+                             const glm::vec3 & origin,
+                             const glm::vec3 & dir,
+                             float & t)
 {
     auto plane = Rect3D(base, right, up).plane();
-    auto valid = PlaneRayIntersection(plane.normal(), plane.d(),
+    auto valid = PlaneRay3DIntersection(plane.normal(), plane.d(),
                                       origin, dir, t);
     if (!valid)
     {
@@ -124,17 +127,19 @@ bool Rect3DRayIntersection(const glm::vec3 & base,
     return true;
 }
 
-bool Rect3DRayIntersection(const Rect3D & rect,
-                           const Ray & ray,
-                           float & t)
+bool Rect3DRay3DIntersection(const Rect3D & rect,
+                             const Ray3D & ray,
+                             float & t)
 {
-    return Rect3DRayIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
+    return Rect3DRay3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
 }
 
 template<>
-bool Intersect(const Ray & ray, const Sphere & sphere)
+bool Intersect(const Ray3D & ray, const Sphere & sphere)
 {
     auto nray = ray.normalized();
-    return NormalizedRaySphereIntersection(nray.origin(), nray.direction(), sphere.position(), sphere.radius());
+    return NormalizedRay3DSphereIntersection(nray.origin(), nray.direction(), sphere.position(), sphere.radius());
+}
+
 }
 

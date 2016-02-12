@@ -90,4 +90,12 @@ StreamType & operator<<(StreamType && os, const glm::mat4 & v)
     return os;
 }
 
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Sphere & s)
+{
+    os << "(" << s.position() << " -> " << s.radius() << ")";
+    return os;
 }
+
+}
+

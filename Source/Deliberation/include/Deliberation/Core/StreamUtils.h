@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <Deliberation/Core/Math/Sphere.h>
+
 namespace deliberation
 {
 
@@ -32,6 +34,9 @@ StreamType & operator<<(StreamType && os, const glm::mat3 & v);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::mat4 & v);
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Sphere & sphere);
 
 }
 

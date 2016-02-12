@@ -3,7 +3,7 @@
 namespace deliberation
 {
 
-unsigned int Morton2D::NumKeysAtDepth(unsigned int depth)
+unsigned int Morton2D::NumKeysAtLevel(unsigned int depth)
 {
     return 1u << (depth * 2u);
 }
@@ -46,7 +46,7 @@ glm::uvec2 Morton2D::toVec() const
     return {x, y};
 }
 
-unsigned int Morton3D::NumKeysAtDepth(unsigned int depth)
+unsigned int Morton3D::NumKeysAtLevel(unsigned int depth)
 {
     return 1u << (depth * 3u);
 }

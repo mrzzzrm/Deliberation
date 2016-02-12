@@ -61,16 +61,7 @@ void LinearOctreeExample()
     iter.toFirstChild();
     iter.node() = 12;
 
-    for (auto n = 0; n < tree.nodes().size(); n++)
-    {
-        if (tree.node(n) != 0)
-        {
-            std::cout << "Node " << n << ": " << tree.node(n) << std::endl;
-        }
-    }
-
-
-
+    std::cout << tree.toString() << std::endl;
 }
 
 int main(int argc, char * argv[])

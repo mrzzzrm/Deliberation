@@ -12,11 +12,11 @@ unsigned int LeftmostBit(const T & value)
     {
         if (value & (1 << testIndex))
         {
-            return testIndex;
+            return testIndex + 1;
         }
     }
 
-    return ~0;
+    return 0;
 }
 
 uint32_t SeparateBitsBy2(uint32_t i)

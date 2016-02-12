@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
@@ -10,49 +11,71 @@
 namespace deliberation
 {
 
+inline std::size_t LinearOctreeLevelBaseIndex(unsigned int level);
+
 template<typename NodeType>
 class DELIBERATION_API LinearOctree final
 {
 public:
-    static std::size_t levelBaseIndex(unsigned int level);
-
-public:
-    class DELIBERATION_API Iterator final
+    template<typename QualifiedNodeType, typename QualifiedTreeType>
+    class DELIBERATION_API IteratorT final
     {
     public:
-        Iterator(LinearOctree & tree, uint32_t index);
+        typedef QualifiedNodeType Node;
 
+    public:
+        IteratorT(QualifiedTreeType & tree, uint32_t index);
+
+        template<typename OtherIteratorT>
+        IteratorT(const OtherIteratorT & other);
+
+        glm::uvec3 cell() const;
+        uint32_t index() const;
+        uint32_t cellIndex() const;
+        uint32_t subnodeBit() const;
+        QualifiedNodeType & node() const;
+
+        bool isCell() const;
+        bool hasParent() const;
         bool isValid() const;
+
+        IteratorT firstChild() const;
+        IteratorT nextSibling() const;
+        IteratorT parent() const;
 
         void toFirstChild();
         void toNextSibling();
-
         void toParent();
 
-        NodeType & node() const;
-
     private:
-        LinearOctree &  m_tree;
-        uint32_t        m_index;
+        QualifiedTreeType & m_tree;
+        uint32_t            m_index;
     };
 
+    typedef IteratorT<NodeType, LinearOctree> Iterator;
+    typedef IteratorT<const NodeType, const LinearOctree> CIterator;
+
 public:
-    LinearOctree(unsigned int depth);
+    LinearOctree(unsigned int depth = 0);
 
     unsigned int depth() const;
+
     std::vector<NodeType> & nodes();
     const std::vector<NodeType> & nodes() const;
 
     Iterator root();
+    CIterator root() const;
 
-    NodeType & node(std::size_t index);
-    const NodeType & node(std::size_t index) const;
+    Iterator cell(const glm::uvec3 & v);
+    CIterator cell(const glm::uvec3 & v) const;
 
-    NodeType & leaf(uint32_t morton);
-    const NodeType & leaf(uint32_t morton) const;
+    Iterator cell(std::size_t cellIndex);
+    CIterator cell(std::size_t cellIndex) const;
 
-    NodeType & leaf(const glm::uvec3 & v);
-    const NodeType & leaf(const glm::uvec3 & v) const;
+    Iterator node(std::size_t index);
+    CIterator node(std::size_t index) const;
+
+    std::string toString() const;
 
 private:
     unsigned int            m_depth;

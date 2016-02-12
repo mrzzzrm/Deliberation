@@ -55,7 +55,9 @@ set(sources
     ${source_path}/Core/Math/Ray3D.cpp
     ${source_path}/Core/Math/Rect3D.cpp
     ${source_path}/Core/Math/Plane.cpp
+    ${source_path}/Core/Math/PrimitiveIntersection.cpp
     ${source_path}/Core/Math/Sphere.cpp
+    ${source_path}/Core/Math/Transform3D.cpp
 
     ${source_path}/Draw/Detail/ClearImpl.cpp
     ${source_path}/Draw/Detail/ClearImpl.h
@@ -149,7 +151,6 @@ set(sources
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
-    ${source_path}/Scene/Transform3D.cpp
     ${source_path}/Scene/UVSphere.cpp
 )
 
@@ -191,9 +192,11 @@ set(api_includes
     ${include_path}/Core/Math/Morton.h
     ${include_path}/Core/Math/Morton.inl
     ${include_path}/Core/Math/Plane.h
+    ${include_path}/Core/Math/PrimitiveIntersection.h
     ${include_path}/Core/Math/Ray3D.h
     ${include_path}/Core/Math/Rect3D.h
     ${include_path}/Core/Math/Sphere.h
+    ${include_path}/Core/Math/Transform3D.h
 
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
@@ -252,7 +255,6 @@ set(api_includes
     ${include_path}/Scene/Mesh.inl
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/MeshCompiler.inl
-    ${include_path}/Scene/Transform3D.h
     ${include_path}/Scene/UVSphere.h
 )
 

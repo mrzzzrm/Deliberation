@@ -1,14 +1,15 @@
 #include <limits>
 
-#include <Deliberation/Core/Assert.h>
+#include <sstream>
 
+#include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/Morton.h>
 
 namespace deliberation
 {
 
-template<typename NodeType>
-std::size_t LinearOctree<NodeType>::levelBaseIndex(unsigned int level)
+std::size_t LinearOctreeLevelBaseIndex(unsigned int level)
 {
     switch(level)
     {
@@ -28,20 +29,113 @@ std::size_t LinearOctree<NodeType>::levelBaseIndex(unsigned int level)
 }
 
 template<typename NodeType>
-LinearOctree<NodeType>::Iterator::Iterator(LinearOctree & tree, uint32_t index):
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::IteratorT(QualifiedTreeType & tree, uint32_t index):
     m_tree(tree),
     m_index(index)
 {
 }
 
 template<typename NodeType>
-bool LinearOctree<NodeType>::Iterator::isValid() const
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+template<typename OtherIteratorT>
+LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::IteratorT(const OtherIteratorT & iter):
+    m_tree(iter.m_tree),
+    m_index(iter.m_index)
+{
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+glm::uvec3 LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::cell() const
+{
+    return Morton3D(cellIndex()).toVec();
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+uint32_t LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::cellIndex() const
+{
+    Assert(isCell(), "");
+    return m_index - LinearOctreeLevelBaseIndex(m_tree.depth() - 1);
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+uint32_t LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::index() const
+{
+    return m_index;
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+uint32_t LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::subnodeBit() const
+{
+    return 1 << ((m_index - 1) & 7);
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+QualifiedNodeType & LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::node() const
+{
+    Assert(isValid(), "");
+    return m_tree.m_nodes[m_index];
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+bool LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::isCell() const
+{
+    return m_index >= LinearOctreeLevelBaseIndex(m_tree.depth() - 1);
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+bool LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::hasParent() const
+{
+    return m_index != 0;
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+bool LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::isValid() const
 {
     return m_index != std::numeric_limits<decltype(m_index)>::max();
 }
 
 template<typename NodeType>
-void LinearOctree<NodeType>::Iterator::toFirstChild()
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+typename LinearOctree<NodeType>::template IteratorT<QualifiedNodeType, QualifiedTreeType>
+LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::firstChild() const
+{
+    auto iter = *this;
+    iter.toFirstChild();
+    return iter;
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+typename LinearOctree<NodeType>::template IteratorT<QualifiedNodeType, QualifiedTreeType>
+LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::nextSibling() const
+{
+    auto iter = *this;
+    iter.toNextSibling();
+    return iter;
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+typename LinearOctree<NodeType>::template IteratorT<QualifiedNodeType, QualifiedTreeType>
+LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::parent() const
+{
+    auto iter = *this;
+    iter.toParent();
+    return iter;
+}
+
+template<typename NodeType>
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+void LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::toFirstChild()
 {
     m_index = (m_index << 3) + 1;
     if (m_index >= m_tree.nodes().size())
@@ -51,7 +145,8 @@ void LinearOctree<NodeType>::Iterator::toFirstChild()
 }
 
 template<typename NodeType>
-void LinearOctree<NodeType>::Iterator::toNextSibling()
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+void LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::toNextSibling()
 {
     m_index++;
     if ((m_index & 7) == 1)
@@ -61,7 +156,8 @@ void LinearOctree<NodeType>::Iterator::toNextSibling()
 }
 
 template<typename NodeType>
-void LinearOctree<NodeType>::Iterator::toParent()
+template<typename QualifiedNodeType, typename QualifiedTreeType>
+void LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::toParent()
 {
     if (m_index == 0)
     {
@@ -72,17 +168,13 @@ void LinearOctree<NodeType>::Iterator::toParent()
 }
 
 template<typename NodeType>
-NodeType & LinearOctree<NodeType>::Iterator::node() const
-{
-    return m_tree.node(m_index);
-}
-
-template<typename NodeType>
 LinearOctree<NodeType>::LinearOctree(unsigned int depth):
     m_depth(depth)
 {
-    Assert(m_depth > 0, "");
-    m_nodes.resize(levelBaseIndex(m_depth));
+    if (m_depth > 0)
+    {
+        m_nodes.resize(LinearOctreeLevelBaseIndex(m_depth));
+    }
 }
 
 template<typename NodeType>
@@ -110,41 +202,67 @@ typename LinearOctree<NodeType>::Iterator LinearOctree<NodeType>::root()
 }
 
 template<typename NodeType>
-NodeType & LinearOctree<NodeType>::node(std::size_t index)
+typename LinearOctree<NodeType>::CIterator LinearOctree<NodeType>::root() const
+{
+    return CIterator(*this, 0);
+}
+
+template<typename NodeType>
+typename LinearOctree<NodeType>::Iterator LinearOctree<NodeType>::cell(const glm::uvec3 & v)
+{
+    return cell(Morton3D(v).toIndex());
+}
+
+template<typename NodeType>
+typename LinearOctree<NodeType>::CIterator LinearOctree<NodeType>::cell(const glm::uvec3 & v) const
+{
+    return cell(Morton3D(v).toIndex());
+}
+
+template<typename NodeType>
+typename LinearOctree<NodeType>::Iterator LinearOctree<NodeType>::cell(std::size_t cellIndex)
+{
+    return node(LinearOctreeLevelBaseIndex(m_depth - 1) + cellIndex);
+}
+
+template<typename NodeType>
+typename LinearOctree<NodeType>::CIterator LinearOctree<NodeType>::cell(std::size_t cellIndex) const
+{
+    return node(LinearOctreeLevelBaseIndex(m_depth - 1) + cellIndex);
+}
+
+template<typename NodeType>
+typename LinearOctree<NodeType>::Iterator LinearOctree<NodeType>::node(std::size_t index)
 {
     Assert(index < m_nodes.size(), "");
-    return m_nodes[index];
+    return Iterator(*this, index);
 }
-
 template<typename NodeType>
-const NodeType & LinearOctree<NodeType>::node(std::size_t index) const
+typename LinearOctree<NodeType>::CIterator LinearOctree<NodeType>::node(std::size_t index) const
 {
     Assert(index < m_nodes.size(), "");
-    return m_nodes[index];
+    return CIterator(*this, index);
 }
 
 template<typename NodeType>
-NodeType & LinearOctree<NodeType>::leaf(uint32_t morton)
+std::string LinearOctree<NodeType>::toString() const
 {
-    return node(levelBaseIndex(m_depth - 1) + morton);
-}
+    std::stringstream stream;
+    std::string indent;
+    auto currentLevel = 0;
 
-template<typename NodeType>
-const NodeType & LinearOctree<NodeType>::leaf(uint32_t morton) const
-{
-    return node(levelBaseIndex(m_depth - 1) + morton);
-}
+    for (auto n = 0; n < m_nodes.size(); n++)
+    {
+        if (n >= LinearOctreeLevelBaseIndex(currentLevel + 1))
+        {
+            currentLevel++;
+            indent += "  ";
+        }
 
-template<typename NodeType>
-NodeType & LinearOctree<NodeType>::leaf(const glm::uvec3 & v)
-{
-    return node(levelBaseIndex(m_depth - 1) + Morton3D(v).toIndex());
-}
+        stream << indent << n << ": " << m_nodes[n] << std::endl;
+    }
 
-template<typename NodeType>
-const NodeType & LinearOctree<NodeType>::leaf(const glm::uvec3 & v) const
-{
-    return node(levelBaseIndex(m_depth - 1) + Morton3D(v).toIndex());
+    return stream.str();
 }
 
 }

@@ -12,7 +12,7 @@ namespace deliberation
 class DELIBERATION_API Morton2D final
 {
 public:
-    static unsigned int NumKeysAtDepth(unsigned int depth);
+    static inline unsigned int NumKeysAtLevel(unsigned int depth);
 
 public:
     inline Morton2D(uint32_t key = 0);
@@ -30,7 +30,7 @@ private:
 class DELIBERATION_API Morton3D final
 {
 public:
-    static unsigned int NumKeysAtDepth(unsigned int depth);
+    static inline unsigned int NumKeysAtLevel(unsigned int depth);
 
 public:
     inline Morton3D(uint32_t key = 0);
