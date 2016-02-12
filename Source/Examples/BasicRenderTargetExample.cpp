@@ -20,7 +20,7 @@
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
-#include <Deliberation/Scene/Transform3D.h>
+#include <Deliberation/Core/Math/Transform3D.h>
 
 GLFWwindow * window;
 
