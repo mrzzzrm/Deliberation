@@ -6,6 +6,7 @@
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/TextureUpload.h>
 
 namespace deliberation
@@ -24,12 +25,13 @@ class DELIBERATION_API Texture final
 {
 public:
     Texture();
-    ~Texture();
 
     unsigned int width() const;
     unsigned int height() const;
 
     gl::GLenum type() const;
+
+    PixelFormat format() const;
 
     unsigned int numFaces() const;
 

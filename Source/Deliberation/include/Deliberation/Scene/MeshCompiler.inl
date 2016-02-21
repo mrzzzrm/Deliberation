@@ -1,5 +1,9 @@
 #include <Deliberation/Core/StreamUtils.h>
 
+#include <iostream>
+
+#define VERBOSE 0
+
 namespace deliberation
 {
 
@@ -31,6 +35,12 @@ void MeshCompiler<T>::compile()
             m_indices.push_back(m_indices.size());
         }
     }
+
+#if VERBOSE
+    std::cout << "MeshCompiler" << std::endl;
+    std::cout << "  Vertices: " << m_vertices.size() << std::endl;
+    std::cout << "  Indices: " << m_indices.size() << std::endl;
+#endif
 }
 
 template<typename T>
@@ -47,3 +57,4 @@ const std::vector<unsigned int> & MeshCompiler<T>::indices() const
 
 }
 
+#undef VERBOSE

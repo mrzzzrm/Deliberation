@@ -157,7 +157,7 @@ void FramebufferImpl::updateFramebufferDesc() const
 {
     std::vector<GLFramebufferDesc::ColorAttachment> colorAttachments(m_renderTargets.size());
 
-    Assert(m_renderTargets.size() > 0, "");
+    Assert(m_renderTargets.size() > 0 || m_depthTarget.engaged(), "");
 
     for (auto rt = 0u; rt < m_renderTargets.size(); rt++)
     {

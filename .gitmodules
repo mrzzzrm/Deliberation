@@ -1,3 +1,0 @@
-[submodule "Source/Extern/bandit"]
-	path = Source/Extern/bandit
-	url = https://github.com/joakimkarlsson/bandit.git

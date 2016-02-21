@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Math/Plane.h>
+#include <Deliberation/Core/Math/Plane.h>
 
 namespace deliberation
 {

@@ -14,7 +14,6 @@
 #include "Detail/DrawImpl.h"
 #include "Detail/FramebufferImpl.h"
 #include "Detail/ProgramImpl.h"
-#include "Detail/SurfaceDownloadImpl.h"
 #include "Detail/TextureImpl.h"
 #include "BufferUploadExecution.h"
 #include "ClearExecution.h"
@@ -139,11 +138,6 @@ Texture Context::createTexture2D(unsigned int width,
     }
 
     return texture;
-}
-
-SurfaceDownload Context::createSurfaceDownload(const Surface & surface)
-{
-    return SurfaceDownload(std::make_shared<SurfaceDownloadImpl>(surface));
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)

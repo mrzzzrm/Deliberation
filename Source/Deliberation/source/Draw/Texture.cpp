@@ -11,8 +11,6 @@ namespace deliberation
 
 Texture::Texture() = default;
 
-Texture::~Texture() = default;
-
 unsigned int Texture::width() const
 {
     Assert(m_impl.get(), "Texture is hollow");
@@ -35,6 +33,12 @@ gl::GLenum Texture::type() const
 {
     Assert(m_impl.get(), "Texture is hollow");
     return m_impl->type;
+}
+
+PixelFormat Texture::format() const
+{
+    Assert(m_impl.get(), "Texture is hollow");
+    return m_impl->format;
 }
 
 Surface & Texture::surface(unsigned int face)

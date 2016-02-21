@@ -1,4 +1,4 @@
-#include <Deliberation/Math/GLMUtils.h>
+#include <Deliberation/Core/Math/GLMUtils.h>
 
 #include <cmath>
 

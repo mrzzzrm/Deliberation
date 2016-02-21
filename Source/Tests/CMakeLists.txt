@@ -9,6 +9,10 @@ find_package(GLFW       REQUIRED)
 find_package(glbinding  REQUIRED)
 find_package(GLM        REQUIRED)
 
+if (NOT BANDIT_FOUND)
+	return()
+endif()
+
 # includes
 include_directories(
     BEFORE

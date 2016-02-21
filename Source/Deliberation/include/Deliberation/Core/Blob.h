@@ -34,6 +34,7 @@ public:
     std::size_t size() const;
     const void * ptr() const;
 
+    Blob & operator=(const Blob & blob);
     Blob & operator=(Blob && blob);
 
 private:

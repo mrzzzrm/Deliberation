@@ -23,6 +23,7 @@ public:
 
 private:
     friend class Context;
+    friend class Surface;
 
 private:
     SurfaceDownload(const std::shared_ptr<SurfaceDownloadImpl> & impl);

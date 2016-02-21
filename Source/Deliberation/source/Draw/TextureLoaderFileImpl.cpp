@@ -43,7 +43,7 @@ TextureBinary TextureLoaderFileImpl::load()
         if (r == IL_FALSE)
         {
             std::cout << "Failed to load texture '" << m_path << "': " << iluErrorString(ilGetError()) << std::endl;
-            return TextureBinary({}, 0u, 0u, PixelFormat_None);
+            return TextureBinary();
         }
 
         // Set IL origin
@@ -72,7 +72,7 @@ TextureBinary TextureLoaderFileImpl::load()
     }
 
 
-    return TextureBinary(std::move(pixels), width, height, format);
+    return TextureBinary(SurfaceBinary(std::move(pixels), width, height, format));
 }
 
 }

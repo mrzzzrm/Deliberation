@@ -21,7 +21,7 @@
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/DebugGrid3DRenderer.h>
-#include <Deliberation/Scene/Transform3D.h>
+#include <Deliberation/Core/Math/Transform3D.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
 

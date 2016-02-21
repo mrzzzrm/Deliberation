@@ -21,6 +21,7 @@ public:
 
 private:
     bool verifyFramebuffer() const;
+    bool verifySamplers() const;
 //    bool verifyProgram() const;
 //    bool verifyVAO() const;
 //    bool verifyUniforms() const;

@@ -37,6 +37,7 @@ public:
 
 private:
     friend class Framebuffer;
+    friend class Surface;
     friend class SurfaceDownloadImpl;
     friend class detail::FramebufferImpl;
     friend class detail::TextureImpl;

@@ -50,7 +50,7 @@ public:
 
     Program createProgram(const std::vector<std::string> & paths);
 
-    Draw createDraw(Program & program, gl::GLenum primitive, const std::string & name = std::string());
+    Draw createDraw(Program & program, gl::GLenum primitive = gl::GL_TRIANGLES, const std::string & name = std::string());
     Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     Clear createClear();

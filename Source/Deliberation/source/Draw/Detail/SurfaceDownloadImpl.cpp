@@ -70,11 +70,13 @@ void SurfaceDownloadImpl::start()
     texture.bind();
     gl::glGetTexImage(texture.type,
                       0,
-                      PixelFormatToGLInternalFormat(texture.format),
-                      gl::GL_FLOAT,
+                      PixelFormatToGLFormat(texture.format),
+                      PixelFormatToGLType(texture.format),
                       nullptr);
 
     sync = gl::glFenceSync(gl::GL_SYNC_GPU_COMMANDS_COMPLETE, (gl::UnusedMask)0);
+
+    context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
 
     started = true;
 }
@@ -88,15 +90,66 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
         return surfaceBinary.get();
     }
 
+    if (!isDone())
+    {
+        while (true)
+        {
+            auto r = gl::glClientWaitSync(sync, gl::GL_SYNC_FLUSH_COMMANDS_BIT, 1000 * 1000u);
+            if (r == gl::GL_WAIT_FAILED)
+            {
+                Fail("Wait for sync failed. This shouldn't happen.");
+            }
+
+            if (r == gl::GL_ALREADY_SIGNALED || r == gl::GL_CONDITION_SATISFIED)
+            {
+                break;
+            }
+        }
+    }
+
     auto & context = surface.m_texture->context;
     auto & texture = *surface.m_texture;
-
-    std::vector<float> data(surface.width() * surface.height() * PixelFormatChannelsPerPixel(texture.format));
+    auto numValues = surface.width() * surface.height() * PixelFormatChannelsPerPixel(texture.format);
+    auto type = PixelFormatToGLType(texture.format);
 
     context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
-    gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
 
-    surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+    switch (type)
+    {
+        case gl::GL_UNSIGNED_BYTE:
+        {
+            std::vector<gl::GLubyte> data(numValues);
+            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
+            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            break;
+        }
+        case gl::GL_UNSIGNED_SHORT:
+        {
+            std::vector<gl::GLushort> data(numValues);
+            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
+            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            break;
+        }
+        case gl::GL_UNSIGNED_INT:
+        {
+            std::vector<gl::GLuint> data(numValues);
+            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
+            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            break;
+        }
+        case gl::GL_FLOAT:
+        {
+            std::vector<gl::GLfloat> data(numValues);
+            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
+            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            break;
+        }
+        default:
+            Fail("Unknown format");
+    }
+
+    context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
+
     return surfaceBinary.get();
 }
 

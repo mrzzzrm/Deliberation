@@ -6,6 +6,7 @@
 #include <Deliberation/Draw/Texture.h>
 
 #include "Detail/TextureImpl.h"
+#include "Detail/SurfaceDownloadImpl.h"
 
 namespace deliberation
 {
@@ -50,7 +51,7 @@ unsigned int Surface::height() const
 SurfaceDownload Surface::download() const
 {
     Assert(m_texture.get(), "Surface object is hollow");
-    return m_texture->context.createSurfaceDownload(*this);
+    return SurfaceDownload(std::make_shared<SurfaceDownloadImpl>(*this));
 }
 
 bool Surface::operator==(const Surface & other) const

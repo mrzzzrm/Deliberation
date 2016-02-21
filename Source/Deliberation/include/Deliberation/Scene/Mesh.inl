@@ -6,8 +6,8 @@ namespace deliberation
 {
 
 template<typename T>
-Mesh<T>::Mesh(const std::vector<Vertex> & vertices,
-           const std::vector<Face> & faces):
+Mesh<T>::Mesh(const Vertices & vertices,
+              const Faces & faces):
     m_vertices(vertices),
     m_faces(faces)
 {
@@ -15,13 +15,13 @@ Mesh<T>::Mesh(const std::vector<Vertex> & vertices,
 }
 
 template<typename T>
-const std::vector<typename Mesh<T>::Vertex> & Mesh<T>::vertices() const
+const typename Mesh<T>::Vertices & Mesh<T>::vertices() const
 {
     return m_vertices;
 }
 
 template<typename T>
-const std::vector<typename Mesh<T>::Face> & Mesh<T>::faces() const
+const typename Mesh<T>::Faces & Mesh<T>::faces() const
 {
     return m_faces;
 }
