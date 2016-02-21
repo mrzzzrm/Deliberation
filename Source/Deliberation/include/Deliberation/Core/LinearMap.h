@@ -53,8 +53,8 @@ public:
     CIterator end() const;
 
 private:
-    friend class Iterator;
-    friend class CIterator;
+    friend struct Iterator;
+    friend struct CIterator;
 
 private:
     std::vector<Optional<Value>> m_vec;
