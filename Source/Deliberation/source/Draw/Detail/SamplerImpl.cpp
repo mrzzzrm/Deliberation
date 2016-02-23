@@ -12,22 +12,25 @@ namespace detail
 
 SamplerImpl::SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLuint location):
     glName(glName),
-    type(gl::GL_NONE),
+    type(uniformType),
     location(location),
     texture(nullptr)
 {
-    switch(uniformType)
+    wrap[0] = gl::GL_REPEAT;
+    wrap[1] = gl::GL_REPEAT;
+    wrap[2] = gl::GL_REPEAT;
+}
+
+gl::GLenum SamplerImpl::textureType() const
+{
+    switch(type)
     {
-    case gl::GL_SAMPLER_2D:     type = gl::GL_TEXTURE_2D; break;
-    case gl::GL_SAMPLER_CUBE:   type = gl::GL_TEXTURE_CUBE_MAP; break;
+    case gl::GL_SAMPLER_2D:     return gl::GL_TEXTURE_2D; break;
+    case gl::GL_SAMPLER_CUBE:   return gl::GL_TEXTURE_CUBE_MAP; break;
 
     default:
         Fail("Unsupported sampler type");
     }
-
-    wrap[0] = gl::GL_REPEAT;
-    wrap[1] = gl::GL_REPEAT;
-    wrap[2] = gl::GL_REPEAT;
 }
 
 }

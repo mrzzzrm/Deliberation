@@ -75,6 +75,12 @@ RingBuffer<T>::RingBuffer(std::size_t capacity):
 }
 
 template<typename T>
+bool RingBuffer<T>::empty() const
+{
+    return m_size == 0;
+}
+
+template<typename T>
 T & RingBuffer<T>::front()
 {
     return at(0);
@@ -147,6 +153,34 @@ void RingBuffer<T>::pop()
 {
     Assert(m_size > 0, "");
     m_size--;
+}
+
+template<typename T>
+void RingBuffer<T>::reserve(std::size_t capacity)
+{
+    std::vector<T> newVec(capacity);
+
+    std::size_t beginA = m_begin;
+    std::size_t endA = m_begin + std::min({capacity, m_size, m_vec.size() - m_begin});
+    std::copy(std::make_move_iterator(m_vec.begin() + beginA),
+              std::make_move_iterator(m_vec.begin() + endA),
+              newVec.begin());
+
+    std::size_t sizeA = endA - beginA;
+    std::size_t size = sizeA;
+
+    if (sizeA < capacity && sizeA < m_size)
+    {
+        std::size_t endB = std::min(capacity - sizeA, m_size - sizeA);
+        std::copy(std::make_move_iterator(m_vec.begin()),
+                  std::make_move_iterator(m_vec.begin() + endB),
+                  newVec.begin() + sizeA);
+         size += endB;
+    }
+
+    m_vec = std::move(newVec);
+    m_begin = 0;
+    m_size = size;
 }
 
 template<typename T>

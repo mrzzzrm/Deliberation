@@ -38,6 +38,8 @@ public:
     RingBuffer();
     RingBuffer(std::size_t capacity);
 
+    bool empty() const;
+
     T & front();
     const T & front() const;
     T & back();
@@ -50,6 +52,7 @@ public:
 
     void push(T && value);
     void pop();
+    void reserve(std::size_t capacity);
 
     Iterator begin();
     Iterator end();

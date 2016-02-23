@@ -67,7 +67,7 @@ void LinearOctreeExample()
 
 void RingBufferExample()
 {
-    std::cout << "----------- RingBufferExample ----------" << std::endl;
+    std::cout << "----------- RingBufferExample - push() ----------" << std::endl;
     RingBuffer<int> buf(3);
 
     std::cout << buf.toString() << std::endl;
@@ -94,6 +94,22 @@ void RingBufferExample()
     buf.push(0);
 
     std::cout << buf.toString() << std::endl;
+
+    std::cout << "----------- RingBufferExample - reserve() ----------" << std::endl;
+
+    buf.reserve(5);
+    std::cout << buf.toString() << std::endl;
+    buf.push(1);
+    buf.push(3);
+    std::cout << buf.toString() << std::endl;
+    buf.push(7);
+    buf.push(5);
+    std::cout << buf.toString() << std::endl;
+    buf.reserve(2);
+    std::cout << buf.toString() << std::endl;
+    buf.push(9);
+    std::cout << buf.toString() << std::endl;
+
 }
 
 int main(int argc, char * argv[])
