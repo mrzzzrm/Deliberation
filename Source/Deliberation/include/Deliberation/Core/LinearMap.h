@@ -52,6 +52,8 @@ public:
     CIterator begin() const;
     CIterator end() const;
 
+    void erase(const Iterator & i);
+
 private:
     friend class Iterator;
     friend class CIterator;

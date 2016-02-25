@@ -171,7 +171,7 @@ void DrawExecution::perform()
 void DrawExecution::drawElementsInstanced() const
 {
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawElementsInstanced(m_drawImpl.state.primitive(),
+    gl::glDrawElementsInstanced(m_drawImpl.state.rasterizerState().primitive(),
                                 elementCount(),
                                 elementType(),
                                 nullptr,
@@ -181,7 +181,7 @@ void DrawExecution::drawElementsInstanced() const
 void DrawExecution::drawElements() const
 {
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawElements(m_drawImpl.state.primitive(),
+    gl::glDrawElements(m_drawImpl.state.rasterizerState().primitive(),
                        elementCount(),
                        elementType(),
                        nullptr);
@@ -190,7 +190,7 @@ void DrawExecution::drawElements() const
 void DrawExecution::drawArrays() const
 {
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawArrays(m_drawImpl.state.primitive(),
+    gl::glDrawArrays(m_drawImpl.state.rasterizerState().primitive(),
                      0u,
                      vertexCount());
 }
@@ -198,7 +198,7 @@ void DrawExecution::drawArrays() const
 void DrawExecution::drawArraysInstanced() const
 {
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawArraysInstanced(m_drawImpl.state.primitive(),
+    gl::glDrawArraysInstanced(m_drawImpl.state.rasterizerState().primitive(),
                                         0u,
                                         vertexCount(),
                                         instanceCount());

@@ -59,6 +59,10 @@ target_link_libraries(BasicFontExample ${libs})
 add_executable(BasicRenderTargetExample BasicRenderTargetExample.cpp)
 target_link_libraries(BasicRenderTargetExample ${libs})
 
+# BasicRenderPipelineExample
+add_executable(BasicRenderPipelineExample BasicRenderPipelineExample.cpp)
+target_link_libraries(BasicRenderPipelineExample ${libs})
+
 # BasicSceneExample
 add_executable(BasicSceneExample BasicSceneExample.cpp)
 target_link_libraries(BasicSceneExample ${libs})

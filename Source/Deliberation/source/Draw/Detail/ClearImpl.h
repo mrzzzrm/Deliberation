@@ -16,10 +16,13 @@ class Context;
 namespace detail
 {
 
+class FramebufferImpl;
+
 class ClearImpl
 {
 public:
-    ClearImpl(Context & context);
+    ClearImpl(Context & context,
+              const std::shared_ptr<FramebufferImpl> & framebuffer);
 
 public:
     Context &   context;

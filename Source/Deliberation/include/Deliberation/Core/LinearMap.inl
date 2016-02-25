@@ -230,5 +230,15 @@ typename LinearMap<Value>::CIterator LinearMap<Value>::end() const
     return CIterator(*this, keyUpperBound());
 }
 
+template<typename Value>
+void LinearMap<Value>::erase(const Iterator & i)
+{
+    auto index = i.pair.first;
+
+    Assert(index < m_vec.size(), "");
+
+    m_vec[index].disengage();
+}
+
 }
 

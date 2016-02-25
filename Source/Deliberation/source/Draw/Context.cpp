@@ -4,6 +4,8 @@
 
 #include <glbinding/gl/functions.h>
 
+#include <Deliberation/Deliberation.h>
+
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/TextureLoader.h>
@@ -25,14 +27,12 @@ namespace deliberation
 
 Context::Context(unsigned int backbufferWidth, unsigned int backbufferHeight)
 {
-    std::cout << "Creating Deliberation Context" << std::endl;
-
-    m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(backbufferWidth, backbufferHeight));
+    m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(*this, backbufferWidth, backbufferHeight));
 }
 
 Framebuffer Context::backbuffer()
 {
-    return Framebuffer(detail::FramebufferImpl::backbuffer(m_backbuffer.width(), m_backbuffer.height()));
+    return Framebuffer(detail::FramebufferImpl::backbuffer(*this, m_backbuffer.width(), m_backbuffer.height()));
 }
 
 const Framebuffer & Context::backbuffer() const
@@ -47,7 +47,7 @@ void Context::setBackbufferResolution(unsigned int width, unsigned height)
         return;
     }
 
-    m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(width, height));
+    m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(*this, width, height));
 }
 
 Buffer Context::createBuffer(const BufferLayout & layout)
@@ -82,7 +82,7 @@ Program Context::createProgram(const std::vector<std::string> & paths)
 Draw Context::createDraw(Program & program, gl::GLenum primitive, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
-    impl->state.setPrimitive(primitive);
+    impl->state.rasterizerState().setPrimitive(primitive);
     impl->name = name;
 
     return Draw(impl);
@@ -99,15 +99,12 @@ Draw Context::createDraw(Program & program, const DrawState & drawState, const s
 
 Clear Context::createClear()
 {
-    return Clear(std::make_shared<detail::ClearImpl>(*this));
+    return Clear(std::make_shared<detail::ClearImpl>(*this, backbuffer().m_impl));
 }
 
-Clear Context::createClear(const glm::vec4 & color)
+Clear Context::createClear(Framebuffer & framebuffer)
 {
-    auto clear = createClear();
-    clear.setColor(color);
-
-    return clear;
+    return Clear(std::make_shared<detail::ClearImpl>(*this, framebuffer.m_impl));
 }
 
 Texture Context::createTexture(const TextureBinary & binary)
@@ -138,6 +135,11 @@ Texture Context::createTexture2D(unsigned int width,
     }
 
     return texture;
+}
+
+Framebuffer Context::createFramebuffer(unsigned int width, unsigned int height)
+{
+    return Framebuffer(detail::FramebufferImpl::custom(*this, width, height));
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)
@@ -210,6 +212,37 @@ void Context::scheduleClear(const Clear & clear)
 //    default:
 //        Fail("");
 //    }
+}
+
+Program & Context::blitProgram()
+{
+    if (!m_blitProgram.engaged())
+    {
+        m_blitProgram.reset(createProgram({
+            deliberation::dataPath("Data/Shaders/Blit.vert"),
+            deliberation::dataPath("Data/Shaders/Blit.frag")
+        }));
+    }
+    return m_blitProgram.get();
+}
+
+Buffer & Context::blitVertexBuffer()
+{
+    if (!m_blitVertexBuffer.engaged())
+    {
+        auto layout = createPackedBufferLayout<glm::vec2>({"Position"});
+        m_blitVertexBuffer.reset(createBuffer(layout));
+
+        std::vector<glm::vec2> vertices({
+            {-1.0f, -1.0f},
+            { 1.0f, -1.0f},
+            {-1.0f,  1.0f},
+            { 1.0f,  1.0f}
+        });
+
+        m_blitVertexBuffer.get().createUpload(vertices).schedule();
+    }
+    return m_blitVertexBuffer.get();
 }
 
 void Context::executeBufferUpload(const BufferUpload & upload)

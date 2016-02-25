@@ -21,8 +21,6 @@ class DELIBERATION_API DrawState final
 public:
     DrawState();
 
-    gl::GLenum primitive() const;
-
     gl::GLenum provokingVertex() const;
 
     BlendState & blendState();
@@ -43,8 +41,6 @@ public:
     bool hasViewport() const;
     const Viewport & viewport() const;
 
-    void setPrimitive(gl::GLenum primitive);
-
     void setProvokingVertex(gl::GLenum provokingVertex);
 
     void setBlendState(const BlendState & blendState);
@@ -58,8 +54,6 @@ public:
     std::string toString() const;
 
 private:
-    gl::GLenum m_primitive; // TODO Should be part of rasterizer state?!
-
     gl::GLenum m_provokingVertex;
 
     BlendState m_blendState;

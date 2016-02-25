@@ -42,19 +42,19 @@ void Ray3D::setDirection(const glm::vec3 & direction)
     m_direction = direction;
 }
 
-bool Ray3D::intersects(const Sphere & sphere) const
-{
-    glm::vec3 o = m_origin - sphere.position();
-
-    float a = glm::dot(m_direction, m_direction);
-    float b = 2 * glm::dot(m_direction, o);
-    float c = glm::dot(o, o) - (sphere.radius() * sphere.radius());
-
-    float t0 = (-b - std::sqrt(b*b - 4*a*c)) / (2*a);
-    float t1 = (-b + std::sqrt(b*b - 4*a*c)) / (2*a);
-
-    return t0 >= 0 || t1 >= 0;
-}
+//bool Ray3D::intersects(const Sphere & sphere) const
+//{
+//    glm::vec3 o = m_origin - sphere.position();
+//
+//    float a = glm::dot(m_direction, m_direction);
+//    float b = 2 * glm::dot(m_direction, o);
+//    float c = glm::dot(o, o) - (sphere.radius() * sphere.radius());
+//
+//    float t0 = (-b - std::sqrt(b*b - 4*a*c)) / (2*a);
+//    float t1 = (-b + std::sqrt(b*b - 4*a*c)) / (2*a);
+//
+//    return t0 >= 0 || t1 >= 0;
+//}
 
 Ray3D Ray3D::normalized() const
 {
@@ -66,6 +66,11 @@ Ray3D Ray3D::normalized() const
 void Ray3D::normalize()
 {
     m_direction = glm::normalize(m_direction);
+}
+
+glm::vec3 Ray3D::at(float s) const
+{
+    return m_origin + s * m_direction;
 }
 
 }

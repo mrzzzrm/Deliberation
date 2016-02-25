@@ -11,14 +11,8 @@ namespace deliberation
 {
 
 DrawState::DrawState():
-    m_primitive(gl::GL_TRIANGLES),
     m_provokingVertex(gl::GL_FIRST_VERTEX_CONVENTION)
 {
-}
-
-gl::GLenum DrawState::primitive() const
-{
-    return m_primitive;
 }
 
 gl::GLenum DrawState::provokingVertex() const
@@ -87,11 +81,6 @@ const Viewport & DrawState::viewport() const
     return m_viewport.get();
 }
 
-void DrawState::setPrimitive(gl::GLenum primitive)
-{
-    m_primitive = primitive;
-}
-
 void DrawState::setProvokingVertex(gl::GLenum provokingVertex)
 {
     m_provokingVertex = provokingVertex;
@@ -132,7 +121,6 @@ std::string DrawState::toString() const
     std::stringstream stream;
 
     stream <<
-        "Primitive " << m_primitive << std::endl <<
         "BlendState: " << m_blendState.toString() << std::endl <<
         "CullState: " << m_cullState.toString() << std::endl <<
         "RasterizerState: " << m_rasterizerState.toString() << std::endl <<

@@ -62,6 +62,8 @@ public:
     void addInstanceBuffer(const Buffer & buffer, unsigned int divisor = 1u);
     void addInstanceBufferRange(const Buffer & buffer, unsigned int first, unsigned int count, unsigned int divisor = 1u);
 
+    void setFramebuffer(const Framebuffer & framebuffer);
+
     void setRenderTarget(const std::string & name, Surface * surface);
 
     void schedule();

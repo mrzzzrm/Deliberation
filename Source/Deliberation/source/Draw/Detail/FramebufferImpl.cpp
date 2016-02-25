@@ -6,6 +6,8 @@
 
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
+#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Surface.h>
 
 #include "Draw/GL/GLFramebuffer.h"
@@ -18,9 +20,11 @@ namespace deliberation
 namespace detail
 {
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(unsigned int width, unsigned int height)
+std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(Context & context,
+                                                             unsigned int width,
+                                                             unsigned int height)
 {
-    auto result = std::make_shared<FramebufferImpl>();
+    auto result = std::make_shared<FramebufferImpl>(context);
     result->m_isBackbuffer = true;
     result->m_resolutionDirty = false;
     result->m_width = width;
@@ -29,14 +33,22 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(unsigned int width,
     return result;
 }
 
-FramebufferImpl::FramebufferImpl():
-    m_isBackbuffer(true),
-    m_glFramebufferDirty(false),
-    m_resolutionDirty(true),
-    m_width(0u),
-    m_height(0u)
+std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(Context & context,
+                                                         unsigned int width,
+                                                         unsigned int height)
 {
+    auto result = std::make_shared<FramebufferImpl>(context);
+    result->m_isBackbuffer = false;
+    result->m_resolutionDirty = false;
+    result->m_width = width;
+    result->m_height = height;
 
+    return result;
+}
+
+Context & FramebufferImpl::context() const
+{
+    return m_context;
 }
 
 unsigned int FramebufferImpl::width() const
@@ -134,6 +146,24 @@ void FramebufferImpl::setDepthTarget(Surface * surface)
     m_resolutionDirty = true;
 }
 
+void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
+{
+    auto texture = m_context.createTexture2D(m_width, m_height, format, true);
+    if (index < 0)
+    {
+        index = m_renderTargets.size();
+    }
+    m_renderTargetTextures[index] = texture;
+    setRenderTarget(index, &texture.surface(0));
+}
+
+void FramebufferImpl::addDepthTarget(PixelFormat format)
+{
+    auto texture = m_context.createTexture2D(m_width, m_height, format, true);
+    m_depthTargetTexture.reset(texture);
+    setDepthTarget(&texture.surface(0));
+}
+
 void FramebufferImpl::bind(GLStateManager & glStateManager) const
 {
     if (m_isBackbuffer)
@@ -151,6 +181,17 @@ void FramebufferImpl::bind(GLStateManager & glStateManager) const
 
         m_glFramebuffer->bind();
     }
+}
+
+FramebufferImpl::FramebufferImpl(Context & context):
+    m_context(context),
+    m_isBackbuffer(true),
+    m_glFramebufferDirty(false),
+    m_resolutionDirty(true),
+    m_width(0u),
+    m_height(0u)
+{
+
 }
 
 void FramebufferImpl::updateFramebufferDesc() const

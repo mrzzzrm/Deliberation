@@ -164,6 +164,7 @@ void LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::to
         m_index = std::numeric_limits<decltype(m_index)>::max();
     }
 
+    m_index -= 1;
     m_index >>= 3;
 }
 

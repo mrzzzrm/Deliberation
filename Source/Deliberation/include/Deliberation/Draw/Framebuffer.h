@@ -7,6 +7,7 @@
 
 #include <Deliberation/Core/Optional.h>
 
+#include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Surface.h>
 
 namespace deliberation
@@ -14,6 +15,7 @@ namespace deliberation
 
 namespace detail
 {
+    class ClearImpl;
     class DrawExecution;
     class DrawImpl;
     class ProgramImpl;
@@ -44,10 +46,16 @@ public:
 
     void setDepthTarget(Surface * surface);
 
+    void addRenderTarget(PixelFormat format, int index = -1);
+    void addDepthTarget(PixelFormat format);
+
+    Clear createClear();
+
 private:
     friend class Context;
     friend class ClearExecution;
     friend class detail::DrawExecution;
+    friend class detail::ClearImpl;
     friend class detail::DrawImpl;
 
 private:

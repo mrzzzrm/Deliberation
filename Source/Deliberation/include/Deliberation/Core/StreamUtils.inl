@@ -1,3 +1,6 @@
+#include <iostream>
+#include <sstream>
+
 namespace deliberation
 {
 
@@ -17,6 +20,27 @@ StreamType & operator<<(StreamType && os, const glm::uvec3 & v)
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::uvec4 & v)
+{
+    os << "(" << v.x << "/" << v.y << "/" << v.z << "/" << v.w << ")";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::ivec2 & v)
+{
+    os << "(" << v.x << "/" << v.y << ")";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::ivec3 & v)
+{
+    os << "(" << v.x << "/" << v.y << "/" << v.z << ")";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::ivec4 & v)
 {
     os << "(" << v.x << "/" << v.y << "/" << v.z << "/" << v.w << ")";
     return os;
@@ -91,11 +115,50 @@ StreamType & operator<<(StreamType && os, const glm::mat4 & v)
 }
 
 template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Ray3D & r)
+{
+    os << "(" << r.origin() << " -> " << r.direction() << ")";
+    return os;
+}
+
+template<typename StreamType>
 StreamType & operator<<(StreamType && os, const Sphere & s)
 {
     os << "(" << s.position() << " -> " << s.radius() << ")";
     return os;
 }
+
+template<typename T>
+std::string operator+(const std::string & s, const T & value)
+{
+    std::stringstream stream;
+    stream << s << value;
+    return stream.str();
+}
+
+template<typename T>
+std::string operator+(const T & value, const std::string & s)
+{
+    std::stringstream stream;
+    stream << value << s;
+    return stream.str();
+}
+//
+//template<typename T>
+//std::string operator+(const char * s, const T & value)
+//{
+//    std::stringstream stream;
+//    stream << s << value;
+//    return stream.str();
+//}
+//
+//template<typename T>
+//std::string operator+(const T & value, const char * s)
+//{
+//    std::stringstream stream;
+//    stream << value << s;
+//    return stream.str();
+//}
 
 }
 

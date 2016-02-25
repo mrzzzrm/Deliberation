@@ -208,6 +208,13 @@ void Draw::addInstanceBufferRange(const Buffer & buffer, unsigned int first, uns
     m_impl->instanceBuffers.push_back(detail::BufferBinding{buffer.m_impl, true, first, count, divisor});
 }
 
+void Draw::setFramebuffer(const Framebuffer & framebuffer)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    m_impl->framebuffer = framebuffer;
+}
+
 void Draw::setRenderTarget(const std::string & name, Surface * surface)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");

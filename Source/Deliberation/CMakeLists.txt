@@ -148,10 +148,13 @@ set(sources
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
 
+    ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/UVSphere.cpp
+    ${source_path}/Scene/RenderNode.cpp
+    ${source_path}/Scene/RenderPipeline.cpp
 )
 
 # api_includes
@@ -223,6 +226,7 @@ set(api_includes
     ${include_path}/Draw/Draw.h
     ${include_path}/Draw/Draw.inl
     ${include_path}/Draw/DrawState.h
+    ${include_path}/Draw/Enum.h
     ${include_path}/Draw/Framebuffer.h
     ${include_path}/Draw/PixelFormat.h
     ${include_path}/Draw/Program.h
@@ -248,6 +252,7 @@ set(api_includes
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
 
+    ${include_path}/Scene/Blit.h
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
@@ -256,6 +261,8 @@ set(api_includes
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/MeshCompiler.inl
     ${include_path}/Scene/UVSphere.h
+    ${include_path}/Scene/RenderNode.h
+    ${include_path}/Scene/RenderPipeline.h
 )
 
 # libs

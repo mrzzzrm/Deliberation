@@ -2,12 +2,15 @@
 
 #include <string>
 
+#include <Deliberation/Deliberation_API.h>
+
 namespace deliberation
 {
 
-class Viewport final
+class DELIBERATION_API Viewport final
 {
 public:
+    Viewport();
     Viewport(unsigned int x,
              unsigned int y,
              unsigned int width,

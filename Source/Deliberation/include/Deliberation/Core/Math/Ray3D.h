@@ -23,10 +23,12 @@ public:
     void setOrigin(const glm::vec3& origin);
     void setDirection(const glm::vec3& direction);
 
-    bool intersects(const Sphere & sphere) const;
+//    bool intersects(const Sphere & sphere) const;
 
     Ray3D normalized() const;
     void normalize();
+
+    glm::vec3 at(float s) const;
 
 protected:
     glm::vec3 m_origin;

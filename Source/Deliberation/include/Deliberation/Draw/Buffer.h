@@ -13,6 +13,7 @@
 /*
     TODO
         Create buffers with immutable size only?
+        upload() = createUpload().schedule()
 */
 
 namespace deliberation

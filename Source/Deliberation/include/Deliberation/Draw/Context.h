@@ -8,6 +8,7 @@
 
 #include <Deliberation/Draw/Detail/NamedDataMemberOf.h>
 #include <Deliberation/Draw/GL/GLStateManager.h>
+#include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Clear.h>
@@ -54,7 +55,7 @@ public:
     Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     Clear createClear();
-    Clear createClear(const glm::vec4 & color);
+    Clear createClear(Framebuffer & framebuffer);
 
     Texture createTexture(const TextureBinary & binary);
     Texture createTexture2D(unsigned int width,
@@ -62,7 +63,7 @@ public:
                             PixelFormat format,
                             bool clear = true);
 
-    SurfaceDownload createSurfaceDownload(const Surface & surface);
+    Framebuffer createFramebuffer(unsigned int width, unsigned int height);
 
     /*
         TODO
@@ -74,6 +75,12 @@ public:
     void scheduleTextureUpload(const TextureUpload & upload);
     void scheduleDraw(const Draw & draw);
     void scheduleClear(const Clear & clear);
+
+    Program & blitProgram();
+    Buffer & blitVertexBuffer();
+    /*
+        / move?
+    */
 
 private:
     friend class SurfaceDownloadImpl;
@@ -88,6 +95,9 @@ private:
     Framebuffer                 m_backbuffer;
     GLStateManager              m_glStateManager;
     std::vector<BufferUpload>   m_bufferUploads;
+
+    Optional<Program>           m_blitProgram;
+    Optional<Buffer>            m_blitVertexBuffer;
 };
 
 };

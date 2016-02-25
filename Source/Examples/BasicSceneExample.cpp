@@ -11,6 +11,8 @@
 
 #include <Deliberation/Deliberation.h>
 
+#include <Deliberation/Core/Math/Transform3D.h>
+
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Context.h>
@@ -21,7 +23,6 @@
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/DebugGrid3DRenderer.h>
-#include <Deliberation/Core/Math/Transform3D.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
 
