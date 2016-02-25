@@ -18,6 +18,8 @@ class SamplerImpl
 public:
     SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLuint location);
 
+    gl::GLenum textureType() const;
+
     gl::GLuint          glName;
     gl::GLenum          type;
     gl::GLuint          location;

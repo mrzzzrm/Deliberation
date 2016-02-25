@@ -18,7 +18,7 @@ Sampler::Sampler():
 void Sampler::setTexture(const Texture & texture)
 {
     Assert(m_impl, "Hollow Sampler can't be set");
-    Assert(texture.type() == m_impl->type, "Texture type mismatch");
+    Assert(texture.type() == m_impl->textureType(), "Texture type mismatch");
 
     m_impl->texture = texture.m_impl.get();
 }

@@ -185,6 +185,8 @@ set(api_includes
     ${include_path}/Core/OffsetOf.inl
     ${include_path}/Core/Optional.h
     ${include_path}/Core/Optional.inl
+    ${include_path}/Core/RingBuffer.h
+    ${include_path}/Core/RingBuffer.inl
     ${include_path}/Core/StringUtils.h
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl

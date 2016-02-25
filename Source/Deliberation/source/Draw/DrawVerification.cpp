@@ -156,7 +156,7 @@ bool DrawVerification::verifySamplers() const
         {
             if (sampler.type != PixelFormatToGLSamplerType(sampler.texture->format))
             {
-                m_reportStream << "Sampler '" << samplerInterface->name() << "' (" << sampler.type << ") isn't compatible with texture of format '" << PixelFormatToString(sampler.texture->format) << "'" << std::endl;
+                m_reportStream << "Sampler '" << samplerInterface->name() << "' (" << sampler.type << ") isn't compatible with texture of format " << PixelFormatToString(sampler.texture->format) << "/" << PixelFormatToGLSamplerType(sampler.texture->format) << "" << std::endl;
                 passed = false;
             }
         }

@@ -1,6 +1,7 @@
 #include "DrawImpl.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include <glbinding/gl/functions.h>
 
