@@ -95,6 +95,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             }
 
             auto name = GLGetActiveUniformName(glProgramName, u);
+            auto size = (gl::GLuint)uniformSizes[u];
             auto location = gl::glGetUniformLocation(glProgramName, name.c_str());
             auto type = (gl::GLenum)uniformTypes[u];
 
@@ -129,9 +130,14 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     m_uniformIndexByLocation.resize(location + 1, (unsigned int)-1);
                 }
 
+                if (size > 1)
+                {
+                    StringRErase(name, "[0]");
+                }
+
                 m_uniformIndexByLocation[location] = m_uniforms.size();
                 m_uniformIndexByName[name] = m_uniforms.size();
-                m_uniforms.emplace_back(name, type, location, (gl::GLuint)uniformSizes[u]);
+                m_uniforms.emplace_back(name, type, location, size);
             }
 
         }

@@ -22,6 +22,9 @@ public:
 
 public:
     SurfaceBinary();
+    SurfaceBinary(unsigned int width,
+                  unsigned int height,
+                  PixelFormat format);
     SurfaceBinary(Blob && data,
                   unsigned int width,
                   unsigned int height,
@@ -32,11 +35,16 @@ public:
     unsigned int height() const;
     PixelFormat format() const;
 
-    uint8_t byte(unsigned int x, unsigned int y, unsigned int channel) const;
+    template<typename T>
+    void setPixel(unsigned int x, unsigned int y, const T & value);
 
-    uint32_t pixelHex(unsigned int x, unsigned y) const;
+    template<typename T>
+    T pixel(unsigned int x, unsigned int y) const;
 
     std::string toString() const;
+
+private:
+    std::size_t expectedDataSize() const;
 
 private:
     Blob            m_data;
@@ -46,4 +54,6 @@ private:
 };
 
 }
+
+#include <Deliberation/Draw/SurfaceBinary.inl>
 

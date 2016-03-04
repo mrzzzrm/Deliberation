@@ -120,12 +120,14 @@ Texture Context::createTexture2D(unsigned int width,
                                  PixelFormat format,
                                  bool clear)
 {
+    Assert(width > 0 && height > 0, "Invalid size");
+
     auto texture = Texture(detail::TextureImpl::build(*this, width, height, 1, format));
 
     if (clear)
     {
         auto c = createClear();
-        if (PixelFormatType(format) == PixelFormatType_Color) {
+        if (format.pixelType() == PixelType_Color) {
             c.framebuffer().setRenderTarget(0, &texture.surface());
         }
         else {

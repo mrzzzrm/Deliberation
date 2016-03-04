@@ -46,7 +46,7 @@ int main
     glbinding::Binding::initialize();
 
     deliberation::init();
-    deliberation::setPrefixPath("..");
+    deliberation::setPrefixPath("/home/moritz/Coding/VoxelAdvent/Extern/Deliberation");
 
     deliberation::Context context;
 

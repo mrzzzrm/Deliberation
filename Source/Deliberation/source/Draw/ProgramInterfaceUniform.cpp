@@ -8,11 +8,11 @@ namespace deliberation
 ProgramInterfaceUniform::ProgramInterfaceUniform(const std::string & name,
                                                  gl::GLenum type,
                                                  gl::GLint location,
-                                                 gl::GLuint size):
+                                                 gl::GLuint arraySize):
     m_name(name),
     m_type(type),
     m_location(location),
-    m_size(size)
+    m_arraySize(arraySize)
 {
 }
 
@@ -31,15 +31,20 @@ gl::GLint ProgramInterfaceUniform::location() const
     return m_location;
 }
 
-gl::GLuint ProgramInterfaceUniform::size() const
+gl::GLuint ProgramInterfaceUniform::arraySize() const
 {
-    return m_size;
+    return m_arraySize;
+}
+
+bool ProgramInterfaceUniform::isArray() const
+{
+    return m_arraySize > 0;
 }
 
 std::string ProgramInterfaceUniform::toString() const
 {
     std::stringstream stream;
-    stream << m_type << " <" << m_name << "> (Size: " << m_size << "; Location: " << m_location << ")";
+    stream << m_type << " <" << m_name << "> (Size: " << m_arraySize << "; Location: " << m_location << ")";
     return stream.str();
 }
 
@@ -48,7 +53,7 @@ bool ProgramInterfaceUniform::operator==(const ProgramInterfaceUniform & other) 
     return m_name == other.m_name &&
            m_type == other.m_type &&
            m_location == other.m_location &&
-           m_size == other.m_size;
+           m_arraySize == other.m_arraySize;
 }
 
 bool ProgramInterfaceUniform::operator!=(const ProgramInterfaceUniform & other) const

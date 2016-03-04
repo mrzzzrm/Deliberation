@@ -64,6 +64,7 @@ public:
 
     void setFramebuffer(const Framebuffer & framebuffer);
 
+    void setRenderTarget(unsigned int index, Surface * surface);
     void setRenderTarget(const std::string & name, Surface * surface);
 
     void schedule();

@@ -23,6 +23,7 @@ public:
     typedef std::vector<Face> Faces;
 
 public:
+    Mesh();
     Mesh(const Vertices & vertices,
          const Faces & faces);
 
@@ -31,9 +32,16 @@ public:
 
     const Vertex & faceVertex(std::size_t face, std::size_t vertex) const;
 
+    void computeNormals();
+    /*
+        TODO
+            Better name
+    */
+    void separateFaces();
+
 private:
-    Vertices m_vertices;
-    Faces m_faces;
+    Vertices    m_vertices;
+    Faces       m_faces;
 };
 
 }

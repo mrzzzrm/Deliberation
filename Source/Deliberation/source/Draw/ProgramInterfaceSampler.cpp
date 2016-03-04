@@ -1,5 +1,7 @@
 #include <Deliberation/Draw/ProgramInterfaceSampler.h>
 
+#include <Deliberation/Core/Assert.h>
+
 #include <sstream>
 
 namespace deliberation
@@ -14,6 +16,24 @@ ProgramInterfaceSampler::ProgramInterfaceSampler(const std::string & name,
     m_location(location),
     m_size(size)
 {
+    switch(type)
+    {
+    case gl::GL_SAMPLER_1D: case gl::GL_SAMPLER_2D: case gl::GL_SAMPLER_3D: case gl::GL_SAMPLER_CUBE:
+    case gl::GL_SAMPLER_1D_SHADOW: case gl::GL_SAMPLER_2D_SHADOW: case gl::GL_SAMPLER_2D_RECT:
+    case gl::GL_SAMPLER_2D_RECT_SHADOW:
+        m_valueType = gl::GL_FLOAT;
+        break;
+    case gl::GL_UNSIGNED_INT_SAMPLER_1D: case gl::GL_UNSIGNED_INT_SAMPLER_2D:
+    case gl::GL_UNSIGNED_INT_SAMPLER_3D: case gl::GL_UNSIGNED_INT_SAMPLER_CUBE:
+        m_valueType = gl::GL_UNSIGNED_INT;
+        break;
+    case gl::GL_INT_SAMPLER_1D: case gl::GL_INT_SAMPLER_2D:
+    case gl::GL_INT_SAMPLER_3D: case gl::GL_INT_SAMPLER_CUBE:
+        m_valueType = gl::GL_INT;
+        break;
+    default:
+        Fail("Unknown sampler format");
+    }
 }
 
 const std::string & ProgramInterfaceSampler::name() const
@@ -24,6 +44,11 @@ const std::string & ProgramInterfaceSampler::name() const
 gl::GLenum ProgramInterfaceSampler::type() const
 {
     return m_type;
+}
+
+gl::GLenum ProgramInterfaceSampler::valueType() const
+{
+    return m_valueType;
 }
 
 gl::GLint ProgramInterfaceSampler::location() const

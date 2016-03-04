@@ -1,0 +1,36 @@
+#pragma once
+
+#include <vector>
+
+#include <Deliberation/Deliberation_API.h>
+
+#include <Deliberation/Core/Detail/IBlobImpl.h>
+
+namespace deliberation
+{
+
+namespace detail
+{
+
+template<typename T>
+class VectorBlobImpl final:
+    public IBlobImpl
+{
+public:
+    VectorBlobImpl(std::size_t size);
+    VectorBlobImpl(std::vector<T> && value);
+    VectorBlobImpl(const std::vector<T> & value);
+
+    virtual std::unique_ptr<IBlobImpl> clone() const override;
+    virtual const void * ptr() const override;
+    virtual std::size_t size() const override;
+
+private:
+    std::vector<T> m_value;
+};
+
+}
+
+}
+
+#include <Deliberation/Core/Detail/VectorBlobImpl.inl>

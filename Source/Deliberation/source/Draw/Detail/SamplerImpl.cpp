@@ -10,9 +10,10 @@ namespace deliberation
 namespace detail
 {
 
-SamplerImpl::SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLuint location):
+SamplerImpl::SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location):
     glName(glName),
     type(uniformType),
+    valueType(valueType),
     location(location),
     texture(nullptr)
 {

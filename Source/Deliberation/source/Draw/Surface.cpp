@@ -54,6 +54,11 @@ unsigned int Surface::height() const
     return m_texture->height; // No mipmaps yet
 }
 
+PixelFormat Surface::format() const
+{
+    return m_texture->format;
+}
+
 SurfaceDownload Surface::download() const
 {
     Assert(m_texture.get(), "Surface object is hollow");

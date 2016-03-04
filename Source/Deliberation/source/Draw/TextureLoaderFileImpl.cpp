@@ -29,7 +29,7 @@ TextureBinary TextureLoaderFileImpl::load()
 
     auto width = ILint{0};
     auto height = ILint{0};
-    auto format = PixelFormat_None;
+    auto format = PixelFormat();
 
     {
         ILuint ilName;
@@ -42,7 +42,7 @@ TextureBinary TextureLoaderFileImpl::load()
         auto r = ilLoadImage(path.c_str());
         if (r == IL_FALSE)
         {
-            std::cout << "Failed to load texture '" << m_path << "': " << iluErrorString(ilGetError()) << std::endl;
+            Fail(std::string("Failed to load texture '") + m_path + "': " + iluErrorString(ilGetError()));
             return TextureBinary();
         }
 
@@ -64,7 +64,7 @@ TextureBinary TextureLoaderFileImpl::load()
         auto ilFormat = ilGetInteger(IL_IMAGE_FORMAT);
         format = ILFormatToPixelFormat(ilFormat);
 
-        pixels.resize(width * height * PixelFormatChannelsPerPixel(format));
+        pixels.resize(width * height * format.componentsPerPixel());
 
         ilCopyPixels(0u, 0u, 0u, width, height, 1, ilFormat, IL_FLOAT, pixels.data());
 

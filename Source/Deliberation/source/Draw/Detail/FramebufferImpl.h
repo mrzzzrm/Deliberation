@@ -49,10 +49,13 @@ public:
 
     bool isBackbuffer() const;
 
+    Surface * renderTarget(unsigned int index);
     const Surface * renderTarget(unsigned int index) const;
+
     const std::vector<Optional<Surface>> & renderTargets() const;
 
-    Surface * depthTarget() const;
+    Surface * depthTarget();
+    const Surface * depthTarget() const;
 
     void setRenderTarget(unsigned int index, Surface * surface);
 
@@ -61,15 +64,9 @@ public:
     void addRenderTarget(PixelFormat format, int index = -1);
     void addDepthTarget(PixelFormat format);
 
-    Clear createClear();
-
     void bind(GLStateManager & glStateManager) const;
 
-private:
-    void updateFramebufferDesc() const;
-    void updateResolution() const;
-
-private:
+public:
     Context &                                   m_context;
     bool                                        m_isBackbuffer;
 
@@ -85,6 +82,13 @@ private:
     mutable unsigned int                        m_width;
     mutable unsigned int                        m_height;
     mutable bool                                m_resolutionDirty;
+
+    mutable Optional<Clear>                     m_clear;
+
+private:
+    void updateFramebufferDesc() const;
+    void updateResolution() const;
+
 };
 
 }

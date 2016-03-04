@@ -16,6 +16,8 @@ public:
 public:
     Blob();
 
+    Blob(std::size_t size);
+
     /*
         TODO
             port all these to static, named builders
@@ -33,6 +35,12 @@ public:
 
     std::size_t size() const;
     const void * ptr() const;
+
+    template<typename T>
+    void write(std::size_t offset, const T & value);
+
+    template<typename T>
+    void read(std::size_t offset, T & value) const;
 
     Blob & operator=(const Blob & blob);
     Blob & operator=(Blob && blob);

@@ -36,6 +36,13 @@ void Clear::setColor(const glm::vec4 & color)
     m_impl->clearColor = true;
 }
 
+void Clear::setColor(unsigned int rt, const glm::vec4 & color)
+{
+    Assert(m_impl.get(), "Clear is hollow");
+    m_impl->colorOverrides[rt] = color;
+    m_impl->clearColor = true;
+}
+
 void Clear::disableColor()
 {
     Assert(m_impl.get(), "Clear is hollow");

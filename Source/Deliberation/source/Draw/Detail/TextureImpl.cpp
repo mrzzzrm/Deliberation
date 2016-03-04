@@ -135,12 +135,12 @@ void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
 
         gl::glTexImage2D(faceTarget(type, f),
                          0,
-                         (gl::GLint)PixelFormatToGLInternalFormat(format),
+                         (gl::GLint)format.glInternalFormat(),
                          binarySurface ? binarySurface->width() : width,
                          binarySurface ? binarySurface->height() : height,
                          0,
-                         PixelFormatToGLFormat(format),
-                         PixelFormatToGLType(format),
+                         format.glFormat(),
+                         format.glType(),
                          binarySurface ? binarySurface->data() : nullptr);
     }
 }

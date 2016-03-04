@@ -30,6 +30,7 @@ public:
     unsigned int face() const;
     unsigned int width() const;
     unsigned int height() const;
+    PixelFormat format() const;
 
     SurfaceDownload download() const;
 

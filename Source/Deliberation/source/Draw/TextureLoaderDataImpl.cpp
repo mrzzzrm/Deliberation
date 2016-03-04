@@ -6,6 +6,8 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 
+#include <Deliberation/Core/Assert.h>
+
 #include <Deliberation/Draw/PixelFormat.h>
 
 namespace deliberation
@@ -34,7 +36,7 @@ TextureBinary TextureLoaderDataImpl::load()
         auto r = ilLoadL(IL_PNG, m_data, m_length);
         if (r == IL_FALSE)
         {
-            std::cout << "Failed to load texture: " << iluErrorString(ilGetError()) << std::endl;
+            Fail(std::string("Failed to load texture: ") + iluErrorString(ilGetError()));
             return TextureBinary();
         }
 
@@ -48,7 +50,7 @@ TextureBinary TextureLoaderDataImpl::load()
         ilDeleteImage(ilName);
     }
 
-    return TextureBinary(SurfaceBinary(std::move(pixels), width, height, PixelFormat_RGB_32F));
+    return TextureBinary(SurfaceBinary(std::move(pixels), width, height, PixelFormat_RGB_32_F));
 }
 
 }

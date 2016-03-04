@@ -74,6 +74,20 @@ bool FramebufferImpl::isBackbuffer() const
     return m_isBackbuffer;
 }
 
+Surface * FramebufferImpl::renderTarget(unsigned int index)
+{
+    Assert(!m_isBackbuffer, "");
+
+    if (index < m_renderTargets.size())
+    {
+        return m_renderTargets[index].engaged() ? &m_renderTargets[index].get() : nullptr;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
 const Surface * FramebufferImpl::renderTarget(unsigned int index) const
 {
     Assert(!m_isBackbuffer, "");
@@ -95,7 +109,12 @@ const std::vector<Optional<Surface>> & FramebufferImpl::renderTargets() const
     return m_renderTargets;
 }
 
-Surface * FramebufferImpl::depthTarget() const
+Surface * FramebufferImpl::depthTarget()
+{
+    return m_depthTarget.ptr();
+}
+
+const Surface * FramebufferImpl::depthTarget() const
 {
     return m_depthTarget.ptr();
 }

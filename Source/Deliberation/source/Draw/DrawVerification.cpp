@@ -122,10 +122,10 @@ bool DrawVerification::verifyFramebuffer() const
 
             if (rt)
             {
-                if (PixelFormatToGLFragmentOutputType(rt->texture().format()) != fragmentOutput.type())
+                if (rt->texture().format().glFragmentOutputType() != fragmentOutput.type())
                 {
                     m_reportStream << "Fragment output " << fragmentOutput.name() << "(" << fragmentOutput.type() << ") and RenderTarget (" <<
-                                      PixelFormatToString(rt->texture().format()) << " = " << PixelFormatToGLFragmentOutputType(rt->texture().format()) << ") are incompatible" << std::endl;
+                                      rt->texture().format().toString() << " = " << rt->texture().format().glFragmentOutputType() << ") are incompatible" << std::endl;
                     passed = false;
                 }
             }
@@ -154,9 +154,10 @@ bool DrawVerification::verifySamplers() const
         }
         else
         {
-            if (sampler.type != PixelFormatToGLSamplerType(sampler.texture->format))
+            if (sampler.valueType != sampler.texture->format.glSamplerValueType())
             {
-                m_reportStream << "Sampler '" << samplerInterface->name() << "' (" << sampler.type << ") isn't compatible with texture of format " << PixelFormatToString(sampler.texture->format) << "/" << PixelFormatToGLSamplerType(sampler.texture->format) << "" << std::endl;
+                m_reportStream << "Sampler '" << samplerInterface->name() << "' (" << sampler.type << ") isn't compatible with texture of format " <<
+                                                 sampler.texture->format.toString() << "/" << sampler.texture->format.glSamplerValueType() << "" << std::endl;
                 passed = false;
             }
         }

@@ -31,12 +31,12 @@ DrawImpl::DrawImpl(Context & context,
             This stuff could be cached per program
     */
 
-    // Create UniformHandleImpls
+    // Create UniformImpls
     {
         uniforms.reserve(this->program->interface.uniforms().size());
         for (auto & uniform : this->program->interface.uniforms())
         {
-            uniforms.emplace_back(uniform.type(), uniform.location());
+            uniforms.emplace_back(uniform.type(), uniform.location(), uniform.arraySize());
         }
     }
 
@@ -53,7 +53,7 @@ DrawImpl::DrawImpl(Context & context,
         {
             auto & sampler = this->program->interface.samplers()[s];
             Assert(glNames[s] != 0, "");
-            samplers.emplace_back(glNames[s], sampler.type(), sampler.location());
+            samplers.emplace_back(glNames[s], sampler.type(), sampler.valueType(), sampler.location());
         }
     }
 

@@ -39,6 +39,7 @@ public:
     const Surface & surface(unsigned int face = 0) const;
 
     TextureUpload createUpload(const TextureBinary & binary);
+    void scheduleUpload(const TextureBinary & binary);
 
 private:
     friend class Context;

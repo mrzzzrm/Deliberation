@@ -61,5 +61,18 @@ std::string StringRErased(const std::string & str, std::size_t num)
     return StringRErase(cpy, num);
 }
 
+std::string & StringRErase(std::string & str, const std::string & testStr)
+{
+    Assert(StringEndsWith(str, testStr), "'" + str + "' doesn't end with '" + testStr + "'");
+    StringRErase(str, testStr.size());
+    return str;
+}
+
+std::string StringRErased(const std::string & str, const std::string & testStr)
+{
+    auto cpy = str;
+    return StringRErase(cpy, testStr);
+}
+
 }
 

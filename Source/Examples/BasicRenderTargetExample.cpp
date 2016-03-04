@@ -42,9 +42,9 @@ deliberation::Draw createOffscreenDraw(deliberation::Context & context)
         {"Normal", &deliberation::UVSphere::Vertex::normal}
     });
 
-    auto depth = context.createTexture2D(300, 300, deliberation::PixelFormat_Depth_32F, false);
-    auto texture0 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_32F);
-    auto texture1 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_8U);
+    auto depth = context.createTexture2D(300, 300, deliberation::PixelFormat_Depth_32_F, false);
+    auto texture0 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_32_F);
+    auto texture1 = context.createTexture2D(300, 300, deliberation::PixelFormat_RGB_8_SN);
 
     auto draw = context.createDraw(program, gl::GL_TRIANGLES);
     draw.addVertices(layout, compiler.vertices());
@@ -133,6 +133,7 @@ int main(int argc, char * argv[])
     glbinding::Binding::initialize();
 
     deliberation::init();
+    deliberation::EnableGLErrorChecks();
     deliberation::setPrefixPath("/home/moritz/Coding/VoxelAdvent/Extern/Deliberation/");
 
     deliberation::Context context;

@@ -90,47 +90,49 @@ void DrawExecution::perform()
         for (auto & uniform : m_drawImpl.uniforms)
         {
             Assert(uniform.isAssigned, "Uniform " + m_drawImpl.program->interface.uniformByLocation(uniform.location)->name() + " not set");
+            Assert(uniform.count > 0, "");
 
+            auto count = uniform.count;
             auto * data = uniform.blob.ptr();
             auto location = uniform.location;
 
             switch (uniform.type)
             {
             case gl::GL_INT:
-                gl::glUniform1i(location, *((const gl::GLint*)data));
+                gl::glUniform1iv(location, count, ((const gl::GLint*)data));
                 break;
             case gl::GL_UNSIGNED_INT:
-                gl::glUniform1ui(location, *((const gl::GLuint*)data));
+                gl::glUniform1uiv(location, count, ((const gl::GLuint*)data));
                 break;
             case gl::GL_INT_VEC2:
             {
                 auto idata = (const gl::GLint*)data;
-                gl::glUniform2i(location, idata[0], idata[1]);
+                gl::glUniform2iv(location, count, idata);
                 break;
             }
             case gl::GL_FLOAT:
-                gl::glUniform1f(location, *((const gl::GLfloat*)data));
+                gl::glUniform1fv(location, count, ((const gl::GLfloat*)data));
                 break;
             case gl::GL_FLOAT_VEC2:
             {
                 auto fdata = (const gl::GLfloat*)data;
-                gl::glUniform2f(location, fdata[0], fdata[1]);
+                gl::glUniform2fv(location, count, fdata);
                 break;
             }
             case gl::GL_FLOAT_VEC3:
             {
                 auto fdata = (const gl::GLfloat*)data;
-                gl::glUniform3f(location, fdata[0], fdata[1], fdata[2]);
+                gl::glUniform3fv(location, count, fdata);
                 break;
             }
             case gl::GL_FLOAT_VEC4:
             {
                 auto fdata = (const gl::GLfloat*)data;
-                gl::glUniform4f(location, fdata[0], fdata[1], fdata[2], fdata[3]);
+                gl::glUniform4fv(location, count, fdata);
                 break;
             }
             case gl::GL_FLOAT_MAT4:
-                gl::glUniformMatrix4fv(location, 1, gl::GL_FALSE, (const gl::GLfloat*)data);
+                gl::glUniformMatrix4fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
                 break;
             default:
                 Fail("Not implemented for type " + glbinding::Meta::getString(uniform.type));

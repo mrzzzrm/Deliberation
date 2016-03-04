@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -21,6 +22,9 @@ public:
 
     template<typename T>
     void set(const T & value);
+
+    template<typename T>
+    void set(const std::vector<T> & vec);
 
 private:
     friend class Draw;

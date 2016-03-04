@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Draw/Framebuffer.h>
 
 namespace deliberation
@@ -25,14 +26,15 @@ public:
               const std::shared_ptr<FramebufferImpl> & framebuffer);
 
 public:
-    Context &   context;
-    glm::vec4   color;
-    float       depth;
-    gl::GLint   stencil;
-    bool        clearColor;
-    bool        clearDepth;
-    bool        clearStencil;
-    Framebuffer framebuffer;
+    Context &               context;
+    glm::vec4               color;
+    LinearMap<glm::vec4>    colorOverrides;
+    float                   depth;
+    gl::GLint               stencil;
+    bool                    clearColor;
+    bool                    clearDepth;
+    bool                    clearStencil;
+    Framebuffer             framebuffer;
 };
 
 }

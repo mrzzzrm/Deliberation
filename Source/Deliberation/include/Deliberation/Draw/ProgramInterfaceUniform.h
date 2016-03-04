@@ -16,12 +16,13 @@ public:
     ProgramInterfaceUniform(const std::string & name,
                             gl::GLenum type,
                             gl::GLint location,
-                            gl::GLuint size);
+                            gl::GLuint arraySize);
 
     const std::string & name() const;
     gl::GLenum type() const;
     gl::GLint location() const;
-    gl::GLuint size() const;
+    gl::GLuint arraySize() const;
+    bool isArray() const;
 
     std::string toString() const;
 
@@ -32,7 +33,7 @@ private:
     std::string m_name;
     gl::GLenum  m_type;
     gl::GLint   m_location;
-    gl::GLuint  m_size;
+    gl::GLuint  m_arraySize;
 };
 
 }

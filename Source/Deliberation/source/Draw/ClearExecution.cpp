@@ -70,30 +70,34 @@ void ClearExecution::clearBackbuffer()
 
 void ClearExecution::clearFramebuffer()
 {
-    if (m_clear.m_impl->clearColor)
+    auto & impl = *m_clear.m_impl;
+
+    if (impl.clearColor)
     {
-        for (auto b = 0u; b < m_clear.m_impl->framebuffer.renderTargets().size(); b++)
+        for (auto b = 0u; b < impl.framebuffer.renderTargets().size(); b++)
         {
-            if (m_clear.m_impl->framebuffer.renderTarget(b))
+            if (impl.framebuffer.renderTarget(b))
             {
-                gl::glClearBufferfv(gl::GL_COLOR, b, &m_clear.m_impl->color[0]);
+                auto color = impl.colorOverrides.contains(b) ? impl.colorOverrides[b] : impl.color;
+
+                gl::glClearBufferfv(gl::GL_COLOR, b, &color[0]);
             }
         }
     }
 
-    if (m_clear.m_impl->clearDepth)
+    if (impl.clearDepth)
     {
-        if (m_clear.m_impl->framebuffer.depthTarget())
+        if (impl.framebuffer.depthTarget())
         {
-            gl::glClearBufferfv(gl::GL_DEPTH, 0, &m_clear.m_impl->depth);
+            gl::glClearBufferfv(gl::GL_DEPTH, 0, &impl.depth);
         }
     }
 
-    if (m_clear.m_impl->clearStencil)
+    if (impl.clearStencil)
     {
-        if (m_clear.m_impl->framebuffer.depthTarget())
+        if (impl.framebuffer.depthTarget())
         {
-            gl::glClearBufferiv(gl::GL_STENCIL, 0, &m_clear.m_impl->stencil);
+            gl::glClearBufferiv(gl::GL_STENCIL, 0, &impl.stencil);
         }
     }
 }

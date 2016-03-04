@@ -37,6 +37,9 @@ public:
     BufferUpload createUpload(const Blob & data);
     BufferUpload createRawUpload(const Blob & data, unsigned int count);
 
+    void scheduleUpload(const Blob & data);
+    void scheduleRawUpload(const Blob & data, unsigned int count);
+
     std::string toString() const;
 
 private:

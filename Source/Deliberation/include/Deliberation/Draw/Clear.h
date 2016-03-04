@@ -30,6 +30,7 @@ public:
     void setFramebuffer(Framebuffer & framebuffer);
 
     void setColor(const glm::vec4 & color);
+    void setColor(unsigned int rt, const glm::vec4 & color);
     void disableColor();
 
     void setDepth(float depth);

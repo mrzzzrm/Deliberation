@@ -34,6 +34,13 @@ bool Framebuffer::isBackbuffer() const
     return m_impl->isBackbuffer();
 }
 
+Surface * Framebuffer::renderTarget(unsigned int index)
+{
+    Assert(m_impl.get(), "Framebuffer is hollow");
+
+    return m_impl->renderTarget(index);
+}
+
 const Surface * Framebuffer::renderTarget(unsigned int index) const
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
@@ -48,7 +55,14 @@ const std::vector<Optional<Surface>> & Framebuffer::renderTargets() const
     return m_impl->renderTargets();
 }
 
-Surface * Framebuffer::depthTarget() const
+Surface * Framebuffer::depthTarget()
+{
+    Assert(m_impl.get(), "Framebuffer is hollow");
+
+    return m_impl->depthTarget();
+}
+
+const Surface * Framebuffer::depthTarget() const
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
@@ -81,6 +95,18 @@ void Framebuffer::addDepthTarget(PixelFormat format)
     Assert(m_impl.get(), "Framebuffer is hollow");
 
     m_impl->addDepthTarget(format);
+}
+
+Clear & Framebuffer::clear()
+{
+    Assert(m_impl.get(), "Framebuffer is hollow");
+
+    if (!m_impl->m_clear.engaged())
+    {
+        m_impl->m_clear.reset(m_impl->m_context.createClear(*this));
+    }
+
+    return m_impl->m_clear.get();
 }
 
 Clear Framebuffer::createClear()

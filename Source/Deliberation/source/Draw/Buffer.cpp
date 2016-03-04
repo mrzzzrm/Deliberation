@@ -53,5 +53,19 @@ BufferUpload Buffer::createRawUpload(const Blob & data, unsigned int count)
     return BufferUpload(m_impl->context, *this, data, count);
 }
 
+void Buffer::scheduleUpload(const Blob & data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
+    BufferUpload(m_impl->context, *this, data).schedule();
+}
+
+void Buffer::scheduleRawUpload(const Blob & data, unsigned int count)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
+    BufferUpload(m_impl->context, *this, data, count).schedule();
+}
+
 }
 

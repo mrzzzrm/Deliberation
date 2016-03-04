@@ -16,12 +16,13 @@ class TextureImpl;
 class SamplerImpl
 {
 public:
-    SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLuint location);
+    SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location);
 
     gl::GLenum textureType() const;
 
     gl::GLuint          glName;
     gl::GLenum          type;
+    gl::GLenum          valueType;
     gl::GLuint          location;
     const TextureImpl * texture;
     gl::GLenum          wrap[3];

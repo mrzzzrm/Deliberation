@@ -18,7 +18,7 @@ SurfaceDownloadImpl::SurfaceDownloadImpl(const Surface & surface):
     surface(surface),
     width(0),
     height(0),
-    format(PixelFormat_None),
+    format(surface.format()),
     glName(0),
     finished(false),
     started(false),
@@ -59,7 +59,7 @@ void SurfaceDownloadImpl::start()
     auto & context = surface.m_texture->context;
 
     auto & texture = *surface.m_texture;
-    size = surface.width() * surface.height() * PixelFormatBytesPerPixel(texture.format);
+    size = surface.width() * surface.height() * format.bytesPerPixel();
 
     gl::glGenBuffers(1, &glName);
     Assert(glName != 0, "");
@@ -70,8 +70,8 @@ void SurfaceDownloadImpl::start()
     texture.bind();
     gl::glGetTexImage(texture.type,
                       0,
-                      PixelFormatToGLFormat(texture.format),
-                      PixelFormatToGLType(texture.format),
+                      gl::GL_RGB,
+                      gl::GL_BYTE,
                       nullptr);
 
     sync = gl::glFenceSync(gl::GL_SYNC_GPU_COMMANDS_COMPLETE, (gl::UnusedMask)0);
@@ -109,8 +109,8 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
 
     auto & context = surface.m_texture->context;
     auto & texture = *surface.m_texture;
-    auto numValues = surface.width() * surface.height() * PixelFormatChannelsPerPixel(texture.format);
-    auto type = PixelFormatToGLType(texture.format);
+    auto numValues = surface.width() * surface.height() * texture.format.componentsPerPixel();
+    auto type = format.glType();
 
     context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
 

@@ -148,10 +148,14 @@ set(sources
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
 
+    ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
+    ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
+    ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
+    ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/RenderNode.cpp
     ${source_path}/Scene/RenderPipeline.cpp
@@ -162,6 +166,8 @@ set(api_includes
     ${include_path}/Deliberation.h
     ${include_path}/Deliberation_API.h
 
+    ${include_path}/Core/Detail/VectorBlobImpl.h
+    ${include_path}/Core/Detail/VectorBlobImpl.inl
     ${include_path}/Core/Detail/IBlobImpl.h
     ${include_path}/Core/Assert.h
     ${include_path}/Core/Blob.h
@@ -198,6 +204,8 @@ set(api_includes
     ${include_path}/Core/Math/Morton.inl
     ${include_path}/Core/Math/Plane.h
     ${include_path}/Core/Math/PrimitiveIntersection.h
+    ${include_path}/Core/Math/Random.h
+    ${include_path}/Core/Math/Random.inl
     ${include_path}/Core/Math/Ray3D.h
     ${include_path}/Core/Math/Rect3D.h
     ${include_path}/Core/Math/Sphere.h
@@ -242,6 +250,7 @@ set(api_includes
     ${include_path}/Draw/StencilState.h
     ${include_path}/Draw/Surface.h
     ${include_path}/Draw/SurfaceBinary.h
+    ${include_path}/Draw/SurfaceBinary.inl
     ${include_path}/Draw/SurfaceDownload.h
     ${include_path}/Draw/Texture.h
     ${include_path}/Draw/TextureBinary.h
@@ -254,6 +263,9 @@ set(api_includes
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
 
+    ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
+    ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
+    ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.h
     ${include_path}/Scene/Blit.h
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
@@ -262,6 +274,7 @@ set(api_includes
     ${include_path}/Scene/Mesh.inl
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/MeshCompiler.inl
+    ${include_path}/Scene/PostprocessingEffect.h
     ${include_path}/Scene/UVSphere.h
     ${include_path}/Scene/RenderNode.h
     ${include_path}/Scene/RenderPipeline.h

@@ -35,6 +35,14 @@ set(libs
     ${GLBINDING_LIBRARY}
 )
 
+# AmbientOcclusionExample
+add_executable(AmbientOcclusionExample AmbientOcclusionExample.cpp)
+target_link_libraries(AmbientOcclusionExample ${libs})
+
+# PixelFormatExample
+add_executable(PixelFormatExample PixelFormatExample.cpp)
+target_link_libraries(PixelFormatExample ${libs})
+
 # BasicCoreExample
 add_executable(BasicCoreExample BasicCoreExample.cpp)
 target_link_libraries(BasicCoreExample ${libs})
@@ -58,10 +66,6 @@ target_link_libraries(BasicFontExample ${libs})
 # BasicRenderTargetExample
 add_executable(BasicRenderTargetExample BasicRenderTargetExample.cpp)
 target_link_libraries(BasicRenderTargetExample ${libs})
-
-# BasicRenderPipelineExample
-add_executable(BasicRenderPipelineExample BasicRenderPipelineExample.cpp)
-target_link_libraries(BasicRenderPipelineExample ${libs})
 
 # BasicSceneExample
 add_executable(BasicSceneExample BasicSceneExample.cpp)

@@ -37,10 +37,13 @@ public:
 
     bool isBackbuffer() const;
 
+    Surface * renderTarget(unsigned int index);
     const Surface * renderTarget(unsigned int index) const;
+
     const std::vector<Optional<Surface>> & renderTargets() const;
 
-    Surface * depthTarget() const;
+    Surface * depthTarget();
+    const Surface * depthTarget() const;
 
     void setRenderTarget(unsigned int index, Surface * surface);
 
@@ -48,6 +51,8 @@ public:
 
     void addRenderTarget(PixelFormat format, int index = -1);
     void addDepthTarget(PixelFormat format);
+
+    Clear & clear();
 
     Clear createClear();
 

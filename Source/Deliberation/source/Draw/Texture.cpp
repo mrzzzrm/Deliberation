@@ -61,6 +61,11 @@ TextureUpload Texture::createUpload(const TextureBinary & binary)
     return TextureUpload(m_impl->context, *this, binary);
 }
 
+void Texture::scheduleUpload(const TextureBinary & binary)
+{
+    createUpload(binary).schedule();
+}
+
 Texture::Texture(const std::shared_ptr<detail::TextureImpl> & impl):
     m_impl(impl)
 {

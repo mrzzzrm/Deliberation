@@ -20,6 +20,7 @@ public:
 
     const std::string & name() const;
     gl::GLenum type() const;
+    gl::GLenum valueType() const;
     gl::GLint location() const;
     gl::GLuint size() const;
 
@@ -31,6 +32,7 @@ public:
 private:
     std::string m_name;
     gl::GLenum m_type;
+    gl::GLenum m_valueType;
     gl::GLint m_location;
     gl::GLuint m_size;
 };

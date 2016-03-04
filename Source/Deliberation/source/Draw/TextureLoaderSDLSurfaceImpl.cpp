@@ -52,11 +52,11 @@ TextureBinary TextureLoaderSDLSurfaceImpl::load()
     {
     case SDL_PIXELFORMAT_RGB888:
         numChannels = 3;
-        format = PixelFormat_RGB_32F;
+        format = PixelFormat_RGB_32_F;
         break;
     case SDL_PIXELFORMAT_RGBA8888:
         numChannels = 4;
-        format = PixelFormat_RGBA_32F;
+        format = PixelFormat_RGBA_32_F;
         break;
     default:
         Fail("Yet unsupported SDL Format");

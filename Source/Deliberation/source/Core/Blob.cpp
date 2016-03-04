@@ -8,6 +8,12 @@ Blob::Blob():
 {
 }
 
+Blob::Blob(std::size_t size):
+    m_impl(std::unique_ptr<detail::IBlobImpl>(new detail::VectorBlobImpl<char>(size)))
+{
+
+}
+
 Blob::Blob(const Blob & blob):
     m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
 {

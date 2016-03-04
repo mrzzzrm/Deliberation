@@ -215,6 +215,12 @@ void Draw::setFramebuffer(const Framebuffer & framebuffer)
     m_impl->framebuffer = framebuffer;
 }
 
+void Draw::setRenderTarget(unsigned int index, Surface * surface)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    m_impl->framebuffer.setRenderTarget(index, surface);
+}
+
 void Draw::setRenderTarget(const std::string & name, Surface * surface)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
