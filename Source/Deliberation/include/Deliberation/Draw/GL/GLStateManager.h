@@ -50,6 +50,10 @@ public:
     void bindBuffer(gl::GLenum target, gl::GLuint buffer);
     void deleteBuffer(gl::GLuint buffer);
     void setViewport(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
+    void genQueries(gl::GLsizei n, gl::GLuint * ids);
+    void deleteQueries(gl::GLsizei n, gl::GLuint * ids);
+    void beginQuery(gl::GLenum target, gl::GLuint id);
+    void endQuery(gl::GLenum target);
 
     /*
         Framebuffer caching
@@ -82,6 +86,20 @@ private:
 
         FramebufferTargetCount
     };
+
+    enum QueryTarget
+    {
+        QueryTimeElapsedTarget = 0,
+        QuerySamplesPassedTarget,
+        QueryAnySamplesPassedTarget,
+        QueryPrimitivesGeneratedTarget,
+        QueryTransformFeedbackPrimitivesTarget,
+
+        QueryTargetCount
+    };
+
+private:
+    QueryTarget glEnumToQueryTarget(gl::GLenum e) const;
 
 private:
     /*
@@ -120,6 +138,8 @@ private:
  	gl::GLint                           m_glViewportY;
  	gl::GLsizei                         m_glViewportWidth;
  	gl::GLsizei                         m_glViewportHeight;
+ 	std::array<gl::GLuint,
+               QueryTargetCount>        m_activeQueries;
 
     /*
 

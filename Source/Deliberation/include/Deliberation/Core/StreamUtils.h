@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <Deliberation/Core/Math/AABB.h>
 #include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/Math/Sphere.h>
 
@@ -52,6 +53,9 @@ StreamType & operator<<(StreamType && os, const Sphere & sphere);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const Ray3D & sphere);
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const AABB & aabb);
 
 
 template<typename T>

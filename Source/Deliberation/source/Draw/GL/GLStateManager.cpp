@@ -1,5 +1,7 @@
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
+#include <iostream>
+
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/boolean.h>
 #include <glbinding/gl/functions.h>
@@ -477,6 +479,72 @@ std::shared_ptr<GLFramebuffer> GLStateManager::framebuffer(const GLFramebufferDe
     }
 
     return result;
+}
+
+void GLStateManager::genQueries(gl::GLsizei n, gl::GLuint * ids)
+{
+    glGenQueries(n, ids);
+}
+
+void GLStateManager::deleteQueries(gl::GLsizei n, gl::GLuint * ids)
+{
+    for (auto i = 0; i < n; i++)
+    {
+        auto name = ids[n];
+
+        for (auto & target : m_activeQueries)
+        {
+            if (name == target)
+            {
+                std::cout << "GLStateManager: Warning! Deleting active Query" << std::endl;
+                target = 0;
+            }
+        }
+    }
+
+    glDeleteQueries(n, ids);
+}
+
+void GLStateManager::beginQuery(gl::GLenum target, gl::GLuint id)
+{
+    auto t = glEnumToQueryTarget(target);
+
+    if (m_activeQueries[t] != 0)
+    {
+        std::cout << "GLStateManager: Warning! Overwriting active query" << std::endl;
+    }
+
+    glBeginQuery(target, id);
+    m_activeQueries[t] = id;
+}
+
+void GLStateManager::endQuery(gl::GLenum target)
+{
+    auto t = glEnumToQueryTarget(target);
+
+    if (m_activeQueries[t] == 0)
+    {
+        std::cout << "GLStateManager: Warning! No query is active on target" << std::endl;
+        return;
+    }
+
+    glEndQuery(target);
+
+    m_activeQueries[t] = 0;
+}
+
+GLStateManager::QueryTarget GLStateManager::glEnumToQueryTarget(gl::GLenum e) const
+{
+    switch (e)
+    {
+    case GL_TIME_ELAPSED: return QueryTimeElapsedTarget;
+    case GL_SAMPLES_PASSED: return QueryTimeElapsedTarget;
+    case GL_ANY_SAMPLES_PASSED: return QueryTimeElapsedTarget;
+    case GL_PRIMITIVES_GENERATED: return QueryTimeElapsedTarget;
+    case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: return QueryTimeElapsedTarget;
+    default:
+        Fail("Not a QueryTarget");
+    }
 }
 
 }

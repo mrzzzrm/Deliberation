@@ -39,6 +39,10 @@ set(libs
 add_executable(AmbientOcclusionExample AmbientOcclusionExample.cpp)
 target_link_libraries(AmbientOcclusionExample ${libs})
 
+# ECSExample
+add_executable(ECSExample ECSExample.cpp)
+target_link_libraries(ECSExample ${libs})
+
 # PixelFormatExample
 add_executable(PixelFormatExample PixelFormatExample.cpp)
 target_link_libraries(PixelFormatExample ${libs})

@@ -115,6 +115,13 @@ StreamType & operator<<(StreamType && os, const glm::mat4 & v)
 }
 
 template<typename StreamType>
+StreamType & operator<<(StreamType && os, const AABB & aabb)
+{
+    os << "(" << aabb.llf() << " -> " << aabb.urb() << ")";
+    return os;
+}
+
+template<typename StreamType>
 StreamType & operator<<(StreamType && os, const Ray3D & r)
 {
     os << "(" << r.origin() << " -> " << r.direction() << ")";

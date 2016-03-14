@@ -70,8 +70,8 @@ void SurfaceDownloadImpl::start()
     texture.bind();
     gl::glGetTexImage(texture.type,
                       0,
-                      gl::GL_RGB,
-                      gl::GL_BYTE,
+                      format.glFormat(),
+                      format.glType(),
                       nullptr);
 
     sync = gl::glFenceSync(gl::GL_SYNC_GPU_COMMANDS_COMPLETE, (gl::UnusedMask)0);
@@ -116,34 +116,27 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
 
     switch (type)
     {
+        case gl::GL_BYTE:
+            fillSurfaceBinary<gl::GLbyte>(numValues);
+            break;
         case gl::GL_UNSIGNED_BYTE:
-        {
-            std::vector<gl::GLubyte> data(numValues);
-            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
-            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            fillSurfaceBinary<gl::GLubyte>(numValues);
             break;
-        }
+        case gl::GL_SHORT:
+            fillSurfaceBinary<gl::GLshort>(numValues);
+            break;
         case gl::GL_UNSIGNED_SHORT:
-        {
-            std::vector<gl::GLushort> data(numValues);
-            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
-            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            fillSurfaceBinary<gl::GLushort>(numValues);
             break;
-        }
+        case gl::GL_INT:
+            fillSurfaceBinary<gl::GLint>(numValues);
+            break;
         case gl::GL_UNSIGNED_INT:
-        {
-            std::vector<gl::GLuint> data(numValues);
-            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
-            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            fillSurfaceBinary<gl::GLuint>(numValues);
             break;
-        }
         case gl::GL_FLOAT:
-        {
-            std::vector<gl::GLfloat> data(numValues);
-            gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
-            surfaceBinary.reset(std::move(data), surface.width(), surface.height(), texture.format);
+            fillSurfaceBinary<gl::GLfloat>(numValues);
             break;
-        }
         default:
             Fail("Unknown format");
     }
@@ -151,6 +144,14 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
     context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
 
     return surfaceBinary.get();
+}
+
+template<typename T>
+void SurfaceDownloadImpl::fillSurfaceBinary(std::size_t numValues) const
+{
+    std::vector<T> data(numValues);
+    gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
+    surfaceBinary.reset(std::move(data), surface.width(), surface.height(), surface.m_texture->format);
 }
 
 }

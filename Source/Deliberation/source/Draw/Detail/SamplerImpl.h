@@ -5,8 +5,12 @@
 
 #include <Deliberation/Core/Optional.h>
 
+#include "../GL/GLSamplerState.h"
+
 namespace deliberation
 {
+
+class GLStateManager;
 
 namespace detail
 {
@@ -16,16 +20,17 @@ class TextureImpl;
 class SamplerImpl
 {
 public:
-    SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location);
+    SamplerImpl(gl::GLenum uniformType,
+                gl::GLenum valueType,
+                gl::GLuint location);
 
     gl::GLenum textureType() const;
 
-    gl::GLuint          glName;
+    GLSamplerState      glSampler;
     gl::GLenum          type;
     gl::GLenum          valueType;
     gl::GLuint          location;
     const TextureImpl * texture;
-    gl::GLenum          wrap[3];
 };
 
 }

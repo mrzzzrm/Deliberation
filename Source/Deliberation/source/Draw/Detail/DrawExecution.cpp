@@ -66,12 +66,9 @@ void DrawExecution::perform()
         gl::glTexParameteri(texture->type, gl::GL_TEXTURE_BASE_LEVEL, texture->baseLevel);
         gl::glTexParameteri(texture->type, gl::GL_TEXTURE_MAX_LEVEL, texture->maxLevel);
 
-        gl::glBindSampler(b, sampler.glName);
-        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_WRAP_S, (gl::GLint)sampler.wrap[0]);
-        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_WRAP_T, (gl::GLint)sampler.wrap[1]);
-        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_WRAP_R, (gl::GLint)sampler.wrap[2]);
-        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)texture->minFilter);
-        gl::glSamplerParameteri(sampler.glName, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)texture->maxFilter);
+        gl::glBindSampler(b, sampler.glSampler.name());
+        gl::glSamplerParameteri(sampler.glSampler.name(), gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)texture->minFilter);
+        gl::glSamplerParameteri(sampler.glSampler.name(), gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)texture->maxFilter);
 
         gl::glUniform1i(sampler.location, b);
     }

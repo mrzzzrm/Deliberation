@@ -72,6 +72,8 @@ set(sources
     ${source_path}/Draw/Detail/FramebufferImpl.h
     ${source_path}/Draw/Detail/ProgramImpl.cpp
     ${source_path}/Draw/Detail/ProgramImpl.h
+    ${source_path}/Draw/Detail/QueryImpl.cpp
+    ${source_path}/Draw/Detail/QueryImpl.h
     ${source_path}/Draw/Detail/SamplerImpl.cpp
     ${source_path}/Draw/Detail/SamplerImpl.h
     ${source_path}/Draw/Detail/SurfaceDownloadImpl.cpp
@@ -83,6 +85,8 @@ set(sources
     ${source_path}/Draw/GL/GLFramebufferDesc.cpp
     ${source_path}/Draw/GL/GLFramebuffer.cpp
     ${source_path}/Draw/GL/GLFramebuffer.h
+    ${source_path}/Draw/GL/GLSamplerState.cpp
+    ${source_path}/Draw/GL/GLSamplerState.h
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
     ${source_path}/Draw/GL/GLUtils.cpp
@@ -121,6 +125,7 @@ set(sources
     ${source_path}/Draw/ProgramInterfaceSampler.cpp
     ${source_path}/Draw/ProgramInterfaceUniform.cpp
     ${source_path}/Draw/ProgramInterfaceVertexAttribute.cpp
+    ${source_path}/Draw/Query.cpp
     ${source_path}/Draw/RasterizerState.cpp
     ${source_path}/Draw/Sampler.cpp
     ${source_path}/Draw/StencilState.cpp
@@ -143,10 +148,16 @@ set(sources
     ${source_path}/Draw/TextureUploadExecution.cpp
     ${source_path}/Draw/TextureUploadExecution.h
     ${source_path}/Draw/Uniform.cpp
+    
+    ${source_path}/ECS/ComponentBase.cpp
+    ${source_path}/ECS/Entity.cpp
+    ${source_path}/ECS/World.cpp
 
     ${source_path}/Font/Font.cpp
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
+    
+    ${source_path}/GLFW/GLFWInputAdapter.cpp
 
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
@@ -155,6 +166,7 @@ set(sources
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
+    ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/RenderNode.cpp
@@ -196,6 +208,8 @@ set(api_includes
     ${include_path}/Core/StringUtils.h
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl
+    ${include_path}/Core/TypeID.h
+    ${include_path}/Core/TypeID.inl
     ${include_path}/Core/Viewport.h
 
     ${include_path}/Core/Math/AABB.h
@@ -210,6 +224,7 @@ set(api_includes
     ${include_path}/Core/Math/Rect3D.h
     ${include_path}/Core/Math/Sphere.h
     ${include_path}/Core/Math/Transform3D.h
+    ${include_path}/Core/Math/Vec.h
 
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
@@ -245,6 +260,7 @@ set(api_includes
     ${include_path}/Draw/ProgramInterfaceUniform.h
     ${include_path}/Draw/ProgramInterfaceSampler.h
     ${include_path}/Draw/ProgramInterfaceVertexAttribute.h
+    ${include_path}/Draw/Query.h
     ${include_path}/Draw/RasterizerState.h
     ${include_path}/Draw/Sampler.h
     ${include_path}/Draw/StencilState.h
@@ -258,10 +274,24 @@ set(api_includes
     ${include_path}/Draw/TextureUpload.h
     ${include_path}/Draw/Uniform.h
     ${include_path}/Draw/Uniform.inl
+    
+    ${include_path}/ECS/ComponentFilter.h  
+    ${include_path}/ECS/Component.h  
+    ${include_path}/ECS/ComponentBase.h  
+    ${include_path}/ECS/Entity.h  
+    ${include_path}/ECS/Entity.inl  
+    ${include_path}/ECS/EventManager.h  
+    ${include_path}/ECS/System.h  
+    ${include_path}/ECS/World.h
+    
+    ${include_path}/ECS/Detail/EntityData.h
+    ${include_path}/ECS/Detail/EntityData.inl
 
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
+    
+    ${include_path}/GLFW/GLFWInputAdapter.h
 
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
@@ -270,6 +300,7 @@ set(api_includes
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
+    ${include_path}/Scene/DebugGroundPlaneRenderer.h
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/Mesh.inl
     ${include_path}/Scene/MeshCompiler.h

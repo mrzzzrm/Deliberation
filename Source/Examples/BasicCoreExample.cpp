@@ -6,6 +6,7 @@
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/LinearOctree.h>
 #include <Deliberation/Core/RingBuffer.h>
+#include <Deliberation/Core/TypeID.h>
 
 using namespace deliberation;
 
@@ -109,7 +110,27 @@ void RingBufferExample()
     std::cout << buf.toString() << std::endl;
     buf.push(9);
     std::cout << buf.toString() << std::endl;
+}
 
+void TypeIDExample()
+{
+    struct A {};
+    struct B {};
+    class C {};
+    class D {};
+
+    std::cout << "----------- TypeIDExample ----------" << std::endl;
+
+    std::cout << "TypeID<A>: " << TypeID::value<A>() << std::endl;
+    std::cout << "TypeID<B>: " << TypeID::value<B>() << std::endl;
+    std::cout << "TypeID<C>: " << TypeID::value<C>() << std::endl;
+    std::cout << "TypeID<D>: " << TypeID::value<D>() << std::endl;
+    std::cout << "TypeID<uint32_t>: " << TypeID::value<uint32_t>() << std::endl;
+
+    std::cout << "TypeID<A, A>: " << TypeID::value<A, A>() << std::endl;
+    std::cout << "TypeID<A, B>: " << TypeID::value<A, B>() << std::endl;
+    std::cout << "TypeID<B, A>: " << TypeID::value<B, A>() << std::endl;
+    std::cout << "TypeID<B, B>: " << TypeID::value<B, B>() << std::endl;
 }
 
 int main(int argc, char * argv[])
@@ -117,6 +138,7 @@ int main(int argc, char * argv[])
     LinearMapExample();
     LinearOctreeExample();
     RingBufferExample();
+    TypeIDExample();
 
     return 0;
 }

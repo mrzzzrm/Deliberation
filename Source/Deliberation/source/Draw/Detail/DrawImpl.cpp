@@ -44,16 +44,11 @@ DrawImpl::DrawImpl(Context & context,
     {
         auto numSamplers = this->program->interface.samplers().size();
 
-        std::vector<gl::GLuint> glNames;
-        glNames.resize(numSamplers, 0u);
-        gl::glGenSamplers(numSamplers, glNames.data());
-
         samplers.reserve(numSamplers);
         for (auto s = 0u; s < this->program->interface.samplers().size(); s++)
         {
             auto & sampler = this->program->interface.samplers()[s];
-            Assert(glNames[s] != 0, "");
-            samplers.emplace_back(glNames[s], sampler.type(), sampler.valueType(), sampler.location());
+            samplers.emplace_back(sampler.type(), sampler.valueType(), sampler.location());
         }
     }
 

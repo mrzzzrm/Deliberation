@@ -22,6 +22,9 @@ public:
 
     const SurfaceBinary & result() const;
 
+    template<typename T>
+    void fillSurfaceBinary(std::size_t numValues) const;
+
     Surface                         surface;
     unsigned int                    width;
     unsigned int                    height;

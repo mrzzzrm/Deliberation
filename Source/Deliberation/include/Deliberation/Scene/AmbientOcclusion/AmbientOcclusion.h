@@ -21,6 +21,7 @@ public:
     AmbientOcclusion();
     AmbientOcclusion(const Surface & normalDepth,
                      const Surface & color,
+                     const Surface & positionVS,
                      const Camera3D & camera);
 
     Surface & rawOcclusion();
@@ -32,6 +33,8 @@ public:
     Surface & output();
     const Surface & output() const;
 
+    void setSampleRadius(float radius);
+
     void schedule();
 
 private:
@@ -39,6 +42,7 @@ private:
 
     Surface                 m_normalDepth;
     Surface                 m_color;
+    Surface                 m_positionVS;
     const Camera3D *        m_camera;
     Texture                 m_output;
     PostprocessingEffect    m_effect;

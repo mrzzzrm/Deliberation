@@ -10,7 +10,7 @@ namespace deliberation
 {
 
 template<typename T>
-MeshCompiler<T>::MeshCompiler(const Mesh<T> & mesh, Primitive primitive):
+MeshCompiler<T>::MeshCompiler(const Mesh<T> & mesh, PrimitiveType primitive):
     m_mesh(mesh),
     m_primitive(primitive)
 {

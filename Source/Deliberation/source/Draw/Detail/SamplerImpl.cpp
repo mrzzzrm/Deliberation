@@ -10,16 +10,15 @@ namespace deliberation
 namespace detail
 {
 
-SamplerImpl::SamplerImpl(gl::GLuint glName, gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location):
-    glName(glName),
+SamplerImpl::SamplerImpl(gl::GLenum uniformType,
+                         gl::GLenum valueType,
+                         gl::GLuint location):
+    glSampler(),
     type(uniformType),
     valueType(valueType),
     location(location),
     texture(nullptr)
 {
-    wrap[0] = gl::GL_REPEAT;
-    wrap[1] = gl::GL_REPEAT;
-    wrap[2] = gl::GL_REPEAT;
 }
 
 gl::GLenum SamplerImpl::textureType() const

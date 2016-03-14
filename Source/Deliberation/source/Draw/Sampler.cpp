@@ -26,27 +26,27 @@ void Sampler::setTexture(const Texture & texture)
 void Sampler::setWrap(gl::GLenum wrap)
 {
     Assert(m_impl, "Hollow Sampler can't be set");
-    m_impl->wrap[0] = wrap;
-    m_impl->wrap[1] = wrap;
-    m_impl->wrap[2] = wrap;
+    m_impl->glSampler.setWrap(0, wrap);
+    m_impl->glSampler.setWrap(1, wrap);
+    m_impl->glSampler.setWrap(2, wrap);
 }
 
 void Sampler::setWrapS(gl::GLenum wrap)
 {
     Assert(m_impl, "Hollow Sampler can't be set");
-    m_impl->wrap[0] = wrap;
+    m_impl->glSampler.setWrap(0, wrap);
 }
 
 void Sampler::setWrapT(gl::GLenum wrap)
 {
     Assert(m_impl, "Hollow Sampler can't be set");
-    m_impl->wrap[1] = wrap;
+    m_impl->glSampler.setWrap(1, wrap);
 }
 
 void Sampler::setWrapR(gl::GLenum wrap)
 {
     Assert(m_impl, "Hollow Sampler can't be set");
-    m_impl->wrap[2] = wrap;
+    m_impl->glSampler.setWrap(2, wrap);
 }
 
 Sampler::Sampler(detail::SamplerImpl & impl):

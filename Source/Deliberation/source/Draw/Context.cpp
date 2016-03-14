@@ -16,6 +16,7 @@
 #include "Detail/DrawImpl.h"
 #include "Detail/FramebufferImpl.h"
 #include "Detail/ProgramImpl.h"
+#include "Detail/QueryImpl.h"
 #include "Detail/TextureImpl.h"
 #include "BufferUploadExecution.h"
 #include "ClearExecution.h"
@@ -142,6 +143,11 @@ Texture Context::createTexture2D(unsigned int width,
 Framebuffer Context::createFramebuffer(unsigned int width, unsigned int height)
 {
     return Framebuffer(detail::FramebufferImpl::custom(*this, width, height));
+}
+
+Query Context::createQuery(QueryType type)
+{
+    return Query(std::make_shared<detail::QueryImpl>(*this, type));
 }
 
 void Context::allocateBuffer(detail::BufferImpl & buffer)

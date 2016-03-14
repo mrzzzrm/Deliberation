@@ -7,7 +7,7 @@ uniform int			KernelSize;
 
 in vec2 f_UV;
 
-out vec3 o_BlurredOcclusion;
+out float o_BlurredOcclusion;
 
 #define COMP_DEPTH 0.01
 #define COMP_NORMAL 0.5
@@ -18,7 +18,7 @@ void main()
 	vec3 normal = normalDepth.xyz;
 	float depth = normalDepth.w;
 
-    vec3 blurredOcclusion = vec3(0.0);
+    float blurredOcclusion = 0.0f;
     int count = 0;
         
     vec2 TexelOffset = -(KernelSize / 2.0f) * TexelSize;
@@ -35,7 +35,7 @@ void main()
 
 			float depthTest = abs(sampleDepth - depth) < COMP_DEPTH ? 1.0 : 0.0;
 			float normalTest = dot(normal, sampleNormal.xyz) > COMP_NORMAL ? 1.0 : 0.0;
-			blurredOcclusion += texture(Occlusion, sampleUV).xyz * depthTest * normalTest;
+			blurredOcclusion += texture(Occlusion, sampleUV).x * depthTest * normalTest;
 			count += int(depthTest * normalTest);
 		}
     }

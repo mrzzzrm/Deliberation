@@ -14,7 +14,7 @@ namespace detail
 
 class Texture;
 
-class DELIBERATION_API Sampler
+class DELIBERATION_API Sampler final
 {
 public:
     Sampler();

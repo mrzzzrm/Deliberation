@@ -1,11 +1,15 @@
 #include <Deliberation/Scene/AmbientOcclusion/AmbientOcclusion.h>
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/Random.h>
+#include <Deliberation/Core/Math/Vec.h>
 
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/SurfaceBinary.h>
@@ -23,9 +27,11 @@ AmbientOcclusion::AmbientOcclusion():
 
 AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
                                    const Surface & color,
+                                   const Surface & positionVS,
                                    const Camera3D & camera):
     m_initialized(true),
     m_normalDepth(normalDepth),
+    m_positionVS(positionVS),
     m_color(color),
     m_camera(&camera)
 {
@@ -33,32 +39,40 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
 
     m_output = context.createTexture2D(m_normalDepth.width(),
                                        m_normalDepth.height(),
-                                       PixelFormat_R_8_U);
+                                       PixelFormat_RGB_32_F);
     m_effect = PostprocessingEffect(context,
                                     {deliberation::dataPath("Data/Shaders/AmbientOcclusion.vert"),
                                      deliberation::dataPath("Data/Shaders/AmbientOcclusion.frag")},
                                     "AmbientOcclusion");
     m_effect.draw().setRenderTarget(0, &m_output.surface());
+
     m_effect.draw().sampler("NormalDepth").setTexture(m_normalDepth.texture());
+    m_effect.draw().sampler("NormalDepth").setWrap(gl::GL_CLAMP_TO_EDGE);
+
+    m_effect.draw().sampler("PositionVS").setTexture(m_positionVS.texture());
+    m_effect.draw().sampler("PositionVS").setWrap(gl::GL_CLAMP_TO_EDGE);
+
     m_projection = m_effect.draw().uniform("Projection");
 
     m_sampleRadius = m_effect.draw().uniform("SampleRadius");
-    m_sampleRadius.set(0.25f);
+    m_sampleRadius.set(0.1f);
 
-    SurfaceBinary surface(4, 4, PixelFormat_RGB_8_I);
+    SurfaceBinary surface(4, 4, PixelFormat_RG_8_SN);
     for (auto y = 0; y < surface.height(); y++)
     {
         for (auto x = 0; x < surface.width(); x++)
         {
-            glm::vec3 pixel = glm::vec3(
-                RandomFloat(-1.0f, 1.0f) * 127,
-                RandomFloat(-1.0f, 1.0f) * 127,
-                0.0f * 127
+            glm::vec2 pixel = glm::vec2(
+                RandomFloat(-1.0f, 1.0f),
+                RandomFloat(-1.0f, 1.0f)
             );
 
             pixel = glm::normalize(pixel);
 
-            surface.setPixel(x, y, pixel);
+            int8_t r = std::floor(pixel.r * 128.0f);
+            int8_t g = std::floor(pixel.g * 128.0f);
+
+            surface.setPixel(x, y, ByteVec2(r, g));
         }
     }
 
@@ -77,7 +91,7 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
         sample = glm::vec3(
             RandomFloat(-1.0f, 1.0f),
             RandomFloat(-1.0f, 1.0f),
-            RandomFloat( 0.0f, 1.0f)
+            RandomFloat(0.0f, 1.0f)
         );
         sample = glm::normalize(sample);
 
@@ -85,6 +99,8 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
         scale = glm::mix(0.1f, 1.0f, scale * scale);
 
         sample *= scale;
+
+        std::cout << "Sample " << s << ": " << sample << std::endl;
     }
 
     m_effect.draw().uniform("Kernel").set(kernel);
@@ -121,7 +137,7 @@ Surface & AmbientOcclusion::output()
 {
     Assert(m_initialized, "");
     return m_mix.output();
-   // return m_output.surface();
+    //return m_output.surface();
 }
 
 const Surface & AmbientOcclusion::output() const
@@ -129,6 +145,11 @@ const Surface & AmbientOcclusion::output() const
     Assert(m_initialized, "");
     return m_mix.output();
    // return m_output.surface();
+}
+
+void AmbientOcclusion::setSampleRadius(float radius)
+{
+    m_sampleRadius.set(radius);
 }
 
 void AmbientOcclusion::schedule()

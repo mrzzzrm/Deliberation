@@ -62,7 +62,7 @@ void RasterizerState::setLineWidth(gl::GLfloat lineWidth)
 
 std::string RasterizerState::toString() const
 {
-    return "PointSize: " + std::to_string(m_pointSize) + "; LineWidth: " + std::to_string(m_lineWidth) + "; Primitive: " + glbinding::Meta::getString(m_primitive);
+    return "PointSize: " + std::to_string(m_pointSize) + "; LineWidth: " + std::to_string(m_lineWidth) + "; PrimitiveType: " + glbinding::Meta::getString(m_primitive);
 }
 
 }

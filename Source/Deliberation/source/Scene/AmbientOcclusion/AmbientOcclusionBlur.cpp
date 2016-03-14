@@ -23,7 +23,7 @@ AmbientOcclusionBlur::AmbientOcclusionBlur(const Surface & occlusion, const Surf
 
     m_output = context.createTexture2D(m_occlusion.width(),
                                        m_occlusion.height(),
-                                       PixelFormat_R_8_U);
+                                       PixelFormat_R_8_UN);
 
     m_effect = PostprocessingEffect(context,
                                     {deliberation::dataPath("Data/Shaders/AmbientOcclusionBlur.vert"),
@@ -32,7 +32,10 @@ AmbientOcclusionBlur::AmbientOcclusionBlur(const Surface & occlusion, const Surf
 
     m_effect.draw().setRenderTarget(0, &m_output.surface());
     m_effect.draw().sampler("Occlusion").setTexture(m_occlusion.texture());
+    m_effect.draw().sampler("Occlusion").setWrap(gl::GL_CLAMP_TO_EDGE);
+
     m_effect.draw().sampler("NormalDepth").setTexture(normalDepth.texture());
+    m_effect.draw().sampler("NormalDepth").setWrap(gl::GL_CLAMP_TO_EDGE);
 
     glm::vec2 texelSize = glm::vec2(1.0f) / glm::vec2(m_occlusion.width(), m_occlusion.height());
     m_effect.draw().uniform("TexelSize").set(texelSize);

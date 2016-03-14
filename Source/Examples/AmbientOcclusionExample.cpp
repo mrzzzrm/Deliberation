@@ -16,6 +16,7 @@
 #include <Deliberation/Core/LapTimer.h>
 #include <Deliberation/Core/Viewport.h>
 #include <Deliberation/Core/StreamUtils.h>
+#include <Deliberation/Core/Math/AABB.h>
 #include <Deliberation/Core/Math/Transform3D.h>
 
 #include <Deliberation/Draw/Buffer.h>
@@ -26,9 +27,13 @@
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/PixelFormat.h>
 
+#include <Deliberation/GLFW/GLFWInputAdapter.h>
+
 #include <Deliberation/Scene/AmbientOcclusion/AmbientOcclusion.h>
 #include <Deliberation/Scene/Blit.h>
 #include <Deliberation/Scene/Camera3D.h>
+#include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/DebugGroundPlaneRenderer.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/Mesh.h>
 #include <Deliberation/Scene/RenderNode.h>
@@ -80,25 +85,23 @@ Mesh<Vertex> createBunnyMesh()
         faces.push_back(face);
     }
 
+
     for (auto v = 0; v < shape.mesh.positions.size(); v++)
     {
         Vertex vertex;
         vertex.position = glm::vec3(shape.mesh.positions[3*v+0],
-                                    shape.mesh.positions[3*v+1],
-                                    shape.mesh.positions[3*v+2]) * 10.0f;
-//        vertex.normal = glm::vec3(shape.mesh.normals[3*v+0],
-//                                  shape.mesh.normals[3*v+1],
-//                                  shape.mesh.normals[3*v+2]);
+                                    shape.mesh.positions[3*v+1] - 0.04f,
+                                    shape.mesh.positions[3*v+2]) * 100.0f;
         vertices.push_back(vertex);
     }
 
-//        for (auto f = 0; f < shape.mesh.num_vertices.size(); f++)
-//        {
-//            auto numVertices = shape.mesh.num_vertices[f];
-//
-//            for (auto v )
-//        }
-//
+    AABB bbox = AABB::containingPoints({vertices[0].position});
+    for (auto & v : vertices)
+    {
+        bbox.enlargeToContain(v.position);
+    }
+
+    std::cout << "BBox: " << bbox << std::endl;
 
     return Mesh<Vertex>(vertices, faces);
 }
@@ -163,14 +166,24 @@ int main(int argc, char * argv[])
     camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
     camera.setAspectRatio(800.0f/450.0f);
 
+    deliberation::GLFWInputAdapter glfwInputAdapter(window);
+
+    deliberation::DebugCameraNavigator3D navigator(camera, glfwInputAdapter, 10.0f);
+
     deliberation::Transform3D transform;
 
     deliberation::LapTimer timer;
 
     deliberation::Framebuffer fb = context.createFramebuffer(800, 450);
     fb.addDepthTarget(deliberation::PixelFormat_Depth_32_F);
-    fb.addRenderTarget(deliberation::PixelFormat_RGB_8_U); // Color
-    fb.addRenderTarget(deliberation::PixelFormat_RGBA_16_U); // NormalDepth
+    fb.addRenderTarget(deliberation::PixelFormat_RGB_8_UN); // Color
+    fb.addRenderTarget(deliberation::PixelFormat_RGBA_16_SN); // NormalDepth
+    fb.addRenderTarget(deliberation::PixelFormat_RGB_32_F); // Position
+
+    deliberation::DebugGroundPlaneRenderer plane(context, camera);
+    plane.setFramebuffer(fb);
+    plane.setSize(20.0f);
+    plane.setQuadSize(1.0f);
 
     auto bbClear = context.createClear();
     auto fbClear = fb.createClear();
@@ -185,26 +198,36 @@ int main(int argc, char * argv[])
     auto blitNormalDepth = deliberation::Blit(*fb.renderTarget(1),
                                               deliberation::Viewport(800, 450, 800, 450));
 
-    deliberation::AmbientOcclusion ao(*fb.renderTarget(1), *fb.renderTarget(0), camera);
+    deliberation::AmbientOcclusion ao(*fb.renderTarget(1), *fb.renderTarget(0), *fb.renderTarget(2), camera);
+    ao.setSampleRadius(0.15f);
 
-    auto blitAO = deliberation::Blit(ao.output(), deliberation::Viewport(0, 0, 800, 450));
+    auto blitAO = deliberation::Blit(ao.rawOcclusion(), deliberation::Viewport(0, 0, 800, 450));
+    auto blitPositionVS = deliberation::Blit(*fb.renderTarget(2), deliberation::Viewport(800, 0, 800, 450));
 
     bool leftMouseButtonPressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+
 
     Optional<SurfaceDownload> download;
     int surfaceX = 0;
     int surfaceY = 0;
     int surfaceBPP = 0;
 
+    auto query = context.createQuery(deliberation::Query_TimeElapsed);
+    bool issueQuery = true;
+
     while (!glfwWindowShouldClose(window))
     {
         timer.lap();
 
-        transform.worldRotate(glm::quat({glm::pi<float>() * 0.3f * timer.seconds() * 0.0f,
-                                         glm::pi<float>() * 0.2f * timer.seconds(),
-                                         glm::pi<float>() * 0.1f * timer.seconds() * 0.0f}));
+//        transform.worldRotate(glm::quat({glm::pi<float>() * 0.3f * timer.seconds() * 0.0f,
+//                                         glm::pi<float>() * 0.2f * timer.seconds(),
+//                                         glm::pi<float>() * 0.1f * timer.seconds() * 0.0f}));
+
+        navigator.update(timer.seconds());
+        glfwInputAdapter.update();
 
         sphereV.set(camera.view());
+
         sphereP.set(camera.projection());
         sphereT.set(transform.matrix());
         sphereFPZ.set(camera.zFar());
@@ -212,10 +235,29 @@ int main(int argc, char * argv[])
         bbClear.schedule();
         fbClear.schedule();
         sphereDraw.schedule();
+        plane.schedule();
         blitColor.schedule();
         blitNormalDepth.schedule();
+
+        if (issueQuery)
+        {
+            query.begin();
+        }
         ao.schedule();
+        if (issueQuery)
+        {
+            query.end();
+            issueQuery = false;
+        }
+
         blitAO.schedule();
+        blitPositionVS.schedule();
+
+        if (query.isResultAvailable())
+        {
+            std::cout << "Time elapsed: " << query.resultU() << std::endl;
+            issueQuery = true;
+        }
 
 //        {
 //            int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);

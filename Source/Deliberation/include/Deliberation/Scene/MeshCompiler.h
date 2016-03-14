@@ -15,7 +15,7 @@ template<typename T>
 class DELIBERATION_API MeshCompiler final
 {
 public:
-    MeshCompiler(const Mesh<T> & mesh, Primitive primitive = Primitive_Triangles);
+    MeshCompiler(const Mesh<T> & mesh, PrimitiveType primitive = Primitive_Triangles);
 
     void compile();
 
@@ -28,7 +28,7 @@ private:
 
 private:
     const Mesh<T> &                        m_mesh;
-    Primitive                              m_primitive;
+    PrimitiveType                          m_primitive;
     std::vector<typename Mesh<T>::Vertex>  m_vertices;
     std::vector<unsigned int>              m_indices;
 };

@@ -17,6 +17,7 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/Query.h>
 #include <Deliberation/Draw/SurfaceDownload.h>
 #include <Deliberation/Draw/TextureUpload.h>
 
@@ -26,6 +27,7 @@ namespace deliberation
 namespace detail
 {
     class BufferImpl;
+    class QueryImpl;
 }
 
 class DELIBERATION_API Context final
@@ -65,6 +67,8 @@ public:
 
     Framebuffer createFramebuffer(unsigned int width, unsigned int height);
 
+    Query createQuery(QueryType type);
+
     /*
         TODO
             move these to private: they shouldn't be called by anyone else than Deliberation/Draw
@@ -83,6 +87,7 @@ public:
     */
 
 private:
+    friend class detail::QueryImpl;
     friend class SurfaceDownloadImpl;
 
 private:
