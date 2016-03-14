@@ -39,12 +39,18 @@ public:
     };
 
 public:
+    LinearMap();
+
     bool contains(std::size_t key) const;
 
     std::size_t keyUpperBound() const;
 
+    std::size_t size() const;
+
     Value & operator[](std::size_t key);
     const Value & operator[](std::size_t key) const;
+
+    Value & at(std::size_t key);
 
     Iterator begin();
     Iterator end();
@@ -52,13 +58,23 @@ public:
     CIterator begin() const;
     CIterator end() const;
 
-    void erase(const Iterator & i);
+    void erase(std::size_t key);
+    Iterator erase(const Iterator & i);
+
+    template<typename ... Args>
+    std::pair<Iterator, bool> emplace(std::size_t key, Args&&... args);
 
 private:
     friend struct Iterator;
     friend struct CIterator;
 
 private:
+    void ensureSize(std::size_t key);
+
+private:
+    /* Number of active keys */
+    std::size_t                  m_size;
+
     std::vector<Optional<Value>> m_vec;
 };
 
