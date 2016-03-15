@@ -167,9 +167,9 @@ int main(int argc, char * argv[])
     deliberation::LapTimer timer;
 
     deliberation::Framebuffer fb = context.createFramebuffer(800, 450);
-    fb.addDepthTarget(deliberation::PixelFormat_Depth_32F);
-    fb.addRenderTarget(deliberation::PixelFormat_RGB_8U); // Color
-    fb.addRenderTarget(deliberation::PixelFormat_RGBA_16U); // NormalDepth
+    fb.addDepthTarget(deliberation::PixelFormat_Depth_32_F);
+    fb.addRenderTarget(deliberation::PixelFormat_RGB_8_U); // Color
+    fb.addRenderTarget(deliberation::PixelFormat_RGBA_16_U); // NormalDepth
 
     auto bbClear = context.createClear();
     auto fbClear = fb.createClear();

@@ -152,6 +152,12 @@ bool LinearMap<Value>::CIterator::operator!=(const CIterator & other) const
 }
 
 template<typename Value>
+LinearMap<Value>::LinearMap():
+    m_size(0)
+{
+}
+
+template<typename Value>
 bool LinearMap<Value>::contains(std::size_t key) const
 {
     if (key >= m_vec.size())
@@ -168,23 +174,20 @@ std::size_t LinearMap<Value>::keyUpperBound() const
 }
 
 template<typename Value>
+std::size_t LinearMap<Value>::size() const
+{
+    return m_size;
+}
+
+template<typename Value>
 Value & LinearMap<Value>::operator[](std::size_t key)
 {
-    if (key >= m_vec.size())
-    {
-        static bool warnedAboutSize = false;
-        if (key > 4096 && !warnedAboutSize)
-        {
-            std::cout << "LinearMap: Excessive key: " << key << std::endl;
-            warnedAboutSize = true;
-        }
-
-        m_vec.resize(key + 1);
-    }
+    ensureSize(key);
 
     if (!m_vec[key].engaged())
     {
         m_vec[key].reset();
+        m_size++;
     }
 
     return m_vec[key].get();
@@ -203,6 +206,13 @@ const Value & LinearMap<Value>::operator[](std::size_t key) const
         Fail("Invalid element");
     }
 
+    return m_vec[key].get();
+}
+
+template<typename Value>
+Value & LinearMap<Value>::at(std::size_t key)
+{
+    Assert(contains(key), "");
     return m_vec[key].get();
 }
 
@@ -231,13 +241,61 @@ typename LinearMap<Value>::CIterator LinearMap<Value>::end() const
 }
 
 template<typename Value>
-void LinearMap<Value>::erase(const Iterator & i)
+void LinearMap<Value>::erase(std::size_t key)
+{
+    Assert(contains(key), "");
+
+    m_vec[key].disengage();
+    m_size--;
+}
+
+template<typename Value>
+typename LinearMap<Value>::Iterator LinearMap<Value>::erase(const Iterator & i)
 {
     auto index = i.pair.first;
 
     Assert(index < m_vec.size(), "");
 
+    Iterator next(i);
+    next++;
+
     m_vec[index].disengage();
+    m_size--;
+
+    return next;
+}
+
+template<typename Value>
+template<typename ... Args>
+std::pair<typename LinearMap<Value>::Iterator, bool> LinearMap<Value>::emplace(std::size_t key, Args&&... args)
+{
+    if (contains(key))
+    {
+        return std::make_pair(Iterator(*this, key), false);
+    }
+
+    ensureSize(key);
+
+    m_vec[key].reset(args...);
+    m_size++;
+
+    return std::make_pair(Iterator(*this, key), true);
+}
+
+template<typename Value>
+void LinearMap<Value>::ensureSize(std::size_t key)
+{
+    if (key >= m_vec.size())
+    {
+        static bool warnedAboutSize = false;
+        if (key > 4096 && !warnedAboutSize)
+        {
+            std::cout << "LinearMap: Excessive key: " << key << std::endl;
+            warnedAboutSize = true;
+        }
+
+        m_vec.resize(key + 1);
+    }
 }
 
 }
