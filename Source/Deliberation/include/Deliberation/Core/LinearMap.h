@@ -51,6 +51,7 @@ public:
     const Value & operator[](std::size_t key) const;
 
     Value & at(std::size_t key);
+    const Value & at(std::size_t key) const;
 
     Iterator begin();
     Iterator end();

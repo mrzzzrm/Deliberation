@@ -24,11 +24,11 @@ struct PositionComponent:
 struct ColliderComponent:
     public Component<ColliderComponent>
 {
-    virtual void onCreate() override
-    {
-        auto & position = entity().getComponent<PositionComponent>();
-        std::cout << "Collider with position at " << position << std::endl;
-    }
+//    virtual void onCreate() override
+//    {
+//        auto & position = entity().getComponent<PositionComponent>();
+//        std::cout << "Collider with position at " << position << std::endl;
+//    }
 };
 
 struct GunComponent:
@@ -101,11 +101,11 @@ int main(int argc, char * argv[])
     std::cout << "------ Setup ------" << std::endl;
 
     auto ship = world.createEntity("Ship");
-    ship.addComponent<PositionComponent>({1.0f, 33.0f, 7.0f});
+    ship.addComponent<PositionComponent>(glm::vec3(1.0f, 33.0f, 7.0f));
     ship.addComponent<ColliderComponent>();
 
     auto bigShip = world.createEntity("BigShip");
-    ship.addComponent<PositionComponent>({10.0f, 330.0f, 70.0f});
+    ship.addComponent<PositionComponent>(glm::vec3(10.0f, 330.0f, 70.0f));
     ship.addComponent<ColliderComponent>();
 
     auto gun0 = bigShip.createChild("BigShipGun0");
@@ -114,25 +114,31 @@ int main(int argc, char * argv[])
     gun1.addComponent<GunComponent>(4.0f);
 
     auto checkpoint = world.createEntity("Checkpoint");
-    checkpoint.addComponent<PositionComponent>({4.0, 2.0f, 0.0f});
+    checkpoint.addComponent<PositionComponent>(glm::vec3(4.0, 2.0f, 0.0f));
 
 //    world.addSystem<AnotherSystem>();
 //    world.addSystem<GunSystem>();
 
+    std::cout << "World: " << std::endl << world.toString() << std::endl;
+
     std::cout << "------ Update 0 ------" << std::endl;
     world.update();
+    std::cout << "World: " << std::endl << world.toString() << std::endl;
 
     std::cout << "------ Update 1 ------" << std::endl;
     gun0.deactivate();
     world.update();
+    std::cout << "World: " << std::endl << world.toString() << std::endl;
 
     std::cout << "------ Update 2 ------" << std::endl;
     bigShip.deactivate();
     world.update();
+    std::cout << "World: " << std::endl << world.toString() << std::endl;
 
     std::cout << "------ Update 3 ------" << std::endl;
     gun0.removeComponent<GunComponent>();
     world.update();
+    std::cout << "World: " << std::endl << world.toString() << std::endl;
 
     return 0;
 }

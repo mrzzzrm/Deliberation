@@ -7,24 +7,24 @@
 namespace deliberation
 {
 
-friend class World;
+class World;
 
 template<typename T>
 class Component:
     public ComponentBase
 {
 public:
-    Entity entity();
+    static std::size_t indexStatic();
 
-protected:
-    virtual void onCreate();
+public:
+    virtual std::size_t index() const override;
+    virtual std::string name() const override;
 
 private:
     friend class World;
-
-private:
-    Component(Entity entity);
 };
 
 }
+
+#include <Deliberation/ECS/Component.inl>
 

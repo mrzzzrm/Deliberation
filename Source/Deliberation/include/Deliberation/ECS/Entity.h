@@ -3,13 +3,21 @@
 #include <limits>
 #include <stdint.h>
 #include <string>
+#include <vector>
 
 #include <Deliberation/Deliberation_API.h>
+
+#include <Deliberation/Core/TypeID.h>
 
 namespace deliberation
 {
 
-class EntityData;
+namespace detail
+{
+    class EntityData;
+}
+
+class ComponentBase;
 class World;
 
 class Entity final
@@ -30,8 +38,8 @@ public:
 
     const std::string & name() const;
 
-    Entity parent() const;
-    std::vector<Entity> & children() const;
+    Entity::id_t parent() const;
+    std::vector<Entity::id_t> & children() const;
 
     template<typename T>
     bool hasComponent() const;
@@ -43,7 +51,7 @@ public:
     const T & component() const;
 
     template<typename T, typename ... Args>
-    T & addComponent(Args ...&& args);
+    T & addComponent(Args &&... args);
 
     template<typename T>
     void removeComponent();
@@ -52,16 +60,24 @@ public:
     void deactivate();
     void remove();
 
+    Entity createChild(const std::string & name = "Entity");
+
 private:
     friend class World;
 
 private:
     Entity(World & world, id_t id);
 
-    EntityData & data() const;
+    detail::EntityData & data() const;
+
+    bool hasComponent(TypeID::value_t c);
+    ComponentBase * component(TypeID::value_t c);
+    const ComponentBase * component(TypeID::value_t c) const;
+    void addComponent(TypeID::value_t c, ComponentBase * ptr);
+    void removeComponent(TypeID::value_t c);
 
 private:
-    mutable World & m_world;
+    World *         m_world;
     id_t            m_id;
 };
 

@@ -217,6 +217,13 @@ Value & LinearMap<Value>::at(std::size_t key)
 }
 
 template<typename Value>
+const Value & LinearMap<Value>::at(std::size_t key) const
+{
+    Assert(contains(key), "");
+    return m_vec[key].get();
+}
+
+template<typename Value>
 typename LinearMap<Value>::Iterator LinearMap<Value>::begin()
 {
     return Iterator(*this, 0);

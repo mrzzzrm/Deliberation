@@ -7,7 +7,6 @@
 namespace deliberation
 {
 
-
 class TypeID
 {
 public:

@@ -1,13 +1,10 @@
 #pragma once
 
+#include <array>
 #include <memory>
-#include <queue>
 #include <stack>
 #include <string>
 #include <vector>
-
-#include <vector>
-#include <stack>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -26,10 +23,16 @@ class World final
 {
 public:
     World();
+    ~World();
 
-    Entity createEntity(const std::string & name = "Nameless Entity");
+    detail::EntityData & entityData(Entity::id_t id);
+
+    Entity createEntity(const std::string & name = "Entity",
+                        Entity::id_t parent = Entity::INVALID_ID);
 
     void update();
+
+    std::string toString() const;
 
 private:
     friend class Entity;
@@ -42,19 +45,33 @@ private:
     void remove(Entity::id_t id);
     ComponentBase * component(Entity::id_t id, TypeID::value_t index);
     const ComponentBase * component(Entity::id_t id, TypeID::value_t index) const;
-    void addComponent(Entity::id_t id, TypeID::value_t index, ComponentBase * component) const;
+    void addComponent(Entity::id_t id, TypeID::value_t index, ComponentBase * component);
     void removeComponent(Entity::id_t id, TypeID::value_t index);
+
+    void scheduleTransition(Entity::id_t id, detail::EntityTransition transition);
+    void propagateTransition(Entity::id_t id, detail::EntityTransition transition);
+    void insertChildrenTransitions(Entity::id_t id, detail::EntityTransition transition);
+
+    void performActivation(detail::EntityData & entity);
+    void performDeactivation(detail::EntityData & entity);
+    void performRemoval(detail::EntityData & entity);
 
 private:
     LinearMap<detail::EntityData>               m_entities;
     std::stack<std::size_t>                     m_entityPool;
     LinearMap<LinearMap<
-        std::unique_ptr<ComponentBase>>         m_components;
+        std::unique_ptr<ComponentBase>>>        m_components;
 
-    std::queue<Entity::id_t>                    m_activationQueue;
-    std::queue<Entity::id_t>                    m_deactivationQueue;
-    std::queue<Entity::id_t>                    m_removalQueue;
-}
+    std::array<
+        std::vector<Entity::id_t>,
+        detail::__EntityTransition_Count__>    m_scheduledTransitions;
+    std::array<
+        std::vector<Entity::id_t>,
+        detail::__EntityTransition_Count__>    m_propagatedTransitions;
+    std::array<
+        std::vector<Entity::id_t>,
+        detail::__EntityTransition_Count__>    m_orderedTransitions;
+};
 
 }
 
