@@ -6,6 +6,7 @@
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/LinearOctree.h>
 #include <Deliberation/Core/RingBuffer.h>
+#include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
 
 using namespace deliberation;
@@ -133,12 +134,48 @@ void TypeIDExample()
     std::cout << "TypeID<B, B>: " << TypeID::value<B, B>() << std::endl;
 }
 
+void SparseVectorExample()
+{
+    std::cout << "----------- SparseVectorExample -----------" << std::endl;
+
+    SparseVector<int> vec;
+
+    vec.insert(1337);
+    vec.insert(42);
+
+    std::cout << vec.toString() << std::endl;
+
+    vec.erase(0);
+
+    std::cout << vec.toString() << std::endl;
+
+    vec.insert(7331);
+    vec.insert(24);
+
+    std::cout << vec.toString() << std::endl;
+
+    for (auto & i : vec)
+    {
+        std::cout << "  " << i << std::endl;
+    }
+
+    vec.clear();
+
+    vec.insert(1);
+    vec.insert(2);
+    vec.insert(3);
+    vec.insert(4);
+
+    std::cout << vec.toString() << std::endl;
+}
+
 int main(int argc, char * argv[])
 {
     LinearMapExample();
     LinearOctreeExample();
     RingBufferExample();
     TypeIDExample();
+    SparseVectorExample();
 
     return 0;
 }

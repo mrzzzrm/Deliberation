@@ -6,6 +6,8 @@
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/ECS/Defines.h>
+
 namespace deliberation
 {
 
@@ -32,16 +34,15 @@ enum EntityState
 struct EntityData
 {
     EntityData();
-    EntityData(Entity::id_t id, const std::string & name, Entity::id_t parent);
+    EntityData(entity_id_t id, const std::string & name, entity_id_t parent);
 
-    Entity::id_t                        id;
+    entity_id_t                 id;
 
-    std::string                         name;
-    Entity::id_t                        parent;
-    std::vector<Entity::id_t>           children;
+    std::string                 name;
+    entity_id_t                 parent;
+    std::vector<entity_id_t>    children;
 
-    EntityState                         state;
-    EntityTransition                    transition;
+    ComponentBitset             componentBits;
 
     /*
         Marks in which collection in World the Entity is
@@ -59,4 +60,4 @@ struct EntityData
 
 }
 
-#include <Deliberation/ECS/Detail/EntityData.inl>
+#include <Deliberation/ECS/EntityData.inl>

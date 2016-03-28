@@ -6,6 +6,7 @@
 
 #include <Deliberation/ECS/Component.h>
 #include <Deliberation/ECS/Entity.h>
+#include <Deliberation/ECS/System.h>
 #include <Deliberation/ECS/World.h>
 
 using namespace deliberation;
@@ -48,9 +49,9 @@ struct GunComponent:
 //    Entity bullet;
 //};
 
-//struct GunSystem:
-//    public System<GunSystem>
-//{
+struct GunSystem:
+    public System<GunSystem>
+{
 //    GunSystem():
 //        Base(ComponentFilter<GunComponent>()),
 //    {
@@ -78,7 +79,7 @@ struct GunComponent:
 //    {
 //        std::cout << "GunSystem: Gun " << entity.toString() << " removed" << std::endl;
 //    }
-//}
+};
 
 //struct AnotherSystem:
 //    public System<AnotherSystem>

@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/ECS/Detail/EntityData.h>
+#include <Deliberation/ECS/EntityData.h>
 #include <Deliberation/ECS/World.h>
 
 namespace deliberation
@@ -13,6 +13,12 @@ Entity::Entity():
     m_id(INVALID_ID)
 {
 
+}
+
+World & Entity::world() const
+{
+    Assert(m_world, "");
+    return *m_world;
 }
 
 Entity::id_t Entity::id() const
@@ -43,6 +49,11 @@ Entity::id_t Entity::parent() const
 std::vector<Entity::id_t> & Entity::children() const
 {
     return data().children;
+}
+
+const ComponentBitset & Entity::componentBits() const
+{
+    return data().componentBits;
 }
 
 void Entity::activate()

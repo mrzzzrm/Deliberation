@@ -14,7 +14,8 @@
 
 #include <Deliberation/ECS/Component.h>
 #include <Deliberation/ECS/Entity.h>
-#include <Deliberation/ECS/Detail/EntityData.h>
+#include <Deliberation/ECS/SystemBase.h>
+#include <Deliberation/ECS/EntityData.h>
 
 namespace deliberation
 {
@@ -29,6 +30,9 @@ public:
 
     Entity createEntity(const std::string & name = "Entity",
                         Entity::id_t parent = Entity::INVALID_ID);
+
+    template<typename T, typename ... Args>
+    T & addSystem(Args &&... args);
 
     void update();
 
@@ -61,6 +65,7 @@ private:
     std::stack<std::size_t>                     m_entityPool;
     LinearMap<LinearMap<
         std::unique_ptr<ComponentBase>>>        m_components;
+    std::vector<std::unique_ptr<SystemBase>>    m_systems;
 
     std::array<
         std::vector<Entity::id_t>,
@@ -74,4 +79,6 @@ private:
 };
 
 }
+
+#include <Deliberation/ECS/World.inl>
 

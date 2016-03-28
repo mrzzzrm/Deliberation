@@ -265,11 +265,13 @@ void World::addComponent(Entity::id_t id, TypeID::value_t index, ComponentBase *
 {
     Assert(isValid(id), "");
 
+    m_entities[id].componentBits.set(index);
     m_components[index][id].reset(component);
 }
 
 void World::removeComponent(Entity::id_t id, TypeID::value_t index)
 {
+    m_entities[id].componentBits.reset(index);
     m_components[index].erase(id);
 }
 

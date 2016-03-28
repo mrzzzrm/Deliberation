@@ -9,6 +9,8 @@
 
 #include <Deliberation/Core/TypeID.h>
 
+#include <Deliberation/ECS/Defines.h>
+
 namespace deliberation
 {
 
@@ -23,7 +25,7 @@ class World;
 class Entity final
 {
 public:
-    typedef uint64_t id_t;
+    typedef entity_id_t id_t;
 
 public:
     static constexpr id_t INVALID_ID = std::numeric_limits<id_t>::max();
@@ -31,6 +33,7 @@ public:
 public:
     Entity();
 
+    World & world() const;
     id_t id() const;
 
     bool isValid();
@@ -38,8 +41,10 @@ public:
 
     const std::string & name() const;
 
-    Entity::id_t parent() const;
-    std::vector<Entity::id_t> & children() const;
+    id_t parent() const;
+    const std::vector<id_t> & children() const;
+
+    const ComponentBitset & componentBits() const;
 
     template<typename T>
     bool hasComponent() const;
@@ -56,14 +61,13 @@ public:
     template<typename T>
     void removeComponent();
 
-    void activate();
-    void deactivate();
     void remove();
 
     Entity createChild(const std::string & name = "Entity");
 
 private:
     friend class World;
+    friend class SystemBase;
 
 private:
     Entity(World & world, id_t id);

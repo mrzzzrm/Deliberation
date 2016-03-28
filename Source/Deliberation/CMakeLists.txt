@@ -150,7 +150,9 @@ set(sources
     ${source_path}/Draw/Uniform.cpp
     
     ${source_path}/ECS/ComponentBase.cpp
+    ${source_path}/ECS/ComponentFilter.cpp
     ${source_path}/ECS/Entity.cpp
+    ${source_path}/ECS/SystemBase.cpp
     ${source_path}/ECS/World.cpp
 
     ${source_path}/Font/Font.cpp
@@ -208,6 +210,8 @@ set(api_includes
     ${include_path}/Core/StringUtils.h
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl
+    ${include_path}/Core/SparseVector.h
+    ${include_path}/Core/SparseVector.inl
     ${include_path}/Core/TypeID.h
     ${include_path}/Core/TypeID.inl
     ${include_path}/Core/Viewport.h
@@ -277,16 +281,19 @@ set(api_includes
     
     ${include_path}/ECS/ComponentFilter.h  
     ${include_path}/ECS/Component.h  
+    ${include_path}/ECS/Component.inl  
     ${include_path}/ECS/ComponentBase.h  
+    ${include_path}/ECS/Defines.h  
     ${include_path}/ECS/Entity.h  
     ${include_path}/ECS/Entity.inl  
+    ${include_path}/ECS/EntityData.h
+    ${include_path}/ECS/EntityData.inl
     ${include_path}/ECS/EventManager.h  
+    ${include_path}/ECS/SystemBase.h  
     ${include_path}/ECS/System.h  
     ${include_path}/ECS/World.h
+    ${include_path}/ECS/World.inl
     
-    ${include_path}/ECS/Detail/EntityData.h
-    ${include_path}/ECS/Detail/EntityData.inl
-
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
