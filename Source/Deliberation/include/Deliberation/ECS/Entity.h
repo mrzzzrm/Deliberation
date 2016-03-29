@@ -14,37 +14,23 @@
 namespace deliberation
 {
 
-namespace detail
-{
-    class EntityData;
-}
-
 class ComponentBase;
+class EntityData;
 class World;
 
 class Entity final
 {
 public:
-    typedef entity_id_t id_t;
-
-public:
-    static constexpr id_t INVALID_ID = std::numeric_limits<id_t>::max();
-
-public:
     Entity();
 
     World & world() const;
-    id_t id() const;
-
-    bool isValid();
-    bool isActive();
-
+    entity_id_t id() const;
     const std::string & name() const;
-
-    id_t parent() const;
-    const std::vector<id_t> & children() const;
-
+    entity_id_t parent() const;
+    const std::vector<entity_id_t> & children() const;
     const ComponentBitset & componentBits() const;
+
+    bool isValid() const;
 
     template<typename T>
     bool hasComponent() const;
@@ -70,9 +56,9 @@ private:
     friend class SystemBase;
 
 private:
-    Entity(World & world, id_t id);
+    Entity(World & world, entity_id_t id);
 
-    detail::EntityData & data() const;
+    EntityData & data() const;
 
     bool hasComponent(TypeID::value_t c);
     ComponentBase * component(TypeID::value_t c);
@@ -81,8 +67,8 @@ private:
     void removeComponent(TypeID::value_t c);
 
 private:
-    World *         m_world;
-    id_t            m_id;
+    World *     m_world;
+    entity_id_t m_id;
 };
 
 }

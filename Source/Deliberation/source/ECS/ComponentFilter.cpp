@@ -17,6 +17,10 @@ ComponentFilter ComponentFilter::none()
     return filter;
 }
 
+ComponentFilter::ComponentFilter()
+{
+}
+
 bool ComponentFilter::accepts(const ComponentBitset & componentBits) const
 {
     return (componentBits & m_components) == m_components;

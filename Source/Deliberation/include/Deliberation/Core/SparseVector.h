@@ -42,6 +42,9 @@ public:
 public:
     bool contains(std::size_t index) const;
 
+    Iterator find(const T & value);
+    CIterator find(const T & value) const;
+
     std::size_t insert(T && value);
 
     template<typename ... Args>

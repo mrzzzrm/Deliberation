@@ -4,18 +4,23 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
 
 #include <Deliberation/Core/LinearMap.h>
+#include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/Optional.h>
 #include <Deliberation/Core/TypeID.h>
 
 #include <Deliberation/ECS/Component.h>
+#include <Deliberation/ECS/Defines.h>
 #include <Deliberation/ECS/Entity.h>
-#include <Deliberation/ECS/SystemBase.h>
+#include <Deliberation/ECS/EntityComponentSetup.h>
 #include <Deliberation/ECS/EntityData.h>
+#include <Deliberation/ECS/EventManager.h>
+#include <Deliberation/ECS/SystemBase.h>
 
 namespace deliberation
 {
@@ -26,15 +31,17 @@ public:
     World();
     ~World();
 
-    detail::EntityData & entityData(Entity::id_t id);
+    EventManager & eventManager();
+
+    EntityData & entityData(entity_id_t id);
 
     Entity createEntity(const std::string & name = "Entity",
-                        Entity::id_t parent = Entity::INVALID_ID);
+                        entity_id_t parent = ECS_INVALID_ENTITY_ID);
 
     template<typename T, typename ... Args>
     T & addSystem(Args &&... args);
 
-    void update();
+    void update(float seconds);
 
     std::string toString() const;
 
@@ -42,40 +49,31 @@ private:
     friend class Entity;
 
 private:
-    bool isValid(Entity::id_t id) const;
-    bool isActive(Entity::id_t id) const;
-    void activate(Entity::id_t id);
-    void deactivate(Entity::id_t id);
-    void remove(Entity::id_t id);
-    ComponentBase * component(Entity::id_t id, TypeID::value_t index);
-    const ComponentBase * component(Entity::id_t id, TypeID::value_t index) const;
-    void addComponent(Entity::id_t id, TypeID::value_t index, ComponentBase * component);
-    void removeComponent(Entity::id_t id, TypeID::value_t index);
+    bool isValid(entity_id_t id) const;
+    void remove(entity_id_t id);
+    ComponentBase * component(entity_id_t id, TypeID::value_t index);
+    const ComponentBase * component(entity_id_t id, TypeID::value_t index) const;
+    void addComponent(entity_id_t id, TypeID::value_t index, ComponentBase * component);
+    void removeComponent(entity_id_t id, TypeID::value_t index);
 
-    void scheduleTransition(Entity::id_t id, detail::EntityTransition transition);
-    void propagateTransition(Entity::id_t id, detail::EntityTransition transition);
-    void insertChildrenTransitions(Entity::id_t id, detail::EntityTransition transition);
-
-    void performActivation(detail::EntityData & entity);
-    void performDeactivation(detail::EntityData & entity);
-    void performRemoval(detail::EntityData & entity);
+    std::size_t entityIndex(entity_id_t id) const;
+    EntityComponentSetup * componentSetup(const ComponentBitset & componentBits);
 
 private:
-    LinearMap<detail::EntityData>               m_entities;
-    std::stack<std::size_t>                     m_entityPool;
+    SparseVector<EntityData>                    m_entities;
+    std::unordered_map<entity_id_t,
+        std::size_t>                            m_entityIndexByID;
+    entity_id_t                                 m_entityIDCounter;
+
+    std::unordered_map<ComponentBitset,
+        EntityComponentSetup>                   m_entityComponentSetups;
+
     LinearMap<LinearMap<
         std::unique_ptr<ComponentBase>>>        m_components;
-    std::vector<std::unique_ptr<SystemBase>>    m_systems;
 
-    std::array<
-        std::vector<Entity::id_t>,
-        detail::__EntityTransition_Count__>    m_scheduledTransitions;
-    std::array<
-        std::vector<Entity::id_t>,
-        detail::__EntityTransition_Count__>    m_propagatedTransitions;
-    std::array<
-        std::vector<Entity::id_t>,
-        detail::__EntityTransition_Count__>    m_orderedTransitions;
+    LinearMap<std::unique_ptr<SystemBase>>      m_systems;
+
+    EventManager                                m_eventManager;
 };
 
 }

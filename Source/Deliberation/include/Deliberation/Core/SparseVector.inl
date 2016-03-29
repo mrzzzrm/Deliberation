@@ -52,13 +52,43 @@ template<typename T>
 template<typename QVecT, typename QValT>
 bool SparseVector<T>::IteratorT<QVecT, QValT>::operator!=(const IteratorT<QVecT, QValT> & other) const
 {
-    return &m_vec != &other.m_vec && m_index != other.m_index;
+    return &m_vec != &other.m_vec || m_index != other.m_index;
 }
 
 template<typename T>
 bool SparseVector<T>::contains(std::size_t index) const
 {
     return index < m_vec.size() && m_vec[index].engaged();
+}
+
+template<typename T>
+typename SparseVector<T>::Iterator SparseVector<T>::find(const T & value)
+{
+    for (std::size_t e = 0; e < m_vec.size(); e++)
+    {
+        auto & element = m_vec[e];
+        if (element.engaged() && element.get() == value)
+        {
+            return Iterator(*this, e);
+        }
+    }
+
+    return end();
+}
+
+template<typename T>
+typename SparseVector<T>::CIterator SparseVector<T>::find(const T & value) const
+{
+    for (std::size_t e = 0; e < m_vec.size(); e++)
+    {
+        auto & element = m_vec[e];
+        if (element.engaged() && element.get() == value)
+        {
+            return CIterator(*this, e);
+        }
+    }
+
+    return end();
 }
 
 template<typename T>

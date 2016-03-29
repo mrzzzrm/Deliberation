@@ -1,8 +1,11 @@
 #pragma once
 
 #include <unordered_set>
+#include <unordered_map>
 
 #include <Deliberation/Deliberation_API.h>
+
+#include <Deliberation/Core/SparseVector.h>
 
 #include <Deliberation/ECS/ComponentFilter.h>
 
@@ -11,19 +14,23 @@ namespace deliberation
 
 class World;
 
-class SystemBase
+class DELIBERATION_API SystemBase
 {
 public:
     SystemBase(World & world, const ComponentFilter & filter);
     virtual ~SystemBase();
 
     World & world();
+    const ComponentFilter & filter() const;
+
+    virtual std::size_t index() const = 0;
 
     bool accepts(const Entity & entity);
 
     void addEntity(Entity & entity);
     void removeEntity(Entity & entity);
 
+    void beforeUpdate();
     void update(float seconds);
 
 protected:
@@ -32,9 +39,18 @@ protected:
     virtual void onUpdate(Entity & entity, float seconds);
 
 private:
+    struct EntityEntry
+    {
+        entity_id_t id;
+        bool        active;
+    };
+
+private:
     World &                          m_world;
     ComponentFilter                  m_filter;
-    std::unordered_set<Entity::id_t> m_entities;
+    SparseVector<EntityEntry>        m_entities;
+    std::unordered_map<entity_id_t,
+        std::size_t>                 m_entityIndexByID;
 };
 
 };

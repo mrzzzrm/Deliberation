@@ -154,7 +154,7 @@ void SparseVectorExample()
 
     std::cout << vec.toString() << std::endl;
 
-    for (auto & i : vec)
+    for (auto i : vec)
     {
         std::cout << "  " << i << std::endl;
     }

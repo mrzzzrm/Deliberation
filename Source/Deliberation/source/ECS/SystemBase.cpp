@@ -10,14 +10,16 @@ SystemBase::SystemBase(World & world, const ComponentFilter & filter):
 
 }
 
-SystemBase::~SystemBase()
-{
-
-}
+SystemBase::~SystemBase() = default;
 
 World & SystemBase::world()
 {
     return m_world;
+}
+
+const ComponentFilter & SystemBase::filter() const
+{
+    return m_filter;
 }
 
 bool SystemBase::accepts(const Entity & entity)
@@ -29,7 +31,12 @@ void SystemBase::addEntity(Entity & entity)
 {
     Assert(&entity.world() == &m_world, "");
 
-    m_entities.insert(entity.id());
+    EntityEntry entry;
+    entry.id = entity.id();
+    entry.active = false;
+
+    m_entityIndexByID[entity.id()] = m_entities.insert(std::move(entry));
+
     onEntityAdded(entity);
 }
 
@@ -37,15 +44,33 @@ void SystemBase::removeEntity(Entity & entity)
 {
     Assert(&entity.world() == &m_world, "");
 
-    m_entities.erase(entity.id());
+    auto i = m_entityIndexByID.find(entity.id());
+    Assert(i != m_entityIndexByID.end(), "");
+
+    m_entities.erase(i->second);
+    m_entityIndexByID.erase(i);
+
     onEntityRemoved(entity);
+}
+
+void SystemBase::beforeUpdate()
+{
+    for (auto & entry : m_entities)
+    {
+        entry.active = true;
+    }
 }
 
 void SystemBase::update(float seconds)
 {
-    for (auto id : m_entities)
+    for (auto & entry : m_entities)
     {
-        Entity entity(m_world, id);
+        if (!entry.active)
+        {
+            continue;
+        }
+
+        Entity entity(m_world, entry.id);
         onUpdate(entity, seconds);
     }
 }

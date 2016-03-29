@@ -1,4 +1,7 @@
+#include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/TypeID.h>
+
+#include <Deliberation/ECS/Defines.h>
 
 namespace deliberation
 {
@@ -6,7 +9,10 @@ namespace deliberation
 template<typename T>
 std::size_t Component<T>::indexStatic()
 {
-    return TypeID::value<T>();
+    auto i = TypeID::value<ComponentBase, T>();
+    Assert(i < ECS_MAX_NUM_COMPONENTS, "");
+
+    return i;
 }
 
 template<typename T>

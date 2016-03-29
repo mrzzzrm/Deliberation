@@ -283,7 +283,7 @@ std::pair<typename LinearMap<Value>::Iterator, bool> LinearMap<Value>::emplace(s
 
     ensureSize(key);
 
-    m_vec[key].reset(args...);
+    m_vec[key].reset(std::forward<Args>(args)...);
     m_size++;
 
     return std::make_pair(Iterator(*this, key), true);

@@ -152,6 +152,7 @@ set(sources
     ${source_path}/ECS/ComponentBase.cpp
     ${source_path}/ECS/ComponentFilter.cpp
     ${source_path}/ECS/Entity.cpp
+    ${source_path}/ECS/EventManager.cpp
     ${source_path}/ECS/SystemBase.cpp
     ${source_path}/ECS/World.cpp
 
@@ -286,9 +287,11 @@ set(api_includes
     ${include_path}/ECS/Defines.h  
     ${include_path}/ECS/Entity.h  
     ${include_path}/ECS/Entity.inl  
+    ${include_path}/ECS/EntityComponentSetup.h    
     ${include_path}/ECS/EntityData.h
     ${include_path}/ECS/EntityData.inl
-    ${include_path}/ECS/EventManager.h  
+    ${include_path}/ECS/EventManager.h
+    ${include_path}/ECS/EventManager.inl
     ${include_path}/ECS/SystemBase.h  
     ${include_path}/ECS/System.h  
     ${include_path}/ECS/World.h

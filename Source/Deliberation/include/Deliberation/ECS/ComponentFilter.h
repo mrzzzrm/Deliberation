@@ -17,8 +17,10 @@ public:
     static ComponentFilter all();
     static ComponentFilter none();
 
-public:
     template<typename ... Args>
+    static ComponentFilter requires();
+
+public:
     ComponentFilter();
 
     bool accepts(const ComponentBitset & componentBits) const;

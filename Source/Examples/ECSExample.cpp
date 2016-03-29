@@ -5,6 +5,7 @@
 #include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/ECS/Component.h>
+#include <Deliberation/ECS/ComponentFilter.h>
 #include <Deliberation/ECS/Entity.h>
 #include <Deliberation/ECS/System.h>
 #include <Deliberation/ECS/World.h>
@@ -43,61 +44,83 @@ struct GunComponent:
     float freq;
 };
 
-//struct GunFired
-//{
-//    Entity gun;
-//    Entity bullet;
-//};
+struct GunFired
+{
+    Entity gun;
+    Entity bullet;
+};
 
 struct GunSystem:
     public System<GunSystem>
 {
-//    GunSystem():
-//        Base(ComponentFilter<GunComponent>()),
-//    {
-//    }
-//
-//    virtual void update(Entity entity, float seconds)
-//    {
-//        auto & position = entity.getComponent<PositionComponent>();
-//
-//        std::cout << "Updating '" << entity.name() << "' with frequency " << gun.freq << std::endl;
-//
-//        auto bullet = world().createEntity("Bullet");
-//        bullet.addComponent<PositionComponent>({0.0f, 1.0f, 2.0f});
-//        bullet.addComponent<ColliderComponent>();
-//
-//        world().eventManager().emit<GunFired>({entity, bullet});
-//    }
-//
-//    virtual void onEntityAdded(Entity entity)
-//    {
-//        std::cout << "GunSystem: Gun " << entity.toString() << " added" << std::endl;
-//    }
-//
-//    virtual void onEntityRemoved(Entity entity)
-//    {
-//        std::cout << "GunSystem: Gun " << entity.toString() << " removed" << std::endl;
-//    }
+    GunSystem(World & world):
+        Base(world, ComponentFilter::requires<GunComponent>())
+    {
+    }
+
+    virtual void onUpdate(Entity & entity, float seconds) override
+    {
+        auto & gun = entity.component<GunComponent>();
+
+        std::cout << "Updating '" << entity.name() << "' with frequency " << gun.freq << std::endl;
+
+        for (auto i = 0; i < 5; i++)
+        {
+            auto bullet = world().createEntity("Bullet");
+            bullet.addComponent<PositionComponent>(glm::vec3{i, 1.0f, 2.0f});
+            bullet.addComponent<ColliderComponent>();
+            world().eventManager().emit<GunFired>({entity, bullet});
+        }
+    }
+
+    virtual void onEntityAdded(Entity & entity) override
+    {
+        std::cout << "GunSystem: Gun " << entity.name() << " added" << std::endl;
+    }
+
+    virtual void onEntityRemoved(Entity & entity) override
+    {
+        std::cout << "GunSystem: Gun " << entity.name() << " removed" << std::endl;
+    }
 };
 
-//struct AnotherSystem:
-//    public System<AnotherSystem>
-//{
-//    AnotherSystem(EventManager & eventManager)
-//    {
-//        eventManager.subscribe<GunFired>(*this);
-//    }
-//
-//    void receive(const GunFired & gunFired)
-//    {
-//        std::cout << "AnotherSystem received GunFired" << std::endl;
-//    }
-//}
+struct PhysicsSystem:
+    public System<PhysicsSystem>
+{
+    PhysicsSystem(World & world):
+        Base(world, ComponentFilter::requires<PositionComponent, ColliderComponent>())
+    {
+    }
+
+    virtual void onUpdate(Entity & entity, float seconds) override
+    {
+        std::cout << "Moving " << entity.name() << std::endl;
+    }
+};
+
+struct AnotherSystem:
+    public System<AnotherSystem>
+{
+    AnotherSystem(World & world):
+        Base(world, ComponentFilter::none())
+    {
+        world.eventManager().subscribe<GunFired>(*this);
+    }
+
+    void receive(const GunFired & gunFired)
+    {
+        std::cout << "AnotherSystem received GunFired (Bullet=" << gunFired.bullet.name()
+                  << "; id=" << gunFired.bullet.id() << ")" << std::endl;
+    }
+};
 
 int main(int argc, char * argv[])
 {
     World world;
+
+    world.addSystem<AnotherSystem>();
+    world.addSystem<GunSystem>();
+    world.addSystem<PhysicsSystem>();
 
     std::cout << "------ Setup ------" << std::endl;
 
@@ -117,30 +140,13 @@ int main(int argc, char * argv[])
     auto checkpoint = world.createEntity("Checkpoint");
     checkpoint.addComponent<PositionComponent>(glm::vec3(4.0, 2.0f, 0.0f));
 
-//    world.addSystem<AnotherSystem>();
-//    world.addSystem<GunSystem>();
 
-    std::cout << "World: " << std::endl << world.toString() << std::endl;
+    std::cout << "------------------ Update1 ------------------" << std::endl;
+    world.update(1.0f);
+    std::cout << "------------------ Update2 ------------------" << std::endl;
+    world.update(1.0f);
 
-    std::cout << "------ Update 0 ------" << std::endl;
-    world.update();
-    std::cout << "World: " << std::endl << world.toString() << std::endl;
-
-    std::cout << "------ Update 1 ------" << std::endl;
-    gun0.deactivate();
-    world.update();
-    std::cout << "World: " << std::endl << world.toString() << std::endl;
-
-    std::cout << "------ Update 2 ------" << std::endl;
-    bigShip.deactivate();
-    world.update();
-    std::cout << "World: " << std::endl << world.toString() << std::endl;
-
-    std::cout << "------ Update 3 ------" << std::endl;
-    gun0.removeComponent<GunComponent>();
-    world.update();
-    std::cout << "World: " << std::endl << world.toString() << std::endl;
-
+    std::cout << "------------------ End ------------------" << std::endl;
     return 0;
 }
 

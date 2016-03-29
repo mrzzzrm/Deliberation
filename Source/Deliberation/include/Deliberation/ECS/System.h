@@ -12,12 +12,21 @@ class DELIBERATION_API System:
     public SystemBase
 {
 public:
+    typedef System<T> Base;
+
+public:
+    static std::size_t indexStatic();
+
+public:
     System(World & world, const ComponentFilter & filter);
 
+    virtual std::size_t index() const override;
 
-private:
-
+    template<typename EventType>
+    void subscribe();
 };
 
 }
+
+#include <Deliberation/ECS/System.inl>
 

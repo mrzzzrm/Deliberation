@@ -5,14 +5,13 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#define VERBOSE 1
-
-using namespace deliberation::detail;
+#define VERBOSE 0
 
 namespace deliberation
 {
 
-World::World()
+World::World():
+    m_entityIDCounter(1)
 {
 
 }
@@ -25,319 +24,66 @@ World::~World()
 
     for (auto & entity : m_entities)
     {
-        if (isValid(entity.second.id))
+        if (isValid(entity.id))
         {
-            remove(entity.second.id);
+            remove(entity.id);
         }
     }
-    update();
 }
 
-EntityData & World::entityData(Entity::id_t id)
+EventManager & World::eventManager()
+{
+    return m_eventManager;
+}
+
+EntityData & World::entityData(entity_id_t id)
 {
     Assert(isValid(id), "");
-    return m_entities[id];
+
+    return m_entities[entityIndex(id)];
 }
 
-Entity World::createEntity(const std::string & name, Entity::id_t parent)
+Entity World::createEntity(const std::string & name, entity_id_t parent)
 {
-    std::size_t index;
-
-    if (m_entityPool.empty())
-    {
-        index = m_entities.keyUpperBound() + 1;
-    }
-    else
-    {
-        index = m_entityPool.top();
-        m_entityPool.pop();
-    }
+    auto id = m_entityIDCounter++;
+    auto index = m_entities.emplace(id, name, parent);
+    m_entityIndexByID[id] = index;
 
 #if VERBOSE
-    std::cout << "World::createEntity(): Allocated id=" << index << " for Entity '" << name << "'; parent=" << (int)parent << std::endl;
+    std::cout << "World::createEntity(): Allocated index=" << index << " for Entity '" << name << "'; parent=" << (int)parent << std::endl;
 #endif
 
-    m_entities.emplace(index, index, name, parent);
+    auto & entity = entityData(id);
 
     if (isValid(parent))
     {
-        m_entities[parent].children.push_back(index);
+        m_entities[entityIndex(parent)].children.push_back(id);
     }
 
-    activate(index);
+    entity.componentSetup = componentSetup(entity.componentBits);
 
-    return Entity(*this, index);
+    return Entity(*this, id);
 }
 
-void World::update()
+void World::update(float seconds)
 {
-    /*
-        Determine actual Entity transition by overriding childrens transition
-    */
-    for (auto t = 0; t < m_scheduledTransitions.size(); t++)
+    for (auto & pair : m_systems)
     {
-        auto & transitions = m_scheduledTransitions[t];
-
-#if VERBOSE
-        if (transitions.size() > 0)
-        {
-            std::cout << "World::update(): Scheduled for transition " << t << std::endl;
-        }
-#endif
-
-        for (auto id : transitions)
-        {
-#if VERBOSE
-            std::cout << "  " << id << "/" << m_entities[id].name << std::endl;
-#endif
-            propagateTransition(id, (EntityTransition)t);
-        }
+        pair.second->beforeUpdate();
     }
 
-    /*
-        Invalidate transitions that got overriden
-        in the previous step
-    */
-    for (auto t = 0; t < m_propagatedTransitions.size(); t++)
+    for (auto & pair : m_systems)
     {
-        auto & transitions = m_propagatedTransitions[t];
-
-        for (auto & id : transitions)
-        {
-            Assert(isValid(id), "");
-
-            auto & entity = m_entities[id];
-            if (entity.transition != t)
-            {
-                id = Entity::INVALID_ID;
-            }
-        }
+        pair.second->update(seconds);
     }
-
-    /*
-        Establish transition order
-    */
-    for (auto t = 0; t < m_propagatedTransitions.size(); t++)
-    {
-        auto & transitions = m_propagatedTransitions[t];
-
-#if VERBOSE
-        if (transitions.size() > 0)
-        {
-            std::cout << "World::update(): Propagated to transition " << t << std::endl;
-        }
-#endif
-        for (auto & id : transitions)
-        {
-            if (!isValid(id))
-            {
-                continue;
-            }
-#if VERBOSE
-            std::cout << "  " << id << "/" << m_entities[id].name << std::endl;
-#endif
-
-            insertChildrenTransitions(id, (EntityTransition)t);
-        }
-    }
-
-    /*
-        Transition
-    */
-    for (auto t = 0; t < m_orderedTransitions.size(); t++)
-    {
-        auto & transitions = m_orderedTransitions[t];
-
-#if VERBOSE
-        if (transitions.size() > 0)
-        {
-            std::cout << "World::update(): Performing transition " << t << std::endl;
-        }
-#endif
-        for (auto & id : transitions)
-        {
-            if (!isValid(id))
-            {
-                continue;
-            }
-
-            auto & entity = m_entities[id];
-
-            if (entity.state == t)
-            {
-                continue;
-            }
-
-            switch (t)
-            {
-            case EntityTransition_Activate:
-                performActivation(entity);
-                break;
-            case EntityTransition_Deactivate:
-                performDeactivation(entity);
-                break;
-            case EntityTransition_Remove:
-                performRemoval(entity);
-                break;
-            default:
-                Fail("");
-            }
-
-            entity.transition = EntityTransition_None;
-            entity.scheduledTransitions.reset();
-            entity.propagatedTransitions.reset();
-            entity.orderedTransitions.reset();
-        }
-    }
-
-    /*
-        Clear Transitions
-    */
-    for (auto t = 0; t < m_scheduledTransitions.size(); t++)
-    {
-        m_scheduledTransitions[t].clear();
-        m_propagatedTransitions[t].clear();
-        m_orderedTransitions[t].clear();
-    }
-}
-
-bool World::isValid(Entity::id_t id) const
-{
-    return m_entities.contains(id);
-}
-
-bool World::isActive(Entity::id_t id) const
-{
-    Assert(isValid(id), "");
-    return m_entities[id].state == EntityState_Activated;
-}
-
-void World::activate(Entity::id_t id)
-{
-    scheduleTransition(id, detail::EntityTransition_Activate);
-}
-
-void World::deactivate(Entity::id_t id)
-{
-    scheduleTransition(id, detail::EntityTransition_Deactivate);
-}
-
-void World::remove(Entity::id_t id)
-{
-    scheduleTransition(id, detail::EntityTransition_Remove);
-}
-
-ComponentBase * World::component(Entity::id_t id, TypeID::value_t index)
-{
-    Assert(isValid(id), "");
-
-    if (!m_components.contains(index))
-    {
-        return nullptr;
-    }
-
-    if (!m_components.at(index).contains(id))
-    {
-        return nullptr;
-    }
-
-    return m_components.at(index).at(id).get();
-}
-
-const ComponentBase * World::component(Entity::id_t id, TypeID::value_t index) const
-{
-    Assert(isValid(id), "");
-
-    if (!m_components.contains(index))
-    {
-        return nullptr;
-    }
-
-    if (!m_components.at(index).contains(id))
-    {
-        return nullptr;
-    }
-
-    return m_components.at(index).at(id).get();
-}
-
-void World::addComponent(Entity::id_t id, TypeID::value_t index, ComponentBase * component)
-{
-    Assert(isValid(id), "");
-
-    m_entities[id].componentBits.set(index);
-    m_components[index][id].reset(component);
-}
-
-void World::removeComponent(Entity::id_t id, TypeID::value_t index)
-{
-    m_entities[id].componentBits.reset(index);
-    m_components[index].erase(id);
-}
-
-void World::scheduleTransition(Entity::id_t id, detail::EntityTransition transition)
-{
-    Assert(isValid(id), "");
-
-    auto & entity = m_entities[id];
-
-    entity.transition = transition;
-
-    if (!entity.scheduledTransitions[transition])
-    {
-        m_scheduledTransitions[transition].push_back(id);
-        entity.scheduledTransitions[transition] = true;
-    }
-}
-
-void World::propagateTransition(Entity::id_t id, detail::EntityTransition transition)
-{
-    Assert(isValid(id), "");
-
-    auto & entity = m_entities[id];
-
-    entity.transition = transition;
-
-    if (!entity.propagatedTransitions[transition])
-    {
-        m_propagatedTransitions[transition].push_back(id);
-        entity.propagatedTransitions[transition] = true;
-    }
-
-    for (auto child : entity.children)
-    {
-        propagateTransition(child, transition);
-    }
-}
-
-void World::insertChildrenTransitions(Entity::id_t id, detail::EntityTransition transition)
-{
-    Assert(isValid(id), "");
-
-    auto & entity = m_entities[id];
-
-    if (entity.orderedTransitions[transition])
-    {
-        return;
-    }
-
-    for (auto child : entity.children)
-    {
-        insertChildrenTransitions(child, transition);
-    }
-
-    m_orderedTransitions[transition].push_back(id);
-    entity.orderedTransitions[transition] = true;
 }
 
 std::string World::toString() const
 {
     std::stringstream stream;
 
-    for (auto & pair : m_entities)
+    for (auto & entity : m_entities)
     {
-        auto & entity = pair.second;
-
         if (!isValid(entity.id))
         {
             continue;
@@ -364,32 +110,184 @@ std::string World::toString() const
     return stream.str();
 }
 
-void World::performActivation(detail::EntityData & entity)
+bool World::isValid(entity_id_t id) const
 {
-#if VERBOSE
-    std::cout << "  Activating " << entity.id << "/" << entity.name << std::endl;
-#endif
-
-    entity.state = EntityState_Activated;
+    return m_entityIndexByID.find(id) != m_entityIndexByID.end();
 }
 
-void World::performDeactivation(detail::EntityData & entity)
+void World::remove(entity_id_t id)
 {
+    Assert(isValid(id), "");
+
+    auto i = entityIndex(id);
+    auto & entity = m_entities[i];
+    auto * componentSetup = entity.componentSetup;
+
 #if VERBOSE
-    std::cout << "  Deactivating " << entity.id << "/" << entity.name << std::endl;
+    std::cout << "World::remove(): id=" << id << "; name=" << entity.name << std::endl;
+    std::cout << "  num children=" << entity.children.size() << std::endl;
 #endif
 
-    entity.state = EntityState_Deactivated;
+    for (auto child : entity.children)
+    {
+        remove(child);
+    }
+
+
+    for (auto componentIndex : componentSetup->componentIndices)
+    {
+        removeComponent(id, componentIndex);
+    }
+
+
+    m_entities.erase(i);
+    m_entityIndexByID.erase(id);
 }
 
-void World::performRemoval(detail::EntityData & entity)
+ComponentBase * World::component(entity_id_t id, TypeID::value_t index)
 {
+    Assert(isValid(id), "");
+
+    auto i = entityIndex(id);
+
+    if (!m_components.contains(index))
+    {
+        return nullptr;
+    }
+
+    if (!m_components.at(index).contains(i))
+    {
+        return nullptr;
+    }
+
+    return m_components.at(index).at(i).get();
+}
+
+const ComponentBase * World::component(entity_id_t id, TypeID::value_t index) const
+{
+    Assert(isValid(id), "");
+
+    auto i = entityIndex(id);
+
+    if (!m_components.contains(index))
+    {
+        return nullptr;
+    }
+
+    if (!m_components.at(index).contains(i))
+    {
+        return nullptr;
+    }
+
+    return m_components.at(index).at(i).get();
+}
+
+void World::addComponent(entity_id_t id, TypeID::value_t index, ComponentBase * component)
+{
+    Assert(isValid(id), "");
+
+
+    auto i = entityIndex(id);
+    auto & entity = m_entities[i];
+    auto * prevComponentSetup = entity.componentSetup;
+
+    entity.componentBits.set(index);
+    entity.componentSetup = componentSetup(entity.componentBits);
+    m_components[index][i].reset(component);
+
 #if VERBOSE
-    std::cout << "  Removing " << entity.id << "/" << entity.name << std::endl;
+    std::cout << "World::addComponent()" << std::endl;
 #endif
 
-    m_entityPool.push(entity.id);
-    entity.id = Entity::INVALID_ID;
+    for (auto systemIndex : entity.componentSetup->systemIndices)
+    {
+#if VERBOSE
+    std::cout << "  Checking system " << systemIndex << " (" << prevComponentSetup->systemBits.test(systemIndex) << ")" << std::endl;
+#endif
+        if (!prevComponentSetup->systemBits.test(systemIndex))
+        {
+#if VERBOSE
+    std::cout << "  Adding entity to system" << std::endl;
+#endif
+            auto & system = *m_systems[systemIndex];
+            Entity entity(*this, id);
+            system.addEntity(entity);
+        }
+    }
+}
+
+void World::removeComponent(entity_id_t id, TypeID::value_t index)
+{
+    auto i = entityIndex(id);
+    auto & entity = m_entities[i];
+    auto * prevComponentSetup = entity.componentSetup;
+
+    entity.componentBits.reset(index);
+    entity.componentSetup = componentSetup(entity.componentBits);
+    m_components[index].erase(i);
+
+    for (auto systemIndex : prevComponentSetup->systemIndices)
+    {
+        if (!entity.componentSetup->systemBits.test(systemIndex))
+        {
+            auto & system = *m_systems[systemIndex];
+            Entity entity(*this, id);
+            system.removeEntity(entity);
+        }
+    }
+}
+
+std::size_t World::entityIndex(entity_id_t id) const
+{
+    auto i = m_entityIndexByID.find(id);
+    Assert(i != m_entityIndexByID.end(), "");
+
+    return i->second;
+}
+
+EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBits)
+{
+    auto i = m_entityComponentSetups.find(componentBits);
+    if (i != m_entityComponentSetups.end())
+    {
+        return &i->second;
+    }
+
+#if VERBOSE
+    std::cout << "World: New component setup for bits " << componentBits.to_string() << std::endl;
+#endif
+
+    auto & setup = m_entityComponentSetups[componentBits];
+
+    for (auto b = 0; b < ECS_MAX_NUM_COMPONENTS; b++)
+    {
+        if (componentBits.test(b))
+        {
+#if VERBOSE
+            std::cout << "  Contains component " << b << std::endl;
+#endif
+            setup.componentIndices.push_back(b);
+        }
+    }
+    for (std::size_t s = 0; s < m_systems.keyUpperBound(); s++)
+    {
+        if (!m_systems.contains(s))
+        {
+            continue;
+        }
+
+        auto & system = *m_systems[s];
+        if (system.filter().accepts(componentBits))
+        {
+#if VERBOSE
+            std::cout << "  In system " << s << std::endl;
+#endif
+            setup.systemIndices.push_back(s);
+            setup.systemBits.set(s);
+        }
+    }
+
+    return &setup;
 }
 
 }

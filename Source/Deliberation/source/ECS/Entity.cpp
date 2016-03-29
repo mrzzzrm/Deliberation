@@ -10,7 +10,7 @@ namespace deliberation
 
 Entity::Entity():
     m_world(nullptr),
-    m_id(INVALID_ID)
+    m_id(ECS_INVALID_ENTITY_ID)
 {
 
 }
@@ -21,19 +21,9 @@ World & Entity::world() const
     return *m_world;
 }
 
-Entity::id_t Entity::id() const
+entity_id_t Entity::id() const
 {
     return m_id;
-}
-
-bool Entity::isValid()
-{
-    return !m_world || m_world->isValid(m_id);
-}
-
-bool Entity::isActive()
-{
-    return m_world->isActive(m_id);
 }
 
 const std::string & Entity::name() const
@@ -41,12 +31,12 @@ const std::string & Entity::name() const
     return data().name;
 }
 
-Entity::id_t Entity::parent() const
+entity_id_t Entity::parent() const
 {
     return data().parent;
 }
 
-std::vector<Entity::id_t> & Entity::children() const
+const std::vector<entity_id_t> & Entity::children() const
 {
     return data().children;
 }
@@ -56,18 +46,9 @@ const ComponentBitset & Entity::componentBits() const
     return data().componentBits;
 }
 
-void Entity::activate()
+bool Entity::isValid() const
 {
-    Assert(m_world, "Entity is hollow");
-
-    m_world->activate(m_id);
-}
-
-void Entity::deactivate()
-{
-    Assert(m_world, "Entity is hollow");
-
-    m_world->deactivate(m_id);
+    return !m_world || m_world->isValid(m_id);
 }
 
 void Entity::remove()
@@ -77,14 +58,14 @@ void Entity::remove()
     m_world->remove(m_id);
 }
 
-Entity::Entity(World & world, id_t id):
+Entity::Entity(World & world, entity_id_t id):
     m_world(&world),
     m_id(id)
 {
 
 }
 
-detail::EntityData & Entity::data() const
+EntityData & Entity::data() const
 {
     Assert(m_world, "Entity is hollow");
 

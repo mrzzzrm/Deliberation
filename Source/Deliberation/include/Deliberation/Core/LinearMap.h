@@ -63,7 +63,7 @@ public:
     Iterator erase(const Iterator & i);
 
     template<typename ... Args>
-    std::pair<Iterator, bool> emplace(std::size_t key, Args&&... args);
+    std::pair<Iterator, bool> emplace(std::size_t key, Args &&... args);
 
 private:
     friend struct Iterator;
