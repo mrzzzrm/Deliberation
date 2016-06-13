@@ -19,6 +19,8 @@ public:
                         float scale,
                         const Camera3D & camera);
 
+    void setFramebuffer(deliberation::Framebuffer & fb);
+
     void draw();
 
 private:

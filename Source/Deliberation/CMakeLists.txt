@@ -148,7 +148,7 @@ set(sources
     ${source_path}/Draw/TextureUploadExecution.cpp
     ${source_path}/Draw/TextureUploadExecution.h
     ${source_path}/Draw/Uniform.cpp
-    
+
     ${source_path}/ECS/ComponentBase.cpp
     ${source_path}/ECS/ComponentFilter.cpp
     ${source_path}/ECS/Entity.cpp
@@ -159,8 +159,19 @@ set(sources
     ${source_path}/Font/Font.cpp
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
-    
+
     ${source_path}/GLFW/GLFWInputAdapter.cpp
+
+    ${source_path}/Physics/BoxCollisionShape.cpp
+    ${source_path}/Physics/BroadphaseBase.cpp
+    ${source_path}/Physics/OctreeBroadphase.cpp
+    ${source_path}/Physics/BroadphaseProxy.cpp
+    ${source_path}/Physics/CollisionShape.cpp
+    ${source_path}/Physics/PhysicsWorld.cpp
+    ${source_path}/Physics/RigidBody.cpp
+    ${source_path}/Physics/SphereCollisionShape.cpp
+
+    ${source_path}/Platform/Application.cpp
 
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
@@ -279,29 +290,41 @@ set(api_includes
     ${include_path}/Draw/TextureUpload.h
     ${include_path}/Draw/Uniform.h
     ${include_path}/Draw/Uniform.inl
-    
-    ${include_path}/ECS/ComponentFilter.h  
-    ${include_path}/ECS/Component.h  
-    ${include_path}/ECS/Component.inl  
-    ${include_path}/ECS/ComponentBase.h  
-    ${include_path}/ECS/Defines.h  
-    ${include_path}/ECS/Entity.h  
-    ${include_path}/ECS/Entity.inl  
-    ${include_path}/ECS/EntityComponentSetup.h    
+
+    ${include_path}/ECS/ComponentFilter.h
+    ${include_path}/ECS/Component.h
+    ${include_path}/ECS/Component.inl
+    ${include_path}/ECS/ComponentBase.h
+    ${include_path}/ECS/Defines.h
+    ${include_path}/ECS/Entity.h
+    ${include_path}/ECS/Entity.inl
+    ${include_path}/ECS/EntityComponentSetup.h
     ${include_path}/ECS/EntityData.h
     ${include_path}/ECS/EntityData.inl
     ${include_path}/ECS/EventManager.h
     ${include_path}/ECS/EventManager.inl
-    ${include_path}/ECS/SystemBase.h  
-    ${include_path}/ECS/System.h  
+    ${include_path}/ECS/SystemBase.h
+    ${include_path}/ECS/System.h
     ${include_path}/ECS/World.h
     ${include_path}/ECS/World.inl
-    
+
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
-    
+
     ${include_path}/GLFW/GLFWInputAdapter.h
+
+    ${include_path}/Physics/BoxCollisionShape.h
+    ${include_path}/Physics/BroadphaseBase.h
+    ${include_path}/Physics/OctreeBroadphase.h
+    ${include_path}/Physics/BroadphaseProxy.h
+    ${include_path}/Physics/CollisionFilter.h
+    ${include_path}/Physics/CollisionShape.h
+    ${include_path}/Physics/PhysicsWorld.h
+    ${include_path}/Physics/RigidBody.h
+    ${include_path}/Physics/SphereCollisionShape.h
+
+    ${include_path}/Platform/Application.h
 
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h

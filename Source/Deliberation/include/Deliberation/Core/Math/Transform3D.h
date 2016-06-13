@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
@@ -8,6 +10,9 @@ namespace deliberation
 
 class Transform3D final
 {
+public:
+    static Transform3D atPosition(const glm::vec3 & position);
+
 public:
     Transform3D();
 
@@ -37,6 +42,8 @@ public:
     glm::vec3 directionLocalToWorld(const glm::vec3 & dir) const;
 
     Transform3D interpolated(const Transform3D & other, float v);
+
+    std::string toString() const;
 
     bool operator==(const Transform3D & other) const;
     bool operator!=(const Transform3D & other) const;

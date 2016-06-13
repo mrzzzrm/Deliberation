@@ -21,6 +21,12 @@ DebugGrid3DRenderer::DebugGrid3DRenderer(Context & context,
     init(scale);
 }
 
+void DebugGrid3DRenderer::setFramebuffer(deliberation::Framebuffer & fb)
+{
+    m_normalLines.setFramebuffer(fb);
+    m_fatLines.setFramebuffer(fb);
+}
+
 void DebugGrid3DRenderer::draw()
 {
     m_normalLines.uniform("viewProjection").set(m_camera.viewProjection());

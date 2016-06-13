@@ -1,15 +1,24 @@
 #include <Deliberation/Core/Math/Transform3D.h>
 
 #include <cmath>
+#include <sstream>
 
 #include <glm/gtx/transform.hpp>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Core/Math/GLMUtils.h>
 
 namespace deliberation
 {
+
+Transform3D Transform3D::atPosition(const glm::vec3 & position)
+{
+    Transform3D result;
+    result.setPosition(position);
+    return result;
+}
 
 Transform3D::Transform3D():
     m_scale(1.0f),
@@ -155,6 +164,17 @@ Transform3D Transform3D::interpolated(const Transform3D & other, float v) {
     result.setCenter(glm::mix(m_center, other.center(), v));
 
     return result;
+}
+
+std::string Transform3D::toString() const
+{
+    std::stringstream stream;
+    stream << "[Position: " << m_position <<
+              "; Orientation: " << m_orientation <<
+              "; Center: " << m_center <<
+              "; Scale: " << m_scale << "]";
+
+    return stream.str();
 }
 
 bool Transform3D::operator==(const Transform3D &other) const
