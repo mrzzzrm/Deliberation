@@ -3,9 +3,6 @@
 #include <iostream>
 #include <cassert>
 
-#include <IL/il.h>
-#include <IL/ilu.h>
-
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
@@ -15,7 +12,7 @@
 namespace
 {
 
-std::string prefixPath;
+std::string prefixPath(".");
 
 }
 
@@ -24,18 +21,6 @@ namespace deliberation
 
 void init()
 {
-    // DevIL
-    {
-        /*
-            TODO
-                Error checking
-        */
-
-        ilInit();
-        ilEnable(IL_ORIGIN_SET);
-        iluInit();
-    }
-
     // SDL_ttf
     {
         auto r = TTF_Init();
@@ -62,7 +47,14 @@ const std::string & prefixPath()
 
 void setPrefixPath(const std::string & prefixPath)
 {
-    ::prefixPath = prefixPath;
+    if (prefixPath.empty())
+    {
+        ::prefixPath = ".";
+    }
+    else
+    {
+        ::prefixPath = ::prefixPath;
+    }
 }
 
 std::string dataPath(const std::string path)

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <IL/il.h>
+//#include <IL/il.h>
 
 #include <Deliberation/Draw/PixelFormat.h>
 
 namespace deliberation
 {
 
-PixelFormat ILFormatToPixelFormat(ILenum format);
+//PixelFormat ILFormatToPixelFormat(ILenum format);
 
 }
 

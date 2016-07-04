@@ -4,7 +4,7 @@ message(STATUS "Tests")
 set(target BanditTest)
 
 # packages
-find_package(BANDIT     REQUIRED)
+find_package(Bandit     REQUIRED)
 find_package(GLFW       REQUIRED)
 find_package(glbinding  REQUIRED)
 find_package(GLM        REQUIRED)
@@ -36,7 +36,7 @@ set(sources
 set(libs
     Deliberation
     ${GLFW_LIBRARY}
-    ${GLBINDING_LIBRARY}
+    ${GLBINDING_LIBRARIES}
 )
 
 # executable

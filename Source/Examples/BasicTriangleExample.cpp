@@ -2,6 +2,7 @@
 #include <chrono>
 
 #include <glbinding/Binding.h>
+#include <glbinding/gl/gl.h>
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 #include <glbinding/gl/bitfield.h>
@@ -12,7 +13,10 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include <SDL2/SDL.h>
+
 #include <Deliberation/Deliberation.h>
+#include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
@@ -20,6 +24,9 @@
 #include <Deliberation/Draw/Clear.h>
 //#include <Deliberation/Draw.h>
 //#include <Deliberation/Program.h>
+
+#include <glbinding/ContextInfo.h>
+#include <glbinding/Version.h>
 
 int main
 (
@@ -29,28 +36,34 @@ int main
 {
     std::cout << "---- BasicTriangleExample ----" << std::endl;
 
-    GLFWwindow* window;
+    SDL_Init(SDL_INIT_VIDEO);
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+    SDL_Window * displayWindow;
+    SDL_Renderer * displayRenderer;
+    SDL_RendererInfo displayRendererInfo;
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "BasicTriangleExample", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
+    SDL_CreateWindowAndRenderer(1600, 900, SDL_WINDOW_OPENGL, &displayWindow, &displayRenderer);
+
+    SDL_GetRendererInfo(displayRenderer, &displayRendererInfo);
+
+    if ((displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) == 0 ||
+        (displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE) == 0) {
+        return 1;
     }
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+    SDL_GLContext glcontext = SDL_GL_CreateContext(displayWindow);
+    SDL_GL_MakeCurrent(displayWindow, glcontext);
+
     glbinding::Binding::initialize();
 
-    deliberation::init();
-    deliberation::setPrefixPath("..");
+    std::cout << std::endl
+        << "OpenGL Version:  " << glbinding::ContextInfo::version() << std::endl
+        << "OpenGL Vendor:   " << glbinding::ContextInfo::vendor() << std::endl
+        << "OpenGL Renderer: " << glbinding::ContextInfo::renderer() << std::endl;
 
-    deliberation::Context context;
+    deliberation::init();
+
+    deliberation::Context context(1600, 900);
 
     struct Vertex
     {
@@ -72,7 +85,8 @@ int main
         {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}
     });
     buffer.createUpload(vertices).schedule();
-    deliberation::Program program = context.createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"), deliberation::dataPath("Data/BasicTriangleTest.frag")});
+    deliberation::Program program = context.createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"),
+                                                           deliberation::dataPath("Data/BasicTriangleTest.frag")});
 
     deliberation::Draw draw = context.createDraw(program, gl::GL_TRIANGLES);
 
@@ -89,9 +103,22 @@ int main
     deliberation::Clear clear = context.createClear();
     clear.setColor({0.2, 0.2f, 0.2f, 0.0f});
 
+    bool running = true;
+
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    while (running)
     {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+            }
+        }
+
         auto seconds = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::system_clock::now() - begin);
 
         draw.uniform("BaseColor").set(glm::vec3(std::sin(seconds.count()), std::cos(seconds.count()), 1.0f));
@@ -100,20 +127,14 @@ int main
 
         clear.schedule();
 
-//        clear.schedule();
         draw.schedule();
-//       break;
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
+        SDL_RenderPresent(displayRenderer);
     }
 
     deliberation::shutdown();
 
-    glfwTerminate();
+    SDL_Quit();
     return 0;
 }
 

@@ -4,14 +4,6 @@ message(STATUS "Deliberation")
 set(include_path 	"${CMAKE_CURRENT_SOURCE_DIR}/include/Deliberation")
 set(source_path 	"${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-# packages
-find_package(glbinding  REQUIRED)
-find_package(GLM        REQUIRED)
-FIND_PACKAGE(IL		    REQUIRED)
-FIND_PACKAGE(ILU	    REQUIRED)
-FIND_PACKAGE(SDL2	    REQUIRED)
-FIND_PACKAGE(SDL2_ttf   REQUIRED)
-find_package(GLFW       REQUIRED)
 
 # include
 include_directories(
@@ -23,7 +15,6 @@ include_directories(
     ${SDL2TTF_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
-    ${IL_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
 )
 
@@ -346,14 +337,11 @@ set(api_includes
 
 # libs
 set(libs
+    ${GLBINDING_LIBRARIES}
     ${GLFW_LIBRARY}
-    ${GLBINDING_LIBRARY}
-    ${IL_LIBRARIES}
-    ${ILU_LIBRARIES}
-    ${SDL2_LIBRARY}
-    ${SDL2TTF_LIBRARY}
 )
 
 # library
-add_library(Deliberation ${api_includes} ${sources})
-target_link_libraries(Deliberation ${libs})
+add_library(Deliberation STATIC ${api_includes} ${sources})
+target_link_libraries(Deliberation
+    ${libs})

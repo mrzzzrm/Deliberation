@@ -1,0 +1,6 @@
+set(GLBINDING_ROOT ${PROJECT_SOURCE_DIR}/Extern/glbinding-2.1.1)
+
+set(GLBINDING_INCLUDE_DIR ${GLBINDING_ROOT}/include)
+set(GLBINDING_LIBRARIES ${GLBINDING_ROOT}/lib/debug/linux64/clang++-libc++/libglbindingd.a)
+
+set(GLBINDING_LIBRARIES ${GLBINDING_LIBRARIES})

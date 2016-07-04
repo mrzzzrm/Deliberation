@@ -1,13 +1,6 @@
 message(STATUS "Examples")
 
-# packages
-find_package(GLFW       REQUIRED)
-find_package(glbinding  REQUIRED)
-find_package(GLM        REQUIRED)
-FIND_PACKAGE(IL		    REQUIRED)
-FIND_PACKAGE(ILU	    REQUIRED)
-FIND_PACKAGE(SDL2	    REQUIRED)
-FIND_PACKAGE(SDL2_ttf   REQUIRED)
+find_package(GLFW REQUIRED)
 
 # includes
 include_directories(
@@ -18,8 +11,8 @@ include_directories(
 
     ${GLBINDING_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
-    ${GLFW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
+    ${GLFW_INCLUDE_DIR}
 )
 
 # sources
@@ -31,8 +24,9 @@ set(sources
 # libs
 set(libs
     Deliberation
-    ${GLFW_LIBRARY}
-    ${GLBINDING_LIBRARY}
+    ${SDL2_LIBRARY}
+    ${SDL2TTF_LIBRARY}
+    ${OPENGL_gl_LIBRARY}
 )
 
 # AmbientOcclusionExample
