@@ -1,6 +1,12 @@
 #include <Deliberation/Platform/Application.h>
 
+#include <iostream>
+
+#include <SDL_image.h>
+
 #include <glbinding/Binding.h>
+#include <glbinding/ContextInfo.h>
+#include <glbinding/Version.h>
 
 #include <Deliberation/Deliberation.h>
 
@@ -18,29 +24,68 @@ Application::Application(const std::string & name):
 
 Application::~Application() = default;
 
+
+Context & Application::context()
+{
+    return m_context.get();
+}
+
+const Context & Application::context() const
+{
+    return m_context.get();
+}
+
 int Application::run()
 {
     m_running = true;
 
-    // Init GLFW
-    if (!glfwInit())
+    // Init SDL
+    if (!SDL_Init(SDL_INIT_VIDEO))
     {
         m_returnCode = -1;
     }
-    m_window = glfwCreateWindow(1600, 900, m_name.c_str(), NULL, NULL);
-    if (!m_window)
+
+    // Init SDL_image
     {
-        glfwTerminate();
+        int flags = IMG_INIT_JPG|IMG_INIT_PNG;
+        int sucess = IMG_Init(flags);
+        if (sucess & flags != flags)
+        {
+            std::cerr << "IMG_Init: Failed to init required jpg and png support!" << std::endl;
+            std::cerr << "IMG_Init: " << IMG_GetError() << std::endl;
+            m_returnCode = -1;
+        }
+    }
+
+    SDL_CreateWindowAndRenderer(1600, 900, SDL_WINDOW_OPENGL, &m_displayWindow, &m_displayRenderer);
+    if (!m_displayWindow || !m_displayRenderer)
+    {
+        SDL_Quit();
         m_returnCode =  -1;
     }
-    glfwMakeContextCurrent(m_window);
+
+    SDL_GetRendererInfo(m_displayRenderer, &m_displayRendererInfo);
+
+    if ((m_displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) == 0 ||
+        (m_displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE) == 0) {
+        return 1;
+    }
+
+    m_glContext = SDL_GL_CreateContext(m_displayWindow);
+    SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
     // Init glbinding
     glbinding::Binding::initialize();
 
+    std::cout << std::endl
+        << "OpenGL Version:  " << glbinding::ContextInfo::version() << std::endl
+        << "OpenGL Vendor:   " << glbinding::ContextInfo::vendor() << std::endl
+        << "OpenGL Renderer: " << glbinding::ContextInfo::renderer() << std::endl;
+
     deliberation::init();
     deliberation::EnableGLErrorChecks();
-    deliberation::setPrefixPath("/home/moritz/Coding/VoxelAdvent/Extern/Deliberation/");
+
+    m_context.reset(1600, 900);
 
     onStartup();
 
@@ -48,10 +93,19 @@ int Application::run()
     {
         onFrame(seconds);
 
-        glfwSwapBuffers(m_window);
-        glfwPollEvents();
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    quit(0);
+            }
+        }
 
-        return m_running && !glfwWindowShouldClose(m_window);
+        SDL_RenderPresent(m_displayRenderer);
+
+        return m_running;
     });
 
     onShutdown();

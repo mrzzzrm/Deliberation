@@ -13,6 +13,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
     ${SDL2TTF_INCLUDE_DIR}
+    ${SDL2IMAGE_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
@@ -339,6 +340,7 @@ set(api_includes
 set(libs
     ${GLBINDING_LIBRARIES}
     ${GLFW_LIBRARY}
+    ${SDL2_IMAGE_LIBRARY}
 )
 
 # library

@@ -24,7 +24,7 @@ public:
 
 private:
     std::string m_path;
-    Origin m_origin;
+    Origin      m_origin;
 };
 
 }

@@ -33,7 +33,7 @@ find_package(glbinding  REQUIRED)
 find_package(GLM        REQUIRED)
 find_package(SDL2       REQUIRED)
 find_package(SDL2_ttf   REQUIRED)
-find_package(GLFW       REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 # Include projects
 add_subdirectory(Source)

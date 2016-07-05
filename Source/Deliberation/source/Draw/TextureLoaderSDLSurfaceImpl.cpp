@@ -30,6 +30,7 @@ TextureLoaderSDLSurfaceImpl::TextureLoaderSDLSurfaceImpl(SDL_Surface * surface):
         break;
     case SDL_PIXELFORMAT_RGBA8888:
     case SDL_PIXELFORMAT_ARGB8888:
+    case SDL_PIXELFORMAT_ABGR8888:
         m_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
         break;
     default:

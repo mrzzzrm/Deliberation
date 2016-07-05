@@ -1,7 +1,5 @@
 message(STATUS "Examples")
 
-find_package(GLFW REQUIRED)
-
 # includes
 include_directories(
     BEFORE
@@ -12,7 +10,6 @@ include_directories(
     ${GLBINDING_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
-    ${GLFW_INCLUDE_DIR}
 )
 
 # sources
