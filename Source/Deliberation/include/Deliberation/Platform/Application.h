@@ -7,6 +7,7 @@
 #include <Deliberation/Draw/Context.h>
 
 #include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Core/InputAdapterBase.h>
 
 namespace deliberation
 {
@@ -16,6 +17,9 @@ class DELIBERATION_API Application
 public:
     Application(const std::string & name);
     virtual ~Application();
+
+    InputAdapterBase & inputAdapter();
+    const InputAdapterBase & inputAdapter() const;
 
     Context & context();
     const Context & context() const;
@@ -40,6 +44,8 @@ private:
     SDL_Renderer *      m_displayRenderer;
     SDL_RendererInfo    m_displayRendererInfo;
     SDL_GLContext       m_glContext;
+
+    InputAdapterBase    m_inputAdapter;
 };
 
 }

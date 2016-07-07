@@ -24,6 +24,15 @@ Application::Application(const std::string & name):
 
 Application::~Application() = default;
 
+InputAdapterBase & Application::inputAdapter()
+{
+    return m_inputAdapter;
+}
+
+const InputAdapterBase & Application::inputAdapter() const
+{
+    return m_inputAdapter;
+}
 
 Context & Application::context()
 {
