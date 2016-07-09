@@ -107,8 +107,18 @@ int Application::run()
         {
             switch (event.type)
             {
+                case SDL_KEYUP:
+                case SDL_KEYDOWN:
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
+                case SDL_MOUSEMOTION:
+                case SDL_MOUSEWHEEL:
+                    m_inputAdapter.onSDLInputEvent(event);
+                    break;
+
                 case SDL_QUIT:
                     quit(0);
+                    break;
             }
         }
 

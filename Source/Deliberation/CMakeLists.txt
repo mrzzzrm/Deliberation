@@ -152,8 +152,6 @@ set(sources
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
 
-    ${source_path}/GLFW/GLFWInputAdapter.cpp
-
     ${source_path}/Physics/BoxCollisionShape.cpp
     ${source_path}/Physics/BroadphaseBase.cpp
     ${source_path}/Physics/OctreeBroadphase.cpp
@@ -164,6 +162,7 @@ set(sources
     ${source_path}/Physics/SphereCollisionShape.cpp
 
     ${source_path}/Platform/Application.cpp
+    ${source_path}/Platform/InputAdapter.cpp
 
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
@@ -304,8 +303,6 @@ set(api_includes
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
 
-    ${include_path}/GLFW/GLFWInputAdapter.h
-
     ${include_path}/Physics/BoxCollisionShape.h
     ${include_path}/Physics/BroadphaseBase.h
     ${include_path}/Physics/OctreeBroadphase.h
@@ -317,6 +314,7 @@ set(api_includes
     ${include_path}/Physics/SphereCollisionShape.h
 
     ${include_path}/Platform/Application.h
+    ${include_path}/Platform/InputAdapter.h
 
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h

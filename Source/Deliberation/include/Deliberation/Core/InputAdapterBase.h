@@ -15,13 +15,14 @@ public:
     enum MouseButton
     {
         MouseButton_Left = 0,
-        MouseButton_Right
+        MouseButton_Right,
+        MouseButton_Unknown
     };
 
     enum Key
     {
         /* Printable keys */
-        Key_SPACE,
+        Key_SPACE = 0,
         Key_APOSTROPHE,          /* ' */
         Key_COMMA,               /* , */
         Key_MINUS,               /* - */
@@ -141,7 +142,9 @@ public:
         Key_RIGHT_CONTROL,
         Key_RIGHT_ALT,
         Key_RIGHT_SUPER,
-        Key_MENU
+        Key_MENU,
+
+        Key_UNKNOWN
     };
 
 public:

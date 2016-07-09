@@ -7,7 +7,8 @@
 #include <Deliberation/Draw/Context.h>
 
 #include <Deliberation/Deliberation_API.h>
-#include <Deliberation/Core/InputAdapterBase.h>
+
+#include <Deliberation/Platform/InputAdapter.h>
 
 namespace deliberation
 {
@@ -45,7 +46,7 @@ private:
     SDL_RendererInfo    m_displayRendererInfo;
     SDL_GLContext       m_glContext;
 
-    InputAdapterBase    m_inputAdapter;
+    InputAdapter        m_inputAdapter;
 };
 
 }
