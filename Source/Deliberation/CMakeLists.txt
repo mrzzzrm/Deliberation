@@ -4,10 +4,7 @@ message(STATUS "Deliberation")
 set(include_path 	"${CMAKE_CURRENT_SOURCE_DIR}/include/Deliberation")
 set(source_path 	"${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-
-# include
-include_directories(
-    BEFORE
+set(DELIBERATION_INCLUDE_DIRS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/source
@@ -17,6 +14,13 @@ include_directories(
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
+    
+    CACHE INTERAL "All Deliberation include dirs" 
+)
+
+# include
+include_directories(
+    ${DELIBERATION_INCLUDE_DIRS}
 )
 
 # library type
@@ -341,7 +345,15 @@ set(libs
     ${SDL2_IMAGE_LIBRARY}
 )
 
+set(DELIBERATION_LIBRARIES
+    Deliberation
+    ${libs}
+    CACHE INTERNAL ""
+)
+
 # library
 add_library(Deliberation STATIC ${api_includes} ${sources})
 target_link_libraries(Deliberation
     ${libs})
+    
+    
