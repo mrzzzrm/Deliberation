@@ -348,6 +348,9 @@ set(libs
 set(DELIBERATION_LIBRARIES
     Deliberation
     ${libs}
+    ${SDL2_LIBRARY}
+    ${SDL2TTF_LIBRARY}
+    ${OPENGL_gl_LIBRARY}
     CACHE INTERNAL ""
 )
 
