@@ -42,6 +42,12 @@ public:
     template<typename T>
     void read(std::size_t offset, T & value) const;
 
+    template<typename T>
+    T & access(size_t offset);
+
+    template<typename T>
+    const T & access(size_t offset) const;
+
     Blob & operator=(const Blob & blob);
     Blob & operator=(Blob && blob);
 

@@ -38,11 +38,15 @@ set(sources
     ${source_path}/Core/BitUtils.cpp
     ${source_path}/Core/Blob.cpp
     ${source_path}/Core/Color.cpp
+    ${source_path}/Core/DataLayout.cpp
+    ${source_path}/Core/DataLayoutField.cpp
+    ${source_path}/Core/LayoutedBlob.cpp
     ${source_path}/Core/FileUtils.cpp
     ${source_path}/Core/InputAdapterBase.cpp
     ${source_path}/Core/LapTimer.cpp
     ${source_path}/Core/MainLoop.cpp
     ${source_path}/Core/StringUtils.cpp
+    ${source_path}/Core/Types.cpp
     ${source_path}/Core/Viewport.cpp
 
     ${source_path}/Core/Math/AABB.cpp
@@ -196,12 +200,16 @@ set(api_includes
     ${include_path}/Core/BitUtils.h
     ${include_path}/Core/BitUtils.inl
     ${include_path}/Core/Color.h
+    ${include_path}/Core/DataLayout.h
+    ${include_path}/Core/DataLayoutField.h
     ${include_path}/Core/FileUtils.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl
     ${include_path}/Core/IntTypes.h
     ${include_path}/Core/InputAdapterBase.h
     ${include_path}/Core/LapTimer.h
+    ${include_path}/Core/LayoutedBlob.h
+    ${include_path}/Core/LayoutedBlob.inl
     ${include_path}/Core/LinearMap.h
     ${include_path}/Core/LinearMap.inl
     ${include_path}/Core/LinearOctree.h
@@ -221,6 +229,7 @@ set(api_includes
     ${include_path}/Core/SparseVector.inl
     ${include_path}/Core/TypeID.h
     ${include_path}/Core/TypeID.inl
+    ${include_path}/Core/Types.h
     ${include_path}/Core/Viewport.h
 
     ${include_path}/Core/Math/AABB.h

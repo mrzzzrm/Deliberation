@@ -3,11 +3,16 @@
 
 #include <Deliberation/Deliberation.h>
 
+#include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/DataLayoutField.h>
+#include <Deliberation/Core/Types.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/LinearOctree.h>
 #include <Deliberation/Core/RingBuffer.h>
 #include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
+#include <Deliberation/Core/IntTypes.h>
 
 using namespace deliberation;
 
@@ -169,6 +174,40 @@ void SparseVectorExample()
     std::cout << vec.toString() << std::endl;
 }
 
+void LayoutedBlobExample()
+{
+    std::cout << "----------- LayoutedBlobExample -----------" << std::endl;
+
+    std::cout << Type_I32.name() << ": " << Type_I32.typeID() << std::endl;
+    std::cout << Type_Vec3.name() << ": " << Type_Vec3.typeID() << std::endl;
+
+    DataLayout layout({
+                          {"Age", Type_I32},
+                          {"Direction", Type_Vec3}
+                      });
+
+    LayoutedBlob blob = LayoutedBlob(layout, 3);
+
+    auto age = layout.field("Age");
+    auto direction = layout.field("Direction");
+
+    auto ages = blob.field<i32>(age);
+    auto directions = blob.field<glm::vec3>(direction);
+
+    directions[0] = glm::vec3(1, 2, 3);
+    directions[1] = glm::vec3(4, 5, 6);
+    directions[2] = glm::vec3(7, 8, 9);
+
+    ages[0] = 12;
+    ages[1] = 42;
+    ages[2] = 89;
+
+    for (int i = 0; i < blob.count(); i++)
+    {
+        std::cout << "  " << i << ": " << ages[i] << " " << directions[i] << std::endl;
+    }
+}
+
 int main(int argc, char * argv[])
 {
     LinearMapExample();
@@ -176,6 +215,7 @@ int main(int argc, char * argv[])
     RingBufferExample();
     TypeIDExample();
     SparseVectorExample();
+    LayoutedBlobExample();
 
     return 0;
 }

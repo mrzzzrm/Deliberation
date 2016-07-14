@@ -78,5 +78,24 @@ void Blob::read(std::size_t offset, T & value) const
     value = *tptr;
 }
 
+template<typename T>
+T & Blob::access(size_t offset)
+{
+    Assert(offset + sizeof(T) <= size(), "");
+
+    auto * bptr = (char*)ptr();
+    return *(T*)&bptr[offset];
+}
+
+template<typename T>
+const T & Blob::access(size_t offset) const
+{
+    Assert(offset + sizeof(T) <= size(), "");
+
+    auto * bptr = (char*)ptr();
+    return *(const T*)&bptr[offset];
+
+}
+
 }
 
