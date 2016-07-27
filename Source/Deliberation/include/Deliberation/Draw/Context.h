@@ -6,10 +6,10 @@
 
 #include <Deliberation/Deliberation_API.h>
 
-#include <Deliberation/Draw/Detail/NamedDataMemberOf.h>
+#include <Deliberation/Core/DataLayout.h>
+
 #include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Draw.h>
@@ -40,13 +40,7 @@ public:
 
     void setBackbufferResolution(unsigned int width, unsigned height);
 
-    template<typename T>
-    BufferLayout createBufferLayout(const std::vector<detail::NamedDataMemberOf<T>> & members);
-
-    template<typename ... Types>
-    BufferLayout createPackedBufferLayout(const std::vector<std::string> & names);
-
-    Buffer createBuffer(const BufferLayout & layout);
+    Buffer createBuffer(const DataLayout & layout);
     Buffer createIndexBuffer8();
     Buffer createIndexBuffer16();
     Buffer createIndexBuffer32();

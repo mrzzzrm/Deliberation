@@ -21,6 +21,11 @@ size_t LayoutedBlob::count() const
     return m_count;
 }
 
+const Blob & LayoutedBlob::rawData() const
+{
+    return m_data;
+}
+
 std::string LayoutedBlob::toString() const
 {
     return "";

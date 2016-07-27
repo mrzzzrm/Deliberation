@@ -5,10 +5,9 @@
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Core/Detail/INamedDataMemberOfImpl.h>
 #include <Deliberation/Core/OffsetOf.h>
-
-#include <Deliberation/Draw/GL/GLSLTypeOf.h>
-#include <Deliberation/Draw/Detail/INamedDataMemberOfImpl.h>
+#include <Deliberation/Core/Types.h>
 
 namespace deliberation
 {
@@ -24,16 +23,16 @@ public:
     NamedDataMemberOf(const std::string & name, U T::* ptr);
 
     const std::string & name() const;
-    gl::GLenum type() const;
+    Type & type() const;
     unsigned int offset(const T & dummy) const;
 
 private:
-    std::shared_ptr<INamedDataMemberOfImpl<T>> m_impl;
-    std::string m_name;
+    std::shared_ptr<INamedDataMemberOfImpl<T>>  m_impl;
+    std::string                                 m_name;
 };
 
 }
 
 }
 
-#include "NamedDataMemberOf.inl"
+#include <Deliberation/Core/Detail/NamedDataMemberOf.inl>

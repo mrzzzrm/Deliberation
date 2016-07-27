@@ -46,6 +46,10 @@ target_link_libraries(BasicCoreExample ${libs})
 add_executable(BasicMathExample BasicMathExample.cpp)
 target_link_libraries(BasicMathExample ${libs})
 
+# BasicMeshExample
+add_executable(BasicMeshExample BasicMeshExample.cpp)
+target_link_libraries(BasicMeshExample ${libs})
+
 # BasicTriangleExample
 add_executable(BasicTriangleExample BasicTriangleExample.cpp)
 target_link_libraries(BasicTriangleExample ${libs})
@@ -65,10 +69,6 @@ target_link_libraries(BasicRenderTargetExample ${libs})
 # BasicSceneExample
 add_executable(BasicSceneExample BasicSceneExample.cpp)
 target_link_libraries(BasicSceneExample ${libs})
-
-# BasicMeshExample
-add_executable(BasicMeshExample BasicMeshExample.cpp)
-target_link_libraries(BasicMeshExample ${libs})
 
 # PhysicsExample
 add_executable(PhysicsExample PhysicsExample.cpp)

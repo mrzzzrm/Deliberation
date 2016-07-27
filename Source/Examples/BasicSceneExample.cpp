@@ -72,7 +72,7 @@ public:
         deliberation::MeshCompiler<deliberation::UVSphere::Vertex> compiler(mesh);
         compiler.compile();
 
-        auto layout = context().createBufferLayout<deliberation::UVSphere::Vertex>({
+        auto layout = deliberation::DataLayout::fromStructOrClass<deliberation::UVSphere::Vertex>({
                                                                                      {"Position", &deliberation::UVSphere::Vertex::position},
                                                                                      {"Normal", &deliberation::UVSphere::Vertex::normal}
                                                                                  });

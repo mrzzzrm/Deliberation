@@ -4,13 +4,14 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Core/DataLayout.h>
 
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/Sampler.h>
 #include <Deliberation/Draw/Program.h>
+
+#include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
@@ -23,7 +24,6 @@ namespace detail
 }
 
 class Buffer;
-class BufferLayoutField;
 class Context;
 class Framebuffer;
 class DrawState;
@@ -53,8 +53,8 @@ public:
     Buffer setIndices8(const Blob & data);
     Buffer setIndices16(const Blob & data);
     Buffer setIndices32(const Blob & data);
-    Buffer addVertices(const BufferLayout & layout, const Blob & data);
-    Buffer addInstances(const BufferLayout & layout, const Blob & data, unsigned int divisor = 1u);
+    Buffer addVertices(const DataLayout & layout, const Blob & data);
+    Buffer addInstances(const DataLayout & layout, const Blob & data, unsigned int divisor = 1u);
 
     void setIndexBuffer(const Buffer & buffer);
     void addVertexBuffer(const Buffer & buffer);
@@ -86,7 +86,7 @@ private:
     void verifyVertexBuffer(const Buffer & buffer) const;
     void verifyInstanceBuffer(const Buffer & buffer) const;
 
-    const BufferLayoutField * bufferField(const std::string & name,
+    const DataLayoutField * bufferField(const std::string & name,
                                           detail::BufferBinding ** o_binding,
                                           gl::GLuint * o_divisor,
                                           unsigned int * o_count) const;

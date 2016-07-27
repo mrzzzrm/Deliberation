@@ -3,7 +3,6 @@
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
 class Buffer;

@@ -10,12 +10,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
 #include <SDL2/SDL.h>
 
 #include <Deliberation/Deliberation.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Context.h>
@@ -23,7 +21,6 @@
 
 #include <glbinding/ContextInfo.h>
 #include <glbinding/Version.h>
-
 struct Vertex
 {
     glm::vec2 position;
@@ -41,26 +38,19 @@ public:
 
     virtual void onStartup() override
     {
-        auto layout = context().createBufferLayout<Vertex>({
-                                                               {"Position", &Vertex::position},
-                                                               {"Color", &Vertex::color},
-                                                           });
+        auto layout = deliberation::DataLayout({{"Position", deliberation::Type_Vec2},
+                                                {"Color", deliberation::Type_Vec3}});
 
-        auto buffer = context().createBuffer(layout);
+        auto vertices = deliberation::LayoutedBlob(layout, 3);
 
-        auto vertices = std::vector<Vertex>({
-                                                {{-0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-                                                {{0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-                                                {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}
-                                            });
-
-        buffer.createUpload(vertices).schedule();
+        vertices.assign<glm::vec2>("Position", {{-0.5f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.5f}});
+        vertices.assign<glm::vec3>("Color", {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}});
 
         auto program = context().createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"),
                                                 deliberation::dataPath("Data/BasicTriangleTest.frag")});
 
         m_draw = context().createDraw(program, gl::GL_TRIANGLES);
-        m_draw.addVertexBuffer(buffer);
+        m_draw.addVertices(vertices.layout(), vertices.rawData());
         m_draw.state().setDepthState(deliberation::DepthState(false, false));
         m_draw.state().setCullState(deliberation::CullState::disabled());
 

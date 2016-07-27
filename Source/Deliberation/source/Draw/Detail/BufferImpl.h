@@ -2,7 +2,7 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Draw/BufferLayout.h>
+#include <Deliberation/Core/DataLayout.h>
 
 namespace deliberation
 {
@@ -15,13 +15,13 @@ namespace detail
 class BufferImpl final
 {
 public:
-    BufferImpl(Context & context, const BufferLayout & layout);
+    BufferImpl(Context & context, const DataLayout & layout);
     ~BufferImpl();
 
     Context &       context;
     gl::GLuint      glName;
     unsigned int    count;
-    BufferLayout    layout;
+    DataLayout      layout;
 };
 
 }

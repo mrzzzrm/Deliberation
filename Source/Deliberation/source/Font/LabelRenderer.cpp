@@ -7,9 +7,9 @@
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/Viewport.h>
 
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
@@ -37,7 +37,7 @@ LabelRenderer::LabelRenderer(Context & context):
         { 0.5f,  0.5f}
     });
 
-    BufferLayout layout = m_context->createPackedBufferLayout<glm::vec2>({"Position"});
+    DataLayout layout = DataLayout({"Position", Type_Vec2});
     m_vertexBuffer = m_context->createBuffer(layout);
     m_vertexBuffer.createUpload(vertices).schedule();
 

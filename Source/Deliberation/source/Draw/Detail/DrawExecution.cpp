@@ -9,6 +9,7 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/GL/GLStateManager.h>
+#include <Deliberation/Draw/GL/GLType.h>
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Draw.h>
@@ -264,7 +265,7 @@ gl::GLenum DrawExecution::elementType() const
     Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
     Assert(m_drawImpl.indexBuffer->layout.fields().size() == 1u, "Invalid index buffer layout");
 
-    return m_drawImpl.indexBuffer->layout.fields()[0].type();
+    return GLType(m_drawImpl.indexBuffer->layout.fields()[0].type());
 }
 
 void DrawExecution::applyDepthState()

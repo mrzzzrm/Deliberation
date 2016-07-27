@@ -6,8 +6,8 @@
 #include <Deliberation/Deliberation_API.h>
 
 #include <Deliberation/Core/Blob.h>
+#include <Deliberation/Core/DataLayout.h>
 
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 
 /*
@@ -32,7 +32,7 @@ public:
     Buffer();
 
     unsigned int count() const;
-    const BufferLayout & layout() const;
+    const DataLayout & layout() const;
 
     BufferUpload createUpload(const Blob & data);
     BufferUpload createRawUpload(const Blob & data, unsigned int count);

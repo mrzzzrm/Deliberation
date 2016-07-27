@@ -58,7 +58,7 @@ int Application::run()
     {
         int flags = IMG_INIT_JPG|IMG_INIT_PNG;
         int sucess = IMG_Init(flags);
-        if (sucess & flags != flags)
+        if ((sucess & flags) != flags)
         {
             std::cerr << "IMG_Init: Failed to init required jpg and png support!" << std::endl;
             std::cerr << "IMG_Init: " << IMG_GetError() << std::endl;

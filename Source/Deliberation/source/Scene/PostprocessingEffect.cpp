@@ -37,7 +37,7 @@ PostprocessingEffect::PostprocessingEffect(Context & context,
         { 1.0f,  1.0f},
     });
 
-    auto layout = context.createPackedBufferLayout<glm::vec2>({"Position"});
+    auto layout = DataLayout("Position", Type_Vec2);
     m_vertexBuffer = context.createBuffer(layout);
     m_vertexBuffer.scheduleUpload(vertices);
 

@@ -13,7 +13,7 @@ Buffer::Buffer():
 
 }
 
-const BufferLayout & Buffer::layout() const
+const DataLayout & Buffer::layout() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
 

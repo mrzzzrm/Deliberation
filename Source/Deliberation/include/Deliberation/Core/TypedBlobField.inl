@@ -14,7 +14,18 @@ TypedBlobField<T>::TypedBlobField(Blob & data, const DataLayout & layout, const 
     m_layout(layout),
     m_field(field)
 {
-    Assert(field.type().typeID() == TypeID::value<T>(), "Field: " + field.type().name() + " " + field.name());
+    Assert(field.type().typeID() == TypeID::value<T>(), std::string("Field: ") + field.type().name() + " " + field.name());
+}
+
+template<typename T>
+void TypedBlobField<T>::assign(const std::vector<T> & values)
+{
+    Assert(values.size() == m_data.size() / m_layout.stride(), "");
+
+    for (int v = 0; v < values.size(); v++)
+    {
+        (*this)[v] = values[v];
+    }
 }
 
 template<typename T>

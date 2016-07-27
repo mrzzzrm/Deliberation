@@ -174,6 +174,14 @@ void SparseVectorExample()
     std::cout << vec.toString() << std::endl;
 }
 
+void DataLayoutExample()
+{
+    std::cout << "----------- DataLayoutExample -----------" << std::endl;
+
+    DataLayout layout();
+
+}
+
 void LayoutedBlobExample()
 {
     std::cout << "----------- LayoutedBlobExample -----------" << std::endl;
@@ -215,6 +223,7 @@ int main(int argc, char * argv[])
     RingBufferExample();
     TypeIDExample();
     SparseVectorExample();
+    DataLayoutExample();
     LayoutedBlobExample();
 
     return 0;

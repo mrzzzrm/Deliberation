@@ -24,6 +24,8 @@
 #include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Platform/Application.h>
 #include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 
 
 struct Vertex
@@ -61,16 +63,48 @@ public:
 
     deliberation::Draw createDraw()
     {
-        deliberation::VertexLayout layout({{"Position", deliberation::Type_Vec3},
-                                           {"Color", deliberation::Type_Vec3}});
-        deliberation::
+        deliberation::DataLayout layout({{"Position", deliberation::Type_Vec3},
+                                         {"Color", deliberation::Type_Vec3}});
+        deliberation::LayoutedBlob meshVertices(layout, 5);
 
+        auto positions = meshVertices.field("Position");
+        auto colors = meshVertices.field("Color");
 
-        positions.add(glm::vec3(0, 0, 0));
-        positions.add(glm::vec3(0, 0, -1));
-        positions.add(glm::vec3(1, 0, -1));
-        positions.add(glm::vec3(1, 0, 0));
-        positions.add(glm::vec3(0, 1, 0));
+        positions[0] = glm::vec3(0, 0, 0);
+        colors[0]    = glm::vec3(1, 0, 0);
+
+        positions[1] = glm::vec3(0, 0, -1);
+        colors[0]    = glm::vec3(1, 0, 0);
+
+        positions[2] = glm::vec3(1, 0, -1);
+        colors[0]    = glm::vec3(1, 0, 0);
+
+        positions[3] = glm::vec3(1, 0, 0);
+        colors[0]    = glm::vec3(1, 0, 0);
+
+        positions[4] = glm::vec3(0, 1, 0);
+        colors[0]    = glm::vec3(1, 1, 1);
+
+        deliberation::LayoutedBlob faceAttributes;
+
+        deliberation::Mesh2::Faces faces(5);
+        faces[0] = {{0, 3, 4}};
+        faces[1] = {{3, 2, 4}};
+        faces[2] = {{1, 4, 2}};
+        faces[3] = {{0, 4, 1}};
+        faces[4] = {{0, 1, 2, 3}};
+
+        deliberation::Mesh2 mesh(std::move(meshVertices), std::move(faceAttributes), std::move(faces));
+
+        deliberation::MeshCompiler2 compiler;
+        auto compiledMesh = compiler.compile(mesh);
+
+        auto program = context().createProgram({deliberation::dataPath("Data/BasicMeshTest.vert"),
+                                               deliberation::dataPath("Data/BasicMeshTest.frag")});
+
+        auto draw = context().createDraw(program);
+        draw.addVertices(compiledMesh.vertices());
+        draw.setIndices16(compiledMesh.indices());
 
 
 

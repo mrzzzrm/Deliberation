@@ -8,7 +8,8 @@
 namespace deliberation
 {
 
-template<typename T> struct DELIBERATION_API GLSLTypeOf
+template<typename T>
+struct DELIBERATION_API GLSLTypeOf
 {
     static constexpr gl::GLenum value = gl::GL_NONE;
 };

@@ -8,6 +8,8 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/GL/GLType.h>
+
 #include "Draw/Detail/BufferImpl.h"
 
 #include "GLVertexAttributeFormat.h"
@@ -31,9 +33,9 @@ void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffse
     auto programAttribute = m_programInterface.attribute(name);
     auto bufferField = m_buffer.layout.field(name);
 
-    if (programAttribute.type() != bufferField.type())
+    if (programAttribute.type() != GLType(bufferField.type()))
     {
-        std::cout << "Cannot bind '" << bufferField.name() << "' of type " << bufferField.type() << " to vertex attribute of type " << programAttribute.type() << std::endl;
+        std::cout << "Cannot bind '" << bufferField.name() << "' of type " << bufferField.type().name() << " to vertex attribute of type " << programAttribute.type() << std::endl;
         assert(false);
     }
 

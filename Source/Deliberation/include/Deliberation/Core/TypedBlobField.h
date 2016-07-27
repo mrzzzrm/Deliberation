@@ -15,6 +15,8 @@ class TypedBlobField final
 public:
     TypedBlobField(Blob & data, const DataLayout & layout, const DataLayoutField & field);
 
+    void assign(const std::vector<T> & values);
+
     T & operator[](size_t index);
     const T & operator[](size_t index) const;
 

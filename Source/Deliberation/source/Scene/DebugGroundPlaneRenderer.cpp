@@ -35,7 +35,7 @@ DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(Context & context, const Came
     });
 
     m_draw.state().setCullState(CullState::disabled());
-    m_draw.addVertices(m_context.createPackedBufferLayout<glm::vec3>({"Position"}), vertices);
+    m_draw.addVertices(DataLayout("Position", Type_Vec3), vertices);
 }
 
 void DebugGroundPlaneRenderer::setFramebuffer(Framebuffer & framebuffer)

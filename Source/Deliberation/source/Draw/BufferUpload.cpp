@@ -3,8 +3,8 @@
 #include <string>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/DataLayout.h>
 
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Context.h>
 

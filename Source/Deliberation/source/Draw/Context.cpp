@@ -51,26 +51,26 @@ void Context::setBackbufferResolution(unsigned int width, unsigned height)
     m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(*this, width, height));
 }
 
-Buffer Context::createBuffer(const BufferLayout & layout)
+Buffer Context::createBuffer(const DataLayout & layout)
 {
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Buffer Context::createIndexBuffer8()
 {
-    BufferLayout layout({BufferLayoutField("Index8", sizeof(gl::GLubyte), gl::GL_UNSIGNED_BYTE, 0)});
+    DataLayout layout({{"Index8", Type_U8}});
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Buffer Context::createIndexBuffer16()
 {
-    BufferLayout layout({BufferLayoutField("Index16", sizeof(gl::GLushort), gl::GL_UNSIGNED_SHORT, 0)});
+    DataLayout layout({{"Index16", Type_U16}});
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
 Buffer Context::createIndexBuffer32()
 {
-    BufferLayout layout({BufferLayoutField("Index32", sizeof(gl::GLuint), gl::GL_UNSIGNED_INT, 0)});
+    DataLayout layout({{"Index32", Type_U32}});
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
@@ -238,7 +238,7 @@ Buffer & Context::blitVertexBuffer()
 {
     if (!m_blitVertexBuffer.engaged())
     {
-        auto layout = createPackedBufferLayout<glm::vec2>({"Position"});
+        auto layout = DataLayout({{"Position", Type_Vec2}});
         m_blitVertexBuffer.reset(createBuffer(layout));
 
         std::vector<glm::vec2> vertices({

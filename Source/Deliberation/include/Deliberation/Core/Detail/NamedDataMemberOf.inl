@@ -17,9 +17,9 @@ NamedDataMemberOf<T>::NamedDataMemberOf(const std::string & name, U T::* ptr):
         {
         }
 
-        virtual gl::GLenum type() const override
+        virtual Type & type() const override
         {
-            return GLSLTypeOf<U>::value;
+            return Type::resolve<U>();
         }
 
         virtual unsigned int offset(const T & t) const override
@@ -40,7 +40,7 @@ const std::string & NamedDataMemberOf<T>::name() const
 }
 
 template<typename T>
-gl::GLenum NamedDataMemberOf<T>::type() const
+Type & NamedDataMemberOf<T>::type() const
 {
     return m_impl->type();
 }

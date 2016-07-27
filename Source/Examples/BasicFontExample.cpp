@@ -14,7 +14,6 @@
 #include <Deliberation/Core/Viewport.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Clear.h>
@@ -43,7 +42,7 @@ public:
     virtual void onStartup() override
     {
 
-        auto layout = context().createBufferLayout<Vertex>({
+        auto layout = deliberation::DataLayout::fromStructOrClass<Vertex>({
                                                              {"Position", &Vertex::position},
                                                              {"UV", &Vertex::uv},
                                                          });

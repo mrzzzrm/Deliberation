@@ -7,6 +7,11 @@
 namespace deliberation
 {
 
+DataLayout::DataLayout(const std::string & name, const Type & type):
+    DataLayout({{name, type}})
+{
+}
+
 DataLayout::DataLayout(const std::vector<DataLayoutField::Desc> & descs)
 {
     m_fields.reserve(descs.size());
@@ -16,6 +21,12 @@ DataLayout::DataLayout(const std::vector<DataLayoutField::Desc> & descs)
         m_fields.push_back(DataLayoutField(desc.name, desc.type, m_stride));
         m_stride += desc.type.size();
     }
+}
+
+DataLayout::DataLayout(std::vector<DataLayoutField> && fields, size_t stride):
+    m_fields(std::move(fields)),
+    m_stride(stride)
+{
 }
 
 const std::vector<DataLayoutField> & DataLayout::fields() const
@@ -41,7 +52,7 @@ const DataLayoutField & DataLayout::field(const std::string & name) const
     Fail("No such field '" + name + "' in DataLayout");
 }
 
-std::string DataLayout::toString()
+std::string DataLayout::toString() const
 {
     std::stringstream stream;
 

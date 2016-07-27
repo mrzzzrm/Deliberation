@@ -64,7 +64,7 @@ void DebugGrid3DRenderer::init(float scale)
     vertices.push_back({0.0f, 0.0f,  halfExtend});
     vertices.push_back({0.0f, 0.0f, -halfExtend});
 
-    auto layout = m_context.createPackedBufferLayout<glm::vec3>({"Position"});
+    auto layout = DataLayout({{"Position", Type_Vec3}});
 
     m_vertexBuffer = m_context.createBuffer(layout);
     m_vertexBuffer.createUpload(vertices).schedule();

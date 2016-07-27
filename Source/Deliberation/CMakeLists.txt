@@ -89,6 +89,7 @@ set(sources
     ${source_path}/Draw/GL/GLSamplerState.h
     ${source_path}/Draw/GL/GLSLSizeOf.cpp
     ${source_path}/Draw/GL/GLStateManager.cpp
+    ${source_path}/Draw/GL/GLType.cpp
     ${source_path}/Draw/GL/GLUtils.cpp
     ${source_path}/Draw/GL/GLUtils.h
     ${source_path}/Draw/GL/GLVertexAttributeBinder.cpp
@@ -98,8 +99,6 @@ set(sources
 
     ${source_path}/Draw/BlendState.cpp
     ${source_path}/Draw/Buffer.cpp
-    ${source_path}/Draw/BufferLayout.cpp
-    ${source_path}/Draw/BufferLayoutField.cpp
     ${source_path}/Draw/BufferUpload.cpp
     ${source_path}/Draw/BufferUploadExecution.cpp
     ${source_path}/Draw/BufferUploadExecution.h
@@ -177,9 +176,12 @@ set(sources
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
+    ${source_path}/Scene/CuboidMesh.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
+    ${source_path}/Scene/EdgeToFaceSmoothing.cpp
+    ${source_path}/Scene/Mesh2.cpp
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/RenderNode.cpp
@@ -191,6 +193,10 @@ set(api_includes
     ${include_path}/Deliberation.h
     ${include_path}/Deliberation_API.h
 
+    ${include_path}/Core/Detail/INamedDataMemberOfImpl.h
+    ${include_path}/Core/Detail/INamedDataMemberOfImpl.inl
+    ${include_path}/Core/Detail/NamedDataMemberOf.h
+    ${include_path}/Core/Detail/NamedDataMemberOf.inl
     ${include_path}/Core/Detail/VectorBlobImpl.h
     ${include_path}/Core/Detail/VectorBlobImpl.inl
     ${include_path}/Core/Detail/IBlobImpl.h
@@ -201,6 +207,7 @@ set(api_includes
     ${include_path}/Core/BitUtils.inl
     ${include_path}/Core/Color.h
     ${include_path}/Core/DataLayout.h
+    ${include_path}/Core/DataLayout.inl
     ${include_path}/Core/DataLayoutField.h
     ${include_path}/Core/FileUtils.h
     ${include_path}/Core/HashUtils.h
@@ -246,10 +253,6 @@ set(api_includes
     ${include_path}/Core/Math/Transform3D.h
     ${include_path}/Core/Math/Vec.h
 
-    ${include_path}/Draw/Detail/INamedDataMemberOfImpl.h
-    ${include_path}/Draw/Detail/INamedDataMemberOfImpl.inl
-    ${include_path}/Draw/Detail/NamedDataMemberOf.h
-    ${include_path}/Draw/Detail/NamedDataMemberOf.inl
     ${include_path}/Draw/Detail/UniformImpl.h
 
     ${include_path}/Draw/GL/GLFramebufferDesc.h
@@ -260,8 +263,6 @@ set(api_includes
 
     ${include_path}/Draw/BlendState.h
     ${include_path}/Draw/Buffer.h
-    ${include_path}/Draw/BufferLayout.h
-    ${include_path}/Draw/BufferLayoutField.h
     ${include_path}/Draw/BufferUpload.h
     ${include_path}/Draw/Clear.h
     ${include_path}/Draw/Context.h
@@ -333,12 +334,15 @@ set(api_includes
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.h
     ${include_path}/Scene/Blit.h
+    ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
     ${include_path}/Scene/DebugGroundPlaneRenderer.h
+    ${include_path}/Scene/EdgeToFaceSmoothing.h
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/Mesh.inl
+    ${include_path}/Scene/Mesh2.h
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/MeshCompiler.inl
     ${include_path}/Scene/PostprocessingEffect.h

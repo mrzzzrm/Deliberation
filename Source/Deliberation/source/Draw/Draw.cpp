@@ -144,7 +144,7 @@ Buffer Draw::setIndices32(const Blob & data)
     return buffer;
 }
 
-Buffer Draw::addVertices(const BufferLayout & layout, const Blob & data)
+Buffer Draw::addVertices(const DataLayout & layout, const Blob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -156,7 +156,7 @@ Buffer Draw::addVertices(const BufferLayout & layout, const Blob & data)
     return buffer;
 }
 
-Buffer Draw::addInstances(const BufferLayout & layout, const Blob & data, unsigned int divisor)
+Buffer Draw::addInstances(const DataLayout & layout, const Blob & data, unsigned int divisor)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -390,7 +390,7 @@ void Draw::verifyInstanceBuffer(const Buffer & buffer) const
     );
 }
 
-const BufferLayoutField * Draw::bufferField(const std::string & name,
+const DataLayoutField * Draw::bufferField(const std::string & name,
                                                      detail::BufferBinding ** o_binding,
                                                      gl::GLuint * o_divisor,
                                                      unsigned int * o_count) const
@@ -402,7 +402,7 @@ const BufferLayoutField * Draw::bufferField(const std::string & name,
         *o_count = 0u;
     }
 
-    auto * field = (const BufferLayoutField*)nullptr;
+    auto * field = (const DataLayoutField*)nullptr;
 
     for (auto b = 0u; b < m_impl->vertexBuffers.size() + m_impl->instanceBuffers.size(); b++)
     {

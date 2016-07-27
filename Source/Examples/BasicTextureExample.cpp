@@ -11,18 +11,12 @@
 
 #include <Deliberation/Deliberation.h>
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/BufferLayout.h>
 #include <Deliberation/Draw/BufferUpload.h>
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/TextureLoader.h>
 #include <Deliberation/Platform/Application.h>
-
-struct Vertex
-{
-    glm::vec2 position;
-    glm::vec2 uv;
-};
+#include <Deliberation/Core/LayoutedBlob.h>
 
 class BasicTextureExample:
     public deliberation::Application {
@@ -34,19 +28,16 @@ public:
 
     virtual void onStartup() override
     {
-        auto layout = context().createBufferLayout<Vertex>({
-                                                             {"Position", &Vertex::position},
-                                                             {"UV", &Vertex::uv},
-                                                           });
+        auto layout = deliberation::DataLayout({{"Position", deliberation::Type_Vec2},
+                                                {"UV", deliberation::Type_Vec2}});
 
         auto vbuffer = context().createBuffer(layout);
-        auto vertices = std::vector<Vertex>({
-                                                {{-0.5f, 0.0f}, {0.0f, 0.0f}},
-                                                {{0.5f, 0.0f}, {1.0f, 0.0f}},
-                                                {{0.0f, 0.5f}, {1.0f, 1.0f}},
-                                                {{-1.0f, 0.5f}, {0.0f, 1.0f}}
-                                            });
-        vbuffer.createUpload(vertices).schedule();
+        auto vertices = deliberation::LayoutedBlob(layout, 4);
+
+        vertices.assign<glm::vec2>("Position", {{-0.5f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.5f}, {-1.0f, 0.5f}});
+        vertices.assign<glm::vec2>("UV", {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}});
+
+        vbuffer.createUpload(vertices.rawData()).schedule();
 
         auto ibuffer = context().createIndexBuffer8();
         auto indices = std::vector<gl::GLbyte>({
