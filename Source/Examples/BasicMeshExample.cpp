@@ -8,6 +8,7 @@
 
 #include <Deliberation/Deliberation.h>
 
+#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/Transform3D.h>
 
 #include <Deliberation/Draw/Buffer.h>
@@ -19,6 +20,8 @@
 #include <Deliberation/Draw/PixelFormat.h>
 
 #include <Deliberation/Scene/Camera3D.h>
+#include <Deliberation/Scene/Mesh2.h>
+#include <Deliberation/Scene/MeshCompiler2.h>
 #include <Deliberation/Scene/DebugGrid3DRenderer.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
@@ -27,6 +30,7 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 
+using namespace deliberation;
 
 struct Vertex
 {
@@ -67,23 +71,23 @@ public:
                                          {"Color", deliberation::Type_Vec3}});
         deliberation::LayoutedBlob meshVertices(layout, 5);
 
-        auto positions = meshVertices.field("Position");
-        auto colors = meshVertices.field("Color");
+        auto positions = meshVertices.field<glm::vec3>("Position");
+        auto colors = meshVertices.field<glm::vec3>("Color");
 
-        positions[0] = glm::vec3(0, 0, 0);
+        positions[0] = glm::vec3(-1, 0, 1);
         colors[0]    = glm::vec3(1, 0, 0);
 
-        positions[1] = glm::vec3(0, 0, -1);
-        colors[0]    = glm::vec3(1, 0, 0);
+        positions[1] = glm::vec3(-1, 0, -1);
+        colors[1]    = glm::vec3(1, 0, 0);
 
         positions[2] = glm::vec3(1, 0, -1);
-        colors[0]    = glm::vec3(1, 0, 0);
+        colors[2]    = glm::vec3(1, 0, 0);
 
-        positions[3] = glm::vec3(1, 0, 0);
-        colors[0]    = glm::vec3(1, 0, 0);
+        positions[3] = glm::vec3(1, 0, 1);
+        colors[3]    = glm::vec3(1, 0, 0);
 
         positions[4] = glm::vec3(0, 1, 0);
-        colors[0]    = glm::vec3(1, 1, 1);
+        colors[4]    = glm::vec3(1, 1, 1);
 
         deliberation::LayoutedBlob faceAttributes;
 
@@ -100,24 +104,29 @@ public:
         auto compiledMesh = compiler.compile(mesh);
 
         auto program = context().createProgram({deliberation::dataPath("Data/BasicMeshTest.vert"),
-                                               deliberation::dataPath("Data/BasicMeshTest.frag")});
+                                                deliberation::dataPath("Data/BasicMeshTest.frag")});
 
-        auto draw = context().createDraw(program);
-        draw.addVertices(compiledMesh.vertices());
-        draw.setIndices16(compiledMesh.indices());
+        auto cpositions = compiledMesh.vertices.field<glm::vec3>("Position");
+        std::cout << "Vertices: " << std::endl;
+        for (int i = 0; i < compiledMesh.vertices.count(); i++)
+        {
+            std::cout << "  [" << i << "] = " << cpositions[i] << std::endl;
+        }
 
+        auto draw = context().createDraw(program, gl::GL_TRIANGLES);
+        draw.addVertices(compiledMesh.vertices.layout(), compiledMesh.vertices.rawData());
+        draw.setIndices32(compiledMesh.indices.rawData());
 
-
-        return deliberation::Draw();
+        return draw;
     }
 
     virtual void onFrame(float seconds) override
     {
         m_navigator.get().update(seconds);
 
-        m_transform.worldRotate(glm::quat({glm::pi<float>() * 0.3f * seconds,
+        m_transform.worldRotate(glm::quat({glm::pi<float>() * 0.0f * seconds,
                                            glm::pi<float>() * 0.2f * seconds,
-                                           glm::pi<float>() * 0.1f * seconds}));
+                                           glm::pi<float>() * 0.0f * seconds}));
 
         m_viewProjectionHandle.set(m_camera.viewProjection());
         m_transformHandle.set(m_transform.matrix());

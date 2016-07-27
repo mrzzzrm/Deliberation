@@ -34,10 +34,13 @@ public:
     Blob(Blob && blob);
 
     std::size_t size() const;
-    const void * ptr() const;
+    void * ptr(size_t offset = 0);
+    const void * ptr(size_t offset = 0) const;
 
     template<typename T>
     void write(std::size_t offset, const T & value);
+
+    void write(std::size_t offset, void * src, size_t length);
 
     template<typename T>
     void read(std::size_t offset, T & value) const;

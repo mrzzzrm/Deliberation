@@ -37,9 +37,14 @@ TypeID::value_t Type::typeID() const
     return m_typeID;
 }
 
-bool Type::operator==(const Type & other)
+bool Type::operator==(const Type & other) const
 {
     return m_typeID == other.m_typeID;
+}
+
+bool Type::operator!=(const Type & other) const
+{
+    return m_typeID != other.m_typeID;
 }
 
 #define DECL_TYPE(name, type) Type Type_##name(#name, sizeof(type), TypeID::value<type>())

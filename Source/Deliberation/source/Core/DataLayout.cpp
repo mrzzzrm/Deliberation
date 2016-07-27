@@ -3,9 +3,14 @@
 #include <sstream>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/Types.h>
 
 namespace deliberation
 {
+
+DataLayout::DataLayout()
+{
+}
 
 DataLayout::DataLayout(const std::string & name, const Type & type):
     DataLayout({{name, type}})
@@ -50,6 +55,28 @@ const DataLayoutField & DataLayout::field(const std::string & name) const
     }
 
     Fail("No such field '" + name + "' in DataLayout");
+}
+
+/**
+ * TODO
+ *  Just use simple hash
+ */
+bool DataLayout::equals(const DataLayout & rhs) const
+{
+    if (m_stride != rhs.m_stride || m_fields.size() != rhs.m_fields.size())
+    {
+        return false;
+    }
+
+    for (size_t f = 0; f < m_fields.size(); f++)
+    {
+        if (m_fields[f].type() != rhs.m_fields[f].type())
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 std::string DataLayout::toString() const

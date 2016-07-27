@@ -41,6 +41,7 @@ set(sources
     ${source_path}/Core/DataLayout.cpp
     ${source_path}/Core/DataLayoutField.cpp
     ${source_path}/Core/LayoutedBlob.cpp
+    ${source_path}/Core/LayoutedBlobElement.cpp
     ${source_path}/Core/FileUtils.cpp
     ${source_path}/Core/InputAdapterBase.cpp
     ${source_path}/Core/LapTimer.cpp
@@ -182,6 +183,7 @@ set(sources
     ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
     ${source_path}/Scene/Mesh2.cpp
+    ${source_path}/Scene/MeshCompiler2.cpp
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/RenderNode.cpp
@@ -217,6 +219,7 @@ set(api_includes
     ${include_path}/Core/LapTimer.h
     ${include_path}/Core/LayoutedBlob.h
     ${include_path}/Core/LayoutedBlob.inl
+    ${include_path}/Core/LayoutedBlobElement.h
     ${include_path}/Core/LinearMap.h
     ${include_path}/Core/LinearMap.inl
     ${include_path}/Core/LinearOctree.h
@@ -343,6 +346,7 @@ set(api_includes
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/Mesh.inl
     ${include_path}/Scene/Mesh2.h
+    ${include_path}/Scene/MeshCompiler2.h
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/MeshCompiler.inl
     ${include_path}/Scene/PostprocessingEffect.h

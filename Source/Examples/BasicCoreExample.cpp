@@ -189,10 +189,8 @@ void LayoutedBlobExample()
     std::cout << Type_I32.name() << ": " << Type_I32.typeID() << std::endl;
     std::cout << Type_Vec3.name() << ": " << Type_Vec3.typeID() << std::endl;
 
-    DataLayout layout({
-                          {"Age", Type_I32},
-                          {"Direction", Type_Vec3}
-                      });
+    DataLayout layout({{"Age", Type_I32},
+                       {"Direction", Type_Vec3}});
 
     LayoutedBlob blob = LayoutedBlob(layout, 3);
 
@@ -213,6 +211,20 @@ void LayoutedBlobExample()
     for (int i = 0; i < blob.count(); i++)
     {
         std::cout << "  " << i << ": " << ages[i] << " " << directions[i] << std::endl;
+    }
+
+    LayoutedBlob blob2(layout, 2);
+
+    blob2[0] = blob[1];
+    blob2[1] = blob[0];
+
+    auto ages2 = blob2.field<i32>(age);
+    auto directions2 = blob2.field<glm::vec3>(direction);
+
+    std::cout << "Copied: " << std::endl;
+    for (int i = 0; i < blob2.count(); i++)
+    {
+        std::cout << "  " << i << ": " << ages2[i] << " " << directions2[i] << std::endl;
     }
 }
 

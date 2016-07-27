@@ -19,6 +19,7 @@ public:
     static DataLayout fromStructOrClass(const std::vector<detail::NamedDataMemberOf<T>> & members);
 
 public:
+    DataLayout();
     DataLayout(const std::string & name, const Type & type);
     DataLayout(const std::vector<DataLayoutField::Desc> & descs);
     DataLayout(std::vector<DataLayoutField> && fields, size_t stride);
@@ -27,6 +28,8 @@ public:
     size_t stride() const;
 
     const DataLayoutField & field(const std::string & name) const;
+
+    bool equals(const DataLayout & rhs) const;
 
     std::string toString() const;
 

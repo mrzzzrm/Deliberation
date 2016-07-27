@@ -30,7 +30,8 @@ public:
     Type & operator=(const Type &) = delete;
     Type & operator=(Type &&) = delete;
 
-    bool operator==(const Type & other);
+    bool operator==(const Type & other) const;
+    bool operator!=(const Type & other) const;
 
 private:
     std::string         m_name;

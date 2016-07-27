@@ -30,9 +30,26 @@ std::size_t Blob::size() const
     return m_impl ? m_impl->size() : 0u;
 }
 
-const void * Blob::ptr() const
+void * Blob::ptr(size_t offset)
 {
-    return m_impl ? m_impl->ptr() : nullptr;
+    Assert(offset < size(), "");
+
+    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+}
+
+const void * Blob::ptr(size_t offset) const
+{
+    Assert(offset < size(), "");
+
+    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+}
+
+void Blob::write(std::size_t offset, void * src, size_t length)
+{
+    Assert(offset + length <= size(), "");
+    Assert(ptr(), "");
+
+    memmove(ptr(offset), src, length);
 }
 
 Blob & Blob::operator=(const Blob & blob)
