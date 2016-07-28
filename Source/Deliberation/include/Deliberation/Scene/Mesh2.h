@@ -22,6 +22,8 @@ public:
 
 public:
     Mesh2(LayoutedBlob && vertices,
+          std::vector<Face> && faces);
+    Mesh2(LayoutedBlob && vertices,
           LayoutedBlob && faceAttributes,
           std::vector<Face> && faces);
 

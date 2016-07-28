@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Scene/Mesh.h>
+#include <Deliberation/Scene/Mesh2.h>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -12,17 +12,10 @@ namespace deliberation
 class DELIBERATION_API UVSphere
 {
 public:
-    struct Vertex
-    {
-        glm::vec3 position;
-        glm::vec3 normal;
-    };
-
-public:
     UVSphere();
     UVSphere(unsigned int numParallels, unsigned int numMeridians);
 
-    Mesh<Vertex> generate();
+    Mesh2 generate();
 
 private:
     unsigned int m_numParallels;

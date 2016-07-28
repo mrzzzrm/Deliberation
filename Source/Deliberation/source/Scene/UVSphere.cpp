@@ -6,6 +6,8 @@
 #include <glm/gtc/constants.hpp>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 
 namespace deliberation
 {
@@ -24,16 +26,21 @@ UVSphere::UVSphere(unsigned int numParallels, unsigned int numMeridians):
 
 }
 
-Mesh<UVSphere::Vertex> UVSphere::generate()
+Mesh2 UVSphere::generate()
 {
     Assert(m_numParallels != 0 && m_numMeridians != 0, "");
 
-    std::vector<Vertex> vertices;
-    std::vector<Mesh<Vertex>::Face> faces;
+    DataLayout vertexLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 
-    Vertex north;
-    north.position = {0.0f, 1.0f, 0.0f};
-    vertices.push_back(north);
+    auto numVertices = m_numParallels * m_numMeridians + 2;
+    LayoutedBlob vertices(vertexLayout, numVertices);
+
+    auto positions = vertices.field<glm::vec3>("Position");
+    auto normals = vertices.field<glm::vec3>("Normal");
+
+    Mesh2::Faces faces;
+
+    positions[0] = {0.0f, 1.0f, 0.0f};
 
     for (std::size_t p = 0; p < m_numParallels; p++)
     {
@@ -46,47 +53,37 @@ Mesh<UVSphere::Vertex> UVSphere::generate()
 			float azimuth = 2.0f * glm::pi<float>() * float(m) / m_numMeridians;
 			float sa = std::sin(azimuth);
 			float ca = std::cos(azimuth);
-			float x = sp * ca;
-			float y = cp;
-			float z = sp * sa;
 
-            Vertex vertex;
-            vertex.position.x = sp * ca;
-            vertex.position.y = cp;
-            vertex.position.z = sp * sa;
-
-			vertices.push_back(vertex);
+            positions[p * m_numMeridians + m] = {sp * ca, cp, sp * sa};
         }
     }
 
-    Vertex south;
-    south.position = {0.0f, -1.0f, 0.0f};
-    vertices.push_back(south);
+    positions[numVertices - 1] = {0.0f, -1.0f, 0.0f};
 
-
-    for (auto & vertex : vertices)
+    for (auto n = 0; n < numVertices; n++)
     {
-        vertex.normal = glm::normalize(vertex.position);
+        normals[n] = glm::normalize(positions[n]);
     }
 
-    for (std::size_t m = 0; m < m_numMeridians; m++)
+    for (auto m = 0; m < m_numMeridians; m++)
     {
-        Mesh<Vertex>::Face face;
-        face.indices = {0, 1 + ((m + 1) % m_numMeridians), 1 + m};
+        Mesh2::Face face;
+        face.indices = {0u, 1 + ((m + 1) % m_numMeridians), 1u + m};
         faces.push_back(face);
     }
 
     for (std::size_t p = 0; p < m_numParallels - 2; p++)
     {
-        auto baseA = 1 + p * m_numMeridians;
-        auto baseB = 1 + (p + 1) * m_numMeridians;
+        auto baseA = 1u + p * m_numMeridians;
+        auto baseB = 1u + (p + 1) * m_numMeridians;
 
         for (std::size_t m = 0; m < m_numMeridians; m++)
         {
-
-            Mesh<Vertex>::Face face;
-            face.indices = {baseA + m, baseA + (m + 1) % m_numMeridians,
-                            baseB + (m + 1) % m_numMeridians, baseB + m};
+            Mesh2::Face face;
+            face.indices = {(u32)(baseA + m),
+                            (u32)(baseA + (m + 1) % m_numMeridians),
+                            (u32)(baseB + (m + 1) % m_numMeridians),
+                            (u32)(baseB + m)};
             faces.push_back(face);
         }
     }
@@ -95,12 +92,12 @@ Mesh<UVSphere::Vertex> UVSphere::generate()
 	{
 		auto a = m + m_numMeridians * (m_numParallels - 2) + 1;
 		auto b = (m + 1) % m_numMeridians + m_numMeridians * (m_numParallels - 2) + 1;
-        Mesh<Vertex>::Face face;
-        face.indices = {vertices.size() - 1, a, b};
+        Mesh2::Face face;
+        face.indices = {(u32)(vertices.count() - 1), (u32)(a), (u32)(b)};
         faces.push_back(face);
 	}
 
-    return Mesh<Vertex>(vertices, faces);
+    return Mesh2(std::move(vertices), std::move(faces));
 }
 
 

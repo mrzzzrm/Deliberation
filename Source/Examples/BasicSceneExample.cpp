@@ -24,6 +24,7 @@
 #include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Platform/Application.h>
 #include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/MeshCompiler2.h>
 
 
 struct Vertex
@@ -69,17 +70,12 @@ public:
         deliberation::UVSphere sphere(7, 7);
         auto mesh = sphere.generate();
 
-        deliberation::MeshCompiler<deliberation::UVSphere::Vertex> compiler(mesh);
-        compiler.compile();
-
-        auto layout = deliberation::DataLayout::fromStructOrClass<deliberation::UVSphere::Vertex>({
-                                                                                     {"Position", &deliberation::UVSphere::Vertex::position},
-                                                                                     {"Normal", &deliberation::UVSphere::Vertex::normal}
-                                                                                 });
+        deliberation::MeshCompiler2 compiler;
+        auto compilation = compiler.compile(mesh);
 
         auto draw = context().createDraw(program, gl::GL_TRIANGLES);
-        draw.addVertices(layout, compiler.vertices());
-        draw.setIndices32(compiler.indices());
+        draw.addVertices(compilation.vertices.layout(), compilation.vertices.rawData());
+        draw.setIndices32(compilation.indices.rawData());
 
         return draw;
     }

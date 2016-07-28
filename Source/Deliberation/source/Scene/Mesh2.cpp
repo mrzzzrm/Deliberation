@@ -14,6 +14,14 @@ Mesh2::Mesh2(LayoutedBlob && vertices,
 {
 }
 
+Mesh2::Mesh2(LayoutedBlob && vertices,
+             std::vector<Face> && faces):
+    m_vertices(std::move(vertices)),
+    m_faces(std::move(faces))
+{
+
+}
+
 const LayoutedBlob & Mesh2::vertices() const
 {
     return m_vertices;
