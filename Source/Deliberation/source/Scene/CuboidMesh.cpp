@@ -9,7 +9,7 @@ namespace deliberation
 //
 //}
 //
-//Mesh2 CuboidMesh::generate() const
+//Mesh CuboidMesh::generate() const
 //{
 //    auto vertexLayout = deliberation::DataLayout({
 //                                                     {"Position", deliberation::Type_Vec3}
@@ -44,7 +44,7 @@ namespace deliberation
 //    normals[4] = { 0.0f, 0.0f,-1.0f};
 //    normals[5] = { 0.0f, 0.0f, 1.0f};
 //
-//    std::vector<Mesh2::Face> faces({
+//    std::vector<Mesh::Face> faces({
 //        {0, 4, 7, 1}, // l
 //        {6, 5, 3, 2}, // r
 //        {0, 1, 2, 3}, // b
@@ -53,7 +53,7 @@ namespace deliberation
 //        {0, 3, 5, 4}
 //    });
 //
-//    return Mesh2(std::move(vertices),
+//    return Mesh(std::move(vertices),
 //                 std::move(face_data),
 //                 std::move(faces));
 //}

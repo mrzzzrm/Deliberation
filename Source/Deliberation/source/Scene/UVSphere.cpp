@@ -26,7 +26,7 @@ UVSphere::UVSphere(unsigned int numParallels, unsigned int numMeridians):
 
 }
 
-Mesh2 UVSphere::generate()
+Mesh UVSphere::generate()
 {
     Assert(m_numParallels != 0 && m_numMeridians != 0, "");
 
@@ -38,7 +38,7 @@ Mesh2 UVSphere::generate()
     auto positions = vertices.field<glm::vec3>("Position");
     auto normals = vertices.field<glm::vec3>("Normal");
 
-    Mesh2::Faces faces;
+    Mesh::Faces faces;
 
     positions[0] = {0.0f, 1.0f, 0.0f};
 
@@ -67,7 +67,7 @@ Mesh2 UVSphere::generate()
 
     for (auto m = 0; m < m_numMeridians; m++)
     {
-        Mesh2::Face face;
+        Mesh::Face face;
         face.indices = {0u, 1 + ((m + 1) % m_numMeridians), 1u + m};
         faces.push_back(face);
     }
@@ -79,7 +79,7 @@ Mesh2 UVSphere::generate()
 
         for (std::size_t m = 0; m < m_numMeridians; m++)
         {
-            Mesh2::Face face;
+            Mesh::Face face;
             face.indices = {(u32)(baseA + m),
                             (u32)(baseA + (m + 1) % m_numMeridians),
                             (u32)(baseB + (m + 1) % m_numMeridians),
@@ -92,12 +92,12 @@ Mesh2 UVSphere::generate()
 	{
 		auto a = m + m_numMeridians * (m_numParallels - 2) + 1;
 		auto b = (m + 1) % m_numMeridians + m_numMeridians * (m_numParallels - 2) + 1;
-        Mesh2::Face face;
+        Mesh::Face face;
         face.indices = {(u32)(vertices.count() - 1), (u32)(a), (u32)(b)};
         faces.push_back(face);
 	}
 
-    return Mesh2(std::move(vertices), std::move(faces));
+    return Mesh(std::move(vertices), std::move(faces));
 }
 
 

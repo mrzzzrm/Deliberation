@@ -1,38 +1,35 @@
 #pragma once
 
-#include <vector>
-
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 
 #include <Deliberation/Draw/Enum.h>
 
-#include <Deliberation/Scene/Mesh.h>
+#include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
 
-template<typename T>
-class DELIBERATION_API MeshCompiler final
+class Mesh;
+
+class MeshCompiler final
 {
 public:
-    MeshCompiler(const Mesh<T> & mesh, PrimitiveType primitive = Primitive_Triangles);
+    struct Compilation
+    {
+        Compilation(const DataLayout & vertexLayout, size_t numVertices);
 
-    void compile();
+        LayoutedBlob vertices;
+        LayoutedBlob indices;
+    };
 
-    const std::vector<typename Mesh<T>::Vertex> & vertices() const;
-    const std::vector<unsigned int> & indices() const;
+public:
+    MeshCompiler();
+
+    Compilation compile(const Mesh & mesh, PrimitiveType primitive = Primitive_Triangles) const;
 
 private:
-    void compileTriangles();
-    void compileLines();
-
-private:
-    const Mesh<T> &                        m_mesh;
-    PrimitiveType                          m_primitive;
-    std::vector<typename Mesh<T>::Vertex>  m_vertices;
-    std::vector<unsigned int>              m_indices;
+    Compilation compileTriangles(const Mesh & mesh) const;
+    Compilation compileLines(const Mesh & mesh) const;
 };
 
 }
-
-#include <Deliberation/Scene/MeshCompiler.inl>

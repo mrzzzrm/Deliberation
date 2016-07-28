@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Scene/Mesh2.h>
+#include <Deliberation/Scene/Mesh.h>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -15,7 +15,7 @@ public:
     UVSphere();
     UVSphere(unsigned int numParallels, unsigned int numMeridians);
 
-    Mesh2 generate();
+    Mesh generate();
 
 private:
     unsigned int m_numParallels;

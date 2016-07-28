@@ -2,49 +2,42 @@
 
 #include <vector>
 
-#include <glm/glm.hpp>
+#include <Deliberation/Core/LayoutedBlob.h>
+#include <Deliberation/Core/IntTypes.h>
 
 #include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
 
-template<typename T>
 class DELIBERATION_API Mesh final
 {
 public:
     struct Face
     {
-        std::vector<std::size_t> indices;
+        std::vector<u32> indices;
     };
 
-    typedef T Vertex;
-    typedef std::vector<Vertex> Vertices;
-    typedef std::vector<Face> Faces;
+    using Faces = std::vector<Face>;
 
 public:
-    Mesh();
-    Mesh(const Vertices & vertices,
-         const Faces & faces);
+    Mesh(LayoutedBlob && vertices,
+          std::vector<Face> && faces);
+    Mesh(LayoutedBlob && vertices,
+          LayoutedBlob && faceAttributes,
+          std::vector<Face> && faces);
 
-    const Vertices & vertices() const;
-    const Faces & faces() const;
+    const LayoutedBlob & vertices() const;
+    const LayoutedBlob & faceAttributes() const;
+    const std::vector<Face> & faces() const;
 
-    const Vertex & faceVertex(std::size_t face, std::size_t vertex) const;
-
-    void computeNormals();
-    /*
-        TODO
-            Better name
-    */
-    void separateFaces();
+    LayoutedBlobElement faceVertex(size_t face, size_t vertex);
+    CLayoutedBlobElement faceVertex(size_t face, size_t vertex) const;
 
 private:
-    Vertices    m_vertices;
-    Faces       m_faces;
+    LayoutedBlob        m_vertices;
+    LayoutedBlob        m_faceAttributes;
+    std::vector<Face>   m_faces;
 };
 
 }
-
-#include <Deliberation/Scene/Mesh.inl>
-

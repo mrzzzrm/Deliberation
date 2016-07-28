@@ -24,7 +24,7 @@
 #include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Platform/Application.h>
 #include <Deliberation/Scene/DebugCameraNavigator3D.h>
-#include <Deliberation/Scene/MeshCompiler2.h>
+#include <Deliberation/Scene/MeshCompiler.h>
 
 
 struct Vertex
@@ -67,10 +67,10 @@ public:
                                                  deliberation::dataPath("Data/Examples/BasicSceneExample.frag")
                                              });
 
-        deliberation::UVSphere sphere(7, 7);
+        deliberation::UVSphere sphere(70, 70);
         auto mesh = sphere.generate();
 
-        deliberation::MeshCompiler2 compiler;
+        deliberation::MeshCompiler compiler;
         auto compilation = compiler.compile(mesh);
 
         auto draw = context().createDraw(program, gl::GL_TRIANGLES);

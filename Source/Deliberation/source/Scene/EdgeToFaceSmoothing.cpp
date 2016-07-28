@@ -29,18 +29,18 @@ namespace
 //namespace deliberation
 //{
 //
-//EdgeToFaceSmoothing::EdgeToFaceSmoothing(const Mesh2 & sourceMesh):
+//EdgeToFaceSmoothing::EdgeToFaceSmoothing(const Mesh & sourceMesh):
 //    m_sourceMesh(sourceMesh)
 //{
 //
 //}
 //
-//Mesh2 EdgeToFaceSmoothing::run()
+//Mesh EdgeToFaceSmoothing::run()
 //{
 //    generateVertices();
 //    generateEdges();
 //
-//    return Mesh2();
+//    return Mesh();
 //}
 //
 //void EdgeToFaceSmoothing::generateVertices()

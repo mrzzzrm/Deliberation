@@ -9,21 +9,21 @@
 namespace deliberation
 {
 
-class Mesh2;
+class Mesh;
 
 class DELIBERATION_API EdgeToFaceSmoothing final
 {
 //public:
-//    EdgeToFaceSmoothing(const Mesh2 & sourceMesh);
+//    EdgeToFaceSmoothing(const Mesh & sourceMesh);
 //
-//    Mesh2 run();
+//    Mesh run();
 //
 //private:
 //    void generateVertices();
 //    void generateEdges();
 //
 //private:
-//    const Mesh2 & m_sourceMesh;
+//    const Mesh & m_sourceMesh;
 };
 
 }

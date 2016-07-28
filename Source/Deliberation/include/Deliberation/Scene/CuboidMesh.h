@@ -12,7 +12,7 @@ class DELIBERATION_API CuboidMesh final
 //public:
 //    CuboidMesh(const glm::vec3 & size);
 //
-//    Mesh2 generate() const;
+//    Mesh generate() const;
 //
 //private:
 //    glm::vec3 m_size;

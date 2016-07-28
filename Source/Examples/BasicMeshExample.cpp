@@ -20,8 +20,8 @@
 #include <Deliberation/Draw/PixelFormat.h>
 
 #include <Deliberation/Scene/Camera3D.h>
-#include <Deliberation/Scene/Mesh2.h>
-#include <Deliberation/Scene/MeshCompiler2.h>
+#include <Deliberation/Scene/Mesh.h>
+#include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Scene/DebugGrid3DRenderer.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
@@ -91,16 +91,16 @@ public:
 
         deliberation::LayoutedBlob faceAttributes;
 
-        deliberation::Mesh2::Faces faces(5);
+        deliberation::Mesh::Faces faces(5);
         faces[0] = {{0, 3, 4}};
         faces[1] = {{3, 2, 4}};
         faces[2] = {{1, 4, 2}};
         faces[3] = {{0, 4, 1}};
         faces[4] = {{0, 1, 2, 3}};
 
-        deliberation::Mesh2 mesh(std::move(meshVertices), std::move(faceAttributes), std::move(faces));
+        deliberation::Mesh mesh(std::move(meshVertices), std::move(faceAttributes), std::move(faces));
 
-        deliberation::MeshCompiler2 compiler;
+        deliberation::MeshCompiler compiler;
         auto compiledMesh = compiler.compile(mesh);
 
         auto program = context().createProgram({deliberation::dataPath("Data/BasicMeshTest.vert"),
