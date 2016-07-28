@@ -74,3 +74,7 @@ target_link_libraries(BasicSceneExample ${libs})
 add_executable(PhysicsExample PhysicsExample.cpp)
 target_link_libraries(PhysicsExample ${libs})
 
+# EdgeToFaceSmoothingExample
+add_executable(EdgeToFaceSmoothingExample EdgeToFaceSmoothingExample.cpp)
+target_link_libraries(EdgeToFaceSmoothingExample ${libs})
+
