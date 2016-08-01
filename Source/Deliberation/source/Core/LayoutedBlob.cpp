@@ -33,18 +33,38 @@ const Blob & LayoutedBlob::rawData() const
     return m_data;
 }
 
+BlobValueAccessor LayoutedBlob::field(const std::string & name)
+{
+    return field(m_layout.field(name));
+}
+
+CBlobValueAccessor LayoutedBlob::field(const std::string & name) const
+{
+    return field(m_layout.field(name));
+}
+
+BlobValueAccessor LayoutedBlob::field(const DataLayoutField & field)
+{
+    return BlobValueAccessor(m_data, m_layout, field);
+}
+
+CBlobValueAccessor LayoutedBlob::field(const DataLayoutField & field) const
+{
+    return CBlobValueAccessor(m_data, m_layout, field);
+}
+
 LayoutedBlobElement LayoutedBlob::operator[](size_t index)
 {
     Assert(index < m_count, "");
 
-    return LayoutedBlobElement(*this, index);
+    return LayoutedBlobElement(m_data, m_layout, index);
 }
 
 CLayoutedBlobElement LayoutedBlob::operator[](size_t index) const
 {
     Assert(index < m_count, "");
 
-    return CLayoutedBlobElement(*this, index);
+    return CLayoutedBlobElement(m_data, m_layout, index);
 }
 
 std::string LayoutedBlob::toString() const

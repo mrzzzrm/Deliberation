@@ -5,16 +5,15 @@
 namespace deliberation
 {
 
-DataLayoutField::Desc::Desc(const std::string & name, const Type & type):
+DataLayoutField::Desc::Desc(const std::string & name, Type type):
     name(name),
     type(type)
 {
 
 }
 
-DataLayoutField::DataLayoutField(const std::string & name, const Type & type, size_t offset):
-    m_name(name),
-    m_type(type),
+DataLayoutField::DataLayoutField(const std::string & name, Type type, size_t offset):
+    m_desc({name, type}),
     m_offset(offset)
 {
 
@@ -22,12 +21,12 @@ DataLayoutField::DataLayoutField(const std::string & name, const Type & type, si
 
 const std::string & DataLayoutField::name() const
 {
-    return m_name;
+    return m_desc.name;
 }
 
-const Type & DataLayoutField::type() const
+Type DataLayoutField::type() const
 {
-    return m_type;
+    return m_desc.type;
 }
 
 size_t DataLayoutField::offset() const
@@ -35,11 +34,16 @@ size_t DataLayoutField::offset() const
     return m_offset;
 }
 
+const DataLayoutField::Desc & DataLayoutField::desc() const
+{
+    return m_desc;
+}
+
 std::string DataLayoutField::toString() const
 {
     std::stringstream stream;
 
-    stream << "[" << m_name << ": " << m_type.name() << " @ " << m_offset << "]";
+    stream << "[" << m_desc.name << ": " << m_desc.type.name() << " @ " << m_offset << "]";
 
     return stream.str();
 }

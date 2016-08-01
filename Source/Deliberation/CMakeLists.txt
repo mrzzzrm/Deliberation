@@ -37,6 +37,7 @@ set(sources
     ${source_path}/Core/Assert.cpp
     ${source_path}/Core/BitUtils.cpp
     ${source_path}/Core/Blob.cpp
+    ${source_path}/Core/BlobValueAccessor.cpp
     ${source_path}/Core/Color.cpp
     ${source_path}/Core/DataLayout.cpp
     ${source_path}/Core/DataLayoutField.cpp

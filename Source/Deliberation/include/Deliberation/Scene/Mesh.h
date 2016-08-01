@@ -15,6 +15,12 @@ class DELIBERATION_API Mesh final
 public:
     struct Face
     {
+        Face() = default;
+        Face(const Face & rhs) = default;
+        Face(std::vector<u32> && indices);
+
+        Face & operator=(const Face & rhs) = default;
+
         std::vector<u32> indices;
     };
 

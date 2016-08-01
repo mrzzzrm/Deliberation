@@ -14,8 +14,8 @@ CuboidMesh::CuboidMesh(const glm::vec3 & size):
 
 Mesh CuboidMesh::generate() const
 {
-    auto vertexLayout = DataLayout({{"Position", deliberation::Type_Vec3}});
-    auto faceLayout = DataLayout({{"Normal", deliberation::Type_Vec3} });
+    auto vertexLayout = DataLayout("Position", deliberation::Type_Vec3);
+    auto faceLayout = DataLayout("Normal", deliberation::Type_Vec3);
 
     LayoutedBlob vertices(vertexLayout, 8);
     LayoutedBlob face_data(faceLayout, 6);
@@ -44,12 +44,12 @@ Mesh CuboidMesh::generate() const
     normals[5] = { 0.0f, 0.0f, 1.0f};
 
     std::vector<Mesh::Face> faces({
-        {0, 4, 7, 1}, // l
-        {6, 5, 3, 2}, // r
-        {0, 1, 2, 3}, // b
-        {4, 5, 6, 7}, // r
-        {1, 7, 6, 2}, // b
-        {0, 3, 5, 4}
+        {{0, 4, 7, 1}}, // l
+        {{6, 5, 3, 2}}, // r
+        {{0, 1, 2, 3}}, // b
+        {{4, 5, 6, 7}}, // r
+        {{1, 7, 6, 2}}, // b
+        {{0, 3, 5, 4}}
     });
 
     return Mesh(std::move(vertices),

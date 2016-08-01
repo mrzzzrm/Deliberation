@@ -5,6 +5,12 @@
 namespace deliberation
 {
 
+Mesh::Face::Face(std::vector<u32> && indices):
+    indices(std::move(indices))
+{
+
+}
+
 Mesh::Mesh(LayoutedBlob && vertices,
              LayoutedBlob && faceAttributes,
              std::vector<Face> && faces):
@@ -39,8 +45,13 @@ const std::vector<Mesh::Face> & Mesh::faces() const
 
 LayoutedBlobElement Mesh::faceVertex(size_t face, size_t vertex)
 {
-    auto e = ((const Mesh*)this)->faceVertex(face, vertex);
-    return LayoutedBlobElement((LayoutedBlob&)e.blob(), e.index());
+    Assert(face < m_faces.size(), "Out of range: " + std::to_string(face));
+    Assert(vertex < m_faces[face].indices.size(), "Out of range: " + std::to_string(vertex));
+
+    auto index = m_faces[face].indices[vertex];
+    Assert(index < m_vertices.count(), "");
+
+    return m_vertices[index];
 }
 
 CLayoutedBlobElement Mesh::faceVertex(size_t face, size_t vertex) const

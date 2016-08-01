@@ -3,9 +3,10 @@
 #include <string>
 
 #include <Deliberation/Core/Blob.h>
+#include <Deliberation/Core/BlobValueAccessor.h>
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlobElement.h>
-#include <Deliberation/Core/TypedBlobField.h>
+#include <Deliberation/Core/TypedBlobValueAccessor.h>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -25,10 +26,22 @@ public:
     const Blob & rawData() const;
 
     template<typename T>
-    TypedBlobField<T> field(const std::string & name);
+    TypedBlobValueAccessor<T> field(const std::string & name);
 
     template<typename T>
-    TypedBlobField<T> field(const DataLayoutField & field);
+    CTypedBlobValueAccessor<T> field(const std::string & name) const;
+
+    template<typename T>
+    TypedBlobValueAccessor<T> field(const DataLayoutField & field);
+
+    template<typename T>
+    CTypedBlobValueAccessor<T> field(const DataLayoutField & field) const;
+   
+    BlobValueAccessor field(const std::string & name);
+    CBlobValueAccessor field(const std::string & name) const;
+
+    BlobValueAccessor field(const DataLayoutField & field);
+    CBlobValueAccessor field(const DataLayoutField & field) const;
 
     template<typename T>
     void assign(const std::string & name, const std::vector<T> & values);

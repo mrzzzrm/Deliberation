@@ -44,6 +44,12 @@ size_t DataLayout::stride() const
     return m_stride;
 }
 
+const DataLayoutField & DataLayout::field(size_t index) const
+{
+    Assert(index < m_fields.size(), "");
+    return m_fields[index];
+}
+
 const DataLayoutField & DataLayout::field(const std::string & name) const
 {
     for (auto & field : m_fields)
@@ -77,6 +83,16 @@ bool DataLayout::equals(const DataLayout & rhs) const
     }
 
     return true;
+}
+
+std::vector<DataLayoutField::Desc> DataLayout::descs() const
+{
+    std::vector<DataLayoutField::Desc> result;
+    result.reserve(m_fields.size());
+    for (auto & field : m_fields) {
+        result.push_back(field.desc());
+    }
+    return result;
 }
 
 std::string DataLayout::toString() const

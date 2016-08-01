@@ -27,9 +27,12 @@ public:
     const std::vector<DataLayoutField> & fields() const;
     size_t stride() const;
 
+    const DataLayoutField & field(size_t index) const;
     const DataLayoutField & field(const std::string & name) const;
 
     bool equals(const DataLayout & rhs) const;
+
+    std::vector<DataLayoutField::Desc> descs() const;
 
     std::string toString() const;
 

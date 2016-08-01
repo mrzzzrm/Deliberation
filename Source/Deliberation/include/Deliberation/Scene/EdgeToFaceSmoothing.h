@@ -13,17 +13,17 @@ class Mesh;
 
 class DELIBERATION_API EdgeToFaceSmoothing final
 {
-//public:
-//    EdgeToFaceSmoothing(const Mesh & sourceMesh);
-//
-//    Mesh run();
-//
-//private:
-//    void generateVertices();
-//    void generateEdges();
-//
-//private:
-//    const Mesh & m_sourceMesh;
+public:
+    EdgeToFaceSmoothing(const Mesh & sourceMesh);
+
+    Mesh run();
+
+private:
+    void generateVertices();
+    void generateEdges();
+
+private:
+    const Mesh & m_sourceMesh;
 };
 
 }

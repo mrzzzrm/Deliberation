@@ -4,72 +4,96 @@
 
 #include <Deliberation/Core/IntTypes.h>
 
+namespace
+{
+
+struct TypeData
+{
+    const char * name;
+    size_t       size;
+};
+
+TypeData DATA[] = {
+    {"None", 0},
+    {"I8", sizeof(deliberation::i8)},
+    {"I16", sizeof(deliberation::i16)},
+    {"I32", sizeof(deliberation::i32)},
+    {"U8", sizeof(deliberation::u8)},
+    {"U16", sizeof(deliberation::u16)},
+    {"U32", sizeof(deliberation::u32)},
+    {"Float", sizeof(float)},
+    {"Double", sizeof(double)},
+    {"Vec2", sizeof(glm::vec2)},
+    {"Vec3", sizeof(glm::vec3)},
+    {"Vec4", sizeof(glm::vec4)},
+    {"IVec2", sizeof(glm::ivec2)},
+    {"IVec3", sizeof(glm::ivec3)},
+    {"IVec4", sizeof(glm::ivec4)},
+    {"UVec2", sizeof(glm::uvec2)},
+    {"UVec3", sizeof(glm::uvec3)},
+    {"UVec4", sizeof(glm::uvec4)},
+    {"Mat2", sizeof(glm::mat2)},
+    {"Mat3", sizeof(glm::mat3)},
+    {"Mat4", sizeof(glm::mat4)}
+};
+
+}
+
 namespace deliberation
 {
 
-Type::Type():
-    m_name("None"),
-    m_size(0),
-    m_typeID(0)
-{
-}
-
-Type::Type(const std::string & name, size_t size, TypeID::value_t typeID):
-    m_name(name),
-    m_size(size),
-    m_typeID(typeID)
+Type::Type(u32 id):
+    m_id(id)
 {
 
 }
 
-const std::string & Type::name() const
+const char * Type::name() const
 {
-    return m_name;
+    return DATA[m_id].name;
 }
 
 size_t Type::size() const
 {
-    return m_size;
+    return DATA[m_id].size;
 }
 
-TypeID::value_t Type::typeID() const
+u32 Type::id() const
 {
-    return m_typeID;
+    return m_id;
 }
 
 bool Type::operator==(const Type & other) const
 {
-    return m_typeID == other.m_typeID;
+    return m_id == other.m_id;
 }
 
 bool Type::operator!=(const Type & other) const
 {
-    return m_typeID != other.m_typeID;
+    return m_id != other.m_id;
 }
 
-#define DECL_TYPE(name, type) Type Type_##name(#name, sizeof(type), TypeID::value<type>())
-
-DECL_TYPE(I8, i8);
-DECL_TYPE(I16, i16);
-DECL_TYPE(I32, i32);
-DECL_TYPE(U8, u8);
-DECL_TYPE(U16, u16);
-DECL_TYPE(U32, u32);
-DECL_TYPE(Float, float);
-DECL_TYPE(Double, double);
-DECL_TYPE(Vec2, glm::vec2);
-DECL_TYPE(Vec3, glm::vec3);
-DECL_TYPE(Vec4, glm::vec4);
-DECL_TYPE(IVec2, glm::ivec2);
-DECL_TYPE(IVec3, glm::ivec3);
-DECL_TYPE(IVec4, glm::ivec4);
-DECL_TYPE(UVec2, glm::uvec2);
-DECL_TYPE(UVec3, glm::uvec3);
-DECL_TYPE(UVec4, glm::uvec4);
-DECL_TYPE(Mat2, glm::mat2);
-DECL_TYPE(Mat3, glm::mat3);
-DECL_TYPE(Mat4, glm::mat4);
-Type Type_None;
+Type Type_None(0);
+Type Type_I8(1);
+Type Type_I16(2);
+Type Type_I32(3);
+Type Type_U8(4);
+Type Type_U16(5);
+Type Type_U32(6);
+Type Type_Float(7);
+Type Type_Double(8);
+Type Type_Vec2(9);
+Type Type_Vec3(10);
+Type Type_Vec4(11);
+Type Type_IVec2(12);
+Type Type_IVec3(13);
+Type Type_IVec4(14);
+Type Type_UVec2(15);
+Type Type_UVec3(16);
+Type Type_UVec4(17);
+Type Type_Mat2(18);
+Type Type_Mat3(19);
+Type Type_Mat4(20);
 
 #undef DECL
 

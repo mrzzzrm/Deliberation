@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <Deliberation/Core/TypeID.h>
+#include <Deliberation/Core/IntTypes.h>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -17,26 +17,21 @@ public:
 
 public:
     Type();
+    Type(u32 id);
+    Type(const Type & type) = default;
 
-    Type(const Type & type) = delete;
-    Type(Type && type) = delete;
-
-    Type(const std::string & name, size_t size, TypeID::value_t typeID);
-
-    const std::string & name() const;
+    const char * name() const;
     size_t size() const;
-    TypeID::value_t typeID() const;
+    u32 id() const;
 
-    Type & operator=(const Type &) = delete;
-    Type & operator=(Type &&) = delete;
+    Type & operator=(const Type &) = default;
+    Type & operator=(Type &&) = default;
 
     bool operator==(const Type & other) const;
     bool operator!=(const Type & other) const;
 
 private:
-    std::string         m_name;
-    size_t              m_size;
-    TypeID::value_t     m_typeID;
+    u32 m_id;
 };
 
 extern Type Type_None;
