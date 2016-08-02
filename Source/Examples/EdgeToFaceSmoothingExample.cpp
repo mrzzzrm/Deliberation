@@ -42,8 +42,8 @@ public:
 
     virtual void onStartup() override
     {
-        m_program = context().createProgram({dataPath("Data/Examples/BasicSceneExample.vert"),
-                                             dataPath("Data/Examples/BasicSceneExample.frag")});
+        m_program = context().createProgram({dataPath("Data/Examples/EdgeToFaceSmoothingExample.vert"),
+                                             dataPath("Data/Examples/EdgeToFaceSmoothingExample.frag")});
 
         m_grid.reset(context(), 0.5f, m_camera);
 
@@ -53,15 +53,18 @@ public:
 
         auto mesh = CuboidMesh({2.0f, 1.0f, 1.0f}).generate();
         auto smoothedMesh = EdgeToFaceSmoothing(mesh).run();
+        auto sphereMesh = UVSphere(10, 10).generate();
 
         m_unsmoothedCubeDraw = createDraw(mesh);
         m_smoothedCubeDraw = createDraw(smoothedMesh);
+        m_sphereDraw = createDraw(sphereMesh);
         m_clear = context().createClear();
 
         m_navigator.reset(m_camera, inputAdapter(), 1.0f);
 
         m_transform[0].setPosition({3.0f, 0.0f, 0.0f});
         m_transform[1].setPosition({-3.0f, 0.0f, 0.0f});
+        m_transform[2].setPosition({0.0f, 0.0f, -3.0f});
     }
 
     Draw createDraw(const Mesh & mesh)
@@ -71,6 +74,7 @@ public:
         auto draw = context().createDraw(m_program, gl::GL_TRIANGLES);
         draw.addVertices(compilation.vertices.layout(), compilation.vertices.rawData());
         draw.setIndices32(compilation.indices.rawData());
+        draw.uniform("LightDirection").set(glm::normalize(glm::vec3(0, -1, -0.2)));
 
         return draw;
     }
@@ -86,25 +90,34 @@ public:
         m_transform[0].localRotate(r);
         m_transform[1].worldRotate(r);
 
-        m_unsmoothedCubeDraw.uniform("ViewProjection").set(m_camera.viewProjection());
+        m_unsmoothedCubeDraw.uniform("View").set(m_camera.view());
+        m_unsmoothedCubeDraw.uniform("Projection").set(m_camera.projection());
         m_unsmoothedCubeDraw.uniform("Transform").set(m_transform[0].matrix());
-        m_smoothedCubeDraw.uniform("ViewProjection").set(m_camera.viewProjection());
+
+        m_smoothedCubeDraw.uniform("View").set(m_camera.view());
+        m_smoothedCubeDraw.uniform("Projection").set(m_camera.projection());
         m_smoothedCubeDraw.uniform("Transform").set(m_transform[1].matrix());
+
+        m_sphereDraw.uniform("View").set(m_camera.view());
+        m_sphereDraw.uniform("Projection").set(m_camera.projection());
+        m_sphereDraw.uniform("Transform").set(m_transform[2].matrix());
 
         m_clear.schedule();
         m_unsmoothedCubeDraw.schedule();
         m_smoothedCubeDraw.schedule();
+        m_sphereDraw.schedule();
         m_grid.get().draw();
     }
 
 private:
     Draw                                m_unsmoothedCubeDraw;
     Draw                                m_smoothedCubeDraw;
+    Draw                                m_sphereDraw;
     Program                             m_program;
     Clear                               m_clear;
     Optional<DebugGrid3DRenderer>       m_grid;
     Camera3D                            m_camera;
-    Transform3D                         m_transform[2];
+    Transform3D                         m_transform[3];
     Optional<DebugCameraNavigator3D>    m_navigator;
 
 };

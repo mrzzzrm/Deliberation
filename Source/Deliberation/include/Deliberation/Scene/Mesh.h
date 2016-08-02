@@ -27,6 +27,7 @@ public:
     using Faces = std::vector<Face>;
 
 public:
+    Mesh();
     Mesh(LayoutedBlob && vertices,
           std::vector<Face> && faces);
     Mesh(LayoutedBlob && vertices,

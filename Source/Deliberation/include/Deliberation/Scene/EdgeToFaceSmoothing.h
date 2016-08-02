@@ -19,10 +19,6 @@ public:
     Mesh run();
 
 private:
-    void generateVertices();
-    void generateEdges();
-
-private:
     const Mesh & m_sourceMesh;
 };
 

@@ -11,6 +11,8 @@ Mesh::Face::Face(std::vector<u32> && indices):
 
 }
 
+Mesh::Mesh() = default;
+
 Mesh::Mesh(LayoutedBlob && vertices,
              LayoutedBlob && faceAttributes,
              std::vector<Face> && faces):

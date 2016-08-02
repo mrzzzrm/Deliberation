@@ -73,7 +73,6 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
     for (std::size_t f = 0u; f < mesh.faces().size(); f++)
     {
         auto & face = mesh.faces()[f];
-        auto faceAttributes = mesh.faceAttributes()[f];
 
         for (std::size_t v = 1; v  < face.indices.size() - 1; v++)
         {
@@ -89,6 +88,7 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
             for (auto fi = 0; fi < mesh.faceAttributes().layout().fields().size(); fi++) {
                 auto srcField = mesh.faceAttributes().layout().field(fi);
                 auto dstField = vertexLayout.field(fi + vertexFields.size());
+                auto faceAttributes = mesh.faceAttributes()[f];
 
                 result.vertices[c + 0].value(dstField) = faceAttributes.value(srcField);
                 result.vertices[c + 1].value(dstField) = faceAttributes.value(srcField);
