@@ -1,5 +1,7 @@
 #include <functional>
 
+#include <Deliberation/Core/Assert.h>
+
 namespace deliberation
 {
 
@@ -43,6 +45,16 @@ template<typename T>
 std::size_t VectorBlobImpl<T>::size() const
 {
     return m_value.size() * sizeof(T);
+}
+
+template<typename T>
+void VectorBlobImpl<T>::resize(std::size_t size)
+{
+    auto num = size / sizeof(T);
+    auto rem = size % sizeof(T);
+    Assert(rem == 0, "Invalid resize");
+
+    return m_value.resize(num);;
 }
 
 }

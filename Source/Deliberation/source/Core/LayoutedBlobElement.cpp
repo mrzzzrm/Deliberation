@@ -8,9 +8,16 @@
 namespace deliberation
 {
 
+CLayoutedBlobElement::CLayoutedBlobElement(const LayoutedBlobElement & rhs):
+    Base(rhs.blob(), rhs.layout(), rhs.index())
+{
+
+}
+
 CLayoutedBlobElement::CLayoutedBlobElement(const Blob & blob, const DataLayout & layout, size_t index):
     Base(blob, layout, index)
 {
+
 }
 
 LayoutedBlobElement::LayoutedBlobElement(Blob & blob, const DataLayout & layout, size_t index):

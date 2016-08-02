@@ -24,6 +24,7 @@ public:
     virtual std::unique_ptr<IBlobImpl> clone() const override;
     virtual const void * ptr() const override;
     virtual std::size_t size() const override;
+    virtual void resize(std::size_t size) override;
 
 private:
     std::vector<T> m_value;

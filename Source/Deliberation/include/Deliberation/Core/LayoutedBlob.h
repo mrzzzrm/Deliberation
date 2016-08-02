@@ -46,6 +46,8 @@ public:
     template<typename T>
     void assign(const std::string & name, const std::vector<T> & values);
 
+    void append(const CLayoutedBlobElement & element);
+
     LayoutedBlobElement operator[](size_t index);
     CLayoutedBlobElement operator[](size_t index) const;
 

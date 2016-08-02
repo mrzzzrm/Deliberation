@@ -41,6 +41,9 @@ protected:
 class DELIBERATION_API CLayoutedBlobElement final:
     public LayoutedBlobElementBase<const Blob>
 {
+public:
+    CLayoutedBlobElement(const LayoutedBlobElement & rhs);
+
 private:
     friend class LayoutedBlobElement;
     friend class LayoutedBlob;

@@ -179,6 +179,22 @@ void DataLayoutExample()
     std::cout << "----------- DataLayoutExample -----------" << std::endl;
 
     DataLayout layout();
+}
+
+void BlobExample()
+{
+    std::cout << "----------- BlobExample -----------" << std::endl;
+
+    Blob blob(6);
+    blob.access<u32>(0) = 0xFF00A3B4;
+    blob.access<i16>(4) = 0x1234;
+
+    std::cout << blob.toString() << std::endl;
+
+    blob.resize(8);
+    blob.access<i16>(6) = 0xABCD;
+
+    std::cout << blob.toString() << std::endl;
 
 }
 
@@ -186,8 +202,8 @@ void LayoutedBlobExample()
 {
     std::cout << "----------- LayoutedBlobExample -----------" << std::endl;
 
-    std::cout << Type_I32.name() << ": " << Type_I32.typeID() << std::endl;
-    std::cout << Type_Vec3.name() << ": " << Type_Vec3.typeID() << std::endl;
+    std::cout << Type_I32.name() << ": " << Type_I32.id() << std::endl;
+    std::cout << Type_Vec3.name() << ": " << Type_Vec3.id() << std::endl;
 
     DataLayout layout({{"Age", Type_I32},
                        {"Direction", Type_Vec3}});
@@ -226,6 +242,20 @@ void LayoutedBlobExample()
     {
         std::cout << "  " << i << ": " << ages2[i] << " " << directions2[i] << std::endl;
     }
+
+    LayoutedBlob flexBlob(layout, 1);
+    flexBlob[0] = blob2[1];
+    flexBlob.append(blob2[0]);
+    flexBlob.append(blob2[1]);
+
+    auto ages3 = flexBlob.field<i32>(age);
+    auto directions3 = flexBlob.field<glm::vec3>(direction);
+
+    std::cout << "Extended: " << std::endl;
+    for (int i = 0; i < flexBlob.count(); i++)
+    {
+        std::cout << "  " << i << ": " << ages3[i] << " " << directions3[i] << std::endl;
+    }
 }
 
 int main(int argc, char * argv[])
@@ -236,6 +266,7 @@ int main(int argc, char * argv[])
     TypeIDExample();
     SparseVectorExample();
     DataLayoutExample();
+    BlobExample();
     LayoutedBlobExample();
 
     return 0;

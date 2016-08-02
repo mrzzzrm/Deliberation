@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <Deliberation/Core/Detail/IBlobImpl.h>
@@ -50,6 +51,10 @@ public:
 
     template<typename T>
     const T & access(size_t offset) const;
+
+    void resize(size_t size);
+
+    std::string toString() const;
 
     Blob & operator=(const Blob & blob);
     Blob & operator=(Blob && blob);

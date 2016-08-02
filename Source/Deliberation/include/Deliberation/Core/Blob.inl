@@ -35,6 +35,11 @@ Blob Blob::fromValue(const T & value)
             return sizeof(T);
         }
 
+        void resize(std::size_t size) override
+        {
+            Fail("Resize not supported");
+        }
+
     private:
         T m_value;
     };

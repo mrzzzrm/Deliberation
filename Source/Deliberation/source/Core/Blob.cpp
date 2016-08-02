@@ -1,5 +1,7 @@
 #include <Deliberation/Core/Blob.h>
 
+#include <sstream>
+
 namespace deliberation
 {
 
@@ -50,6 +52,26 @@ void Blob::write(std::size_t offset, void * src, size_t length)
     Assert(ptr(), "");
 
     memmove(ptr(offset), src, length);
+}
+
+void Blob::resize(size_t size)
+{
+    Assert(m_impl.get(), "Hollow Blob");
+    m_impl->resize(size);
+}
+
+std::string Blob::toString() const
+{
+    std::stringstream stream;
+    stream << "Blob: {";
+
+    for (auto b = 0; b < size(); b++)
+    {
+        stream << std::hex << (int)access<unsigned char>(b) << ", ";
+    }
+
+    stream << "}";
+    return stream.str();
 }
 
 Blob & Blob::operator=(const Blob & blob)
