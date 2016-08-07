@@ -1,23 +1,103 @@
 #include <Deliberation/Physics/RigidBody.h>
 
+#include <sstream>
+
+#include <Deliberation/Core/StreamUtils.h>
+
 namespace deliberation
 {
 
-RigidBody::RigidBody(const Transform3D & transform,
-                     const std::shared_ptr<CollisionShape> & shape):
-    m_transform(transform),
-    m_shape(shape)
+RigidBody::RigidBody(const std::shared_ptr<CollisionShape> & shape,
+                     const Transform3D & transform,
+                     float inverseMass,
+                     const glm::vec3 & linearVelocity,
+                     const glm::vec3 & angularVelocity):
+    CollisionObject(shape, transform),
+    m_inverseMass(inverseMass),
+    m_linearVelocity(linearVelocity),
+    m_angularVelocity(angularVelocity)
 {
 }
 
-const Transform3D & RigidBody::transform() const
+float RigidBody::inverseMass() const
 {
-    return m_transform;
+    return m_inverseMass;
 }
 
-const CollisionShape & RigidBody::shape() const
+float RigidBody::mass() const
 {
-    return *m_shape;
+    return m_inverseMass != 0.0f ? 1.0f / m_inverseMass : 0.0f;
+}
+
+const glm::vec3 & RigidBody::linearVelocity() const
+{
+    return m_angularVelocity;
+}
+
+const glm::vec3 & RigidBody::angularVelocity() const
+{
+    return m_angularVelocity;
+}
+
+const glm::vec3 & RigidBody::force() const
+{
+    return m_force;
+}
+
+bool RigidBody::isStatic() const
+{
+    return m_static;
+}
+
+void RigidBody::setInverseMass(float inverseMass)
+{
+    m_inverseMass = inverseMass;
+}
+
+void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
+{
+    m_linearVelocity = velocity;
+}
+
+void RigidBody::setAngularVelocity(const glm::vec3 & velocity)
+{
+    m_angularVelocity = velocity;
+}
+
+void RigidBody::setForce(const glm::vec3 & force)
+{
+    m_force = force;
+}
+
+void RigidBody::applyForce(const glm::vec3 & force)
+{
+    m_force += force;
+}
+
+void RigidBody::setStatic(bool isStatic)
+{
+    m_static = isStatic;
+}
+
+void RigidBody::predictTransform(float seconds, Transform3D & prediction)
+{
+    prediction.setCenter(transform().center());
+    prediction.setScale(transform().scale());
+    prediction.setPosition(transform().position() + seconds * m_linearVelocity);
+    prediction.setOrientation(transform().orientation()/* * glm::quat(seconds * m_angularVelocity)*/);
+}
+
+void RigidBody::integrateVelocities(float seconds)
+{
+    m_linearVelocity += m_force * m_inverseMass * seconds;
+    // m_angularVelocity
+}
+
+std::string RigidBody::toString() const
+{
+    std::stringstream stream;
+    stream << "{" << transform().position() << ", " << transform().orientation() << "}";
+    return stream.str();
 }
 
 }

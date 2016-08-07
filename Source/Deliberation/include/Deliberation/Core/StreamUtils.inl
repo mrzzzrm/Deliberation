@@ -70,7 +70,27 @@ StreamType & operator<<(StreamType && os, const glm::vec4 & v)
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::quat & q)
 {
-    os << "(" << q.x << "/" << q.y << "/" << q.z << "/" << q.w << ")";
+    os << "("  << q.w << "/" << q.x << "/" << q.y << "/" << q.z << ")";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::mat2 & v)
+{
+    os << "(" << std::endl;
+
+    for (auto r = 0u; r < 2u; r++)
+    {
+        os << "  ";
+        for (auto c = 0u; c < 2u; c++)
+        {
+            os << v[c][r] << "/";
+        }
+        os << std::endl;
+    }
+
+    os << ")" << std::endl;
+
     return os;
 }
 

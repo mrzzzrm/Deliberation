@@ -7,14 +7,14 @@
 
 #include <Deliberation/Scene/Mesh.h>
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 namespace deliberation
 {
 
-MeshCompiler::Compilation::Compilation(const DataLayout & vertexLayout, size_t numVertices):
+MeshCompiler::Compilation::Compilation(const DataLayout & vertexLayout, size_t numVertices, size_t numIndices):
     vertices(vertexLayout, numVertices),
-    indices({"Index", Type_U32}, numVertices)
+    indices({"Index", Type_U32}, numIndices)
 {
 
 }
@@ -64,7 +64,7 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
 
     DataLayout vertexLayout(combinedFields);
 
-    Compilation result(vertexLayout, numVertices);
+    Compilation result(vertexLayout, numVertices, numVertices);
 
     auto indices = result.indices.field<u32>("Index");
 
@@ -103,11 +103,12 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
         }
     }
 
-
 #if VERBOSE
-    std::cout << "Mesh Compilation:" << std::endl;
+    std::cout << "Mesh Compilation Triangles:" << std::endl;
     std::cout << "  Vertices: " << result.vertices.count() << std::endl;
+    std::cout << result.vertices.toString() << std::endl;
     std::cout << "  Indices: " << result.indices.count() << std::endl;
+    std::cout << result.indices.toString() << std::endl;
 #endif
 
     return result;
@@ -115,7 +116,87 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
 
 MeshCompiler::Compilation MeshCompiler::compileLines(const Mesh & mesh) const
 {
-    Compilation result(mesh.vertices().layout(), 0);
+    /**
+     * Count vertices
+     */
+    size_t numVertices = 0;
+    size_t numIndices = 0;
+    for (std::size_t f = 0u; f < mesh.faces().size(); f++)
+    {
+        numVertices += mesh.faces()[f].indices.size();
+        numIndices += 2 * mesh.faces()[f].indices.size();
+    }
+
+    /**
+     * Combined Vertex Layout
+     */
+    auto layout = DataLayout::concatenate({mesh.vertices().layout(), mesh.faceAttributes().layout()});
+    std::vector<std::pair<DataLayoutField, DataLayoutField>> fromVertexFields;
+    for (auto & field : mesh.vertices().layout().fields())
+    {
+        fromVertexFields.push_back({layout.field(field.name()), field});
+    }
+    std::vector<std::pair<DataLayoutField, DataLayoutField>> fromFaceFields;
+    for (auto & field : mesh.faceAttributes().layout().fields())
+    {
+        fromFaceFields.push_back({layout.field(field.name()), field});
+    }
+
+    /**
+     * Result
+     */
+    Compilation result(layout, numVertices, numIndices);
+
+    auto indices = result.indices.field<u32>("Index");
+
+    /**
+     * Compile mesh
+     */
+    auto vIndex = 0u;
+    auto iIndex = 0u;
+    for (size_t f = 0u; f < mesh.faces().size(); f++)
+    {
+        auto & face = mesh.faces()[f];
+
+        auto baseIndex = vIndex;
+
+        /**
+         * Generate face outline vertices
+         */
+        for (size_t v = 0; v < face.indices.size(); v++)
+        {
+            auto b = v < face.indices.size() - 1 ? v + 1 : 0;
+
+            for (auto &field : fromVertexFields) {
+                result.vertices[vIndex].value(field.first) = mesh.faceVertex(f, v).value(field.second);
+            }
+            for (auto &field : fromFaceFields) {
+                result.vertices[vIndex].value(field.first) = mesh.faceVertex(f, v).value(field.second);
+            }
+
+            vIndex++;
+        }
+
+        /**
+         * Generate face outline indices
+         */
+        for (size_t v = 0; v < face.indices.size(); v++)
+        {
+            indices[iIndex + 0] = baseIndex + v;
+            indices[iIndex + 1] = baseIndex + (v + 1 < face.indices.size() ? v + 1 : 0);
+
+            iIndex += 2;
+        }
+    }
+
+#if VERBOSE
+    std::cout << "Mesh Compilation Lines:" << std::endl;
+    std::cout << "  Vertices: " << result.vertices.count() << std::endl;
+    std::cout << result.vertices.toString() << std::endl;
+    std::cout << "  Indices: " << result.indices.count() << std::endl;
+    std::cout << result.indices.toString() << std::endl;
+#endif
+
     return result;
 }
 

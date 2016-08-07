@@ -1,5 +1,7 @@
 #include <Deliberation/Core/LayoutedBlob.h>
 
+#include <sstream>
+
 #include <Deliberation/Core/Assert.h>
 
 namespace deliberation
@@ -60,6 +62,12 @@ void LayoutedBlob::append(const CLayoutedBlobElement & element)
     operator[](m_count - 1) = element;
 }
 
+void LayoutedBlob::resize(size_t count)
+{
+    m_count = count;
+    m_data.resize(m_layout.stride() * m_count);
+}
+
 LayoutedBlobElement LayoutedBlob::operator[](size_t index)
 {
     Assert(index < m_count, "");
@@ -76,7 +84,20 @@ CLayoutedBlobElement LayoutedBlob::operator[](size_t index) const
 
 std::string LayoutedBlob::toString() const
 {
-    return "";
+    std::stringstream stream;
+
+    stream << "{\n\tCount: " << m_count << "\n";
+
+    stream << "\tLayout: " << m_layout.toString() << std::endl;
+
+    for (auto e = 0; e < m_count; e++)
+    {
+        stream << "\t[" << e << "] = " << operator[](e).toString() << std::endl;
+    }
+
+    stream << "}" << std::endl;
+
+    return stream.str();
 }
 
 }

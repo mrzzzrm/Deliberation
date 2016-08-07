@@ -16,7 +16,7 @@ class MeshCompiler final
 public:
     struct Compilation
     {
-        Compilation(const DataLayout & vertexLayout, size_t numVertices);
+        Compilation(const DataLayout & vertexLayout, size_t numVertices, size_t numIndices);
 
         LayoutedBlob vertices;
         LayoutedBlob indices;

@@ -24,6 +24,8 @@ public:
     size_t size() const;
     u32 id() const;
 
+    std::string toString(const void * ptr) const;
+
     Type & operator=(const Type &) = default;
     Type & operator=(Type &&) = default;
 

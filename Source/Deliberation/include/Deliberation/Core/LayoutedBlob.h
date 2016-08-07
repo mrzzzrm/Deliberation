@@ -19,7 +19,7 @@ class DELIBERATION_API LayoutedBlob final
 {
 public:
     LayoutedBlob();
-    LayoutedBlob(const DataLayout & layout, size_t count);
+    LayoutedBlob(const DataLayout & layout, size_t count = 0);
 
     const DataLayout & layout() const;
     size_t count() const;
@@ -47,6 +47,7 @@ public:
     void assign(const std::string & name, const std::vector<T> & values);
 
     void append(const CLayoutedBlobElement & element);
+    void resize(size_t count);
 
     LayoutedBlobElement operator[](size_t index);
     CLayoutedBlobElement operator[](size_t index) const;

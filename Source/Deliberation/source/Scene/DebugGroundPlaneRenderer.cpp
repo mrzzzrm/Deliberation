@@ -1,5 +1,7 @@
 #include <Deliberation/Scene/DebugGroundPlaneRenderer.h>
 
+#include <iostream>
+
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Draw/Context.h>
@@ -19,7 +21,7 @@ DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(Context & context, const Came
 
     m_view = m_draw.uniform("View");
     m_projection = m_draw.uniform("Projection");
-    m_farPlaneZ = m_draw.uniform("FarPlaneZ");
+    //m_farPlaneZ = m_draw.uniform("FarPlaneZ");
 
     m_size = m_draw.uniform("Size");
     m_size.set(3.0f);
@@ -57,7 +59,7 @@ void DebugGroundPlaneRenderer::schedule()
 {
     m_view.set(m_camera.view());
     m_projection.set(m_camera.projection());
-    m_farPlaneZ.set(m_camera.zFar());
+//    m_farPlaneZ.set(m_camera.zFar());
 
     m_draw.schedule();
 }

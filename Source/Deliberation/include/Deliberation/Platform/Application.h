@@ -16,7 +16,7 @@ namespace deliberation
 class DELIBERATION_API Application
 {
 public:
-    Application(const std::string & name);
+    Application(const std::string & name, const std::string & prefixPath);
     virtual ~Application();
 
     InputAdapterBase & inputAdapter();
@@ -35,9 +35,14 @@ protected:
     virtual void onFrame(float seconds);
 
 private:
+    void init();
+
+private:
     std::string         m_name;
-    bool                m_running;
-    int                 m_returnCode;
+    std::string         m_prefixPath;
+    bool                m_running = false;
+    bool                m_initialized = false;
+    int                 m_returnCode = 0;
 
     Optional<Context>   m_context;
 

@@ -1,40 +1,60 @@
 #include <Deliberation/Core/Types.h>
 
+#include <functional>
+#include <sstream>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Core/IntTypes.h>
+#include <Deliberation/Core/StreamUtils.h>
+
+using namespace deliberation;
 
 namespace
 {
 
+std::string dummyToString(const void*)
+{
+    return "";
+}
+
+template<typename T>
+std::string toString(const void * ptr)
+{
+    std::stringstream stream;
+    stream << *((const T*)ptr);
+    return stream.str();
+}
+
 struct TypeData
 {
-    const char * name;
-    size_t       size;
+    const char *                      name;
+    size_t                            size;
+    std::function<std::string(const void*)> toString;
 };
 
 TypeData DATA[] = {
-    {"None", 0},
-    {"I8", sizeof(deliberation::i8)},
-    {"I16", sizeof(deliberation::i16)},
-    {"I32", sizeof(deliberation::i32)},
-    {"U8", sizeof(deliberation::u8)},
-    {"U16", sizeof(deliberation::u16)},
-    {"U32", sizeof(deliberation::u32)},
-    {"Float", sizeof(float)},
-    {"Double", sizeof(double)},
-    {"Vec2", sizeof(glm::vec2)},
-    {"Vec3", sizeof(glm::vec3)},
-    {"Vec4", sizeof(glm::vec4)},
-    {"IVec2", sizeof(glm::ivec2)},
-    {"IVec3", sizeof(glm::ivec3)},
-    {"IVec4", sizeof(glm::ivec4)},
-    {"UVec2", sizeof(glm::uvec2)},
-    {"UVec3", sizeof(glm::uvec3)},
-    {"UVec4", sizeof(glm::uvec4)},
-    {"Mat2", sizeof(glm::mat2)},
-    {"Mat3", sizeof(glm::mat3)},
-    {"Mat4", sizeof(glm::mat4)}
+    {"None", 0, dummyToString},
+    {"I8", sizeof(i8), toString<i8>},
+    {"I16", sizeof(i16), toString<i16>},
+    {"I32", sizeof(i32), toString<i32>},
+    {"U8", sizeof(u8), toString<u8>},
+    {"U16", sizeof(u16), toString<u16>},
+    {"U32", sizeof(u32), toString<u32>},
+    {"Float", sizeof(float), toString<float>},
+    {"Double", sizeof(double), toString<double>},
+    {"Vec2", sizeof(glm::vec2), toString<glm::vec2>},
+    {"Vec3", sizeof(glm::vec3), toString<glm::vec3>},
+    {"Vec4", sizeof(glm::vec4), toString<glm::vec4>},
+    {"IVec2", sizeof(glm::ivec2), toString<glm::ivec2>},
+    {"IVec3", sizeof(glm::ivec3), toString<glm::ivec3>},
+    {"IVec4", sizeof(glm::ivec4), toString<glm::ivec4>},
+    {"UVec2", sizeof(glm::uvec2), toString<glm::uvec2>},
+    {"UVec3", sizeof(glm::uvec3), toString<glm::uvec3>},
+    {"UVec4", sizeof(glm::uvec4), toString<glm::uvec4>},
+    {"Mat2", sizeof(glm::mat2), toString<glm::mat2>},
+    {"Mat3", sizeof(glm::mat3), toString<glm::mat3>},
+    {"Mat4", sizeof(glm::mat4), toString<glm::mat4>}
 };
 
 }
@@ -45,7 +65,6 @@ namespace deliberation
 Type::Type(u32 id):
     m_id(id)
 {
-
 }
 
 const char * Type::name() const
@@ -61,6 +80,11 @@ size_t Type::size() const
 u32 Type::id() const
 {
     return m_id;
+}
+
+std::string Type::toString(const void * ptr) const
+{
+    return DATA[m_id].toString(ptr);
 }
 
 bool Type::operator==(const Type & other) const

@@ -30,14 +30,29 @@ Mesh::Mesh(LayoutedBlob && vertices,
 
 }
 
+LayoutedBlob & Mesh::vertices()
+{
+    return m_vertices;
+}
+
 const LayoutedBlob & Mesh::vertices() const
 {
     return m_vertices;
 }
 
+LayoutedBlob & Mesh::faceAttributes()
+{
+    return m_faceAttributes;
+}
+
 const LayoutedBlob & Mesh::faceAttributes() const
 {
     return m_faceAttributes;
+}
+
+std::vector<Mesh::Face> & Mesh::faces()
+{
+    return m_faces;
 }
 
 const std::vector<Mesh::Face> & Mesh::faces() const

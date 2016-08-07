@@ -15,6 +15,7 @@ std::string dataPath(const std::string path);
 
 void EnableGLErrorChecks();
 void EnableGLErrorChecksAndLogging();
+void DisableGLErrorChecks();
 
 }
 

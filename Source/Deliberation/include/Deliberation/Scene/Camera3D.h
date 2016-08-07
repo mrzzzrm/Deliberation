@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
@@ -33,6 +35,8 @@ public:
 
     Rect3D nearPlane() const;
     Rect3D farPlane() const;
+
+    std::string toString() const;
 
 private:
     glm::vec3           m_position;

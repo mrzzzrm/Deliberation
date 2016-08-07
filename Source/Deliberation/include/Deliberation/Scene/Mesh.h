@@ -34,8 +34,13 @@ public:
           LayoutedBlob && faceAttributes,
           std::vector<Face> && faces);
 
+    LayoutedBlob & vertices();
     const LayoutedBlob & vertices() const;
+
+    LayoutedBlob & faceAttributes();
     const LayoutedBlob & faceAttributes() const;
+
+    std::vector<Face> & faces();
     const std::vector<Face> & faces() const;
 
     LayoutedBlobElement faceVertex(size_t face, size_t vertex);

@@ -43,6 +43,9 @@ template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::quat & q);
 
 template<typename StreamType>
+StreamType & operator<<(StreamType && os, const glm::mat2 & v);
+
+template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::mat3 & v);
 
 template<typename StreamType>

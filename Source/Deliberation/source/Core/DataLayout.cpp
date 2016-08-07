@@ -8,6 +8,17 @@
 namespace deliberation
 {
 
+DataLayout DataLayout::concatenate(const std::vector<DataLayout> & layouts)
+{
+    std::vector<DataLayoutField::Desc> allDescs;
+    for (auto & layout : layouts)
+    {
+        auto descs = layout.descs();
+        allDescs.insert(allDescs.end(), descs.begin(), descs.end());
+    }
+    return DataLayout(allDescs);
+}
+
 DataLayout::DataLayout()
 {
 }
@@ -42,6 +53,14 @@ const std::vector<DataLayoutField> & DataLayout::fields() const
 size_t DataLayout::stride() const
 {
     return m_stride;
+}
+
+bool DataLayout::hasField(const std::string & name) const
+{
+    auto i = std::find_if(m_fields.begin(), m_fields.end(), [this, name](const DataLayoutField & field) {
+        return field.name() == name;
+    });
+    return i != m_fields.end();
 }
 
 const DataLayoutField & DataLayout::field(size_t index) const

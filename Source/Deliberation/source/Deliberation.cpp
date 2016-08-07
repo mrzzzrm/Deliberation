@@ -53,7 +53,7 @@ void setPrefixPath(const std::string & prefixPath)
     }
     else
     {
-        ::prefixPath = ::prefixPath;
+        ::prefixPath = prefixPath;
     }
 }
 
@@ -128,6 +128,11 @@ void EnableGLErrorChecksAndLogging()
         }
         glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
     });
+}
+
+void DisableGLErrorChecks()
+{
+    glbinding::setCallbackMask(glbinding::CallbackMask::None);
 }
 
 }

@@ -46,6 +46,7 @@ public:
     CIterator find(const T & value) const;
 
     std::size_t insert(T && value);
+    std::size_t insert(const T & value);
 
     template<typename ... Args>
     std::size_t emplace(Args &&... args);

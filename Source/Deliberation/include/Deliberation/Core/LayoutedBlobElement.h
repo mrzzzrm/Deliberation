@@ -29,6 +29,8 @@ public:
     CBlobValue value(const DataLayoutField & field) const;
     CBlobValue value(const std::string & name) const;
 
+    std::string toString() const;
+
 protected:
     LayoutedBlobElementBase(BlobType & blob, const DataLayout & layout, size_t index);
 

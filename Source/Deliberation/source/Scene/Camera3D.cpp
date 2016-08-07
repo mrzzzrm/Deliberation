@@ -1,9 +1,12 @@
 #include <Deliberation/Scene/Camera3D.h>
 
+#include <sstream>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/StreamUtils.h>
 
 namespace deliberation
 {
@@ -166,6 +169,21 @@ Rect3D Camera3D::farPlane() const
     auto up = m_orientation * glm::vec3(0.0f, height, 0.0f);
 
     return {origin, right, up};
+}
+
+std::string Camera3D::toString() const
+{
+    std::stringstream stream;
+
+    stream << "{Position: " << m_position << "; ";
+    stream << "Orientation: " << m_orientation << "; ";
+    stream << "zNear: " << m_zNear << "; ";
+    stream << "zFar: " << m_zFar << "; ";
+    stream << "yFoV: " << m_yFoV << "; ";
+    stream << "Aspect Ratio: " << m_aspectRatio << "}";
+
+    return stream.str();
+
 }
 
 }

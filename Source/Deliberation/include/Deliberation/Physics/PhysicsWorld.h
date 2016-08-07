@@ -16,17 +16,25 @@ class RigidBody;
 class DELIBERATION_API PhysicsWorld final
 {
 public:
-    PhysicsWorld();
+    PhysicsWorld(float timestep = 1.0f / 60.0f);
 
-    void addRigidBody(const std::shared_ptr<RigidBody> & body);
-    void removeRigidBody(const std::shared_ptr<RigidBody> & body);
+    void addRigidBody(std::shared_ptr<RigidBody> & body);
+    void removeRigidBody(std::shared_ptr<RigidBody> & body);
 
-    void setGravity(const glm::vec3 & gravity);
+    void setGravity(float gravity);
 
     void update(float seconds);
 
+    std::string toString() const;
+
 private:
-    SparseVector<std::shared_ptr<RigidBody>> m_rigidBodies;
+    void performTimestep(float seconds);
+    void integrateTransforms(float seconds);
+
+private:
+    float                                       m_timestep  = 1.0f / 60.0f;
+    float                                       m_gravity   = 0.0f;
+    SparseVector<std::shared_ptr<RigidBody>>    m_rigidBodies;
 };
 
 }

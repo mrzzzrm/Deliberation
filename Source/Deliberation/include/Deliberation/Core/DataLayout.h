@@ -18,6 +18,8 @@ public:
     template<typename T>
     static DataLayout fromStructOrClass(const std::vector<detail::NamedDataMemberOf<T>> & members);
 
+    static DataLayout concatenate(const std::vector<DataLayout> & layouts);
+
 public:
     DataLayout();
     DataLayout(const std::string & name, const Type & type);
@@ -26,6 +28,8 @@ public:
 
     const std::vector<DataLayoutField> & fields() const;
     size_t stride() const;
+
+    bool hasField(const std::string & name) const;
 
     const DataLayoutField & field(size_t index) const;
     const DataLayoutField & field(const std::string & name) const;

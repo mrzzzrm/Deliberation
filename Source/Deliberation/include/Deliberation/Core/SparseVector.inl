@@ -115,6 +115,12 @@ std::size_t SparseVector<T>::insert(T && value)
 }
 
 template<typename T>
+std::size_t SparseVector<T>::insert(const T & value)
+{
+    return insert(T(value));
+}
+
+template<typename T>
 template<typename ... Args>
 std::size_t SparseVector<T>::emplace(Args &&... args)
 {
