@@ -62,6 +62,10 @@ target_link_libraries(BasicTextureExample ${libs})
 add_executable(BasicFontExample BasicFontExample.cpp)
 target_link_libraries(BasicFontExample ${libs})
 
+# BasicPhysicsExample
+add_executable(BasicPhysicsExample BasicPhysicsExample.cpp)
+target_link_libraries(BasicPhysicsExample ${libs})
+
 # BasicRenderTargetExample
 add_executable(BasicRenderTargetExample BasicRenderTargetExample.cpp)
 target_link_libraries(BasicRenderTargetExample ${libs})

@@ -62,6 +62,12 @@ bool SparseVector<T>::contains(std::size_t index) const
 }
 
 template<typename T>
+size_t SparseVector<T>::capacity() const
+{
+    return m_vec.size();
+}
+
+template<typename T>
 typename SparseVector<T>::Iterator SparseVector<T>::find(const T & value)
 {
     for (std::size_t e = 0; e < m_vec.size(); e++)

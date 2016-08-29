@@ -29,9 +29,14 @@ float RigidBody::mass() const
     return m_inverseMass != 0.0f ? 1.0f / m_inverseMass : 0.0f;
 }
 
+float RigidBody::restitution() const
+{
+    return m_restitution;
+}
+
 const glm::vec3 & RigidBody::linearVelocity() const
 {
-    return m_angularVelocity;
+    return m_linearVelocity;
 }
 
 const glm::vec3 & RigidBody::angularVelocity() const
@@ -44,6 +49,11 @@ const glm::vec3 & RigidBody::force() const
     return m_force;
 }
 
+size_t RigidBody::index() const
+{
+    return m_index;
+}
+
 bool RigidBody::isStatic() const
 {
     return m_static;
@@ -52,6 +62,11 @@ bool RigidBody::isStatic() const
 void RigidBody::setInverseMass(float inverseMass)
 {
     m_inverseMass = inverseMass;
+}
+
+void RigidBody::setRestitution(float restitution)
+{
+    m_restitution = restitution;
 }
 
 void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
@@ -77,6 +92,11 @@ void RigidBody::applyForce(const glm::vec3 & force)
 void RigidBody::setStatic(bool isStatic)
 {
     m_static = isStatic;
+}
+
+void RigidBody::setIndex(size_t index)
+{
+    m_index = index;
 }
 
 void RigidBody::predictTransform(float seconds, Transform3D & prediction)

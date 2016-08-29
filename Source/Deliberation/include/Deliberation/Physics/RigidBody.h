@@ -26,17 +26,21 @@ public:
 
     float mass() const;
     float inverseMass() const;
+    float restitution() const;
     const glm::vec3 & linearVelocity() const;
     const glm::vec3 & angularVelocity() const;
     const glm::vec3 & force() const;
     bool isStatic() const;
+    size_t index() const;
 
     void setInverseMass(float mass);
+    void setRestitution(float restitution);
     void setLinearVelocity(const glm::vec3 & velocity);
     void setAngularVelocity(const glm::vec3 & velocity);
     void setForce(const glm::vec3 & force);
     void applyForce(const glm::vec3 & force);
     void setStatic(bool isStatic);
+    void setIndex(size_t index);
 
     void integrateVelocities(float seconds);
 
@@ -46,10 +50,14 @@ public:
 
 private:
     float                           m_inverseMass = 1.0f / 1.0f;
+    float                           m_restitution = 1.0f;
+
     glm::vec3                       m_linearVelocity;
     glm::vec3                       m_angularVelocity;
     glm::vec3                       m_force;
+
     bool                            m_static = false;
+    size_t                          m_index = -1;
 };
 
 }

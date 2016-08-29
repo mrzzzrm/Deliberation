@@ -52,6 +52,7 @@ set(sources
     ${source_path}/Core/Viewport.cpp
 
     ${source_path}/Core/Math/AABB.cpp
+    ${source_path}/Core/Math/Box.cpp
     ${source_path}/Core/Math/GLMUtils.cpp
     ${source_path}/Core/Math/Morton.cpp
     ${source_path}/Core/Math/Ray3D.cpp
@@ -161,13 +162,18 @@ set(sources
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
 
-    ${source_path}/Physics/AABBCollisionShape.cpp
-    ${source_path}/Physics/BoxCollisionShape.cpp
+    ${source_path}/Physics/Contacts/BoxContact.cpp
+    ${source_path}/Physics/Contacts/Contact.cpp
+    ${source_path}/Physics/Contacts/ContactDispatcher.cpp
+    ${source_path}/Physics/Contacts/SphereContact.cpp
+    ${source_path}/Physics/BoxShape.cpp
     ${source_path}/Physics/Broadphase.cpp
-    ${source_path}/Physics/OctreeBroadphase.cpp
     ${source_path}/Physics/BroadphaseProxy.cpp
+    ${source_path}/Physics/CollisionObject.cpp
     ${source_path}/Physics/CollisionShape.cpp
+    ${source_path}/Physics/Narrowphase.cpp
     ${source_path}/Physics/PhysicsWorld.cpp
+    ${source_path}/Physics/ReferenceBroadphase.cpp
     ${source_path}/Physics/RigidBody.cpp
     ${source_path}/Physics/SphereCollisionShape.cpp
 
@@ -245,6 +251,7 @@ set(api_includes
     ${include_path}/Core/Viewport.h
 
     ${include_path}/Core/Math/AABB.h
+    ${include_path}/Core/Math/Box.h
     ${include_path}/Core/Math/GLMUtils.h
     ${include_path}/Core/Math/Morton.h
     ${include_path}/Core/Math/Morton.inl
@@ -322,14 +329,19 @@ set(api_includes
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
 
-    ${include_path}/Physics/AABBCollisionShape.h
-    ${include_path}/Physics/BoxCollisionShape.h
+    ${include_path}/Physics/Contacts/BoxContact.h
+    ${include_path}/Physics/Contacts/Contact.h
+    ${include_path}/Physics/Contacts/ContactDispatcher.h
+    ${include_path}/Physics/Contacts/ContactDispatcher.inl
+    ${include_path}/Physics/Contacts/SphereContact.h
+    ${include_path}/Physics/BoxShape.h
     ${include_path}/Physics/Broadphase.h
-    ${include_path}/Physics/OctreeBroadphase.h
     ${include_path}/Physics/BroadphaseProxy.h
-    ${include_path}/Physics/CollisionFilter.h
+    ${include_path}/Physics/CollisionObject.h
     ${include_path}/Physics/CollisionShape.h
+    ${include_path}/Physics/Narrowphase.h
     ${include_path}/Physics/PhysicsWorld.h
+    ${include_path}/Physics/ReferenceBroadphase.h
     ${include_path}/Physics/RigidBody.h
     ${include_path}/Physics/SphereCollisionShape.h
 

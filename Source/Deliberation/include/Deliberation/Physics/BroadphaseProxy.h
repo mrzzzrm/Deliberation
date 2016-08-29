@@ -12,16 +12,19 @@ namespace deliberation
 class DELIBERATION_API BroadphaseProxy final
 {
 public:
-    BroadphaseProxy(CollisionObject * collisionObject, const AABB & bounds = AABB());
+    BroadphaseProxy(void * userData, const AABB & bounds = AABB());
 
-    CollisionObject * collisionObject() const;
+    void * userData() const;
     const AABB & bounds() const;
+    size_t index() const;
 
     void setBounds(const AABB & bounds);
+    void setIndex(size_t index);
 
 private:
-    CollisionObject *  m_collisionObject;
-    AABB               m_bounds;
+    void *  m_userData;
+    AABB    m_bounds;
+    size_t  m_index;
 };
 
 }
