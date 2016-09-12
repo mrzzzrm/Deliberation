@@ -6,6 +6,8 @@
 
 #include <Deliberation/Deliberation.h>
 
+#include <Deliberation/Core/LayoutedBlob.h>
+
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/TextureLoader.h>
@@ -56,6 +58,13 @@ Buffer Context::createBuffer(const DataLayout & layout)
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
+Buffer Context::createBuffer(const LayoutedBlob & data)
+{
+    auto buffer = createBuffer(data.layout());
+    buffer.scheduleUpload(data);
+    return buffer;
+}
+
 Buffer Context::createIndexBuffer8()
 {
     DataLayout layout({{"Index8", Type_U8}});
@@ -80,7 +89,7 @@ Program Context::createProgram(const std::vector<std::string> & paths)
     return program;
 }
 
-Draw Context::createDraw(Program & program, gl::GLenum primitive, const std::string & name)
+Draw Context::createDraw(const Program & program, gl::GLenum primitive, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
     impl->state.rasterizerState().setPrimitive(primitive);
@@ -89,7 +98,7 @@ Draw Context::createDraw(Program & program, gl::GLenum primitive, const std::str
     return Draw(impl);
 }
 
-Draw Context::createDraw(Program & program, const DrawState & drawState, const std::string & name)
+Draw Context::createDraw(const Program & program, const DrawState & drawState, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
     impl->state = drawState;

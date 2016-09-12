@@ -166,6 +166,7 @@ set(sources
     ${source_path}/Physics/Contacts/Contact.cpp
     ${source_path}/Physics/Contacts/ContactDispatcher.cpp
     ${source_path}/Physics/Contacts/SphereContact.cpp
+    ${source_path}/Physics/Contacts/Manifold.cpp
     ${source_path}/Physics/BoxShape.cpp
     ${source_path}/Physics/Broadphase.cpp
     ${source_path}/Physics/BroadphaseProxy.cpp
@@ -186,6 +187,7 @@ set(sources
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/CuboidMesh.cpp
+    ${source_path}/Scene/DebugGeometryRenderer.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
@@ -333,6 +335,7 @@ set(api_includes
     ${include_path}/Physics/Contacts/Contact.h
     ${include_path}/Physics/Contacts/ContactDispatcher.h
     ${include_path}/Physics/Contacts/ContactDispatcher.inl
+    ${include_path}/Physics/Contacts/Manifold.h
     ${include_path}/Physics/Contacts/SphereContact.h
     ${include_path}/Physics/BoxShape.h
     ${include_path}/Physics/Broadphase.h
@@ -354,6 +357,7 @@ set(api_includes
     ${include_path}/Scene/Blit.h
     ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/Camera3D.h
+    ${include_path}/Scene/DebugGeometryRenderer.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
     ${include_path}/Scene/DebugGroundPlaneRenderer.h

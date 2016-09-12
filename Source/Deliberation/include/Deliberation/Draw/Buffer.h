@@ -25,6 +25,7 @@ namespace detail
 }
 
 class Context;
+class LayoutedBlob;
 
 class DELIBERATION_API Buffer final
 {
@@ -39,6 +40,8 @@ public:
 
     void scheduleUpload(const Blob & data);
     void scheduleRawUpload(const Blob & data, unsigned int count);
+
+    void scheduleUpload(const LayoutedBlob & data);
 
     std::string toString() const;
 

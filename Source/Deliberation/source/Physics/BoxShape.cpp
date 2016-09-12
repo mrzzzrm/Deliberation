@@ -1,9 +1,12 @@
 #include <Deliberation/Physics/BoxShape.h>
 
+#include <Deliberation/Core/Math/Transform3D.h>
+
 namespace deliberation
 {
 
 BoxShape::BoxShape(const glm::vec3 & halfExtent):
+    CollisionShape(CollisionShape_Box),
     m_halfExtent(halfExtent)
 {
 

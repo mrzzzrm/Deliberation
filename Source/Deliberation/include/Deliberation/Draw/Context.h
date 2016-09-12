@@ -41,14 +41,15 @@ public:
     void setBackbufferResolution(unsigned int width, unsigned height);
 
     Buffer createBuffer(const DataLayout & layout);
+    Buffer createBuffer(const LayoutedBlob & data);
     Buffer createIndexBuffer8();
     Buffer createIndexBuffer16();
     Buffer createIndexBuffer32();
 
     Program createProgram(const std::vector<std::string> & paths);
 
-    Draw createDraw(Program & program, gl::GLenum primitive = gl::GL_TRIANGLES, const std::string & name = std::string());
-    Draw createDraw(Program & program, const DrawState & drawState, const std::string & name = std::string());
+    Draw createDraw(const Program & program, gl::GLenum primitive = gl::GL_TRIANGLES, const std::string & name = std::string());
+    Draw createDraw(const Program & program, const DrawState & drawState, const std::string & name = std::string());
 
     Clear createClear();
     Clear createClear(Framebuffer & framebuffer);

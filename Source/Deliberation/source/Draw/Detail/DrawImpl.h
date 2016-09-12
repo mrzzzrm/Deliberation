@@ -28,7 +28,7 @@ class DrawImpl final
 {
 public:
     DrawImpl(Context & context,
-             Program & program);
+             const Program & program);
 
     Context &                           context;
     std::string                         name;

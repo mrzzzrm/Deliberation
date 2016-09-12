@@ -20,7 +20,7 @@ namespace detail
 {
 
 DrawImpl::DrawImpl(Context & context,
-                   Program & program):
+                   const Program & program):
     context(context),
     program(program.m_impl),
     indexBuffer(nullptr),

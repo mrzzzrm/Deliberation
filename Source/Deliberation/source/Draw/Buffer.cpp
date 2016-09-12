@@ -1,6 +1,7 @@
 #include <Deliberation/Draw/Buffer.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 
 #include "Detail/BufferImpl.h"
 
@@ -65,6 +66,14 @@ void Buffer::scheduleRawUpload(const Blob & data, unsigned int count)
     Assert(m_impl.get(), "Can't perform action on hollow object");
 
     BufferUpload(m_impl->context, *this, data, count).schedule();
+}
+
+void Buffer::scheduleUpload(const LayoutedBlob & data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+    Assert(layout().equals(data.layout()), "Layout mismatch");
+
+    BufferUpload(m_impl->context, *this, data.rawData(), data.count()).schedule();
 }
 
 }

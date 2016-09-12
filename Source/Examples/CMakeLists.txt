@@ -30,6 +30,10 @@ set(libs
 add_executable(AmbientOcclusionExample AmbientOcclusionExample.cpp)
 target_link_libraries(AmbientOcclusionExample ${libs})
 
+# BoxBoxSandbox
+add_executable(BoxBoxSandbox BoxBoxSandbox.cpp)
+target_link_libraries(BoxBoxSandbox ${libs})
+
 # ECSExample
 add_executable(ECSExample ECSExample.cpp)
 target_link_libraries(ECSExample ${libs})

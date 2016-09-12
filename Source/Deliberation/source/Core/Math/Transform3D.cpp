@@ -147,12 +147,12 @@ glm::vec3 Transform3D::pointWorldToLocal(const glm::vec3 & point) const
 
 glm::vec3 Transform3D::directionWorldToLocal(const glm::vec3 & dir) const
 {
-    return m_orientation * dir;
+    return glm::inverse(m_orientation) * dir;
 }
 
 glm::vec3 Transform3D::directionLocalToWorld(const glm::vec3 & dir) const
 {
-    return glm::inverse(m_orientation) * dir;
+    return m_orientation * dir;
 }
 
 Transform3D Transform3D::interpolated(const Transform3D & other, float v) {
