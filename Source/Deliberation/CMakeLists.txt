@@ -126,6 +126,7 @@ set(sources
     ${source_path}/Draw/ProgramInterfaceFragmentOutput.cpp
     ${source_path}/Draw/ProgramInterfaceSampler.cpp
     ${source_path}/Draw/ProgramInterfaceUniform.cpp
+    ${source_path}/Draw/ProgramInterfaceUniformBlock.cpp
     ${source_path}/Draw/ProgramInterfaceVertexAttribute.cpp
     ${source_path}/Draw/Query.cpp
     ${source_path}/Draw/RasterizerState.cpp
@@ -293,6 +294,7 @@ set(api_includes
     ${include_path}/Draw/ProgramInterface.h
     ${include_path}/Draw/ProgramInterfaceFragmentOutput.h
     ${include_path}/Draw/ProgramInterfaceUniform.h
+    ${include_path}/Draw/ProgramInterfaceUniformBlock.h
     ${include_path}/Draw/ProgramInterfaceSampler.h
     ${include_path}/Draw/ProgramInterfaceVertexAttribute.h
     ${include_path}/Draw/Query.h

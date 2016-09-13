@@ -7,7 +7,7 @@ namespace detail
 {
 
 UniformImpl::UniformImpl():
-    type(gl::GL_NONE),
+    type(Type_None),
     location((unsigned int)-1),
     isPlaceholder(true),
     isAssigned(false),
@@ -17,7 +17,7 @@ UniformImpl::UniformImpl():
 
 }
 
-UniformImpl::UniformImpl(gl::GLenum type, unsigned int location, unsigned int arraySize):
+UniformImpl::UniformImpl(Type type, unsigned int location, unsigned int arraySize):
     type(type),
     location(location),
     isPlaceholder(false),

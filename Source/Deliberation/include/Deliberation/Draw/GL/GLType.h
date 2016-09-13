@@ -9,6 +9,7 @@
 namespace deliberation
 {
 
-gl::GLenum DELIBERATION_API GLType(const Type & type);
+gl::GLenum DELIBERATION_API TypeToGLType(const Type & type);
+Type DELIBERATION_API GLTypeToType(gl::GLenum glType);
 
 }

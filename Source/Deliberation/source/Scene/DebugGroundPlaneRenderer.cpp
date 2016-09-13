@@ -29,15 +29,17 @@ DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(Context & context, const Came
     m_quadSize = m_draw.uniform("QuadSize");
     m_quadSize.set(0.5f);
 
-    std::vector<glm::vec3> vertices({
-        {-1.0f, 0.0f, 1.0f},
-        {-1.0f, 0.0f,-1.0f},
-        { 1.0f, 0.0f, 1.0f},
-        { 1.0f, 0.0f,-1.0f}
-    });
+    LayoutedBlob vertices({"Position", Type_Vec3}, 4);
+
+    auto positions = vertices.field<glm::vec3>("Position");
+
+    positions[0] = {-1.0f, 0.0f, 1.0f};
+    positions[1] = {-1.0f, 0.0f,-1.0f};
+    positions[2] = { 1.0f, 0.0f, 1.0f};
+    positions[3] = { 1.0f, 0.0f,-1.0f};
 
     m_draw.state().setCullState(CullState::disabled());
-    m_draw.addVertices(DataLayout("Position", Type_Vec3), vertices);
+    m_draw.addVertices(vertices);
 }
 
 void DebugGroundPlaneRenderer::setFramebuffer(Framebuffer & framebuffer)

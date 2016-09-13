@@ -5,6 +5,7 @@
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Texture.h>
@@ -50,11 +51,9 @@ public:
 
     void setState(const DrawState & state);
 
-    Buffer setIndices8(const Blob & data);
-    Buffer setIndices16(const Blob & data);
-    Buffer setIndices32(const Blob & data);
-    Buffer addVertices(const DataLayout & layout, const Blob & data);
-    Buffer addInstances(const DataLayout & layout, const Blob & data, unsigned int divisor = 1u);
+    Buffer setIndices(const LayoutedBlob & data);
+    Buffer addVertices(const LayoutedBlob & data);
+    Buffer addInstances(const LayoutedBlob & data, unsigned int divisor = 1u);
 
     void setIndexBuffer(const Buffer & buffer);
     void addVertexBuffer(const Buffer & buffer);
@@ -66,6 +65,8 @@ public:
 
     void setRenderTarget(unsigned int index, Surface * surface);
     void setRenderTarget(const std::string & name, Surface * surface);
+
+    void setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin = 0);
 
     void schedule();
 

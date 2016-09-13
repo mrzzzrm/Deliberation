@@ -125,7 +125,7 @@ std::string DataLayout::toString() const
         stream << field.toString() << ", ";
     }
 
-    stream << "}}" << std::endl;
+    stream << "}}";
 
     return stream.str();
 }

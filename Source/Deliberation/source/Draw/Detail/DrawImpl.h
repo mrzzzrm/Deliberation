@@ -12,6 +12,7 @@
 
 #include "BufferBinding.h"
 #include "SamplerImpl.h"
+#include "UniformBufferBinding.h"
 
 namespace deliberation
 {
@@ -30,17 +31,18 @@ public:
     DrawImpl(Context & context,
              const Program & program);
 
-    Context &                           context;
-    std::string                         name;
-    std::shared_ptr<ProgramImpl>        program;
-    std::shared_ptr<BufferImpl>         indexBuffer;
-    std::vector<BufferBinding>          vertexBuffers;
-    std::vector<BufferBinding>          instanceBuffers;
-    DrawState                           state;
-    Framebuffer                         framebuffer;
-    gl::GLuint                          glVertexArray;
-    std::vector<UniformImpl>            uniforms;
-    std::vector<SamplerImpl>            samplers;
+    Context &                                   context;
+    std::string                                 name;
+    std::shared_ptr<ProgramImpl>                program;
+    std::shared_ptr<BufferImpl>                 indexBuffer;
+    std::vector<BufferBinding>                  vertexBuffers;
+    std::vector<BufferBinding>                  instanceBuffers;
+    DrawState                                   state;
+    Framebuffer                                 framebuffer;
+    gl::GLuint                                  glVertexArray;
+    std::vector<UniformImpl>                    uniforms;
+    std::vector<SamplerImpl>                    samplers;
+    std::vector<Optional<UniformBufferBinding>> uniformBuffers;
 };
 
 }

@@ -28,6 +28,13 @@ unsigned int Buffer::count() const
     return m_impl->count;
 }
 
+unsigned int Buffer::size() const
+{
+    Assert(m_impl.get(), "Can't perform action on hollow object");
+
+    return count() * layout().stride();
+}
+
 std::string Buffer::toString() const
 {
     return

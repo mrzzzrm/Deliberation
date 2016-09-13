@@ -5,6 +5,7 @@
 #include <Deliberation/Deliberation_API.h>
 
 #include <Deliberation/Core/Blob.h>
+#include <Deliberation/Core/Types.h>
 
 namespace deliberation
 {
@@ -16,9 +17,9 @@ class DELIBERATION_API UniformImpl final
 {
 public:
     UniformImpl();
-    UniformImpl(gl::GLenum type, unsigned int location, unsigned int arraySize);
+    UniformImpl(Type type, unsigned int location, unsigned int arraySize);
 
-    gl::GLenum      type;
+    Type            type;
     unsigned int    location;
     bool            isAssigned;
     bool            isPlaceholder; // for sparse uniform layout.

@@ -54,6 +54,9 @@ DrawImpl::DrawImpl(Context & context,
 
     // Create framebuffer
     framebuffer = context.backbuffer();
+
+    // Allocate Uniform Buffer Bindings
+    uniformBuffers.resize(program.interface().uniformBlocks().size());
 }
 
 }

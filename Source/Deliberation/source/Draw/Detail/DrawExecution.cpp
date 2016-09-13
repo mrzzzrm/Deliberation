@@ -94,7 +94,7 @@ void DrawExecution::perform()
             auto * data = uniform.blob.ptr();
             auto location = uniform.location;
 
-            switch (uniform.type)
+            switch (TypeToGLType(uniform.type))
             {
             case gl::GL_INT:
                 gl::glUniform1iv(location, count, ((const gl::GLint*)data));
@@ -133,8 +133,26 @@ void DrawExecution::perform()
                 gl::glUniformMatrix4fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
                 break;
             default:
-                Fail("Not implemented for type " + glbinding::Meta::getString(uniform.type));
+                Fail(std::string("Not implemented for type ") + uniform.type.name());
             }
+        }
+    }
+
+    // Set uniform buffers
+    {
+        for (auto b = 0; b < m_drawImpl.uniformBuffers.size(); b++)
+        {
+            auto & binding = m_drawImpl.uniformBuffers[b];
+
+            Assert(binding.engaged(), "UniformBuffer " + m_drawImpl.program->interface.uniformBlocks()[b].name() + " not bound");
+
+            auto & buffer = *binding.get().buffer;
+            auto size = buffer.count * buffer.layout.stride();
+
+            Assert(size > binding.get().begin, "begin beyond buffer bounds");
+
+            gl::glUniformBlockBinding(m_drawImpl.program->glProgramName, b, b);
+            gl::glBindBufferRange(gl::GL_UNIFORM_BUFFER, b, buffer.glName, binding.get().begin, buffer.layout.stride());
         }
     }
 
@@ -265,7 +283,7 @@ gl::GLenum DrawExecution::elementType() const
     Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
     Assert(m_drawImpl.indexBuffer->layout.fields().size() == 1u, "Invalid index buffer layout");
 
-    return GLType(m_drawImpl.indexBuffer->layout.fields()[0].type());
+    return TypeToGLType(m_drawImpl.indexBuffer->layout.fields()[0].type());
 }
 
 void DrawExecution::applyDepthState()

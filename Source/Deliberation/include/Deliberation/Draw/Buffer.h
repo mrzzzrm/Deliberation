@@ -33,6 +33,7 @@ public:
     Buffer();
 
     unsigned int count() const;
+    unsigned int size() const;
     const DataLayout & layout() const;
 
     BufferUpload createUpload(const Blob & data);

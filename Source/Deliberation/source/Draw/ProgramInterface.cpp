@@ -9,7 +9,11 @@
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/DataLayoutField.h>
 #include <Deliberation/Core/StringUtils.h>
+
+#include "Deliberation/Draw/GL/GLType.h"
 
 #include "GL/GLUtils.h"
 
@@ -64,6 +68,10 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
         }
     }
 
+    // Shared between Uniform and UniformBlock inspectors
+    std::vector<gl::GLint> uniformOffsets;
+    std::unordered_map<gl::GLuint, ProgramInterfaceUniform> blockUniformsByIndex;
+
     // Uniforms & samplers
     {
         auto numUniforms = GLGetProgram(glProgramName, gl::GL_ACTIVE_UNIFORMS);
@@ -79,8 +87,11 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
         //std::vector<gl::GLuint> uniformNameLengths(numUniforms);
         std::vector<gl::GLint> uniformBlockIndex(numUniforms);
 
+        uniformOffsets.resize(numUniforms);
+
         gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_TYPE, uniformTypes.data());
         gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_SIZE, uniformSizes.data());
+        gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_OFFSET, uniformOffsets.data());
         //gl::glGetActiveUniformsiv(numUniforms, uniformIndices.data(), gl::GL_UNIFORM_NAME_LENGTH, uniformNameLength.data());
         gl::glGetActiveUniformsiv(glProgramName, numUniforms, uniformIndices.data(), gl::GL_UNIFORM_BLOCK_INDEX, uniformBlockIndex.data());
 
@@ -88,12 +99,6 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
         for (auto u = 0; u < numUniforms; u++)
         {
-            if (uniformBlockIndex[u] != -1)
-            {
-                std::cout << "WARNING: No support for block uniforms in layout" << std::endl;
-                continue;
-            }
-
             auto name = GLGetActiveUniformName(glProgramName, u);
             auto size = (gl::GLuint)uniformSizes[u];
             auto location = gl::glGetUniformLocation(glProgramName, name.c_str());
@@ -119,9 +124,16 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     m_samplerIndexByLocation.resize(location + 1, (unsigned int)-1);
                 }
 
-                m_samplerIndexByLocation[location] = m_samplers.size();
-                m_samplerIndexByName[name] = m_samplers.size();
-                m_samplers.emplace_back(name, type, location, (gl::GLuint)uniformSizes[u]);
+                if (uniformBlockIndex[u] >= -1)
+                {
+                    std::cout << "Sample '" << name << "' in block, not supported" << std::endl;
+                }
+                else
+                {
+                    m_samplerIndexByLocation[location] = m_samplers.size();
+                    m_samplerIndexByName[name] = m_samplers.size();
+                    m_samplers.emplace_back(name, type, location, (gl::GLuint)uniformSizes[u]);
+                }
             }
             else
             {
@@ -135,12 +147,61 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     StringRErase(name, "[0]");
                 }
 
-                m_uniformIndexByLocation[location] = m_uniforms.size();
-                m_uniformIndexByName[name] = m_uniforms.size();
-                m_uniforms.emplace_back(name, type, location, size);
+                if (uniformBlockIndex[u] >= -1)
+                {
+                    blockUniformsByIndex.emplace(std::make_pair(u, ProgramInterfaceUniform(name, GLTypeToType(type), location, size)));
+                }
+                else
+                {
+                    m_uniformIndexByLocation[location] = m_uniforms.size();
+                    m_uniformIndexByName[name] = m_uniforms.size();
+                    m_uniforms.emplace_back(name, GLTypeToType(type), location, size);
+                }
             }
 
         }
+    }
+
+    // Uniform Blocks
+    {
+        auto numUniformBlocks = GLGetProgram(glProgramName, gl::GL_ACTIVE_UNIFORM_BLOCKS);
+
+        for (auto b = 0; b < numUniformBlocks; b++)
+        {
+            std::vector<DataLayoutField> fields;
+
+            auto name = GLGetActiveUniformBlockName(glProgramName, b);
+            auto size = GLGetActiveUniformBlockInt(glProgramName, b, gl::GL_UNIFORM_BLOCK_DATA_SIZE);
+            auto numUniforms = GLGetActiveUniformBlockInt(glProgramName, b, gl::GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS);
+
+            Assert(numUniforms >= 0, "");
+
+            std::vector<gl::GLint> indices(numUniforms);
+            if (numUniforms > 0)
+            {
+                gl::glGetActiveUniformBlockiv(glProgramName, b, gl::GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, indices.data());
+
+                for (auto i = 0; i < indices.size(); i++)
+                {
+                    auto it = blockUniformsByIndex.find(indices[i]);
+                    Assert(it != blockUniformsByIndex.end(), "");
+
+                    auto & uniform = it->second;
+
+                    fields.emplace_back(uniform.name(), uniform.type(), uniformOffsets[indices[i]]);
+                }
+
+                m_uniformBlocks.emplace_back(name, DataLayout(std::move(fields), size), b);
+                m_uniformBlockByName[name] = m_uniformBlocks.size() - 1;
+
+                std::cout << name << ": " << name.size() << " " << m_uniformBlocks.back().layout().toString() << std::endl;
+            }
+            else
+            {
+                std::cout << "Skipping empty uniform block '" << name << "'" << std::endl;
+            }
+        }
+
     }
 
     // Fragment output
@@ -222,6 +283,14 @@ const ProgramInterfaceFragmentOutput & ProgramInterface::fragmentOutput(const st
     Assert (iter != m_fragmentOutputIndexByName.end(), "No such fragmentOutput '" + name + "'");
 
     return m_fragmentOutputs[iter->second];
+}
+
+const ProgramInterfaceUniformBlock & ProgramInterface::uniformBlock(const std::string & name) const
+{
+    auto iter = m_uniformBlockByName.find(name);
+    Assert (iter != m_uniformBlockByName.end(), "No such uniform block '" + name + "'");
+
+    return m_uniformBlocks[iter->second];
 }
 
 const ProgramInterfaceVertexAttribute * ProgramInterface::attributeByLocation(unsigned int location) const
@@ -307,6 +376,11 @@ const std::vector<ProgramInterfaceFragmentOutput> & ProgramInterface::fragmentOu
     return m_fragmentOutputs;
 }
 
+const std::vector<ProgramInterfaceUniformBlock> & ProgramInterface::uniformBlocks() const
+{
+    return m_uniformBlocks;
+}
+
 bool ProgramInterface::hasAttribute(const std::string & name) const
 {
     auto iter = m_attributeIndexByName.find(name);
@@ -329,6 +403,12 @@ bool ProgramInterface::hasFragmentOutput(const std::string & name) const
 {
     auto iter = m_fragmentOutputIndexByName.find(name);
     return iter != m_fragmentOutputIndexByName.end();
+}
+
+bool ProgramInterface::hasUniformBlock(const std::string & name) const
+{
+    auto iter = m_uniformBlockByName.find(name);
+    return iter != m_uniformBlockByName.end();
 }
 
 bool ProgramInterface::operator==(const ProgramInterface & other) const

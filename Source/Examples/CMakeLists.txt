@@ -78,6 +78,10 @@ target_link_libraries(BasicRenderTargetExample ${libs})
 add_executable(BasicSceneExample BasicSceneExample.cpp)
 target_link_libraries(BasicSceneExample ${libs})
 
+# DrawExample
+add_executable(DrawExample DrawExample.cpp)
+target_link_libraries(DrawExample ${libs})
+
 # PhysicsExample
 add_executable(PhysicsExample PhysicsExample.cpp)
 target_link_libraries(PhysicsExample ${libs})

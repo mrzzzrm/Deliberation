@@ -6,7 +6,7 @@ namespace deliberation
 {
 
 ProgramInterfaceUniform::ProgramInterfaceUniform(const std::string & name,
-                                                 gl::GLenum type,
+                                                 Type type,
                                                  gl::GLint location,
                                                  gl::GLuint arraySize):
     m_name(name),
@@ -21,7 +21,7 @@ const std::string & ProgramInterfaceUniform::name() const
     return m_name;
 }
 
-gl::GLenum ProgramInterfaceUniform::type() const
+Type ProgramInterfaceUniform::type() const
 {
     return m_type;
 }
@@ -44,7 +44,7 @@ bool ProgramInterfaceUniform::isArray() const
 std::string ProgramInterfaceUniform::toString() const
 {
     std::stringstream stream;
-    stream << m_type << " <" << m_name << "> (Size: " << m_arraySize << "; Location: " << m_location << ")";
+    stream << m_type.name() << " <" << m_name << "> (Size: " << m_arraySize << "; Location: " << m_location << ")";
     return stream.str();
 }
 
