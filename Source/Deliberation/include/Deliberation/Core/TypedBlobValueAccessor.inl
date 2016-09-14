@@ -28,7 +28,7 @@ TypedBlobValueAccessor<T>::TypedBlobValueAccessor(Blob & data,
                                                   const DataLayoutField & field):
     BlobValueAccessorBase{data, layout, field}
 {
-    Assert(field.type() == Type::resolve<T>(), std::string("Field: ") + field.type().name() + " " + field.name());
+    Assert(field.type() == Type::resolve<T>(), std::string("Trying to access: ") + Type::resolve<T>().name() + ", but is actually " + field.type().name() + ": " + field.name());
 }
 
 template<typename T>

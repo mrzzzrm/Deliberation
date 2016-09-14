@@ -23,7 +23,7 @@ void main()
     
     if (local.Type == 1) 
     {
-        scale = cos(Time);
+        scale = abs(cos(Time)) + 0.4f;
     }
     
     gl_Position = (ViewProjection * local.Transform * vec4((scale * Position + Offset), 1.0f));

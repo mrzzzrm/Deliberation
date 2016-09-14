@@ -119,6 +119,8 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             if (isSampler)
             {
+                Assert(location >= 0, "");
+
                 if (location >= (gl::GLint)m_samplerIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
                 {
                     m_samplerIndexByLocation.resize(location + 1, (unsigned int)-1);
@@ -147,18 +149,19 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     StringRErase(name, "[0]");
                 }
 
-                if (uniformBlockIndex[u] >= -1)
+                if (uniformBlockIndex[u] >= 0)
                 {
                     blockUniformsByIndex.emplace(std::make_pair(u, ProgramInterfaceUniform(name, GLTypeToType(type), location, size)));
                 }
                 else
                 {
+                    Assert(location >= 0, "");
+
                     m_uniformIndexByLocation[location] = m_uniforms.size();
                     m_uniformIndexByName[name] = m_uniforms.size();
                     m_uniforms.emplace_back(name, GLTypeToType(type), location, size);
                 }
             }
-
         }
     }
 
@@ -187,14 +190,26 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     Assert(it != blockUniformsByIndex.end(), "");
 
                     auto & uniform = it->second;
+                    auto & blockAndName = uniform.name();
+                    auto dotPos = blockAndName.rfind('.');
+                    std::string strippedName;
 
-                    fields.emplace_back(uniform.name(), uniform.type(), uniformOffsets[indices[i]]);
+                    if (dotPos == std::string::npos)
+                    {
+                        strippedName = blockAndName;
+                    }
+                    else
+                    {
+                        strippedName = blockAndName.substr(dotPos + 1, std::string::npos);
+                    }
+
+                    std::cout << "Name: " << strippedName << std::endl;
+
+                    fields.emplace_back(strippedName, uniform.type(), uniformOffsets[indices[i]]);
                 }
 
                 m_uniformBlocks.emplace_back(name, DataLayout(std::move(fields), size), b);
                 m_uniformBlockByName[name] = m_uniformBlocks.size() - 1;
-
-                std::cout << name << ": " << name.size() << " " << m_uniformBlocks.back().layout().toString() << std::endl;
             }
             else
             {
@@ -433,6 +448,11 @@ bool ProgramInterface::operator==(const ProgramInterface & other) const
         return false;
     }
 
+    if (m_uniformBlocks.size() != other.m_uniformBlocks.size())
+    {
+        return false;
+    }
+
     for (auto a = 0u; a < m_attributes.size(); a++)
     {
         if (m_attributes[a] != other.m_attributes[a])
@@ -457,9 +477,17 @@ bool ProgramInterface::operator==(const ProgramInterface & other) const
         }
     }
 
-    for (auto fo = 0u; fo < m_samplers.size(); fo++)
+    for (auto fo = 0u; fo < m_fragmentOutputs.size(); fo++)
     {
         if (m_fragmentOutputs[fo] != other.m_fragmentOutputs[fo])
+        {
+            return false;
+        }
+    }
+
+    for (auto b = 0u; b < m_samplers.size(); b++)
+    {
+        if (m_uniformBlocks[b] != other.m_uniformBlocks[b])
         {
             return false;
         }

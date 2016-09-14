@@ -28,4 +28,17 @@ unsigned int ProgramInterfaceUniformBlock::index() const
     return m_index;
 }
 
+
+bool ProgramInterfaceUniformBlock::operator==(const ProgramInterfaceUniformBlock & other) const
+{
+    return m_name == other.m_name &&
+           m_layout.equals(other.m_layout) &&
+           m_index == other.m_index;
+}
+
+bool ProgramInterfaceUniformBlock::operator!=(const ProgramInterfaceUniformBlock & other) const
+{
+    return !(operator==(other));
+}
+
 }
