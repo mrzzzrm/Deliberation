@@ -8,6 +8,8 @@
 #include <Deliberation/Core/Math/PolygonClipping.h>
 
 #include <Deliberation/Physics/Contacts/Manifold.h>
+#include <Deliberation/Physics/BoxShape.h>
+#include <Deliberation/Physics/RigidBody.h>
 
 namespace
 {
@@ -293,6 +295,8 @@ bool CollideFaceSomething(const glm::vec3 & direction,
              */
             auto c = rFaceRot * glm::vec3(result[resultIndex].x, result[resultIndex].y, 0) + rFace.center;
             manifold.setPosition(c);
+            manifold.setLocalPointA(glm::transpose(boxA.orientationMatrix()) * (c - boxA.p()));
+            manifold.setLocalPointB(glm::transpose(boxB.orientationMatrix()) * (c - boxB.p()));
         }
 
         return true;
@@ -370,6 +374,8 @@ bool CollideEdgeEdge(const glm::vec3 & dirA, const glm::vec3 & dirB, const Box &
             auto contact = (contactA + contactB) * 0.5f;
 
             manifold.setPosition(contact);
+            manifold.setLocalPointA(glm::transpose(boxA.orientationMatrix()) * (contact - boxA.p()));
+            manifold.setLocalPointB(glm::transpose(boxB.orientationMatrix()) * (contact - boxB.p()));
         }
 
         return true;
@@ -482,6 +488,62 @@ BoxContact::BoxContact(RigidBody & bodyA, RigidBody & bodyB):
 
 void BoxContact::update()
 {
+    /**
+     * Retrieve boxes
+     */
+    auto & shapeA = (BoxShape&)*m_bodyA.shape();
+    auto & shapeB = (BoxShape&)*m_bodyB.shape();
+    auto boxA = shapeA.instanciate(m_bodyA.transform());
+    auto boxB = shapeB.instanciate(m_bodyB.transform());
+
+    /**
+     * Intersect
+     */
+    CollideBoxBoxDebugInfo info;
+    Manifold manifold;
+    m_intersect = CollideBoxBox(boxA, boxB, manifold, &info);
+
+    if (m_intersect)
+    {
+        m_localPointA = manifold.localPositionA();
+        m_localPointB = manifold.localPositionB();
+        m_normal = manifold.normal();
+        m_separation = manifold.depth();
+
+        auto & vA = m_bodyA.linearVelocity();
+        auto & vB = m_bodyB.linearVelocity();
+
+        auto mA = m_bodyA.inverseMass();
+        auto mB = m_bodyB.inverseMass();
+
+        // vcp->rA = worldManifold.points[j] - cA;
+        // vcp->rB = worldManifold.points[j] - cB;
+
+        //  float32 rnA = b2Cross(vcp->rA, vc->normal);
+        //   float32 rnB = b2Cross(vcp->rB, vc->normal);
+
+        auto kNormal = mA + mB /* + iA * rnA * rnA + iB * rnB * rnB*/;
+
+        m_normalMass = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
+
+        //   b2Vec2 tangent = b2Cross(vc->normal, 1.0f);
+
+        // float32 rtA = b2Cross(vcp->rA, tangent);
+        // float32 rtB = b2Cross(vcp->rB, tangent);
+
+        //   float32 kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
+
+        //vcp->tangentMass = kTangent > 0.0f ? 1.0f /  kTangent : 0.0f;
+
+        // Setup a velocity bias for restitution.
+        m_velocityBias = 0.0f;
+        auto vRel = glm::dot(m_normal, vB - vA /*- b2Cross(wA, vcp->rA)+ glm::cross(wB, vcp->rB) */);
+        if (vRel < -1.0f)
+        {
+            auto restitution = std::max(m_bodyA.restitution(), m_bodyB.restitution());
+            m_velocityBias = -restitution * vRel;
+        }
+    }
 
 }
 

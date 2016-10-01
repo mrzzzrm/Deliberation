@@ -5,6 +5,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Physics/Contacts/BoxContact.h>
 #include <Deliberation/Physics/Contacts/SphereContact.h>
 #include <Deliberation/Physics/RigidBody.h>
 
@@ -23,6 +24,7 @@ ContactCreator::~ContactCreator() = default;
 ContactDispatcher::ContactDispatcher()
 {
     registerContactType<SphereContact>((int)CollisionShape_Sphere, (int)CollisionShape_Sphere);
+    registerContactType<BoxContact>((int)CollisionShape_Box, (int)CollisionShape_Box);
 }
 
 std::unique_ptr<Contact> ContactDispatcher::createContact(RigidBody & bodyA, RigidBody & bodyB) const

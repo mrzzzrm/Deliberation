@@ -13,10 +13,9 @@ Box::Box()
 
 Box::Box(const glm::vec3 & p, const glm::vec3 & x, const glm::vec3 & y, const glm::vec3 & z):
     m_p(p),
-    m_axes(x, y, z)
+    m_axes(glm::normalize(x), glm::normalize(y), glm::normalize(z))
 {
     m_halfExtent = glm::vec3(glm::length(x), glm::length(y), glm::length(z));
-
 }
 
 Box::Box(const glm::vec3 & halfExtent, const Transform3D & transform)

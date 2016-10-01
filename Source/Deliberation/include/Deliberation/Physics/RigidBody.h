@@ -14,7 +14,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API RigidBody:
+class DELIBERATION_API RigidBody final:
     public CollisionObject
 {
 public:

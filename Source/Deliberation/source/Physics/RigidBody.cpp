@@ -71,21 +71,41 @@ void RigidBody::setRestitution(float restitution)
 
 void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
 {
+    if (m_static)
+    {
+        return;
+    }
+
     m_linearVelocity = velocity;
 }
 
 void RigidBody::setAngularVelocity(const glm::vec3 & velocity)
 {
+    if (m_static)
+    {
+        return;
+    }
+
     m_angularVelocity = velocity;
 }
 
 void RigidBody::setForce(const glm::vec3 & force)
 {
+    if (m_static)
+    {
+        return;
+    }
+
     m_force = force;
 }
 
 void RigidBody::applyForce(const glm::vec3 & force)
 {
+    if (m_static)
+    {
+        return;
+    }
+
     m_force += force;
 }
 
@@ -109,6 +129,11 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
 
 void RigidBody::integrateVelocities(float seconds)
 {
+    if (m_static)
+    {
+        return;
+    }
+
     m_linearVelocity += m_force * m_inverseMass * seconds;
     // m_angularVelocity
 }

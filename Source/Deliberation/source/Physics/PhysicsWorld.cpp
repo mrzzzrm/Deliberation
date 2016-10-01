@@ -183,9 +183,11 @@ void PhysicsWorld::solveVelocities(Contact & contact)
     // Apply contact impulse
     auto P = lambda * normal;
 
+    std::cout << "  " << bodyA.linearVelocity() << " -> ";
     bodyA.setLinearVelocity(vA - mA * P);
 //            bodyA.setAngularVelocity(bodyA.angularVelocity() - mA * P);
 //            wA -= iA * b2Cross(vcp->rA, P);
+    std::cout << bodyA.linearVelocity() << std::endl;
 
     bodyB.setLinearVelocity(vB + mB * P);
 //            wB += iB * b2Cross(vcp->rB, P);
