@@ -5,6 +5,7 @@
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
@@ -13,8 +14,16 @@
 #include <Deliberation/Draw/Context.h>
 
 #include <Deliberation/Scene/Camera3D.h>
+#include <Deliberation/Scene/ConeMesh.h>
 #include <Deliberation/Scene/CuboidMesh.h>
 #include <Deliberation/Scene/MeshCompiler.h>
+
+namespace
+{
+
+const float ARROW_CONE_HEIGHT = 0.2f;
+
+}
 
 namespace deliberation
 {
@@ -84,8 +93,9 @@ void DebugPointInstance::setPosition(const glm::vec3 & position)
 }
 
 
-DebugArrowInstance::DebugArrowInstance(const Program & program,
-                                       const DataLayout & vertexLayout,
+DebugArrowInstance::DebugArrowInstance(const Program & lineProgram,
+                                       const DataLayout & lineVertexLayout,
+                                       const Draw & coneDraw,
                                        const glm::vec3 & origin,
                                        const glm::vec3 & delta,
                                        const glm::vec3 & color):
@@ -93,18 +103,28 @@ DebugArrowInstance::DebugArrowInstance(const Program & program,
     m_delta(delta),
     m_color(color)
 {
-    auto & context = program.context();
-    m_draw = context.createDraw(program, gl::GL_LINES);
+    auto & context = lineProgram.context();
 
-    m_draw.uniform("Transform").set(glm::mat4(1.0f));
-    m_draw.uniform("Color").set(color);
-    m_draw.uniform("Scale").set(glm::vec3(1.0f));
+    /**
+     * Setup line draw
+     */
+    m_lineDraw = context.createDraw(lineProgram, gl::GL_LINES);
 
-    m_vertexBuffer = context.createBuffer(vertexLayout);
+    m_lineDraw.uniform("Transform").set(glm::mat4(1.0f));
+    m_lineDraw.uniform("Color").set(color);
+    m_lineDraw.uniform("Scale").set(glm::vec3(1.0f));
+
+    m_lineVertexBuffer = context.createBuffer(lineVertexLayout);
 
     buildVertices();
 
-    m_draw.addVertexBuffer(m_vertexBuffer);
+    m_lineDraw.addVertexBuffer(m_lineVertexBuffer);
+
+    /**
+     * Setup cone Draw
+     */
+    m_coneDraw = coneDraw;
+    setupConeTransform();
 }
 
 void DebugArrowInstance::reset(const glm::vec3 & origin, const glm::vec3 & delta)
@@ -118,17 +138,35 @@ void DebugArrowInstance::reset(const glm::vec3 & origin, const glm::vec3 & delta
     m_delta = delta;
 
     buildVertices();
+    setupConeTransform();
 }
 
 void DebugArrowInstance::buildVertices()
 {
-    LayoutedBlob vertices(m_vertexBuffer.layout(), 2);
+    LayoutedBlob vertices(m_lineVertexBuffer.layout(), 2);
     auto positions = vertices.field<glm::vec3>("Position");
 
     positions[0] = m_origin;
     positions[1] = m_origin + m_delta;
 
-    m_vertexBuffer.scheduleUpload(vertices);
+    m_lineVertexBuffer.scheduleUpload(vertices);
+}
+
+void DebugArrowInstance::setupConeTransform()
+{
+    if (m_delta == glm::vec3(0.0f))
+    {
+        return;
+    }
+
+    Transform3D transform;
+
+    auto rotation = RotationMatrixFromDirectionY(m_delta);
+
+    transform.setPosition(m_origin + m_delta - glm::normalize(m_delta) * ARROW_CONE_HEIGHT);
+    transform.setOrientation(glm::quat_cast(rotation));
+
+    m_coneDraw.uniform("Transform").set(transform.matrix());
 }
 
 DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D & camera):
@@ -156,6 +194,17 @@ DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D &
 
         m_boxLinesVertexBuffer = m_context.createBuffer(compilation.vertices);
         m_boxLinesIndexBuffer = m_context.createBuffer(compilation.indices);
+    }
+
+    /**
+     * Create cone mesh
+     */
+    {
+        auto mesh = ConeMesh(0.1f, ARROW_CONE_HEIGHT).generate();
+        auto compilation = MeshCompiler().compile(mesh, Primitive_Triangles);
+
+        m_coneVertexBuffer = m_context.createBuffer(compilation.vertices);
+        m_coneIndexBuffer = m_context.createBuffer(compilation.indices);
     }
 
     m_unicolorDataLayout = DataLayout("Position", Type_Vec3);
@@ -230,7 +279,7 @@ size_t DebugGeometryRenderer::addBox(const glm::vec3 & halfExtent, const glm::ve
     }
     else
     {
-        draw = m_context.createDraw(m_shadedProgram, gl::GL_LINES);
+        draw = m_context.createDraw(m_shadedProgram, gl::GL_TRIANGLES);
         draw.addVertexBuffer(m_boxTrianglesVertexBuffer);
         draw.setIndexBuffer(m_boxTrianglesIndexBuffer);
     }
@@ -250,7 +299,13 @@ size_t DebugGeometryRenderer::addPoint(const glm::vec3 & position, const glm::ve
 
 size_t DebugGeometryRenderer::addArrow(const glm::vec3 & origin, const glm::vec3 & delta, const glm::vec3 & color)
 {
-    m_arrows.push_back({m_unicolorProgram, m_unicolorDataLayout, origin, delta, color});
+    auto draw = m_context.createDraw(m_shadedProgram, gl::GL_TRIANGLES);
+    draw.addVertexBuffer(m_coneVertexBuffer);
+    draw.setIndexBuffer(m_coneIndexBuffer);
+    draw.uniform("Color").set(color);
+    draw.uniform("Scale").set(glm::vec3(1.0f, 1.0f, 1.0f));
+
+    m_arrows.push_back({m_unicolorProgram, m_unicolorDataLayout, draw, origin, delta, color});
     return m_arrows.size() - 1;
 }
 
@@ -312,11 +367,13 @@ void DebugGeometryRenderer::schedule()
             continue;
         }
 
-        auto & draw = arrow.m_draw;
+        auto & lineDraw = arrow.m_lineDraw;
+        lineDraw.uniform("ViewProjection").set(m_camera.viewProjection());
+        lineDraw.schedule();
 
-        draw.uniform("ViewProjection").set(m_camera.viewProjection());
-
-        draw.schedule();
+        auto & coneDraw = arrow.m_coneDraw;
+        coneDraw.uniform("ViewProjection").set(m_camera.viewProjection());
+        coneDraw.schedule();
     }
 }
 

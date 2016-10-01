@@ -97,10 +97,10 @@ public:
         m_debugInfoRenderer.get().allocatePoints(4, {1.0f, 0.5f, 0.5f}, true); // Reference Face
         m_debugInfoRenderer.get().allocatePoints(4, {0.5f, 1.0f, 0.5f}, true); // Incident Face
         m_debugInfoRenderer.get().allocatePoints(8, {0.5f, 0.5f, 1.0f}, false);
-        m_debugInfoRenderer.get().allocateArrows(2, {0.9f, 0.9f, 0.9f}, false);
+        m_debugInfoRenderer.get().allocateArrows(2, {0.2f, 0.9f, 0.2f}, false);
 
-        m_boxA = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {1.0f, 0.6f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxA).transform().setPosition({2.89f, 2.90f, 2.99f});
+        m_boxA = m_geometryRenderer.get().addBox({5.0f, 1.0f, 0.5f}, {1.0f, 0.6f, 0.6f}, true);
+        m_geometryRenderer.get().box(m_boxA).transform().setPosition({2.89f, 3.90f, 2.99f});
 
         m_boxB = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.6f}, true);
         m_geometryRenderer.get().box(m_boxB).transform().setPosition({1.3f, 1.3f, 1.3});
@@ -194,7 +194,7 @@ public:
 
             m_geometryRenderer.get().box(0).transform() = prevTransform;
 
-            auto origin = m_geometryRenderer.get().box(0).transform().position();
+            auto origin = manifold.position() - manifold.normal() / 2.0f;
             auto delta = manifold.normal();
 
             if (!m_contactSeparationIndex.engaged())

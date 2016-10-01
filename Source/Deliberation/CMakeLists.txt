@@ -54,6 +54,7 @@ set(sources
     ${source_path}/Core/Math/AABB.cpp
     ${source_path}/Core/Math/Box.cpp
     ${source_path}/Core/Math/GLMUtils.cpp
+    ${source_path}/Core/Math/MathUtils.cpp
     ${source_path}/Core/Math/Morton.cpp
     ${source_path}/Core/Math/Ray2D.cpp
     ${source_path}/Core/Math/Ray3D.cpp
@@ -189,6 +190,7 @@ set(sources
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
+    ${source_path}/Scene/ConeMesh.cpp
     ${source_path}/Scene/CuboidMesh.cpp
     ${source_path}/Scene/DebugGeometryRenderer.cpp
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
@@ -261,6 +263,7 @@ set(api_includes
     ${include_path}/Core/Math/AABB.h
     ${include_path}/Core/Math/Box.h
     ${include_path}/Core/Math/GLMUtils.h
+    ${include_path}/Core/Math/MathUtils.h
     ${include_path}/Core/Math/Morton.h
     ${include_path}/Core/Math/Morton.inl
     ${include_path}/Core/Math/Plane.h
@@ -364,8 +367,9 @@ set(api_includes
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.h
     ${include_path}/Scene/Blit.h
-    ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/Camera3D.h
+    ${include_path}/Scene/ConeMesh.h
+    ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/DebugGeometryRenderer.h
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h

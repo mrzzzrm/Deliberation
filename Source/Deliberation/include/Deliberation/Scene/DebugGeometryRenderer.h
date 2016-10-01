@@ -85,8 +85,9 @@ class DELIBERATION_API DebugArrowInstance final:
     public DebugGeometryInstance
 {
 public:
-    DebugArrowInstance(const Program & program,
-                       const DataLayout & vertexLayout,
+    DebugArrowInstance(const Program & lineProgram,
+                       const DataLayout & lineVertexLayout,
+                       const Draw & coneDraw,
                        const glm::vec3 & origin,
                        const glm::vec3 & delta,
                        const glm::vec3 & color);
@@ -98,10 +99,14 @@ private:
 
 private:
     void buildVertices();
+    void setupConeTransform();
 
 private:
-    Draw      m_draw;
-    Buffer    m_vertexBuffer;
+    Draw      m_lineDraw;
+    Buffer    m_lineVertexBuffer;
+
+    Draw      m_coneDraw;
+
     glm::vec3 m_origin;
     glm::vec3 m_delta;
     glm::vec3 m_color;
@@ -152,6 +157,9 @@ private:
     Buffer                          m_boxTrianglesIndexBuffer;
     Buffer                          m_boxLinesVertexBuffer;
     Buffer                          m_boxLinesIndexBuffer;
+
+    Buffer                          m_coneVertexBuffer;
+    Buffer                          m_coneIndexBuffer;
 
     std::vector<DebugBoxInstance>   m_boxes;
     std::vector<DebugArrowInstance> m_arrows;

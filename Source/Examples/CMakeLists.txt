@@ -38,6 +38,10 @@ target_link_libraries(BoxBoxSandbox ${libs})
 add_executable(ECSExample ECSExample.cpp)
 target_link_libraries(ECSExample ${libs})
 
+# DebugGeometryRendererExample
+add_executable(DebugGeometryRendererExample DebugGeometryRendererExample.cpp)
+target_link_libraries(DebugGeometryRendererExample ${libs})
+
 # PixelFormatExample
 add_executable(PixelFormatExample PixelFormatExample.cpp)
 target_link_libraries(PixelFormatExample ${libs})

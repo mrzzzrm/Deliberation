@@ -115,7 +115,7 @@ Face computeFaceFromNormal(const Box & box, const glm::vec3 & normal)
     face.xAxis = box.axis(face.xAxisIndex);
     face.yAxis = box.axis(face.yAxisIndex);
 
-    face.center = box.p() + face.normalAxis * boxA.halfExtent()[face.normalIndex];
+    face.center = box.p() + face.normalAxis * box.halfExtent()[face.normalIndex];
 
     return face;
 }
@@ -262,7 +262,6 @@ bool CollideFaceSomething(const glm::vec3 & direction,
             /**
              * Pick the result point with the greatest depth
              */
-            std::cout << "Clipped: " << std::endl;
             auto resultIndex = -1;
             {
                 Assert(inNormalRef.z != 0.0f, "");
@@ -277,9 +276,6 @@ bool CollideFaceSomething(const glm::vec3 & direction,
                     auto nom =  - (x - inCenterRef.x) * n.x - (y - inCenterRef.y) * n.y;
 
                     auto z = (nom / (n.z)) + inCenterRef.z;
-
-                    std::cout << "  " << x << ", " << y << ": " << z << std::endl;
-
                     if (z < maxZ)
                     {
                         maxZ = z;
@@ -291,8 +287,6 @@ bool CollideFaceSomething(const glm::vec3 & direction,
             {
                 return true;
             }
-
-            std::cout << "Result: " << result[resultIndex] << " " << inCenterRef << " " << inNormalRef << std::endl;
 
             /**
              * Compute contact point
