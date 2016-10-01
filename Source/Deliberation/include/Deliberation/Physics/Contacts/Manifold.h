@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Deliberation_API.h>
@@ -28,6 +30,8 @@ public:
     void setLocalPointA(const glm::vec3 & localPositionA);
     void setLocalPointB(const glm::vec3 & localPositionB);
     void setNormal(const glm::vec3 & normal);
+
+    std::string toString() const;
 
 private:
     float     m_depth = 0.0f;

@@ -20,7 +20,21 @@ class Camera3D;
 class DebugGeometryRenderer;
 class Transform3D;
 
-class DELIBERATION_API DebugBoxInstance final
+class DELIBERATION_API DebugGeometryInstance
+{
+public:
+    bool visible() const;
+    void setVisible(bool visible);
+
+protected:
+    DebugGeometryInstance();
+
+private:
+    bool m_visible = true;
+};
+
+class DELIBERATION_API DebugBoxInstance final:
+    public DebugGeometryInstance
 {
 public:
     DebugBoxInstance(const Draw & draw,
@@ -41,7 +55,8 @@ private:
     glm::vec3   m_color;
 };
 
-class DELIBERATION_API DebugPointInstance final
+class DELIBERATION_API DebugPointInstance final:
+    public DebugGeometryInstance
 {
 public:
     DebugPointInstance(Program & program,
@@ -66,7 +81,8 @@ private:
     glm::vec3   m_color;
 };
 
-class DELIBERATION_API DebugArrowInstance final
+class DELIBERATION_API DebugArrowInstance final:
+    public DebugGeometryInstance
 {
 public:
     DebugArrowInstance(const Program & program,
@@ -96,9 +112,17 @@ class DELIBERATION_API DebugGeometryRenderer final
 public:
     DebugGeometryRenderer(Context & context, const Camera3D & camera);
 
+    bool visible() const;
+
+    void setVisible(bool visible);
+
     DebugBoxInstance & box(size_t index);
     DebugArrowInstance & arrow(size_t index);
     DebugPointInstance & point(size_t index);
+
+//    void allocateBoxes(uint count, bool wireframe);
+    void allocatePoints(uint count, const glm::vec3 & color = {1.0f, 0.0f, .5f}, bool visible = false);
+    void allocateArrows(uint count, const glm::vec3 & color = {1.0f, 0.0f, .5f}, bool visible = false);
 
     size_t addBox(const glm::vec3 & halfExtent, const glm::vec3 & color, bool wireframe = false);
     size_t addPoint(const glm::vec3 & position, const glm::vec3 & color);
@@ -116,6 +140,8 @@ private:
 private:
     Context &                       m_context;
     const Camera3D &                m_camera;
+
+    bool                            m_visible = true;
 
     Program                         m_shadedProgram;
     Program                         m_unicolorProgram;

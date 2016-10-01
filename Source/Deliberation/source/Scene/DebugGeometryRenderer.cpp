@@ -19,6 +19,18 @@
 namespace deliberation
 {
 
+bool DebugGeometryInstance::visible() const
+{
+    return m_visible;
+}
+
+void DebugGeometryInstance::setVisible(bool visible)
+{
+    m_visible = visible;
+}
+
+DebugGeometryInstance::DebugGeometryInstance() = default;
+
 DebugBoxInstance::DebugBoxInstance(const Draw & draw,
                                    const glm::vec3 & halfExtent,
                                    const glm::vec3 & color):
@@ -149,6 +161,17 @@ DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D &
     m_unicolorDataLayout = DataLayout("Position", Type_Vec3);
 }
 
+
+bool DebugGeometryRenderer::visible() const
+{
+    return m_visible;
+}
+
+void DebugGeometryRenderer::setVisible(bool visible)
+{
+    m_visible = visible;
+}
+
 DebugBoxInstance & DebugGeometryRenderer::box(size_t index)
 {
     Assert(index < m_boxes.size(), " ");
@@ -167,6 +190,34 @@ DebugPointInstance & DebugGeometryRenderer::point(size_t index)
     return m_points[index];
 }
 
+//void DebugGeometryRenderer::allocateBoxes(uint count, bool wireframe)
+//{
+//
+//}
+
+void DebugGeometryRenderer::allocatePoints(uint count, const glm::vec3 & color, bool visible)
+{
+    for (uint p = 0; p < count; p++)
+    {
+        auto index = addPoint({}, color);
+        point(index).setVisible(visible);
+    }
+}
+
+void DebugGeometryRenderer::allocateArrows(uint count, const glm::vec3 & color, bool visible)
+{
+    for (uint a = 0; a < count; a++)
+    {
+        auto index = addArrow({}, {}, color);
+        arrow(index).setVisible(visible);
+    }
+}
+//void DebugGeometryRenderer::allocateArrows(uint count)
+//{
+
+//}
+
+
 size_t DebugGeometryRenderer::addBox(const glm::vec3 & halfExtent, const glm::vec3 & color, bool wireframe)
 {
     Draw draw;
@@ -183,6 +234,8 @@ size_t DebugGeometryRenderer::addBox(const glm::vec3 & halfExtent, const glm::ve
         draw.addVertexBuffer(m_boxTrianglesVertexBuffer);
         draw.setIndexBuffer(m_boxTrianglesIndexBuffer);
     }
+
+    draw.state().rasterizerState().setLineWidth(2.0f);
 
     m_boxes.push_back({draw, halfExtent, color});
 
@@ -221,8 +274,18 @@ void DebugGeometryRenderer::removeArrow(size_t index)
 
 void DebugGeometryRenderer::schedule()
 {
+    if (!m_visible)
+    {
+        return;
+    }
+
     for (auto & box : m_boxes)
     {
+        if (!box.visible())
+        {
+            continue;
+        }
+
         auto & draw = box.m_draw;
 
         draw.uniform("Transform").set(box.m_transform.matrix());
@@ -230,14 +293,25 @@ void DebugGeometryRenderer::schedule()
 
         draw.schedule();
     }
+
     for (auto & point : m_points)
     {
+        if (!point.visible())
+        {
+            continue;
+        }
         auto & draw = point.m_draw;
         draw.uniform("ViewProjection").set(m_camera.viewProjection());
         draw.schedule();
     }
+
     for (auto & arrow : m_arrows)
     {
+        if (!arrow.visible())
+        {
+            continue;
+        }
+
         auto & draw = arrow.m_draw;
 
         draw.uniform("ViewProjection").set(m_camera.viewProjection());

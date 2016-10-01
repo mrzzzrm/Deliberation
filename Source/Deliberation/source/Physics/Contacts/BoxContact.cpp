@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <limits>
+#include <stdlib.h>
 
 #include <Deliberation/Core/StreamUtils.h>
+#include <Deliberation/Core/Math/PolygonClipping.h>
+
 #include <Deliberation/Physics/Contacts/Manifold.h>
 
 namespace
@@ -11,12 +14,24 @@ namespace
 
 using namespace deliberation;
 
+struct Face
+{
+    u8 normalIndex;
+    u8 xAxisIndex;
+    u8 yAxisIndex;
+    glm::vec3 normalAxis;
+    glm::vec3 xAxis;
+    glm::vec3 yAxis;
+    glm::vec3 center;
+};
+
 struct BoxContactAlgorithm
 {
 
 const Box & boxA;
 const Box & boxB;
 Manifold & manifold;
+CollideBoxBoxDebugInfo * debugInfo;
 
 glm::mat3 aInvOrientation;
 glm::mat3 bInvOrientation;
@@ -34,7 +49,6 @@ void rayClosestApproach(const glm::vec3 & oA, const glm::vec3 & dA, const glm::v
     auto q2 = -glm::dot(dB, p);
     auto d = 1-uaub*uaub;
     if (d <= 0.0001f) {
-        // @@@ this needs to be made more robust
         a = 0;
         b  = 0;
     }
@@ -60,15 +74,65 @@ glm::vec3 normalFromDirection(const glm::vec3 & direction)
     }
 }
 
-BoxContactAlgorithm(const Box & boxA, const Box & boxB, Manifold & manifold):
+Face computeFaceFromNormal(const Box & box, const glm::vec3 & normal)
+{
+    Face face;
+
+    auto normalAbs = glm::abs(aNormal);
+
+    if (normalAbs.x >= normalAbs.y)
+    {
+        if (normalAbs.x >= normalAbs.z)
+        {
+            face.normalIndex = 0;
+            face.xAxisIndex = 1;
+            face.yAxisIndex = 2;
+        }
+        else
+        {
+            face.normalIndex = 2;
+            face.xAxisIndex = 0;
+            face.yAxisIndex = 1;
+        }
+    }
+    else
+    {
+        if (normalAbs.y >= normalAbs.z)
+        {
+            face.normalIndex = 1;
+            face.xAxisIndex = 0;
+            face.yAxisIndex = 2;
+        }
+        else
+        {
+            face.normalIndex = 2;
+            face.xAxisIndex = 0;
+            face.yAxisIndex = 1;
+        }
+    }
+
+    face.normalAxis = (normal[face.normalIndex] > 0 ? 1.0f : -1.0f) * box.axis(face.normalIndex);
+    face.xAxis = box.axis(face.xAxisIndex);
+    face.yAxis = box.axis(face.yAxisIndex);
+
+    face.center = box.p() + face.normalAxis * boxA.halfExtent()[face.normalIndex];
+
+    return face;
+}
+
+BoxContactAlgorithm(const Box & boxA, const Box & boxB, Manifold & manifold, CollideBoxBoxDebugInfo * debugInfo):
     boxA(boxA),
     boxB(boxB),
-    manifold(manifold)
+    manifold(manifold),
+    debugInfo(debugInfo)
 {
 
 }
 
-bool CollideFaceSomething(const glm::vec3 & direction, const Box & boxA, const Box & boxB, Manifold & manifold, bool flip)
+bool CollideFaceSomething(const glm::vec3 & direction,
+                          const Box & boxA,
+                          const Box & boxB,
+                          Manifold & manifold)
 {
     auto checkDirection = glm::normalize(direction);
 
@@ -101,8 +165,140 @@ bool CollideFaceSomething(const glm::vec3 & direction, const Box & boxA, const B
     {
         if (depth < manifold.depth())
         {
+
+            if (debugInfo)
+            {
+                debugInfo->edgeCollision = false;
+            }
+
             manifold.setDepth(depth);
             manifold.setNormal(normalFromDirection(checkDirection));
+
+            aNormal = aInvOrientation * manifold.normal();
+            bNormal = bInvOrientation * -manifold.normal();
+
+            Face rFace = computeFaceFromNormal(boxA, aNormal);
+            Face iFace = computeFaceFromNormal(boxB, bNormal);
+
+            if (debugInfo)
+            {
+                debugInfo->incidentFaceCenter = iFace.center;
+                debugInfo->incidentFaceNormal = iFace.normalAxis;
+                debugInfo->referenceFaceCenter = rFace.center;
+                debugInfo->referenceFaceNormal = rFace.normalAxis;
+            }
+
+            glm::mat3 rFaceRot = glm::mat3(rFace.xAxis, rFace.yAxis, rFace.normalAxis);
+            glm::mat3 invRFaceRot = glm::transpose(rFaceRot);
+
+            /**
+             * Project incident face on reference face
+             */
+            auto x = iFace.xAxis * boxB.halfExtent()[iFace.xAxisIndex];
+            auto y = iFace.yAxis * boxB.halfExtent()[iFace.yAxisIndex];
+
+            glm::vec3 in3[4];
+            in3[0] = iFace.center + x + y;
+            in3[1] = iFace.center - x + y;
+            in3[2] = iFace.center - x - y;
+            in3[3] = iFace.center + x - y;
+
+            if (debugInfo)
+            {
+                memcpy(debugInfo->incidentFace, in3, sizeof(in3));
+            }
+
+            glm::vec2 ref2[4];
+            {
+                auto x = boxA.halfExtent()[rFace.xAxisIndex];
+                auto y = boxA.halfExtent()[rFace.yAxisIndex];
+
+                ref2[0] = glm::vec2( x, y);
+                ref2[1] = glm::vec2(-x, y);
+                ref2[2] = glm::vec2(-x,-y);
+                ref2[3] = glm::vec2( x,-y);
+            }
+
+            if (debugInfo)
+            {
+                for (uint v = 0; v < 4; v++)
+                {
+                    debugInfo->referenceFace[v] = rFaceRot * glm::vec3(ref2[v].x, ref2[v].y, 0) + rFace.center;
+                }
+            }
+
+            /**
+             * Clip projection
+             */
+            std::vector<glm::vec2> result;
+            glm::vec2 subject[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                in3[i] = invRFaceRot * (in3[i] - rFace.center);
+
+                subject[i].x = in3[i].x;
+                subject[i].y = in3[i].y;
+            }
+
+            PolygonClipping2D(subject, ref2, result);
+
+            if (debugInfo)
+            {
+                debugInfo->numClipPoints = result.size();
+
+                for (uint v = 0; v < debugInfo->numClipPoints; v++)
+                {
+                    debugInfo->clipPoints[v] = rFaceRot * glm::vec3(result[v].x, result[v].y, 0) + rFace.center;
+                }
+            }
+
+            /**
+             * Incident face center and normal in reference face coordinates
+             */
+            glm::vec3 inCenterRef = invRFaceRot * (iFace.center - rFace.center);
+            glm::vec3 inNormalRef = invRFaceRot * iFace.normalAxis;
+
+            /**
+             * Pick the result point with the greatest depth
+             */
+            std::cout << "Clipped: " << std::endl;
+            auto resultIndex = -1;
+            {
+                Assert(inNormalRef.z != 0.0f, "");
+
+                auto maxZ = std::numeric_limits<float>::max();
+
+                for (auto r = 0u; r < result.size(); r++)
+                {
+                    auto x = result[r].x;
+                    auto y = result[r].y;
+                    auto & n = inNormalRef;
+                    auto nom =  - (x - inCenterRef.x) * n.x - (y - inCenterRef.y) * n.y;
+
+                    auto z = (nom / (n.z)) + inCenterRef.z;
+
+                    std::cout << "  " << x << ", " << y << ": " << z << std::endl;
+
+                    if (z < maxZ)
+                    {
+                        maxZ = z;
+                        resultIndex = r;
+                    }
+                }
+            }
+            if (resultIndex == -1)
+            {
+                return true;
+            }
+
+            std::cout << "Result: " << result[resultIndex] << " " << inCenterRef << " " << inNormalRef << std::endl;
+
+            /**
+             * Compute contact point
+             */
+            auto c = rFaceRot * glm::vec3(result[resultIndex].x, result[resultIndex].y, 0) + rFace.center;
+            manifold.setPosition(c);
         }
 
         return true;
@@ -148,6 +344,11 @@ bool CollideEdgeEdge(const glm::vec3 & dirA, const glm::vec3 & dirB, const Box &
     {
         if (depth < manifold.depth())
         {
+            if (debugInfo)
+            {
+                debugInfo->edgeCollision = true;
+            }
+
             manifold.setDepth(depth);
             manifold.setNormal(normalFromDirection(checkDirection));
 
@@ -175,8 +376,6 @@ bool CollideEdgeEdge(const glm::vec3 & dirA, const glm::vec3 & dirB, const Box &
             auto contact = (contactA + contactB) * 0.5f;
 
             manifold.setPosition(contact);
-
-            std::cout << aNormal << " " << bNormal << std::endl;
         }
 
         return true;
@@ -185,29 +384,6 @@ bool CollideEdgeEdge(const glm::vec3 & dirA, const glm::vec3 & dirB, const Box &
     {
         return false;
     }
-}
-
-bool CollideFacesSomething(const Box & boxA, const Box & boxB, Manifold & manifold, bool flip)
-{
-    if (!CollideFaceSomething(boxA.x(), boxA, boxB, manifold, flip))
-    {
-        std::cout << "No collision in direction " << boxA.x() << std::endl;
-        return false;
-    }
-
-    if (!CollideFaceSomething(boxA.y(), boxA, boxB, manifold, flip))
-    {
-        std::cout << "No collision in direction " << boxA.y() << std::endl;
-        return false;
-    }
-
-    if (!CollideFaceSomething(boxA.z(), boxA, boxB, manifold, flip))
-    {
-        std::cout << "No collision in direction " << boxA.z() << std::endl;
-        return false;
-    }
-
-    return true;
 }
 
 bool CollideEdgesEdges(const Box & boxA, const Box & boxB, Manifold & manifold)
@@ -244,13 +420,39 @@ bool execute()
     aPositionDelta = aInvOrientation * worldPositionDelta;
 
 
-    if (!CollideFacesSomething(boxA, boxB, manifold, false))
+    if (!CollideFaceSomething(boxA.x(), boxA, boxB, manifold))
     {
+        //std::cout << "No collision in direction " << boxA.x() << std::endl;
         return false;
     }
 
-    if (!CollideFacesSomething(boxB, boxA, manifold, true))
+    if (!CollideFaceSomething(boxA.y(), boxA, boxB, manifold))
     {
+        //std::cout << "No collision in direction " << boxA.y() << std::endl;
+        return false;
+    }
+
+    if (!CollideFaceSomething(boxA.z(), boxA, boxB, manifold))
+    {
+        //std::cout << "No collision in direction " << boxA.z() << std::endl;
+        return false;
+    }
+
+    if (!CollideFaceSomething(boxB.x(), boxA, boxB, manifold))
+    {
+        //std::cout << "No collision in direction " << boxA.x() << std::endl;
+        return false;
+    }
+
+    if (!CollideFaceSomething(boxB.y(), boxA, boxB, manifold))
+    {
+        //std::cout << "No collision in direction " << boxA.y() << std::endl;
+        return false;
+    }
+
+    if (!CollideFaceSomething(boxB.z(), boxA, boxB, manifold))
+    {
+        //std::cout << "No collision in direction " << boxA.z() << std::endl;
         return false;
     }
 
@@ -269,9 +471,12 @@ bool execute()
 namespace deliberation
 {
 
-bool DELIBERATION_API CollideBoxBox(const Box & boxA, const Box & boxB, Manifold & manifold)
+bool DELIBERATION_API CollideBoxBox(const Box & boxA,
+                                    const Box & boxB,
+                                    Manifold & manifold,
+                                    CollideBoxBoxDebugInfo * debugInfo)
 {
-    BoxContactAlgorithm algorithm(boxA, boxB, manifold);
+    BoxContactAlgorithm algorithm(boxA, boxB, manifold, debugInfo);
     return algorithm.execute();
 }
 

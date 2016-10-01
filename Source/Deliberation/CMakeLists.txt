@@ -55,9 +55,11 @@ set(sources
     ${source_path}/Core/Math/Box.cpp
     ${source_path}/Core/Math/GLMUtils.cpp
     ${source_path}/Core/Math/Morton.cpp
+    ${source_path}/Core/Math/Ray2D.cpp
     ${source_path}/Core/Math/Ray3D.cpp
     ${source_path}/Core/Math/Rect3D.cpp
     ${source_path}/Core/Math/Plane.cpp
+    ${source_path}/Core/Math/PolygonClipping.cpp
     ${source_path}/Core/Math/PrimitiveIntersection.cpp
     ${source_path}/Core/Math/Sphere.cpp
     ${source_path}/Core/Math/Transform3D.cpp
@@ -213,6 +215,7 @@ set(api_includes
     ${include_path}/Core/Detail/VectorBlobImpl.h
     ${include_path}/Core/Detail/VectorBlobImpl.inl
     ${include_path}/Core/Detail/IBlobImpl.h
+
     ${include_path}/Core/Assert.h
     ${include_path}/Core/Blob.h
     ${include_path}/Core/Blob.inl
@@ -246,6 +249,8 @@ set(api_includes
     ${include_path}/Core/StringUtils.h
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl
+    ${include_path}/Core/Span.h
+    ${include_path}/Core/Span.inl
     ${include_path}/Core/SparseVector.h
     ${include_path}/Core/SparseVector.inl
     ${include_path}/Core/TypeID.h
@@ -259,9 +264,11 @@ set(api_includes
     ${include_path}/Core/Math/Morton.h
     ${include_path}/Core/Math/Morton.inl
     ${include_path}/Core/Math/Plane.h
+    ${include_path}/Core/Math/PolygonClipping.h
     ${include_path}/Core/Math/PrimitiveIntersection.h
     ${include_path}/Core/Math/Random.h
     ${include_path}/Core/Math/Random.inl
+    ${include_path}/Core/Math/Ray2D.h
     ${include_path}/Core/Math/Ray3D.h
     ${include_path}/Core/Math/Rect3D.h
     ${include_path}/Core/Math/Sphere.h

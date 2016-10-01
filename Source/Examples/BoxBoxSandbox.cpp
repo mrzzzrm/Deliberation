@@ -49,6 +49,25 @@ void AABBTest()
     TestBoxes(originUnitBox, testBox0);
 }
 
+void BoxBoxExample()
+{
+    Manifold manifold;
+
+    Box a({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
+    Box b({1.4f, 1.4f, 0.0f}, {0.71f, 0.71f, 0.0f}, {-0.71f, 0.71f, 0.0f}, {0.0f, 0.0f, 1.0f});
+
+    auto r = CollideBoxBox(a, b, manifold);
+
+    if (r)
+    {
+        std::cout << "Manifold: " << manifold.toString() << std::endl;
+    }
+    else
+    {
+        std::cout << "No collision" << std::endl;
+    }
+}
+
 
 class BoxBoxSandbox:
     public Application
@@ -74,10 +93,20 @@ public:
 
         m_geometryRenderer.reset(context(), m_camera);
 
-        m_boxA = m_geometryRenderer.get().addBox({0.5f, 1.0f, 1.5f}, {1.0f, 0.6f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxA).transform().setPosition({3.0f, 0.0f, 0.0});
+        m_debugInfoRenderer.reset(context(), m_camera);
+        m_debugInfoRenderer.get().allocatePoints(4, {1.0f, 0.5f, 0.5f}, true); // Reference Face
+        m_debugInfoRenderer.get().allocatePoints(4, {0.5f, 1.0f, 0.5f}, true); // Incident Face
+        m_debugInfoRenderer.get().allocatePoints(8, {0.5f, 0.5f, 1.0f}, false);
+        m_debugInfoRenderer.get().allocateArrows(2, {0.9f, 0.9f, 0.9f}, false);
 
-        m_geometryRenderer.get().addBox({1.3f, 1.5f, 1.7f}, {0.0f, 1.0f, 0.6f}, true);
+        m_boxA = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {1.0f, 0.6f, 0.6f}, true);
+        m_geometryRenderer.get().box(m_boxA).transform().setPosition({2.89f, 2.90f, 2.99f});
+
+        m_boxB = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.6f}, true);
+        m_geometryRenderer.get().box(m_boxB).transform().setPosition({1.3f, 1.3f, 1.3});
+        m_geometryRenderer.get().box(m_boxB).transform().setOrientation(
+            glm::angleAxis(glm::quarter_pi<float>(),
+                           glm::normalize(glm::vec3(1.0f, 1.0f, -1.0f))));
 
         auto box = m_geometryRenderer.get().box(m_boxA).toBox();
         auto p = box.p();
@@ -88,6 +117,8 @@ public:
 
     virtual void onFrame(float seconds) override
     {
+        seconds = 0.002f;
+
         m_navigator.get().update(seconds);
 
         {
@@ -122,15 +153,45 @@ public:
 
             m_geometryRenderer.get().box(0).transform().worldTranslate(t);
             m_geometryRenderer.get().box(0).transform().worldRotate(glm::quat(a));
+
+//            std::cout << m_geometryRenderer.get().box(0).transform().position() << std::endl;
         }
 
         Manifold manifold;
-        auto r = CollideBoxBox(m_geometryRenderer.get().box(0).toBox(), m_geometryRenderer.get().box(1).toBox(), manifold);
+        CollideBoxBoxDebugInfo debugInfo;
 
-        std::cout << "Collision: " << r << " " << manifold.depth() << " " << manifold.position() << std::endl;
+        auto r = CollideBoxBox(m_geometryRenderer.get().box(0).toBox(),
+                               m_geometryRenderer.get().box(1).toBox(),
+                               manifold,
+                               &debugInfo);
+
+//        std::cout << "Collision: " << r << " " << manifold.toString() << std::endl;
 
         if (r)
         {
+            m_debugInfoRenderer.get().setVisible(!debugInfo.edgeCollision);
+            if (!debugInfo.edgeCollision)
+            {
+                for (int v = 0; v < 4; v++)
+                {
+                    m_debugInfoRenderer.get().point(v).setPosition(debugInfo.referenceFace[v]);
+                    m_debugInfoRenderer.get().point(v + 4).setPosition(debugInfo.incidentFace[v]);
+                }
+                for (uint v = 0; v < debugInfo.numClipPoints; v++)
+                {
+                    m_debugInfoRenderer.get().point(v + 8).setPosition(debugInfo.clipPoints[v]);
+                    m_debugInfoRenderer.get().point(v + 8).setVisible(true);
+                }
+                for (uint v = debugInfo.numClipPoints; v < 8; v++)
+                {
+                    m_debugInfoRenderer.get().point(v + 8).setVisible(false);
+                }
+                m_debugInfoRenderer.get().arrow(0).reset(debugInfo.incidentFaceCenter, debugInfo.incidentFaceNormal);
+                m_debugInfoRenderer.get().arrow(0).setVisible(true);
+                m_debugInfoRenderer.get().arrow(1).reset(debugInfo.referenceFaceCenter, debugInfo.referenceFaceNormal);
+                m_debugInfoRenderer.get().arrow(1).setVisible(true);
+            }
+
             m_geometryRenderer.get().box(0).transform() = prevTransform;
 
             auto origin = m_geometryRenderer.get().box(0).transform().position();
@@ -161,6 +222,8 @@ public:
         }
         else
         {
+            m_debugInfoRenderer.get().setVisible(false);
+
             if (m_contactSeparationIndex.engaged())
             {
                 m_geometryRenderer.get().removeArrow(m_contactSeparationIndex.get());
@@ -177,10 +240,12 @@ public:
         m_clear.schedule();
         m_grid.get().draw();
         m_geometryRenderer.get().schedule();
+        m_debugInfoRenderer.get().schedule();
     }
 
 private:
     Optional<DebugGeometryRenderer>     m_geometryRenderer;
+    Optional<DebugGeometryRenderer>     m_debugInfoRenderer;
     Clear                               m_clear;
     Optional<DebugGrid3DRenderer>       m_grid;
     Camera3D                            m_camera;
@@ -192,12 +257,14 @@ private:
     Optional<size_t>                    m_contactSeparationIndex;
 
     size_t                              m_boxA;
+    size_t                              m_boxB;
     size_t                              m_halfExtent[3];
 };
 
 int main()
 {
-    AABBTest();
+  //  AABBTest();
+  //  BoxBoxExample(); return 0;
 
     return BoxBoxSandbox().run();
 }

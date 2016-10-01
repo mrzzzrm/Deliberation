@@ -1,5 +1,9 @@
 #include <Deliberation/Physics/Contacts/Manifold.h>
 
+#include <sstream>
+
+#include <Deliberation/Core/StreamUtils.h>
+
 namespace deliberation
 {
 
@@ -70,6 +74,21 @@ void Manifold::setLocalPointB(const glm::vec3 & localPositionB)
 void Manifold::setNormal(const glm::vec3 & normal)
 {
     m_normal = normal;
+}
+
+std::string Manifold::toString() const
+{
+    std::stringstream s;
+
+    s << "{";
+    s << "Depth: " << m_depth << "; ";
+    s << "Position: " << m_position << "; ";
+    s << "LocalPointA: " << m_localPositionA << "; ";
+    s << "LocalPointB: " << m_localPositionB << "; ";
+    s << "Normal: " << m_normal;
+    s << "}";
+
+    return s.str();
 }
 
 }

@@ -5,6 +5,7 @@
 namespace deliberation
 {
 
+class Ray2D;
 class Ray3D;
 class Rect3D;
 class Sphere;
@@ -46,8 +47,23 @@ bool Rect3DRay3DIntersection(const glm::vec3 & base,
                              float & t);
 
 bool Rect3DRay3DIntersection(const Rect3D & rect,
-                           const Ray3D & ray,
-                           float & t);
+                             const Ray3D & ray,
+                             float & t);
+
+float PointRay2DHalfspace(const glm::vec2 & point,
+                          const glm::vec2 & origin,
+                          const glm::vec2 & direction);
+
+float PointRay2DHalfspace(const glm::vec2 & point,
+                          const Ray2D & ray);
+
+glm::vec2 Ray2DIntersectionPoint(const glm::vec2 & originA,
+                                 const glm::vec2 & directionA,
+                                 const glm::vec2 & originB,
+                                 const glm::vec2 & directionB,
+                                 bool & exists);
+
+glm::vec2 Ray2DIntersectionPoint(const Ray2D & a, const Ray2D & b, bool & exists);
 
 template<typename T1, typename T2>
 bool Intersect(const T1 & p1, const T2 & p2);

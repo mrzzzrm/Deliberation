@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include <Deliberation/Core/Math/Plane.h>
+#include <Deliberation/Core/Math/Ray2D.h>
 #include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/Math/Rect3D.h>
 #include <Deliberation/Core/Math/Sphere.h>
@@ -132,6 +133,49 @@ bool Rect3DRay3DIntersection(const Rect3D & rect,
                              float & t)
 {
     return Rect3DRay3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
+}
+
+float PointRay2DHalfspace(const glm::vec2 & point,
+                          const glm::vec2 & origin,
+                          const glm::vec2 & direction)
+{
+    glm::vec2 normal(direction.y, -direction.x);
+    return glm::dot(normal, point - origin);
+}
+
+float PointRay2DHalfspace(const glm::vec2 & point,
+                          const Ray2D & ray)
+{
+    return PointRay2DHalfspace(point, ray.origin(), ray.direction());
+}
+
+glm::vec2 Ray2DIntersectionPoint(const glm::vec2 & oA,
+                                 const glm::vec2 & dA,
+                                 const glm::vec2 & oB,
+                                 const glm::vec2 & dB,
+                                 bool & exists)
+{
+    auto w = oA - oB;
+    auto d = (dA.x * dB.y - dB.x * dA.y);
+
+    if (d == 0.0f)
+    {
+        exists = false;
+        return {};
+    }
+
+    exists = true;
+
+    auto n = (dB.x * w.y - dB.y * w.x);
+    auto s = n / d;
+    auto r = oA + s * dA;
+
+    return r;
+}
+
+glm::vec2 Ray2DIntersectionPoint(const Ray2D & a, const Ray2D & b, bool & exists)
+{
+    return Ray2DIntersectionPoint(a.origin(), a.direction(), b.origin(), b.direction(), exists);
 }
 
 template<>

@@ -149,6 +149,13 @@ StreamType & operator<<(StreamType && os, const Ray3D & r)
 }
 
 template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Ray2D & r)
+{
+    os << "(" << r.origin() << " -> " << r.direction() << ")";
+    return os;
+}
+
+template<typename StreamType>
 StreamType & operator<<(StreamType && os, const Sphere & s)
 {
     os << "(" << s.position() << " -> " << s.radius() << ")";
