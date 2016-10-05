@@ -23,7 +23,9 @@ public:
 
     Box instanciate(const Transform3D & transform) const;
 
+    // From CollisionShape
     virtual AABB bounds(const Transform3D & transform) const override;
+    virtual glm::mat3 localInertia() const override;
 
 private:
     glm::vec3 m_halfExtent;

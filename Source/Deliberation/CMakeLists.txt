@@ -180,7 +180,7 @@ set(sources
     ${source_path}/Physics/PhysicsWorld.cpp
     ${source_path}/Physics/ReferenceBroadphase.cpp
     ${source_path}/Physics/RigidBody.cpp
-    ${source_path}/Physics/SphereCollisionShape.cpp
+    ${source_path}/Physics/SphereShape.cpp
 
     ${source_path}/Platform/Application.cpp
     ${source_path}/Platform/InputAdapter.cpp
@@ -358,7 +358,7 @@ set(api_includes
     ${include_path}/Physics/PhysicsWorld.h
     ${include_path}/Physics/ReferenceBroadphase.h
     ${include_path}/Physics/RigidBody.h
-    ${include_path}/Physics/SphereCollisionShape.h
+    ${include_path}/Physics/SphereShape.h
 
     ${include_path}/Platform/Application.h
     ${include_path}/Platform/InputAdapter.h

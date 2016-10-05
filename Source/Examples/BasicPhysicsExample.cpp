@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/StreamUtils.h>
 
-#include <Deliberation/Physics/SphereCollisionShape.h>
+#include <Deliberation/Physics/SphereShape.h>
 #include <Deliberation/Physics/PhysicsWorld.h>
 #include <Deliberation/Physics/RigidBody.h>
 

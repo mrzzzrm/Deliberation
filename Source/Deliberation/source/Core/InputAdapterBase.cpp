@@ -9,6 +9,18 @@ InputAdapterBase::InputAdapterBase() = default;
 
 InputAdapterBase::~InputAdapterBase() = default;
 
+bool InputAdapterBase::mouseButtonPressed(unsigned int button) const
+{
+    auto it = std::find(m_pressedMouseButtons.begin(), m_pressedMouseButtons.end(), button);
+    return it != m_pressedMouseButtons.end();
+}
+
+bool InputAdapterBase::keyPressed(unsigned int key) const
+{
+    auto it = std::find(m_pressedKeys.begin(), m_pressedKeys.end(), key);
+    return it != m_pressedKeys.end();
+}
+
 bool InputAdapterBase::mouseButtonDown(unsigned int button) const
 {
     if (button >= m_mouseButtons.size())
@@ -46,6 +58,14 @@ void InputAdapterBase::setMouseButtonDown(unsigned int button, bool down)
         m_mouseButtons.resize(button + 1, false);
     }
 
+    if (down)
+    {
+        if (!m_mouseButtons[button] && !mouseButtonPressed(button))
+        {
+            m_pressedMouseButtons.push_back(button);
+        }
+    }
+
     m_mouseButtons[button] = down;
 }
 
@@ -63,12 +83,26 @@ void InputAdapterBase::setKeyDown(unsigned int key, bool down)
         m_keys.resize(key + 1, false);
     }
 
+    if (down)
+    {
+        if (!m_keys[key] && !keyPressed(key))
+        {
+            m_pressedKeys.push_back(key);
+        }
+    }
+
     m_keys[key] = down;
 }
 
 void InputAdapterBase::setMousePosition(const glm::vec2 & position)
 {
     m_mousePosition = position;
+}
+
+void InputAdapterBase::step()
+{
+    m_pressedMouseButtons.clear();
+    m_pressedKeys.clear();
 }
 
 }

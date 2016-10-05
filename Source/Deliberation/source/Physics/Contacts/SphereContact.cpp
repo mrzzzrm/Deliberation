@@ -3,15 +3,15 @@
 #include <iostream>
 
 #include <Deliberation/Physics/RigidBody.h>
-#include <Deliberation/Physics/SphereCollisionShape.h>
+#include <Deliberation/Physics/SphereShape.h>
 
 namespace deliberation
 {
 
 SphereContact::SphereContact(RigidBody & bodyA, RigidBody & bodyB):
     Contact(bodyA, bodyB),
-    m_shapeA(*(SphereCollisionShape*)bodyA.shape().get()),
-    m_shapeB(*(SphereCollisionShape*)bodyB.shape().get())
+    m_shapeA(*(SphereShape*)bodyA.shape().get()),
+    m_shapeB(*(SphereShape*)bodyB.shape().get())
 {
 
 }
@@ -34,6 +34,7 @@ void SphereContact::update()
         m_normal = glm::normalize(pB - pA);
         m_localPointA = pA + m_normal * m_shapeA.radius();
         m_localPointB = pB - m_normal * m_shapeB.radius();
+        m_position = 0.5f * (m_localPointA + m_localPointB);
         m_separation = glm::dot(pB - pA, m_normal) - m_shapeA.radius() - m_shapeB.radius();
     }
 

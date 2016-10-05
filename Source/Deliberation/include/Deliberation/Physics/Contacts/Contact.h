@@ -17,7 +17,10 @@ public:
 
     RigidBody & bodyA() const;
     RigidBody & bodyB() const;
+
     bool intersect() const;
+
+    const glm::vec3 & position() const;
     const glm::vec3 & localPointA() const;
     const glm::vec3 & localPointB() const;
     const glm::vec3 & normal() const;
@@ -34,6 +37,7 @@ protected:
     RigidBody & m_bodyA;
     RigidBody & m_bodyB;
     bool        m_intersect;
+    glm::vec3   m_position;
     glm::vec3   m_localPointA;
     glm::vec3   m_localPointB;
     glm::vec3   m_normal;

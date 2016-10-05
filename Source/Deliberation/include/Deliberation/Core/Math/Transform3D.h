@@ -34,6 +34,7 @@ public:
     void localRotate(const glm::quat & delta);
     void worldRotate(const glm::quat & delta);
 
+    const glm::mat3 & basis() const;
     const glm::mat4 & matrix() const;
 
     glm::vec3 pointWorldToLocal(const glm::vec3 & point) const;
@@ -53,7 +54,11 @@ protected:
     glm::quat           m_orientation;
     glm::vec3           m_center;
     float               m_scale;
-    mutable bool        m_dirty;
+
+    mutable glm::mat3   m_basis;
+    mutable bool        m_basisDirty;
+
+    mutable bool        m_matrixDirty;
     mutable glm::mat4   m_matrix;
 };
 

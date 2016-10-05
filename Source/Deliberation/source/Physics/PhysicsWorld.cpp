@@ -55,6 +55,7 @@ void PhysicsWorld::update(float seconds)
 
         body->applyForce({0.0f, -m_gravity * body->mass(), 0.0f});
         body->integrateVelocities(seconds);
+        body->updateWorldInertia();
     }
 
     auto time = 0.0f;
@@ -126,6 +127,12 @@ std::string PhysicsWorld::toString() const
 
 void PhysicsWorld::solve()
 {
+    if (m_narrowphase->contacts().empty())
+    {
+        return;
+    }
+
+    std::cout << "Solve velocities:" << std::endl;
     for (auto i = 0; i < m_numVelocityIterations; i++)
     {
         for (auto & contact : m_narrowphase->contacts())
@@ -134,6 +141,7 @@ void PhysicsWorld::solve()
         }
     }
 
+    std::cout << "Solve positions:" << std::endl;
     for (auto i = 0; i < m_numPositionIterations; i++)
     {
         for (auto & contact : m_narrowphase->contacts())
@@ -154,14 +162,18 @@ void PhysicsWorld::solveVelocities(Contact & contact)
     auto & bodyB = contact.bodyB();
 
     auto mA = bodyA.inverseMass();
+    auto & iA = bodyA.worldInvInertia();
     auto & vA = bodyA.linearVelocity();
     auto & wA = bodyA.angularVelocity();
     auto & pA = bodyA.transform().position();
+    auto cA = contact.position() - pA;
 
     auto mB = bodyB.inverseMass();
+    auto & iB = bodyB.worldInvInertia();
     auto & vB = bodyB.linearVelocity();
     auto & wB = bodyB.angularVelocity();
     auto & pB = bodyB.transform().position();
+    auto cB = contact.position() - pB;
 
     auto & normal = contact.normal();
     auto normalMass = contact.normalMass();
@@ -169,10 +181,13 @@ void PhysicsWorld::solveVelocities(Contact & contact)
     auto normalImpulse = contact.normalImpulse();
 
     // Relative velocity at contact
-    auto vR = vB + glm::cross(wB, pB) - vA - glm::cross(wA, pA);
+    auto aA = glm::cross(wA, cA);
+    auto aB = glm::cross(wB, cB);
 
-    auto vn = glm::dot(vR, normal);
-    auto lambda = -normalMass * (vn - velocityBias);
+    auto relativeVelocityAtContact = vB + aB - vA - aA;
+
+    auto relativeVelocityAtNormal = glm::dot(relativeVelocityAtContact, normal);
+    auto lambda = -normalMass * (relativeVelocityAtNormal - velocityBias);
 
     // Clamp the accumulated impulse
     auto newImpulse = std::max(normalImpulse + lambda, 0.0f);
@@ -181,16 +196,20 @@ void PhysicsWorld::solveVelocities(Contact & contact)
     contact.setNormalImpulse(newImpulse);
 
     // Apply contact impulse
-    auto P = lambda * normal;
+    auto contactImpulse = lambda * normal;
 
-    std::cout << "  " << bodyA.linearVelocity() << " -> ";
-    bodyA.setLinearVelocity(vA - mA * P);
-//            bodyA.setAngularVelocity(bodyA.angularVelocity() - mA * P);
-//            wA -= iA * b2Cross(vcp->rA, P);
-    std::cout << bodyA.linearVelocity() << std::endl;
+    std::cout << "  " << &contact << "(" << mA << ": " << contactImpulse << " " << normalMass << " " << " "  << velocityBias << " " << normal << std::endl;
+    std::cout << "    rV: " << relativeVelocityAtContact << std::endl;
+    std::cout << "    rVn: " << relativeVelocityAtNormal << std::endl;
+    std::cout << "    Impulse: " << normalImpulse << " -> " << newImpulse << std::endl;
+    std::cout << "    " << vA << " " << wA << std::endl;
+    std::cout << "    " << vB << " " << wB << std::endl;
 
-    bodyB.setLinearVelocity(vB + mB * P);
-//            wB += iB * b2Cross(vcp->rB, P);
+    bodyA.setLinearVelocity(vA - mA * contactImpulse);
+    bodyA.setAngularVelocity(wA - iA * glm::cross(cA, contactImpulse));
+
+    bodyB.setLinearVelocity(vB + mB * contactImpulse);
+    bodyB.setAngularVelocity(wB + iB * glm::cross(cB, contactImpulse));
 }
 
 void PhysicsWorld::solvePositions(Contact & contact)
@@ -208,6 +227,9 @@ void PhysicsWorld::solvePositions(Contact & contact)
 
     auto mA = bodyA.inverseMass();
     auto mB = bodyB.inverseMass();
+
+    auto & iA = bodyA.worldInvInertia();
+    auto & iB = bodyB.worldInvInertia();
 
     auto & cA = transformA.position();
 
@@ -242,6 +264,7 @@ void PhysicsWorld::solvePositions(Contact & contact)
     auto P = impulse * normal;
 
     transformA.setPosition(transformA.position() - mA * P);
+//    transformA.setOrientation(transformA.orientation() - iA * glm::cross(cA, P))
 //    aA -= iA * b2Cross(rA, P);
 //
     transformB.setPosition(transformB.position() + mB * P);

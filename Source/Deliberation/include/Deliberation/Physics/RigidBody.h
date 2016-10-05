@@ -27,6 +27,7 @@ public:
     float mass() const;
     float inverseMass() const;
     float restitution() const;
+    const glm::mat3 & worldInvInertia() const;
     const glm::vec3 & linearVelocity() const;
     const glm::vec3 & angularVelocity() const;
     const glm::vec3 & force() const;
@@ -38,26 +39,34 @@ public:
     void setLinearVelocity(const glm::vec3 & velocity);
     void setAngularVelocity(const glm::vec3 & velocity);
     void setForce(const glm::vec3 & force);
-    void applyForce(const glm::vec3 & force);
     void setStatic(bool isStatic);
     void setIndex(size_t index);
+
+    void applyForce(const glm::vec3 & force);
 
     void integrateVelocities(float seconds);
 
     void predictTransform(float seconds, Transform3D & prediction);
 
+    void updateWorldInertia();
+
     std::string toString() const;
 
 private:
-    float                           m_inverseMass = 1.0f / 1.0f;
-    float                           m_restitution = 1.0f;
+    float     m_inverseMass = 1.0f / 1.0f;
+    float     m_restitution = 0.0f;
 
-    glm::vec3                       m_linearVelocity;
-    glm::vec3                       m_angularVelocity;
-    glm::vec3                       m_force;
+    glm::mat3 m_localInvInertia;
+    glm::mat3 m_worldInvInertia;
 
-    bool                            m_static = false;
-    size_t                          m_index = -1;
+    glm::vec3 m_linearVelocity;
+    glm::vec3 m_angularVelocity;
+
+    glm::vec3 m_force;
+    glm::vec3 m_torque;
+
+    bool      m_static = false;
+    size_t    m_index = -1;
 };
 
 }

@@ -22,7 +22,8 @@ Transform3D Transform3D::atPosition(const glm::vec3 & position)
 
 Transform3D::Transform3D():
     m_scale(1.0f),
-    m_dirty(true)
+    m_matrixDirty(true),
+    m_basisDirty(true)
 {
 }
 
@@ -51,7 +52,7 @@ void Transform3D::setPosition(const glm::vec3 & position)
     Assert(GLMIsFinite(position), "");
 
     m_position = position;
-    m_dirty = true;
+    m_matrixDirty = true;
 }
 
 void Transform3D::setOrientation(const glm::quat & orientation)
@@ -59,7 +60,8 @@ void Transform3D::setOrientation(const glm::quat & orientation)
     Assert(GLMIsFinite(orientation), "");
 
     m_orientation = orientation;
-    m_dirty = true;
+    m_matrixDirty = true;
+    m_basisDirty = true;
 }
 
 void Transform3D::setCenter(const glm::vec3 & center)
@@ -67,7 +69,7 @@ void Transform3D::setCenter(const glm::vec3 & center)
     Assert(GLMIsFinite(center), "");
 
     m_center = center;
-    m_dirty = true;
+    m_matrixDirty = true;
 }
 
 void Transform3D::setScale(float scale)
@@ -76,7 +78,7 @@ void Transform3D::setScale(float scale)
     Assert(scale > 0.0f, "");
 
     m_scale = scale;
-    m_dirty = true;
+    m_matrixDirty = true;
 }
 
 void Transform3D::setCenterAndAdjustPosition(const glm::vec3 & center)
@@ -90,13 +92,13 @@ void Transform3D::setCenterAndAdjustPosition(const glm::vec3 & center)
 void Transform3D::localTranslate(const glm::vec3 & delta)
 {
     m_position += m_orientation * delta;
-    m_dirty = true;
+    m_matrixDirty = true;
 }
 
 void Transform3D::worldTranslate(const glm::vec3 & delta)
 {
     m_position += delta;
-    m_dirty = true;
+    m_matrixDirty = true;
 }
 
 // rotate around local axis
@@ -105,7 +107,7 @@ void Transform3D::localRotate(const glm::quat & delta)
     Assert(GLMIsFinite(delta), "");
 
     m_orientation = m_orientation * delta;
-    m_dirty = true;
+    m_matrixDirty = true;
 
     Assert(GLMIsFinite(m_orientation), "");
 }
@@ -115,21 +117,31 @@ void Transform3D::worldRotate(const glm::quat & delta)
     Assert(GLMIsFinite(delta), "");
 
     m_orientation = delta * m_orientation;
-    m_dirty = true;
+    m_matrixDirty = true;
 
     Assert(GLMIsFinite(m_orientation), "");
 }
 
+const glm::mat3 & Transform3D::basis() const
+{
+    if (m_basisDirty)
+    {
+        m_basis = glm::mat3_cast(m_orientation);
+    }
+    
+    return m_basis;
+}
+
 const glm::mat4 & Transform3D::matrix() const
 {
-    if (m_dirty)
+    if (m_matrixDirty)
     {
         // Yes, this could be done way more efficient...
         m_matrix = glm::translate(m_position) *
                    glm::mat4_cast(m_orientation) *
                    glm::scale(glm::vec3(m_scale)) *
                    glm::translate(-m_center);
-        m_dirty = false;
+        m_matrixDirty = false;
     }
 
     return m_matrix;

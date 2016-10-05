@@ -59,8 +59,6 @@ int Application::run()
 
     MainLoop().run([this](float seconds)
     {
-        onFrame(seconds);
-
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -80,6 +78,10 @@ int Application::run()
                     break;
             }
         }
+
+        onFrame(seconds);
+
+        m_inputAdapter.step();
 
         SDL_RenderPresent(m_displayRenderer);
 

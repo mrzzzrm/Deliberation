@@ -68,6 +68,16 @@ size_t SparseVector<T>::capacity() const
 }
 
 template<typename T>
+size_t SparseVector<T>::count() const {
+    return m_vec.size() - m_pool.size();
+}
+
+template<typename T>
+bool SparseVector<T>::empty() const {
+    return count() == 0;
+}
+
+template<typename T>
 typename SparseVector<T>::Iterator SparseVector<T>::find(const T & value)
 {
     for (std::size_t e = 0; e < m_vec.size(); e++)

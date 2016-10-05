@@ -36,4 +36,17 @@ AABB BoxShape::bounds(const Transform3D & transform) const
     return instanciate(transform).bounds();
 }
 
+glm::mat3 BoxShape::localInertia() const
+{
+    auto extent = m_halfExtent * 2.0f;
+
+    auto x = extent.y * extent.y + extent.z * extent.z;
+    auto y = extent.x * extent.x + extent.z * extent.z;
+    auto z = extent.x * extent.x + extent.y * extent.y;
+
+    return (1.0f / 12.0f) * glm::mat3({x, 0.0f, 0.0f},
+                                      {0.0f, y, 0.0f},
+                                      {0.0f, 0.0f, z});
+}
+
 }

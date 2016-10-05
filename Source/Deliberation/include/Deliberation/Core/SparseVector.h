@@ -43,6 +43,9 @@ public:
     bool contains(std::size_t index) const;
 
     size_t capacity() const;
+    size_t count() const;
+
+    bool empty() const;
 
     Iterator find(const T & value);
     CIterator find(const T & value) const;

@@ -8,7 +8,7 @@ namespace deliberation
 {
 
 class CollisionObject;
-class SphereCollisionShape;
+class SphereShape;
 
 class DELIBERATION_API SphereContact:
     public Contact
@@ -19,8 +19,8 @@ public:
     virtual void update() override;
 
 private:
-    const SphereCollisionShape & m_shapeA;
-    const SphereCollisionShape & m_shapeB;
+    const SphereShape & m_shapeA;
+    const SphereShape & m_shapeB;
 };
 
 }

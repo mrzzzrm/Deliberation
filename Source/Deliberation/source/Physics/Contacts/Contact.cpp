@@ -27,6 +27,11 @@ bool Contact::intersect() const
     return m_intersect;
 }
 
+const glm::vec3 & Contact::position() const
+{
+    return m_position;
+}
+
 const glm::vec3 & Contact::localPointA() const
 {
     return m_localPointA;

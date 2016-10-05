@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <Deliberation/Core/Math/AABB.h>
 
 #include <Deliberation/Deliberation_API.h>
@@ -25,6 +27,7 @@ public:
     int type() const;
 
     virtual AABB bounds(const Transform3D & transform) const = 0;
+    virtual glm::mat3 localInertia() const = 0;
 
 private:
     int m_type;

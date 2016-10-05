@@ -9,16 +9,17 @@
 namespace deliberation
 {
 
-class DELIBERATION_API SphereCollisionShape:
+class DELIBERATION_API SphereShape:
     public CollisionShape
 {
 public:
-    SphereCollisionShape(float radius);
+    SphereShape(float radius);
 
     float radius() const;
 
     // From CollisionShape
     virtual AABB bounds(const Transform3D & transform) const override;
+    virtual glm::mat3 localInertia() const override;
 
 private:
     float m_radius;

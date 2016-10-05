@@ -151,6 +151,9 @@ public:
     InputAdapterBase();
     virtual ~InputAdapterBase();
 
+    bool mouseButtonPressed(unsigned int button) const;
+    bool keyPressed(unsigned int key) const;
+
     bool mouseButtonDown(unsigned int button) const;
     bool keyDown(unsigned int key) const;
     const glm::vec2 & mousePosition() const;
@@ -159,9 +162,15 @@ public:
     void setKeyDown(unsigned int key, bool down);
     void setMousePosition(const glm::vec2 & position);
 
+    void step();
+
 private:
     std::vector<bool> m_mouseButtons;
+    std::vector<uint> m_pressedMouseButtons;
+
     std::vector<bool> m_keys;
+    std::vector<uint> m_pressedKeys;
+
     glm::vec2         m_mousePosition;
 };
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -33,7 +34,7 @@ public:
 
         m_grid.reset(context(), 2.5f, m_camera);
 
-        m_camera.setPosition({0.0f, 5.0f, 15.0f});
+        m_camera.setPosition({0.0f, 5.0f, 25.0f});
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
         m_camera.setAspectRatio((float)context().backbuffer().width() / (float)context().backbuffer().height());
 
@@ -44,11 +45,13 @@ public:
         auto shapeA = std::make_shared<BoxShape>(glm::vec3{1.0f, 1.0f, 1.0f});
         auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 10.0f});
 
-        m_bodyA = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({0.0f, 15.0f, 0.0f}));
+        m_bodyA = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({2.0f, 15.0f, 0.0f}));
         m_bodyGround = std::make_shared<RigidBody>(shapeGround, Transform3D::atPosition({0.0f, 0.0f, 0.0f}));
-        m_bodyGround->setStatic(true);
+        m_bodyGround->setInverseMass(1.0f / 50.0f);
 
-        m_world.setGravity(2.0f);
+        m_world.setGravity(0.0f);
+
+        m_bodyA->setLinearVelocity({0.0f, -2.0f, 0.0f});
 
         m_world.addRigidBody(m_bodyA);
         m_world.addRigidBody(m_bodyGround);
@@ -59,9 +62,10 @@ public:
 
     virtual void onFrame(float seconds) override
     {
-        m_world.update(0.017f);
-
-        std::cout << m_bodyA->transform().position() << " " << m_bodyA->linearVelocity() << std::endl;
+        if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE) || inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
+        {
+            m_world.update(0.017f);
+        }
 
         m_navigator.get().update(seconds);
 
@@ -86,6 +90,9 @@ private:
 
     uint                              m_bodyAIndex;
     uint                              m_bodyGroundIndex;
+
+
+    std::chrono::steady_clock::time_point m_physicsPlayStart;
 };
 
 int main(int argc, char * argv[])

@@ -505,6 +505,7 @@ void BoxContact::update()
 
     if (m_intersect)
     {
+        m_position = manifold.position();
         m_localPointA = manifold.localPositionA();
         m_localPointB = manifold.localPositionB();
         m_normal = manifold.normal();
@@ -516,13 +517,13 @@ void BoxContact::update()
         auto mA = m_bodyA.inverseMass();
         auto mB = m_bodyB.inverseMass();
 
-        // vcp->rA = worldManifold.points[j] - cA;
-        // vcp->rB = worldManifold.points[j] - cB;
+        auto rA = m_position - m_bodyA.transform().position();
+        auto rB = m_position - m_bodyB.transform().position();
 
-        //  float32 rnA = b2Cross(vcp->rA, vc->normal);
-        //   float32 rnB = b2Cross(vcp->rB, vc->normal);
+        auto rnA = glm::cross(rA, m_normal);
+        auto rnB = glm::cross(rB, m_normal);
 
-        auto kNormal = mA + mB /* + iA * rnA * rnA + iB * rnB * rnB*/;
+        auto kNormal = mA + mB + m_bodyA.worldInvInertia() * rnA * rnA + m_bodyB.worldInvInertia() * rnB * rnB;
 
         m_normalMass = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
 

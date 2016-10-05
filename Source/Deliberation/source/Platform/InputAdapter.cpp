@@ -3,11 +3,21 @@
 namespace
 {
 
+using namespace deliberation;
+
 deliberation::InputAdapterBase::Key SDLKeyToDeliberation(SDL_Keycode code)
 {
     if (code >= SDLK_a && code <= SDLK_z)
     {
-        return (deliberation::InputAdapterBase::Key)(deliberation::InputAdapterBase::Key_A + (code - SDLK_a));
+        return (InputAdapterBase::Key)(InputAdapterBase::Key_A + (code - SDLK_a));
+    }
+
+    switch(code) {
+        case SDLK_RIGHT: return InputAdapterBase::Key_RIGHT;
+        case SDLK_LEFT: return InputAdapterBase::Key_LEFT;
+        case SDLK_UP: return InputAdapterBase::Key_UP;
+        case SDLK_DOWN: return InputAdapterBase::Key_DOWN;
+        case SDLK_SPACE: return InputAdapterBase::Key_SPACE;
     }
 
     return deliberation::InputAdapterBase::Key_UNKNOWN;
