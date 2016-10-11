@@ -20,20 +20,21 @@ class DELIBERATION_API RigidBody final:
 public:
     RigidBody(const std::shared_ptr<CollisionShape> & shape,
               const Transform3D & transform = Transform3D(),
-              float inverseMass = 1.0f / 1.0f,
+              float mass = 1.0f,
               const glm::vec3 & linearVelocity = {},
               const glm::vec3 & angularVelocity = {});
 
     float mass() const;
     float inverseMass() const;
     float restitution() const;
-    const glm::mat3 & worldInvInertia() const;
+    const glm::mat3 & worldInverseInertia() const;
     const glm::vec3 & linearVelocity() const;
     const glm::vec3 & angularVelocity() const;
     const glm::vec3 & force() const;
     bool isStatic() const;
     size_t index() const;
 
+    void setMass(float mass);
     void setInverseMass(float mass);
     void setRestitution(float restitution);
     void setLinearVelocity(const glm::vec3 & velocity);
@@ -54,10 +55,10 @@ public:
 
 private:
     float     m_inverseMass = 1.0f / 1.0f;
-    float     m_restitution = 0.0f;
+    float     m_restitution = 0.3f;
 
-    glm::mat3 m_localInvInertia;
-    glm::mat3 m_worldInvInertia;
+    glm::mat3 m_localInverseInertia;
+    glm::mat3 m_worldInverseInertia;
 
     glm::vec3 m_linearVelocity;
     glm::vec3 m_angularVelocity;

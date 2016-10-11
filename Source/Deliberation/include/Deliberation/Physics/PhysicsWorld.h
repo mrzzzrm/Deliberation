@@ -41,8 +41,8 @@ private:
 private:
     float                                       m_timestep              = 1.0f / 60.0f;
     float                                       m_gravity               = 0.0f;
-    unsigned int                                m_numVelocityIterations = 6;
-    unsigned int                                m_numPositionIterations = 2;
+    unsigned int                                m_numVelocityIterations = 1;
+    unsigned int                                m_numPositionIterations = 1;
     SparseVector<std::shared_ptr<RigidBody>>    m_rigidBodies;
     std::unique_ptr<Broadphase>                 m_broadphase;
     std::unique_ptr<Narrowphase>                m_narrowphase;

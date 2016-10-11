@@ -10,18 +10,15 @@ namespace deliberation
 
 RigidBody::RigidBody(const std::shared_ptr<CollisionShape> & shape,
                      const Transform3D & transform,
-                     float inverseMass,
+                     float mass,
                      const glm::vec3 & linearVelocity,
                      const glm::vec3 & angularVelocity):
     CollisionObject(shape, transform),
-    m_inverseMass(inverseMass),
+    m_inverseMass(0.0f),
     m_linearVelocity(linearVelocity),
     m_angularVelocity(angularVelocity)
 {
-    auto localInertia = shape->localInertia() * mass();
-    m_localInvInertia = InverseDiagonalMatrix(localInertia);
-
-    updateWorldInertia();
+    setMass(mass);
 }
 
 float RigidBody::inverseMass() const
@@ -39,9 +36,9 @@ float RigidBody::restitution() const
     return m_restitution;
 }
 
-const glm::mat3 & RigidBody::worldInvInertia() const
+const glm::mat3 & RigidBody::worldInverseInertia() const
 {
-    return m_worldInvInertia;
+    return m_worldInverseInertia;
 }
 
 const glm::vec3 & RigidBody::linearVelocity() const
@@ -69,9 +66,16 @@ bool RigidBody::isStatic() const
     return m_static;
 }
 
+void RigidBody::setMass(float mass)
+{
+    setInverseMass(mass > 0.0f ? 1.0f / mass : 0.0f);
+}
+
 void RigidBody::setInverseMass(float inverseMass)
 {
     m_inverseMass = inverseMass;
+    auto localInertia = shape()->localInertia() * mass();
+    m_localInverseInertia = glm::inverse(localInertia);
 }
 
 void RigidBody::setRestitution(float restitution)
@@ -112,6 +116,10 @@ void RigidBody::setForce(const glm::vec3 & force)
 void RigidBody::setStatic(bool isStatic)
 {
     m_static = isStatic;
+    if (isStatic)
+    {
+        setMass(0.0f);
+    }
 }
 
 void RigidBody::setIndex(size_t index)
@@ -134,12 +142,18 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
     prediction.setCenter(transform().center());
     prediction.setScale(transform().scale());
     prediction.setPosition(transform().position() + seconds * m_linearVelocity);
-    prediction.setOrientation(transform().orientation() * glm::quat(seconds * m_angularVelocity));
+
+    if (m_angularVelocity != glm::vec3(0.0f))
+    {
+        auto quat = glm::angleAxis(glm::length(seconds * m_angularVelocity), glm::normalize(m_angularVelocity));
+        prediction.setOrientation(transform().orientation() * quat);
+    }
+
 }
 
 void RigidBody::updateWorldInertia()
 {
-    m_worldInvInertia = transform().basis() * m_localInvInertia * glm::transpose(transform().basis());
+    m_worldInverseInertia = transform().basis() * m_localInverseInertia * glm::transpose(transform().basis());
 }
 
 void RigidBody::integrateVelocities(float seconds)
@@ -150,7 +164,7 @@ void RigidBody::integrateVelocities(float seconds)
     }
 
     m_linearVelocity += m_inverseMass * m_force * seconds;
-    m_angularVelocity += m_worldInvInertia * m_torque * seconds;
+    m_angularVelocity += m_worldInverseInertia * m_torque * seconds;
 }
 
 std::string RigidBody::toString() const

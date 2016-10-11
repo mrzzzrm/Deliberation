@@ -21,13 +21,15 @@ DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(Context & context, const Came
 
     m_view = m_draw.uniform("View");
     m_projection = m_draw.uniform("Projection");
-    //m_farPlaneZ = m_draw.uniform("FarPlaneZ");
 
     m_size = m_draw.uniform("Size");
     m_size.set(3.0f);
 
     m_quadSize = m_draw.uniform("QuadSize");
     m_quadSize.set(0.5f);
+
+    m_radius = m_draw.uniform("Radius");
+    m_radius.set(3.0f);
 
     LayoutedBlob vertices({"Position", Type_Vec3}, 4);
 
@@ -57,11 +59,15 @@ void DebugGroundPlaneRenderer::setQuadSize(float quadSize)
     m_quadSize.set(quadSize);
 }
 
+void DebugGroundPlaneRenderer::setRadius(float radius)
+{
+    m_radius.set(radius);
+}
+
 void DebugGroundPlaneRenderer::schedule()
 {
     m_view.set(m_camera.view());
     m_projection.set(m_camera.projection());
-//    m_farPlaneZ.set(m_camera.zFar());
 
     m_draw.schedule();
 }

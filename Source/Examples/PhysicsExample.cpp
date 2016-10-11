@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include <Deliberation/Core/StreamUtils.h>
 
@@ -43,21 +44,36 @@ public:
         m_geometryRenderer.reset(context(), m_camera);
 
         auto shapeA = std::make_shared<BoxShape>(glm::vec3{1.0f, 1.0f, 1.0f});
-        auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 10.0f});
+        auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
 
-        m_bodyA = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({2.0f, 15.0f, 0.0f}));
+        for (int i = 0; i < 2; i++) {
+            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({0.0f, 3.0f + 3.5f * i, 0.0f}));
+            body->setLinearVelocity({0.0f, -2.0f, 0.0f});
+            m_world.addRigidBody(body);
+            m_bodies.push_back(body);
+        }
+
         m_bodyGround = std::make_shared<RigidBody>(shapeGround, Transform3D::atPosition({0.0f, 0.0f, 0.0f}));
-        m_bodyGround->setInverseMass(1.0f / 50.0f);
+        m_bodyGround->setMass(50000);
 
         m_world.setGravity(0.0f);
 
-        m_bodyA->setLinearVelocity({0.0f, -2.0f, 0.0f});
-
-        m_world.addRigidBody(m_bodyA);
         m_world.addRigidBody(m_bodyGround);
 
-        m_bodyAIndex = m_geometryRenderer.get().addBox(shapeA->halfExtent(), {1.0f, 0.0f, 0.0f}, false);
-        m_bodyGroundIndex = m_geometryRenderer.get().addBox(shapeGround->halfExtent(), {1.0f, 0.0f, 0.0f}, false);
+        std::vector<glm::vec3> colors({
+            {1.0f, 0.0f, 0.0f},
+            {1.0f, 1.0f, 0.0f},
+            {1.0f, 0.0f, 1.0f},
+            {1.0f, 1.0f, 1.0f}
+        });
+
+        for (auto i = 0; i < m_bodies.size(); i++)
+        {
+            auto index = m_geometryRenderer.get().addBox(shapeA->halfExtent(), colors[i % colors.size()], false);
+            m_bodyIndices.push_back(index);
+        }
+
+        m_bodyGroundIndex = m_geometryRenderer.get().addBox(shapeGround->halfExtent(), {0.0f, 1.0f, 0.0f}, false);
     }
 
     virtual void onFrame(float seconds) override
@@ -69,7 +85,11 @@ public:
 
         m_navigator.get().update(seconds);
 
-        m_geometryRenderer.get().box(m_bodyAIndex).transform() = m_bodyA->transform();
+        for (auto i = 0; i < m_bodies.size(); i++)
+        {
+            m_geometryRenderer.get().box(m_bodyIndices[i]).transform() = m_bodies[i]->transform();
+        }
+
         m_geometryRenderer.get().box(m_bodyGroundIndex).transform() = m_bodyGround->transform();
 
         m_clear.schedule();
@@ -79,7 +99,8 @@ public:
 
 private:
     PhysicsWorld                      m_world;
-    std::shared_ptr<RigidBody>        m_bodyA;
+    std::vector<
+        std::shared_ptr<RigidBody>>   m_bodies;
     std::shared_ptr<RigidBody>        m_bodyGround;
 
     Clear                             m_clear;
@@ -88,7 +109,8 @@ private:
     Optional<DebugCameraNavigator3D>  m_navigator;
     Optional<DebugGeometryRenderer>   m_geometryRenderer;
 
-    uint                              m_bodyAIndex;
+    std::vector<uint>                 m_bodyIndices;
+    uint                              m_bodyBIndex;
     uint                              m_bodyGroundIndex;
 
 

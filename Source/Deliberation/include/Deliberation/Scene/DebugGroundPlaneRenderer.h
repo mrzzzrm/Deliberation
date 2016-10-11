@@ -21,6 +21,7 @@ public:
     void setFramebuffer(Framebuffer & framebuffer);
     void setSize(float size);
     void setQuadSize(float quadSize);
+    void setRadius(float radius);
 
     void schedule();
 
@@ -32,9 +33,9 @@ private:
     Draw                m_draw;
     Uniform             m_view;
     Uniform             m_projection;
-    Uniform             m_farPlaneZ;
     Uniform             m_size;
     Uniform             m_quadSize;
+    Uniform             m_radius;
 };
 
 }

@@ -517,13 +517,19 @@ void BoxContact::update()
         auto mA = m_bodyA.inverseMass();
         auto mB = m_bodyB.inverseMass();
 
+        auto & iA = m_bodyA.worldInverseInertia();
+        auto & iB = m_bodyB.worldInverseInertia();
+
         auto rA = m_position - m_bodyA.transform().position();
         auto rB = m_position - m_bodyB.transform().position();
 
         auto rnA = glm::cross(rA, m_normal);
         auto rnB = glm::cross(rB, m_normal);
 
-        auto kNormal = mA + mB + m_bodyA.worldInvInertia() * rnA * rnA + m_bodyB.worldInvInertia() * rnB * rnB;
+        auto inertiaA = glm::dot(m_normal, glm::cross(iA * rnA, rA));
+        auto inertiaB = glm::dot(m_normal, glm::cross(iB * rnB, rB));
+
+        auto kNormal = mA + mB + inertiaA + inertiaB;
 
         m_normalMass = kNormal > 0.0f ? 1.0f / kNormal : 0.0f;
 

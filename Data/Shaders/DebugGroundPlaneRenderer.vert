@@ -1,5 +1,6 @@
 #version 330
 
+uniform float Radius;
 uniform float Size;
 uniform mat4 View;
 uniform mat4 Projection;
@@ -9,6 +10,7 @@ in vec3 Position;
 
 //out float f_Depth;
 out vec3 f_Normal;
+out vec2 f_PositionLocal;
 out vec2 f_PositionNormalized;
 out vec3 f_PositionVS;
 
@@ -18,7 +20,8 @@ void main()
 	//f_Depth = -positionVS.z / FarPlaneZ;
 	f_Normal = (View * vec4(0.0f, 1.0f, 0.0f, 0.0f)).xyz;
 	f_PositionVS = positionVS.xyz;
-	f_PositionNormalized = (Position.xz + 1.0f) / 2.0f;
+	f_PositionLocal = Position.xz * Size;
+	f_PositionNormalized = (Position.xz + 1) / 2;
 	gl_Position = Projection * positionVS;
 }
 

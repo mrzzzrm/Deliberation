@@ -99,10 +99,10 @@ void PolygonClippingExample()
 
 int main(int argc, char * argv[])
 {
-    Morton2DExample();
-    Morton3DExample();
-    PointRay2DHalfspaceExample();
-    PolygonClippingExample();
+//    Morton2DExample();
+//    Morton3DExample();
+//    PointRay2DHalfspaceExample();
+//    PolygonClippingExample();
 
     return 0;
 }
