@@ -43,12 +43,12 @@ public:
         m_navigator.reset(m_camera, inputAdapter(), 10.0f);
         m_geometryRenderer.reset(context(), m_camera);
 
-        auto shapeA = std::make_shared<BoxShape>(glm::vec3{1.0f, 1.0f, 1.0f});
+        auto shapeA = std::make_shared<BoxShape>(glm::vec3{5.0f, 1.0f, 1.0f});
         auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
 
-        for (int i = 0; i < 2; i++) {
-            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({0.0f, 3.0f + 3.5f * i, 0.0f}));
-            body->setLinearVelocity({0.0f, -2.0f, 0.0f});
+        for (int i = 0; i < 1; i++) {
+            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({0.0f, 3.0f + 6.5f * i, 0.0f}));
+            body->setLinearVelocity({0.0f, -2.0f  , 0.0f});
             m_world.addRigidBody(body);
             m_bodies.push_back(body);
         }
@@ -78,9 +78,11 @@ public:
 
     virtual void onFrame(float seconds) override
     {
+       // std::cout << seconds << std::endl;
+
         if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE) || inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
         {
-            m_world.update(0.017f);
+            m_world.update(seconds);
         }
 
         m_navigator.get().update(seconds);

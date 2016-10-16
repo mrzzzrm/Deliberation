@@ -156,6 +156,7 @@ void DebugArrowInstance::setupConeTransform()
 {
     if (m_delta == glm::vec3(0.0f))
     {
+        m_coneDraw.uniform("Transform").set(Transform3D::identity().matrix());
         return;
     }
 

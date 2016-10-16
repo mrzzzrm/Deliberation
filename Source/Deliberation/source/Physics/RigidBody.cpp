@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include <glm/gtx/quaternion.hpp>
+
 #include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/StreamUtils.h>
 
@@ -143,10 +145,16 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
     prediction.setScale(transform().scale());
     prediction.setPosition(transform().position() + seconds * m_linearVelocity);
 
-    if (m_angularVelocity != glm::vec3(0.0f))
+    auto w = m_angularVelocity * seconds;
+
+    if (w != glm::vec3(0.0f))
     {
-        auto quat = glm::angleAxis(glm::length(seconds * m_angularVelocity), glm::normalize(m_angularVelocity));
-        prediction.setOrientation(transform().orientation() * quat);
+        auto angle = glm::length(w);
+        auto axis = glm::normalize(w);
+
+        auto quat = glm::rotate(transform().orientation(), angle, axis);
+
+        prediction.setOrientation(quat);
     }
 
 }

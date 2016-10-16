@@ -11,14 +11,9 @@ namespace deliberation
 {
 
 class Manifold;
-struct CollideBoxBoxDebugInfo;
+struct CollideBox3DDebugInfo;
 
-bool DELIBERATION_API CollideBoxBox(const Box & boxA,
-                                    const Box & boxB,
-                                    Manifold & manifold,
-                                    CollideBoxBoxDebugInfo * debugInfo = nullptr);
-
-struct CollideBoxBoxDebugInfo
+struct DELIBERATION_API CollideBox3DDebugInfo
 {
     bool edgeCollision = false;
 
@@ -30,8 +25,60 @@ struct CollideBoxBoxDebugInfo
     glm::vec3 incidentFaceCenter;
     glm::vec3 incidentFaceNormal;
 
-    u16 numClipPoints = 0;
+    uint numClipPoints = 0;
     glm::vec3 clipPoints[8];
+};
+
+class DELIBERATION_API CollideBox3D
+{
+public:
+    CollideBox3D(const Box & boxA,
+                 const Box & boxB,
+                 CollideBox3DDebugInfo * debugInfo = nullptr);
+
+    bool execute();
+
+public:
+    uint         numIntersections;
+    Intersection intersections[8];
+
+private:
+    struct BoxWrapper
+    {
+        const Box & box;
+        glm::mat3 inverseOrientation;
+
+        BoxWrapper(const Box & box);
+    };
+
+private:
+    bool checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint baseIndex);
+    bool checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & normalB, uint index);
+    void checkFaceIntersection(const BoxWrapper & ref, const BoxWrapper & in, uint a);
+    void checkEdgeIntersection(uint e0, uint e1);
+    glm::vec3 normalFromDirection(const glm::vec3 & direction) const;
+
+private:
+    BoxWrapper                  m_a;
+    BoxWrapper                  m_b;
+
+    CollideBox3DDebugInfo *    m_debugInfo;
+
+
+    /**
+     * 0..2 x,y,z of boxA
+     * 3..5 x,y,z of boxB
+     *
+     * 6..8 x of boxA and x,y,z of boxB
+     * 9..11 y of boxA and x,y,z of boxB
+     * 12..4 z of boxA and x,y,z of boxB
+     */
+    int                         m_intersectionIndex;
+    float                       m_minIntersectionDepth;
+
+    glm::vec3                   m_boxPositionDelta;
+
+    glm::vec3                   m_edgeCrossProducts[9];
 };
 
 class DELIBERATION_API BoxContact final:

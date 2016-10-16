@@ -35,14 +35,14 @@ private:
     void performTimestep(float seconds);
     void integrateTransforms(float seconds);
     void solve();
-    void solveVelocities(Contact & contact);
-    void solvePositions(Contact & contact);
+    void solveContactVelocities(Contact & contact);
+//    void solvePositions(Contact & contact);
 
 private:
     float                                       m_timestep              = 1.0f / 60.0f;
     float                                       m_gravity               = 0.0f;
-    unsigned int                                m_numVelocityIterations = 1;
-    unsigned int                                m_numPositionIterations = 1;
+    unsigned int                                m_numVelocityIterations = 6;
+//    unsigned int                                m_numPositionIterations = 1;
     SparseVector<std::shared_ptr<RigidBody>>    m_rigidBodies;
     std::unique_ptr<Broadphase>                 m_broadphase;
     std::unique_ptr<Narrowphase>                m_narrowphase;

@@ -58,16 +58,19 @@ void PhysicsWorld::update(float seconds)
         body->updateWorldInertia();
     }
 
-    auto time = 0.0f;
-    for (; time < seconds; time += m_timestep)
     {
-        performTimestep(m_timestep);
-    }
+        auto timeStepped = 0.0f;
+        for(;;)
+        {
+            auto timeStep = std::min    (seconds - timeStepped, m_timestep);
+            performTimestep(timeStep);
+            timeStepped += timeStep;
 
-    auto remainder = seconds - (time - m_timestep);
-    if (remainder > 0)
-    {
-        performTimestep(remainder);
+            if (timeStep < m_timestep)
+            {
+                break;
+            }
+        }
     }
 
     /**
@@ -137,30 +140,26 @@ void PhysicsWorld::solve()
     {
         for (auto & contact : m_narrowphase->contacts())
         {
-            solveVelocities(*contact);
+            solveContactVelocities(*contact);
         }
     }
 
 //    std::cout << "Solve positions:" << std::endl;
-    for (auto i = 0; i < m_numPositionIterations; i++)
-    {
-        for (auto & contact : m_narrowphase->contacts())
-        {
-            solvePositions(*contact);
-        }
-    }
+//    for (auto i = 0; i < m_numPositionIterations; i++)
+//    {
+//        for (auto & contact : m_narrowphase->contacts())
+//        {
+//            solvePositions(*contact);
+//        }
+//    }
 }
 
-void PhysicsWorld::solveVelocities(Contact & contact)
+void PhysicsWorld::solveContactVelocities(Contact & contact)
 {
-    static bool t = false;// if (t) return;
-
     if (!contact.intersect())
     {
         return;
     }
-
-    t = true;
 
     auto & bodyA = contact.bodyA();
     auto & bodyB = contact.bodyB();
@@ -169,137 +168,124 @@ void PhysicsWorld::solveVelocities(Contact & contact)
     auto & iA = bodyA.worldInverseInertia();
     auto & vA = bodyA.linearVelocity();
     auto & wA = bodyA.angularVelocity();
-    auto & pA = bodyA.transform().position();
-    auto rA = contact.position() - pA;
+    auto & cA = bodyA.transform().position();
 
     auto mB = bodyB.inverseMass();
     auto & iB = bodyB.worldInverseInertia();
     auto & vB = bodyB.linearVelocity();
     auto & wB = bodyB.angularVelocity();
-    auto & pB = bodyB.transform().position();
-    auto rB = contact.position() - pB;
-
-    auto & n = contact.normal();
-    auto normalMass = contact.normalMass();
-    auto velocityBias = contact.velocityBias();
-    auto normalImpulse = contact.normalImpulse();
+    auto & cB = bodyB.transform().position();
 
     // Coefficient of restitution
-    auto e = std::max(bodyA.restitution(), bodyB.restitution());
+    auto e = contact.restitution();
 
-    // Relative velocity along normal
-    auto vra = vA + glm::cross(wA, rA);
-    auto vrb = vB + glm::cross(wB, rB);
-    auto vRel = vrb - vra;
-    auto vRelN = glm::dot(n, vRel);
-
-    // Nominator
-    auto nom = -(e + 1) * vRelN;
-
-    // Denominator
-    auto tA = glm::cross(rA, n);
-    auto tB = glm::cross(rB, n);
-    auto itA = iA * tA;
-    auto itB = iB * tB;
-    auto wiA = glm::cross(itA, rA);
-    auto wiB = glm::cross(itB, rB);
-    auto dwvA = glm::dot(n, wiA);
-    auto dwvB = glm::dot(n, wiB);
-    auto denom = mA + mB + glm::dot(wiA + wiB, n);
-
-    // J - impulse magnitude
-    auto J = (nom / denom) * n;
-
-    //std::cout << J << " " << vRelN << " " << nom << " " << denom << std::endl;
-
-    auto delta_vA = mA * J;
-    auto delta_wA = iA * glm::cross(rA, J);
-
-    bodyA.setLinearVelocity(vA - delta_vA);
-    bodyA.setAngularVelocity(wA - delta_wA);
-
-    bodyB.setLinearVelocity(vB + mB * J);
-    bodyB.setAngularVelocity(wB + iB * glm::cross(rB, J));
-
+    for (uint p = 0; p < contact.numPoints(); p++)
     {
+        auto & point = contact.point(p);
+
+        auto rA = point.position - cA;
+        auto rB = point.position - cB;
+
+        auto & n = point.normal;
+        auto normalMass = point.normalMass;
+        auto velocityBias = point.velocityBias;
+
+        // Relative velocity along normal
         auto vra = vA + glm::cross(wA, rA);
         auto vrb = vB + glm::cross(wB, rB);
-        auto vRel = vrb - vra;
-        auto vRelN = glm::dot(n, vRel);
+        auto vRel = glm::dot(n, vrb - vra);
 
-      //  std::cout << "  " << vRelN << std::endl;
+        //
+        auto vDelta = velocityBias - vRel;
+
+        auto lambda = vDelta / normalMass;
+
+        auto newNormalImpulseAccumulator = std::max(lambda + point.normalImpulseAccumulator, 0.0f);
+        lambda = newNormalImpulseAccumulator - point.normalImpulseAccumulator;
+        point.normalImpulseAccumulator += lambda;
+
+        std::cout << "Impulse: " << lambda << " " << n << " " << point.normalImpulseAccumulator << " " << normalMass           << std::endl;
+
+        // J - impulse magnitude
+        auto J = lambda * n;
+
+        bodyA.setLinearVelocity(vA - mA * J);
+        bodyA.setAngularVelocity(wA - iA * glm::cross(rA, J));
+
+        bodyB.setLinearVelocity(vB + mB * J);
+        bodyB.setAngularVelocity(wB + iB * glm::cross(rB, J));
     }
 }
 
-void PhysicsWorld::solvePositions(Contact & contact)
-{
-    if (!contact.intersect())
-    {
-        return;
-    }
-
-    auto & bodyA = contact.bodyA();
-    auto & bodyB = contact.bodyB();
-
-    auto & transformA = bodyA.transform();
-    auto & transformB = bodyB.transform();
-
-    auto mA = bodyA.inverseMass();
-    auto mB = bodyB.inverseMass();
-
-    auto & iA = bodyA.worldInverseInertia();
-    auto & iB = bodyB.worldInverseInertia();
-
-    auto & cA = transformA.position();
-    auto & cB = transformB.position();
-
-    auto n = contact.normal();
-
-    auto point = contact.position();
-    auto separation = -contact.separation();
-
-    auto rA = point - cA;
-    auto rB = point - cB;
-
-
-    // Track max constraint error.
-  //  auto minSeparation = std::min(minSeparation, separation);
-
-    auto baumgarte = 0.2f;
-    auto linearSlop = 0.0005f;
-    auto maxLinearCorrection = 0.2f;
-
-    // Prevent large corrections and allow slop.
-    auto C = std::min(std::max(baumgarte * (separation + linearSlop), -maxLinearCorrection), 0.0f);
-
-    // Compute the effective mass.
-    // Denominator
-    auto tA = glm::cross(rA, n);
-    auto tB = glm::cross(rB, n);
-    auto itA = iA * tA;
-    auto itB = iB * tB;
-    auto wiA = glm::cross(itA, rA);
-    auto wiB = glm::cross(itB, rB);
-    auto dwvA = glm::dot(n, wiA);
-    auto dwvB = glm::dot(n, wiB);
-    auto K = mA + mB + glm::dot(wiA + wiB, n);
-
-
-    // Compute normal impulse
-    auto impulse = K > 0.0f ? - C / K : 0.0f;
-
-    auto P = impulse * n;
-
-    std::cout << "Separation: " << separation << " " << C << " " << K << " = " << P << std::endl;
-
-    transformA.setPosition(transformA.position() - mA * P);
-    transformA.setOrientation(transformA.orientation() * glm::quat(iA * glm::cross(cA, -P)));
-//    aA -= iA * b2Cross(rA, P);
+//void PhysicsWorld::solvePositions(Contact & contact)
+//{
+//    if (!contact.intersect())
+//    {
+//        return;
+//    }
 //
-    transformB.setPosition(transformB.position() + mB * P);
-    transformB.setOrientation(transformB.orientation() * glm::quat(iB * glm::cross(cB, P)));
-//    aB += iB * b2Cross(rB, P);
-}
+//    auto & bodyA = contact.bodyA();
+//    auto & bodyB = contact.bodyB();
+//
+//    auto & transformA = bodyA.transform();
+//    auto & transformB = bodyB.transform();
+//
+//    auto mA = bodyA.inverseMass();
+//    auto mB = bodyB.inverseMass();
+//
+//    auto & iA = bodyA.worldInverseInertia();
+//    auto & iB = bodyB.worldInverseInertia();
+//
+//    auto & cA = transformA.position();
+//    auto & cB = transformB.position();
+//
+//    auto n = contact.normal();
+//
+//    auto point = contact.position();
+//    auto separation = -contact.separation();
+//
+//    auto rA = point - cA;
+//    auto rB = point - cB;
+//
+//
+//    // Track max constraint error.
+//  //  auto minSeparation = std::min(minSeparation, separation);
+//
+//    auto baumgarte = 0.2f;
+//    auto linearSlop = 0.0005f;
+//    auto maxLinearCorrection = 0.2f;
+//
+//    // Prevent large corrections and allow slop.
+//    auto C = std::min(std::max(baumgarte * (separation + linearSlop), -maxLinearCorrection), 0.0f);
+//
+//    // Compute the effective mass.
+//    // Denominator
+//    auto tA = glm::cross(rA, n);
+//    auto tB = glm::cross(rB, n);
+//    auto itA = iA * tA;
+//    auto itB = iB * tB;
+//    auto wiA = glm::cross(itA, rA);
+//    auto wiB = glm::cross(itB, rB);
+//    auto dwvA = glm::dot(n, wiA);
+//    auto dwvB = glm::dot(n, wiB);
+//    auto K = mA + mB + glm::dot(wiA + wiB, n);
+//
+//
+//    // Compute normal impulse
+//    auto impulse = K > 0.0f ? - C / K : 0.0f;
+//
+//    auto P = impulse * n;
+//
+//    std::cout << "Separation: " << separation << " " << C << " " << K << " = " << P << std::endl;
+//
+//    transformA.setPosition(transformA.position() - mA * P);
+//    transformA.setOrientation(transformA.orientation() * glm::quat(iA * glm::cross(cA, -P)));
+////    aA -= iA * b2Cross(rA, P);
+////
+//    transformB.setPosition(transformB.position() + mB * P);
+//    transformB.setOrientation(transformB.orientation() * glm::quat(iB * glm::cross(cB, P)));
+////    aB += iB * b2Cross(rB, P);
+//}
 
 }
 

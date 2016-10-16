@@ -9,7 +9,6 @@
 #include <Deliberation/Draw/Draw.h>
 
 #include <Deliberation/Physics/Contacts/BoxContact.h>
-#include <Deliberation/Physics/Contacts/Manifold.h>
 
 #include <Deliberation/Platform/Application.h>
 
@@ -22,21 +21,20 @@ using namespace deliberation;
 
 void TestBoxes(const Box & boxA, const Box & boxB)
 {
-    std::cout << "  -------------- TestBoxes ----------------" << std::endl;
-
-    Manifold manifold;
-
-    auto r = CollideBoxBox(boxA, boxB, manifold);
-
-    if (r)
-    {
-        std::cout << "    Collision";
-    }
-    else
-    {
-        std::cout << "    Separated";
-    }
-
+//    std::cout << "  -------------- TestBoxes ----------------" << std::endl;
+//
+//
+//
+//    auto r = CollideBoxBox(boxA, boxB, manifold);
+//
+//    if (r)
+//    {
+//        std::cout << "    Collision";
+//    }
+//    else
+//    {
+//        std::cout << "    Separated";
+//    }
 }
 
 void AABBTest()
@@ -51,21 +49,21 @@ void AABBTest()
 
 void BoxBoxExample()
 {
-    Manifold manifold;
+//    Manifold manifold;
 
-    Box a({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
-    Box b({1.4f, 1.4f, 0.0f}, {0.71f, 0.71f, 0.0f}, {-0.71f, 0.71f, 0.0f}, {0.0f, 0.0f, 1.0f});
+//    Box a({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f});
+//    Box b({1.4f, 1.4f, 0.0f}, {0.71f, 0.71f, 0.0f}, {-0.71f, 0.71f, 0.0f}, {0.0f, 0.0f, 1.0f});
 
-    auto r = CollideBoxBox(a, b, manifold);
+//    auto r = CollideBoxBox(a, b, manifold);
 
-    if (r)
-    {
-        std::cout << "Manifold: " << manifold.toString() << std::endl;
-    }
-    else
-    {
-        std::cout << "No collision" << std::endl;
-    }
+//    if (r)
+//    {
+//        std::cout << "Manifold: " << manifold.toString() << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "No collision" << std::endl;
+//    }
 }
 
 
@@ -98,15 +96,16 @@ public:
         m_debugInfoRenderer.get().allocatePoints(4, {0.5f, 1.0f, 0.5f}, true); // Incident Face
         m_debugInfoRenderer.get().allocatePoints(8, {0.5f, 0.5f, 1.0f}, false);
         m_debugInfoRenderer.get().allocateArrows(2, {0.2f, 0.9f, 0.2f}, false);
+        m_debugInfoRenderer.get().allocateArrows(4, {0.9f, 0.9f, 0.2f}, false); // Contacts
 
         m_boxA = m_geometryRenderer.get().addBox({5.0f, 1.0f, 0.5f}, {1.0f, 0.6f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxA).transform().setPosition({2.89f, 3.90f, 2.99f});
+        m_geometryRenderer.get().box(m_boxA).transform().setPosition({2.89f, 3.90f, 0.0f});
 
         m_boxB = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.6f}, true);
         m_geometryRenderer.get().box(m_boxB).transform().setPosition({1.3f, 1.3f, 1.3});
-        m_geometryRenderer.get().box(m_boxB).transform().setOrientation(
-            glm::angleAxis(glm::quarter_pi<float>(),
-                           glm::normalize(glm::vec3(1.0f, 1.0f, -1.0f))));
+//        m_geometryRenderer.get().box(m_boxB).transform().setOrientation(
+//            glm::angleAxis(glm::quarter_pi<float>(),
+//                           glm::normalize(glm::vec3(1.0f, 1.0f, -1.0f))));
 
         auto box = m_geometryRenderer.get().box(m_boxA).toBox();
         auto p = box.p();
@@ -157,13 +156,10 @@ public:
 //            std::cout << m_geometryRenderer.get().box(0).transform().position() << std::endl;
         }
 
-        Manifold manifold;
-        CollideBoxBoxDebugInfo debugInfo;
+        CollideBox3DDebugInfo debugInfo;
 
-        auto r = CollideBoxBox(m_geometryRenderer.get().box(0).toBox(),
-                               m_geometryRenderer.get().box(1).toBox(),
-                               manifold,
-                               &debugInfo);
+        CollideBox3D collision(m_geometryRenderer.get().box(0).toBox(), m_geometryRenderer.get().box(1).toBox(), &debugInfo);
+        auto r = collision.execute();
 
 //        std::cout << "Collision: " << r << " " << manifold.toString() << std::endl;
 
@@ -192,10 +188,21 @@ public:
                 m_debugInfoRenderer.get().arrow(1).setVisible(true);
             }
 
+            for (auto a = 0; a < collision.numIntersections; a++)
+            {
+                m_debugInfoRenderer.get().arrow(a + 2).setVisible(true);
+                m_debugInfoRenderer.get().arrow(a + 2).reset(collision.intersections[a].position, collision.intersections[a].normal);
+            }
+
+            for (auto a = collision.numIntersections; a < 4; a++)
+            {
+                m_debugInfoRenderer.get().arrow(a + 2).setVisible(false);
+            }
+
             m_geometryRenderer.get().box(0).transform() = prevTransform;
 
-            auto origin = manifold.position() - manifold.normal() / 2.0f;
-            auto delta = manifold.normal();
+            auto origin = collision.intersections[0].position - collision.intersections[0].normal / 2.0f;
+            auto delta = collision.intersections[0].normal;
 
             if (!m_contactSeparationIndex.engaged())
             {
@@ -212,12 +219,12 @@ public:
             if (!m_contactPointIndex.engaged())
             {
                 m_contactPointIndex.reset(
-                    m_geometryRenderer.get().addPoint(manifold.position(), glm::vec3(1.0f, 1.0f, 1.0f))
+                    m_geometryRenderer.get().addPoint(collision.intersections[0].position, glm::vec3(1.0f, 1.0f, 1.0f))
                 );
             }
             else
             {
-                m_geometryRenderer.get().point(m_contactPointIndex.get()).setPosition(manifold.position());
+                m_geometryRenderer.get().point(m_contactPointIndex.get()).setPosition(collision.intersections[0].position);
             }
         }
         else

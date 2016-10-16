@@ -170,7 +170,6 @@ set(sources
     ${source_path}/Physics/Contacts/Contact.cpp
     ${source_path}/Physics/Contacts/ContactDispatcher.cpp
     ${source_path}/Physics/Contacts/SphereContact.cpp
-    ${source_path}/Physics/Contacts/Manifold.cpp
     ${source_path}/Physics/BoxShape.cpp
     ${source_path}/Physics/Broadphase.cpp
     ${source_path}/Physics/BroadphaseProxy.cpp
@@ -347,7 +346,6 @@ set(api_includes
     ${include_path}/Physics/Contacts/Contact.h
     ${include_path}/Physics/Contacts/ContactDispatcher.h
     ${include_path}/Physics/Contacts/ContactDispatcher.inl
-    ${include_path}/Physics/Contacts/Manifold.h
     ${include_path}/Physics/Contacts/SphereContact.h
     ${include_path}/Physics/BoxShape.h
     ${include_path}/Physics/Broadphase.h
