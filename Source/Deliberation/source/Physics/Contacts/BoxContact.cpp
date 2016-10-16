@@ -4,6 +4,8 @@
 #include <limits>
 #include <stdlib.h>
 
+#include <glm/gtc/epsilon.hpp>
+
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/PolygonClipping.h>
@@ -465,10 +467,12 @@ namespace deliberation
 CollideBox3D::CollideBox3D(const Box & boxA,
                            const Box & boxB,
                            CollideBox3DDebugInfo * debugInfo):
+    numIntersections(0),
     m_a(boxA),
     m_b(boxB),
     m_debugInfo(debugInfo),
-    m_minIntersectionDepth(std::numeric_limits<float>::max())
+    m_minIntersectionDepth(std::numeric_limits<float>::max()),
+    m_intersectionIndex(-1)
 {
 
 }
@@ -761,16 +765,19 @@ bool CollideBox3D::checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint b
 
 bool CollideBox3D::checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & normalB, uint index)
 {
-    auto direction = glm::cross(normalA, normalB);
-    m_edgeCrossProducts[index - 6] = direction;
-
     /**
      * normalA || normalB
      */
-    if (direction == glm::vec3(0.0f))
+    auto diff = normalA - normalB;
+    auto epsilon = std::numeric_limits<float>::epsilon();
+    if (glm::all(glm::epsilonEqual(diff, glm::vec3(), epsilon)))
     {
         return false;
     }
+
+    auto direction = glm::cross(normalA, normalB);
+    m_edgeCrossProducts[index - 6] = direction;
+
 
     auto minA = std::numeric_limits<float>::max();
     auto maxA = std::numeric_limits<float>::lowest();

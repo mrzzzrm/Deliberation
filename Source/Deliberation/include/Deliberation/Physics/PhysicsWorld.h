@@ -13,6 +13,7 @@ namespace deliberation
 
 class Broadphase;
 class Contact;
+    class Context;
 class Narrowphase;
 class RigidBody;
 
@@ -21,6 +22,8 @@ class DELIBERATION_API PhysicsWorld final
 public:
     PhysicsWorld(float timestep = 1.0f / 60.0f);
     ~PhysicsWorld();
+
+    const Narrowphase & narrowphase() const;
 
     void addRigidBody(const std::shared_ptr<RigidBody> & body);
     void removeRigidBody(const RigidBody & body);
@@ -46,6 +49,8 @@ private:
     SparseVector<std::shared_ptr<RigidBody>>    m_rigidBodies;
     std::unique_ptr<Broadphase>                 m_broadphase;
     std::unique_ptr<Narrowphase>                m_narrowphase;
+
+
 };
 
 }

@@ -125,6 +125,8 @@ public:
     DebugArrowInstance & arrow(size_t index);
     DebugPointInstance & point(size_t index);
 
+    void resizeArrows(uint count, const glm::vec3 & color = {1.0f, 0.0f, .5f}, bool visible = false);
+
 //    void allocateBoxes(uint count, bool wireframe);
     void allocatePoints(uint count, const glm::vec3 & color = {1.0f, 0.0f, .5f}, bool visible = false);
     void allocateArrows(uint count, const glm::vec3 & color = {1.0f, 0.0f, .5f}, bool visible = false);

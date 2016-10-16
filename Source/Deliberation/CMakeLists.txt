@@ -195,6 +195,7 @@ set(sources
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
+    ${source_path}/Scene/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
     ${source_path}/Scene/Mesh.cpp
     ${source_path}/Scene/MeshCompiler.cpp
@@ -372,6 +373,7 @@ set(api_includes
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
     ${include_path}/Scene/DebugGroundPlaneRenderer.h
+    ${include_path}/Scene/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/MeshCompiler.h

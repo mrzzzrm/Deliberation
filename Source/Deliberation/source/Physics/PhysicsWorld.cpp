@@ -23,6 +23,11 @@ PhysicsWorld::PhysicsWorld(float timestep):
 
 PhysicsWorld::~PhysicsWorld() = default;
 
+const Narrowphase & PhysicsWorld::narrowphase() const
+{
+    return *m_narrowphase;
+}
+
 void PhysicsWorld::addRigidBody(const std::shared_ptr<RigidBody> & body)
 {
     auto index = m_rigidBodies.insert(body);

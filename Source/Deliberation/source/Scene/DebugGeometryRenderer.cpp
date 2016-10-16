@@ -240,6 +240,23 @@ DebugPointInstance & DebugGeometryRenderer::point(size_t index)
     return m_points[index];
 }
 
+void DebugGeometryRenderer::resizeArrows(uint count, const glm::vec3 & color, bool visible)
+{
+    if (count > m_arrows.size())
+    {
+        allocateArrows(count - m_arrows.size(), color, visible);
+    }
+    else
+    {
+        m_arrows.erase(m_arrows.begin() + count, m_arrows.end());
+        for (auto & arrow : m_arrows)
+        {
+            // TODO: Set color
+            arrow.setVisible(visible);
+        }
+    }
+}
+
 //void DebugGeometryRenderer::allocateBoxes(uint count, bool wireframe)
 //{
 //

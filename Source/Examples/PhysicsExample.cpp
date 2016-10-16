@@ -17,6 +17,7 @@
 #include <Deliberation/Scene/DebugGeometryRenderer.h>
 #include <Deliberation/Scene/DebugGrid3DRenderer.h>
 #include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/DebugPhysicsWorldRenderer.h>
 
 using namespace deliberation;
 
@@ -42,23 +43,25 @@ public:
         m_clear = context().createClear();
         m_navigator.reset(m_camera, inputAdapter(), 10.0f);
         m_geometryRenderer.reset(context(), m_camera);
+        m_world.reset();
+        m_worldDebugRenderer.reset(context(), m_world.get(), m_camera);
 
         auto shapeA = std::make_shared<BoxShape>(glm::vec3{5.0f, 1.0f, 1.0f});
         auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
 
         for (int i = 0; i < 1; i++) {
-            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({0.0f, 3.0f + 6.5f * i, 0.0f}));
+            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({11.0f, 3.0f + 6.5f * i, 0.0f}));
             body->setLinearVelocity({0.0f, -2.0f  , 0.0f});
-            m_world.addRigidBody(body);
+            m_world.get().addRigidBody(body);
             m_bodies.push_back(body);
         }
 
         m_bodyGround = std::make_shared<RigidBody>(shapeGround, Transform3D::atPosition({0.0f, 0.0f, 0.0f}));
         m_bodyGround->setMass(50000);
 
-        m_world.setGravity(0.0f);
+        m_world.get().setGravity(0.0f);
 
-        m_world.addRigidBody(m_bodyGround);
+        m_world.get().addRigidBody(m_bodyGround);
 
         std::vector<glm::vec3> colors({
             {1.0f, 0.0f, 0.0f},
@@ -69,11 +72,11 @@ public:
 
         for (auto i = 0; i < m_bodies.size(); i++)
         {
-            auto index = m_geometryRenderer.get().addBox(shapeA->halfExtent(), colors[i % colors.size()], false);
+            auto index = m_geometryRenderer.get().addBox(shapeA->halfExtent(), colors[i % colors.size()], true);
             m_bodyIndices.push_back(index);
         }
 
-        m_bodyGroundIndex = m_geometryRenderer.get().addBox(shapeGround->halfExtent(), {0.0f, 1.0f, 0.0f}, false);
+        m_bodyGroundIndex = m_geometryRenderer.get().addBox(shapeGround->halfExtent(), {0.0f, 1.0f, 0.0f}, true);
     }
 
     virtual void onFrame(float seconds) override
@@ -82,7 +85,7 @@ public:
 
         if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE) || inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
         {
-            m_world.update(seconds);
+            m_world.get().update(seconds);
         }
 
         m_navigator.get().update(seconds);
@@ -97,26 +100,25 @@ public:
         m_clear.schedule();
         m_grid.get().draw();
         m_geometryRenderer.get().schedule();
+        m_worldDebugRenderer.get().schedule();
     }
 
 private:
-    PhysicsWorld                      m_world;
+    Optional<PhysicsWorld>              m_world;
+    Optional<DebugPhysicsWorldRenderer> m_worldDebugRenderer;
     std::vector<
-        std::shared_ptr<RigidBody>>   m_bodies;
-    std::shared_ptr<RigidBody>        m_bodyGround;
+        std::shared_ptr<RigidBody>>     m_bodies;
+    std::shared_ptr<RigidBody>          m_bodyGround;
 
-    Clear                             m_clear;
-    Optional<DebugGrid3DRenderer>     m_grid;
-    Camera3D                          m_camera;
-    Optional<DebugCameraNavigator3D>  m_navigator;
-    Optional<DebugGeometryRenderer>   m_geometryRenderer;
+    Clear                               m_clear;
+    Optional<DebugGrid3DRenderer>       m_grid;
+    Camera3D                            m_camera;
+    Optional<DebugCameraNavigator3D>    m_navigator;
+    Optional<DebugGeometryRenderer>     m_geometryRenderer;
 
-    std::vector<uint>                 m_bodyIndices;
-    uint                              m_bodyBIndex;
-    uint                              m_bodyGroundIndex;
-
-
-    std::chrono::steady_clock::time_point m_physicsPlayStart;
+    std::vector<uint>                   m_bodyIndices;
+    uint                                m_bodyBIndex;
+    uint                                m_bodyGroundIndex;
 };
 
 int main(int argc, char * argv[])
