@@ -99,7 +99,8 @@ public:
         m_debugInfoRenderer.get().allocateArrows(4, {0.9f, 0.9f, 0.2f}, false); // Contacts
 
         m_boxA = m_geometryRenderer.get().addBox({5.0f, 1.0f, 0.5f}, {1.0f, 0.6f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxA).transform().setPosition({2.89f, 3.90f, 0.0f});
+        m_geometryRenderer.get().box(m_boxA).transform().setPosition({1.59f, 3.5f, 0.0f});
+        m_geometryRenderer.get().box(m_boxA).transform().setOrientation({0.303991f, 0.61078f, -0.393686f, 0.616063f});
 
         m_boxB = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.6f}, true);
         m_geometryRenderer.get().box(m_boxB).transform().setPosition({1.3f, 1.3f, 1.3});
@@ -153,7 +154,8 @@ public:
             m_geometryRenderer.get().box(0).transform().worldTranslate(t);
             m_geometryRenderer.get().box(0).transform().worldRotate(glm::quat(a));
 
-//            std::cout << m_geometryRenderer.get().box(0).transform().position() << std::endl;
+            std::cout << m_geometryRenderer.get().box(0).transform().position() << " " <<
+                                                                                       m_geometryRenderer.get().box(0).transform().orientation() << std::endl;
         }
 
         CollideBox3DDebugInfo debugInfo;

@@ -1,5 +1,7 @@
 #include <Deliberation/Scene/DebugPhysicsWorldRenderer.h>
 
+#include <iostream>
+
 #include <Deliberation/Physics/Narrowphase.h>
 #include <Deliberation/Physics/PhysicsWorld.h>
 

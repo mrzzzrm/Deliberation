@@ -507,12 +507,9 @@ bool CollideBox3D::execute()
         }
     }
 
-    //std::cout << "IntersectionIndex: " << m_intersectionIndex << std::endl;
-
     /**
      *
      */
-    m_boxPositionDelta = m_b.box.p() - m_a.box.p();
     m_a.inverseOrientation = glm::transpose(m_a.box.orientationMatrix());
     m_b.inverseOrientation = glm::transpose(m_b.box.orientationMatrix());
 
@@ -523,15 +520,19 @@ bool CollideBox3D::execute()
     {
         if (m_intersectionIndex < 3)
         {
-            checkFaceIntersection(m_a, m_b, m_intersectionIndex);
+            m_refCenterToInCenter = m_b.box.p() - m_a.box.p();
+            checkFaceIntersection(m_a, m_b, m_a.box.axis(m_intersectionIndex), false);
         }
         else
         {
-            checkFaceIntersection(m_a, m_b, m_intersectionIndex - 3);
+            m_refCenterToInCenter = m_a.box.p() - m_b.box.p();
+            checkFaceIntersection(m_b, m_a, m_b.box.axis(m_intersectionIndex - 3), true);
         }
     }
     else
     {
+        m_refCenterToInCenter = m_b.box.p() - m_a.box.p();
+
         auto edgeIntersectionIndex = m_intersectionIndex - 6;
         auto e0 = edgeIntersectionIndex / 3;
         auto e1 = edgeIntersectionIndex % 3;
@@ -542,7 +543,10 @@ bool CollideBox3D::execute()
     return true;
 }
 
-void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref, const BoxWrapper & in, uint a)
+void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
+                                         const BoxWrapper & in,
+                                         const glm::vec3 & direction,
+                                         bool flip)
 {
     if (m_debugInfo)
     {
@@ -552,9 +556,7 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref, const BoxWrappe
     auto & rBox = ref.box;
     auto & iBox = in.box;
 
-    auto direction = rBox.axis(a);
     auto normal = normalFromDirection(direction);
-    std::cout << "  Normal: " << normal << std::endl;
 
     auto rNormal = ref.inverseOrientation * normal;
     auto iNormal = in.inverseOrientation * -normal;
@@ -663,7 +665,7 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref, const BoxWrappe
             numIntersections++;
 
             intersection.position = rFaceRot * glm::vec3(result[r].x, result[r].y, 0) + rFace.center;
-            intersection.normal = normal;
+            intersection.normal = flip ? -normal : normal;
             intersection.depth = -z;
         }
     }
@@ -715,11 +717,11 @@ void CollideBox3D::checkEdgeIntersection(uint e0, uint e1)
     /**
      * Add intersection
      */
-    auto & intersection = intersections[0];
+    auto & intersection = intersections[numIntersections];
     intersection.position = position;
     intersection.normal = normal;
     intersection.depth = glm::length(contactA - contactB);
-    numIntersections = 1;
+    numIntersections++;
 }
 
 bool CollideBox3D::checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint baseIndex)
@@ -770,12 +772,12 @@ bool CollideBox3D::checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & n
      */
     auto diff = normalA - normalB;
     auto epsilon = std::numeric_limits<float>::epsilon();
-    if (glm::all(glm::epsilonEqual(diff, glm::vec3(), epsilon)))
+    if (glm::all(glm::epsilonEqual(diff, glm::vec3(), 0.1f)))
     {
         return false;
     }
 
-    auto direction = glm::cross(normalA, normalB);
+    auto direction = glm::normalize(glm::cross(normalA, normalB));
     m_edgeCrossProducts[index - 6] = direction;
 
 
@@ -812,7 +814,7 @@ bool CollideBox3D::checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & n
 
 glm::vec3 CollideBox3D::normalFromDirection(const glm::vec3 & direction) const
 {
-    auto dot = glm::dot(direction, m_boxPositionDelta);
+    auto dot = glm::dot(direction, m_refCenterToInCenter);
 
     if (dot < 0)
     {

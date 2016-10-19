@@ -209,7 +209,7 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
         lambda = newNormalImpulseAccumulator - point.normalImpulseAccumulator;
         point.normalImpulseAccumulator += lambda;
 
-        std::cout << "Impulse: " << lambda << " " << n << " " << point.normalImpulseAccumulator << " " << normalMass           << std::endl;
+      //  std::cout << "Impulse: " << lambda << " " << n << " " << point.normalImpulseAccumulator << " " << normalMass           << std::endl;
 
         // J - impulse magnitude
         auto J = lambda * n;

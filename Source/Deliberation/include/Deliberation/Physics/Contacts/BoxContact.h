@@ -54,7 +54,7 @@ private:
 private:
     bool checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint baseIndex);
     bool checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & normalB, uint index);
-    void checkFaceIntersection(const BoxWrapper & ref, const BoxWrapper & in, uint a);
+    void checkFaceIntersection(const BoxWrapper & ref, const BoxWrapper & in, const glm::vec3 & direction, bool flip);
     void checkEdgeIntersection(uint e0, uint e1);
     glm::vec3 normalFromDirection(const glm::vec3 & direction) const;
 
@@ -62,7 +62,7 @@ private:
     BoxWrapper                  m_a;
     BoxWrapper                  m_b;
 
-    CollideBox3DDebugInfo *    m_debugInfo;
+    CollideBox3DDebugInfo *     m_debugInfo;
 
 
     /**
@@ -76,7 +76,7 @@ private:
     int                         m_intersectionIndex;
     float                       m_minIntersectionDepth;
 
-    glm::vec3                   m_boxPositionDelta;
+    glm::vec3                   m_refCenterToInCenter;
 
     glm::vec3                   m_edgeCrossProducts[9];
 };
