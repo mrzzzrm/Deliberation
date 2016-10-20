@@ -1,5 +1,7 @@
 #include <Deliberation/Physics/Contacts/Contact.h>
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Core/Assert.h>
@@ -43,9 +45,10 @@ void ContactPoint::update(const Contact & contact, const Intersection & intersec
 
     auto vRelProjected = glm::dot(normal, vContactB - vContactA);
 
-    if (vRelProjected > 0)
+    if (vRelProjected < 0)
     {
         velocityBias = -vRelProjected * contact.restitution();
+        std::cout << "VelocityBias = " << velocityBias << std::endl;
     }
     else
     {
@@ -98,34 +101,59 @@ ContactPoint & Contact::point(uint index)
     return m_points[index];
 }
 
-int Contact::matchPoint(const glm::vec3 & position)
+void Contact::updatePoints(const Span<Intersection> & intersections)
 {
-    for (uint p = 0; p < m_numPoints; p++)
+    std::sort(intersections.begin(), intersections.end(), [](const Intersection & a, const Intersection & b) {
+        return a.depth > b.depth;
+    });
+
+    auto numConsideredIntersections = std::min<uint>(intersections.size(), MAX_NUM_CONTACT_POINTS);
+
+    ContactPoint newPoints[MAX_NUM_CONTACT_POINTS];
+
+
+    for (auto i = 0; i < numConsideredIntersections; i++)
     {
-        auto * point = &m_points[p];
-        if (glm::length(position - point->position) < 0.2f)
+        uint p = 0;
+        for (; p < m_numPoints; p++)
         {
-            return p;
+            if (intersectionMatchesPoint(intersections[i], m_points[p]))
+            {
+                newPoints[i] = m_points[p];
+                newPoints[i].update(*this, intersections[i]);
+                break;
+            }
+        }
+
+        if (p == m_numPoints)
+        {
+            std::cout << "New ContactPoint" << std::endl;
+
+            newPoints[i].initialize(*this, intersections[i]);
         }
     }
-    return -1;
+
+    memcpy(m_points, newPoints, numConsideredIntersections * sizeof(ContactPoint));
+    m_numPoints = numConsideredIntersections;
 }
 
-void Contact::updatePoint(uint index, const Intersection & intersection)
+bool Contact::intersectionMatchesPoint(const Intersection & intersection, const ContactPoint & point) const
 {
-    Assert(index < m_numPoints, "");
-
-    auto * point = &m_points[index];
-    point->update(*this, intersection);
-}
-
-void Contact::addPoint(const Intersection & intersection)
-{
-    if (m_numPoints < MAX_NUM_CONTACT_POINTS)
+    if (glm::length(intersection.position - point.position) < 0.1f)
     {
-        m_points[m_numPoints].initialize(*this, intersection);
-        m_numPoints++;
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
+
+void Contact::clearPoints()
+{
+    m_numPoints = 0;
+}
+
+
 
 }

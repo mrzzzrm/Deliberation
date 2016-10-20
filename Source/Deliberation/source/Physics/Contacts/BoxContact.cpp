@@ -683,7 +683,7 @@ void CollideBox3D::checkEdgeIntersection(uint e0, uint e1)
     }
 
     auto normal = normalFromDirection(checkDirection);
-    std::cout << "  Normal2: " << normal << std::endl;
+   // std::cout << "  Normal2: " << normal << std::endl;
 
     auto & boxA = m_a.box;
     auto & boxB = m_b.box;
@@ -859,22 +859,13 @@ void BoxContact::update()
      */
     if (m_intersect)
     {
-        for (uint p = 0; p < collideBox3D.numIntersections; p++)
-        {
-            auto & intersection = collideBox3D.intersections[p];
-
-            auto index = matchPoint(intersection.position);
-            if (index >= 0)
-            {
-                updatePoint(index, intersection);
-            }
-            else
-            {
-                addPoint(intersection);
-            }
-        }
-        m_numPoints = collideBox3D.numIntersections;
+        updatePoints({collideBox3D.numIntersections, collideBox3D.intersections});
     }
+    else
+    {
+        clearPoints();
+    }
+
 }
 
 }

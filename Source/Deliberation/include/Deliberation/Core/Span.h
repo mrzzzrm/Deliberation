@@ -17,12 +17,16 @@ public:
 
     Span(std::vector<T> & vec);
 
+    Span(size_t size, T * ptr);
+
     size_t size() const;
 
     std::vector<T> toVector() const;
 
-    T & operator[](size_t index);
-    const T & operator[](size_t index) const;
+    T * begin() const;
+    T * end() const;
+
+    T & operator[](size_t index) const;
 
 private:
     T *     m_ptr;

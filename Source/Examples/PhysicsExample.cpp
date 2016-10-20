@@ -50,8 +50,8 @@ public:
         auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
 
         for (int i = 0; i < 1; i++) {
-            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({11.0f, 3.0f + 6.5f * i, 0.0f}));
-            body->setLinearVelocity({0.0f, -2.0f  , 0.0f});
+            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({6.0f, 3.0f + 6.5f * i, 0.0f}));
+            body->setLinearVelocity({0.0f, -10.0f  , 0.0f});
             m_world.get().addRigidBody(body);
             m_bodies.push_back(body);
         }
@@ -81,7 +81,11 @@ public:
 
     virtual void onFrame(float seconds) override
     {
-       // std::cout << seconds << std::endl;
+//        for (auto & body : m_bodies)
+//        {
+//            std::cout << body->transform().position() << body->transform().orientation() << " - ";
+//        }
+//        std::cout << m_bodyGround->transform().position() << m_bodyGround->transform().orientation() << std::endl;
 
         if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE) || inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
         {
@@ -117,7 +121,6 @@ private:
     Optional<DebugGeometryRenderer>     m_geometryRenderer;
 
     std::vector<uint>                   m_bodyIndices;
-    uint                                m_bodyBIndex;
     uint                                m_bodyGroundIndex;
 };
 

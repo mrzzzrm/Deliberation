@@ -37,7 +37,11 @@ void SphereContact::update()
         intersection.position = 0.5f * (pA + pB);
         intersection.depth = glm::dot(pB - pA, intersection.normal) - m_shapeA.radius() - m_shapeB.radius();
 
-        updatePoint(0, intersection);
+        updatePoints({1, &intersection});
+    }
+    else
+    {
+        clearPoints();
     }
 }
 

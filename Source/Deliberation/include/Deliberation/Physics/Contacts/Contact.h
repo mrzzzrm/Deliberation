@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Core/Span.h>
+
 #include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
@@ -48,11 +50,13 @@ public:
     uint numPoints() const;
     ContactPoint & point(uint index);
 
-    int matchPoint(const glm::vec3 & position);
-    void updatePoint(uint index, const Intersection & intersection);
-    void addPoint(const Intersection & intersection);
+    void updatePoints(const Span<Intersection> & intersections);
+    void clearPoints();
 
     virtual void update() = 0;
+
+private:
+    bool intersectionMatchesPoint(const Intersection & intersection, const ContactPoint & point) const;
 
 protected:
     RigidBody &  m_bodyA;

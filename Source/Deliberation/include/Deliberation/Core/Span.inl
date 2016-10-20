@@ -23,20 +23,33 @@ Span<T>::Span(std::vector<T> & vec)
 }
 
 template<typename T>
+Span<T>::Span(size_t size, T * ptr):
+    m_size(size),
+    m_ptr(ptr)
+{
+
+}
+
+template<typename T>
 size_t Span<T>::size() const
 {
     return m_size;
 }
 
 template<typename T>
-T & Span<T>::operator[](size_t index)
+T * Span<T>::begin() const
 {
-    Assert(index < m_size, "");
-    return m_ptr[index];
+    return m_ptr;
 }
 
 template<typename T>
-const T & Span<T>::operator[](size_t index) const
+T * Span<T>::end() const
+{
+    return &m_ptr[m_size];
+}
+
+template<typename T>
+T & Span<T>::operator[](size_t index) const
 {
     Assert(index < m_size, "");
     return m_ptr[index];

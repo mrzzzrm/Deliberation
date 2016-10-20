@@ -98,12 +98,13 @@ public:
         m_debugInfoRenderer.get().allocateArrows(2, {0.2f, 0.9f, 0.2f}, false);
         m_debugInfoRenderer.get().allocateArrows(4, {0.9f, 0.9f, 0.2f}, false); // Contacts
 
-        m_boxA = m_geometryRenderer.get().addBox({5.0f, 1.0f, 0.5f}, {1.0f, 0.6f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxA).transform().setPosition({1.59f, 3.5f, 0.0f});
-        m_geometryRenderer.get().box(m_boxA).transform().setOrientation({0.303991f, 0.61078f, -0.393686f, 0.616063f});
+        m_boxB = m_geometryRenderer.get().addBox({5.0f, 1.0f, 1.0f}, {1.0f, 0.6f, 0.6f}, true);
+        m_geometryRenderer.get().box(m_boxB).transform().setPosition({10.9006f,0.191372f,6.29913e-09f});
+        m_geometryRenderer.get().box(m_boxB).transform().setOrientation({0.528583,0.0519542,0.109405,-0.840297});
 
-        m_boxB = m_geometryRenderer.get().addBox({1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxB).transform().setPosition({1.3f, 1.3f, 1.3});
+        m_boxA = m_geometryRenderer.get().addBox({10.0f, 1.0f, 6.0f}, {0.0f, 1.0f, 0.6f}, true);
+        m_geometryRenderer.get().box(m_boxA).transform().setPosition({1.98752e-06,-0.000352063,-1.2599e-13});
+        m_geometryRenderer.get().box(m_boxA).transform().setOrientation({1,5.162e-08,-3.177e-08,-5.23162e-05});
 //        m_geometryRenderer.get().box(m_boxB).transform().setOrientation(
 //            glm::angleAxis(glm::quarter_pi<float>(),
 //                           glm::normalize(glm::vec3(1.0f, 1.0f, -1.0f))));
@@ -160,7 +161,9 @@ public:
 
         CollideBox3DDebugInfo debugInfo;
 
-        CollideBox3D collision(m_geometryRenderer.get().box(0).toBox(), m_geometryRenderer.get().box(1).toBox(), &debugInfo);
+        CollideBox3D collision(m_geometryRenderer.get().box(m_boxA).toBox(),
+                               m_geometryRenderer.get().box(m_boxB).toBox(),
+                               &debugInfo);
         auto r = collision.execute();
 
 //        std::cout << "Collision: " << r << " " << manifold.toString() << std::endl;
