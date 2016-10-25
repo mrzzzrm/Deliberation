@@ -1,5 +1,6 @@
 #include <Deliberation/Core/Blob.h>
 
+#include <string.h>
 #include <sstream>
 
 namespace deliberation

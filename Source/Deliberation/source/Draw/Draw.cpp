@@ -1,5 +1,6 @@
 #include <Deliberation/Draw/Draw.h>
 
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 

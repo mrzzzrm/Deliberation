@@ -1,5 +1,6 @@
 #include <Deliberation/Core/InputAdapterBase.h>
 
+#include <algorithm>
 #include <iostream>
 
 namespace deliberation

@@ -1,5 +1,7 @@
 #include <Deliberation/Core/Assert.h>
 
+#include <string.h>
+
 namespace deliberation
 {
 
