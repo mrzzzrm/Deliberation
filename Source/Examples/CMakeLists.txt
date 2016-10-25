@@ -7,6 +7,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/Source/Deliberation/include
     ${CMAKE_CURRENT_SOURCE_DIR}
 
+    ${CXXOPTS_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
@@ -20,10 +21,7 @@ set(sources
 
 # libs
 set(libs
-    Deliberation
-    ${SDL2_LIBRARY}
-    ${SDL2TTF_LIBRARY}
-    ${OPENGL_gl_LIBRARY}
+    ${DELIBERATION_LIBRARIES}
 )
 
 # AmbientOcclusionExample

@@ -126,6 +126,6 @@ private:
 
 int main(int argc, char * argv[])
 {
-    return PhysicsExample().run();
+    return PhysicsExample().run(argc, argv);
 }
 

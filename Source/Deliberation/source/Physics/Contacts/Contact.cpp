@@ -1,6 +1,8 @@
 #include <Deliberation/Physics/Contacts/Contact.h>
 
+#include <algorithm>
 #include <iostream>
+#include <string.h>
 
 #include <glm/glm.hpp>
 

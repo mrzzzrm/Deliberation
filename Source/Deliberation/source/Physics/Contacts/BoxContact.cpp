@@ -1,5 +1,6 @@
 #include <Deliberation/Physics/Contacts/BoxContact.h>
 
+#include <algorithm>
 #include <iostream>
 #include <limits>
 #include <string.h>

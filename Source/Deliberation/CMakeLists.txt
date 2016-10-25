@@ -9,6 +9,7 @@ set(DELIBERATION_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
+    ${CXXOPTS_INCLUDE_DIR}
     ${SDL2TTF_INCLUDE_DIR}
     ${SDL2IMAGE_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
@@ -17,6 +18,8 @@ set(DELIBERATION_INCLUDE_DIRS
     
     CACHE INTERAL "All Deliberation include dirs" 
 )
+
+message("CXXOPTS: ${DELIBERATION_INCLUDE_DIRS}")
 
 # include
 include_directories(
