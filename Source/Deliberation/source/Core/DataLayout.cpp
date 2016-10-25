@@ -1,5 +1,6 @@
 #include <Deliberation/Core/DataLayout.h>
 
+#include <algorithm>
 #include <sstream>
 
 #include <Deliberation/Core/Assert.h>

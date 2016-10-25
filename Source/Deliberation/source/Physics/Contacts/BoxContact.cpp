@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <limits>
+#include <string.h>
 #include <stdlib.h>
 
 #include <Deliberation/Core/StreamUtils.h>

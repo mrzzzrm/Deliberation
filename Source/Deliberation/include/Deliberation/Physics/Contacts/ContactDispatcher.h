@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <Deliberation/Core/Dispatch.h>
 
 #include <Deliberation/Deliberation_API.h>
