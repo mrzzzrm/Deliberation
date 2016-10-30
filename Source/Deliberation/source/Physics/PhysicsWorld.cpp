@@ -192,7 +192,7 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
     {
         auto & point = contact.point(p);
 
-        auto rA = point.position - cA;
+        auto rA = point.position - cA; std::cout << "Ra: " << rA << std::endl;
         auto rB = point.position - cB;
 
         auto & n = point.normal;
@@ -200,8 +200,8 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
         auto velocityBias = point.velocityBias;
 
         // Relative velocity along normal
-        auto vra = vA + glm::cross(wA, rA);
-        auto vrb = vB + glm::cross(wB, rB);
+        auto vra = bodyA.localVelocity(rA);
+        auto vrb = bodyB.localVelocity(rB);
         auto vRel = glm::dot(n, vrb - vra);
 
         //
@@ -213,28 +213,14 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
         lambda = newNormalImpulseAccumulator - point.normalImpulseAccumulator;
         point.normalImpulseAccumulator += lambda;
 
-      //  std::cout << "Impulse: " << lambda << " " << n << " " << point.normalImpulseAccumulator << " " << normalMass           << std::endl;
-
         // J - impulse magnitude
         auto J = lambda * n;
 
-        std::cout << "Impulse applied: " << lambda << " @ " << n << " " << bodyA.mass() << std::endl;
-        std::cout << "  Ineratia: " << iA << std::endl;
-
-        //bodyA.setLinearVelocity(vA - mA * J);
-        std::cout << "  angularVelocity: " << wA;
+        bodyA.setLinearVelocity(vA - mA * J);
         bodyA.setAngularVelocity(wA - iA * glm::cross(rA, J));
-        std::cout << " -> : " << wA << std::endl;
 
         bodyB.setLinearVelocity(vB + mB * J);
         bodyB.setAngularVelocity(wB + iB * glm::cross(rB, J));
-
-        {
-            auto vra = vA + glm::cross(wA, rA);
-            auto vrb = vB + glm::cross(wB, rB);
-            auto vRel = glm::dot(n, vrb - vra);
-            std::cout << "  New vrel: " << vRel << " " << vA << " " << glm::cross(wA, rA) << " " << vra << std::endl;
-        }
     }
 }
 

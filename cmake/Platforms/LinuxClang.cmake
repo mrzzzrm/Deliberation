@@ -1,14 +1,14 @@
 message(STATUS "Configuring for platform Linux/Clang.")
 
 set (DELIBERATION_BUILD_TARGET_OS 		  linux64)
-set (DELIBERATION_BUILD_COMPILER_PLATFORM clang++-libc++)
+set (DELIBERATION_BUILD_COMPILER_PLATFORM clang++-libstdc++)
 
 # Enable C++11 support
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 
-include_directories("/usr/include/c++/v1/")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+#include_directories("/usr/include/c++/v1/")
 
 set(LINUX_COMPILE_DEFS
 	LINUX	                  # Linux system

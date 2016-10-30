@@ -43,6 +43,7 @@ public:
         m_clear = context().createClear();
         m_navigator.reset(m_camera, inputAdapter(), 10.0f);
         m_geometryRenderer.reset(context(), m_camera);
+        m_geometryRenderer2.reset(context(), m_camera);
         m_world.reset();
         m_worldDebugRenderer.reset(context(), m_world.get(), m_camera);
 
@@ -50,8 +51,9 @@ public:
         auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
 
         for (int i = 0; i < 1; i++) {
-            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({8.0f, 3.0f + 6.5f * i, 0.0f}));
+            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({12.0f, 3.0f + 6.5f * i, 0.0f}));
             body->setLinearVelocity({0.0f, -10.0f  , 0.0f});
+            //body->setAngularVelocity({1.24698,2.5979,-1.47831});
             m_world.get().addRigidBody(body);
             m_bodies.push_back(body);
         }
@@ -81,6 +83,14 @@ public:
 
     virtual void onFrame(float seconds) override
     {
+//        auto p = glm::vec3{-2,-2,1};
+//        auto v = m_bodies[0]->localVelocity(p);
+//        std::cout << m_bodies[0]->angularVelocity() << " " << v << std::endl;
+
+//        m_geometryRenderer2->resizeArrows(1, {1.0f, 1.0f, 1.0f}, true);
+//        m_geometryRenderer2->arrow(0).reset(p + m_bodies[0]->transform().position(), v);
+
+
 //        for (auto & body : m_bodies)
 //        {
 //            std::cout << body->transform().position() << body->transform().orientation() << " - ";
@@ -108,6 +118,7 @@ public:
         m_clear.schedule();
         m_grid.get().draw();
         m_geometryRenderer.get().schedule();
+        m_geometryRenderer2.get().schedule();
         m_worldDebugRenderer.get().schedule();
     }
 
@@ -123,13 +134,37 @@ private:
     Camera3D                            m_camera;
     Optional<DebugCameraNavigator3D>    m_navigator;
     Optional<DebugGeometryRenderer>     m_geometryRenderer;
+    Optional<DebugGeometryRenderer>     m_geometryRenderer2;
 
     std::vector<uint>                   m_bodyIndices;
     uint                                m_bodyGroundIndex;
 };
 
+void TestAngularVelocity(const glm::vec3 & w, const glm::vec3 & r) {
+    auto v = glm::cross(w, r);
+
+    auto f = 0.001f;
+
+    auto angle = glm::length(w * f);
+    auto axis = glm::normalize(w * f);
+
+    auto quat = glm::rotate(glm::quat(), angle, axis);
+
+    auto i = quat * r;
+
+    std::cout << v << " " << ((i - r)/f) << std::endl;
+}
+
+void AngularVelocitySandbox() {
+    TestAngularVelocity({0,1,0}, {1,0,0});
+    TestAngularVelocity({1.24698,2.5979,-1.47831}, {-2,-2,1});
+    TestAngularVelocity({1.24698,2.5979,-1.47831}, {-2.04013,-1.87571,0.999999});
+}
+
 int main(int argc, char * argv[])
 {
-    return PhysicsExample().run(argc, argv);
+    AngularVelocitySandbox();
+  //  return 0;
+  //  return PhysicsExample().run(argc, argv);
 }
 

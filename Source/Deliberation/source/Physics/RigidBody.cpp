@@ -68,6 +68,11 @@ bool RigidBody::isStatic() const
     return m_static;
 }
 
+glm::vec3 RigidBody::localVelocity(const glm::vec3 & r) const
+{
+    return m_linearVelocity + glm::cross(m_angularVelocity, r);
+}
+
 void RigidBody::setMass(float mass)
 {
     setInverseMass(mass > 0.0f ? 1.0f / mass : 0.0f);
@@ -149,7 +154,6 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
 
     if (w != glm::vec3(0.0f))
     {
-        std::cout << "AngularVelocity: " << w << std::endl;
         auto angle = glm::length(w);
         auto axis = glm::normalize(w);
 

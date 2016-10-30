@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <Deliberation/Core/StreamUtils.h>
+
 #include <Deliberation/Physics/Narrowphase.h>
 #include <Deliberation/Physics/PhysicsWorld.h>
 
@@ -15,7 +17,8 @@ DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(Context & context,
     m_physicsWorld(physicsWorld),
     m_camera(camera)
 {
-    m_contactRenderer.reset(m_context, m_camera);
+    m_contactNormalRenderer.reset(m_context, m_camera);
+    m_contactVelocityRenderer.reset(m_context, m_camera);
     m_linearVelocityRenderer.reset(m_context, m_camera);
     m_angularVelocityRenderer.reset(m_context, m_camera);
 }
@@ -36,10 +39,11 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Allocate enough arrows for contact points
      */
-    m_contactRenderer.get().resizeArrows(numContactPoints, {0.2f, 1.0f, 0.2}, true);
+    m_contactNormalRenderer->resizeArrows(numContactPoints, {0.2f, 1.0f, 0.2}, true);
+    m_contactVelocityRenderer->resizeArrows(numContactPoints * 2, {0.2f, 0.7f, 0.4}, true);
 
     /**
-     * Setup arrows
+     * Setup contacts
      */
     uint index = 0;
     for (auto & contact : narrowphase.contacts())
@@ -47,12 +51,23 @@ void DebugPhysicsWorldRenderer::schedule()
         for (uint p = 0; p < contact->numPoints(); p++)
         {
             auto & point = contact->point(p);
+            auto & bodyA = contact->bodyA();
+            auto & bodyB = contact->bodyB();
 
-            m_contactRenderer.get().arrow(index).reset(point.position, point.normal);
+            m_contactNormalRenderer->arrow(index).reset(point.position, point.normal);
+
+            auto localVA = bodyA.localVelocity(point.position - bodyA.transform().position());
+            auto localVB = bodyB.localVelocity(point.position - bodyB.transform().position());
+
+            std::cout << localVA << " " << (point.position - bodyA.transform().position()) << " " << bodyA.angularVelocity() << std::endl;
+
+            m_contactVelocityRenderer->arrow(2 * index + 0).reset(point.position, localVA);
+            m_contactVelocityRenderer->arrow(2 * index + 1).reset(point.position, localVB);
 
             if (point.velocityBias < 0.01f)
             {
-                m_contactRenderer->arrow(index).setColor({0.6f, 0.6f, 0.6f});
+                // Desaturate inactive contacts
+                m_contactNormalRenderer->arrow(index).setColor({0.6f, 0.6f, 0.6f});
             }
 
             index++;
@@ -93,9 +108,10 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Commit
      */
-    m_linearVelocityRenderer.get().schedule();
-    m_angularVelocityRenderer.get().schedule();
-    m_contactRenderer.get().schedule();
+    m_linearVelocityRenderer->schedule();
+    m_angularVelocityRenderer->schedule();
+    m_contactNormalRenderer->schedule();
+    m_contactVelocityRenderer->schedule();
 }
 
 }

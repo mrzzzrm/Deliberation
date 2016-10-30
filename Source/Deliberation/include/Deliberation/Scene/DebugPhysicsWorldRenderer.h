@@ -27,7 +27,8 @@ private:
     const PhysicsWorld &            m_physicsWorld;
     const Camera3D &                m_camera;
 
-    Optional<DebugGeometryRenderer> m_contactRenderer;
+    Optional<DebugGeometryRenderer> m_contactNormalRenderer;
+    Optional<DebugGeometryRenderer> m_contactVelocityRenderer;
     Optional<DebugGeometryRenderer> m_linearVelocityRenderer;
     Optional<DebugGeometryRenderer> m_angularVelocityRenderer;
 };

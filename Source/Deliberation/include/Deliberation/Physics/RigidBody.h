@@ -34,6 +34,8 @@ public:
     bool isStatic() const;
     size_t index() const;
 
+    glm::vec3 localVelocity(const glm::vec3 & r) const;
+
     void setMass(float mass);
     void setInverseMass(float mass);
     void setRestitution(float restitution);
