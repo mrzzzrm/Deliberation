@@ -149,6 +149,7 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
 
     if (w != glm::vec3(0.0f))
     {
+        std::cout << "AngularVelocity: " << w << std::endl;
         auto angle = glm::length(w);
         auto axis = glm::normalize(w);
 

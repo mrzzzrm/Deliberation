@@ -99,12 +99,12 @@ public:
         m_debugInfoRenderer.get().allocateArrows(4, {0.9f, 0.9f, 0.2f}, false); // Contacts
 
         m_boxB = m_geometryRenderer.get().addBox({5.0f, 1.0f, 1.0f}, {1.0f, 0.6f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxB).transform().setPosition({10.9006f,0.191372f,6.29913e-09f});
-        m_geometryRenderer.get().box(m_boxB).transform().setOrientation({0.528583,0.0519542,0.109405,-0.840297});
+        m_geometryRenderer.get().box(m_boxB).transform().setPosition({11.4,0.191372f,6.29913e-09f});
+        m_geometryRenderer.get().box(m_boxB).transform().setOrientation({1.0, 0.0, 0.0, 0.0});
 
         m_boxA = m_geometryRenderer.get().addBox({10.0f, 1.0f, 6.0f}, {0.0f, 1.0f, 0.6f}, true);
-        m_geometryRenderer.get().box(m_boxA).transform().setPosition({1.98752e-06,-0.000352063,-1.2599e-13});
-        m_geometryRenderer.get().box(m_boxA).transform().setOrientation({1,5.162e-08,-3.177e-08,-5.23162e-05});
+        m_geometryRenderer.get().box(m_boxA).transform().setPosition({0.0f, 0.0f, 0.0f});
+        m_geometryRenderer.get().box(m_boxA).transform().setOrientation({1, 0, 0, 0});
 //        m_geometryRenderer.get().box(m_boxB).transform().setOrientation(
 //            glm::angleAxis(glm::quarter_pi<float>(),
 //                           glm::normalize(glm::vec3(1.0f, 1.0f, -1.0f))));
@@ -138,6 +138,9 @@ public:
             auto speed = 5.0f;
             auto r = glm::pi<float>();
 
+            if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE))
+                a = glm::vec3{1.0f, 1.0f, -1.0f} * seconds;
+
             t.x += -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_J) ? 1 : 0);
             t.x -= -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_L) ? 1 : 0);
             t.y += -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_K) ? 1 : 0);
@@ -145,18 +148,18 @@ public:
             t.z += -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_U) ? 1 : 0);
             t.z -= -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_O) ? 1 : 0);
 
-            a.x += -r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_Y) ? 1 : 0);
-            a.x -= -r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_X) ? 1 : 0);
-            a.y += -r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_C) ? 1 : 0);
-            a.y -= -r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_V) ? 1 : 0);
-            a.z += -r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_B) ? 1 : 0);
-            a.z -= -r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_N) ? 1 : 0);
+            a.x -= r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_Y) ? 1 : 0);
+            a.x += r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_X) ? 1 : 0);
+            a.y -= r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_C) ? 1 : 0);
+            a.y += r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_V) ? 1 : 0);
+            a.z -= r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_B) ? 1 : 0);
+            a.z += r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_N) ? 1 : 0);
 
             m_geometryRenderer.get().box(0).transform().worldTranslate(t);
             m_geometryRenderer.get().box(0).transform().worldRotate(glm::quat(a));
 
-            std::cout << m_geometryRenderer.get().box(0).transform().position() << " " <<
-                                                                                       m_geometryRenderer.get().box(0).transform().orientation() << std::endl;
+         //   std::cout << m_geometryRenderer.get().box(0).transform().position() << " " <<
+         //                                                                              m_geometryRenderer.get().box(0).transform().orientation() << std::endl;
         }
 
         CollideBox3DDebugInfo debugInfo;
@@ -204,7 +207,7 @@ public:
                 m_debugInfoRenderer.get().arrow(a + 2).setVisible(false);
             }
 
-            m_geometryRenderer.get().box(0).transform() = prevTransform;
+         //   m_geometryRenderer.get().box(0).transform() = prevTransform;
 
             auto origin = collision.intersections[0].position - collision.intersections[0].normal / 2.0f;
             auto delta = collision.intersections[0].normal;
@@ -273,10 +276,10 @@ private:
     size_t                              m_halfExtent[3];
 };
 
-int main()
+int main(int argc, char ** argv)
 {
   //  AABBTest();
   //  BoxBoxExample(); return 0;
 
-    return BoxBoxSandbox().run();
+    return BoxBoxSandbox().run(argc, argv);
 }

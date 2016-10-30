@@ -23,6 +23,16 @@ PhysicsWorld::PhysicsWorld(float timestep):
 
 PhysicsWorld::~PhysicsWorld() = default;
 
+const PhysicsWorld::RigidBodies & PhysicsWorld::rigidBodies() const
+{
+    return m_rigidBodies;
+}
+
+float PhysicsWorld::timestep() const
+{
+    return m_timestep;
+}
+
 const Narrowphase & PhysicsWorld::narrowphase() const
 {
     return *m_narrowphase;
@@ -64,17 +74,11 @@ void PhysicsWorld::update(float seconds)
     }
 
     {
-        auto timeStepped = 0.0f;
-        for(;;)
+        m_timeAccumulator += seconds;
+        while (m_timeAccumulator >= m_timestep)
         {
-            auto timeStep = std::min    (seconds - timeStepped, m_timestep);
-            performTimestep(timeStep);
-            timeStepped += timeStep;
-
-            if (timeStep < m_timestep)
-            {
-                break;
-            }
+            performTimestep(m_timestep);
+            m_timeAccumulator -= m_timestep;
         }
     }
 
@@ -214,11 +218,23 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
         // J - impulse magnitude
         auto J = lambda * n;
 
-        bodyA.setLinearVelocity(vA - mA * J);
+        std::cout << "Impulse applied: " << lambda << " @ " << n << " " << bodyA.mass() << std::endl;
+        std::cout << "  Ineratia: " << iA << std::endl;
+
+        //bodyA.setLinearVelocity(vA - mA * J);
+        std::cout << "  angularVelocity: " << wA;
         bodyA.setAngularVelocity(wA - iA * glm::cross(rA, J));
+        std::cout << " -> : " << wA << std::endl;
 
         bodyB.setLinearVelocity(vB + mB * J);
         bodyB.setAngularVelocity(wB + iB * glm::cross(rB, J));
+
+        {
+            auto vra = vA + glm::cross(wA, rA);
+            auto vrb = vB + glm::cross(wB, rB);
+            auto vRel = glm::dot(n, vrb - vra);
+            std::cout << "  New vrel: " << vRel << " " << vA << " " << glm::cross(wA, rA) << " " << vra << std::endl;
+        }
     }
 }
 

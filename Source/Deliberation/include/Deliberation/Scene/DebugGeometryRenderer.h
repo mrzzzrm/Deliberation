@@ -94,6 +94,8 @@ public:
 
     void reset(const glm::vec3 & origin, const glm::vec3 & delta);
 
+    void setColor(const glm::vec3 & color);
+
 private:
     friend class DebugGeometryRenderer;
 

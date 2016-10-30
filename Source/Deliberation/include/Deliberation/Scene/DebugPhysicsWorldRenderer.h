@@ -28,6 +28,8 @@ private:
     const Camera3D &                m_camera;
 
     Optional<DebugGeometryRenderer> m_contactRenderer;
+    Optional<DebugGeometryRenderer> m_linearVelocityRenderer;
+    Optional<DebugGeometryRenderer> m_angularVelocityRenderer;
 };
 
 }

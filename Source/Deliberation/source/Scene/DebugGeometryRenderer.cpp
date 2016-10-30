@@ -141,6 +141,12 @@ void DebugArrowInstance::reset(const glm::vec3 & origin, const glm::vec3 & delta
     setupConeTransform();
 }
 
+void DebugArrowInstance::setColor(const glm::vec3 & color)
+{
+    m_lineDraw.uniform("Color").set(color);
+    m_coneDraw.uniform("Color").set(color);
+}
+
 void DebugArrowInstance::buildVertices()
 {
     LayoutedBlob vertices(m_lineVertexBuffer.layout(), 2);

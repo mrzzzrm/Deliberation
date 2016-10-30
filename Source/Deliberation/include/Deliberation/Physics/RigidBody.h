@@ -55,7 +55,7 @@ public:
 
 private:
     float     m_inverseMass = 1.0f / 1.0f;
-    float     m_restitution = 1.0f;
+    float     m_restitution = 0.3f;
 
     glm::mat3 m_localInverseInertia;
     glm::mat3 m_worldInverseInertia;

@@ -50,10 +50,11 @@ void ContactPoint::update(const Contact & contact, const Intersection & intersec
     if (vRelProjected < 0)
     {
         velocityBias = -vRelProjected * contact.restitution();
-        std::cout << "VelocityBias = " << velocityBias << std::endl;
+        std::cout << "VelocityBias = " << velocityBias << " "  << vRelProjected << std::endl;
     }
     else
     {
+        std::cout << "vRelProjected = " << vRelProjected << std::endl;
         velocityBias = 0;
     }
 

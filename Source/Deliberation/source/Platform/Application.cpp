@@ -184,7 +184,7 @@ void Application::init()
 
     deliberation::init();
     deliberation::setPrefixPath(m_prefixPath);
-    deliberation::EnableGLErrorChecksAndLogging();
+    deliberation::EnableGLErrorChecks();
 
     std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
 

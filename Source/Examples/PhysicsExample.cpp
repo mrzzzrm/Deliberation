@@ -50,7 +50,7 @@ public:
         auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
 
         for (int i = 0; i < 1; i++) {
-            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({6.0f, 3.0f + 6.5f * i, 0.0f}));
+            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({8.0f, 3.0f + 6.5f * i, 0.0f}));
             body->setLinearVelocity({0.0f, -10.0f  , 0.0f});
             m_world.get().addRigidBody(body);
             m_bodies.push_back(body);
@@ -87,7 +87,11 @@ public:
 //        }
 //        std::cout << m_bodyGround->transform().position() << m_bodyGround->transform().orientation() << std::endl;
 
-        if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE) || inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
+        if (inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
+        {
+            m_world.get().update(m_world.get().timestep());
+        }
+        if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE))
         {
             m_world.get().update(seconds);
         }
