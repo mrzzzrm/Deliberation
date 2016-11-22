@@ -50,11 +50,9 @@ void ContactPoint::update(const Contact & contact, const Intersection & intersec
     if (vRelProjected < 0)
     {
         velocityBias = -vRelProjected * contact.restitution();
-        std::cout << "VelocityBias = " << velocityBias << " "  << vRelProjected << std::endl;
     }
     else
     {
-        std::cout << "vRelProjected = " << vRelProjected << std::endl;
         velocityBias = 0;
     }
 
@@ -69,6 +67,7 @@ Contact::Contact(RigidBody & bodyA, RigidBody & bodyB):
     m_numPoints(0)
 {
     m_resitution = std::max(m_bodyA.restitution(), m_bodyB.restitution());
+    m_friction = (m_bodyA.friction() + m_bodyB.friction()) / 2.0f;
 }
 
 Contact::~Contact() = default;
@@ -91,6 +90,11 @@ bool Contact::intersect() const
 float Contact::restitution() const
 {
     return m_resitution;
+}
+
+float Contact::friction() const
+{
+    return m_friction;
 }
 
 uint Contact::numPoints() const
@@ -142,14 +146,7 @@ void Contact::updatePoints(const Span<Intersection> & intersections)
 
 bool Contact::intersectionMatchesPoint(const Intersection & intersection, const ContactPoint & point) const
 {
-    if (glm::length(intersection.position - point.position) < 0.1f)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return glm::length(intersection.position - point.position) < 0.3f;
 }
 
 void Contact::clearPoints()

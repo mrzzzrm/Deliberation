@@ -47,23 +47,49 @@ public:
         m_world.reset();
         m_worldDebugRenderer.reset(context(), m_world.get(), m_camera);
 
-        auto shapeA = std::make_shared<BoxShape>(glm::vec3{5.0f, 1.0f, 1.0f});
-        auto shapeGround = std::make_shared<BoxShape>(glm::vec3{10.0f, 1.0f, 6.0f});
+        auto shapeA = std::make_shared<BoxShape>(glm::vec3{10.0f, 0.1f, 1.0f});
+        auto shapeB = std::make_shared<BoxShape>(glm::vec3{1.0f, 1.0f, 1.0f});
+        auto shapeGround = std::make_shared<BoxShape>(glm::vec3{100.0f, 1.0f, 100.0f});
 
-        for (int i = 0; i < 1; i++) {
-            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({12.0f, 3.0f + 6.5f * i, 0.0f}));
-            body->setLinearVelocity({0.0f, -10.0f  , 0.0f});
-            //body->setAngularVelocity({1.24698,2.5979,-1.47831});
-            m_world.get().addRigidBody(body);
-            m_bodies.push_back(body);
-        }
+//        {
+//            auto body = std::make_shared<RigidBody>(shapeA, Transform3D::atPosition({8.0f, 1.2f, 0.0f}));
+//            m_world.get().addRigidBody(body);
+//            m_bodies.push_back(body);
+//        }
+//
+//        {
+//            auto body = std::make_shared<RigidBody>(shapeB, Transform3D::atPosition({15.0f, 5.0f, 0.0f}));
+//            body->setMass(10.0f);
+//            m_world.get().addRigidBody(body);
+//            body->setLinearVelocity({0.0f, -10.0f  , 0.0f});
+//            m_bodies.push_back(body);
+//        }
+//
+//        {
+//            auto body = std::make_shared<RigidBody>(shapeB, Transform3D::atPosition({0.0f, 3.0f, 0.0f}));
+//            body->setMass(0.1f);
+//            m_world.get().addRigidBody(body);
+//            m_bodies.push_back(body);
+//        }
 
-        m_bodyGround = std::make_shared<RigidBody>(shapeGround, Transform3D::atPosition({0.0f, 0.0f, 0.0f}));
-        m_bodyGround->setMass(50000);
+//        for (int x = 0; x < 7; x++) {
+            auto x = 6;
+            for (int i = 0; i < x; i++) {
+                auto body = std::make_shared<RigidBody>(shapeB, Transform3D::atPosition({-7.0f + x * 4.0f, 6.0f + 6.5f * i, 0.0f}));
+                body->setLinearVelocity({0.4f, -10.0f, 0.0f});
+                //body->setAngularVelocity({2.92364,3.58609,0.492873});
+                //body->transform().setOrientation({-0.201427,0.90855,-0.0821644,0.356667});
+                m_world.get().addRigidBody(body);
+                m_bodies.push_back(body);
+            }
+//        }
 
-        m_world.get().setGravity(0.0f);
+        m_bodyGround = std::make_shared<RigidBody>(shapeGround, Transform3D::atPosition({0.0f, -  shapeGround->halfExtent().y / 2, 0.0f}));
+        m_bodyGround->setStatic(true);
 
-        m_world.get().addRigidBody(m_bodyGround);
+        m_world->setGravity(9.81f);
+
+        m_world->addRigidBody(m_bodyGround);
 
         std::vector<glm::vec3> colors({
             {1.0f, 0.0f, 0.0f},
@@ -74,29 +100,13 @@ public:
 
         for (auto i = 0; i < m_bodies.size(); i++)
         {
-            auto index = m_geometryRenderer.get().addBox(shapeA->halfExtent(), colors[i % colors.size()], true);
+            auto index = m_geometryRenderer.get().addBox(((BoxShape*)m_bodies[i]->shape().get())->halfExtent(), colors[i % colors.size()], false);
             m_bodyIndices.push_back(index);
         }
-
-        m_bodyGroundIndex = m_geometryRenderer.get().addBox(shapeGround->halfExtent(), {0.0f, 1.0f, 0.0f}, true);
     }
 
     virtual void onFrame(float seconds) override
     {
-//        auto p = glm::vec3{-2,-2,1};
-//        auto v = m_bodies[0]->localVelocity(p);
-//        std::cout << m_bodies[0]->angularVelocity() << " " << v << std::endl;
-
-//        m_geometryRenderer2->resizeArrows(1, {1.0f, 1.0f, 1.0f}, true);
-//        m_geometryRenderer2->arrow(0).reset(p + m_bodies[0]->transform().position(), v);
-
-
-//        for (auto & body : m_bodies)
-//        {
-//            std::cout << body->transform().position() << body->transform().orientation() << " - ";
-//        }
-//        std::cout << m_bodyGround->transform().position() << m_bodyGround->transform().orientation() << std::endl;
-
         if (inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
         {
             m_world.get().update(m_world.get().timestep());
@@ -112,8 +122,6 @@ public:
         {
             m_geometryRenderer.get().box(m_bodyIndices[i]).transform() = m_bodies[i]->transform();
         }
-
-        m_geometryRenderer.get().box(m_bodyGroundIndex).transform() = m_bodyGround->transform();
 
         m_clear.schedule();
         m_grid.get().draw();
@@ -163,8 +171,8 @@ void AngularVelocitySandbox() {
 
 int main(int argc, char * argv[])
 {
-    AngularVelocitySandbox();
+  //  AngularVelocitySandbox();
   //  return 0;
-  //  return PhysicsExample().run(argc, argv);
+    return PhysicsExample().run(argc, argv);
 }
 

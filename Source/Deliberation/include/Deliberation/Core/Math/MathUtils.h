@@ -13,4 +13,6 @@ glm::mat3 DELIBERATION_API RotationMatrixFromDirectionY(const glm::vec3 & y);
 
 glm::mat3 DELIBERATION_API InverseDiagonalMatrix(const glm::mat3 & m);
 
+glm::quat DELIBERATION_API QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a);
+
 }

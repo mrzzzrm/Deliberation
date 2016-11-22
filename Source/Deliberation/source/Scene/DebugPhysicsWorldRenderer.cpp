@@ -59,8 +59,6 @@ void DebugPhysicsWorldRenderer::schedule()
             auto localVA = bodyA.localVelocity(point.position - bodyA.transform().position());
             auto localVB = bodyB.localVelocity(point.position - bodyB.transform().position());
 
-            std::cout << localVA << " " << (point.position - bodyA.transform().position()) << " " << bodyA.angularVelocity() << std::endl;
-
             m_contactVelocityRenderer->arrow(2 * index + 0).reset(point.position, localVA);
             m_contactVelocityRenderer->arrow(2 * index + 1).reset(point.position, localVB);
 

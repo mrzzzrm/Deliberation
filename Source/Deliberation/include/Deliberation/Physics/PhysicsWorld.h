@@ -13,7 +13,7 @@ namespace deliberation
 
 class Broadphase;
 class Contact;
-    class Context;
+class Context;
 class Narrowphase;
 class RigidBody;
 
@@ -43,16 +43,17 @@ private:
     void performTimestep(float seconds);
     void integrateTransforms(float seconds);
     void solve();
+    void warmStart(Contact & contact) const;
     void solveContactVelocities(Contact & contact);
-//    void solvePositions(Contact & contact);
+    void solvePositions(Contact & contact);
 
 private:
     float                           m_timestep              = 1.0f / 60.0f;
     float                           m_timeAccumulator       = 0.0f;
     float                           m_gravity               = 0.0f;
     unsigned int                    m_numVelocityIterations = 6;
-//    unsigned int                                m_numPositionIterations = 1;
-        RigidBodies                 m_rigidBodies;
+    unsigned int                    m_numPositionIterations = 2;
+    RigidBodies                     m_rigidBodies;
     std::unique_ptr<Broadphase>     m_broadphase;
     std::unique_ptr<Narrowphase>    m_narrowphase;
 

@@ -25,11 +25,21 @@ RigidBody::RigidBody(const std::shared_ptr<CollisionShape> & shape,
 
 float RigidBody::inverseMass() const
 {
+    if (m_static)
+    {
+        return 0.0f;
+    }
+
     return m_inverseMass;
 }
 
 float RigidBody::mass() const
 {
+    if (m_static)
+    {
+        return 0.0f;
+    }
+
     return m_inverseMass != 0.0f ? 1.0f / m_inverseMass : 0.0f;
 }
 
@@ -38,18 +48,42 @@ float RigidBody::restitution() const
     return m_restitution;
 }
 
+float RigidBody::friction() const
+{
+    return m_friction;
+}
+
 const glm::mat3 & RigidBody::worldInverseInertia() const
 {
+    static glm::mat3 staticBodyInertia(0.0f);
+
+    if (m_static)
+    {
+        return staticBodyInertia;
+    }
+
     return m_worldInverseInertia;
 }
 
 const glm::vec3 & RigidBody::linearVelocity() const
 {
+    static glm::vec3 staticBodyLinearVelocity(0.0f);
+    if (m_static)
+    {
+        return staticBodyLinearVelocity;
+    }
+
     return m_linearVelocity;
 }
 
 const glm::vec3 & RigidBody::angularVelocity() const
 {
+    static glm::vec3 staticAngularVelocity(0.0f);
+    if (m_static)
+    {
+        return staticAngularVelocity;
+    }
+
     return m_angularVelocity;
 }
 
@@ -70,6 +104,11 @@ bool RigidBody::isStatic() const
 
 glm::vec3 RigidBody::localVelocity(const glm::vec3 & r) const
 {
+    if (m_static)
+    {
+        return glm::vec3(0.0f);
+    }
+
     return m_linearVelocity + glm::cross(m_angularVelocity, r);
 }
 
@@ -88,6 +127,11 @@ void RigidBody::setInverseMass(float inverseMass)
 void RigidBody::setRestitution(float restitution)
 {
     m_restitution = restitution;
+}
+
+void RigidBody::setFriction(float friction)
+{
+    m_friction = friction;
 }
 
 void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
@@ -123,10 +167,6 @@ void RigidBody::setForce(const glm::vec3 & force)
 void RigidBody::setStatic(bool isStatic)
 {
     m_static = isStatic;
-    if (isStatic)
-    {
-        setMass(0.0f);
-    }
 }
 
 void RigidBody::setIndex(size_t index)
@@ -157,9 +197,9 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
         auto angle = glm::length(w);
         auto axis = glm::normalize(w);
 
-        auto quat = glm::rotate(transform().orientation(), angle, axis);
+        auto quat = glm::rotate(glm::quat(), angle, axis);
 
-        prediction.setOrientation(quat);
+        prediction.setOrientation(quat * transform().orientation());
     }
 
 }

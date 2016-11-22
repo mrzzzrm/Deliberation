@@ -28,7 +28,9 @@ struct DELIBERATION_API ContactPoint:
     glm::vec3 relativePositionB;
     float     velocityBias = 0.0f;
     float     normalMass;
+    float     tangentMass;
     float     normalImpulseAccumulator = 0.0f;
+    float     tangentImpulseAccumulator = 0.0f;
 
     void initialize(const Contact & contact, const Intersection & intersection);
     void update(const Contact & contact, const Intersection & intersection);
@@ -46,6 +48,7 @@ public:
     bool intersect() const;
 
     float restitution() const;
+    float friction() const;
 
     uint numPoints() const;
     ContactPoint & point(uint index);
@@ -65,6 +68,7 @@ protected:
     bool         m_intersect;
 
     float        m_resitution;
+    float        m_friction;
 
     uint         m_numPoints;
     ContactPoint m_points[MAX_NUM_CONTACT_POINTS];
