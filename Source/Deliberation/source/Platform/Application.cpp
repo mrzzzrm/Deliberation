@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <cxxopts.hpp>
+
 #include <SDL_image.h>
 
 #include <glbinding/Binding.h>
@@ -15,13 +17,13 @@
 namespace deliberation
 {
 
-Application::Application(const std::string & name, const std::string & prefixPath):
+Application::Application(const std::string & name,
+                         const std::string & prefixPath):
     m_name(name),
     m_prefixPath(prefixPath),
     m_running(false),
     m_returnCode(0)
 {
-    init();
 }
 
 Application::~Application() = default;
@@ -46,12 +48,28 @@ const Context & Application::context() const
     return m_context.get();
 }
 
-int Application::run()
+int Application::run(int argc,
+                     char ** argv)
 {
-    if (!m_initialized)
+    /**
+     * Parse command line
+     */
+    std::string cmdPrefix;
+
+    cxxopts::Options options(m_name, "");
+    options.add_options()("prefix", "Deliberation install prefix", cxxopts::value<std::string>(cmdPrefix));
+    options.parse(argc, argv);
+
+    if (!cmdPrefix.empty())
     {
-        return m_returnCode;
+        std::cout << "Prefix override: '" + cmdPrefix + "'" << std::endl;
+        m_prefixPath = cmdPrefix;
     }
+
+    /**
+     *
+     */
+    init();
 
     m_running = true;
 
@@ -78,6 +96,8 @@ int Application::run()
                     break;
             }
         }
+
+        SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
         onFrame(seconds);
 

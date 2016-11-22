@@ -17,7 +17,7 @@ int main()
 
     auto bigSphere = std::make_shared<RigidBody>(bigSphereShape);
     bigSphere->transform().setPosition({0, -bigSphereShape->radius(), 0});
-    bigSphere->setInverseMass(1.0f/3.0f);
+    bigSphere->setMass(3.0f);
 
     auto smallSphere = std::make_shared<RigidBody>(smallSphereShape);
     smallSphere->transform().setPosition({0, 10, 0});

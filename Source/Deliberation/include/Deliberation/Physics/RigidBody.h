@@ -27,6 +27,7 @@ public:
     float mass() const;
     float inverseMass() const;
     float restitution() const;
+    float friction() const;
     const glm::mat3 & worldInverseInertia() const;
     const glm::vec3 & linearVelocity() const;
     const glm::vec3 & angularVelocity() const;
@@ -34,9 +35,12 @@ public:
     bool isStatic() const;
     size_t index() const;
 
+    glm::vec3 localVelocity(const glm::vec3 & r) const;
+
     void setMass(float mass);
     void setInverseMass(float mass);
     void setRestitution(float restitution);
+    void setFriction(float friction);
     void setLinearVelocity(const glm::vec3 & velocity);
     void setAngularVelocity(const glm::vec3 & velocity);
     void setForce(const glm::vec3 & force);
@@ -55,7 +59,8 @@ public:
 
 private:
     float     m_inverseMass = 1.0f / 1.0f;
-    float     m_restitution = 0.3f;
+    float     m_restitution = 0.1f;
+    float     m_friction    = 0.03f;
 
     glm::mat3 m_localInverseInertia;
     glm::mat3 m_worldInverseInertia;

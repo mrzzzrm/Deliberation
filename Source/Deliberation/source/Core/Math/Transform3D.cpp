@@ -20,6 +20,13 @@ Transform3D Transform3D::atPosition(const glm::vec3 & position)
     return result;
 }
 
+const Transform3D & Transform3D::identity()
+{
+    static Transform3D i;
+    return i;
+}
+
+
 Transform3D::Transform3D():
     m_scale(1.0f),
     m_matrixDirty(true),

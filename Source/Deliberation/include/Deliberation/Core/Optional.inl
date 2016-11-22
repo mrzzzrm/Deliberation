@@ -85,6 +85,18 @@ void Optional<T>::disengage()
 }
 
 template<typename T>
+T * Optional<T>::operator->()
+{
+    return ptr();
+}
+
+template<typename T>
+const T * Optional<T>::operator->() const
+{
+    return ptr();
+}
+
+template<typename T>
 bool Optional<T>::operator==(const T * other) const
 {
     if (!other && !m_engaged)

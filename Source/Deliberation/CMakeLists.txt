@@ -9,6 +9,7 @@ set(DELIBERATION_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
+    ${CXXOPTS_INCLUDE_DIR}
     ${SDL2TTF_INCLUDE_DIR}
     ${SDL2IMAGE_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
@@ -17,6 +18,8 @@ set(DELIBERATION_INCLUDE_DIRS
     
     CACHE INTERAL "All Deliberation include dirs" 
 )
+
+message("CXXOPTS: ${DELIBERATION_INCLUDE_DIRS}")
 
 # include
 include_directories(
@@ -170,7 +173,6 @@ set(sources
     ${source_path}/Physics/Contacts/Contact.cpp
     ${source_path}/Physics/Contacts/ContactDispatcher.cpp
     ${source_path}/Physics/Contacts/SphereContact.cpp
-    ${source_path}/Physics/Contacts/Manifold.cpp
     ${source_path}/Physics/BoxShape.cpp
     ${source_path}/Physics/Broadphase.cpp
     ${source_path}/Physics/BroadphaseProxy.cpp
@@ -196,6 +198,7 @@ set(sources
     ${source_path}/Scene/DebugCameraNavigator3D.cpp
     ${source_path}/Scene/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
+    ${source_path}/Scene/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
     ${source_path}/Scene/Mesh.cpp
     ${source_path}/Scene/MeshCompiler.cpp
@@ -347,7 +350,6 @@ set(api_includes
     ${include_path}/Physics/Contacts/Contact.h
     ${include_path}/Physics/Contacts/ContactDispatcher.h
     ${include_path}/Physics/Contacts/ContactDispatcher.inl
-    ${include_path}/Physics/Contacts/Manifold.h
     ${include_path}/Physics/Contacts/SphereContact.h
     ${include_path}/Physics/BoxShape.h
     ${include_path}/Physics/Broadphase.h
@@ -374,6 +376,7 @@ set(api_includes
     ${include_path}/Scene/DebugCameraNavigator3D.h
     ${include_path}/Scene/DebugGrid3DRenderer.h
     ${include_path}/Scene/DebugGroundPlaneRenderer.h
+    ${include_path}/Scene/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/MeshCompiler.h

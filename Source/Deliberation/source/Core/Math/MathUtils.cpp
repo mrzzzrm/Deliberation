@@ -1,11 +1,17 @@
 #include <Deliberation/Core/Math/MathUtils.h>
 
+#include <iostream>
+
+#include <Deliberation/Core/StreamUtils.h>
+
 namespace deliberation
 {
 
 glm::vec3 AnyPerpendicularVectorTo(const glm::vec3 & v)
 {
-    if (v.x != 0.0f)
+    auto absV = glm::abs(v);
+
+    if (absV.x > absV.y)
     {
         return glm::cross(v, {0.0f, 1.0f, 0.0f});
     }
@@ -41,6 +47,22 @@ glm::mat3 DELIBERATION_API InverseDiagonalMatrix(const glm::mat3 & m)
         {0.0f, y, 0.0f},
         {0.0f, 0.0f, z}
     };
+}
+
+glm::quat QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a)
+{
+    // TODO: Epsilon
+    if (a == glm::vec3(0.0f))
+    {
+        return q;
+    }
+
+    auto angle = glm::length(a);
+    auto axis = glm::normalize(a);
+
+    auto quat = glm::rotate(glm::quat(), angle, axis);
+
+    return quat * q;
 }
 
 }

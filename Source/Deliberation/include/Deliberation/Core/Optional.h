@@ -25,6 +25,9 @@ public:
 
     void disengage();
 
+    T * operator->();
+    const T * operator->() const;
+
     bool operator==(const T * other) const;
     bool operator!=(const T * other) const;
 

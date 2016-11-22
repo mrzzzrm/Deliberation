@@ -16,7 +16,8 @@ namespace deliberation
 class DELIBERATION_API Application
 {
 public:
-    Application(const std::string & name, const std::string & prefixPath = "Deliberation2");
+    Application(const std::string & name,
+                const std::string & prefixPath = "Deliberation2");
     virtual ~Application();
 
     InputAdapterBase & inputAdapter();
@@ -25,7 +26,8 @@ public:
     Context & context();
     const Context & context() const;
 
-    int run();
+    int run(int argc,
+            char ** argv);
 
     void quit(int returnCode = 0);
 

@@ -66,28 +66,33 @@ void EnableGLErrorChecks()
 {
     glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
     glbinding::setAfterCallback([](const glbinding::FunctionCall & call)
-    {
-        glbinding::setCallbackMask(glbinding::CallbackMask::None);
-        gl::GLenum error;
-        while((error = gl::glGetError()) != gl::GL_NO_ERROR)
         {
-            std::cout << "GL Error: " << error << std::endl;
-            std::cout << "  after calling ";
-            std::cout << call.function->name() << "(";
-            for (unsigned i = 0; i < call.parameters.size(); ++i)
+            glbinding::setCallbackMask(glbinding::CallbackMask::None);
+            gl::GLenum error;
+
+            auto hadError = false;
+
+            while((error = gl::glGetError()) != gl::GL_NO_ERROR)
             {
-                std::cout << call.parameters[i]->asString();
-                if (i < call.parameters.size() - 1)
+                hadError = true;
+
+                std::cout << "GL Error: " << error << std::endl;
+                std::cout << "  after calling ";
+                std::cout << call.function->name() << "(";
+                for (unsigned i = 0; i < call.parameters.size(); ++i)
                 {
-                    std::cout << ", ";
+                    std::cout << call.parameters[i]->asString();
+                    if (i < call.parameters.size() - 1)
+                    {
+                        std::cout << ", ";
+                    }
                 }
+                std::cout << ")";
+                std::cout << std::endl;
             }
-            std::cout << ")";
-            std::cout << std::endl;
-            assert(false);
-        }
-        glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
-    });
+            assert(!hadError);
+            glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
+        });
 }
 
 void EnableGLErrorChecksAndLogging()

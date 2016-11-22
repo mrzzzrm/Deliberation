@@ -141,6 +141,12 @@ void DebugArrowInstance::reset(const glm::vec3 & origin, const glm::vec3 & delta
     setupConeTransform();
 }
 
+void DebugArrowInstance::setColor(const glm::vec3 & color)
+{
+    m_lineDraw.uniform("Color").set(color);
+    m_coneDraw.uniform("Color").set(color);
+}
+
 void DebugArrowInstance::buildVertices()
 {
     LayoutedBlob vertices(m_lineVertexBuffer.layout(), 2);
@@ -156,6 +162,7 @@ void DebugArrowInstance::setupConeTransform()
 {
     if (m_delta == glm::vec3(0.0f))
     {
+        m_coneDraw.uniform("Transform").set(Transform3D::identity().matrix());
         return;
     }
 
@@ -237,6 +244,23 @@ DebugPointInstance & DebugGeometryRenderer::point(size_t index)
 {
     Assert(index < m_points.size(), " ");
     return m_points[index];
+}
+
+void DebugGeometryRenderer::resizeArrows(uint count, const glm::vec3 & color, bool visible)
+{
+    if (count > m_arrows.size())
+    {
+        allocateArrows(count - m_arrows.size(), color, visible);
+    }
+    else
+    {
+        m_arrows.erase(m_arrows.begin() + count, m_arrows.end());
+        for (auto & arrow : m_arrows)
+        {
+            // TODO: Set color
+            arrow.setVisible(visible);
+        }
+    }
 }
 
 //void DebugGeometryRenderer::allocateBoxes(uint count, bool wireframe)

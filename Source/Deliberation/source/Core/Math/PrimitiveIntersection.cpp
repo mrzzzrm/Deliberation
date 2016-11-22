@@ -128,9 +128,36 @@ bool Rect3DRay3DIntersection(const glm::vec3 & base,
     return true;
 }
 
+void Ray3DClosestApproach(const glm::vec3 & oA,
+                          const glm::vec3 & dA,
+                          const glm::vec3 & oB,
+                          const glm::vec3 & dB,
+                          float & a,
+                          float & b)
+{
+    glm::vec3 p = oB - oA;
+    auto uaub = glm::dot(dA, dB);
+    auto q1 =  glm::dot(dA, p);
+    auto q2 = -glm::dot(dB, p);
+    auto d = 1-uaub*uaub;
+
+    if (d <= 0.0001f)
+    {
+        a = 0;
+        b = 0;
+    }
+    else
+    {
+        d = 1.0f / d;
+        a = (q1 + uaub*q2)*d;
+        b  = (uaub*q1 + q2)*d;
+    }
+}
+
+
 bool Rect3DRay3DIntersection(const Rect3D & rect,
-                             const Ray3D & ray,
-                             float & t)
+                         const Ray3D & ray,
+                         float & t)
 {
     return Rect3DRay3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
 }
