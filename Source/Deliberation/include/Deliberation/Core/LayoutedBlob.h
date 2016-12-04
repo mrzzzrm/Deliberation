@@ -18,6 +18,10 @@ class DataLayout;
 class DELIBERATION_API LayoutedBlob final
 {
 public:
+    template<typename T> using Field = TypedBlobValueAccessor<T>;
+    template<typename T> using CField = CTypedBlobValueAccessor<T>;
+
+public:
     LayoutedBlob();
     LayoutedBlob(const DataLayout & layout, size_t count = 0);
 

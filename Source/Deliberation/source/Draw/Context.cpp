@@ -294,7 +294,7 @@ void Context::executeDraw(const Draw & draw)
     DrawVerification verification(draw);
     Assert(verification.passed(), verification.toString());
 
-    detail::DrawExecution(m_glStateManager, draw).perform();
+   detail::DrawExecution(m_glStateManager, draw).perform();
 }
 
 void Context::executeClear(const Clear & clear)

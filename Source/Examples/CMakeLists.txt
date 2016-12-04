@@ -13,14 +13,14 @@ include_directories(
     ${GLM_INCLUDE_DIR}
 )
 
-# sources
-set(sources
-    BanditTest.cpp
-    main.cpp
+add_library(ExampleCommon
+    SceneExampleApplication.cpp
+    SceneExampleApplication.h
 )
 
 # libs
 set(libs
+    ExampleCommon
     ${DELIBERATION_LIBRARIES}
 )
 
@@ -91,4 +91,8 @@ target_link_libraries(PhysicsExample ${libs})
 # EdgeToFaceSmoothingExample
 add_executable(EdgeToFaceSmoothingExample EdgeToFaceSmoothingExample.cpp)
 target_link_libraries(EdgeToFaceSmoothingExample ${libs})
+
+# VoxelExample
+add_executable(VoxelExample VoxelExample.cpp)
+target_link_libraries(VoxelExample ${libs})
 

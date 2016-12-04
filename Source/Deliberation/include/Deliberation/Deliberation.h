@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <Deliberation/Core/IntTypes.h>
+
 namespace deliberation
 {
 
