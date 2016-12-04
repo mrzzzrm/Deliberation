@@ -65,4 +65,14 @@ glm::quat QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a)
     return quat * q;
 }
 
+glm::vec2 RotateHalfPiCW(const glm::vec2 & v)
+{
+    return {v.y, -v.x};
+}
+
+glm::vec2 RotateHalfPiCCW(const glm::vec2 & v)
+{
+    return {-v.y, v.x};
+}
+
 }

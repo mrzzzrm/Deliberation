@@ -97,6 +97,19 @@ const T * Optional<T>::operator->() const
 }
 
 template<typename T>
+T & Optional<T>::operator*()
+{
+    return get();
+}
+
+template<typename T>
+const T & Optional<T>::operator*() const
+{
+    return get();
+}
+
+
+template<typename T>
 bool Optional<T>::operator==(const T * other) const
 {
     if (!other && !m_engaged)

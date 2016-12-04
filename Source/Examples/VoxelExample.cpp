@@ -1,12 +1,16 @@
 #include <bitset>
 #include <iostream>
+#include <set>
 
 #include <Deliberation/Deliberation.h>
 
-#include <Deliberation/Platform/Application.h>
-#include <set>
+#include <Deliberation/Core/Math/MathUtils.h>
+#include <Deliberation/Core/StreamUtils.h>
 
-//#include <Deliberation/Voxel/VoxelCluster.h>
+#include <Deliberation/Platform/Application.h>
+
+#include <Deliberation/Voxel/VoxelCluster.h>
+#include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
 
 #include "SceneExampleApplication.h"
 
@@ -27,10 +31,10 @@ public:
         SceneExampleApplication::onStartup();
 
         auto cluster = VoxelCluster<glm::vec3>({1, 1, 1});
-        cluster.setVoxel(0, 0, 0, {1.0f, 0.8f, 0.2f});
+        cluster.set({0, 0, 0}, {1.0f, 0.8f, 0.2f});
 
-        auto marchingCubes = VoxelClusterMarchingCubes{};
-        auto mesh = marchingCubes.parse(cluster);
+        auto marchingCubes = VoxelClusterMarchingCubes(cluster);
+        marchingCubes.run();
 
 
     }
@@ -84,7 +88,7 @@ std::bitset<8> rotateZ(const std::bitset<8> & config) {
 }
 
 struct ClassConfig {
-    u8 equivalenceClass;
+    u8 equivalenceClass = 255;
     glm::u8vec3 rotation;
     bool inverse;
 };
@@ -116,7 +120,7 @@ int main(int argc, char * argv[])
     };
 
     std::array<std::vector<int>, 18> equivalenceClassMeshes = {
-        std::vector<int>{{}}, // 0
+        std::vector<int>(), // 0
         std::vector<int>{{3,2,7}}, // 1
         std::vector<int>{{3,2,7,10,6,9}}, // 2
         std::vector<int>{{0,7,4,0,2,7}}, // 3
@@ -136,6 +140,21 @@ int main(int argc, char * argv[])
         std::vector<int>{{3,10,7,3,9,10,3,0,9,0,5,9,4,11,8}}, // 17
     };
 
+    std::array<glm::vec3, 12> edgePositions = {{
+                                                   {0.0f, -0.5f, 0.5f},
+                                                   {0.5f, -0.5f, 0.0f},
+                                                   {0.0f, -0.5f, -0.5f},
+                                                   {-0.5f, -0.5f, 0.0f},
+                                                   {-0.5f, 0.0f, 0.5f},
+                                                   {0.5f, 0.0f, 0.5f},
+                                                   {0.5f, 0.0f, -0.5f},
+                                                   {-0.5f, 0.0f, -0.5f},
+                                                   {0.0f, 0.5f, 0.5f},
+                                                   {0.5f, 0.5f, 0.0f},
+                                                   {0.0f, 0.5f, -0.5f},
+                                                   {-0.5f, 0.5f, 0.0f},
+                                               }};
+
     for (size_t e = 0; e < equivalenceClasses.size(); e++) {
         auto & equivalenceClass = equivalenceClasses[e];
 
@@ -148,34 +167,40 @@ int main(int argc, char * argv[])
                 std::bitset<8> baseClassZ = baseClassY;
 
                 for (auto z = 0; z < 4; z++) {
-                    if (coveredConfigs.count(baseClassZ.to_ullong()) == 0) {
-                        coveredConfigs.insert(baseClassZ.to_ullong());
+
+                    auto configID = baseClassZ.to_ullong();
+
+                    std::cout << e << " " << configID << std::endl;
+
+
+                    if (coveredConfigs.count(configID) == 0) {
+                        coveredConfigs.insert(configID);
 
                         ClassConfig config;
                         config.equivalenceClass = e;
                         config.rotation = {x, y, z};
                         config.inverse = false;
 
-                        classByConfig[baseClassZ.to_ullong()] = config;
+                        classByConfig[configID] = config;
                     }
 
                     auto flipped = baseClassZ;
                     flipped.flip();
 
-                    if (coveredConfigs.count(flipped.to_ullong()) == 0) {
-                        coveredConfigs.insert(flipped.to_ullong());
+                    configID = flipped.to_ullong();
+
+                    if (coveredConfigs.count(configID) == 0) {
+                        coveredConfigs.insert(configID);
 
                         ClassConfig config;
                         config.equivalenceClass = e;
                         config.rotation = {x, y, z};
                         config.inverse = true;
 
-                        classByConfig[baseClassZ.to_ullong()] = config;
+                        classByConfig[configID] = config;
                     }
 
                     baseClassZ = rotateZ(baseClassZ);
-
-                    std::cout << baseClassZ.to_ullong() << " " << baseClassZ.to_string() << " " << coveredConfigs.size() << std::endl;
                 }
 
                 baseClassY = rotateY(baseClassY);
@@ -187,15 +212,50 @@ int main(int argc, char * argv[])
         std::cout << std::endl;
     }
 
+    std::cout << "Num configs: " << coveredConfigs.size() << std::endl;
+
     for (size_t c = 0; c < classByConfig.size(); c++) {
         auto & _class = classByConfig[c];
 
-        std::cout << std::bitset<8>(c).to_string() << ": " << (int)_class.equivalenceClass << " {" <<
-                  (int)_class.rotation.x << ", " <<
-                  (int)_class.rotation.y << ", " <<
-                  (int)_class.rotation.z << "} " << _class.inverse << std::endl;
+//        std::cout << c << ": " << std::bitset<8>(c).to_string() << ": " << (int)_class.equivalenceClass << " {" <<
+//                  (int)_class.rotation.x << ", " <<
+//                  (int)_class.rotation.y << ", " <<
+//                  (int)_class.rotation.z << "} " << _class.inverse << std::endl;
+
+        auto & edgeIndices = equivalenceClassMeshes[_class.equivalenceClass];
+
+        std::cout << c << "(" << (int)_class.equivalenceClass << ", " << edgeIndices.size() << ") {";
+
+        for (auto & index : edgeIndices) {
+            auto position = edgePositions[index];
+
+//            for (auto i = 0; i < _class.rotation.x; i++)
+//            {
+//                position.z = position.y;
+//                position.y = -position.z;
+//            }
+//            for (auto i = 0; i < _class.rotation.y; i++)
+//            {
+//                position.x = position.z;
+//                position.z = -position.x;
+//            }
+//            for (auto i = 0; i < _class.rotation.z; i++)
+//            {
+//                position.x = -position.y;
+//                position.y = position.x;
+//            }
+
+//            position = glm::angleAxis(glm::half_pi<float>() * _class.rotation.x, glm::vec3{1.0f, 0.0f, 0.0}) * position;
+//            position = glm::angleAxis(glm::half_pi<float>() * _class.rotation.y, glm::vec3{0.0f, 1.0f, 0.0}) * position;
+//            position = glm::angleAxis(glm::half_pi<float>() * _class.rotation.z, glm::vec3{0.0f, 0.0f, 1.0}) * position;
+
+            std::cout << position  << ", ";
+        }
+        std::cout << "}" << std::endl;
     }
 
-    return VoxelExample().run(argc, argv);
+
+
+   // return VoxelExample().run(argc, argv);
 }
 

@@ -207,6 +207,7 @@ set(sources
     ${source_path}/Scene/RenderNode.cpp
     ${source_path}/Scene/RenderPipeline.cpp
 
+    ${source_path}/Voxel/VoxelCluster.cpp
     ${source_path}/Voxel/VoxelClusterMarchingCubes.cpp
     ${source_path}/Voxel/VoxReader.cpp)
 

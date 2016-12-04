@@ -12,6 +12,7 @@ VoxelCluster<T>::VoxelCluster(const glm::uvec3 & size):
 {
 }
 
+template<typename T>
 const glm::vec3 & VoxelCluster<T>::size() const
 {
     return m_size;
@@ -48,7 +49,7 @@ template<typename T>
 size_t VoxelCluster<T>::voxelToIndex(const glm::uvec3 & voxel) const
 {
     auto result = voxel.x + voxel.y * m_size.x + voxel.z * m_size.x * m_size.y;
-    Assert(index < m_voxels.size(), "Voxel out of bounds");
+    Assert(result < m_voxels.size(), "Voxel out of bounds");
     return result;
 }
 

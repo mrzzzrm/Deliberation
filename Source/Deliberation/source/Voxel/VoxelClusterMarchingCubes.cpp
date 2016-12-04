@@ -7,24 +7,25 @@
 namespace
 {
 
-struct Config
+struct Vertex
 {
-    struct Vertex
-    {
-        glm::vec3 position;
-        glm::vec3 normal;
-    };
+    Vertex(const glm::vec3 &position, const glm::vec3 &normal) : position(position), normal(normal)
+    {}
 
-    std::vector<Vertex> vertices;
+    glm::vec3 position;
+    glm::vec3 normal;
 };
 
-    
+const std::vector<Vertex> CONFIGS[] = {
+    {{{0, 0, 0}, {1, 1, 1}}, {{2, 2, 2}, {3, 3, 3}}}
+};
 
 }
 
-namespace deliberation {
+namespace deliberation
+{
 
-VoxelClusterMarchingCubes::VoxelClusterMarchingCubes(const VoxelCluster<glm::vec3> & cluster):
+VoxelClusterMarchingCubes::VoxelClusterMarchingCubes(const VoxelCluster<glm::vec3> &cluster) :
     m_cluster(cluster)
 {
 
@@ -33,26 +34,24 @@ VoxelClusterMarchingCubes::VoxelClusterMarchingCubes(const VoxelCluster<glm::vec
 void VoxelClusterMarchingCubes::run()
 {
     auto vertexLayout = DataLayout({{"Position", Type_Vec3},
-                                    {"Normal", Type_Vec3},
-                                    {"Color", Type_Vec3}});
+                                    {"Normal",   Type_Vec3},
+                                    {"Color",    Type_Vec3}});
 
     m_vertices = LayoutedBlob(vertexLayout);
 
-    m_positions = m_vertices.field<glm::vec3>("Position");
-    m_normals = m_vertices.field<glm::vec3>("Normal");
-    m_colors = m_vertices.field<glm::vec3>("Color");
+    m_positions.reset(m_vertices.field<glm::vec3>("Position"));
+    m_normals.reset(m_vertices.field<glm::vec3>("Normal"));
+    m_colors.reset(m_vertices.field<glm::vec3>("Color"));
 
-    auto & size = m_cluster.size();
+    auto &size = m_cluster.size();
     auto config = std::bitset<8>();
 
-    for (size_t z = 0; z <= size.z; z++)
+    for (i32 z = 0; z <= size.z; z++)
     {
-        for (size_t y = 0; y <= size.y; y++)
+        for (i32 y = 0; y <= size.y; y++)
         {
-            for (size_t x = 0; x <= size.x; x++)
+            for (i32 x = 0; x <= size.x; x++)
             {
-                if (m_cluster)
-
                 config.reset();
 
                 config.set(0, checkVoxel(x - 1, y - 1, z - 1));
@@ -64,20 +63,20 @@ void VoxelClusterMarchingCubes::run()
                 config.set(6, checkVoxel(x - 0, y - 0, z - 0));
                 config.set(7, checkVoxel(x - 1, y - 0, z - 0));
 
-                generateMesh(x, y, z, config.to_ullong(), m_cluster.);
+                generateMesh(x, y, z, config.to_ullong());
             }
         }
     }
 }
 
-LayoutedBlob && VoxelClusterMarchingCubes::takeVertices()
+LayoutedBlob &&VoxelClusterMarchingCubes::takeVertices()
 {
     return std::move(m_vertices);
 }
 
 bool VoxelClusterMarchingCubes::checkVoxel(i32 x, i32 y, i32 z) const
 {
-    auto & size = m_cluster.size();
+    auto &size = m_cluster.size();
 
     if (x < 0 || y < 0 || z < 0 ||
         x >= size.x || y >= size.y || z >= size.z)
@@ -90,23 +89,22 @@ bool VoxelClusterMarchingCubes::checkVoxel(i32 x, i32 y, i32 z) const
 
 void VoxelClusterMarchingCubes::generateMesh(i32 x, i32 y, i32 z, u8 configID)
 {
-    auto & config = CONFIGS[config_id];
+    auto &config = CONFIGS[configID];
 
-    if (config.vertices.empty())
+    if (config.empty())
     {
         return;
     }
 
     auto vertexIndex = m_vertices.count();
 
-    m_vertices.resize(m_vertices.count() + config.vertices.size());
+    m_vertices.resize(m_vertices.count() + config.size());
 
-    for (auto & configVertex : config.vertices) {
-        auto & outputVertex = m_vertices[vertexIndex];
-
-        m_positions[vertexIndex] = configVertex.position + glm::vec3(x, y, z);
-        m_normals[vertexIndex] = configVertex.normal;
-        m_colors[vertexIndex] = glm::vec3(100, 255, 100);
+    for (auto &configVertex : config)
+    {
+        (*m_positions)[vertexIndex] = configVertex.position + glm::vec3(x, y, z);
+        (*m_normals)[vertexIndex] = configVertex.normal;
+        (*m_colors)[vertexIndex] = glm::vec3(100, 255, 100);
 
         vertexIndex++;
     }

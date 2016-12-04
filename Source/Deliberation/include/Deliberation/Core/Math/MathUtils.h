@@ -15,4 +15,7 @@ glm::mat3 DELIBERATION_API InverseDiagonalMatrix(const glm::mat3 & m);
 
 glm::quat DELIBERATION_API QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a);
 
+glm::vec2 DELIBERATION_API RotateHalfPiCW(const glm::vec2 & v);
+glm::vec2 DELIBERATION_API RotateHalfPiCCW(const glm::vec2 & v);
+
 }

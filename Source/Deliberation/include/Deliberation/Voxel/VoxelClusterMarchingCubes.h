@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Deliberation/Core/LayoutedBlob.h>
+#include <Deliberation/Core/Optional.h>
 
 #include <Deliberation/Voxel/VoxelCluster.h>
 
@@ -27,9 +28,9 @@ private:
     const VoxelCluster<glm::vec3> & m_cluster;
     LayoutedBlob                    m_vertices;
 
-    LayoutedBlob::Field<glm::vec3>  m_positions;
-    LayoutedBlob::Field<glm::vec3>  m_normals;
-    LayoutedBlob::Field<glm::vec3>  m_colors;
+    Optional<LayoutedBlob::Field<glm::vec3>>  m_positions;
+    Optional<LayoutedBlob::Field<glm::vec3>>  m_normals;
+    Optional<LayoutedBlob::Field<glm::vec3>>  m_colors;
 };
 
 }
