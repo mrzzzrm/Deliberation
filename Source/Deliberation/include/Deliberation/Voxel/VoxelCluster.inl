@@ -8,7 +8,7 @@ namespace deliberation
 template<typename T>
 VoxelCluster<T>::VoxelCluster(const glm::uvec3 & size):
     m_size(size),
-    m_voxels(size.x * size.y * size.z)
+    m_voxels(size.x * size.y * size.z, EMPTY_VOXEL)
 {
 }
 
