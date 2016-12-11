@@ -43,7 +43,9 @@ public:
     glm::vec3 directionWorldToLocal(const glm::vec3 & dir) const;
     glm::vec3 directionLocalToWorld(const glm::vec3 & dir) const;
 
-    Transform3D interpolated(const Transform3D & other, float v);
+    Transform3D scaled(float scale) const;
+    Transform3D worldTranslated(const glm::vec3 & delta) const;
+    Transform3D interpolated(const Transform3D & other, float v) const;
 
     std::string toString() const;
 

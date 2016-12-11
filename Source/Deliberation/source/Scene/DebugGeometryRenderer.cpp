@@ -17,6 +17,7 @@
 #include <Deliberation/Scene/ConeMesh.h>
 #include <Deliberation/Scene/CuboidMesh.h>
 #include <Deliberation/Scene/MeshCompiler.h>
+#include <Deliberation/Scene/UVSphere.h>
 
 namespace
 {
@@ -54,6 +55,11 @@ DebugBoxInstance::DebugBoxInstance(const Draw & draw,
 Transform3D & DebugBoxInstance::transform()
 {
     return m_transform;
+}
+
+void DebugBoxInstance::setTransform(const Transform3D & transform)
+{
+    m_transform = transform;
 }
 
 Box DebugBoxInstance::toBox() const
@@ -176,6 +182,101 @@ void DebugArrowInstance::setupConeTransform()
     m_coneDraw.uniform("Transform").set(transform.matrix());
 }
 
+DebugWireframeInstance::DebugWireframeInstance(const Program & program,
+                                               const DataLayout & vertexLayout):
+    m_program(program),
+    m_vertexLayout(vertexLayout)
+{
+
+}
+
+void DebugWireframeInstance::setTransform(const Transform3D & transform)
+{
+    m_transform = transform;
+    m_draw.uniform("Transform").set(m_transform.matrix());
+}
+
+void DebugWireframeInstance::addLineStrip(const std::vector<ColoredVertex> & vertices)
+{
+    Assert(vertices.size() >= 2, "Not a line strip");
+
+    m_lineStrips.push_back(vertices);
+    m_lineCount += vertices.size() - 1;
+    m_dirty = true;
+}
+
+void DebugWireframeInstance::schedule(const Camera3D & camera)
+{
+    if (m_dirty)
+    {
+        m_draw = m_program.context().createDraw(m_program, gl::GL_LINES);
+
+        auto vertices = LayoutedBlob(m_vertexLayout, m_lineCount * 2);
+        auto positions = vertices.field<glm::vec3>("Position");
+        auto colors = vertices.field<glm::vec3>("Color");
+
+        u32 i = 0;
+
+        for (auto & strip : m_lineStrips)
+        {
+            for (u32 v = 0; v < strip.size() - 1; v++)
+            {
+                positions[i + 0] = strip[v].position;
+                positions[i + 1] = strip[v + 1].position;
+                colors[i + 0] = strip[v].color;
+                colors[i + 1] = strip[v + 1].color;
+
+                i += 2;
+            }
+        }
+
+        m_draw.addVertices(vertices);
+
+        m_dirty = false;
+    }
+
+    m_draw.uniform("ViewProjection").set(camera.viewProjection());
+    m_draw.schedule();
+}
+
+DebugSphereInstance::DebugSphereInstance(const Program & program,
+                                         const Buffer & vertexBuffer,
+                                         const Buffer & indexBuffer,
+                                         const glm::vec3 & color,
+                                         const float scale):
+    m_program(program),
+    m_vertexBuffer(vertexBuffer),
+    m_indexBuffer(indexBuffer),
+    m_color(color),
+    m_scale(scale)
+{
+
+}
+
+void DebugSphereInstance::setTransform(const Transform3D & transform)
+{
+    m_transform = transform;
+    m_draw.uniform("Transform").set(m_transform.scaled(m_scale).matrix());
+}
+
+void DebugSphereInstance::schedule(const Camera3D & camera)
+{
+    if (m_dirty)
+    {
+        m_draw = m_program.context().createDraw(m_program, gl::GL_TRIANGLES);
+
+        m_draw.addVertexBuffer(m_vertexBuffer);
+        m_draw.setIndexBuffer(m_indexBuffer);
+        m_draw.uniform("Color").set(m_color);
+        m_draw.uniform("Transform").set(m_transform.scaled(m_scale).matrix());
+
+        m_dirty = false;
+    }
+
+    m_draw.uniform("ViewProjection").set(camera.viewProjection());
+    m_draw.schedule();
+}
+
 DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D & camera):
     m_context(context),
     m_camera(camera)
@@ -187,6 +288,9 @@ DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D &
 
     m_unicolorProgram = m_context.createProgram({deliberation::dataPath("Data/Shaders/DebugGeometryUnicolor.vert"),
                                                  deliberation::dataPath("Data/Shaders/DebugGeometryUnicolor.frag")});
+
+    m_vertexColorProgram = m_context.createProgram({deliberation::dataPath("Data/Shaders/DebugGeometryVertexColor.vert"),
+                                                    deliberation::dataPath("Data/Shaders/DebugGeometryVertexColor.frag")});
 
     auto mesh = CuboidMesh({2.0f, 2.0f, 2.0f}).generate();
     {
@@ -214,7 +318,20 @@ DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D &
         m_coneIndexBuffer = m_context.createBuffer(compilation.indices);
     }
 
+    /**
+     * Create Sphere Mesh
+     */
+    {
+        auto sphereMesh = UVSphere(10, 10).generateMesh2();
+        m_sphereVertexBuffer = m_context.createBuffer(sphereMesh.takeVertices());
+        m_sphereIndexBuffer = m_context.createBuffer(sphereMesh.takeIndices());
+    }
+
+    /**
+     *
+     */
     m_unicolorDataLayout = DataLayout("Position", Type_Vec3);
+    m_vertexColorDataLayout = DataLayout({{"Position", Type_Vec3}, {"Color", Type_Vec3}});
 }
 
 
@@ -244,6 +361,18 @@ DebugPointInstance & DebugGeometryRenderer::point(size_t index)
 {
     Assert(index < m_points.size(), " ");
     return m_points[index];
+}
+
+DebugWireframeInstance & DebugGeometryRenderer::wireframe(size_t index)
+{
+    Assert(index < m_wireframes.size(), " ");
+    return m_wireframes[index];
+}
+
+DebugSphereInstance & DebugGeometryRenderer::sphere(size_t index)
+{
+    Assert(index < m_spheres.size(), " ");
+    return m_spheres[index];
 }
 
 void DebugGeometryRenderer::resizeArrows(uint count, const glm::vec3 & color, bool visible)
@@ -331,6 +460,32 @@ size_t DebugGeometryRenderer::addArrow(const glm::vec3 & origin, const glm::vec3
 
     m_arrows.push_back({m_unicolorProgram, m_unicolorDataLayout, draw, origin, delta, color});
     return m_arrows.size() - 1;
+}
+
+size_t DebugGeometryRenderer::addWireframe()
+{
+    m_wireframes.emplace_back();
+
+    auto & wireframe = m_wireframes.back();
+
+    return m_wireframes.size() - 1;
+}
+
+DebugBoxInstance & DebugGeometryRenderer::addAndGetBox(const glm::vec3 & halfExtent,
+                                                       const glm::vec3 & color,
+                                                       bool wireframe)
+{
+    return box(addBox(halfExtent, color, wireframe));
+}
+
+DebugWireframeInstance & DebugGeometryRenderer::addAndGetWireframe()
+{
+    return wireframe(addWireframe());
+}
+
+DebugSphereInstance & DebugGeometryRenderer::addAndGetSphere(const glm::vec3 & color, float radius)
+{
+    return sphere(addSphere(color, radius));
 }
 
 void DebugGeometryRenderer::removeBox(size_t index)

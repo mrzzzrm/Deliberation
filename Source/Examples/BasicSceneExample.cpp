@@ -71,7 +71,7 @@ public:
                                              });
 
         deliberation::UVSphere sphere(7, 7);
-        auto mesh = sphere.generate();
+        auto mesh = sphere.generateMesh();
 
         deliberation::MeshCompiler compiler;
         auto compilation = compiler.compile(mesh);

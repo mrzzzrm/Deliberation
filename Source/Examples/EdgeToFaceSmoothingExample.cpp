@@ -53,7 +53,7 @@ public:
 
         auto mesh = CuboidMesh({2.0f, 1.0f, 1.0f}).generate();
         auto smoothedMesh = EdgeToFaceSmoothing(mesh).run();
-        auto sphereMesh = UVSphere(10, 10).generate();
+        auto sphereMesh = UVSphere(10, 10).generateMesh();
 
         m_unsmoothedCubeDraw = createDraw(mesh);
         m_smoothedCubeDraw = createDraw(smoothedMesh);

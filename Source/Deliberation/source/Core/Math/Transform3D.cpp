@@ -174,7 +174,22 @@ glm::vec3 Transform3D::directionLocalToWorld(const glm::vec3 & dir) const
     return m_orientation * dir;
 }
 
-Transform3D Transform3D::interpolated(const Transform3D & other, float v) {
+Transform3D Transform3D::scaled(float scale) const
+{
+    Transform3D result(*this);
+    result.setScale(result.scale() * scale);
+    return result;
+}
+
+Transform3D Transform3D::worldTranslated(const glm::vec3 & delta) const
+{
+    Transform3D result(*this);
+    result.worldTranslate(delta);
+    return result;
+}
+
+Transform3D Transform3D::interpolated(const Transform3D & other, float v) const
+{
     Transform3D result;
 
     result.setOrientation(glm::slerp(m_orientation, other.orientation(), v));

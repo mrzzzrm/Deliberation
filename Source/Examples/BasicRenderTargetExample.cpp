@@ -32,7 +32,7 @@ deliberation::Draw createOffscreenDraw(deliberation::Context & context)
     });
 
     deliberation::UVSphere sphere(7, 7);
-    auto mesh = sphere.generate();
+    auto mesh = sphere.generateMesh();
 
     deliberation::MeshCompiler<deliberation::UVSphere::Vertex> compiler(mesh);
     compiler.compile();

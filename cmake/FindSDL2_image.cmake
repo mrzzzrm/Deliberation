@@ -9,7 +9,7 @@
 # (SDL2_image.dll, libsdl2_image.so, SDL2_image.framework, etc).
 # Set SDL2_IMAGE_LIBRARY_TEMP to point to your SDL2 library, and configure again.
 # Similarly, if you see an empty SDL2MAIN_LIBRARY, you should set this value
-# as appropriate. These values are used to generate the final SDL2_IMAGE_LIBRARY
+# as appropriate. These values are used to generateMesh the final SDL2_IMAGE_LIBRARY
 # variable, but when these values are unset, SDL2_IMAGE_LIBRARY does not get created.
 #
 # $SDL2 is an environment variable that would

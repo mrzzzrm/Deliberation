@@ -201,6 +201,7 @@ set(sources
     ${source_path}/Scene/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
     ${source_path}/Scene/Mesh.cpp
+    ${source_path}/Scene/Mesh2.cpp
     ${source_path}/Scene/MeshCompiler.cpp
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
@@ -382,6 +383,7 @@ set(api_includes
     ${include_path}/Scene/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
     ${include_path}/Scene/Mesh.h
+    ${include_path}/Scene/Mesh2.h
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/PostprocessingEffect.h
     ${include_path}/Scene/UVSphere.h
