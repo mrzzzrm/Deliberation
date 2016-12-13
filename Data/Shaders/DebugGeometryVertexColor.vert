@@ -10,8 +10,7 @@ out vec3 f_Color;
 
 void main()
 {	
-	vec3 scaled = Position * Scale;
-	vec4 transformed = ViewProjection * Transform * vec4(scaled, 1.0f);
+	vec4 transformed = ViewProjection * Transform * vec4(Position, 1.0f);
 
     f_Color = Color;
 

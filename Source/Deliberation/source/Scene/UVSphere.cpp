@@ -146,10 +146,10 @@ Mesh2 UVSphere::generateMesh2() const
      * Generate indices
      */
     auto numIndices = m_numMeridians * 3 +
-                      m_numParallels * m_numMeridians * 6 +
-                      m_numMeridians * 3;
-    DataLayout index("Index", Type_U32);
-    LayoutedBlob indexBlob(vertexLayout, numVertices);
+        (m_numParallels - 2) * m_numMeridians * 6 +
+        m_numMeridians * 3;
+    DataLayout indexLayout("Index", Type_U32);
+    LayoutedBlob indexBlob(indexLayout, numIndices);
     auto indices = indexBlob.field<u32>("Index");
     u32 i = 0;
 
@@ -171,8 +171,8 @@ Mesh2 UVSphere::generateMesh2() const
             indices[i++] = (u32)(baseA + (m + 1) % m_numMeridians);
             indices[i++] = (u32)(baseB + (m + 1) % m_numMeridians);
 
+            indices[i++] = (u32)(baseA + m);
             indices[i++] = (u32)(baseB + (m + 1) % m_numMeridians);
-            indices[i++] = (u32)(baseA + (m + 1) % m_numMeridians);
             indices[i++] = (u32)(baseB + m);
         }
     }

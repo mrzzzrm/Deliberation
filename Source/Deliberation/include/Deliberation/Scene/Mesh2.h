@@ -16,8 +16,8 @@ public:
     const LayoutedBlob & vertices() const;
     const LayoutedBlob & indices() const;
 
-    LayoutedBlob && takeVertices();
-    LayoutedBlob && takeIndices();
+    LayoutedBlob takeVertices();
+    LayoutedBlob takeIndices();
 
 private:
     LayoutedBlob m_vertices;

@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include <Deliberation/Deliberation_API.h>
 

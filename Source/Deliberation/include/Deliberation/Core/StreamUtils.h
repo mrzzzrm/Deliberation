@@ -16,8 +16,11 @@ namespace deliberation
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::uvec2 & v);
 
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::uvec3 & v);
+//template<typename StreamType>
+//StreamType & operator<<(StreamType && os, const glm::uvec3 & v);
+
+template<typename StreamType, typename T, glm::precision precision>
+StreamType & operator<<(StreamType && os, const glm::tvec3<T, precision> & v);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::uvec4 & v);
@@ -25,17 +28,17 @@ StreamType & operator<<(StreamType && os, const glm::uvec4 & v);
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::ivec2 & v);
 
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::ivec3 & v);
+//template<typename StreamType>
+//StreamType & operator<<(StreamType && os, const glm::ivec3 & v);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::ivec4 & v);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::vec2 & v);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::vec3 & v);
+//
+//template<typename StreamType>
+//StreamType & operator<<(StreamType && os, const glm::vec3 & v);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::vec4 & v);

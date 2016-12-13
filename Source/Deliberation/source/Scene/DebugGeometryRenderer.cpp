@@ -193,7 +193,10 @@ DebugWireframeInstance::DebugWireframeInstance(const Program & program,
 void DebugWireframeInstance::setTransform(const Transform3D & transform)
 {
     m_transform = transform;
-    m_draw.uniform("Transform").set(m_transform.matrix());
+    if (m_draw.engaged())
+    {
+        m_draw->uniform("Transform").set(m_transform.matrix());
+    }
 }
 
 void DebugWireframeInstance::addLineStrip(const std::vector<ColoredVertex> & vertices)
@@ -207,9 +210,14 @@ void DebugWireframeInstance::addLineStrip(const std::vector<ColoredVertex> & ver
 
 void DebugWireframeInstance::schedule(const Camera3D & camera)
 {
+    if (m_lineStrips.empty())
+    {
+        return;
+    }
+
     if (m_dirty)
     {
-        m_draw = m_program.context().createDraw(m_program, gl::GL_LINES);
+        m_draw.reset(m_program.context().createDraw(m_program, gl::GL_LINES));
 
         auto vertices = LayoutedBlob(m_vertexLayout, m_lineCount * 2);
         auto positions = vertices.field<glm::vec3>("Position");
@@ -230,13 +238,14 @@ void DebugWireframeInstance::schedule(const Camera3D & camera)
             }
         }
 
-        m_draw.addVertices(vertices);
+        m_draw->addVertices(vertices);
+        m_draw->uniform("Transform").set(m_transform.matrix());
 
         m_dirty = false;
     }
 
-    m_draw.uniform("ViewProjection").set(camera.viewProjection());
-    m_draw.schedule();
+    m_draw->uniform("ViewProjection").set(camera.viewProjection());
+    m_draw->schedule();
 }
 
 DebugSphereInstance::DebugSphereInstance(const Program & program,
@@ -256,25 +265,28 @@ DebugSphereInstance::DebugSphereInstance(const Program & program,
 void DebugSphereInstance::setTransform(const Transform3D & transform)
 {
     m_transform = transform;
-    m_draw.uniform("Transform").set(m_transform.scaled(m_scale).matrix());
+    if (m_draw.engaged())
+    {
+        m_draw->uniform("Transform").set(m_transform.scaled(m_scale).matrix());
+    }
 }
 
 void DebugSphereInstance::schedule(const Camera3D & camera)
 {
     if (m_dirty)
     {
-        m_draw = m_program.context().createDraw(m_program, gl::GL_TRIANGLES);
+        m_draw.reset(m_program.context().createDraw(m_program, gl::GL_TRIANGLES));
 
-        m_draw.addVertexBuffer(m_vertexBuffer);
-        m_draw.setIndexBuffer(m_indexBuffer);
-        m_draw.uniform("Color").set(m_color);
-        m_draw.uniform("Transform").set(m_transform.scaled(m_scale).matrix());
+        m_draw->addVertexBuffer(m_vertexBuffer);
+        m_draw->setIndexBuffer(m_indexBuffer);
+        m_draw->uniform("Color").set(m_color);
+        m_draw->uniform("Transform").set(m_transform.scaled(m_scale).matrix());
 
         m_dirty = false;
     }
 
-    m_draw.uniform("ViewProjection").set(camera.viewProjection());
-    m_draw.schedule();
+    m_draw->uniform("ViewProjection").set(camera.viewProjection());
+    m_draw->schedule();
 }
 
 DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D & camera):
@@ -322,7 +334,7 @@ DebugGeometryRenderer::DebugGeometryRenderer(Context & context, const Camera3D &
      * Create Sphere Mesh
      */
     {
-        auto sphereMesh = UVSphere(10, 10).generateMesh2();
+        auto sphereMesh = UVSphere(6, 6).generateMesh2();
         m_sphereVertexBuffer = m_context.createBuffer(sphereMesh.takeVertices());
         m_sphereIndexBuffer = m_context.createBuffer(sphereMesh.takeIndices());
     }
@@ -464,11 +476,15 @@ size_t DebugGeometryRenderer::addArrow(const glm::vec3 & origin, const glm::vec3
 
 size_t DebugGeometryRenderer::addWireframe()
 {
-    m_wireframes.emplace_back();
-
-    auto & wireframe = m_wireframes.back();
-
+    m_wireframes.emplace_back(m_vertexColorProgram, m_vertexColorDataLayout);
     return m_wireframes.size() - 1;
+}
+
+size_t DebugGeometryRenderer::addSphere(const glm::vec3 & color, float radius)
+{
+    m_spheres.emplace_back(m_shadedProgram, m_sphereVertexBuffer, m_sphereIndexBuffer, color, radius);
+    return m_spheres.size() - 1;
+
 }
 
 DebugBoxInstance & DebugGeometryRenderer::addAndGetBox(const glm::vec3 & halfExtent,
@@ -553,6 +569,16 @@ void DebugGeometryRenderer::schedule()
         auto & coneDraw = arrow.m_coneDraw;
         coneDraw.uniform("ViewProjection").set(m_camera.viewProjection());
         coneDraw.schedule();
+    }
+
+    for (auto & wireframe : m_wireframes)
+    {
+        wireframe.schedule(m_camera);
+    }
+
+    for (auto & sphere : m_spheres)
+    {
+        sphere.schedule(m_camera);
     }
 }
 

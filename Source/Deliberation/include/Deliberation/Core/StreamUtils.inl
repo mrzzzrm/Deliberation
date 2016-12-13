@@ -18,6 +18,14 @@ StreamType & operator<<(StreamType && os, const glm::uvec3 & v)
     return os;
 }
 
+
+template<typename StreamType, typename T, glm::precision precision>
+StreamType & operator<<(StreamType && os, const glm::tvec3<T, precision> & v)
+{
+    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << "," << std::to_string(v.z) << "}";
+    return os;
+}
+
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::uvec4 & v)
 {
@@ -33,13 +41,6 @@ StreamType & operator<<(StreamType && os, const glm::ivec2 & v)
 }
 
 template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::ivec3 & v)
-{
-    os << "{" << v.x << "," << v.y << "," << v.z << "}";
-    return os;
-}
-
-template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::ivec4 & v)
 {
     os << "{" << v.x << "," << v.y << "," << v.z << "," << v.w << "}";
@@ -50,13 +51,6 @@ template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::vec2 & v)
 {
     os << "{" << v.x << "," << v.y << "}";
-    return os;
-}
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::vec3 & v)
-{
-    os << "{" << v.x << "," << v.y << "," << v.z << "}";
     return os;
 }
 

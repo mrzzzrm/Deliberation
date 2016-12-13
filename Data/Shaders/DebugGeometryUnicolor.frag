@@ -2,7 +2,6 @@
 
 uniform vec3 Color;
 
-
 out vec3 o_Color;
 
 void main()

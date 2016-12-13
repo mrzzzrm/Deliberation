@@ -5,6 +5,7 @@
 
 #include <Deliberation/Core/Math/Box.h>
 #include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Core/Optional.h>
 
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Draw.h>
@@ -134,7 +135,7 @@ private:
     friend class DebugGeometryRenderer;
 
 private:
-    Draw                                    m_draw;
+    Optional<Draw>                          m_draw;
     Program                                 m_program;
     DataLayout                              m_vertexLayout;
     Transform3D                             m_transform;
@@ -158,14 +159,14 @@ public:
     void schedule(const Camera3D & camera);
 
 private:
-    Draw        m_draw;
-    Transform3D m_transform;
-    Program     m_program;
-    Buffer      m_vertexBuffer;
-    Buffer      m_indexBuffer;
-    glm::vec3   m_color;
-    float       m_scale;
-    bool        m_dirty = true;
+    Optional<Draw>  m_draw;
+    Transform3D     m_transform;
+    Program         m_program;
+    Buffer          m_vertexBuffer;
+    Buffer          m_indexBuffer;
+    glm::vec3       m_color;
+    float           m_scale;
+    bool            m_dirty = true;
 };
 
 class DELIBERATION_API DebugGeometryRenderer final
@@ -181,7 +182,7 @@ public:
     DebugArrowInstance & arrow(size_t index);
     DebugPointInstance & point(size_t index);
     DebugWireframeInstance & wireframe(size_t index);
-    DebugWireframeInstance & sphere(size_t index);
+    DebugSphereInstance & sphere(size_t index);
 
     void resizeArrows(uint count, const glm::vec3 & color = {1.0f, 0.0f, .5f}, bool visible = false);
 

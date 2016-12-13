@@ -229,8 +229,6 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
         std::vector<char> nameData(maxNameLength);
 
-        std::cout << "Active outputs: " << activeResources << std::endl;
-
         for (auto r = 0; r < activeResources; r++)
         {
             auto props =  std::vector<gl::GLenum>({gl::GL_NAME_LENGTH, gl::GL_TYPE, gl::GL_ARRAY_SIZE, gl::GL_LOCATION, gl::GL_LOCATION_INDEX});

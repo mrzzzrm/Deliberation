@@ -22,6 +22,7 @@ public:
     u32 configNumVertices(u8 config) const;
     NormalVertex configVertex(u8 config, u32 vertex) const;
     u8 configTriangleCorner(u8 config, u32 triangle) const;
+    const glm::vec3 & cornerOffset(u8 corner) const;
 
     void run();
 

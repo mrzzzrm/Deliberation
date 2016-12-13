@@ -69,6 +69,16 @@ std::array<glm::vec3, 12> edgePositions = {{
                                                {-0.5f, 0.5f, 0.0f},
                                            }};
 
+std::array<glm::vec3, 8> corners = {{
+                                        {-0.5f, -0.5f, -0.5f},
+                                        {0.5f, -0.5f, -0.5f},
+                                        {0.5f,  -0.5f, 0.5f},
+                                        {-0.5f,  -0.5f, 0.5f},
+                                        {-0.5f, 0.5f, -0.5f},
+                                        {0.5f, 0.5f, -0.5f},
+                                        {0.5f,  0.5f, 0.5f},
+                                        {-0.5f,  0.5f, 0.5f},
+                                    }};
 
 struct Config {
     u8 equivalenceClass = 255;
@@ -123,8 +133,6 @@ struct Configs {
     }
 
     Configs() {
-        std::array<Config, 256> configs;
-
         /**
          * Generate inverted configs
          */
@@ -206,7 +214,7 @@ struct Configs {
                     }
                     if (vertexCorners[0] == vertexCorners[2])
                     {
-                        bisectTriangle(c, a, b, vertexCorners[0], vertexCorners[2]);
+                        bisectTriangle(c, a, b, vertexCorners[0], vertexCorners[1]);
                         continue;
                     }
                     if (vertexCorners[1] == vertexCorners[2])
@@ -389,9 +397,10 @@ struct Configs {
     std::array<std::bitset<8>, 36>          m_equivalenceClasses;
     std::array<std::vector<int>, 36>        m_rawEquivalenceClassMeshes;
 
-
     std::array<std::vector<glm::vec3>, 36>  equivalenceClassMeshes;
     std::array<std::vector<u8>, 36>         equivalenceClassCorners;
+
+    std::array<Config, 256>                 configs;
 
     std::array<std::vector<glm::vec3>, 256> positions;
     std::array<std::vector<u8>, 256>        corners;
@@ -408,6 +417,36 @@ VoxelClusterMarchingCubes::VoxelClusterMarchingCubes(const VoxelCluster<glm::vec
 {
     std::cout << rotateY(std::bitset<8>("01001101")) << std::endl;
     std::cout << rotateZ(rotateY(std::bitset<8>("01001101"))).to_ullong() << std::endl;
+}
+
+
+u32 VoxelClusterMarchingCubes::configNumVertices(u8 config) const
+{
+    return Configs::get().positions[config].size();
+}
+
+NormalVertex VoxelClusterMarchingCubes::configVertex(u8 config, u32 vertex) const
+{
+    Assert(vertex < Configs::get().positions[config].size(), "");
+    Assert(vertex / 3 < Configs::get().normals[config].size(), "");
+
+    NormalVertex result;
+    result.position = Configs::get().positions[config][vertex];
+    result.normal = Configs::get().normals[config][vertex / 3];
+
+    return result;
+}
+
+u8 VoxelClusterMarchingCubes::configTriangleCorner(u8 config, u32 triangle) const
+{
+    Assert(triangle < Configs::get().corners[config].size(), "");
+    return Configs::get().corners[config][triangle];
+}
+
+const glm::vec3 & VoxelClusterMarchingCubes::cornerOffset(u8 corner) const
+{
+    Assert(corner < 8, "Not a corner index");
+    return corners[corner];
 }
 
 void VoxelClusterMarchingCubes::run()

@@ -13,6 +13,7 @@
 
 #include <Deliberation/Voxel/VoxelCluster.h>
 #include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
+#include <Deliberation/Voxel/VoxReader.h>
 
 #include "SceneExampleApplication.h"
 
@@ -32,43 +33,51 @@ public:
     {
         SceneExampleApplication::onStartup();
 
+        m_ground.disengage();
+
+        m_camera.setPosition({-15.0f, 1.0f, 15.0f});
+
         auto cluster = VoxelCluster<glm::vec3>({3,2,7});
         cluster.set({0, 0, 0}, {1.0f, 0.8f, 0.2f});
+        cluster.set({0, 1, 0}, {0.4f, 0.4f, 0.4f});
+        cluster.set({0, 2, 0}, {0.4f, 0.7f, 0.7f});
+        cluster.set({0, 3, 0}, {0.4f, 0.7f, 0.7f});
         cluster.set({1, 0, 1}, {0.0f, 0.8f, 0.2f});
         cluster.set({0, 0, 1}, {1.0f, 0.8f, 0.2f});
         cluster.set({0, 0, 2}, {1.0f, 0.8f, 0.2f});
+        cluster.set({0, 0, 3}, {0.8f, 0.9f, 0.2f});
         auto marchingCubes = VoxelClusterMarchingCubes(cluster);
         marchingCubes.run();
 
-        m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
-                                             deliberation::dataPath("Data/Shaders/VoxelExample.frag")});
-        m_draw = context().createDraw(m_program);
+//        m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
+//                                             deliberation::dataPath("Data/Shaders/VoxelExample.frag")});
+//        m_draw = context().createDraw(m_program);
 
-        m_draw.addVertices(marchingCubes.takeVertices());
-      //  m_draw.state().rasterizerState().setPrimitive(gl::GL_LINE_LOOP);
-      //  m_draw.state().setCullState(CullState::disabled());
+//        m_draw.addVertices(marchingCubes.takeVertices());
 
-        std::array<glm::vec3, 8> cornerColors = {
-            {1.0f, 0.0f, 0.0f},
-            {1.0f, 1.0f, 0.0f},
-            {1.0f, 1.0f, 1.0f},
-            {0.0f, 1.0f, 1.0f},
-            {0.0f, 0.0f, 1.0f},
-            {1.0f, 0.0f, 1.0f},
-            {0.5f, 0.5f, 0.5f},
-            {1.0f, 0.0f, 0.5f}
-        };
+        std::array<glm::vec3, 8> cornerColors = {{
+                                                     {1.0f, 0.0f, 0.0f},
+                                                     {1.0f, 1.0f, 0.0f},
+                                                     {1.0f, 1.0f, 1.0f},
+                                                     {0.0f, 1.0f, 1.0f},
+                                                     {0.0f, 0.0f, 1.0f},
+                                                     {1.0f, 0.0f, 1.0f},
+                                                     {0.5f, 0.5f, 0.5f},
+                                                     {1.0f, 0.0f, 0.5f}
+                                                 }};
 
-        for (u8 config = 0; config < 256; config++)
+        for (u32 config = 0; config < 256; config++)
         {
             m_geometryRenderers.emplace_back(context(), m_camera);
 
             auto & renderer = m_geometryRenderers.back();
 
-            auto centerX = (config % 16) - 8;
-            auto centerZ = -(config / 16) + 8;
+            auto centerX = i32(config % 16) - 8;
+            auto centerZ = -i32(config / 16) + 8;
 
-            auto transform = Transform3D::atPosition({centerX, 1.0f, centerZ});
+            auto center = glm::vec3{centerX, 1.0f, centerZ} * 2.4f;
+
+            auto transform = Transform3D::atPosition(center);
 
 
             auto color = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -76,40 +85,32 @@ public:
             /**
              * Cube
              */
-            auto & cube = renderer.addAndGetBox({0.5f, 0.5f, 0.5f}, color);
+            auto & cube = renderer.addAndGetBox({0.5f, 0.5f, 0.5f}, color, true);
             cube.setTransform(transform);
-//            cube.addLineStrip({
-//                                       {{-0.5f, -0.5f, 0.5f}, color},
-//                                       {{ 0.5f, -0.5f, 0.5f}, color},
-//                                       {{ 0.5f,  0.5f, 0.5f}, color},
-//                                       {{-0.5f,  0.5f, 0.5f}, color}
-//                                   });
-//            cube.addLineStrip({
-//                                       {{-0.5f, -0.5f,-0.5f}, color},
-//                                       {{ 0.5f, -0.5f,-0.5f}, color},
-//                                       {{ 0.5f,  0.5f,-0.5f}, color},
-//                                       {{-0.5f,  0.5f,-0.5f}, color}
-//                                   });
-//
-//            cube.addLineStrip({{{-0.5f, -0.5f, -0.5f}, color}, {{-0.5f, -0.5f, 0.5f}, color}});
-//            cube.addLineStrip({{{ 0.5f, -0.5f, -0.5f}, color}, {{ 0.5f, -0.5f, 0.5f}, color}});
-//            cube.addLineStrip({{{ 0.5f,  0.5f, -0.5f}, color}, {{ 0.5f,  0.5f, 0.5f}, color}});
-//            cube.addLineStrip({{{-0.5f,  0.5f, -0.5f}, color}, {{-0.5f,  0.5f, 0.5f}, color}});
 
             /**
              * Corners
              */
-            std::bitset<8> configBits;
+            std::bitset<8> configBits(config);
             for (u32 b = 0; b < configBits.size(); b++)
             {
-                auto & sphere = renderer.addAndGetSphere({0.3f, 0.3f, 1.0f}, 0.1f);
-                sphere.setTransform(Transform3D::atPosition(transform.worldTranslated(marchingCubes.cornerOffset(b))));
+                if (!configBits.test(b))
+                {
+                    continue;
+                }
+
+                auto & sphere = renderer.addAndGetSphere(cornerColors[b], 0.1f);
+
+                auto cornerTransform = transform.worldTranslated(marchingCubes.cornerOffset(b));
+
+                sphere.setTransform(cornerTransform);
             }
 
             /**
              * Triangles
              */
             auto & triangles = renderer.addAndGetWireframe();
+            triangles.setTransform(transform);
 
             color = glm::vec3(1.0f, 0.2f, 0.2f);
 
@@ -117,13 +118,36 @@ public:
             for (u32 v = 0; v < marchingCubes.configNumVertices(config); v += 3)
             {
                 triangles.addLineStrip({
-                                           {marchingCubes.configVertex(config, v).position, cornerColors[marchingCubes.configTriangleCorner(v/3)]},
-                                           {marchingCubes.configVertex(config, v + 1).position, cornerColors[marchingCubes.configTriangleCorner(v/3)]},
-                                           {marchingCubes.configVertex(config, v + 2).position, cornerColors[marchingCubes.configTriangleCorner(v/3)]},
-                                           {marchingCubes.configVertex(config, v).position, cornerColors[marchingCubes.configTriangleCorner(v/3)]},
+                                           {marchingCubes.configVertex(config, v).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
+                                           {marchingCubes.configVertex(config, v + 1).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
+                                           {marchingCubes.configVertex(config, v + 2).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
+                                           {marchingCubes.configVertex(config, v).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
                                        });
             }
         }
+
+        /**
+         *
+         */
+        VoxReader voxReader;
+
+        auto clusters = voxReader.read(deliberation::dataPath("Data/VoxelCluster/station.vox"));
+        if (!clusters.empty())
+        {
+            auto marchingCubes = VoxelClusterMarchingCubes(clusters[0]);
+            marchingCubes.run();
+
+            m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
+                                                 deliberation::dataPath("Data/Shaders/VoxelExample.frag")});
+            m_draw = context().createDraw(m_program);
+
+            m_draw.addVertices(marchingCubes.takeVertices());
+        }
+
+        /**
+         *
+         */
+        deliberation::DisableGLErrorChecks();
     }
 
     virtual void onFrame(float seconds) override
@@ -131,6 +155,7 @@ public:
         SceneExampleApplication::onFrame(seconds);
 
         m_draw.uniform("ViewProjection").set(m_camera.viewProjection());
+        m_draw.uniform("Transform").set(m_transform.matrix());
         m_draw.schedule();
 
         for (auto & geometryRenderer : m_geometryRenderers)
@@ -140,8 +165,9 @@ public:
     }
 
 private:
-    Program m_program;
-    Draw    m_draw;
+    Program     m_program;
+    Draw        m_draw;
+    Transform3D m_transform;
 
     std::vector<DebugGeometryRenderer> m_geometryRenderers;
 };
