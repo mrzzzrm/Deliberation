@@ -15,7 +15,7 @@
 #include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
 #include <Deliberation/Voxel/VoxReader.h>
 #include <Deliberation/Voxel/VoxelClusterMarchingCubesTriangulation.h>
-#include <Deliberation/Voxel/VoxelClusterMarchingCubes2.h>
+#include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
 
 #include "SceneExampleApplication.h"
 
@@ -40,24 +40,6 @@ public:
         m_ground.disengage();
 
         m_camera.setPosition({-15.0f, 1.0f, 15.0f});
-
-        auto cluster = VoxelCluster<glm::vec3>({3,2,7});
-        cluster.set({0, 0, 0}, {1.0f, 0.8f, 0.2f});
-        cluster.set({0, 1, 0}, {0.4f, 0.4f, 0.4f});
-        cluster.set({0, 2, 0}, {0.4f, 0.7f, 0.7f});
-        cluster.set({0, 3, 0}, {0.4f, 0.7f, 0.7f});
-        cluster.set({1, 0, 1}, {0.0f, 0.8f, 0.2f});
-        cluster.set({0, 0, 1}, {1.0f, 0.8f, 0.2f});
-        cluster.set({0, 0, 2}, {1.0f, 0.8f, 0.2f});
-        cluster.set({0, 0, 3}, {0.8f, 0.9f, 0.2f});
-        auto marchingCubes = VoxelClusterMarchingCubes(cluster);
-        marchingCubes.run();
-//
-//        m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
-//                                             deliberation::dataPath("Data/Shaders/VoxelExample.frag")});
-//        m_draw = context().createDraw(m_program);
-//
-//        m_draw.addVertices(marchingCubes.takeVertices());
 
         std::array<glm::vec3, 8> cornerColors = {{
                                                      {1.0f, 0.0f, 0.0f},
@@ -111,7 +93,18 @@ public:
 
                 auto & sphere = renderer.addAndGetSphere(cornerColors[b], 0.1f);
 
-                auto p = marchingCubes.cornerOffset(b);
+                static std::array<glm::vec3, 8> corners = {{
+                                                            {-0.5f, -0.5f, -0.5f},
+                                                            {0.5f, -0.5f, -0.5f},
+                                                            {0.5f,  -0.5f, 0.5f},
+                                                            {-0.5f,  -0.5f, 0.5f},
+                                                            {-0.5f, 0.5f, -0.5f},
+                                                            {0.5f, 0.5f, -0.5f},
+                                                            {0.5f,  0.5f, 0.5f},
+                                                            {-0.5f,  0.5f, 0.5f},
+                                                    }};
+
+                auto p = corners[b];
                 p.z *= -1.0f;
                 auto cornerTransform = transform.worldTranslated(p);
 
@@ -151,7 +144,7 @@ public:
         auto clusters = voxReader.read(deliberation::dataPath("Data/VoxelCluster/ship.vox"));
         if (!clusters.empty())
         {
-            auto marchingCubes = VoxelClusterMarchingCubes2(marchingCubesTriangulation, clusters[0]);
+            auto marchingCubes = VoxelClusterMarchingCubes(marchingCubesTriangulation, clusters[0]);
             marchingCubes.run();
 
             m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
