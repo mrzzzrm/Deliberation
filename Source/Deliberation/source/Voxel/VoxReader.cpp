@@ -24,7 +24,7 @@ u32 SUPPORTED_VERSION_NUMBER = 150;
 u32 CHUNK_HEADER_SIZE = 12;
 u32 MAX_NUM_MODELS_SUPPORTED = 16;
 
-VoxReader::Palette defaultPalette = {
+VoxReader::Palette DEFAULT_PALETTE = {
     0x00000000, 0xffffffff, 0xffccffff, 0xff99ffff, 0xff66ffff, 0xff33ffff, 0xff00ffff, 0xffffccff, 0xffccccff, 0xff99ccff, 0xff66ccff, 0xff33ccff, 0xff00ccff, 0xffff99ff, 0xffcc99ff, 0xff9999ff,
     0xff6699ff, 0xff3399ff, 0xff0099ff, 0xffff66ff, 0xffcc66ff, 0xff9966ff, 0xff6666ff, 0xff3366ff, 0xff0066ff, 0xffff33ff, 0xffcc33ff, 0xff9933ff, 0xff6633ff, 0xff3333ff, 0xff0033ff, 0xffff00ff,
     0xffcc00ff, 0xff9900ff, 0xff6600ff, 0xff3300ff, 0xff0000ff, 0xffffffcc, 0xffccffcc, 0xff99ffcc, 0xff66ffcc, 0xff33ffcc, 0xff00ffcc, 0xffffcccc, 0xffcccccc, 0xff99cccc, 0xff66cccc, 0xff33cccc,
@@ -113,7 +113,8 @@ std::vector<VoxelCluster<glm::vec3>> VoxReader::read(const std::string & path)
     /**
      * Read pallete
      */
-    Palette palette;
+    Palette * palette = nullptr;
+    Palette paletteInFile;
 
     auto rgbaChunk = readChunkHeader(file);
     if (rgbaChunk.type == RGBA_CHUNK)
@@ -122,12 +123,15 @@ std::vector<VoxelCluster<glm::vec3>> VoxReader::read(const std::string & path)
         for (u32 c = 0; c < 256; c++)
         {
             file.read((char*)rgba.data(), rgba.size());
-            palette[c] = ((u32)rgba[0] << 0) | ((u32)rgba[1] << 8) | ((u32)rgba[2] << 16) | ((u32)rgba[3] << 24);
+            paletteInFile[c] = ((u32)rgba[0] << 0) | ((u32)rgba[1] << 8) | ((u32)rgba[2] << 16) | ((u32)rgba[3] << 24);
         }
+
+        palette = &paletteInFile;
     }
     else
     {
         file.seekg(-CHUNK_HEADER_SIZE, std::ios_base::cur);
+        palette = &DEFAULT_PALETTE;
     }
 
     /**
@@ -148,7 +152,7 @@ std::vector<VoxelCluster<glm::vec3>> VoxReader::read(const std::string & path)
 
         for (auto & voxel : voxelModel.voxels)
         {
-            auto color = palette[voxel.colorIndex];
+            auto color = (*palette)[voxel.colorIndex];
 
             glm::vec3 colorv;
             colorv.x = (float)(color & 0xFF) / 255.0f;

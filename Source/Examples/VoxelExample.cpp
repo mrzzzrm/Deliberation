@@ -14,6 +14,8 @@
 #include <Deliberation/Voxel/VoxelCluster.h>
 #include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
 #include <Deliberation/Voxel/VoxReader.h>
+#include <Deliberation/Voxel/VoxelClusterMarchingCubesTriangulation.h>
+#include <Deliberation/Voxel/VoxelClusterMarchingCubes2.h>
 
 #include "SceneExampleApplication.h"
 
@@ -33,6 +35,8 @@ public:
     {
         SceneExampleApplication::onStartup();
 
+        VoxelClusterMarchingCubesTriangulation marchingCubesTriangulation;
+
         m_ground.disengage();
 
         m_camera.setPosition({-15.0f, 1.0f, 15.0f});
@@ -48,11 +52,11 @@ public:
         cluster.set({0, 0, 3}, {0.8f, 0.9f, 0.2f});
         auto marchingCubes = VoxelClusterMarchingCubes(cluster);
         marchingCubes.run();
-
+//
 //        m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
 //                                             deliberation::dataPath("Data/Shaders/VoxelExample.frag")});
 //        m_draw = context().createDraw(m_program);
-
+//
 //        m_draw.addVertices(marchingCubes.takeVertices());
 
         std::array<glm::vec3, 8> cornerColors = {{
@@ -66,14 +70,20 @@ public:
                                                      {1.0f, 0.0f, 0.5f}
                                                  }};
 
-        for (u32 config = 0; config < 256; config++)
+        auto & configs = marchingCubesTriangulation.configs();
+
+        for (u32 configID = 0; configID < configs.size(); configID++)
         {
+            if (configID != 158) continue;
+
+            auto & triangulation = configs[configID];
+
             m_geometryRenderers.emplace_back(context(), m_camera);
 
             auto & renderer = m_geometryRenderers.back();
 
-            auto centerX = i32(config % 16) - 8;
-            auto centerZ = -i32(config / 16) + 8;
+            auto centerX = i32(configID % 16) - 8;
+            auto centerZ = -i32(configID / 16) + 8;
 
             auto center = glm::vec3{centerX, 1.0f, centerZ} * 2.4f;
 
@@ -91,7 +101,7 @@ public:
             /**
              * Corners
              */
-            std::bitset<8> configBits(config);
+            std::bitset<8> configBits(configID);
             for (u32 b = 0; b < configBits.size(); b++)
             {
                 if (!configBits.test(b))
@@ -101,7 +111,9 @@ public:
 
                 auto & sphere = renderer.addAndGetSphere(cornerColors[b], 0.1f);
 
-                auto cornerTransform = transform.worldTranslated(marchingCubes.cornerOffset(b));
+                auto p = marchingCubes.cornerOffset(b);
+                p.z *= -1.0f;
+                auto cornerTransform = transform.worldTranslated(p);
 
                 sphere.setTransform(cornerTransform);
             }
@@ -114,14 +126,19 @@ public:
 
             color = glm::vec3(1.0f, 0.2f, 0.2f);
 
-            Assert(marchingCubes.configNumVertices(config) % 3 == 0, "");
-            for (u32 v = 0; v < marchingCubes.configNumVertices(config); v += 3)
+            for (auto & triangle : triangulation)
             {
+                auto pos = triangle.positions;
+
+                pos[0].z *= -1.0f;
+                pos[1].z *= -1.0f;
+                pos[2].z *= -1.0f;
+
                 triangles.addLineStrip({
-                                           {marchingCubes.configVertex(config, v).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
-                                           {marchingCubes.configVertex(config, v + 1).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
-                                           {marchingCubes.configVertex(config, v + 2).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
-                                           {marchingCubes.configVertex(config, v).position, cornerColors[marchingCubes.configTriangleCorner(config, v/3)]},
+                                           {pos[0], cornerColors[triangle.corner]},
+                                           {pos[1], cornerColors[triangle.corner]},
+                                           {pos[2], cornerColors[triangle.corner]},
+                                           {pos[0], cornerColors[triangle.corner]},
                                        });
             }
         }
@@ -131,10 +148,10 @@ public:
          */
         VoxReader voxReader;
 
-        auto clusters = voxReader.read(deliberation::dataPath("Data/VoxelCluster/station.vox"));
+        auto clusters = voxReader.read(deliberation::dataPath("Data/VoxelCluster/ship.vox"));
         if (!clusters.empty())
         {
-            auto marchingCubes = VoxelClusterMarchingCubes(clusters[0]);
+            auto marchingCubes = VoxelClusterMarchingCubes2(marchingCubesTriangulation, clusters[0]);
             marchingCubes.run();
 
             m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
@@ -153,6 +170,7 @@ public:
     virtual void onFrame(float seconds) override
     {
         SceneExampleApplication::onFrame(seconds);
+
 
         m_draw.uniform("ViewProjection").set(m_camera.viewProjection());
         m_draw.uniform("Transform").set(m_transform.matrix());

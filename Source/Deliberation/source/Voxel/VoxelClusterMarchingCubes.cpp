@@ -232,12 +232,16 @@ struct Configs {
                 auto l = (c + a) / 2.0f;
                 auto m = (a + b + c) / 3.0f;
 
-                addTriangleToEquivalenceClass(e, a, m, l, vertexCorners[0]);
-                addTriangleToEquivalenceClass(e, a, j, m, vertexCorners[0]);
-                addTriangleToEquivalenceClass(e, b, m, j, vertexCorners[1]);
-                addTriangleToEquivalenceClass(e, b, k, m, vertexCorners[1]);
-                addTriangleToEquivalenceClass(e, c, m, k, vertexCorners[2]);
-                addTriangleToEquivalenceClass(e, c, l, m, vertexCorners[2]);
+//                addTriangleToEquivalenceClass(e, a, m, l, vertexCorners[0]);
+//                addTriangleToEquivalenceClass(e, a, j, m, vertexCorners[0]);
+//                addTriangleToEquivalenceClass(e, b, m, j, vertexCorners[1]);
+//                addTriangleToEquivalenceClass(e, b, k, m, vertexCorners[1]);
+//                addTriangleToEquivalenceClass(e, c, m, k, vertexCorners[2]);
+//                addTriangleToEquivalenceClass(e, c, l, m, vertexCorners[2]);
+                addTriangleToEquivalenceClass(e, a, j, l, vertexCorners[0]);
+                addTriangleToEquivalenceClass(e, k, j, b, vertexCorners[1]);
+                addTriangleToEquivalenceClass(e, l, k, c, vertexCorners[2]);
+//                addTriangleToEquivalenceClass(e, l, j, k, vertexCorners[1]);
             }
         }
 
@@ -364,6 +368,33 @@ struct Configs {
         equivalenceClassMeshes[e].emplace_back(b);
         equivalenceClassMeshes[e].emplace_back(c);
         equivalenceClassCorners[e].emplace_back(corner);
+    }
+
+    u8 getCornerOfTriangle(const glm::vec3 & a,
+                           const glm::vec3 & b,
+                           const glm::vec3 & c,
+                           const std::array<u8, 3> & corners)
+    {
+        auto m = (a + b + c) / 3.0f;
+        m += 0.5f;
+        m *= 2.0f;
+
+        glm::ivec3 octcube(m.x, m.y, m.z);
+
+        auto index = octcube.y * 4 + octcube.z * 2;
+
+        if (octcube.z == 0)
+        {
+            index += octcube.x;
+        }
+        else
+        {
+            index += (1 - octcube.x);
+        }
+
+        Assert(index < 8, "");
+
+        return index;
     }
 
     u8 getCornerOfEdgeIndex(const std::bitset<8> & config, u8 edgeIndex) const
