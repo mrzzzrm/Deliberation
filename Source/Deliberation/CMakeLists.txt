@@ -208,7 +208,6 @@ set(sources
 
     ${source_path}/Voxel/VoxelCluster.cpp
     ${source_path}/Voxel/VoxelClusterMarchingCubes.cpp
-    ${source_path}/Voxel/VoxelClusterMarchingCubes2.cpp
     ${source_path}/Voxel/VoxelClusterMarchingCubesTriangulation.cpp
     ${source_path}/Voxel/VoxReader.cpp)
 
@@ -393,7 +392,6 @@ set(api_includes
     ${include_path}/Voxel/VoxelCluster.h
     ${include_path}/Voxel/VoxelCluster.inl
     ${include_path}/Voxel/VoxelClusterMarchingCubes.h
-    ${include_path}/Voxel/VoxelClusterMarchingCubes2.h
     ${include_path}/Voxel/VoxelClusterMarchingCubesTriangulation.h
     ${include_path}/Voxel/VoxReader.h)
 
