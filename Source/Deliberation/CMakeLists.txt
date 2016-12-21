@@ -19,8 +19,6 @@ set(DELIBERATION_INCLUDE_DIRS
     CACHE INTERAL "All Deliberation include dirs" 
 )
 
-message("CXXOPTS: ${DELIBERATION_INCLUDE_DIRS}")
-
 # include
 include_directories(
     ${DELIBERATION_INCLUDE_DIRS}

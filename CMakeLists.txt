@@ -4,7 +4,6 @@ project(Deliberation C CXX)
 
 # Configuration options
 
-
 # CMake configuration
 set(CMAKE_MODULE_PATH 			   ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -12,19 +11,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Setup platform specifics (compile flags, etc., ...)
-if(MSVC)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Platforms/WindowsMSVC.cmake)
-elseif(WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Platforms/WindowsGCC.cmake)
-elseif(APPLE)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Platforms/MacOS.cmake)
-elseif(UNIX AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Platforms/LinuxClang.cmake)
-elseif(UNIX)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Platforms/LinuxGCC.cmake)
-else()
-    message(WARNING "Unsupported platform/compiler combination")
-endif()
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Platforms/Platform.cmake)
 
 # dependencies
 find_package(Bandit     REQUIRED)
