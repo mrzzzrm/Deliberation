@@ -89,8 +89,8 @@ std::vector<VoxelCluster<glm::vec3>> VoxReader::read(const std::string & path)
         Assert(sizeChunk.type == SIZE_CHUNK, "No size chunk");
 
         file.read((char*)&voxelModels[m].size.x, sizeof(voxelModels[m].size.x));
-        file.read((char*)&voxelModels[m].size.y, sizeof(voxelModels[m].size.y));
         file.read((char*)&voxelModels[m].size.z, sizeof(voxelModels[m].size.z));
+        file.read((char*)&voxelModels[m].size.y, sizeof(voxelModels[m].size.y));
 
         std::cout << "Model " << m << ": " << voxelModels[m].size << std::endl;
 
@@ -137,10 +137,6 @@ std::vector<VoxelCluster<glm::vec3>> VoxReader::read(const std::string & path)
     /**
      *
      */
-
-    /**
-     *
-     */
     std::vector<VoxelCluster<glm::vec3>> voxelClusters;
     voxelClusters.reserve(numModels);
 
@@ -182,8 +178,8 @@ VoxReader::Voxel VoxReader::readVoxel(std::ifstream & file)
 
     Voxel voxel;
     voxel.position.x = voxelData[0];
-    voxel.position.y = voxelData[1];
-    voxel.position.z = voxelData[2];
+    voxel.position.y = voxelData[2];
+    voxel.position.z = voxelData[1];
     voxel.colorIndex = voxelData[3];
 
     return voxel;

@@ -164,7 +164,6 @@ public:
     {
         SceneExampleApplication::onFrame(seconds);
 
-
         m_draw.uniform("ViewProjection").set(m_camera.viewProjection());
         m_draw.uniform("Transform").set(m_transform.matrix());
         m_draw.schedule();
