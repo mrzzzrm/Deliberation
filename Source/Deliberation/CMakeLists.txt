@@ -188,15 +188,17 @@ set(sources
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.cpp
+    ${source_path}/Scene/Debug/DebugGeometryManager.cpp
+    ${source_path}/Scene/Debug/DebugGeometryRenderer.cpp
+    ${source_path}/Scene/Debug/DebugCameraNavigator3D.cpp
+    ${source_path}/Scene/Debug/DebugGrid3DRenderer.cpp
+    ${source_path}/Scene/Debug/DebugGroundPlaneRenderer.cpp
+    ${source_path}/Scene/Debug/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
+    ${source_path}/Scene/CameraDolly3D.cpp
     ${source_path}/Scene/ConeMesh.cpp
     ${source_path}/Scene/CuboidMesh.cpp
-    ${source_path}/Scene/DebugGeometryRenderer.cpp
-    ${source_path}/Scene/DebugCameraNavigator3D.cpp
-    ${source_path}/Scene/DebugGrid3DRenderer.cpp
-    ${source_path}/Scene/DebugGroundPlaneRenderer.cpp
-    ${source_path}/Scene/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
     ${source_path}/Scene/Mesh.cpp
     ${source_path}/Scene/Mesh2.cpp
@@ -274,6 +276,8 @@ set(api_includes
     ${include_path}/Core/Math/Morton.inl
     ${include_path}/Core/Math/Plane.h
     ${include_path}/Core/Math/PolygonClipping.h
+    ${include_path}/Core/Math/Pose3D.h
+    ${include_path}/Core/Math/Pose3D.inl
     ${include_path}/Core/Math/PrimitiveIntersection.h
     ${include_path}/Core/Math/Random.h
     ${include_path}/Core/Math/Random.inl
@@ -371,15 +375,17 @@ set(api_includes
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionMix.h
+    ${include_path}/Scene/Debug/DebugGeometryManager.h
+    ${include_path}/Scene/Debug/DebugGeometryRenderer.h
+    ${include_path}/Scene/Debug/DebugCameraNavigator3D.h
+    ${include_path}/Scene/Debug/DebugGrid3DRenderer.h
+    ${include_path}/Scene/Debug/DebugGroundPlaneRenderer.h
+    ${include_path}/Scene/Debug/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/Blit.h
     ${include_path}/Scene/Camera3D.h
+    ${include_path}/Scene/CameraDolly3D.h
     ${include_path}/Scene/ConeMesh.h
     ${include_path}/Scene/CuboidMesh.h
-    ${include_path}/Scene/DebugGeometryRenderer.h
-    ${include_path}/Scene/DebugCameraNavigator3D.h
-    ${include_path}/Scene/DebugGrid3DRenderer.h
-    ${include_path}/Scene/DebugGroundPlaneRenderer.h
-    ${include_path}/Scene/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/Mesh2.h

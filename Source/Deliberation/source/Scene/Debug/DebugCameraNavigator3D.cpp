@@ -1,4 +1,4 @@
-#include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 
 #include <Deliberation/Core/InputAdapterBase.h>
 

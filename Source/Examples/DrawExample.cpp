@@ -12,9 +12,9 @@
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/CuboidMesh.h>
-#include <Deliberation/Scene/DebugGrid3DRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGrid3DRenderer.h>
 #include <Deliberation/Scene/MeshCompiler.h>
-#include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 
 using namespace deliberation;
 

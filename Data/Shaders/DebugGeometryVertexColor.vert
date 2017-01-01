@@ -1,7 +1,11 @@
 #version 330
 
+uniform Globals
+{
+    mat4 ViewProjection;
+};
+
 uniform mat4 Transform;
-uniform mat4 ViewProjection;
 
 in vec3 Position;
 in vec3 Color;

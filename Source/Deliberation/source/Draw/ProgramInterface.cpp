@@ -203,8 +203,6 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                         strippedName = blockAndName.substr(dotPos + 1, std::string::npos);
                     }
 
-                    std::cout << "Name: " << strippedName << std::endl;
-
                     fields.emplace_back(strippedName, uniform.type(), uniformOffsets[indices[i]]);
                 }
 

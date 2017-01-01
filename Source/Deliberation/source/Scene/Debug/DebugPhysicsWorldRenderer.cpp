@@ -1,4 +1,4 @@
-#include <Deliberation/Scene/DebugPhysicsWorldRenderer.h>
+#include <Deliberation/Scene/Debug/DebugPhysicsWorldRenderer.h>
 
 #include <iostream>
 
@@ -17,10 +17,10 @@ DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(Context & context,
     m_physicsWorld(physicsWorld),
     m_camera(camera)
 {
-    m_contactNormalRenderer.reset(m_context, m_camera);
-    m_contactVelocityRenderer.reset(m_context, m_camera);
-    m_linearVelocityRenderer.reset(m_context, m_camera);
-    m_angularVelocityRenderer.reset(m_context, m_camera);
+//    m_contactNormalRenderer.reset(m_context, m_camera);
+//    m_contactVelocityRenderer.reset(m_context, m_camera);
+//    m_linearVelocityRenderer.reset(m_context, m_camera);
+//    m_angularVelocityRenderer.reset(m_context, m_camera);
 }
 
 void DebugPhysicsWorldRenderer::schedule()
@@ -39,8 +39,8 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Allocate enough arrows for contact points
      */
-    m_contactNormalRenderer->resizeArrows(numContactPoints, {0.2f, 1.0f, 0.2}, true);
-    m_contactVelocityRenderer->resizeArrows(numContactPoints * 2, {0.2f, 0.7f, 0.4}, true);
+    m_contactNormalRenderer->resizeArrows(numContactPoints/*, {0.2f, 1.0f, 0.2}, true*/);
+    m_contactVelocityRenderer->resizeArrows(numContactPoints * 2/*, {0.2f, 0.7f, 0.4}, true*/);
 
     /**
      * Setup contacts
@@ -54,13 +54,17 @@ void DebugPhysicsWorldRenderer::schedule()
             auto & bodyA = contact->bodyA();
             auto & bodyB = contact->bodyB();
 
-            m_contactNormalRenderer->arrow(index).reset(point.position, point.normal);
+//            {
+//                auto &arrow = m_contactNormalRenderer->arrow(index);
+//                arrow.setOrigin(point.position);
+//                arrow.setDelta(point.normal);
+//            }
 
             auto localVA = bodyA.localVelocity(point.position - bodyA.transform().position());
             auto localVB = bodyB.localVelocity(point.position - bodyB.transform().position());
 
-            m_contactVelocityRenderer->arrow(2 * index + 0).reset(point.position, localVA);
-            m_contactVelocityRenderer->arrow(2 * index + 1).reset(point.position, localVB);
+//            m_contactVelocityRenderer->arrow(2 * index + 0).reset(point.position, localVA);
+//            m_contactVelocityRenderer->arrow(2 * index + 1).reset(point.position, localVB);
 
             if (point.velocityBias < 0.01f)
             {
@@ -75,8 +79,8 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Linear Velocities and Angular Velocities
      */
-    m_linearVelocityRenderer->resizeArrows(m_physicsWorld.rigidBodies().count(), {1.0f, 1.0f, 0.0f}, true);
-    m_angularVelocityRenderer->resizeArrows(m_physicsWorld.rigidBodies().count(), {1.0f, 0.0f, 1.0f}, true);
+//    m_linearVelocityRenderer->resizeArrows(m_physicsWorld.rigidBodies().count(), {1.0f, 1.0f, 0.0f}, true);
+//    m_angularVelocityRenderer->resizeArrows(m_physicsWorld.rigidBodies().count(), {1.0f, 0.0f, 1.0f}, true);
 
     auto b = 0u;
     for (auto & body : m_physicsWorld.rigidBodies()) {
@@ -106,10 +110,10 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Commit
      */
-    m_linearVelocityRenderer->schedule();
-    m_angularVelocityRenderer->schedule();
-    m_contactNormalRenderer->schedule();
-    m_contactVelocityRenderer->schedule();
+//    m_linearVelocityRenderer->schedule();
+//    m_angularVelocityRenderer->schedule();
+//    m_contactNormalRenderer->schedule();
+//    m_contactVelocityRenderer->schedule();
 }
 
 }

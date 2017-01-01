@@ -9,10 +9,10 @@
 #include <Deliberation/Platform/Application.h>
 
 #include <Deliberation/Scene/Camera3D.h>
-#include <Deliberation/Scene/DebugGroundPlaneRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
-#include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 
 #include <Deliberation/Platform/Application.h>
 
