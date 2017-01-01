@@ -10,7 +10,7 @@
 
 using namespace deliberation;
 
-struct Sphere {
+struct OrbittingSphere {
     size_t index = -1;
     float radius = 0.0f;
     float angle = 0.0f;
@@ -36,18 +36,20 @@ public:
         m_manager.reset(context());
         m_renderer.reset(*m_manager);
 
-        for (uint i = 0; i < 14; i++)
+        for (uint i = 0; i < 5; i++)
         {
-            auto & box = m_renderer->addBox({1.2f - i * 0.08f, 0.3f, 1.3f - i * 0.08f}, {1.0f, 0.2f, 0.2f}, false);
-            auto transform = Transform3D::atPosition({0.0f, i * box.halfExtent().y, 0.0f});
+            auto & box = m_renderer->addBox({1.2f - i * 0.18f, 0.3f, 1.3f - i * 0.18f}, {1.0f, 0.2f, 0.2f}, false);
+            auto transform = Transform3D::atPosition({0.0f, i * (2.0f * box.halfExtent().y), 0.0f});
             transform.setCenter({0.0f, -box.halfExtent().y, 0.0f});
             box.setTransform(transform);
         }
 
+        m_renderer->addArrow({}, {}, {0.0f, 1.0f, 0.0f});
+
         for (uint i = 0; i < 3; i++) {
             auto index = m_renderer->addSphere({0.0f, 0.5f, 0.8f}, 0.5f).index();
 
-            Sphere sphere;
+            OrbittingSphere sphere;
             sphere.index = index;
             sphere.radius = 3.0f + i * 2.0f;
             sphere.angle = i * 0.6f;
@@ -62,11 +64,16 @@ public:
         SceneExampleApplication::onFrame(seconds);
 
         for (auto & sphere : m_spheres) {
+            sphere.angle += seconds / sphere.radius;
             auto & s = m_renderer->sphere(sphere.index);
             s.setTransform(Transform3D::atPosition({std::cos(sphere.angle) * sphere.radius,
                                                     sphere.y,
                                                     std::sin(sphere.angle) * sphere.radius}));
         }
+
+        m_arrowPhase += seconds;
+        m_renderer->arrow(0).setOrigin({1.5f, 0.0f, 1.5f});
+        m_renderer->arrow(0).setDelta({0.0f, 0.6f, 0.0f});
 
         m_renderer->schedule(m_camera);
     }
@@ -75,7 +82,9 @@ private:
     Optional<DebugGeometryManager>  m_manager;
     Optional<DebugGeometryRenderer> m_renderer;
 
-    std::vector<Sphere>             m_spheres;
+    std::vector<OrbittingSphere>    m_spheres;
+
+    float                           m_arrowPhase = 0.0f;
 };
 
 int main(int argc, char ** argv)

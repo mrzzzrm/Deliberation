@@ -15,6 +15,9 @@ namespace deliberation
 class DELIBERATION_API DebugGeometryManager final
 {
 public:
+    static constexpr float ARROW_CONE_HEIGHT = 0.2f;
+
+public:
     struct BuildIns
     {
         /**

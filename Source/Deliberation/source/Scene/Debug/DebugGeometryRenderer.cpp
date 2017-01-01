@@ -155,18 +155,168 @@ Box DebugBoxInstance::toBox() const
     return Box(m_halfExtent, m_transform);
 }
 
-DebugBoxInstance::DebugPointInstance(DebugGeometryRenderer & renderer,
-size_t index):
-    DebugGeometryInstance(renderer)
+DebugPointInstance::DebugPointInstance(DebugGeometryRenderer & renderer,
+                                       size_t index):
+    DebugGeometryInstance(renderer, index)
 {
+    m_draw = manager().context().createDraw(manager().buildIns().unicolorProgram, gl::GL_POINTS);
+    m_draw.addVertexBuffer(manager().buildIns().pointVertexBuffer);
+    m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
+    m_draw.state().rasterizerState().setPointSize(3.0f);
 
+    m_colorUniform = m_draw.uniform("Color");
 }
 
-const glm::vec3 & DebugBoxInstance::color() const;
+const glm::vec3 & DebugPointInstance::color() const
+{
+    return m_color;
+}
 
-void DebugBoxInstance::setColor(const glm::vec3 & color);
+void DebugPointInstance::setColor(const glm::vec3 & color)
+{
+    m_color = color;
+    m_colorUniform.set(m_color);
+}
 
-void DebugBoxInstance::schedule() const;
+void DebugPointInstance::schedule() const
+{
+    m_draw.schedule();
+}
+
+DebugArrowInstance::DebugArrowInstance(DebugGeometryRenderer & renderer,
+                                       size_t index):
+    DebugGeometryInstance(renderer, index)
+{
+    m_lineVertices = LayoutedBlob(DataLayout("Position", Type_Vec3), 2);
+    m_lineVertexBuffer = manager().context().createBuffer(m_lineVertices.layout());
+
+    m_lineDraw = manager().context().createDraw(manager().buildIns().unicolorProgram,
+                                                gl::GL_LINES);
+    m_lineDraw.addVertexBuffer(m_lineVertexBuffer);
+    m_lineDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
+    m_lineDraw.uniform("Transform").set(glm::mat4(1.0f));
+    m_lineColorUniform = m_lineDraw.uniform("Color");
+
+    m_coneDraw = manager().context().createDraw(manager().buildIns().shadedProgram,
+                                                gl::GL_TRIANGLES);
+    m_coneDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
+    m_coneDraw.addVertexBuffer(manager().buildIns().coneVertexBuffer);
+    m_coneDraw.setIndexBuffer(manager().buildIns().coneIndexBuffer);
+    m_coneColorUniform = m_coneDraw.uniform("Color");
+    m_coneTransformUniform = m_coneDraw.uniform("Transform");
+}
+
+const glm::vec3 & DebugArrowInstance::origin() const
+{
+    return m_origin;
+}
+
+const glm::vec3 & DebugArrowInstance::delta() const
+{
+    return m_delta;
+}
+
+const glm::vec3 & DebugArrowInstance::color() const
+{
+    return m_color;
+}
+
+void DebugArrowInstance::setOrigin(const glm::vec3 & origin)
+{
+    reset(origin, m_delta);
+}
+
+void DebugArrowInstance::setDelta(const glm::vec3 & delta)
+{
+    reset(m_origin, delta);
+}
+
+void DebugArrowInstance::setColor(const glm::vec3 & color)
+{
+    m_color = color;
+    m_lineColorUniform.set(m_color);
+    m_coneColorUniform.set(m_color);
+}
+
+void DebugArrowInstance::reset(const glm::vec3 & origin, const glm::vec3 & delta)
+{
+    m_origin = origin;
+    m_delta = delta;
+
+    auto positions = m_lineVertices.field<glm::vec3>("Position");
+    positions[0] = m_origin;
+    positions[1] = m_origin + m_delta;
+
+    m_lineVertexBuffer.scheduleUpload(m_lineVertices);
+
+    if (m_delta == glm::vec3(0.0f))
+    {
+        m_coneTransformUniform.set(Transform3D::identity().matrix());
+        return;
+    }
+
+    Transform3D transform;
+
+    auto rotation = RotationMatrixFromDirectionY(m_delta);
+
+    transform.setPosition(m_origin + m_delta - glm::normalize(m_delta) * DebugGeometryManager::ARROW_CONE_HEIGHT);
+    transform.setOrientation(glm::quat_cast(rotation));
+
+    m_coneTransformUniform.set(transform.matrix());
+}
+
+void DebugArrowInstance::schedule() const
+{
+    m_lineDraw.schedule();
+    m_coneDraw.schedule();
+}
+
+DebugSphereInstance::DebugSphereInstance(DebugGeometryRenderer & renderer,
+                                         size_t index):
+    DebugGeometryInstance(renderer, index)
+{
+    m_draw = manager().context().createDraw(manager().buildIns().shadedProgram,
+                                            gl::GL_TRIANGLES);
+    m_draw.addVertexBuffer(manager().buildIns().sphereVertexBuffer);
+    m_draw.setIndexBuffer(manager().buildIns().sphereIndexBuffer);
+    m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
+
+    m_colorUniform = m_draw.uniform("Color");
+    m_transformUniform = m_draw.uniform("Transform");
+}
+
+const glm::vec3 & DebugSphereInstance::color() const
+{
+    return m_color;
+}
+
+float DebugSphereInstance::radius() const
+{
+    return m_radius;
+}
+
+void DebugSphereInstance::setColor(const glm::vec3 & color)
+{
+    m_color = color;
+    m_colorUniform.set(color);
+}
+
+void DebugSphereInstance::setRadius(float radius)
+{
+    m_radius = radius;
+    m_transformDirty = true;
+}
+
+void DebugSphereInstance::schedule() const
+{
+    if (m_transformDirty)
+    {
+        m_transformUniform.set(m_transform.matrix() * glm::scale(glm::vec3(m_radius)));
+        m_transformDirty = false;
+    }
+
+    m_draw.schedule();
+}
 
 DebugGeometryRenderer::DebugGeometryRenderer(DebugGeometryManager & manager):
     m_manager(manager)
@@ -204,7 +354,8 @@ DebugBoxInstance & DebugGeometryRenderer::box(size_t index)
 
 DebugArrowInstance & DebugGeometryRenderer::arrow(size_t index)
 {
-
+    Assert(index < m_arrows.size(), "Invalid index");
+    return *m_arrows[index];
 }
 
 DebugPointInstance & DebugGeometryRenderer::point(size_t index)
@@ -219,7 +370,8 @@ DebugWireframeInstance & DebugGeometryRenderer::wireframe(size_t index)
 
 DebugSphereInstance & DebugGeometryRenderer::sphere(size_t index)
 {
-
+    Assert(index < m_spheres.size(), "Invalid index");
+    return *m_spheres[index];
 }
 
 DebugPoseInstance & DebugGeometryRenderer::pose(size_t index)
@@ -234,7 +386,7 @@ size_t DebugGeometryRenderer::numBoxes() const
 
 size_t DebugGeometryRenderer::numPoints() const
 {
-
+    return m_arrows.size();
 }
 
 size_t DebugGeometryRenderer::numArrows() const
@@ -249,7 +401,7 @@ size_t DebugGeometryRenderer::numWireframes() const
 
 size_t DebugGeometryRenderer::numSpheres() const
 {
-
+    return m_spheres.size();
 }
 
 size_t DebugGeometryRenderer::numPoses() const
@@ -279,7 +431,17 @@ void DebugGeometryRenderer::resizePoints(size_t count)
 
 void DebugGeometryRenderer::resizeArrows(size_t count)
 {
-
+    if (count < m_arrows.size())
+    {
+        m_arrows.erase(m_arrows.begin() + count, m_arrows.end());
+    }
+    else
+    {
+        for (size_t a = m_arrows.size(); a < count; a++)
+        {
+            addArrow({}, {}, {1.0f, 0.0f, 0.5f});
+        }
+    }
 }
 
 void DebugGeometryRenderer::resizeWireframes(size_t count)
@@ -289,7 +451,17 @@ void DebugGeometryRenderer::resizeWireframes(size_t count)
 
 void DebugGeometryRenderer::resizeSpheres(size_t count)
 {
-
+    if (count < m_spheres.size())
+    {
+        m_spheres.erase(m_spheres.begin() + count, m_spheres.end());
+    }
+    else
+    {
+        for (size_t s = m_spheres.size(); s < count; s++)
+        {
+            addSphere({1.0f, 0.0f, 0.5f}, 1.0f);
+        }
+    }
 }
 
 void DebugGeometryRenderer::resizePoses(size_t count)
@@ -316,7 +488,13 @@ DebugPointInstance & DebugGeometryRenderer::addPoint(const glm::vec3 & position,
 
 DebugArrowInstance & DebugGeometryRenderer::addArrow(const glm::vec3 & origin, const glm::vec3 & delta, const glm::vec3 & color)
 {
+    m_arrows.push_back(std::make_unique<DebugArrowInstance>(*this, m_arrows.size()));
+    auto & arrow = *m_arrows.back();
 
+    arrow.reset(origin, delta);
+    arrow.setColor(color);
+
+    return arrow;
 }
 
 DebugWireframeInstance & DebugGeometryRenderer::addWireframe()
@@ -326,7 +504,13 @@ DebugWireframeInstance & DebugGeometryRenderer::addWireframe()
 
 DebugSphereInstance & DebugGeometryRenderer::addSphere(const glm::vec3 & color, float radius)
 {
+    m_spheres.push_back(std::make_unique<DebugSphereInstance>(*this, m_spheres.size()));
+    auto & sphere = *m_spheres.back();
 
+    sphere.setRadius(radius);
+    sphere.setColor(color);
+
+    return sphere;
 }
 
 DebugPoseInstance & DebugGeometryRenderer::addPose(const Pose3D & pose)
@@ -369,8 +553,19 @@ void DebugGeometryRenderer::schedule(const Camera3D & camera)
     m_globals.field<glm::mat4>("ViewProjection")[0] = camera.viewProjection();
     m_globalsBuffer.scheduleUpload(m_globals);
 
-    for (auto & box : m_boxes) {
+    for (auto & box : m_boxes)
+    {
         box->schedule();
+    }
+
+    for (auto & arrow : m_arrows)
+    {
+        arrow->schedule();
+    }
+
+    for (auto & sphere : m_spheres)
+    {
+        sphere->schedule();
     }
 }
 

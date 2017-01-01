@@ -95,6 +95,7 @@ public:
 private:
     Draw        m_draw;
     glm::vec3   m_color;
+    Uniform     m_colorUniform;
 };
 
 class DELIBERATION_API DebugArrowInstance final:
@@ -114,17 +115,21 @@ public:
 
     void reset(const glm::vec3 & origin, const glm::vec3 & delta);
 
-    void schedule(const Camera3D & camera) const;
+    void schedule() const;
 
 private:
-    Draw      m_lineDraw;
-    Buffer    m_lineVertexBuffer;
+    Draw            m_lineDraw;
+    Buffer          m_lineVertexBuffer;
+    LayoutedBlob    m_lineVertices;
+    Uniform         m_lineColorUniform;
 
-    Draw      m_coneDraw;
+    Draw            m_coneDraw;
+    Uniform         m_coneColorUniform;
+    Uniform         m_coneTransformUniform;
 
-    glm::vec3 m_origin;
-    glm::vec3 m_delta;
-    glm::vec3 m_color;
+    glm::vec3       m_origin;
+    glm::vec3       m_delta;
+    glm::vec3       m_color;
 };
 
 class DELIBERATION_API DebugWireframeInstance final:
@@ -157,10 +162,12 @@ public:
     void setColor(const glm::vec3 & color);
     void setRadius(float radius);
 
-    void schedule(const Camera3D & camera) const;
+    void schedule() const;
 
 private:
-    Optional<Draw>  m_draw;
+    Draw            m_draw;
+    Uniform         m_colorUniform;
+    mutable Uniform m_transformUniform;
     glm::vec3       m_color;
     float           m_radius = 0.0f;
     bool            m_dirty = true;

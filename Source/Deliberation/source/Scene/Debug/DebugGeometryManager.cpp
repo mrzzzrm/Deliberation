@@ -7,15 +7,10 @@
 #include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Scene/UVSphere.h>
 
-namespace
-{
-
-const float ARROW_CONE_HEIGHT = 0.2f;
-
-}
-
 namespace deliberation
 {
+
+constexpr float DebugGeometryManager::ARROW_CONE_HEIGHT;
 
 DebugGeometryManager::DebugGeometryManager(Context & context):
     m_context(context)
@@ -66,7 +61,7 @@ DebugGeometryManager::DebugGeometryManager(Context & context):
      * Create Sphere Mesh
      */
     {
-        auto sphereMesh = UVSphere(6, 6).generateMesh2();
+        auto sphereMesh = UVSphere(16, 16).generateMesh2();
         m_buildIns.sphereVertexBuffer = m_context.createBuffer(sphereMesh.takeVertices());
         m_buildIns.sphereIndexBuffer = m_context.createBuffer(sphereMesh.takeIndices());
     }

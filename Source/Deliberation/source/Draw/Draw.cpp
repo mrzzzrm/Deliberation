@@ -218,7 +218,7 @@ void Draw::setUniformBuffer(const std::string & name, const Buffer & buffer, uns
     m_impl->uniformBuffers[index].reset(binding);
 }
 
-void Draw::schedule()
+void Draw::schedule() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -307,7 +307,7 @@ bool Draw::isComplete() const
     return true;
 }
 
-void Draw::build()
+void Draw::build() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
