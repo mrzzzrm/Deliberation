@@ -25,6 +25,11 @@ const DataLayout & LayoutedBlob::layout() const
     return m_layout;
 }
 
+bool LayoutedBlob::empty() const
+{
+    return m_count == 0;
+}
+
 size_t LayoutedBlob::count() const
 {
     return m_count;

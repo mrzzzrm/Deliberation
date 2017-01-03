@@ -160,9 +160,10 @@ DebugPointInstance::DebugPointInstance(DebugGeometryRenderer & renderer,
     DebugGeometryInstance(renderer, index)
 {
     m_draw = manager().context().createDraw(manager().buildIns().unicolorProgram, gl::GL_POINTS);
-    m_draw.addVertexBuffer(manager().buildIns().pointVertexBuffer);
+    m_draw.addVertexBuffer(manager().buildIns().pointVertexBuffer);;
     m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_draw.state().rasterizerState().setPointSize(3.0f);
+    m_transformUniform = m_draw.uniform("Transform");
 
     m_colorUniform = m_draw.uniform("Color");
 }
@@ -180,6 +181,12 @@ void DebugPointInstance::setColor(const glm::vec3 & color)
 
 void DebugPointInstance::schedule() const
 {
+    if (m_transformDirty)
+    {
+        m_transformUniform.set(m_transform.matrix());
+        m_transformDirty = false;
+    }
+
     m_draw.schedule();
 }
 
@@ -271,6 +278,68 @@ void DebugArrowInstance::schedule() const
     m_coneDraw.schedule();
 }
 
+DebugWireframeInstance::DebugWireframeInstance(DebugGeometryRenderer & renderer,
+                                               size_t index):
+    DebugGeometryInstance(renderer, index)
+{
+    m_vertices = LayoutedBlob(DataLayout("Position", Type_Vec3));
+
+    m_vertexBuffer = manager().context().createBuffer(m_vertices.layout());
+
+    m_draw = manager().context().createDraw(manager().buildIns().unicolorProgram, gl::GL_LINES);
+    m_draw.addVertexBuffer(m_vertexBuffer);
+    m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
+
+    m_transformUniform = m_draw.uniform("Transform");
+    m_colorUniform = m_draw.uniform("Color");
+}
+
+const glm::vec3 & DebugWireframeInstance::color() const
+{
+    return m_color;
+}
+
+void DebugWireframeInstance::setColor(const glm::vec3 & color)
+{
+    m_color = color;
+    m_colorUniform.set(m_color);
+}
+
+void DebugWireframeInstance::addLineStrip(const std::vector<BasicVertex> & vertices)
+{
+    Assert(vertices.size() >= 2, "Not a line strip");
+
+    auto oldNumVertices = m_vertices.count();
+
+    m_vertices.resize(oldNumVertices + (vertices.size() - 1) * 2);
+
+    auto positions = m_vertices.field<glm::vec3>("Position");
+
+    for (uint l = 0; l < vertices.size() - 1; l++)
+    {
+        positions[oldNumVertices + l * 2 + 0] = vertices[l + 0].position;
+        positions[oldNumVertices + l * 2 + 1] = vertices[l + 1].position;
+    }
+
+    m_vertexBuffer.scheduleUpload(m_vertices);
+}
+
+void DebugWireframeInstance::schedule() const
+{
+    if (m_vertices.empty())
+    {
+        return;
+    }
+
+    if (m_transformDirty)
+    {
+        m_transformUniform.set(m_transform.matrix());
+        m_transformDirty = false;
+    }
+
+    m_draw.schedule();
+}
+
 DebugSphereInstance::DebugSphereInstance(DebugGeometryRenderer & renderer,
                                          size_t index):
     DebugGeometryInstance(renderer, index)
@@ -318,6 +387,53 @@ void DebugSphereInstance::schedule() const
     m_draw.schedule();
 }
 
+DebugPoseInstance::DebugPoseInstance(DebugGeometryRenderer & renderer,
+                                     size_t index):
+    DebugGeometryInstance(renderer, index)
+{
+    m_arrows[0].reset(renderer, std::numeric_limits<size_t>::max());
+    m_arrows[0]->setColor({1.0f, 0.0f, 0.0f});
+
+    m_arrows[1].reset(renderer, std::numeric_limits<size_t>::max());
+    m_arrows[1]->setColor({0.0f, 1.0f, 0.0f});
+
+    m_arrows[2].reset(renderer, std::numeric_limits<size_t>::max());
+    m_arrows[2]->setColor({0.0f, 0.0f, 1.0f});
+}
+
+const Pose3D & DebugPoseInstance::pose() const
+{
+    return m_pose;
+}
+
+void DebugPoseInstance::setPose(const Pose3D & pose)
+{
+    m_pose = pose;
+    m_transformDirty = true;
+}
+
+void DebugPoseInstance::schedule() const
+{
+    if (m_transformDirty)
+    {
+        auto origin = m_pose.position();
+        origin = m_transform.pointLocalToWorld(origin);
+
+        auto orientation = m_transform.orientation() * m_pose.orientation();
+
+        m_arrows[0]->reset(origin, orientation * glm::vec3(1.0f, 0.0f, 0.0f));
+        m_arrows[1]->reset(origin, orientation * glm::vec3(0.0f, 1.0f, 0.0f));
+        m_arrows[2]->reset(origin, orientation * glm::vec3(0.0f, 0.0f, 1.0f));
+
+        m_transformDirty = false;
+    }
+
+    for (auto & arrow : m_arrows)
+    {
+        arrow->schedule();
+    }
+}
+
 DebugGeometryRenderer::DebugGeometryRenderer(DebugGeometryManager & manager):
     m_manager(manager)
 {
@@ -360,12 +476,14 @@ DebugArrowInstance & DebugGeometryRenderer::arrow(size_t index)
 
 DebugPointInstance & DebugGeometryRenderer::point(size_t index)
 {
-
+    Assert(index < m_points.size(), "Invalid index");
+    return *m_points[index];
 }
 
 DebugWireframeInstance & DebugGeometryRenderer::wireframe(size_t index)
 {
-
+    Assert(index < m_wireframes.size(), "Invalid index");
+    return *m_wireframes[index];
 }
 
 DebugSphereInstance & DebugGeometryRenderer::sphere(size_t index)
@@ -376,7 +494,8 @@ DebugSphereInstance & DebugGeometryRenderer::sphere(size_t index)
 
 DebugPoseInstance & DebugGeometryRenderer::pose(size_t index)
 {
-
+    Assert(index < m_poses.size(), "Invalid index");
+    return *m_poses[index];
 }
 
 size_t DebugGeometryRenderer::numBoxes() const
@@ -386,17 +505,17 @@ size_t DebugGeometryRenderer::numBoxes() const
 
 size_t DebugGeometryRenderer::numPoints() const
 {
-    return m_arrows.size();
+    return m_points.size();
 }
 
 size_t DebugGeometryRenderer::numArrows() const
 {
-
+    return m_arrows.size();
 }
 
 size_t DebugGeometryRenderer::numWireframes() const
 {
-
+    return m_wireframes.size();
 }
 
 size_t DebugGeometryRenderer::numSpheres() const
@@ -406,7 +525,7 @@ size_t DebugGeometryRenderer::numSpheres() const
 
 size_t DebugGeometryRenderer::numPoses() const
 {
-
+    return m_poses.size();
 }
 
 void DebugGeometryRenderer::resizeBoxes(size_t count)
@@ -426,7 +545,17 @@ void DebugGeometryRenderer::resizeBoxes(size_t count)
 
 void DebugGeometryRenderer::resizePoints(size_t count)
 {
-
+    if (count < m_points.size())
+    {
+        m_points.erase(m_points.begin() + count, m_points.end());
+    }
+    else
+    {
+        for (size_t b = m_points.size(); b < count; b++)
+        {
+            addPoint({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.5f});
+        }
+    }
 }
 
 void DebugGeometryRenderer::resizeArrows(size_t count)
@@ -446,7 +575,17 @@ void DebugGeometryRenderer::resizeArrows(size_t count)
 
 void DebugGeometryRenderer::resizeWireframes(size_t count)
 {
-
+    if (count < m_wireframes.size())
+    {
+        m_wireframes.erase(m_wireframes.begin() + count, m_wireframes.end());
+    }
+    else
+    {
+        for (size_t a = m_wireframes.size(); a < count; a++)
+        {
+            addWireframe({1.0f, 0.0f, 0.5f});
+        }
+    }
 }
 
 void DebugGeometryRenderer::resizeSpheres(size_t count)
@@ -466,7 +605,17 @@ void DebugGeometryRenderer::resizeSpheres(size_t count)
 
 void DebugGeometryRenderer::resizePoses(size_t count)
 {
-
+    if (count < m_poses.size())
+    {
+        m_poses.erase(m_poses.begin() + count, m_poses.end());
+    }
+    else
+    {
+        for (size_t s = m_poses.size(); s < count; s++)
+        {
+            addPose({});
+        }
+    }
 }
 
 DebugBoxInstance & DebugGeometryRenderer::addBox(const glm::vec3 & halfExtent, const glm::vec3 & color, bool wireframe)
@@ -483,7 +632,13 @@ DebugBoxInstance & DebugGeometryRenderer::addBox(const glm::vec3 & halfExtent, c
 
 DebugPointInstance & DebugGeometryRenderer::addPoint(const glm::vec3 & position, const glm::vec3 & color)
 {
+    m_points.push_back(std::make_unique<DebugPointInstance>(*this, m_points.size()));
+    auto & point = *m_points.back();
 
+    point.setTransform(Transform3D::atPosition(position));
+    point.setColor(color);
+
+    return point;
 }
 
 DebugArrowInstance & DebugGeometryRenderer::addArrow(const glm::vec3 & origin, const glm::vec3 & delta, const glm::vec3 & color)
@@ -497,9 +652,14 @@ DebugArrowInstance & DebugGeometryRenderer::addArrow(const glm::vec3 & origin, c
     return arrow;
 }
 
-DebugWireframeInstance & DebugGeometryRenderer::addWireframe()
+DebugWireframeInstance & DebugGeometryRenderer::addWireframe(const glm::vec3 & color)
 {
+    m_wireframes.push_back(std::make_unique<DebugWireframeInstance>(*this, m_wireframes.size()));
+    auto & wireframe = *m_wireframes.back();
 
+    wireframe.setColor(color);
+
+    return wireframe;
 }
 
 DebugSphereInstance & DebugGeometryRenderer::addSphere(const glm::vec3 & color, float radius)
@@ -515,37 +675,48 @@ DebugSphereInstance & DebugGeometryRenderer::addSphere(const glm::vec3 & color, 
 
 DebugPoseInstance & DebugGeometryRenderer::addPose(const Pose3D & pose)
 {
+    m_poses.push_back(std::make_unique<DebugPoseInstance>(*this, m_poses.size()));
+    auto & poseInstance = *m_poses.back();
 
+    poseInstance.setPose(pose);
+
+    return poseInstance;
 }
 
 void DebugGeometryRenderer::removeBox(size_t index)
 {
-
+    Assert(index < m_boxes.size(), "Invalid index");
+    m_boxes.erase(m_boxes.begin() + index);
 }
 
 void DebugGeometryRenderer::removePoint(size_t index)
 {
-
+    Assert(index < m_points.size(), "Invalid index");
+    m_points.erase(m_points.begin() + index);
 }
 
 void DebugGeometryRenderer::removeArrow(size_t index)
 {
-
+    Assert(index < m_arrows.size(), "Invalid index");
+    m_arrows.erase(m_arrows.begin() + index);
 }
 
 void DebugGeometryRenderer::removeWireframe(size_t index)
 {
-
+    Assert(index < m_wireframes.size(), "Invalid index");
+    m_wireframes.erase(m_wireframes.begin() + index);
 }
 
 void DebugGeometryRenderer::removeSphere(size_t index)
 {
-
+    Assert(index < m_spheres.size(), "Invalid index");
+    m_spheres.erase(m_spheres.begin() + index);
 }
 
 void DebugGeometryRenderer::removePose(size_t index)
 {
-
+    Assert(index < m_poses.size(), "Invalid index");
+    m_poses.erase(m_poses.begin() + index);
 }
 
 void DebugGeometryRenderer::schedule(const Camera3D & camera)
@@ -558,14 +729,29 @@ void DebugGeometryRenderer::schedule(const Camera3D & camera)
         box->schedule();
     }
 
+    for (auto & point : m_points)
+    {
+        point->schedule();
+    }
+
     for (auto & arrow : m_arrows)
     {
         arrow->schedule();
     }
 
+    for (auto & wireframe : m_wireframes)
+    {
+        wireframe->schedule();
+    }
+
     for (auto & sphere : m_spheres)
     {
         sphere->schedule();
+    }
+
+    for (auto & pose : m_poses)
+    {
+        pose->schedule();
     }
 }
 

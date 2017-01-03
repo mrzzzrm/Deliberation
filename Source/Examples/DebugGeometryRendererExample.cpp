@@ -48,6 +48,7 @@ public:
 
         for (uint i = 0; i < 3; i++) {
             auto index = m_renderer->addSphere({0.0f, 0.5f, 0.8f}, 0.5f).index();
+            m_renderer->addPoint({}, {0.0f, 0.5f, 0.8f});
 
             OrbittingSphere sphere;
             sphere.index = index;
@@ -57,6 +58,20 @@ public:
 
             m_spheres.push_back(sphere);
         }
+
+        m_renderer->addPose(Pose3D({2.0f, 0.2f, -5.0f}, glm::quat()));
+
+        std::vector<BasicVertex> wireframeMesh(45);
+        for (uint s = 0; s < wireframeMesh.size(); s++) {
+            auto angle = s * glm::pi<float>() / 7.0f;
+            auto radius = 5.0f - s * 0.2f;
+
+            wireframeMesh[s].position.x = std::cos(angle) * radius;
+            wireframeMesh[s].position.y = s * 0.2f;
+            wireframeMesh[s].position.z = std::sin(angle) * radius;
+        }
+        auto & wireframe = m_renderer->addWireframe({0.5f, 0.5f, 0.5f});
+        wireframe.addLineStrip(wireframeMesh);
     }
 
     virtual void onFrame(float seconds) override
@@ -66,14 +81,22 @@ public:
         for (auto & sphere : m_spheres) {
             sphere.angle += seconds / sphere.radius;
             auto & s = m_renderer->sphere(sphere.index);
-            s.setTransform(Transform3D::atPosition({std::cos(sphere.angle) * sphere.radius,
-                                                    sphere.y,
-                                                    std::sin(sphere.angle) * sphere.radius}));
+            auto & p = m_renderer->point(sphere.index);
+
+            auto spherePosition = glm::vec3{std::cos(sphere.angle) * sphere.radius,
+                                            sphere.y,
+                                            std::sin(sphere.angle) * sphere.radius};
+
+            s.setTransform(Transform3D::atPosition(spherePosition));
+            p.setTransform(Transform3D::atPosition(spherePosition + glm::vec3(0.0f, 2.0f, 0.0f)));
         }
 
         m_arrowPhase += seconds;
         m_renderer->arrow(0).setOrigin({1.5f, 0.0f, 1.5f});
         m_renderer->arrow(0).setDelta({0.0f, 0.6f, 0.0f});
+
+        m_wireframeAngle -= seconds;
+        m_renderer->wireframe(0).setTransform(Transform3D::atOrientation(glm::quat({0.0f, m_wireframeAngle, 0.0f})));
 
         m_renderer->schedule(m_camera);
     }
@@ -85,6 +108,7 @@ private:
     std::vector<OrbittingSphere>    m_spheres;
 
     float                           m_arrowPhase = 0.0f;
+    float                           m_wireframeAngle = 0.0f;
 };
 
 int main(int argc, char ** argv)

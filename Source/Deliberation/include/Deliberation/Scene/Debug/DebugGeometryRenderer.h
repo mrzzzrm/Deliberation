@@ -93,9 +93,10 @@ public:
     void schedule() const;
 
 private:
-    Draw        m_draw;
-    glm::vec3   m_color;
-    Uniform     m_colorUniform;
+    Draw            m_draw;
+    mutable Uniform m_transformUniform;
+    glm::vec3       m_color;
+    Uniform         m_colorUniform;
 };
 
 class DELIBERATION_API DebugArrowInstance final:
@@ -139,14 +140,21 @@ public:
     DebugWireframeInstance(DebugGeometryRenderer & renderer,
                            size_t index);
 
-    void addLineStrip(const std::vector<ColoredVertex> & vertices);
+    const glm::vec3 & color() const;
+
+    void setColor(const glm::vec3 & color);
+
+    void addLineStrip(const std::vector<BasicVertex> & vertices);
 
     void schedule() const;
 
 private:
-    Optional<Draw>                          m_draw;
-    std::vector<std::vector<ColoredVertex>> m_lineStrips;
-    uint                                    m_lineCount = 0;
+    Draw            m_draw;
+    Buffer          m_vertexBuffer;
+    mutable Uniform m_transformUniform;
+    Uniform         m_colorUniform;
+    LayoutedBlob    m_vertices;
+    glm::vec3       m_color;
 };
 
 class DELIBERATION_API DebugSphereInstance final:
@@ -184,17 +192,13 @@ public:
 
     void setPose(const Pose3D & pose);
 
-    void schedule(const Camera3D & camera) const;
+    void schedule() const;
 
 private:
-    struct Arrow {
-        Draw   lineDraw;
-        Buffer lineVertexBuffer;
-        Draw   coneDraw;
-    };
-
-private:
-    std::array<Arrow, 3> m_arrows;
+    Draw                                 m_draw;
+    Pose3D                               m_pose;
+    mutable std::array<
+        Optional<DebugArrowInstance>, 3> m_arrows;
 };
 
 class DELIBERATION_API DebugGeometryRenderer final
@@ -232,7 +236,7 @@ public:
     DebugBoxInstance & addBox(const glm::vec3 & halfExtent, const glm::vec3 & color, bool wireframe = false);
     DebugPointInstance & addPoint(const glm::vec3 & position, const glm::vec3 & color);
     DebugArrowInstance & addArrow(const glm::vec3 & origin, const glm::vec3 & delta, const glm::vec3 & color);
-    DebugWireframeInstance & addWireframe();
+    DebugWireframeInstance & addWireframe(const glm::vec3 & color);
     DebugSphereInstance & addSphere(const glm::vec3 & color, float radius);
     DebugPoseInstance & addPose(const Pose3D & pose);
 

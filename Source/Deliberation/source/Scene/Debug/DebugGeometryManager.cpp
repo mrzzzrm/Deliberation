@@ -67,6 +67,15 @@ DebugGeometryManager::DebugGeometryManager(Context & context):
     }
 
     /**
+     * Create Point Mesh
+     */
+    {
+        LayoutedBlob vertex(DataLayout("Position", Type_Vec3), 1);
+        vertex.field<glm::vec3>("Position")[0] = glm::vec3(0.0f, 0.0f, 0.0f);
+        m_buildIns.pointVertexBuffer = m_context.createBuffer(vertex);
+    }
+
+    /**
      * Create Data Layouts
      */
     m_buildIns.unicolorDataLayout = DataLayout("Position", Type_Vec3);

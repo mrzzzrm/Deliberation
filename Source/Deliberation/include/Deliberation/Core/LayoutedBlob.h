@@ -26,6 +26,7 @@ public:
     LayoutedBlob(const DataLayout & layout, size_t count = 0);
 
     const DataLayout & layout() const;
+    bool empty() const;
     size_t count() const;
     const Blob & rawData() const;
 

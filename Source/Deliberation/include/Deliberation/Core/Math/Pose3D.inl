@@ -37,6 +37,15 @@ inline Pose3D::Pose3D():
 {
 }
 
+inline Pose3D::Pose3D(const glm::vec3 & position, const glm::quat & orientation):
+    m_matrixDirty(true),
+    m_basisDirty(true),
+    m_position(position),
+    m_orientation(orientation)
+{
+
+}
+
 inline const glm::vec3 & Pose3D::position() const
 {
     return m_position;

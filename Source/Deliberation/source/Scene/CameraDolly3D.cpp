@@ -25,7 +25,7 @@ void CameraDolly3D::setAcceleration(float acceleration)
     m_acceleration = acceleration;
 }
 
-void CameraDolly3D::setPose(const Pose3D & pose)
+void CameraDolly3D::setRelativePose(const Pose3D &pose)
 {
     m_relativePose = pose;
 }

@@ -16,8 +16,8 @@ public:
     inline static const Pose3D & identity();
 
 public:
-    inline Pose3D();
-    inline Pose3D(const glm::vec3 & position, glm::quat & orientation);
+    Pose3D();
+    Pose3D(const glm::vec3 & position, const glm::quat & orientation);
 
     const glm::vec3 & position() const;
     const glm::quat & orientation() const;

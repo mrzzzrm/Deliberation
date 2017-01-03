@@ -18,7 +18,7 @@ public:
     const Pose3D & relativePose() const;
 
     void setAcceleration(float acceleration);
-    void setPose(const Pose3D & pose);
+    void setRelativePose(const Pose3D & pose);
 
     void update(const glm::vec3 & position,
                 const glm::quat & orientation,

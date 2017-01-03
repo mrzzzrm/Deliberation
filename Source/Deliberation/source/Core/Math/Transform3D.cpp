@@ -20,6 +20,13 @@ Transform3D Transform3D::atPosition(const glm::vec3 & position)
     return result;
 }
 
+Transform3D Transform3D::atOrientation(const glm::quat & orientation)
+{
+    Transform3D result;
+    result.setOrientation(orientation);
+    return result;
+}
+
 const Transform3D & Transform3D::identity()
 {
     static Transform3D i;
