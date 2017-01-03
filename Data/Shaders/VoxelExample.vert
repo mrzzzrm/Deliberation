@@ -12,7 +12,7 @@ out vec3 f_Color;
 
 void main()
 {
-    gl_Position = ViewProjection * vec4(Position, 1.0f);
+    gl_Position = ViewProjection * Transform * vec4(Position, 1.0f);
 	f_Normal = (Transform * vec4(Normal, 0.0f)).xyz;
     f_Color = Color;
 }

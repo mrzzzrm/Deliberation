@@ -14,10 +14,10 @@
 #include <Deliberation/Physics/RigidBody.h>
 
 #include <Deliberation/Scene/Camera3D.h>
-#include <Deliberation/Scene/DebugGeometryRenderer.h>
-#include <Deliberation/Scene/DebugGrid3DRenderer.h>
-#include <Deliberation/Scene/DebugCameraNavigator3D.h>
-#include <Deliberation/Scene/DebugPhysicsWorldRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGrid3DRenderer.h>
+#include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Debug/DebugPhysicsWorldRenderer.h>
 
 using namespace deliberation;
 

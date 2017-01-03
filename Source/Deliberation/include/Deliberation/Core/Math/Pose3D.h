@@ -8,27 +8,22 @@
 namespace deliberation
 {
 
-class Transform3D final
+class Pose3D final
 {
 public:
-    static Transform3D atPosition(const glm::vec3 & position);
-    static Transform3D atOrientation(const glm::quat & orientation);
-    static const Transform3D & identity();
+    inline static Pose3D atPosition(const glm::vec3 & position);
+    inline static Pose3D atOrientation(const glm::quat & orientation);
+    inline static const Pose3D & identity();
 
 public:
-    Transform3D();
+    Pose3D();
+    Pose3D(const glm::vec3 & position, const glm::quat & orientation);
 
     const glm::vec3 & position() const;
     const glm::quat & orientation() const;
-    const glm::vec3 & center() const;
-    float scale() const;
 
     void setPosition(const glm::vec3 & position);
     void setOrientation(const glm::quat & orientation);
-    void setCenter(const glm::vec3 & center);
-    void setScale(float scale);
-
-    void setCenterAndAdjustPosition(const glm::vec3 & center);
 
     void localTranslate(const glm::vec3 & delta);
     void worldTranslate(const glm::vec3 & delta);
@@ -44,20 +39,17 @@ public:
     glm::vec3 directionWorldToLocal(const glm::vec3 & dir) const;
     glm::vec3 directionLocalToWorld(const glm::vec3 & dir) const;
 
-    Transform3D scaled(float scale) const;
-    Transform3D worldTranslated(const glm::vec3 & delta) const;
-    Transform3D interpolated(const Transform3D & other, float v) const;
+    Pose3D worldTranslated(const glm::vec3 & delta) const;
+    Pose3D interpolated(const Pose3D & other, float v) const;
 
     std::string toString() const;
 
-    bool operator==(const Transform3D & other) const;
-    bool operator!=(const Transform3D & other) const;
+    bool operator==(const Pose3D & other) const;
+    bool operator!=(const Pose3D & other) const;
 
 protected:
     glm::vec3           m_position;
     glm::quat           m_orientation;
-    glm::vec3           m_center;
-    float               m_scale;
 
     mutable glm::mat3   m_basis;
     mutable bool        m_basisDirty;
@@ -68,3 +60,4 @@ protected:
 
 }
 
+#include <Deliberation/Core/Math/Pose3D.inl>

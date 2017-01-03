@@ -1,4 +1,4 @@
-#include <Deliberation/Scene/DebugGrid3DRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGrid3DRenderer.h>
 
 #include <glbinding/gl/enum.h>
 

@@ -1,4 +1,4 @@
-#include <Deliberation/Scene/DebugGroundPlaneRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
 
 #include <iostream>
 

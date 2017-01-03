@@ -22,11 +22,11 @@
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/Mesh.h>
 #include <Deliberation/Scene/MeshCompiler.h>
-#include <Deliberation/Scene/DebugGrid3DRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGrid3DRenderer.h>
 #include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Platform/Application.h>
-#include <Deliberation/Scene/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 

@@ -68,7 +68,7 @@ public:
 
     void setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin = 0);
 
-    void schedule();
+    void schedule() const;
 
     std::string toString() const;
 
@@ -82,7 +82,7 @@ private:
 
     bool isBuild() const;
 
-    void build();
+    void build() const;
 
     void verifyVertexBuffer(const Buffer & buffer) const;
     void verifyInstanceBuffer(const Buffer & buffer) const;

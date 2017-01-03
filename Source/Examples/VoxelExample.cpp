@@ -9,7 +9,7 @@
 
 #include <Deliberation/Platform/Application.h>
 
-#include <Deliberation/Scene/DebugGeometryRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
 
 #include <Deliberation/Voxel/VoxelCluster.h>
 #include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>

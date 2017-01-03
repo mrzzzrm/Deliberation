@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Scene/DebugGeometryRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
 
 #include <Deliberation/Deliberation_API.h>
 
