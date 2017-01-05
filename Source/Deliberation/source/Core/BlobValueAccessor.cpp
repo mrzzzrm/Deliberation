@@ -9,30 +9,33 @@ namespace deliberation
 {
 
 CBlobValueAccessor::CBlobValueAccessor(const Blob & data, const DataLayout & layout, const DataLayoutField & field):
-    BlobValueAccessorBase{data, layout, field}
+    m_data(data, layout, field)
 {
 
 }
 
 CBlobValue CBlobValueAccessor::operator[](size_t index) const
 {
-    return CBlobValue(m_data.ptr(m_field.offset() + index * m_layout.stride()), m_field.type());
+    Assert(m_data, "Accessor is not initialized");
+    return CBlobValue(m_data->data.ptr(m_data->field.offset() + index * m_data->layout.stride()), m_data->field.type());
 }
 
 BlobValueAccessor::BlobValueAccessor(Blob & data, const DataLayout & layout, const DataLayoutField & field):
-    BlobValueAccessorBase{data, layout, field}
+    m_data{data, layout, field}
 {
 
 }
 
 BlobValue BlobValueAccessor::operator[](size_t index)
 {
-    return BlobValue(m_data.ptr(m_field.offset() + index * m_layout.stride()), m_field.type());
+    Assert(m_data, "Accessor is not initialized");
+    return BlobValue(m_data->data.ptr(m_data->field.offset() + index * m_data->layout.stride()), m_data->field.type());
 }
 
 CBlobValue BlobValueAccessor::operator[](size_t index) const
 {
-    return CBlobValue(m_data.ptr(m_field.offset() + index * m_layout.stride()), m_field.type());
+    Assert(m_data, "Accessor is not initialized");
+    return CBlobValue(m_data->data.ptr(m_data->field.offset() + index * m_data->layout.stride()), m_data->field.type());
 }
 
 }

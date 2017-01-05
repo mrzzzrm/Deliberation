@@ -8,7 +8,7 @@
 
 #include <Deliberation/Deliberation_API.h>
 
-#include <Deliberation/Platform/InputAdapter.h>
+#include <Deliberation/Platform/Input.h>
 
 namespace deliberation
 {
@@ -20,8 +20,8 @@ public:
                 const std::string & prefixPath = "Deliberation2");
     virtual ~Application();
 
-    InputAdapterBase & inputAdapter();
-    const InputAdapterBase & inputAdapter() const;
+    InputBase & input();
+    const InputBase & input() const;
 
     Context & context();
     const Context & context() const;
@@ -53,7 +53,7 @@ private:
     SDL_RendererInfo    m_displayRendererInfo;
     SDL_GLContext       m_glContext;
 
-    InputAdapter        m_inputAdapter;
+    Optional<Input>     m_input;
 };
 
 }

@@ -1,4 +1,4 @@
-#include <Deliberation/Core/InputAdapterBase.h>
+#include <Deliberation/Core/InputBase.h>
 
 #include <algorithm>
 #include <iostream>
@@ -6,23 +6,23 @@
 namespace deliberation
 {
 
-InputAdapterBase::InputAdapterBase() = default;
+InputBase::InputBase() = default;
 
-InputAdapterBase::~InputAdapterBase() = default;
+InputBase::~InputBase() = default;
 
-bool InputAdapterBase::mouseButtonPressed(unsigned int button) const
+bool InputBase::mouseButtonPressed(unsigned int button) const
 {
     auto it = std::find(m_pressedMouseButtons.begin(), m_pressedMouseButtons.end(), button);
     return it != m_pressedMouseButtons.end();
 }
 
-bool InputAdapterBase::keyPressed(unsigned int key) const
+bool InputBase::keyPressed(unsigned int key) const
 {
     auto it = std::find(m_pressedKeys.begin(), m_pressedKeys.end(), key);
     return it != m_pressedKeys.end();
 }
 
-bool InputAdapterBase::mouseButtonDown(unsigned int button) const
+bool InputBase::mouseButtonDown(unsigned int button) const
 {
     if (button >= m_mouseButtons.size())
     {
@@ -31,7 +31,7 @@ bool InputAdapterBase::mouseButtonDown(unsigned int button) const
     return m_mouseButtons[button];
 }
 
-bool InputAdapterBase::keyDown(unsigned int key) const
+bool InputBase::keyDown(unsigned int key) const
 {
     if (key >= m_keys.size())
     {
@@ -40,12 +40,12 @@ bool InputAdapterBase::keyDown(unsigned int key) const
     return m_keys[key];
 }
 
-const glm::vec2 & InputAdapterBase::mousePosition() const
+const glm::vec2 & InputBase::mousePosition() const
 {
     return m_mousePosition;
 }
 
-void InputAdapterBase::setMouseButtonDown(unsigned int button, bool down)
+void InputBase::setMouseButtonDown(unsigned int button, bool down)
 {
     static bool haveWarned = false;
     if (button > 4096 && !haveWarned)
@@ -70,7 +70,7 @@ void InputAdapterBase::setMouseButtonDown(unsigned int button, bool down)
     m_mouseButtons[button] = down;
 }
 
-void InputAdapterBase::setKeyDown(unsigned int key, bool down)
+void InputBase::setKeyDown(unsigned int key, bool down)
 {
     static bool haveWarned = false;
     if (key > 4096 && !haveWarned)
@@ -95,12 +95,12 @@ void InputAdapterBase::setKeyDown(unsigned int key, bool down)
     m_keys[key] = down;
 }
 
-void InputAdapterBase::setMousePosition(const glm::vec2 & position)
+void InputBase::setMousePosition(const glm::vec2 & position)
 {
     m_mousePosition = position;
 }
 
-void InputAdapterBase::step()
+void InputBase::step()
 {
     m_pressedMouseButtons.clear();
     m_pressedKeys.clear();

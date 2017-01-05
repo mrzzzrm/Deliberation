@@ -1,6 +1,6 @@
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 
-#include <Deliberation/Core/InputAdapterBase.h>
+#include <Deliberation/Core/InputBase.h>
 
 #include <Deliberation/Scene/Camera3D.h>
 
@@ -8,7 +8,7 @@ namespace deliberation
 {
 
 DebugCameraNavigator3D::DebugCameraNavigator3D(Camera3D & camera,
-                                               const InputAdapterBase & inputAdapter,
+                                               const InputBase & inputAdapter,
                                                float speed):
     m_camera(camera),
     m_inputAdapter(inputAdapter),
@@ -39,7 +39,7 @@ void DebugCameraNavigator3D::update(float seconds)
     double mouseY;
 
     auto mousePos = m_inputAdapter.mousePosition();
-    auto pressed = m_inputAdapter.mouseButtonDown(InputAdapterBase::MouseButton_Left);
+    auto pressed = m_inputAdapter.mouseButtonDown(InputBase::MouseButton_Left);
 
     if (!m_mousePressed && pressed)
     {
@@ -63,9 +63,9 @@ void DebugCameraNavigator3D::update(float seconds)
     auto up = glm::normalize(m_camera.orientation() * glm::vec3(0, 1, 0));
     auto r = glm::cross(fw, up);
 
-    float x = (m_inputAdapter.keyDown(InputAdapterBase::Key_A) ? -1 : 0) + (m_inputAdapter.keyDown(InputAdapterBase::Key_D) ? 1 : 0);
-    float y = (m_inputAdapter.keyDown(InputAdapterBase::Key_F) ? -1 : 0) + (m_inputAdapter.keyDown(InputAdapterBase::Key_R) ? 1 : 0);
-    float z = (m_inputAdapter.keyDown(InputAdapterBase::Key_W) ? -1 : 0) + (m_inputAdapter.keyDown(InputAdapterBase::Key_S) ? 1 : 0);
+    float x = (m_inputAdapter.keyDown(InputBase::Key_A) ? -1 : 0) + (m_inputAdapter.keyDown(InputBase::Key_D) ? 1 : 0);
+    float y = (m_inputAdapter.keyDown(InputBase::Key_F) ? -1 : 0) + (m_inputAdapter.keyDown(InputBase::Key_R) ? 1 : 0);
+    float z = (m_inputAdapter.keyDown(InputBase::Key_W) ? -1 : 0) + (m_inputAdapter.keyDown(InputBase::Key_S) ? 1 : 0);
 
     auto step = m_camera.orientation() * glm::vec3(x, y, z) * m_speed * seconds;
 

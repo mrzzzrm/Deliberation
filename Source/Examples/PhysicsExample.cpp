@@ -41,7 +41,7 @@ public:
         m_camera.setAspectRatio((float)context().backbuffer().width() / (float)context().backbuffer().height());
 
         m_clear = context().createClear();
-        m_navigator.reset(m_camera, inputAdapter(), 10.0f);
+        m_navigator.reset(m_camera, input(), 10.0f);
         m_geometryRenderer.reset(context(), m_camera);
         m_geometryRenderer2.reset(context(), m_camera);
         m_world.reset();
@@ -107,11 +107,11 @@ public:
 
     virtual void onFrame(float seconds) override
     {
-        if (inputAdapter().keyPressed(InputAdapterBase::Key_RIGHT))
+        if (input().keyPressed(InputBase::Key_RIGHT))
         {
             m_world.get().update(m_world.get().timestep());
         }
-        if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE))
+        if (input().keyDown(InputBase::Key_SPACE))
         {
             m_world.get().update(seconds);
         }

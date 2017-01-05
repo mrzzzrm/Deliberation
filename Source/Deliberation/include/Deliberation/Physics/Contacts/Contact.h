@@ -72,7 +72,6 @@ protected:
 
     uint         m_numPoints;
     ContactPoint m_points[MAX_NUM_CONTACT_POINTS];
-
 };
 
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <Deliberation/Core/BlobValueAccessor.h>
+#include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
@@ -12,26 +13,32 @@ class DataLayout;
 class DataLayoutField;
 
 template<typename T>
-class CTypedBlobValueAccessor final:
-    private BlobValueAccessorBase<const Blob>
+class CTypedBlobValueAccessor final
 {
 public:
+    CTypedBlobValueAccessor() = default;
     CTypedBlobValueAccessor(const Blob & data, const DataLayout & layout, const DataLayoutField & field);
 
     const T & operator[](size_t index) const;
+
+private:
+    Optional<BlobValueAccessorData<const Blob>> m_data;
 };
 
 template<typename T>
-class TypedBlobValueAccessor final:
-    private BlobValueAccessorBase<Blob>
+class TypedBlobValueAccessor final
 {
 public:
+    TypedBlobValueAccessor() = default;
     TypedBlobValueAccessor(Blob & data, const DataLayout & layout, const DataLayoutField & field);
 
     void assign(const std::vector<T> & values);
 
     T & operator[](size_t index);
     const T & operator[](size_t index) const;
+
+private:
+    Optional<BlobValueAccessorData<Blob>> m_data;
 };
 
 }

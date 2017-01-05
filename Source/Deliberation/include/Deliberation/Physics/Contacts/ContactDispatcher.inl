@@ -11,6 +11,12 @@ namespace deliberation
 {
 
 template<typename T>
+void ContactDispatcher::registerContactType(int type)
+{
+    registerContactType<T>(type, type);
+}
+
+template<typename T>
 void ContactDispatcher::registerContactType(int typeA, int typeB)
 {
     Assert(typeA >= 0 && typeB >= 0, "");

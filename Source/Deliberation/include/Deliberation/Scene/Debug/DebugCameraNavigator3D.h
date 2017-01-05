@@ -8,13 +8,13 @@ namespace deliberation
 {
 
 class Camera3D;
-class InputAdapterBase;
+class InputBase;
 
 class DELIBERATION_API DebugCameraNavigator3D final
 {
 public:
     DebugCameraNavigator3D(Camera3D & camera,
-                           const InputAdapterBase & inputAdapter,
+                           const InputBase & inputAdapter,
                            float speed);
 
     Camera3D & camera() const;
@@ -26,7 +26,7 @@ public:
 
 private:
     Camera3D &                  m_camera;
-    const InputAdapterBase &    m_inputAdapter;
+    const InputBase &    m_inputAdapter;
     float                       m_speed;
     bool                        m_mousePressed;
     glm::vec2                   m_lastMousePos;

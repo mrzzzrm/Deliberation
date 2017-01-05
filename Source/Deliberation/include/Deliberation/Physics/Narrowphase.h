@@ -21,6 +21,8 @@ public:
     Narrowphase();
     ~Narrowphase();
 
+    ContactDispatcher & contactDispatcher();
+    const ContactDispatcher & contactDispatcher() const;
     const SparseVector<std::unique_ptr<Contact>> & contacts() const;
 
     bool hasContact(void * userDataA, void * userDataB) const;

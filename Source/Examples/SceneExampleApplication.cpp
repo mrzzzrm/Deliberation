@@ -20,7 +20,7 @@ void SceneExampleApplication::onStartup()
 
     m_clear = context().createClear();
 
-    m_navigator.reset(m_camera, inputAdapter(), 10.0f);
+    m_navigator.reset(m_camera, input(), 10.0f);
 }
 
 void SceneExampleApplication::onFrame(float seconds)

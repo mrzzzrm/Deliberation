@@ -28,14 +28,16 @@ Application::Application(const std::string & name,
 
 Application::~Application() = default;
 
-InputAdapterBase & Application::inputAdapter()
+InputBase & Application::input()
 {
-    return m_inputAdapter;
+    Assert(m_input.engaged(), "Input not yet setup");
+    return *m_input;
 }
 
-const InputAdapterBase & Application::inputAdapter() const
+const InputBase & Application::input() const
 {
-    return m_inputAdapter;
+    Assert(m_input.engaged(), "Input not yet setup");
+    return *m_input;
 }
 
 Context & Application::context()
@@ -88,7 +90,7 @@ int Application::run(int argc,
                 case SDL_MOUSEBUTTONUP:
                 case SDL_MOUSEMOTION:
                 case SDL_MOUSEWHEEL:
-                    m_inputAdapter.onSDLInputEvent(event);
+                    m_input->onSDLInputEvent(event);
                     break;
 
                 case SDL_QUIT:
@@ -101,7 +103,7 @@ int Application::run(int argc,
 
         onFrame(seconds);
 
-        m_inputAdapter.step();
+        m_input->step();
 
         SDL_RenderPresent(m_displayRenderer);
 
@@ -189,6 +191,11 @@ void Application::init()
     std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
 
     m_context.reset(1600, 900);
+
+    /**
+     * Init input
+     */
+    m_input.reset(*m_context);
 
     m_initialized = true;
 }

@@ -41,6 +41,11 @@ float PhysicsWorld::timestep() const
     return m_timestep;
 }
 
+Narrowphase & PhysicsWorld::narrowphase()
+{
+    return *m_narrowphase;
+}
+
 const Narrowphase & PhysicsWorld::narrowphase() const
 {
     return *m_narrowphase;
@@ -69,13 +74,11 @@ void PhysicsWorld::setGravity(float gravity)
 
 void PhysicsWorld::update(float seconds)
 {
+    m_timeAccumulator += seconds;
+    while (m_timeAccumulator >= m_timestep)
     {
-        m_timeAccumulator += seconds;
-        while (m_timeAccumulator >= m_timestep)
-        {
-            performTimestep(m_timestep);
-            m_timeAccumulator -= m_timestep;
-        }
+        performTimestep(m_timestep);
+        m_timeAccumulator -= m_timestep;
     }
 }
 

@@ -6,7 +6,7 @@
 #include <Deliberation/Physics/CollisionObject.h>
 #include <Deliberation/Physics/RigidBody.h>
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 namespace deliberation
 {
@@ -14,6 +14,16 @@ namespace deliberation
 Narrowphase::Narrowphase() = default;
 
 Narrowphase::~Narrowphase() = default;
+
+ContactDispatcher & Narrowphase::contactDispatcher()
+{
+    return m_contactDispatcher;
+}
+
+const ContactDispatcher & Narrowphase::contactDispatcher() const
+{
+    return m_contactDispatcher;
+}
 
 const SparseVector<std::unique_ptr<Contact>> & Narrowphase::contacts() const
 {

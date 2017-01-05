@@ -11,11 +11,11 @@
 
 #include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
 
-#include <Deliberation/Voxel/VoxelCluster.h>
-#include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
-#include <Deliberation/Voxel/VoxReader.h>
-#include <Deliberation/Voxel/VoxelClusterMarchingCubesTriangulation.h>
-#include <Deliberation/Voxel/VoxelClusterMarchingCubes.h>
+#include "../../../Source/GameLib/Voxel/VoxelCluster.h"
+#include "../../../Source/GameLib/Voxel/VoxelClusterMarchingCubes.h"
+#include "../../../Source/GameLib/Voxel/VoxReader.h"
+#include "../../../Source/GameLib/Voxel/VoxelClusterMarchingCubesTriangulation.h"
+#include "../../../Source/GameLib/Voxel/VoxelClusterMarchingCubes.h"
 
 #include "SceneExampleApplication.h"
 

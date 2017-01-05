@@ -192,14 +192,19 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
 
     auto w = m_angularVelocity * seconds;
 
-    if (w != glm::vec3(0.0f))
+    auto angle = glm::length(w);
+
+    if (angle > 0.0001f)
     {
-        auto angle = glm::length(w);
         auto axis = glm::normalize(w);
 
         auto quat = glm::rotate(glm::quat(), angle, axis);
 
         prediction.setOrientation(quat * transform().orientation());
+    }
+    else
+    {
+        prediction.setOrientation(transform().orientation());
     }
 
 }

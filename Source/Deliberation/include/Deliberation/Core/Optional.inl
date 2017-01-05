@@ -108,6 +108,11 @@ const T & Optional<T>::operator*() const
     return get();
 }
 
+template<typename T>
+Optional<T>::operator bool() const
+{
+    return m_engaged;
+}
 
 template<typename T>
 bool Optional<T>::operator==(const T * other) const

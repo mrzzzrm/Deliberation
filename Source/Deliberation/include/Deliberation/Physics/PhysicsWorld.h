@@ -28,6 +28,7 @@ public:
 
     const RigidBodies & rigidBodies() const;
     float timestep() const;
+    Narrowphase & narrowphase();
     const Narrowphase & narrowphase() const;
 
     void addRigidBody(const std::shared_ptr<RigidBody> & body);

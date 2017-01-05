@@ -3,9 +3,10 @@
 #include <stdlib.h>
 
 #include <Deliberation/Core/BlobValue.h>
+#include <Deliberation/Core/Optional.h>
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
@@ -15,30 +16,42 @@ class DataLayout;
 class DataLayoutField;
 
 template<typename BlobType>
-struct BlobValueAccessorBase
+struct DELIBERATION_API BlobValueAccessorData final
 {
-    BlobType &              m_data;
-    const DataLayout &      m_layout;
-    const DataLayoutField & m_field;
+    BlobValueAccessorData(BlobType & data,
+                          const DataLayout & layout,
+                          const DataLayoutField & field);
+
+    BlobType &              data;
+    const DataLayout &      layout;
+    const DataLayoutField & field;
 };
 
-class DELIBERATION_API CBlobValueAccessor final:
-    private BlobValueAccessorBase<const Blob>
+class DELIBERATION_API CBlobValueAccessor final
 {
 public:
+    CBlobValueAccessor() = default;
     CBlobValueAccessor(const Blob & data, const DataLayout & layout, const DataLayoutField & field);
 
     CBlobValue operator[](size_t index) const;
+
+private:
+    Optional<BlobValueAccessorData<const Blob>> m_data;
 };
 
-class DELIBERATION_API BlobValueAccessor final:
-    private BlobValueAccessorBase<Blob>
+class DELIBERATION_API BlobValueAccessor final
 {
 public:
+    BlobValueAccessor() = default;
     BlobValueAccessor(Blob & data, const DataLayout & layout, const DataLayoutField & field);
 
     BlobValue operator[](size_t index);
     CBlobValue operator[](size_t index) const;
+
+private:
+    Optional<BlobValueAccessorData<Blob>> m_data;
 };
 
 }
+
+#include <Deliberation/Core/BlobValueAccessor.inl>

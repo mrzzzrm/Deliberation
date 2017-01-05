@@ -62,7 +62,7 @@ public:
         m_viewProjectionHandle = m_draw.uniform("ViewProjection");
         m_transformHandle = m_draw.uniform("Transform");
 
-        m_navigator.reset(m_camera, inputAdapter(), 1.0f);
+        m_navigator.reset(m_camera, input(), 1.0f);
     }
 
     deliberation::Draw createDraw()

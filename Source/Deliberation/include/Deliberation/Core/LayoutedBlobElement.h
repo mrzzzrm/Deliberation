@@ -64,8 +64,6 @@ public:
     LayoutedBlobElement & operator=(const LayoutedBlobElement & rhs);
     LayoutedBlobElement & operator=(const CLayoutedBlobElement & rhs);
 
-
-
 private:
     friend class LayoutedBlob;
 

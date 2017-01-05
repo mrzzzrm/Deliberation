@@ -9,7 +9,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API InputAdapterBase
+class DELIBERATION_API InputBase
 {
 public:
     enum MouseButton
@@ -148,8 +148,8 @@ public:
     };
 
 public:
-    InputAdapterBase();
-    virtual ~InputAdapterBase();
+    InputBase();
+    virtual ~InputBase();
 
     bool mouseButtonPressed(unsigned int button) const;
     bool keyPressed(unsigned int key) const;

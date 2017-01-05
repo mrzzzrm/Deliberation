@@ -45,7 +45,7 @@ set(sources
     ${source_path}/Core/LayoutedBlob.cpp
     ${source_path}/Core/LayoutedBlobElement.cpp
     ${source_path}/Core/FileUtils.cpp
-    ${source_path}/Core/InputAdapterBase.cpp
+    ${source_path}/Core/InputBase.cpp
     ${source_path}/Core/LapTimer.cpp
     ${source_path}/Core/MainLoop.cpp
     ${source_path}/Core/StringUtils.cpp
@@ -183,7 +183,7 @@ set(sources
     ${source_path}/Physics/SphereShape.cpp
 
     ${source_path}/Platform/Application.cpp
-    ${source_path}/Platform/InputAdapter.cpp
+    ${source_path}/Platform/Input.cpp
 
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
@@ -206,12 +206,7 @@ set(sources
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/RenderNode.cpp
-    ${source_path}/Scene/RenderPipeline.cpp
-
-    ${source_path}/Voxel/VoxelCluster.cpp
-    ${source_path}/Voxel/VoxelClusterMarchingCubes.cpp
-    ${source_path}/Voxel/VoxelClusterMarchingCubesTriangulation.cpp
-    ${source_path}/Voxel/VoxReader.cpp)
+    ${source_path}/Scene/RenderPipeline.cpp)
 
 # api_includes
 set(api_includes
@@ -229,21 +224,30 @@ set(api_includes
     ${include_path}/Core/Assert.h
     ${include_path}/Core/Blob.h
     ${include_path}/Core/Blob.inl
+    ${include_path}/Core/BlobValue.h
+    ${include_path}/Core/BlobValue.inl
+    ${include_path}/Core/BlobValueAccessor.h
+    ${include_path}/Core/BlobValueAccessor.inl
     ${include_path}/Core/BitUtils.h
     ${include_path}/Core/BitUtils.inl
+    ${include_path}/Core/Chrono.h
+    ${include_path}/Core/Chrono.inl
     ${include_path}/Core/Color.h
     ${include_path}/Core/DataLayout.h
     ${include_path}/Core/DataLayout.inl
     ${include_path}/Core/DataLayoutField.h
+    ${include_path}/Core/Dispatch.h
+    ${include_path}/Core/Dispatch.inl
     ${include_path}/Core/FileUtils.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl
     ${include_path}/Core/IntTypes.h
-    ${include_path}/Core/InputAdapterBase.h
+    ${include_path}/Core/InputBase.h
     ${include_path}/Core/LapTimer.h
     ${include_path}/Core/LayoutedBlob.h
     ${include_path}/Core/LayoutedBlob.inl
     ${include_path}/Core/LayoutedBlobElement.h
+    ${include_path}/Core/LayoutedBlobElement.inl
     ${include_path}/Core/LinearMap.h
     ${include_path}/Core/LinearMap.inl
     ${include_path}/Core/LinearOctree.h
@@ -259,6 +263,8 @@ set(api_includes
     ${include_path}/Core/StringUtils.h
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl
+    ${include_path}/Core/TypedBlobValueAccessor.h
+    ${include_path}/Core/TypedBlobValueAccessor.inl
     ${include_path}/Core/Span.h
     ${include_path}/Core/Span.inl
     ${include_path}/Core/SparseVector.h
@@ -266,6 +272,7 @@ set(api_includes
     ${include_path}/Core/TypeID.h
     ${include_path}/Core/TypeID.inl
     ${include_path}/Core/Types.h
+    ${include_path}/Core/Types.inl
     ${include_path}/Core/Viewport.h
 
     ${include_path}/Core/Math/AABB.h
@@ -370,7 +377,7 @@ set(api_includes
     ${include_path}/Physics/SphereShape.h
 
     ${include_path}/Platform/Application.h
-    ${include_path}/Platform/InputAdapter.h
+    ${include_path}/Platform/Input.h
 
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
@@ -393,13 +400,7 @@ set(api_includes
     ${include_path}/Scene/PostprocessingEffect.h
     ${include_path}/Scene/UVSphere.h
     ${include_path}/Scene/RenderNode.h
-    ${include_path}/Scene/RenderPipeline.h
-
-    ${include_path}/Voxel/VoxelCluster.h
-    ${include_path}/Voxel/VoxelCluster.inl
-    ${include_path}/Voxel/VoxelClusterMarchingCubes.h
-    ${include_path}/Voxel/VoxelClusterMarchingCubesTriangulation.h
-    ${include_path}/Voxel/VoxReader.h)
+    ${include_path}/Scene/RenderPipeline.h)
 
 # libs
 set(libs

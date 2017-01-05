@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
@@ -18,4 +18,9 @@ glm::quat DELIBERATION_API QuaternionAxisRotation(const glm::quat & q, const glm
 glm::vec2 DELIBERATION_API RotateHalfPiCW(const glm::vec2 & v);
 glm::vec2 DELIBERATION_API RotateHalfPiCCW(const glm::vec2 & v);
 
+template <typename T>
+i32 SigNum(T value);
+
 }
+
+#include <Deliberation/Core/Math/MathUtils.inl>

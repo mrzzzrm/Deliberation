@@ -60,7 +60,7 @@ public:
         m_sphereDraw = createDraw(sphereMesh);
         m_clear = context().createClear();
 
-        m_navigator.reset(m_camera, inputAdapter(), 1.0f);
+        m_navigator.reset(m_camera, input(), 1.0f);
 
         m_transform[0].setPosition({3.0f, 0.0f, 0.0f});
         m_transform[1].setPosition({-3.0f, 0.0f, 0.0f});

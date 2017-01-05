@@ -12,29 +12,33 @@ template<typename T>
 CTypedBlobValueAccessor<T>::CTypedBlobValueAccessor(const Blob & data,
                                                     const DataLayout & layout,
                                                     const DataLayoutField & field):
-    BlobValueAccessorBase{data, layout, field}
+    m_data(data, layout, field)
 {
 }
 
 template<typename T>
 const T & CTypedBlobValueAccessor<T>::operator[](size_t index) const
 {
-    return m_data.access<T>(m_field.offset() + index * m_layout.stride());
+    Assert(m_data, "Accessor is not initialized");
+    return m_data->data.access<T>(m_data->field.offset() + index * m_data->layout.stride());
 }
 
 template<typename T>
 TypedBlobValueAccessor<T>::TypedBlobValueAccessor(Blob & data,
                                                   const DataLayout & layout,
                                                   const DataLayoutField & field):
-    BlobValueAccessorBase{data, layout, field}
+    m_data(data, layout, field)
 {
-    Assert(field.type() == Type::resolve<T>(), std::string("Trying to access: ") + Type::resolve<T>().name() + ", but is actually " + field.type().name() + ": " + field.name());
+    Assert(field.type() == Type::resolve<T>(), std::string("Trying to access: ") + Type::resolve<T>().name() +
+        ", but is actually " + field.type().name() + ": " + field.name());
 }
 
 template<typename T>
 void TypedBlobValueAccessor<T>::assign(const std::vector<T> & values)
 {
-    Assert(values.size() == m_data.size() / m_layout.stride(), "");
+    Assert(m_data, "Accessor is not initialized");
+
+    Assert(values.size() == m_data->data.size() / m_data->layout.stride(), "");
 
     for (int v = 0; v < values.size(); v++)
     {
@@ -45,13 +49,15 @@ void TypedBlobValueAccessor<T>::assign(const std::vector<T> & values)
 template<typename T>
 T & TypedBlobValueAccessor<T>::operator[](size_t index)
 {
-    return m_data.access<T>(m_field.offset() + index * m_layout.stride());
+    Assert(m_data, "Accessor is not initialized");
+    return m_data->data.access<T>(m_data->field.offset() + index * m_data->layout.stride());
 }
 
 template<typename T>
 const T & TypedBlobValueAccessor<T>::operator[](size_t index) const
 {
-    return m_data.access<T>(m_field.offset() + index * m_layout.stride());
+    Assert(m_data, "Accessor is not initialized");
+    return m_data->data.access<T>(m_data->field.offset() + index * m_data->layout.stride());
 }
 
 }

@@ -31,6 +31,9 @@ public:
     ContactDispatcher();
 
     template<typename T>
+    void registerContactType(int typeA);
+
+    template<typename T>
     void registerContactType(int typeA, int typeB);
 
     std::unique_ptr<Contact> createContact(RigidBody & bodyA, RigidBody & bodyB) const;

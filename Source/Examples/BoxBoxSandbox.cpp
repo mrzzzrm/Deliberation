@@ -87,7 +87,7 @@ public:
 
         m_clear = context().createClear();
 
-        m_navigator.reset(m_camera, inputAdapter(), 10.0f);
+        m_navigator.reset(m_camera, input(), 10.0f);
 
         m_geometryRenderer.reset(context(), m_camera);
 
@@ -138,22 +138,22 @@ public:
             auto speed = 5.0f;
             auto r = glm::pi<float>();
 
-            if (inputAdapter().keyDown(InputAdapterBase::Key_SPACE))
+            if (input().keyDown(InputBase::Key_SPACE))
                 a = glm::vec3{1.0f, 1.0f, -1.0f} * seconds;
 
-            t.x += -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_J) ? 1 : 0);
-            t.x -= -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_L) ? 1 : 0);
-            t.y += -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_K) ? 1 : 0);
-            t.y -= -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_I) ? 1 : 0);
-            t.z += -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_U) ? 1 : 0);
-            t.z -= -speed * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_O) ? 1 : 0);
+            t.x += -speed * seconds * (input().keyDown(InputBase::Key_J) ? 1 : 0);
+            t.x -= -speed * seconds * (input().keyDown(InputBase::Key_L) ? 1 : 0);
+            t.y += -speed * seconds * (input().keyDown(InputBase::Key_K) ? 1 : 0);
+            t.y -= -speed * seconds * (input().keyDown(InputBase::Key_I) ? 1 : 0);
+            t.z += -speed * seconds * (input().keyDown(InputBase::Key_U) ? 1 : 0);
+            t.z -= -speed * seconds * (input().keyDown(InputBase::Key_O) ? 1 : 0);
 
-            a.x -= r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_Y) ? 1 : 0);
-            a.x += r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_X) ? 1 : 0);
-            a.y -= r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_C) ? 1 : 0);
-            a.y += r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_V) ? 1 : 0);
-            a.z -= r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_B) ? 1 : 0);
-            a.z += r * seconds * (inputAdapter().keyDown(InputAdapterBase::Key_N) ? 1 : 0);
+            a.x -= r * seconds * (input().keyDown(InputBase::Key_Y) ? 1 : 0);
+            a.x += r * seconds * (input().keyDown(InputBase::Key_X) ? 1 : 0);
+            a.y -= r * seconds * (input().keyDown(InputBase::Key_C) ? 1 : 0);
+            a.y += r * seconds * (input().keyDown(InputBase::Key_V) ? 1 : 0);
+            a.z -= r * seconds * (input().keyDown(InputBase::Key_B) ? 1 : 0);
+            a.z += r * seconds * (input().keyDown(InputBase::Key_N) ? 1 : 0);
 
             m_geometryRenderer.get().box(0).transform().worldTranslate(t);
             m_geometryRenderer.get().box(0).transform().worldRotate(glm::quat(a));

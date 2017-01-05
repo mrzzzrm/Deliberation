@@ -53,7 +53,7 @@ public:
         m_draw.uniform("Color").set(glm::vec3(1.0f, 0.0f, 0.0f));
 
         m_grid.reset(context(), 1.0f, m_camera);
-        m_navigator.reset(m_camera, inputAdapter(), 10.0f);
+        m_navigator.reset(m_camera, input(), 10.0f);
     }
 
     virtual void onFrame(float seconds) override
