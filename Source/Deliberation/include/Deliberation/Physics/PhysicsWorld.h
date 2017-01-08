@@ -4,9 +4,12 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Deliberation.h>
 
+#include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/SparseVector.h>
+
+#include <Deliberation/Physics/NarrowphasePrimitiveTest.h>
 
 namespace deliberation
 {
@@ -37,6 +40,8 @@ public:
     void setGravity(float gravity);
 
     void update(float seconds);
+
+    void rayCast(const Ray3D & ray, const std::function<bool(const RayCastIntersection &)> & handler);
 
     std::string toString() const;
 

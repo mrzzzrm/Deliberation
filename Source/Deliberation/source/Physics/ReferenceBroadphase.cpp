@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <Deliberation/Core/Math/PrimitiveIntersection.h>
 #include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Physics/BroadphaseProxy.h>
@@ -19,6 +20,27 @@ ReferenceBroadphase::ReferenceBroadphase(Narrowphase & narrowphase):
 void ReferenceBroadphase::setProxyBounds(BroadphaseProxy & proxy, const AABB & bounds)
 {
     proxy.setBounds(bounds);
+}
+
+std::vector<std::shared_ptr<BroadphaseProxy>> ReferenceBroadphase::rayCast(const Ray3D & ray) const
+{
+    std::vector<std::shared_ptr<BroadphaseProxy>> result;
+
+    auto normalizedRay = ray.normalized();
+
+    for (auto & proxy : m_proxies)
+    {
+        auto & aabb = proxy->bounds();
+        auto position = aabb.center();
+        auto radius = aabb.diameter() / 2.0f;
+
+        if (NormalizedRay3DSphereIntersection(normalizedRay.origin(), normalizedRay.direction(), position, radius))
+        {
+            result.emplace_back(proxy);
+        }
+    }
+
+    return result;
 }
 
 void ReferenceBroadphase::checkProximities()

@@ -177,6 +177,7 @@ set(sources
     ${source_path}/Physics/CollisionObject.cpp
     ${source_path}/Physics/CollisionShape.cpp
     ${source_path}/Physics/Narrowphase.cpp
+    ${source_path}/Physics/NarrowphasePrimitiveTest.cpp
     ${source_path}/Physics/PhysicsWorld.cpp
     ${source_path}/Physics/ReferenceBroadphase.cpp
     ${source_path}/Physics/RigidBody.cpp

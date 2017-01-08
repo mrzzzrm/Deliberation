@@ -119,7 +119,7 @@ std::string DataLayout::toString() const
 {
     std::stringstream stream;
 
-    stream << "Layout: {Stride = " << m_stride << "; Fields={";
+    stream << "{Stride = " << m_stride << "; Fields={";
 
     for (auto & field : m_fields)
     {

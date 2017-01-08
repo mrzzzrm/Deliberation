@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/SparseVector.h>
 
 #include <Deliberation/Deliberation_API.h>
@@ -25,6 +26,8 @@ public:
 
     std::shared_ptr<BroadphaseProxy> createProxy(const CollisionObject & object);
     void removeProxy(const BroadphaseProxy & proxy);
+
+    virtual std::vector<std::shared_ptr<BroadphaseProxy>> rayCast(const Ray3D & ray) const = 0;
 
     virtual void setProxyBounds(BroadphaseProxy & proxy, const AABB & bounds) = 0;
 

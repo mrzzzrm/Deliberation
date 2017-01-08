@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <Deliberation/Physics/BroadphaseProxy.h>
 #include <Deliberation/Physics/Contacts/Contact.h>
 #include <Deliberation/Physics/CollisionObject.h>
 #include <Deliberation/Physics/RigidBody.h>
@@ -75,6 +76,34 @@ void Narrowphase::removeContact(void * userDataA, void * userDataB)
     m_keysToContactIndex.erase(indexA, indexB);
 
     m_contacts.erase(index);
+}
+
+void Narrowphase::rayTest(const Ray3D & ray,
+                          const std::shared_ptr<BroadphaseProxy> & proxy,
+                          const std::function<bool(const RayCastIntersection&)> & handler)
+{
+    auto & body = *(RigidBody*)proxy->userData();
+
+    auto it = m_primitiveTestByShapeType.find(body.shape()->type());
+
+    if (it == m_primitiveTestByShapeType.end())
+    {
+        return;
+    }
+
+    auto & primitiveTest = it->second;
+    auto intersection = primitiveTest->rayCast(ray, body);
+
+    if (intersection)
+    {
+        handler(*intersection);
+    }
+}
+
+void Narrowphase::registerPrimitiveTest(int shapeType, std::unique_ptr<NarrowphasePrimitiveTest> && primitiveTest)
+{
+    Assert(m_primitiveTestByShapeType.count(shapeType) == 0, "Shape type already registered");
+    m_primitiveTestByShapeType[shapeType] = std::move(primitiveTest);
 }
 
 void Narrowphase::updateContacts()

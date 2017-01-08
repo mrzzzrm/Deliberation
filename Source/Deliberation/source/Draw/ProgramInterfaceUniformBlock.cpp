@@ -1,5 +1,7 @@
 #include <Deliberation/Draw/ProgramInterfaceUniformBlock.h>
 
+#include <sstream>
+
 namespace deliberation
 {
 
@@ -28,6 +30,14 @@ unsigned int ProgramInterfaceUniformBlock::index() const
     return m_index;
 }
 
+std::string ProgramInterfaceUniformBlock::toString() const
+{
+    std::stringstream stream;
+
+    stream << "{Name: " << m_name << "; Index: " << m_index << "; Layout: " << m_layout.toString() << "}";
+
+    return stream.str();
+};
 
 bool ProgramInterfaceUniformBlock::operator==(const ProgramInterfaceUniformBlock & other) const
 {

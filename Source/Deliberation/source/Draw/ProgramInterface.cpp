@@ -513,6 +513,12 @@ std::string ProgramInterface::toString() const
         stream << "  " << uniform.toString() << std::endl;
     }
 
+    stream << "UniformBlocks: " << m_uniformBlocks.size() << std::endl;
+    for (auto & uniformBlock : m_uniformBlocks)
+    {
+        stream << "  " << uniformBlock.toString() << std::endl;
+    }
+
     stream << "Samplers: " << m_samplers.size() << std::endl;
     for (auto & sampler : m_samplers)
     {

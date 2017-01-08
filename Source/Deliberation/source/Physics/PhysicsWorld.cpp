@@ -82,6 +82,16 @@ void PhysicsWorld::update(float seconds)
     }
 }
 
+void PhysicsWorld::rayCast(const Ray3D & ray, const std::function<bool(const RayCastIntersection&)> & handler)
+{
+    auto broadcastResult = m_broadphase->rayCast(ray);
+
+    for (auto & proxy : broadcastResult)
+    {
+        m_narrowphase->rayTest(ray, proxy, handler);
+    }
+}
+
 void PhysicsWorld::performTimestep(float seconds)
 {
     for (auto & body : m_rigidBodies)
@@ -115,6 +125,19 @@ void PhysicsWorld::performTimestep(float seconds)
     }
 }
 
+std::string PhysicsWorld::toString() const
+{
+    std::stringstream stream;
+    stream << "{\n";
+    for (auto & body : m_rigidBodies)
+    {
+        stream << "  " << body->toString() << "\n";
+    }
+    stream << "}\n";
+
+    return stream.str();
+}
+
 void PhysicsWorld::integrateTransforms(float seconds)
 {
     for (auto & body : m_rigidBodies)
@@ -128,19 +151,6 @@ void PhysicsWorld::integrateTransforms(float seconds)
         body->predictTransform(seconds, predictedTransform);
         body->setTransform(predictedTransform);
     }
-}
-
-std::string PhysicsWorld::toString() const
-{
-    std::stringstream stream;
-    stream << "{\n";
-    for (auto & body : m_rigidBodies)
-    {
-        stream << "  " << body->toString() << "\n";
-    }
-    stream << "}\n";
-
-    return stream.str();
 }
 
 void PhysicsWorld::solve()
@@ -162,7 +172,6 @@ void PhysicsWorld::solve()
      * Iterative solving
      */
 
-//    std::cout << "Solve velocities:" << std::endl;
     for (auto i = 0; i < m_numVelocityIterations; i++)
     {
         for (auto & contact : m_narrowphase->contacts())
@@ -171,7 +180,6 @@ void PhysicsWorld::solve()
         }
     }
 
-    std::cout << "Solve positions:" << std::endl;
     for (auto i = 0; i < m_numPositionIterations; i++)
     {
         for (auto & contact : m_narrowphase->contacts())

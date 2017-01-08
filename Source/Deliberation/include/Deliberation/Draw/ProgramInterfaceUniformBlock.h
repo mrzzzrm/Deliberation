@@ -16,6 +16,8 @@ public:
     const DataLayout & layout() const;
     unsigned int index() const;
 
+    std::string toString() const;
+
     bool operator==(const ProgramInterfaceUniformBlock & other) const;
     bool operator!=(const ProgramInterfaceUniformBlock & other) const;
 
