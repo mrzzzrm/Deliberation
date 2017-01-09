@@ -39,8 +39,8 @@ public:
     const glm::vec3 & force() const;
     bool isStatic() const;
     size_t index() const;
-    std::unique_ptr<RigidBodyPayload> & payload();
-    const std::unique_ptr<RigidBodyPayload> & payload() const;
+    std::shared_ptr<RigidBodyPayload> & payload();
+    const std::shared_ptr<RigidBodyPayload> & payload() const;
 
     glm::vec3 localVelocity(const glm::vec3 & r) const;
 
@@ -53,7 +53,7 @@ public:
     void setForce(const glm::vec3 & force);
     void setStatic(bool isStatic);
     void setIndex(size_t index);
-    void setPayload(std::unique_ptr<RigidBodyPayload> && payload);
+    void setPayload(const std::shared_ptr<RigidBodyPayload> & payload);
 
     void applyForce(const glm::vec3 & force);
 
@@ -82,7 +82,7 @@ private:
     bool        m_static = false;
     size_t      m_index = -1;
 
-    std::unique_ptr<RigidBodyPayload>
+    std::shared_ptr<RigidBodyPayload>
                 m_payload;
 };
 

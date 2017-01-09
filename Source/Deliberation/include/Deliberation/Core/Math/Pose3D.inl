@@ -37,11 +37,12 @@ inline Pose3D::Pose3D():
 {
 }
 
-inline Pose3D::Pose3D(const glm::vec3 & position, const glm::quat & orientation):
+inline Pose3D::Pose3D(const glm::vec3 & position, const glm::quat & orientation, const glm::vec3 & center):
     m_matrixDirty(true),
     m_basisDirty(true),
     m_position(position),
-    m_orientation(orientation)
+    m_orientation(orientation),
+    m_center(center)
 {
 
 }
@@ -54,6 +55,11 @@ inline const glm::vec3 & Pose3D::position() const
 inline const glm::quat & Pose3D::orientation() const
 {
     return m_orientation;
+}
+
+inline const glm::vec3 & Pose3D::center() const
+{
+    return m_center;
 }
 
 inline void Pose3D::setPosition(const glm::vec3 & position)
@@ -71,6 +77,14 @@ inline void Pose3D::setOrientation(const glm::quat & orientation)
     m_orientation = orientation;
     m_matrixDirty = true;
     m_basisDirty = true;
+}
+
+inline void Pose3D::setCenter(const glm::vec3 & center)
+{
+    Assert(GLMIsFinite(center), "");
+
+    m_center = center;
+    m_matrixDirty = true;
 }
 
 inline void Pose3D::localTranslate(const glm::vec3 & delta)
@@ -122,7 +136,8 @@ inline const glm::mat4 & Pose3D::matrix() const
     {
         // Yes, this could be done way more efficient...
         m_matrix = glm::translate(m_position) *
-                   glm::mat4_cast(m_orientation);
+                   glm::mat4_cast(m_orientation) *
+                   glm::translate(-m_center);
         m_matrixDirty = false;
     }
 
@@ -131,12 +146,12 @@ inline const glm::mat4 & Pose3D::matrix() const
 
 inline glm::vec3 Pose3D::pointLocalToWorld(const glm::vec3 & point) const
 {
-    return m_position + (m_orientation * point);
+    return m_position + (m_orientation * (-m_center + point));
 }
 
 inline glm::vec3 Pose3D::pointWorldToLocal(const glm::vec3 & point) const
 {
-    return glm::inverse(m_orientation) * (point - m_position);
+    return glm::inverse(m_orientation) * (point - m_position) + m_center;
 }
 
 inline glm::vec3 Pose3D::directionWorldToLocal(const glm::vec3 & dir) const
@@ -162,6 +177,7 @@ inline Pose3D Pose3D::interpolated(const Pose3D & other, float v) const
 
     result.setOrientation(glm::slerp(m_orientation, other.orientation(), v));
     result.setPosition(glm::mix(m_position, other.position(), v));
+    result.setCenter(glm::mix(m_center, other.center(), v));
 
     return result;
 }
@@ -170,15 +186,17 @@ inline std::string Pose3D::toString() const
 {
     std::stringstream stream;
     stream << "[Position: " << m_position <<
-           "; Orientation: " << m_orientation << "]";
+           "; Orientation: " << m_orientation <<
+           "; Center: " << m_center << "]";
 
     return stream.str();
 }
 
-inline bool Pose3D::operator==(const Pose3D &other) const
+inline bool Pose3D::operator==(const Pose3D & other) const
 {
     return m_position == other.m_position &&
-           m_orientation == other.m_orientation;
+           m_orientation == other.m_orientation &&
+           m_center == other.m_center;
 }
 
 inline bool Pose3D::operator!=(const Pose3D &other) const

@@ -17,13 +17,15 @@ public:
 
 public:
     Pose3D();
-    Pose3D(const glm::vec3 & position, const glm::quat & orientation);
+    Pose3D(const glm::vec3 & position, const glm::quat & orientation, const glm::vec3 & center = {});
 
     const glm::vec3 & position() const;
     const glm::quat & orientation() const;
+    const glm::vec3 & center() const;
 
     void setPosition(const glm::vec3 & position);
     void setOrientation(const glm::quat & orientation);
+    void setCenter(const glm::vec3 & center);
 
     void localTranslate(const glm::vec3 & delta);
     void worldTranslate(const glm::vec3 & delta);
@@ -50,6 +52,7 @@ public:
 protected:
     glm::vec3           m_position;
     glm::quat           m_orientation;
+    glm::vec3           m_center;
 
     mutable glm::mat3   m_basis;
     mutable bool        m_basisDirty;

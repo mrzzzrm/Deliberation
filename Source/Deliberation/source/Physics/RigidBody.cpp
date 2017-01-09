@@ -97,12 +97,12 @@ size_t RigidBody::index() const
     return m_index;
 }
 
-std::unique_ptr<RigidBodyPayload> & RigidBody::payload()
+std::shared_ptr<RigidBodyPayload> & RigidBody::payload()
 {
     return m_payload;
 }
 
-const std::unique_ptr<RigidBodyPayload> & RigidBody::payload() const
+const std::shared_ptr<RigidBodyPayload> & RigidBody::payload() const
 {
     return m_payload;
 }
@@ -184,9 +184,9 @@ void RigidBody::setIndex(size_t index)
     m_index = index;
 }
 
-void RigidBody::setPayload(std::unique_ptr<RigidBodyPayload> && payload)
+void RigidBody::setPayload(const std::shared_ptr<RigidBodyPayload> & payload)
 {
-    m_payload = std::move(payload);
+    m_payload = payload;
 }
 
 void RigidBody::applyForce(const glm::vec3 & force)
