@@ -3,6 +3,8 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <iostream>
+
 namespace deliberation
 {
 

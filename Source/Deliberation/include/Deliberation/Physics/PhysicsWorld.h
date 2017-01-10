@@ -41,7 +41,9 @@ public:
 
     void update(float seconds);
 
-    void rayCast(const Ray3D & ray, const std::function<bool(const RayCastIntersection &)> & handler);
+    void rayCast(const Ray3D & ray,
+                 const std::function<bool(const RayCastIntersection &)> & handler
+                 );
 
     std::string toString() const;
 

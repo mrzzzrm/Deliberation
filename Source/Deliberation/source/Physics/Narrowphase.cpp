@@ -94,6 +94,8 @@ void Narrowphase::rayTest(const Ray3D & ray,
     auto & primitiveTest = it->second;
     auto intersection = primitiveTest->rayCast(ray, body);
 
+    std::cout << "  Intersects: " << (intersection.get() != nullptr) << " "  << body.toString() << std::endl;
+
     if (intersection)
     {
         handler(*intersection);

@@ -26,6 +26,7 @@ public:
     AABB bounds() const;
     const std::shared_ptr<BroadphaseProxy> & proxy() const;
 
+    void setShape(const std::shared_ptr<CollisionShape> & shape);
     void setTransform(const Transform3D & transform);
     void setProxy(const std::shared_ptr<BroadphaseProxy> & proxy);
 

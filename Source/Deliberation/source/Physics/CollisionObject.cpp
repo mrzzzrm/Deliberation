@@ -41,6 +41,11 @@ const std::shared_ptr<BroadphaseProxy> & CollisionObject::proxy() const
     return m_proxy;
 }
 
+void CollisionObject::setShape(const std::shared_ptr<CollisionShape> & shape)
+{
+    m_shape = shape;
+}
+
 void CollisionObject::setTransform(const Transform3D & transform)
 {
     m_transform = transform;
