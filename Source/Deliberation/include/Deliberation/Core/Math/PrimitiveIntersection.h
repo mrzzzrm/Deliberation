@@ -17,6 +17,11 @@ bool DELIBERATION_API NormalizedRay3DSphereIntersection(const glm::vec3 & origin
                                                         const glm::vec3 & center,
                                                         float radius);
 
+bool DELIBERATION_API LineSphereIntersection(const glm::vec3 & pointA,
+                                             const glm::vec3 & pointB,
+                                             const glm::vec3 & center,
+                                             float radius);
+
 bool DELIBERATION_API LinearSphereSweepSphereIntersection(const glm::vec3 & centerA,
                                                           float radiusA,
                                                           const glm::vec3 & delta,

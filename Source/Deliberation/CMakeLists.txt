@@ -48,6 +48,7 @@ set(sources
     ${source_path}/Core/InputBase.cpp
     ${source_path}/Core/LapTimer.cpp
     ${source_path}/Core/MainLoop.cpp
+    ${source_path}/Core/ScopeProfiler.cpp
     ${source_path}/Core/StringUtils.cpp
     ${source_path}/Core/Types.cpp
     ${source_path}/Core/Viewport.cpp
@@ -261,6 +262,7 @@ set(api_includes
     ${include_path}/Core/Optional.inl
     ${include_path}/Core/RingBuffer.h
     ${include_path}/Core/RingBuffer.inl
+    ${include_path}/Core/ScopeProfiler.h
     ${include_path}/Core/StringUtils.h
     ${include_path}/Core/StreamUtils.h
     ${include_path}/Core/StreamUtils.inl

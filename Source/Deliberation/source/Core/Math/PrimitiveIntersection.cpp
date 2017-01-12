@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 #include <Deliberation/Core/Math/Plane.h>
 #include <Deliberation/Core/Math/Ray2D.h>
@@ -34,6 +35,51 @@ bool NormalizedRay3DSphereIntersection(const glm::vec3 & origin,
     }
 
     return b * b - c >= 0;
+}
+
+bool DELIBERATION_API LineSphereIntersection(const glm::vec3 & origin,
+                                             const glm::vec3 & delta,
+                                             const glm::vec3 & center,
+                                             float radius)
+{
+    auto tOrigin = origin - center;
+
+    auto a = glm::dot(delta, delta);
+    auto b = 2 * glm::dot(tOrigin, delta);
+    auto c = glm::dot(tOrigin, tOrigin) - radius * radius;
+
+    auto underSqrt = b * b - 4 * a * c;
+
+    // We're starting inside the Sphere
+    if (c <= 0)
+    {
+        return true;
+    }
+
+    if (underSqrt < 0)
+    {
+        return false;
+    }
+
+    auto s1 = (-b + std::sqrt(underSqrt)) / (2 * a);
+    auto s2 = (-b - std::sqrt(underSqrt)) / (2 * a);
+
+    return (s1 >= 0 && s1 <= 1) || (s2 >= 0 && s2 <= 1);
+
+    std::cout << s1 << " " << s2 << std::endl;
+
+    if (b >= 0)
+    {
+        auto greaterZero = c <= 0 || a <= 0;
+        auto smallerOne = 2 * a >= -b && a + b >= -c;
+        return greaterZero && smallerOne;
+    }
+    else
+    {
+        auto s1 = 2 * a >= -b && a + b >= -c;
+        auto s2 = (a == 0 || c >= 0) && (2 * a >= -b || a + b <= -c);
+        return s1 || s2;
+    }
 }
 
 bool LinearSphereSweepSphereIntersection(const glm::vec3 & centerA,

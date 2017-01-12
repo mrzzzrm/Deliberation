@@ -17,6 +17,7 @@ public:
     virtual const void * ptr() const = 0;
     virtual std::size_t size() const = 0;
     virtual void resize(std::size_t size) = 0;
+    virtual void reserve(std::size_t size) = 0;
 };
 
 }

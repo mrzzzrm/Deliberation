@@ -27,7 +27,7 @@ public:
     std::shared_ptr<BroadphaseProxy> createProxy(const CollisionObject & object);
     void removeProxy(const BroadphaseProxy & proxy);
 
-    virtual std::vector<std::shared_ptr<BroadphaseProxy>> rayCast(const Ray3D & ray) const = 0;
+    virtual std::vector<std::shared_ptr<BroadphaseProxy>> lineCast(const Ray3D & ray) const = 0;
 
     virtual void setProxyBounds(BroadphaseProxy & proxy, const AABB & bounds) = 0;
 

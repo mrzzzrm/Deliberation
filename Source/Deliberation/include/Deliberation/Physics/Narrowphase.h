@@ -31,9 +31,9 @@ public:
     void addContact(void * userDataA, void * userDataB);
     void removeContact(void * userDataA, void * userDataB);
 
-    void rayTest(const Ray3D & ray,
-                 const std::shared_ptr<BroadphaseProxy> & proxy,
-                 const std::function<bool(const RayCastIntersection&)> & handler);
+    void lineTest(const Ray3D &ray,
+                  const std::shared_ptr<BroadphaseProxy> &proxy,
+                  const std::function<bool(const RayCastIntersection &)> &handler);
 
     void registerPrimitiveTest(int shapeType, std::unique_ptr<NarrowphasePrimitiveTest> && primitiveTest);
 

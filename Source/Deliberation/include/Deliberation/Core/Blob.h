@@ -53,6 +53,7 @@ public:
     const T & access(size_t offset) const;
 
     void resize(size_t size);
+    void reserve(size_t size);
 
     std::string toString() const;
 

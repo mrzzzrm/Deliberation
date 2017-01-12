@@ -82,15 +82,13 @@ void PhysicsWorld::update(float seconds)
     }
 }
 
-void PhysicsWorld::rayCast(const Ray3D & ray, const std::function<bool(const RayCastIntersection&)> & handler)
+void PhysicsWorld::lineCast(const Ray3D &ray, const std::function<bool(const RayCastIntersection &)> &handler)
 {
-    auto broadphaseResult = m_broadphase->rayCast(ray);
-
-    std::cout << "Cast into " << broadphaseResult.size() << " proxies" << std::endl;
+    auto broadphaseResult = m_broadphase->lineCast(ray);
 
     for (auto & proxy : broadphaseResult)
     {
-        m_narrowphase->rayTest(ray, proxy, handler);
+        m_narrowphase->lineTest(ray, proxy, handler);
     }
 }
 

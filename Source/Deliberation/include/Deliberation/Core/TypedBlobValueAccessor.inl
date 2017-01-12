@@ -9,6 +9,20 @@ namespace deliberation
 {
 
 template<typename T>
+TypedBlobIterator<T>::TypedBlobIterator(T * ptr, size_t stride):
+    m_ptr(ptr),
+    m_stride(stride)
+{}
+
+template<typename T>
+void TypedBlobIterator<T>::put(const T & value)
+{
+    *m_ptr = std::move(value);
+        
+    m_ptr = (T*)(((u8*)m_ptr) + m_stride);
+}
+
+template<typename T>
 CTypedBlobValueAccessor<T>::CTypedBlobValueAccessor(const Blob & data,
                                                     const DataLayout & layout,
                                                     const DataLayoutField & field):
@@ -31,6 +45,13 @@ TypedBlobValueAccessor<T>::TypedBlobValueAccessor(Blob & data,
 {
     Assert(field.type() == Type::resolve<T>(), std::string("Trying to access: ") + Type::resolve<T>().name() +
         ", but is actually " + field.type().name() + ": " + field.name());
+}
+
+template<typename T>
+TypedBlobIterator<T> TypedBlobValueAccessor<T>::iterator()
+{
+    Assert(m_data, "Accessor is not initialized");
+    return TypedBlobIterator<T>((T*)&m_data->data.access<T>(m_data->field.offset()), m_data->layout.stride());
 }
 
 template<typename T>

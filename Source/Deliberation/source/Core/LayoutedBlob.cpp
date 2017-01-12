@@ -73,6 +73,11 @@ void LayoutedBlob::resize(size_t count)
     m_data.resize(m_layout.stride() * m_count);
 }
 
+void LayoutedBlob::reserve(size_t count)
+{
+    m_data.reserve(m_layout.stride() * m_count);
+}
+
 LayoutedBlobElement LayoutedBlob::operator[](size_t index)
 {
     Assert(index < m_count, "");

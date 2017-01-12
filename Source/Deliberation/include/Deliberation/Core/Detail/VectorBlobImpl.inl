@@ -54,7 +54,17 @@ void VectorBlobImpl<T>::resize(std::size_t size)
     auto rem = size % sizeof(T);
     Assert(rem == 0, "Invalid resize");
 
-    return m_value.resize(num);;
+    return m_value.resize(num);
+}
+
+template<typename T>
+void VectorBlobImpl<T>::reserve(std::size_t size)
+{
+    auto num = size / sizeof(T);
+    auto rem = size % sizeof(T);
+    Assert(rem == 0, "Invalid reserve");
+
+    return m_value.reserve(num);
 }
 
 }

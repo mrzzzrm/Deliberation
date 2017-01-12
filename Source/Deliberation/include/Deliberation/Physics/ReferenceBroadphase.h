@@ -15,7 +15,7 @@ public:
 
     virtual void setProxyBounds(BroadphaseProxy & proxy, const AABB & bounds) override;
 
-    virtual std::vector<std::shared_ptr<BroadphaseProxy>> rayCast(const Ray3D & ray) const override;
+    virtual std::vector<std::shared_ptr<BroadphaseProxy>> lineCast(const Ray3D & ray) const override;
 
     virtual void checkProximities() override;
 };

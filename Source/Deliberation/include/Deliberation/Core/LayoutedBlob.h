@@ -20,6 +20,7 @@ class DELIBERATION_API LayoutedBlob final
 public:
     template<typename T> using Field = TypedBlobValueAccessor<T>;
     template<typename T> using CField = CTypedBlobValueAccessor<T>;
+    template<typename T> using Iterator = TypedBlobIterator<T>;
 
 public:
     LayoutedBlob();
@@ -53,6 +54,7 @@ public:
 
     void append(const CLayoutedBlobElement & element);
     void resize(size_t count);
+    void reserve(size_t count);
 
     LayoutedBlobElement operator[](size_t index);
     CLayoutedBlobElement operator[](size_t index) const;

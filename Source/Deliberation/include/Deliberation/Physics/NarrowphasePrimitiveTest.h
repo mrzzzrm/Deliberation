@@ -19,8 +19,8 @@ struct RayCastIntersection
 class NarrowphasePrimitiveTest
 {
 public:
-    virtual std::unique_ptr<RayCastIntersection> rayCast(const Ray3D & ray,
-                                                         const RigidBody & body) const = 0;
+    virtual std::unique_ptr<RayCastIntersection> lineTest(const Ray3D &ray,
+                                                          const RigidBody &body) const = 0;
 };
 
 }

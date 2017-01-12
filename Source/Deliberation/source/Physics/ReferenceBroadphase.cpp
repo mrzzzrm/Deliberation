@@ -22,11 +22,9 @@ void ReferenceBroadphase::setProxyBounds(BroadphaseProxy & proxy, const AABB & b
     proxy.setBounds(bounds);
 }
 
-std::vector<std::shared_ptr<BroadphaseProxy>> ReferenceBroadphase::rayCast(const Ray3D & ray) const
+std::vector<std::shared_ptr<BroadphaseProxy>> ReferenceBroadphase::lineCast(const Ray3D & ray) const
 {
     std::vector<std::shared_ptr<BroadphaseProxy>> result;
-
-    auto normalizedRay = ray.normalized();
 
     for (auto & proxy : m_proxies)
     {
@@ -34,7 +32,7 @@ std::vector<std::shared_ptr<BroadphaseProxy>> ReferenceBroadphase::rayCast(const
         auto position = aabb.center();
         auto radius = aabb.diameter() / 2.0f;
 
-        if (NormalizedRay3DSphereIntersection(normalizedRay.origin(), normalizedRay.direction(), position, radius))
+        if (LineSphereIntersection(ray.origin(), ray.direction(), position, radius))
         {
             result.emplace_back(proxy);
         }

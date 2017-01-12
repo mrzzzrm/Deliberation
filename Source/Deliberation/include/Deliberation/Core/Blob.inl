@@ -40,6 +40,11 @@ Blob Blob::fromValue(const T & value)
             Fail("Resize not supported");
         }
 
+        void reserve(std::size_t size) override
+        {
+            Fail("Reserve not supported");
+        }
+
     private:
         T m_value;
     };

@@ -13,6 +13,19 @@ class DataLayout;
 class DataLayoutField;
 
 template<typename T>
+class TypedBlobIterator final
+{
+public:
+    TypedBlobIterator(T * ptr = nullptr, size_t stride = 0);
+
+    void put(const T & value);
+
+private:
+    T *     m_ptr;
+    size_t  m_stride;
+};
+
+template<typename T>
 class CTypedBlobValueAccessor final
 {
 public:
@@ -31,6 +44,8 @@ class TypedBlobValueAccessor final
 public:
     TypedBlobValueAccessor() = default;
     TypedBlobValueAccessor(Blob & data, const DataLayout & layout, const DataLayoutField & field);
+
+    TypedBlobIterator<T> iterator();
 
     void assign(const std::vector<T> & values);
 

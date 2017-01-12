@@ -61,6 +61,12 @@ void Blob::resize(size_t size)
     m_impl->resize(size);
 }
 
+void Blob::reserve(size_t size)
+{
+    Assert(m_impl.get(), "Hollow Blob");
+    m_impl->reserve(size);
+}
+
 std::string Blob::toString() const
 {
     std::stringstream stream;

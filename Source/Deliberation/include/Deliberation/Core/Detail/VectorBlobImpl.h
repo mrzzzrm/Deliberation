@@ -25,6 +25,7 @@ public:
     virtual const void * ptr() const override;
     virtual std::size_t size() const override;
     virtual void resize(std::size_t size) override;
+    virtual void reserve(std::size_t size) override;
 
 private:
     std::vector<T> m_value;

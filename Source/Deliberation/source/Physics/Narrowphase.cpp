@@ -78,9 +78,9 @@ void Narrowphase::removeContact(void * userDataA, void * userDataB)
     m_contacts.erase(index);
 }
 
-void Narrowphase::rayTest(const Ray3D & ray,
-                          const std::shared_ptr<BroadphaseProxy> & proxy,
-                          const std::function<bool(const RayCastIntersection&)> & handler)
+void Narrowphase::lineTest(const Ray3D &ray,
+                           const std::shared_ptr<BroadphaseProxy> &proxy,
+                           const std::function<bool(const RayCastIntersection &)> &handler)
 {
     auto & body = *(RigidBody*)proxy->userData();
 
@@ -92,9 +92,7 @@ void Narrowphase::rayTest(const Ray3D & ray,
     }
 
     auto & primitiveTest = it->second;
-    auto intersection = primitiveTest->rayCast(ray, body);
-
-    std::cout << "  Intersects: " << (intersection.get() != nullptr) << " "  << body.toString() << std::endl;
+    auto intersection = primitiveTest->lineTest(ray, body);
 
     if (intersection)
     {
