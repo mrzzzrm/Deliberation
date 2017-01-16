@@ -18,10 +18,10 @@ class TypedBlobIterator final
 public:
     TypedBlobIterator(T * ptr = nullptr, size_t stride = 0);
 
-    void put(const T & value);
+    inline void put(const T & value);
 
 private:
-    T *     m_ptr;
+    u8 *    m_ptr;
     size_t  m_stride;
 };
 

@@ -52,8 +52,7 @@ void DebugCameraNavigator3D::update(float seconds)
     else
     {
         auto delta = mousePos - m_lastMousePos;
-        delta *= 0.004f;
-        auto rotation = glm::quat(glm::vec3(-delta.y, -delta.x, 0.0f));
+        auto rotation = glm::quat(glm::vec3(delta.y, -delta.x, 0.0f));
         m_camera.setOrientation(m_camera.orientation() * rotation);
     }
 

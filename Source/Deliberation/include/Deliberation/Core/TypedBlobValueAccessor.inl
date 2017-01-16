@@ -10,16 +10,15 @@ namespace deliberation
 
 template<typename T>
 TypedBlobIterator<T>::TypedBlobIterator(T * ptr, size_t stride):
-    m_ptr(ptr),
+    m_ptr((u8*)ptr),
     m_stride(stride)
 {}
 
 template<typename T>
-void TypedBlobIterator<T>::put(const T & value)
+inline void TypedBlobIterator<T>::put(const T & value)
 {
-    *m_ptr = std::move(value);
-        
-    m_ptr = (T*)(((u8*)m_ptr) + m_stride);
+    *(T*)m_ptr = value;
+    m_ptr += m_stride;
 }
 
 template<typename T>
