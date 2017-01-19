@@ -4,6 +4,17 @@ project(Deliberation C CXX)
 
 set(DELIBERATION_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
+# Build Type
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set(DELIBERATION_BUILD_TYPE_DEBUG 1)
+    set(DELIBERATION_BUILD_TYPE_RELEASE 0)
+elseif (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    set(DELIBERATION_BUILD_TYPE_DEBUG 0)
+    set(DELIBERATION_BUILD_TYPE_RELEASE 1)
+else()
+    message(FATAL_ERROR "Unknown build type ${CMAKE_BUILD_TYPE}")
+endif()
+
 # Configuration options
 
 # CMake configuration

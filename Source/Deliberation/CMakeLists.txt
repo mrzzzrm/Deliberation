@@ -48,6 +48,7 @@ set(sources
     ${source_path}/Core/InputBase.cpp
     ${source_path}/Core/LapTimer.cpp
     ${source_path}/Core/MainLoop.cpp
+    ${source_path}/Core/RandomColorGenerator.cpp
     ${source_path}/Core/ScopeProfiler.cpp
     ${source_path}/Core/StringUtils.cpp
     ${source_path}/Core/Types.cpp
@@ -260,6 +261,7 @@ set(api_includes
     ${include_path}/Core/OffsetOf.inl
     ${include_path}/Core/Optional.h
     ${include_path}/Core/Optional.inl
+    ${include_path}/Core/RandomColorGenerator.h
     ${include_path}/Core/RingBuffer.h
     ${include_path}/Core/RingBuffer.inl
     ${include_path}/Core/ScopeProfiler.h
@@ -426,4 +428,8 @@ add_library(Deliberation STATIC ${api_includes} ${sources})
 target_link_libraries(Deliberation
     ${libs})
     
-    
+target_compile_definitions(Deliberation
+    PUBLIC
+    DELIBERATION_BUILD_TYPE_DEBUG=${DELIBERATION_BUILD_TYPE_DEBUG}
+    DELIBERATION_BUILD_TYPE_RELEASE=${DELIBERATION_BUILD_TYPE_RELEASE}
+    )

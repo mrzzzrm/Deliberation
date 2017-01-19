@@ -2,24 +2,68 @@
 
 #include <cassert>
 #include <string>
+#include <iostream>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Deliberation.h>
 
-/*
-    TODO
-        - namespace / prefixing
-*/
+#if DELIBERATION_BUILD_TYPE_DEBUG
 
-#define Assert(expr, msg) { __Assert(__FILE__, __func__, __LINE__, (expr), (msg)); assert((expr)); }
-#define Fail(msg) { __Fail(__FILE__, __func__, __LINE__, (msg)); assert(false); }
+#define Assert(expr, msg) { ::deliberation::AssertImpl(__FILE__, __func__, __LINE__, (expr), (msg)); assert((expr)); }
+#define Fail(msg) { ::deliberation::FailImpl(__FILE__, __func__, __LINE__, (msg)); assert(false); }
 
-void DELIBERATION_API __Assert(const std::string & file,
-                               const std::string & function,
+#else
+
+#define Assert(expr, msg)
+#define Fail(msg)
+
+#endif
+
+namespace deliberation
+{
+
+#if DELIBERATION_BUILD_TYPE_DEBUG
+
+inline void DELIBERATION_API AssertImpl(const char * file,
+                                 const char * function,
+                                 unsigned int line,
+                                 bool expr,
+                                 const char * msg)
+{
+    if (expr)
+    {
+        return;
+    }
+
+    std::cerr << "------------------- ASSERT: " << file << ": " << line << " (" << function << ") -------------------" << std::endl <<
+                               msg << std::endl;
+}
+
+inline void DELIBERATION_API AssertImpl(const char * file,
+                                 const char * function,
+                                 unsigned int line,
+                                 bool expr,
+                                 const std::string & msg)
+{
+    AssertImpl(file, function, line, expr, msg.c_str());
+}
+
+inline void DELIBERATION_API FailImpl(const char * file,
+                               const char * function,
                                unsigned int line,
-                               bool expr,
-                               const std::string & msg);
+                               const char * msg)
+{
+    std::cerr << "------------------- FAIL: " << file << ":" << line << " (" << function << ") -------------------" << std::endl <<
+                             msg << std::endl;
+}
 
-void DELIBERATION_API __Fail(const std::string & file,
-                             const std::string & function,
-                             unsigned int line,
-                             const std::string & msg);
+inline void DELIBERATION_API FailImpl(const char * file,
+                               const char * function,
+                               unsigned int line,
+                               const std::string & msg)
+{
+    FailImpl(file, function, line, msg.c_str());
+}
+
+#endif
+
+}
