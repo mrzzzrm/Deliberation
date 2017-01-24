@@ -37,6 +37,8 @@ public:
     std::size_t size() const;
     void * ptr(size_t offset = 0);
     const void * ptr(size_t offset = 0) const;
+    void * ptrRaw(size_t offset = 0);
+    const void * ptrRaw(size_t offset = 0) const;
 
     template<typename T>
     void write(std::size_t offset, const T & value);

@@ -47,6 +47,16 @@ const void * Blob::ptr(size_t offset) const
     return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
 }
 
+void * Blob::ptrRaw(size_t offset)
+{
+    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+}
+
+const void * Blob::ptrRaw(size_t offset) const
+{
+    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+}
+
 void Blob::write(std::size_t offset, void * src, size_t length)
 {
     Assert(offset + length <= size(), "");

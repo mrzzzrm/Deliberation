@@ -50,7 +50,10 @@ template<typename T>
 TypedBlobIterator<T> TypedBlobValueAccessor<T>::iterator()
 {
     Assert(m_data, "Accessor is not initialized");
-    return TypedBlobIterator<T>((T*)&m_data->data.access<T>(m_data->field.offset()), m_data->layout.stride());
+
+    auto offset = m_data->field.offset();
+
+    return TypedBlobIterator<T>((T*)&((char*)m_data->data.ptrRaw())[offset], m_data->layout.stride());
 }
 
 template<typename T>
