@@ -36,6 +36,8 @@ void CameraDolly3D::update(const glm::vec3 & position,
 {
     Assert(m_acceleration >= 0.0f, "Invalid acceleration");
 
+    static float lastDistance = 0.0f;
+
     /**
      * Move position
      */

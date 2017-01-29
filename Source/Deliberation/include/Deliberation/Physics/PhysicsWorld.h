@@ -39,11 +39,11 @@ public:
 
     void setGravity(float gravity);
 
-    void update(float seconds);
+    float update(float seconds);
 
     void lineCast(const Ray3D &ray,
                   const std::function<bool(const RayCastIntersection &)> &handler
-    );
+    ) const;
 
     std::string toString() const;
 

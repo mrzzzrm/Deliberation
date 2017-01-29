@@ -72,17 +72,22 @@ void PhysicsWorld::setGravity(float gravity)
     m_gravity = gravity;
 }
 
-void PhysicsWorld::update(float seconds)
+float PhysicsWorld::update(float seconds)
 {
+    auto simulatedTime = 0.0f;
+
     m_timeAccumulator += seconds;
     while (m_timeAccumulator >= m_timestep)
     {
         performTimestep(m_timestep);
         m_timeAccumulator -= m_timestep;
+        simulatedTime += m_timestep;
     }
+
+    return simulatedTime;
 }
 
-void PhysicsWorld::lineCast(const Ray3D &ray, const std::function<bool(const RayCastIntersection &)> &handler)
+void PhysicsWorld::lineCast(const Ray3D &ray, const std::function<bool(const RayCastIntersection &)> &handler) const
 {
     auto broadphaseResult = m_broadphase->lineCast(ray);
 
