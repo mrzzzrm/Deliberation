@@ -15,7 +15,7 @@ Camera3D::Camera3D():
     m_position(0.0, 0.0, 10.0),
     m_orientation({0.0f, 0.0f, 0.0f}),
     m_zNear(0.1f),
-    m_zFar(1000.0f),
+    m_zFar(9999.0f),
     m_yFoV(glm::radians(70.0f)),
     m_aspectRatio(1.0f),
     m_viewDirty(true),

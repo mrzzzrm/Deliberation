@@ -78,7 +78,7 @@ glm::vec3 RandomInHemisphere(const glm::vec3 & normal)
     do
     {
         p = RandomInSphere();
-    } while(glm::dot(glm::normalize(p), normal) < 0.0f); // Not kidding, no...
+    } while(glm::dot(p, normal) < 0.0f); // Not kidding, no...
 
     return p;
 }
