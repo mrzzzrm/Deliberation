@@ -256,7 +256,7 @@ void DebugArrowInstance::reset(const glm::vec3 & origin, const glm::vec3 & delta
 
     m_lineVertexBuffer.scheduleUpload(m_lineVertices);
 
-    if (m_delta == glm::vec3(0.0f))
+    if (glm::length2(m_delta) < 0.001f)
     {
         m_coneTransformUniform.set(Transform3D::identity().matrix());
         return;

@@ -4,7 +4,9 @@
 
 #include <glm/gtx/quaternion.hpp>
 
+#include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/Math/MathUtils.h>
+#include <Deliberation/Core/Math/GLMUtils.h>
 #include <Deliberation/Core/StreamUtils.h>
 
 namespace deliberation
@@ -146,6 +148,8 @@ void RigidBody::setFriction(float friction)
 
 void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
 {
+    Assert(GLMIsFinite(velocity), "");
+
     if (m_static)
     {
         return;

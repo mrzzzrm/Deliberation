@@ -18,8 +18,13 @@ glm::quat DELIBERATION_API QuaternionAxisRotation(const glm::quat & q, const glm
 glm::vec2 DELIBERATION_API RotateHalfPiCW(const glm::vec2 & v);
 glm::vec2 DELIBERATION_API RotateHalfPiCCW(const glm::vec2 & v);
 
+// 1, 0, -1
 template <typename T>
 i32 SigNum(T value);
+
+// 1, -1
+template<typename T>
+i32 Sign(T value);
 
 }
 
