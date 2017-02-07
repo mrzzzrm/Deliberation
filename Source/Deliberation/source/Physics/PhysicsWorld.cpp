@@ -41,6 +41,11 @@ float PhysicsWorld::timestep() const
     return m_timestep;
 }
 
+float PhysicsWorld::nextSimulationStep(float seconds)
+{
+    return std::floor((m_timeAccumulator + seconds) / m_timestep) * m_timestep;
+}
+
 Narrowphase & PhysicsWorld::narrowphase()
 {
     return *m_narrowphase;

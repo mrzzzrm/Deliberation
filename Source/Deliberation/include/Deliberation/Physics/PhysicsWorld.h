@@ -34,6 +34,12 @@ public:
     Narrowphase & narrowphase();
     const Narrowphase & narrowphase() const;
 
+    /**
+     * If @seconds would be handed to update(), returns how many seconds will be simulated. To sync game logic with the
+     * physics.
+     */
+    float nextSimulationStep(float seconds);
+
     void addRigidBody(const std::shared_ptr<RigidBody> & body);
     void removeRigidBody(const RigidBody & body);
 
