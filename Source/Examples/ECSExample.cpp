@@ -12,8 +12,7 @@
 
 using namespace deliberation;
 
-struct PositionComponent:
-    public Component<PositionComponent>
+struct PositionComponent
 {
     PositionComponent(const glm::vec3 & position):
         position(position)
@@ -23,8 +22,7 @@ struct PositionComponent:
     glm::vec3 position;
 };
 
-struct ColliderComponent:
-    public Component<ColliderComponent>
+struct ColliderComponent
 {
 //    virtual void onCreate() override
 //    {
@@ -33,8 +31,7 @@ struct ColliderComponent:
 //    }
 };
 
-struct GunComponent:
-    public Component<GunComponent>
+struct GunComponent
 {
     GunComponent(float freq):
         freq(freq)

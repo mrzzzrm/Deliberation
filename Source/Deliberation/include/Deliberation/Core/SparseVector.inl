@@ -60,7 +60,7 @@ bool SparseVector<T>::IteratorT<QVecT, QValT>::operator!=(const IteratorT<QVecT,
 template<typename T>
 bool SparseVector<T>::contains(std::size_t index) const
 {
-    return index < m_vec.size() && m_vec[index].engaged();
+    return index < m_vec.size() && m_vec[index];
 }
 
 template<typename T>
@@ -126,7 +126,7 @@ std::size_t SparseVector<T>::insert(T && value)
 
         Assert(result < m_vec.size(), "");
 
-        m_vec[result].reset(std::move(value));
+        m_vec[result] = std::move(value);
     }
 
     return result;
@@ -147,7 +147,7 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
     if (m_pool.empty())
     {
         result = m_vec.size();
-        m_vec.emplace_back(std::forward<Args>(args)...);
+        m_vec.emplace_back(std::experimental::in_place, std::forward<Args>(args)...);
     }
     else
     {
@@ -156,7 +156,7 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
 
         Assert(result < m_vec.size(), "");
 
-        m_vec[result].reset(std::forward<Args>(args)...);
+        m_vec[result] = T{std::forward<Args>(args)...};
     }
 
     return result;
@@ -166,9 +166,9 @@ template<typename T>
 void SparseVector<T>::erase(std::size_t index)
 {
     Assert(index < m_vec.size(), "");
-    Assert(m_vec[index].engaged(), "");
+    Assert(!!m_vec[index], "");
 
-    m_vec[index].disengage();
+    m_vec[index] = std::experimental::optional<T>{};
     m_pool.push(index);
 }
 
@@ -218,14 +218,14 @@ template<typename T>
 T & SparseVector<T>::operator[](std::size_t index)
 {
     Assert(contains(index), "");
-    return m_vec[index].get();
+    return *m_vec[index];
 }
 
 template<typename T>
 const T & SparseVector<T>::operator[](std::size_t index) const
 {
     Assert(contains(index), "");
-    return m_vec[index].get();
+    return *m_vec[index];
 }
 
 template<typename T>

@@ -93,11 +93,11 @@ const ComponentBase * Entity::component(TypeID::value_t c) const
     return m_world->component(m_id, c);
 }
 
-void Entity::addComponent(TypeID::value_t c, ComponentBase * ptr)
+void Entity::addComponent(TypeID::value_t c, std::unique_ptr<ComponentBase> component)
 {
     Assert(m_world, "Entity is hollow");
 
-    m_world->addComponent(m_id, c, ptr);
+    m_world->addComponent(m_id, c, std::move(component));
 }
 
 void Entity::removeComponent(TypeID::value_t c)
