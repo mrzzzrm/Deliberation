@@ -51,8 +51,8 @@ private:
 private:
     bool isValid(entity_id_t id) const;
     void remove(entity_id_t id);
-    ComponentBase * component(entity_id_t id, TypeID::value_t index);
-    const ComponentBase * component(entity_id_t id, TypeID::value_t index) const;
+    std::shared_ptr<ComponentBase> component(entity_id_t id, TypeID::value_t index);
+    std::shared_ptr<const ComponentBase> component(entity_id_t id, TypeID::value_t index) const;
     void addComponent(entity_id_t id, TypeID::value_t index, std::unique_ptr<ComponentBase> component);
     void removeComponent(entity_id_t id, TypeID::value_t index);
 
@@ -69,7 +69,7 @@ private:
         EntityComponentSetup>                   m_entityComponentSetups;
 
     LinearMap<LinearMap<
-        std::unique_ptr<ComponentBase>>>        m_components;
+        std::shared_ptr<ComponentBase>>>        m_components;
 
     LinearMap<std::unique_ptr<SystemBase>>      m_systems;
 

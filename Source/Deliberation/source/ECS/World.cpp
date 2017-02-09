@@ -144,7 +144,7 @@ void World::remove(entity_id_t id)
     m_entityIndexByID.erase(id);
 }
 
-ComponentBase * World::component(entity_id_t id, TypeID::value_t index)
+std::shared_ptr<ComponentBase> World::component(entity_id_t id, TypeID::value_t index)
 {
     Assert(isValid(id), "");
 
@@ -160,10 +160,10 @@ ComponentBase * World::component(entity_id_t id, TypeID::value_t index)
         return nullptr;
     }
 
-    return m_components.at(index).at(i).get();
+    return m_components.at(index).at(i);
 }
 
-const ComponentBase * World::component(entity_id_t id, TypeID::value_t index) const
+std::shared_ptr<const ComponentBase> World::component(entity_id_t id, TypeID::value_t index) const
 {
     Assert(isValid(id), "");
 
@@ -179,7 +179,7 @@ const ComponentBase * World::component(entity_id_t id, TypeID::value_t index) co
         return nullptr;
     }
 
-    return m_components.at(index).at(i).get();
+    return m_components.at(index).at(i);
 }
 
 void World::addComponent(entity_id_t id, TypeID::value_t index, std::unique_ptr<ComponentBase> component)

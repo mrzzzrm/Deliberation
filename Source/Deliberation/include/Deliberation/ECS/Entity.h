@@ -62,8 +62,8 @@ private:
     EntityData & data() const;
 
     bool hasComponent(TypeID::value_t c);
-    ComponentBase * component(TypeID::value_t c);
-    const ComponentBase * component(TypeID::value_t c) const;
+    ComponentBase & component(TypeID::value_t c);
+    const ComponentBase & component(TypeID::value_t c) const;
     void addComponent(TypeID::value_t c, std::unique_ptr<ComponentBase> component);
     void removeComponent(TypeID::value_t c);
 

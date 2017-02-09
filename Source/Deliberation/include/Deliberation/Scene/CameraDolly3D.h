@@ -26,7 +26,7 @@ public:
 
 private:
     Camera3D &  m_camera;
-    float       m_acceleration = 150.0f;
+    float       m_acceleration = 750.0f;
     Pose3D      m_relativePose;
 };
 

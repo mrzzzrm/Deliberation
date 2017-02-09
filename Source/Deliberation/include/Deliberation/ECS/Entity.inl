@@ -18,19 +18,13 @@ bool Entity::hasComponent() const
 template<typename T>
 T & Entity::component()
 {
-    auto * ptr = (T*)component(ComponentWrapper<T>::indexStatic());
-    Assert(ptr, "");
-
-    return *ptr;
+    return dynamic_cast<ComponentWrapper<T>&>(component(ComponentWrapper<T>::indexStatic())).value();
 }
 
 template<typename T>
 const T & Entity::component() const
 {
-    auto * ptr = (T*)component(ComponentWrapper<T>::indexStatic());
-    Assert(ptr, "");
-
-    return *ptr;
+    return dynamic_cast<ComponentWrapper<T>&>(component(ComponentWrapper<T>::indexStatic())).value();
 }
 
 template<typename T, typename ... Args>
