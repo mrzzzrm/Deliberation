@@ -182,7 +182,7 @@ const ComponentBase * World::component(entity_id_t id, TypeID::value_t index) co
     return m_components.at(index).at(i).get();
 }
 
-void World::addComponent(entity_id_t id, TypeID::value_t index, ComponentBase * component)
+void World::addComponent(entity_id_t id, TypeID::value_t index, std::unique_ptr<ComponentBase> component)
 {
     Assert(isValid(id), "");
 
@@ -193,7 +193,7 @@ void World::addComponent(entity_id_t id, TypeID::value_t index, ComponentBase * 
 
     entity.componentBits.set(index);
     entity.componentSetup = componentSetup(entity.componentBits);
-    m_components[index][i].reset(component);
+    m_components[index][i] = std::move(component);
 
 #if VERBOSE
     std::cout << "World::addComponent()" << std::endl;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits>
+#include <memory>
 #include <stdint.h>
 #include <string>
 #include <vector>
@@ -63,7 +64,7 @@ private:
     bool hasComponent(TypeID::value_t c);
     ComponentBase * component(TypeID::value_t c);
     const ComponentBase * component(TypeID::value_t c) const;
-    void addComponent(TypeID::value_t c, ComponentBase * ptr);
+    void addComponent(TypeID::value_t c, std::unique_ptr<ComponentBase> component);
     void removeComponent(TypeID::value_t c);
 
 private:

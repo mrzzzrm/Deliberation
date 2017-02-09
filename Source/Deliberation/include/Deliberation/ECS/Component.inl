@@ -1,3 +1,5 @@
+#include <typeinfo>
+
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/TypeID.h>
 

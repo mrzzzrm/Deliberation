@@ -1,5 +1,6 @@
 #pragma once
 
+#include <experimental/optional>
 #include <vector>
 #include <stack>
 #include <string>
@@ -76,8 +77,8 @@ private:
     template<typename, typename> friend class IteratorT;
 
 private:
-    std::vector<Optional<T>>    m_vec;
-    std::stack<std::size_t>     m_pool;
+    std::vector<std::experimental::optional<T>> m_vec;
+    std::stack<std::size_t>                     m_pool;
 };
 
 }

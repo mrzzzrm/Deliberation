@@ -53,7 +53,7 @@ private:
     void remove(entity_id_t id);
     ComponentBase * component(entity_id_t id, TypeID::value_t index);
     const ComponentBase * component(entity_id_t id, TypeID::value_t index) const;
-    void addComponent(entity_id_t id, TypeID::value_t index, ComponentBase * component);
+    void addComponent(entity_id_t id, TypeID::value_t index, std::unique_ptr<ComponentBase> component);
     void removeComponent(entity_id_t id, TypeID::value_t index);
 
     std::size_t entityIndex(entity_id_t id) const;

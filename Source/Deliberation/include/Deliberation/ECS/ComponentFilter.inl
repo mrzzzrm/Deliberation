@@ -12,7 +12,7 @@ struct SetComponentBits<Head, Args...>
 {
     static void unpack(ComponentBitset & bits)
     {
-        bits.set(Head::indexStatic());
+        bits.set(ComponentWrapper<Head>::indexStatic());
         SetComponentBits<Args...>::unpack(bits);
     }
 };

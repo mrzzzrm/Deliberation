@@ -4,6 +4,7 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/ECS/Component.h>
+#include <Deliberation/ECS/ComponentWrapper.h>
 
 namespace deliberation
 {
@@ -11,17 +12,13 @@ namespace deliberation
 template<typename T>
 bool Entity::hasComponent() const
 {
-    Assert((std::is_base_of<Component<T>, T>::value), "");
-
-    return hasComponent(T::indexStatic());
+    return hasComponent(ComponentWrapper<T>::indexStatic());
 }
 
 template<typename T>
 T & Entity::component()
 {
-    Assert((std::is_base_of<Component<T>, T>::value), "");
-
-    auto * ptr = (T*)component(T::indexStatic());
+    auto * ptr = (T*)component(ComponentWrapper<T>::indexStatic());
     Assert(ptr, "");
 
     return *ptr;
@@ -30,9 +27,7 @@ T & Entity::component()
 template<typename T>
 const T & Entity::component() const
 {
-    Assert((std::is_base_of<Component<T>, T>::value), "");
-
-    auto * ptr = (T*)component(T::indexStatic());
+    auto * ptr = (T*)component(ComponentWrapper<T>::indexStatic());
     Assert(ptr, "");
 
     return *ptr;
@@ -41,21 +36,18 @@ const T & Entity::component() const
 template<typename T, typename ... Args>
 T & Entity::addComponent(Args &&... args)
 {
-    Assert((std::is_base_of<Component<T>, T>::value), "");
+    auto component = std::make_unique<ComponentWrapper<T>>(std::forward<Args>(args)...);
+    auto & ref = *component;
 
-    auto * ptr = new T(std::forward<Args>(args)...);
+    addComponent(ComponentWrapper<T>::indexStatic(), std::move(component));
 
-    addComponent(T::indexStatic(), ptr);
-
-    return *ptr;
+    return ref.value();
 }
 
 template<typename T>
 void Entity::removeComponent()
 {
-    Assert((std::is_base_of<Component<T>, T>::value), "");
-
-    removeComponent(T::indexStatic());
+    removeComponent(ComponentWrapper<T>::indexStatic());
 }
 
 }
