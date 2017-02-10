@@ -23,6 +23,9 @@ class DELIBERATION_API RigidBody final:
     public CollisionObject
 {
 public:
+    static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
+
+public:
     RigidBody(const std::shared_ptr<CollisionShape> & shape,
               const Transform3D & transform = Transform3D(),
               float mass = 1.0f,
@@ -80,7 +83,7 @@ private:
     glm::vec3   m_torque;
 
     bool        m_static = false;
-    size_t      m_index = -1;
+    size_t      m_index = INVALID_INDEX;
 
     std::shared_ptr<RigidBodyPayload>
                 m_payload;

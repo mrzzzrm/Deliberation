@@ -41,7 +41,7 @@ public:
     float nextSimulationStep(float seconds);
 
     void addRigidBody(const std::shared_ptr<RigidBody> & body);
-    void removeRigidBody(const RigidBody & body);
+    void removeRigidBody(const std::shared_ptr<RigidBody> & body);
 
     void setGravity(float gravity);
 

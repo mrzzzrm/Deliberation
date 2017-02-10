@@ -65,11 +65,15 @@ void PhysicsWorld::addRigidBody(const std::shared_ptr<RigidBody> & body)
     body->setProxy(proxy);
 }
 
-void PhysicsWorld::removeRigidBody(const RigidBody & body)
+void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
 {
-    auto index = body.index();
+    auto index = body->index();
+    Assert(index != RigidBody::INVALID_INDEX, "Body was never added to PhysicsWorld");
+
     m_rigidBodies.erase(index);
-    m_broadphase->removeProxy(*body.proxy());
+    m_broadphase->removeProxy(*body->proxy());
+
+    body->setIndex(RigidBody::INVALID_INDEX);
 }
 
 void PhysicsWorld::setGravity(float gravity)

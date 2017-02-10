@@ -42,6 +42,7 @@ public:
     T & addSystem(Args &&... args);
 
     void update(float seconds);
+    void prePhysicsUpdate(float seconds);
 
     std::string toString() const;
 

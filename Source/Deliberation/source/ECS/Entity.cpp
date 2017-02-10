@@ -72,7 +72,7 @@ EntityData & Entity::data() const
     return m_world->entityData(m_id);
 }
 
-bool Entity::hasComponent(TypeID::value_t c)
+bool Entity::hasComponent(TypeID::value_t c) const
 {
     Assert(m_world, "Entity is hollow");
 
@@ -83,14 +83,20 @@ ComponentBase & Entity::component(TypeID::value_t c)
 {
     Assert(m_world, "Entity is hollow");
 
-    return *m_world->component(m_id, c);
+    auto component = m_world->component(m_id, c);
+    Assert(!!component, "No such component");
+
+    return *component;
 }
 
 const ComponentBase & Entity::component(TypeID::value_t c) const
 {
     Assert(m_world, "Entity is hollow");
 
-    return *m_world->component(m_id, c);
+    auto component = m_world->component(m_id, c);
+    Assert(!!component, "No such component");
+
+    return *component;
 }
 
 void Entity::addComponent(TypeID::value_t c, std::unique_ptr<ComponentBase> component)

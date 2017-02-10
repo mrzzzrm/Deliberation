@@ -67,15 +67,13 @@ Entity World::createEntity(const std::string & name, entity_id_t parent)
 
 void World::update(float seconds)
 {
-    for (auto & pair : m_systems)
-    {
-        pair.second->beforeUpdate();
-    }
+    for (auto & pair : m_systems) pair.second->beforeUpdate();
+    for (auto & pair : m_systems) pair.second->update(seconds);
+}
 
-    for (auto & pair : m_systems)
-    {
-        pair.second->update(seconds);
-    }
+void World::prePhysicsUpdate(float seconds)
+{
+    for (auto & pair : m_systems) pair.second->prePhysicsUpdate(seconds);
 }
 
 std::string World::toString() const
@@ -150,15 +148,8 @@ std::shared_ptr<ComponentBase> World::component(entity_id_t id, TypeID::value_t 
 
     auto i = entityIndex(id);
 
-    if (!m_components.contains(index))
-    {
-        return nullptr;
-    }
-
-    if (!m_components.at(index).contains(i))
-    {
-        return nullptr;
-    }
+    if (!m_components.contains(index)) return nullptr;
+    if (!m_components.at(index).contains(i)) return nullptr;
 
     return m_components.at(index).at(i);
 }
@@ -224,7 +215,6 @@ void World::removeComponent(entity_id_t id, TypeID::value_t index)
 
     entity.componentBits.reset(index);
     entity.componentSetup = componentSetup(entity.componentBits);
-    m_components[index].erase(i);
 
     for (auto systemIndex : prevComponentSetup->systemIndices)
     {
@@ -235,6 +225,8 @@ void World::removeComponent(entity_id_t id, TypeID::value_t index)
             system.removeEntity(entity);
         }
     }
+
+    m_components[index].erase(i);
 }
 
 std::size_t World::entityIndex(entity_id_t id) const

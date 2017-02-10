@@ -65,13 +65,21 @@ void SystemBase::update(float seconds)
 {
     for (auto & entry : m_entities)
     {
-        if (!entry.active)
-        {
-            continue;
-        }
+        if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
         onUpdate(entity, seconds);
+    }
+}
+
+void SystemBase::prePhysicsUpdate(float seconds)
+{
+    for (auto & entry : m_entities)
+    {
+        if (!entry.active) continue;
+
+        Entity entity(m_world, entry.id);
+        onPrePhysicsUpdate(entity, seconds);
     }
 }
 
@@ -90,5 +98,9 @@ void SystemBase::onUpdate(Entity & entity, float seconds)
     // dummy
 }
 
+void SystemBase::onPrePhysicsUpdate(Entity & entity, float physicsTimestep)
+{
+
+}
 
 }

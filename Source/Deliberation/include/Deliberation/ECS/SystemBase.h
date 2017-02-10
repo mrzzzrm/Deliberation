@@ -32,11 +32,13 @@ public:
 
     void beforeUpdate();
     void update(float seconds);
+    void prePhysicsUpdate(float seconds);
 
 protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
     virtual void onUpdate(Entity & entity, float seconds);
+    virtual void onPrePhysicsUpdate(Entity & entity, float physicsTimestep);
 
 private:
     struct EntityEntry
