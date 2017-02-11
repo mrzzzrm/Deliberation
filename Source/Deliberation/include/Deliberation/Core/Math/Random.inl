@@ -71,6 +71,18 @@ glm::vec3 RandomInSphere()
     return p;
 }
 
+glm::vec2 RandomOnCircle()
+{
+    glm::vec2 p;
+
+    do
+    {
+        p = RandomVec2(-1.0f, 1.0f);
+    } while(p.x * p.x + p.y * p.y > 1.0f); // Yes, seriously
+
+    return p;
+}
+
 glm::vec3 RandomInHemisphere(const glm::vec3 & normal)
 {
     glm::vec3 p;

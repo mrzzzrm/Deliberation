@@ -1,6 +1,8 @@
 #include <cassert>
 #include <functional>
 
+#include <Deliberation/Core/Assert.h>
+
 namespace deliberation
 {
 
@@ -87,12 +89,14 @@ void Optional<T>::disengage()
 template<typename T>
 T * Optional<T>::operator->()
 {
+    Assert(m_engaged, "Optional is hollow");
     return ptr();
 }
 
 template<typename T>
 const T * Optional<T>::operator->() const
 {
+    Assert(m_engaged, "Optional is hollow");
     return ptr();
 }
 

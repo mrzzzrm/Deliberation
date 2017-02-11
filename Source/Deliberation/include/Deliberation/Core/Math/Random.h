@@ -15,6 +15,7 @@ inline glm::vec3 DELIBERATION_API RandomVec3(float from, float to);
 inline glm::vec2 DELIBERATION_API RandomUnitVec2();
 inline glm::vec3 DELIBERATION_API RandomUnitVec3();
 inline glm::vec3 DELIBERATION_API RandomInSphere();
+inline glm::vec2 DELIBERATION_API RandomOnCircle();
 inline glm::vec3 DELIBERATION_API RandomInHemisphere(const glm::vec3 & normal);
 
 }
