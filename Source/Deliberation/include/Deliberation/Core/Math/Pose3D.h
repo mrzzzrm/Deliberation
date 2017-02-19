@@ -40,6 +40,7 @@ public:
     glm::vec3 pointLocalToWorld(const glm::vec3 & point) const;
     glm::vec3 directionWorldToLocal(const glm::vec3 & dir) const;
     glm::vec3 directionLocalToWorld(const glm::vec3 & dir) const;
+    Pose3D poseLocalToWorld(const Pose3D & local);
 
     Pose3D worldTranslated(const glm::vec3 & delta) const;
     Pose3D interpolated(const Pose3D & other, float v) const;

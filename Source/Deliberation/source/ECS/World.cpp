@@ -76,6 +76,11 @@ void World::prePhysicsUpdate(float seconds)
     for (auto & pair : m_systems) pair.second->prePhysicsUpdate(seconds);
 }
 
+void World::render()
+{
+    for (auto & pair : m_systems) pair.second->render();
+}
+
 std::string World::toString() const
 {
     std::stringstream stream;

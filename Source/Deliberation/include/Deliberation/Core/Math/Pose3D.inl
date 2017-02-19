@@ -164,6 +164,18 @@ inline glm::vec3 Pose3D::directionLocalToWorld(const glm::vec3 & dir) const
     return m_orientation * dir;
 }
 
+inline Pose3D Pose3D::poseLocalToWorld(const Pose3D & local)
+{
+    Pose3D result;
+    result.m_position = pointLocalToWorld(local.m_position);
+    result.m_orientation = m_orientation * local.m_orientation;
+    result.m_center = local.m_center;
+    result.m_basisDirty = true;
+    result.m_matrixDirty = true;
+
+    return result;
+}
+
 inline Pose3D Pose3D::worldTranslated(const glm::vec3 & delta) const
 {
     Pose3D result(*this);

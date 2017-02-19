@@ -64,7 +64,7 @@ void DebugGroundPlaneRenderer::setRadius(float radius)
     m_radius.set(radius);
 }
 
-void DebugGroundPlaneRenderer::schedule()
+void DebugGroundPlaneRenderer::render()
 {
     m_view.set(m_camera.view());
     m_projection.set(m_camera.projection());

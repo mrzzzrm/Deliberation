@@ -39,7 +39,7 @@ public:
     void setStencil(gl::GLint stencil);
     void disableStencil();
 
-    void schedule();
+    void render();
 
 private:
     friend class Context;

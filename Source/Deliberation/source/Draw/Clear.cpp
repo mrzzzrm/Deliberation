@@ -75,7 +75,7 @@ void Clear::disableStencil()
     m_impl->clearStencil = false;
 }
 
-void Clear::schedule()
+void Clear::render()
 {
     Assert(m_impl.get(), "Clear is hollow");
     m_impl->context.scheduleClear(*this);

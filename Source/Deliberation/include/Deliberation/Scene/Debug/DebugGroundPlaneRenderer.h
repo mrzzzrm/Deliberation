@@ -23,7 +23,7 @@ public:
     void setQuadSize(float quadSize);
     void setRadius(float radius);
 
-    void schedule();
+    void render();
 
 private:
     Context &           m_context;

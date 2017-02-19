@@ -237,12 +237,12 @@ std::string SparseVector<T>::toString() const
 
     for (auto & o : m_vec)
     {
-        if (!o.engaged())
+        if (!o)
         {
             continue;
         }
 
-        stream << o.get() << "; ";
+        stream << *o << "; ";
     }
 
     stream << "}";

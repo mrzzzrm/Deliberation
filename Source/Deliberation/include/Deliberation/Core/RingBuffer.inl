@@ -161,7 +161,7 @@ void RingBuffer<T>::reserve(std::size_t capacity)
     std::vector<T> newVec(capacity);
 
     std::size_t beginA = m_begin;
-    std::size_t endA = m_begin + std::min({capacity, m_size, m_vec.size() - m_begin});
+    std::size_t endA = m_begin + std::min(std::min(capacity, m_size), m_vec.size() - m_begin);
     std::copy(std::make_move_iterator(m_vec.begin() + beginA),
               std::make_move_iterator(m_vec.begin() + endA),
               newVec.begin());

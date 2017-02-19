@@ -43,6 +43,7 @@ public:
 
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
+    void render();
 
     std::string toString() const;
 

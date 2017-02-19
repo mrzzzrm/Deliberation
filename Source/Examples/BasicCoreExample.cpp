@@ -13,6 +13,7 @@
 #include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
 #include <Deliberation/Core/IntTypes.h>
+#include <Deliberation/Core/Math/Trajetory.h>
 
 using namespace deliberation;
 
@@ -178,7 +179,7 @@ void DataLayoutExample()
 {
     std::cout << "----------- DataLayoutExample -----------" << std::endl;
 
-    DataLayout layout();
+    DataLayout layout{};
 }
 
 void BlobExample()
@@ -258,16 +259,39 @@ void LayoutedBlobExample()
     }
 }
 
+void TrajectoryExample()
+{
+    std::cout << "----------- TrajectoryExample -----------" << std::endl;
+
+    auto success = false;
+
+    auto trajectory0 = CalculateTrajectory({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, 30,
+                                           {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, success);
+    std::cout << "Trajectory0: " << success << ": " << trajectory0 << std::endl;
+
+
+    auto trajectory1 = CalculateTrajectory({0.0f, 0.0f, 0.0f}, {0.0f, 0.5f, 0.0f}, 30,
+                                           {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, success);
+    std::cout << "Trajectory1: " << success << ": " << trajectory1 << std::endl;
+
+    auto trajectory2 = CalculateTrajectory({0.0f, 0.0f, 0.0f}, {0.0f, 5.0f, 0.0f}, 30,
+                                           {100.0f, 0.0f, 0.0f}, {10.0f, 0.0f, 0.0f}, success);
+    std::cout << "Trajectory2: " << success << ": " << trajectory2 << std::endl;
+
+
+}
+
 int main(int argc, char * argv[])
 {
-    LinearMapExample();
-    LinearOctreeExample();
-    RingBufferExample();
-    TypeIDExample();
-    SparseVectorExample();
-    DataLayoutExample();
-    BlobExample();
-    LayoutedBlobExample();
+    TrajectoryExample();
+//    LinearMapExample();
+//    LinearOctreeExample();
+//    RingBufferExample();
+//    TypeIDExample();
+//    SparseVectorExample();
+//    DataLayoutExample();
+//    BlobExample();
+//    LayoutedBlobExample();
 
     return 0;
 }

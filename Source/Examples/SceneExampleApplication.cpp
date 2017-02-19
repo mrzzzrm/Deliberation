@@ -27,10 +27,10 @@ void SceneExampleApplication::onFrame(float seconds)
 {
     m_navigator->update(seconds);
 
-    m_clear.schedule();
+    m_clear.render();
 
     if (m_ground.engaged())
     {
-        m_ground->schedule();
+        m_ground->render();
     }
 }

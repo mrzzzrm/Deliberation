@@ -143,7 +143,7 @@ Texture Context::createTexture2D(unsigned int width,
         else {
             c.framebuffer().setDepthTarget(&texture.surface());
         }
-        c.schedule();
+        c.render();
     }
 
     return texture;

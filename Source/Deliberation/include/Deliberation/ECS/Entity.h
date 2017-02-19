@@ -52,6 +52,9 @@ public:
 
     Entity createChild(const std::string & name = "Entity");
 
+    bool operator==(const Entity & rhs) const;
+    bool operator!=(const Entity & rhs) const;
+
 private:
     friend class World;
     friend class SystemBase;
