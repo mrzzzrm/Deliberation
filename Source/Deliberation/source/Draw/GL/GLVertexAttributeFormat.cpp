@@ -2,75 +2,94 @@
 
 #include <cassert>
 #include <iostream>
+#include <unordered_map>
 
+#include <glbinding/Meta.h>
+
+#include <Deliberation/Core/Assert.h>
 #include <Deliberation/Draw/GL/GLSLSizeOf.h>
+
+namespace 
+{
+
+using namespace deliberation;
+
+struct BaseFormat
+{
+    gl::GLenum type;
+    gl::GLuint size;
+    GLVertexAttributeFormatType call;
+    int numLocations;
+};
+
+BaseFormat GetBaseFormat(Type type)
+{
+    static std::unordered_map<u32, BaseFormat> BASE_FORMAT_BY_TYPE{
+        {Type_Bool.id(),    {gl::GL_BOOL, 1, GLVertexAttributeFormatType::IFormat, 1}},
+        {Type_I32.id(),     {gl::GL_INT, 1, GLVertexAttributeFormatType::IFormat, 1}},
+        {Type_U32.id(),     {gl::GL_UNSIGNED_INT, 1, GLVertexAttributeFormatType::IFormat, 1}},
+        {Type_Float.id(),    {gl::GL_FLOAT, 1, GLVertexAttributeFormatType::Format, 1}},
+        {Type_Vec2.id(),    {gl::GL_FLOAT, 2, GLVertexAttributeFormatType::Format, 1}},
+        {Type_Vec3.id(),    {gl::GL_FLOAT, 3, GLVertexAttributeFormatType::Format, 1}},
+        {Type_Vec4.id(),    {gl::GL_FLOAT, 4, GLVertexAttributeFormatType::Format, 1}},
+        {Type_IVec2.id(),    {gl::GL_INT, 2, GLVertexAttributeFormatType::Format, 1}},
+        {Type_IVec3.id(),    {gl::GL_INT, 3, GLVertexAttributeFormatType::Format, 1}},
+        {Type_IVec4.id(),    {gl::GL_INT, 4, GLVertexAttributeFormatType::Format, 1}},
+    };
+
+    return BASE_FORMAT_BY_TYPE[type.id()];
+
+//    switch(type)
+//    {
+//        case Type_Bool:                 return ;
+//        case Type_I32:                  return {gl::GL_INT, 1, GLVertexAttributeFormatType::IFormat, 1};
+//        case Type_U32:                  return {gl::GL_INT, 1, GLVertexAttributeFormatType::IFormat, 1};
+//
+//        case Type_Float:                return {gl::GL_FLOAT, 1, GLVertexAttributeFormatType::Format, 1};
+//
+//        case Type_Vec2:                 return {gl::GL_FLOAT, 2, GLVertexAttributeFormatType::Format, 1};
+//        case Type_Vec3:                 return {gl::GL_FLOAT, 3, GLVertexAttributeFormatType::Format, 1};
+//        case Type_Vec4:                 return {gl::GL_FLOAT, 4, GLVertexAttributeFormatType::Format, 1};
+//
+//        case Type_IVec2:                return {gl::GL_INT, 2, GLVertexAttributeFormatType::IFormat, 1};
+//        case Type_IVec3:                return {gl::GL_INT, 3, GLVertexAttributeFormatType::IFormat, 1};
+//        case Type_IVec4:                return {gl::GL_INT, 4, GLVertexAttributeFormatType::IFormat, 1};
+//
+//        case Type_UVec2:                return {gl::GL_UNSIGNED_INT, 2, GLVertexAttributeFormatType::IFormat, 1};
+//        case gl::GL_UNSIGNED_INT_VEC3:  return {gl::GL_UNSIGNED_INT, 3, GLVertexAttributeFormatType::IFormat, 1};
+//        case gl::GL_UNSIGNED_INT_VEC4:  return {gl::GL_UNSIGNED_INT, 4, GLVertexAttributeFormatType::IFormat, 1};
+//
+//        case gl::GL_FLOAT_MAT2:         return {gl::GL_FLOAT, 2, GLVertexAttributeFormatType::Format, 2};
+//        case gl::GL_FLOAT_MAT3:         return {gl::GL_FLOAT, 3, GLVertexAttributeFormatType::Format, 3};
+//        case gl::GL_FLOAT_MAT4:         return {gl::GL_FLOAT, 4, GLVertexAttributeFormatType::Format, 4};
+//
+//        default:
+//            Fail("VertexAttributeFormat not implemented for " + glbinding::Meta::getString(type));
+//    }
+}
+
+}
 
 namespace deliberation
 {
 
-GLVertexAttributeFormat::GLVertexAttributeFormat(gl::GLenum type):
-    m_type(type),
-    m_size(0),
-    m_numLocations(0),
-    m_innerStride(0),
-    m_call(GLVertexAttributeFormatType::Format)
-{
-    switch(type)
-    {
-    case gl::GL_BOOL:               m_type = gl::GL_BOOL;   m_size = 1; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-    case gl::GL_INT:                m_type = gl::GL_INT;    m_size = 1; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-    case gl::GL_UNSIGNED_INT:       m_type = gl::GL_INT;    m_size = 1; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-
-    case gl::GL_FLOAT:              m_type = gl::GL_FLOAT;  m_size = 1; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 1; break;
-
-    case gl::GL_FLOAT_VEC2:         m_type = gl::GL_FLOAT; m_size = 2; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 1; break;
-    case gl::GL_FLOAT_VEC3:         m_type = gl::GL_FLOAT; m_size = 3; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 1; break;
-    case gl::GL_FLOAT_VEC4:         m_type = gl::GL_FLOAT; m_size = 4; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 1; break;
-
-    case gl::GL_INT_VEC2:           m_type = gl::GL_INT; m_size = 2; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-    case gl::GL_INT_VEC3:           m_type = gl::GL_INT; m_size = 3; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-    case gl::GL_INT_VEC4:           m_type = gl::GL_INT; m_size = 4; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-
-    case gl::GL_UNSIGNED_INT_VEC2:  m_type = gl::GL_UNSIGNED_INT; m_size = 2; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-    case gl::GL_UNSIGNED_INT_VEC3:  m_type = gl::GL_UNSIGNED_INT; m_size = 3; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-    case gl::GL_UNSIGNED_INT_VEC4:  m_type = gl::GL_UNSIGNED_INT; m_size = 4; m_call = GLVertexAttributeFormatType::IFormat; m_numLocations = 1; break;
-
-    case gl::GL_FLOAT_MAT2:         m_type = gl::GL_FLOAT; m_size = 2; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 2; break;
-    case gl::GL_FLOAT_MAT3:         m_type = gl::GL_FLOAT; m_size = 3; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 3; break;
-    case gl::GL_FLOAT_MAT4:         m_type = gl::GL_FLOAT; m_size = 4; m_call = GLVertexAttributeFormatType::Format; m_numLocations = 4; break;
-
-    default:
-        std::cout << "VertexAttributeFormat not implemented for " << type << std::endl;
-        assert(false);
-    }
-
-    m_innerStride = GLSLSizeOf(m_type) * m_size;
-}
-
-gl::GLenum GLVertexAttributeFormat::type() const
-{
-    return m_type;
-}
-
-gl::GLuint GLVertexAttributeFormat::size() const
-{
-    return m_size;
-}
-
-int GLVertexAttributeFormat::numLocations() const
-{
-    return m_numLocations;
-}
-
 gl::GLuint GLVertexAttributeFormat::relativeOffsetOfLocation(int location) const
 {
-    assert(location >= 0 && location < m_numLocations);
-    return location * m_innerStride;
+    assert(location >= 0 && location < numLocations);
+    return location * innerStride;
 }
 
-GLVertexAttributeFormatType GLVertexAttributeFormat::call() const
+GLVertexAttributeFormat DELIBERATION_API GLGetVertexAttributeFormat(Type type)
 {
-    return m_call;
+    auto baseFormat = GetBaseFormat(type);
+
+    GLVertexAttributeFormat format;
+    format.type = baseFormat.type;
+    format.size = baseFormat.size;
+    format.call = baseFormat.call;
+    format.numLocations = baseFormat.numLocations;
+    format.innerStride = GLSLSizeOf(format.type) * format.size;
+    return format;
 }
 
 }

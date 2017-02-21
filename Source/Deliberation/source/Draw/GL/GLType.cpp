@@ -41,7 +41,7 @@ std::unordered_map<u32, gl::GLenum> TYPE_TO_GL_TYPE
 
 std::unordered_map<i32, u32> GL_TYPE_TO_TYPE
     {
-        {(i32)GL_UNSIGNED_BYTE, Type_U8.id(), },
+        {(i32)GL_UNSIGNED_BYTE, Type_U8.id()},
         {(i32)GL_UNSIGNED_SHORT, Type_U16.id()},
         {(i32)GL_UNSIGNED_INT, Type_U32.id()},
         {(i32)GL_BYTE, Type_I8.id()},

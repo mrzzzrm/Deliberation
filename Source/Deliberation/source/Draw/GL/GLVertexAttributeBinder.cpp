@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 
+#include <glbinding/Meta.h>
 #include <glbinding/gl/boolean.h>
 #include <glbinding/gl/functions.h>
 
@@ -30,31 +31,29 @@ GLVertexAttributeBinder::GLVertexAttributeBinder(gl::GLuint vao,
 
 void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffset)
 {
-    auto programAttribute = m_programInterface.attribute(name);
+    auto attribute = m_programInterface.attribute(name);
     auto bufferField = m_buffer.layout.field(name);
+    auto bufferFieldType = bufferField.type();
+    auto attributeType = GLTypeToType(attribute.type());
 
-    if (programAttribute.type() != TypeToGLType(bufferField.type()))
-    {
-        std::cout << "Cannot bind '" << bufferField.name() << "' of type " << bufferField.type().name() << " to vertex attribute of type " << programAttribute.type() << std::endl;
-        assert(false);
-    }
+    Assert(attributeType.numColumns() == bufferField.type().numColumns() &&
+               attributeType.numRows() == bufferField.type().numRows(),
+           std::string("Cannot bind ") + bufferField.type().name() + " to " + attributeType.name());
 
-    auto format = GLVertexAttributeFormat(programAttribute.type());
+    auto format = GLGetVertexAttributeFormat(bufferField.type());
+    auto startLocation = attribute.location();
 
-    auto startLocation = programAttribute.location();
-    assert(startLocation >= 0);
+    Assert(startLocation >= 0, "");
 
-    /*
-        TODO
-            gl calls - out of here!?
-    */
+    auto normalize = attributeType.isFloat() && bufferField.type().isInteger() ? gl::GL_TRUE : gl::GL_FALSE;
+    auto type = bufferFieldType.isFloat() ? gl::GL_FLOAT : (bufferFieldType.isSigned() ? gl::GL_INT : gl::GL_UNSIGNED_INT);
 
     gl::glBindVertexArray(m_vao);
     gl::glBindBuffer(gl::GL_ARRAY_BUFFER, m_buffer.glName);
 
-    Assert(format.numLocations() == 1, "Implement this");
+    Assert(format.numLocations == 1, "Implement this");
 
-    for (decltype(startLocation) l = startLocation; l < startLocation + format.numLocations(); l++)
+    for (decltype(startLocation) l = startLocation; l < startLocation + format.numLocations; l++)
     {
         gl::glEnableVertexAttribArray(l);
         gl::glVertexAttribDivisor(l, m_divisor);
@@ -62,28 +61,13 @@ void GLVertexAttributeBinder::bind(const std::string & name, gl::GLint baseoffse
         auto localLocation = l - startLocation;
         auto offset = bufferField.offset() + format.relativeOffsetOfLocation(localLocation);
 
-        switch (format.call())
-        {
-        case GLVertexAttributeFormatType::Format:
-            gl::glVertexAttribPointer(l, format.size(), format.type(), gl::GL_FALSE, m_buffer.layout.stride(), (const gl::GLvoid*)(baseoffset + offset));
-//            binding->setFormat(format.size(), format.type(), gl::GL_FALSE, offset);
-            break;
-        case GLVertexAttributeFormatType::IFormat:
-            gl::glVertexAttribIPointer(l, format.size(), format.type(), m_buffer.layout.stride(), (const gl::GLvoid*)(baseoffset + offset));
-//            binding->setIFormat(format.size(), format.type(), offset);
-            break;
-//        case VertexAttributeFormatCall::LFormat:
-//            binding->setLFormat(format.size(), format.type(), offset);
-//            break;
+        if (attributeType.isFloat()) {
+            gl::glVertexAttribPointer(l, format.size, format.type, normalize, m_buffer.layout.stride(),
+                                      (const gl::GLvoid*)(baseoffset + offset));
+        } else {
+            gl::glVertexAttribIPointer(l, format.size, format.type, m_buffer.layout.stride(),
+                                       (const gl::GLvoid*)(baseoffset + offset));
         }
-    }
-}
-
-void GLVertexAttributeBinder::bindAll(gl::GLint baseoffset)
-{
-    for (auto & field : m_buffer.layout.fields())
-    {
-        bind(field.name(), baseoffset);
     }
 }
 

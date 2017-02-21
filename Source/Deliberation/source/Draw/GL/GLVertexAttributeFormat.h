@@ -2,6 +2,10 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Core/Types.h>
+
+#include <Deliberation/Deliberation.h>
+
 namespace deliberation
 {
 
@@ -9,30 +13,21 @@ enum class GLVertexAttributeFormatType
 {
     Format,
     IFormat,
-//    LFormat
+    LFormat
 };
 
-class GLVertexAttributeFormat final
+struct GLVertexAttributeFormat
 {
-public:
-    GLVertexAttributeFormat(gl::GLenum type);
-
-    gl::GLenum type() const;
-    gl::GLuint size() const;
-
-    int numLocations() const;
+    gl::GLenum type;
+    gl::GLuint size;
+    GLVertexAttributeFormatType call;
+    int numLocations;
+    int innerStride;
 
     gl::GLuint relativeOffsetOfLocation(int location) const;
-
-    GLVertexAttributeFormatType call() const;
-
-private:
-    gl::GLenum m_type;
-    gl::GLuint m_size;
-    int m_numLocations;
-    int m_innerStride;
-    GLVertexAttributeFormatType m_call;
 };
+
+GLVertexAttributeFormat DELIBERATION_API GLGetVertexAttributeFormat(Type type);
 
 }
 

@@ -24,7 +24,6 @@ public:
                             gl::GLuint divisor = 0);
 
     void bind(const std::string & name, gl::GLint baseoffset = 0);
-    void bindAll(gl::GLint baseoffset = 0);
 
 private:
     gl::GLuint m_vao;

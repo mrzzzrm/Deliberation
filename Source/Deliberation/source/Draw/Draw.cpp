@@ -321,13 +321,13 @@ void Draw::build() const
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);
     Assert(m_impl->glVertexArray != 0u, "");
 
-    for (auto & programField : m_impl->program->interface.attributes())
+    for (auto & attribute : m_impl->program->interface.attributes())
     {
         auto count = 0u;
         auto binding = (detail::BufferBinding*)nullptr;
         auto divisor = 0u;
 
-        auto bufferField = this->bufferField(programField.name(), &binding, &divisor, &count);
+        auto bufferField = this->bufferField(attribute.name(), &binding, &divisor, &count);
         Assert(count == 1u, "");
         Assert(binding, "");
 
