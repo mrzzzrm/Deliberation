@@ -42,6 +42,7 @@ set(sources
     ${source_path}/Core/Color.cpp
     ${source_path}/Core/DataLayout.cpp
     ${source_path}/Core/DataLayoutField.cpp
+    ${source_path}/Core/ElementalTypes.cpp
     ${source_path}/Core/LayoutedBlob.cpp
     ${source_path}/Core/LayoutedBlobElement.cpp
     ${source_path}/Core/FileUtils.cpp
@@ -101,10 +102,8 @@ set(sources
     ${source_path}/Draw/GL/GLType.cpp
     ${source_path}/Draw/GL/GLUtils.cpp
     ${source_path}/Draw/GL/GLUtils.h
-    ${source_path}/Draw/GL/GLVertexAttributeBinder.cpp
-    ${source_path}/Draw/GL/GLVertexAttributeBinder.h
-    ${source_path}/Draw/GL/GLVertexAttributeFormat.cpp
-    ${source_path}/Draw/GL/GLVertexAttributeFormat.h
+    ${source_path}/Draw/GL/GLBindVertexAttribute.cpp
+    ${source_path}/Draw/GL/GLBindVertexAttribute.h
 
     ${source_path}/Draw/BlendState.cpp
     ${source_path}/Draw/Buffer.cpp
@@ -241,6 +240,7 @@ set(api_includes
     ${include_path}/Core/DataLayoutField.h
     ${include_path}/Core/Dispatch.h
     ${include_path}/Core/Dispatch.inl
+    ${include_path}/Core/ElementalTypes.h
     ${include_path}/Core/FileUtils.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl

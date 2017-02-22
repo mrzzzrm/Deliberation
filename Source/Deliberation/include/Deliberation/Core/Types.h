@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include <Deliberation/Core/ElementalTypes.h>
 #include <Deliberation/Core/IntTypes.h>
 
 #include <Deliberation/Deliberation_API.h>
@@ -9,14 +10,14 @@
 namespace deliberation
 {
 
-class Type final
+class DELIBERATION_API Type final
 {
 public:
     template<typename T>
     static constexpr Type & resolve();
 
 public:
-    Type(u32 id);
+    Type(u8 id);
     Type(const Type & type) = default;
 
     const char * name() const;
@@ -24,9 +25,7 @@ public:
     u32 id() const;
     u8 numRows() const;
     u8 numColumns() const;
-    bool isFloat() const;
-    bool isInteger() const;
-    bool isSigned() const;
+    ElementalType elementalType() const;
 
     std::string toString(const void * ptr) const;
 
@@ -37,7 +36,7 @@ public:
     bool operator!=(const Type & other) const;
 
 private:
-    u32 m_id;
+    u8 m_id;
 };
 
 extern Type Type_None;

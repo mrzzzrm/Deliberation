@@ -19,7 +19,7 @@
 #include "Detail/ProgramImpl.h"
 #include "Detail/UniformBufferBinding.h"
 
-#include "GL/GLVertexAttributeBinder.h"
+#include "Draw/GL/GLBindVertexAttribute.h"
 
 namespace deliberation
 {
@@ -333,8 +333,12 @@ void Draw::build() const
 
         auto baseoffset = binding->ranged ? binding->first * binding->buffer->layout.stride() : 0;
 
-        GLVertexAttributeBinder binder(m_impl->glVertexArray, m_impl->program->interface, *binding->buffer, divisor);
-        binder.bind(bufferField->name(), baseoffset);
+        GLBindVertexAttribute(m_impl->glVertexArray,
+                              m_impl->program->interface,
+                              *binding->buffer,
+                              divisor,
+                              bufferField->name(),
+                              baseoffset);
     }
 
     if (m_impl->indexBuffer)

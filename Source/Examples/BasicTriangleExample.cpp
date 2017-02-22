@@ -38,13 +38,15 @@ public:
 
     virtual void onStartup() override
     {
+        deliberation::EnableGLErrorChecksAndLogging();
+
         auto layout = deliberation::DataLayout({{"Position", deliberation::Type_Vec2},
                                                 {"Color", deliberation::Type_U8Vec3}});
 
         auto vertices = deliberation::LayoutedBlob(layout, 3);
 
-        vertices.assign<glm::vec2>("Position", {{-0.5f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.5f}});
-       // vertices.assign<glm::vec3>("Color", {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
+        vertices.assign<glm::vec2>("Position", {{-0.5f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.2f}});
+       // vertices.assign<glm::vec3>("Color", {{1, 0, 0}, {1, 0, 0}, {1, 0, 0}});
         vertices.assign<glm::u8vec3>("Color", {{255, 0, 0}, {0, 255, 0}, {0, 0, 255}});
 
         auto program = context().createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"),
