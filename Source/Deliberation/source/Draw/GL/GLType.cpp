@@ -15,7 +15,18 @@ using namespace deliberation;
 namespace
 {
 
-std::unordered_map<u32, gl::GLenum> TYPE_TO_GL_TYPE
+std::unordered_map<u8, gl::GLenum> ELEMENTAL_TYPE_TO_GL_TYPE
+    {
+        {ElementalType_U8.id(), GL_UNSIGNED_BYTE},
+        {ElementalType_U16.id(), GL_UNSIGNED_SHORT},
+        {ElementalType_U32.id(), GL_UNSIGNED_INT},
+        {ElementalType_I8.id(),  GL_BYTE},
+        {ElementalType_I16.id(), GL_SHORT},
+        {ElementalType_I32.id(), GL_INT},
+        {ElementalType_Float.id(), GL_FLOAT},
+    };
+
+std::unordered_map<u8, gl::GLenum> TYPE_TO_GL_TYPE
     {
         {Type_U8.id(), GL_UNSIGNED_BYTE},
         {Type_U16.id(), GL_UNSIGNED_SHORT},
@@ -39,9 +50,9 @@ std::unordered_map<u32, gl::GLenum> TYPE_TO_GL_TYPE
         {Type_Mat4.id(), GL_FLOAT_MAT4}
     };
 
-std::unordered_map<i32, u32> GL_TYPE_TO_TYPE
+std::unordered_map<i32, u8> GL_TYPE_TO_TYPE
     {
-        {(i32)GL_UNSIGNED_BYTE, Type_U8.id(), },
+        {(i32)GL_UNSIGNED_BYTE, Type_U8.id()},
         {(i32)GL_UNSIGNED_SHORT, Type_U16.id()},
         {(i32)GL_UNSIGNED_INT, Type_U32.id()},
         {(i32)GL_BYTE, Type_I8.id()},
@@ -67,6 +78,19 @@ std::unordered_map<i32, u32> GL_TYPE_TO_TYPE
 
 namespace deliberation
 {
+
+gl::GLenum ElementalTypeToGLType(const ElementalType & type)
+{
+    auto it = ELEMENTAL_TYPE_TO_GL_TYPE.find(type.id());
+    if (it == ELEMENTAL_TYPE_TO_GL_TYPE.end())
+    {
+        return GL_NONE;
+    }
+    else
+    {
+        return it->second;
+    }
+}
 
 gl::GLenum TypeToGLType(const Type & type)
 {

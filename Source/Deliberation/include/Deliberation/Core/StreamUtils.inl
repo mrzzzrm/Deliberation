@@ -4,20 +4,12 @@
 namespace deliberation
 {
 
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::uvec2 & v)
+template<typename StreamType, typename T, glm::precision precision>
+StreamType & operator<<(StreamType && os, const glm::tvec2<T, precision> & v)
 {
-    os << "{" << v.x << "," << v.y << "}";
+    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << "}";
     return os;
 }
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::uvec3 & v)
-{
-    os << "{" << v.x << "," << v.y << "," << v.z << "}";
-    return os;
-}
-
 
 template<typename StreamType, typename T, glm::precision precision>
 StreamType & operator<<(StreamType && os, const glm::tvec3<T, precision> & v)
@@ -26,38 +18,11 @@ StreamType & operator<<(StreamType && os, const glm::tvec3<T, precision> & v)
     return os;
 }
 
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::uvec4 & v)
+template<typename StreamType, typename T, glm::precision precision>
+StreamType & operator<<(StreamType && os, const glm::tvec4<T, precision> & v)
 {
-    os << "{" << v.x << "," << v.y << "," << v.z << "," << v.w << "}";
-    return os;
-}
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::ivec2 & v)
-{
-    os << "{" << v.x << "," << v.y << "}";
-    return os;
-}
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::ivec4 & v)
-{
-    os << "{" << v.x << "," << v.y << "," << v.z << "," << v.w << "}";
-    return os;
-}
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::vec2 & v)
-{
-    os << "{" << v.x << "," << v.y << "}";
-    return os;
-}
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::vec4 & v)
-{
-    os << "{" << v.x << "," << v.y << "," << v.z << "," << v.w << "}";
+    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << "," <<
+        std::to_string(v.z) << "," << std::to_string(v.w) << "}";
     return os;
 }
 

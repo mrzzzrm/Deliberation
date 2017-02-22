@@ -38,19 +38,22 @@ public:
 
     virtual void onStartup() override
     {
+        deliberation::EnableGLErrorChecksAndLogging();
+
         auto layout = deliberation::DataLayout({{"Position", deliberation::Type_Vec2},
-                                                {"Color", deliberation::Type_Vec3}});
+                                                {"Color", deliberation::Type_U8Vec3}});
 
         auto vertices = deliberation::LayoutedBlob(layout, 3);
 
-        vertices.assign<glm::vec2>("Position", {{-0.5f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.5f}});
-        vertices.assign<glm::vec3>("Color", {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}});
+        vertices.assign<glm::vec2>("Position", {{-0.5f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.2f}});
+       // vertices.assign<glm::vec3>("Color", {{1, 0, 0}, {1, 0, 0}, {1, 0, 0}});
+        vertices.assign<glm::u8vec3>("Color", {{255, 0, 0}, {0, 255, 0}, {0, 0, 255}});
 
         auto program = context().createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"),
                                                 deliberation::dataPath("Data/BasicTriangleTest.frag")});
 
         m_draw = context().createDraw(program, gl::GL_TRIANGLES);
-        m_draw.addVertices(vertices.layout(), vertices.rawData());
+        m_draw.addVertices(vertices);
         m_draw.state().setDepthState(deliberation::DepthState(false, false));
         m_draw.state().setCullState(deliberation::CullState::disabled());
 
@@ -62,9 +65,8 @@ public:
         m_clear.setColor({0.2, 0.2f, 0.2f, 0.0f});
     }
 
-    virtual void onFrame(float seconds)
+    void onFrame(float seconds) override
     {
-        m_draw.uniform("BaseColor").set(glm::vec3(std::sin(seconds), std::cos(seconds), 1.0f));
         m_transform.set(glm::rotate(glm::pi<float>()/2.0f * m_accumSeconds, glm::vec3(0, 0, -1)));
 
         m_clear.schedule();
@@ -86,6 +88,6 @@ int main
     char * argv[]
 )
 {
-    return BasicTriangleExample().run();
+    return BasicTriangleExample().run(argc, argv);
 }
 

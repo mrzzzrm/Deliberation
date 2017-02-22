@@ -12,7 +12,7 @@ int main()
 {
     PhysicsWorld world;
 
-    auto bigSphereShape = std::make_shared<SphereCollisionShape>(5.0f);
+    auto bigSphereShape = std::make_shared<SphereShape>(5.0f);
     auto smallSphereShape = std::make_shared<SphereCollisionShape>(1.0f);
 
     auto bigSphere = std::make_shared<RigidBody>(bigSphereShape);

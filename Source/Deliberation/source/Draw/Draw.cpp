@@ -19,7 +19,7 @@
 #include "Detail/ProgramImpl.h"
 #include "Detail/UniformBufferBinding.h"
 
-#include "GL/GLVertexAttributeBinder.h"
+#include "Draw/GL/GLBindVertexAttribute.h"
 
 namespace deliberation
 {
@@ -321,20 +321,24 @@ void Draw::build() const
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);
     Assert(m_impl->glVertexArray != 0u, "");
 
-    for (auto & programField : m_impl->program->interface.attributes())
+    for (auto & attribute : m_impl->program->interface.attributes())
     {
         auto count = 0u;
         auto binding = (detail::BufferBinding*)nullptr;
         auto divisor = 0u;
 
-        auto bufferField = this->bufferField(programField.name(), &binding, &divisor, &count);
+        auto bufferField = this->bufferField(attribute.name(), &binding, &divisor, &count);
         Assert(count == 1u, "");
         Assert(binding, "");
 
         auto baseoffset = binding->ranged ? binding->first * binding->buffer->layout.stride() : 0;
 
-        GLVertexAttributeBinder binder(m_impl->glVertexArray, m_impl->program->interface, *binding->buffer, divisor);
-        binder.bind(bufferField->name(), baseoffset);
+        GLBindVertexAttribute(m_impl->glVertexArray,
+                              m_impl->program->interface,
+                              *binding->buffer,
+                              divisor,
+                              bufferField->name(),
+                              baseoffset);
     }
 
     if (m_impl->indexBuffer)
