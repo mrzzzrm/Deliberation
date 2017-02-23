@@ -92,7 +92,7 @@ void Narrowphase::lineTest(const Ray3D &ray,
     }
 
     auto & primitiveTest = it->second;
-    auto intersection = primitiveTest->lineTest(ray, body);
+    auto intersection = primitiveTest->lineTest(ray, body.shared_from_this());
 
     if (intersection)
     {

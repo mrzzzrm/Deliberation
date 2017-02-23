@@ -28,10 +28,14 @@ public:
     void setCenter(const glm::vec3 & center);
 
     void localTranslate(const glm::vec3 & delta);
+    Pose3D localTranslated(const glm::vec3 & delta) const;
     void worldTranslate(const glm::vec3 & delta);
+    Pose3D worldTranslated(const glm::vec3 & delta) const;
 
     void localRotate(const glm::quat & delta);
+    Pose3D localRotated(const glm::quat & delta) const;
     void worldRotate(const glm::quat & delta);
+    Pose3D worldRotated(const glm::quat & delta) const;
 
     const glm::mat3 & basis() const;
     const glm::mat4 & matrix() const;
@@ -42,7 +46,6 @@ public:
     glm::vec3 directionLocalToWorld(const glm::vec3 & dir) const;
     Pose3D poseLocalToWorld(const Pose3D & local);
 
-    Pose3D worldTranslated(const glm::vec3 & delta) const;
     Pose3D interpolated(const Pose3D & other, float v) const;
 
     std::string toString() const;

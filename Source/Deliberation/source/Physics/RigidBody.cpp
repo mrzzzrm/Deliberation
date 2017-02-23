@@ -203,6 +203,12 @@ void RigidBody::applyForce(const glm::vec3 & force)
     m_force += force;
 }
 
+void RigidBody::applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse)
+{
+    m_linearVelocity += m_inverseMass * impulse;
+    m_angularVelocity += m_worldInverseInertia * glm::cross(point, impulse);
+}
+
 void RigidBody::predictTransform(float seconds, Transform3D & prediction)
 {
     prediction.setCenter(transform().center());

@@ -12,8 +12,6 @@ namespace deliberation
 {
 
 Camera3D::Camera3D():
-    m_position(0.0, 0.0, 10.0),
-    m_orientation({0.0f, 0.0f, 0.0f}),
     m_zNear(0.1f),
     m_zFar(9999.0f),
     m_yFoV(glm::radians(70.0f)),
@@ -25,12 +23,12 @@ Camera3D::Camera3D():
 
 const glm::vec3 & Camera3D::position() const
 {
-    return m_position;
+    return m_pose.position();
 }
 
 const glm::quat & Camera3D::orientation() const
 {
-    return m_orientation;
+    return m_pose.orientation();
 }
 
 float Camera3D::zNear() const
@@ -53,15 +51,20 @@ float Camera3D::aspectRatio() const
     return m_aspectRatio;
 }
 
+const Pose3D & Camera3D::pose() const
+{
+    return m_pose;
+}
+
 void Camera3D::setPosition(const glm::vec3 & position)
 {
-    m_position = position;
+    m_pose.setPosition(position);
     m_viewDirty = true;
 }
 
 void Camera3D::setOrientation(const glm::quat & orientation)
 {
-    m_orientation = orientation;
+    m_pose.setOrientation(orientation);
     m_viewDirty = true;
 }
 
@@ -101,9 +104,9 @@ const glm::mat4 & Camera3D::view() const
 {
     if (m_viewDirty)
     {
-        m_view = glm::lookAt(m_position,
-                             m_position + m_orientation * glm::vec3(0.0f, 0.0f, -1.0f),
-                             m_orientation * glm::vec3(0.0f, 1.0f, 0.0f));
+        m_view = glm::lookAt(m_pose.position(),
+                             m_pose.position() + m_pose.orientation() * glm::vec3(0.0f, 0.0f, -1.0f),
+                             m_pose.orientation() * glm::vec3(0.0f, 1.0f, 0.0f));
         m_viewDirty = false;
     }
 
@@ -143,10 +146,10 @@ Rect3D Camera3D::nearPlane() const
     auto width = m_aspectRatio * height;
 
     auto origin = glm::vec3(-width/2.0f, -height/2.0f, -m_zNear);
-    origin = m_position + m_orientation * origin;
+    origin = m_pose.position() + m_pose.orientation() * origin;
 
-    auto right = m_orientation * glm::vec3(width, 0.0f, 0.0f);
-    auto up = m_orientation * glm::vec3(0.0f, height, 0.0f);
+    auto right = m_pose.orientation() * glm::vec3(width, 0.0f, 0.0f);
+    auto up = m_pose.orientation() * glm::vec3(0.0f, height, 0.0f);
 
     return {origin, right, up};
 }
@@ -163,10 +166,10 @@ Rect3D Camera3D::farPlane() const
     auto width = m_aspectRatio * height;
 
     auto origin = glm::vec3(-width/2.0f, -height/2.0f, -m_zFar);
-    origin = m_position + m_orientation * origin;
+    origin = m_pose.position() + m_pose.orientation() * origin;
 
-    auto right = m_orientation * glm::vec3(width, 0.0f, 0.0f);
-    auto up = m_orientation * glm::vec3(0.0f, height, 0.0f);
+    auto right = m_pose.orientation() * glm::vec3(width, 0.0f, 0.0f);
+    auto up = m_pose.orientation() * glm::vec3(0.0f, height, 0.0f);
 
     return {origin, right, up};
 }
@@ -175,8 +178,8 @@ std::string Camera3D::toString() const
 {
     std::stringstream stream;
 
-    stream << "{Position: " << m_position << "; ";
-    stream << "Orientation: " << m_orientation << "; ";
+    stream << "{Position: " << m_pose.position() << "; ";
+    stream << "Orientation: " << m_pose.orientation() << "; ";
     stream << "zNear: " << m_zNear << "; ";
     stream << "zFar: " << m_zFar << "; ";
     stream << "yFoV: " << m_yFoV << "; ";

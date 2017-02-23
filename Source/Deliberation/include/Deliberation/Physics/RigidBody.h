@@ -20,6 +20,7 @@ struct RigidBodyPayload
 };
 
 class DELIBERATION_API RigidBody final:
+    public std::enable_shared_from_this<RigidBody>,
     public CollisionObject
 {
 public:
@@ -59,6 +60,7 @@ public:
     void setPayload(const std::shared_ptr<RigidBodyPayload> & payload);
 
     void applyForce(const glm::vec3 & force);
+    void applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse);
 
     void integrateVelocities(float seconds);
 

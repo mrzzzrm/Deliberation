@@ -10,17 +10,17 @@ class RigidBody;
 
 struct RayCastIntersection
 {
-    RayCastIntersection(const RigidBody & body);
+    RayCastIntersection(std::shared_ptr<RigidBody> body);
     virtual ~RayCastIntersection() = default;
 
-    const RigidBody & body;
+    std::shared_ptr<RigidBody> body;
 };
 
 class NarrowphasePrimitiveTest
 {
 public:
     virtual std::unique_ptr<RayCastIntersection> lineTest(const Ray3D &ray,
-                                                          const RigidBody &body) const = 0;
+                                                          std::shared_ptr<RigidBody> body) const = 0;
 };
 
 }

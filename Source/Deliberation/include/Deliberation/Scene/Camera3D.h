@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <Deliberation/Core/Math/Pose3D.h>
 #include <Deliberation/Core/Math/Rect3D.h>
 
 namespace deliberation
@@ -21,6 +22,7 @@ public:
     float zFar() const;
     float yFoV() const;
     float aspectRatio() const;
+    const Pose3D & pose() const;
 
     void setPosition(const glm::vec3 & position);
     void setOrientation(const glm::quat& orientation);
@@ -39,8 +41,7 @@ public:
     std::string toString() const;
 
 private:
-    glm::vec3           m_position;
-    glm::quat           m_orientation;
+    Pose3D              m_pose;
     float               m_zNear;
     float               m_zFar;
     float               m_yFoV;

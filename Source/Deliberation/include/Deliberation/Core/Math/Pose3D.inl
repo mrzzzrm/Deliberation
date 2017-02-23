@@ -93,10 +93,24 @@ inline void Pose3D::localTranslate(const glm::vec3 & delta)
     m_matrixDirty = true;
 }
 
+inline Pose3D Pose3D::localTranslated(const glm::vec3 & delta) const
+{
+    Pose3D result(*this);
+    result.localTranslate(delta);
+    return result;
+}
+
 inline void Pose3D::worldTranslate(const glm::vec3 & delta)
 {
     m_position += delta;
     m_matrixDirty = true;
+}
+
+inline Pose3D Pose3D::worldTranslated(const glm::vec3 & delta) const
+{
+    Pose3D result(*this);
+    result.worldTranslate(delta);
+    return result;
 }
 
 // rotate around local axis
@@ -110,6 +124,13 @@ inline void Pose3D::localRotate(const glm::quat & delta)
     Assert(GLMIsFinite(m_orientation), "");
 }
 
+inline Pose3D Pose3D::localRotated(const glm::quat & delta) const
+{
+    Pose3D result(*this);
+    result.localRotate(delta);
+    return result;
+}
+
 inline void Pose3D::worldRotate(const glm::quat & delta)
 {
     Assert(GLMIsFinite(delta), "");
@@ -118,6 +139,13 @@ inline void Pose3D::worldRotate(const glm::quat & delta)
     m_matrixDirty = true;
 
     Assert(GLMIsFinite(m_orientation), "");
+}
+
+inline Pose3D Pose3D::worldRotated(const glm::quat & delta) const
+{
+    Pose3D result(*this);
+    result.worldRotate(delta);
+    return result;
 }
 
 inline const glm::mat3 & Pose3D::basis() const
@@ -173,13 +201,6 @@ inline Pose3D Pose3D::poseLocalToWorld(const Pose3D & local)
     result.m_basisDirty = true;
     result.m_matrixDirty = true;
 
-    return result;
-}
-
-inline Pose3D Pose3D::worldTranslated(const glm::vec3 & delta) const
-{
-    Pose3D result(*this);
-    result.worldTranslate(delta);
     return result;
 }
 
