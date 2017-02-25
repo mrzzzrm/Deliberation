@@ -660,7 +660,7 @@
 //#	else // libstdc++
 //#		include <bits/c++config.h>
 #	endif
-#	if defined(_LIBCPP_VERSION)// || defined(__GLIBCXX__)
+#	if defined(_LIBCPP_VERSION) || defined(__GLIBCXX__)
 #		define GLM_HAS_CXX11_STL 1
 #	else
 #		define GLM_HAS_CXX11_STL 0
