@@ -110,9 +110,9 @@ void PhysicsWorld::performTimestep(float seconds)
 {
     for (auto & body : m_rigidBodies)
     {
-        body->applyForce({0.0f, -m_gravity * body->mass(), 0.0f});
+        body->applyForce({0.0f, -m_gravity * body->shape()->mass(), 0.0f});
         body->integrateVelocities(seconds);
-        body->updateWorldInertia();
+        body->adjustCenterOfMass();
     }
 
     /**

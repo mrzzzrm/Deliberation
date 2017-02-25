@@ -163,7 +163,7 @@ const glm::mat4 & Transform3D::matrix() const
 
 glm::vec3 Transform3D::pointLocalToWorld(const glm::vec3 & point) const
 {
-    return m_position + (m_orientation * (m_scale * (-m_center + point)));
+    return m_position + (m_orientation * (m_scale * (point - m_center)));
 }
 
 glm::vec3 Transform3D::pointWorldToLocal(const glm::vec3 & point) const

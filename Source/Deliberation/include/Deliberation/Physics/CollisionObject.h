@@ -30,7 +30,7 @@ public:
     void setTransform(const Transform3D & transform);
     void setProxy(const std::shared_ptr<BroadphaseProxy> & proxy);
 
-private:
+protected:
     std::shared_ptr<CollisionShape>     m_shape;
     Transform3D                         m_transform;
     std::shared_ptr<BroadphaseProxy>    m_proxy;

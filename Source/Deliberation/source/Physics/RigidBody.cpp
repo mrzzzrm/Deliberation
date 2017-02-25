@@ -5,6 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/Math/FloatUtils.h>
 #include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/Math/GLMUtils.h>
 #include <Deliberation/Core/StreamUtils.h>
@@ -14,35 +15,19 @@ namespace deliberation
 
 RigidBody::RigidBody(const std::shared_ptr<CollisionShape> & shape,
                      const Transform3D & transform,
-                     float mass,
                      const glm::vec3 & linearVelocity,
                      const glm::vec3 & angularVelocity):
     CollisionObject(shape, transform),
-    m_inverseMass(0.0f),
     m_linearVelocity(linearVelocity),
     m_angularVelocity(angularVelocity)
 {
-    setMass(mass);
 }
 
 float RigidBody::inverseMass() const
 {
-    if (m_static)
-    {
-        return 0.0f;
-    }
+    if (m_static) return 0.0f;
 
-    return m_inverseMass;
-}
-
-float RigidBody::mass() const
-{
-    if (m_static)
-    {
-        return 0.0f;
-    }
-
-    return m_inverseMass != 0.0f ? 1.0f / m_inverseMass : 0.0f;
+    return EpsilonGt(shape()->mass(), 0.0f) ? 1.0f / shape()->mass() : 0.0f;
 }
 
 float RigidBody::restitution() const
@@ -59,10 +44,10 @@ const glm::mat3 & RigidBody::worldInverseInertia() const
 {
     static glm::mat3 staticBodyInertia(0.0f);
 
-    if (m_static)
-    {
-        return staticBodyInertia;
-    }
+    if (m_static) return staticBodyInertia;
+
+    m_worldInverseInertia = transform().basis() * glm::inverse(shape()->localInertia()) *
+        glm::transpose(transform().basis());
 
     return m_worldInverseInertia;
 }
@@ -124,18 +109,6 @@ glm::vec3 RigidBody::localVelocity(const glm::vec3 & r) const
     return m_linearVelocity + glm::cross(m_angularVelocity, r);
 }
 
-void RigidBody::setMass(float mass)
-{
-    setInverseMass(mass > 0.0f ? 1.0f / mass : 0.0f);
-}
-
-void RigidBody::setInverseMass(float inverseMass)
-{
-    m_inverseMass = inverseMass;
-    auto localInertia = shape()->localInertia() * mass();
-    m_localInverseInertia = glm::inverse(localInertia);
-}
-
 void RigidBody::setRestitution(float restitution)
 {
     m_restitution = restitution;
@@ -150,20 +123,16 @@ void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
 {
     Assert(GLMIsFinite(velocity), "");
 
-    if (m_static)
-    {
-        return;
-    }
+    if (m_static) return;
 
     m_linearVelocity = velocity;
 }
 
 void RigidBody::setAngularVelocity(const glm::vec3 & velocity)
 {
-    if (m_static)
-    {
-        return;
-    }
+    Assert(GLMIsFinite(velocity), "");
+
+    if (m_static) return;
 
     m_angularVelocity = velocity;
 }
@@ -205,8 +174,8 @@ void RigidBody::applyForce(const glm::vec3 & force)
 
 void RigidBody::applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse)
 {
-    m_linearVelocity += m_inverseMass * impulse;
-    m_angularVelocity += m_worldInverseInertia * glm::cross(point, impulse);
+    setLinearVelocity(m_linearVelocity + inverseMass() * impulse);
+    setAngularVelocity(m_angularVelocity + worldInverseInertia() * glm::cross(point, impulse));
 }
 
 void RigidBody::predictTransform(float seconds, Transform3D & prediction)
@@ -234,11 +203,6 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
 
 }
 
-void RigidBody::updateWorldInertia()
-{
-    m_worldInverseInertia = transform().basis() * m_localInverseInertia * glm::transpose(transform().basis());
-}
-
 void RigidBody::integrateVelocities(float seconds)
 {
     if (m_static)
@@ -246,8 +210,18 @@ void RigidBody::integrateVelocities(float seconds)
         return;
     }
 
-    m_linearVelocity += m_inverseMass * m_force * seconds;
-    m_angularVelocity += m_worldInverseInertia * m_torque * seconds;
+    setLinearVelocity(m_linearVelocity + inverseMass() * m_force * seconds);
+    setAngularVelocity(m_angularVelocity + worldInverseInertia() * m_torque * seconds);
+}
+
+void RigidBody::adjustCenterOfMass()
+{
+    if (m_transform.center() == m_shape->centerOfMass()) return;
+
+    auto delta = m_shape->centerOfMass() - m_transform.center();
+
+    m_transform.setCenter(m_shape->centerOfMass());
+    m_transform.worldTranslate(m_transform.orientation() * delta);
 }
 
 std::string RigidBody::toString() const
