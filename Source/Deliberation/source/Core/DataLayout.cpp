@@ -35,8 +35,7 @@ DataLayout::DataLayout(const std::vector<DataLayoutField::Desc> & descs)
 
     for (auto & desc : descs)
     {
-        m_fields.push_back(DataLayoutField(desc.name, desc.type, m_stride));
-        m_stride += desc.type.size();
+        addField(desc.name, desc.type);
     }
 }
 
@@ -81,6 +80,14 @@ const DataLayoutField & DataLayout::field(const std::string & name) const
     }
 
     Fail("No such field '" + name + "' in DataLayout");
+}
+
+DataLayoutField DataLayout::addField(const std::string & name, const Type & type)
+{
+    m_fields.push_back(DataLayoutField(name, type, m_stride));
+    m_stride += type.size();
+
+    return m_fields.back();
 }
 
 /**

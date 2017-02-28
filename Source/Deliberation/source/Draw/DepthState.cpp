@@ -9,7 +9,7 @@
 namespace deliberation
 {
 
-DepthState::DepthState():
+DepthState:: DepthState():
     m_depthTestEnabled(true),
     m_depthMask(true)
 {

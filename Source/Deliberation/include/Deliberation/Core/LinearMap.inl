@@ -9,14 +9,14 @@ template<typename Value>
 LinearMap<Value>::Iterator::Iterator(LinearMap<Value> & map, std::size_t index):
     map(map)
 {
-    while (index < map.m_vec.size() && !map.m_vec[index].engaged())
+    while (index < map.m_vec.size() && !map.m_vec[index])
     {
         index++;
     }
 
     if (index < map.m_vec.size())
     {
-        pair.reset(std::make_pair(index, std::ref(map.m_vec[index].get())));
+        pair.reset(std::make_pair(index, std::ref(*map.m_vec[index])));
     }
 }
 
@@ -43,14 +43,14 @@ typename LinearMap<Value>::Iterator & LinearMap<Value>::Iterator::operator++()
     auto index = pair.get().first;
 
     index++;
-    while (index < map.m_vec.size() && !map.m_vec[index].engaged())
+    while (index < map.m_vec.size() && !map.m_vec[index])
     {
         index++;
     }
 
     if (index < map.m_vec.size())
     {
-        pair = std::make_pair(index, std::ref(map.m_vec[index].get()));
+        pair = std::make_pair(index, std::ref(*map.m_vec[index]));
     }
     else
     {
@@ -67,29 +67,29 @@ bool LinearMap<Value>::Iterator::operator!=(const Iterator & other) const
     {
         return true;
     }
-    if (!pair.engaged() && !other.pair.engaged())
+    if (!pair && !other.pair)
     {
         return false;
     }
-    if (pair.engaged() != other.pair.engaged())
+    if (pair != other.pair)
     {
         return true;
     }
-    return pair.get().first != other.pair.get().first;
+    return pair->first != other.pair->first;
 }
 
 template<typename Value>
 LinearMap<Value>::CIterator::CIterator(const LinearMap<Value> & map, std::size_t index):
     map(map)
 {
-    while (index < map.m_vec.size() && !map.m_vec[index].engaged())
+    while (index < map.m_vec.size() && !map.m_vec[index])
     {
         index++;
     }
 
     if (index < map.m_vec.size())
     {
-        pair.reset(std::make_pair(index, std::ref(map.m_vec[index].get())));
+        pair.reset(std::make_pair(index, std::ref(*map.m_vec[index])));
     }
 }
 
@@ -104,30 +104,30 @@ LinearMap<Value>::CIterator::CIterator(const CIterator & other):
 template<typename Value>
 const std::pair<std::size_t, const Value&> & LinearMap<Value>::CIterator::operator*()
 {
-    Assert(pair.engaged(), "");
-    return pair.get();
+    Assert(!!pair, "");
+    return *pair;
 }
 
 template<typename Value>
 typename LinearMap<Value>::CIterator & LinearMap<Value>::CIterator::operator++()
 {
-    Assert(pair.engaged(), "");
+    Assert(!!pair, "");
 
-    auto index = pair.get().first;
+    auto index = pair->first;
 
     index++;
-    while (index < map.m_vec.size() && !map.m_vec[index].engaged())
+    while (index < map.m_vec.size() && !map.m_vec[index])
     {
         index++;
     }
 
     if (index < map.m_vec.size())
     {
-        pair = std::make_pair(index, std::ref(map.m_vec[index].get()));
+        pair = std::make_pair(index, std::ref(*map.m_vec[index]));
     }
     else
     {
-        pair.disengage();
+        pair = decltype(pair)();
     }
 
     return *this;
@@ -140,15 +140,15 @@ bool LinearMap<Value>::CIterator::operator!=(const CIterator & other) const
     {
         return true;
     }
-    if (!pair.engaged() && !other.pair.engaged())
+    if (!pair && !other.pair)
     {
         return false;
     }
-    if (pair.engaged() != other.pair.engaged())
+    if (pair != other.pair)
     {
         return true;
     }
-    return pair.get().first != other.pair.get().first;
+    return pair->first != other.pair->first;
 }
 
 template<typename Value>
@@ -164,7 +164,7 @@ bool LinearMap<Value>::contains(std::size_t key) const
     {
         return false;
     }
-    return m_vec[key].engaged();
+    return (bool)m_vec[key];
 }
 
 template<typename Value>
@@ -184,43 +184,36 @@ Value & LinearMap<Value>::operator[](std::size_t key)
 {
     ensureSize(key);
 
-    if (!m_vec[key].engaged())
+    if (!m_vec[key])
     {
-        m_vec[key].reset();
+        m_vec[key].emplace();
         m_size++;
     }
 
-    return m_vec[key].get();
+    return *m_vec[key];
 }
 
 template<typename Value>
 const Value & LinearMap<Value>::operator[](std::size_t key) const
 {
-    if (key >= m_vec.size())
-    {
-        Fail("Invalid element");
-    }
+    Assert(key < m_vec.size(), "Invalid element");
+    Assert(!!m_vec[key], "Invalid element");
 
-    if (!m_vec[key].engaged())
-    {
-        Fail("Invalid element");
-    }
-
-    return m_vec[key].get();
+    return *m_vec[key];
 }
 
 template<typename Value>
 Value & LinearMap<Value>::at(std::size_t key)
 {
     Assert(contains(key), "");
-    return m_vec[key].get();
+    return *m_vec[key];
 }
 
 template<typename Value>
 const Value & LinearMap<Value>::at(std::size_t key) const
 {
     Assert(contains(key), "");
-    return m_vec[key].get();
+    return *m_vec[key];
 }
 
 template<typename Value>
@@ -252,7 +245,7 @@ void LinearMap<Value>::erase(std::size_t key)
 {
     Assert(contains(key), "");
 
-    m_vec[key].disengage();
+    m_vec[key] = std::experimental::optional<Value>();
     m_size--;
 }
 
@@ -283,7 +276,7 @@ std::pair<typename LinearMap<Value>::Iterator, bool> LinearMap<Value>::emplace(s
 
     ensureSize(key);
 
-    m_vec[key].reset(std::forward<Args>(args)...);
+    m_vec[key].emplace(std::forward<Args>(args)...);
     m_size++;
 
     return std::make_pair(Iterator(*this, key), true);

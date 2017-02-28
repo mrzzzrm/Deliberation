@@ -300,7 +300,7 @@ bool Draw::isComplete() const
 
         if (count != 1u)
         {
-            return false;
+            if (m_impl->attributes.find(attribute.name()) == m_impl->attributes.end()) return false;
         }
     }
 
@@ -328,17 +328,35 @@ void Draw::build() const
         auto divisor = 0u;
 
         auto bufferField = this->bufferField(attribute.name(), &binding, &divisor, &count);
-        Assert(count == 1u, "");
-        Assert(binding, "");
 
-        auto baseoffset = binding->ranged ? binding->first * binding->buffer->layout.stride() : 0;
+        if (bufferField)
+        {
+            Assert(count == 1u, "");
+            Assert(binding, "");
 
-        GLBindVertexAttribute(m_impl->glVertexArray,
-                              m_impl->program->interface,
-                              *binding->buffer,
-                              divisor,
-                              bufferField->name(),
-                              baseoffset);
+            auto baseoffset = binding->ranged ? binding->first * binding->buffer->layout.stride() : 0;
+
+            GLBindVertexAttribute(m_impl->glVertexArray,
+                                  m_impl->program->interface,
+                                  *binding->buffer,
+                                  divisor,
+                                  bufferField->name(),
+                                  baseoffset);
+        }
+        else
+        {
+            const auto iter = m_impl->attributes.find(attribute.name());
+
+            Assert(iter != m_impl->attributes.end(), "Attribute '" + attribute.name() +
+                "' is neither supplied by buffer nor by fixed attribute");
+
+            GLBindVertexAttribute(
+                m_impl->glVertexArray,
+                attribute,
+                iter->second.data
+                );
+        }
+
     }
 
     if (m_impl->indexBuffer)
@@ -383,17 +401,15 @@ void Draw::verifyInstanceBuffer(const Buffer & buffer) const
     );
 }
 
-const DataLayoutField * Draw::bufferField(const std::string & name,
-                                                     detail::BufferBinding ** o_binding,
-                                                     gl::GLuint * o_divisor,
-                                                     unsigned int * o_count) const
+const DataLayoutField * Draw::bufferField(
+    const std::string & name,
+    detail::BufferBinding ** o_binding,
+    gl::GLuint * o_divisor,
+    unsigned int * o_count) const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    if (o_count)
-    {
-        *o_count = 0u;
-    }
+    if (o_count) *o_count = 0u;
 
     auto * field = (const DataLayoutField*)nullptr;
 
@@ -411,20 +427,9 @@ const DataLayoutField * Draw::bufferField(const std::string & name,
             {
                 field = &bufferField;
 
-                if (o_divisor)
-                {
-                    *o_divisor = binding.divisor;
-                }
-
-                if (o_binding)
-                {
-                    *o_binding = &binding;
-                }
-
-                if (o_count)
-                {
-                    (*o_count)++;
-                }
+                if (o_divisor) *o_divisor = binding.divisor;
+                if (o_binding) *o_binding = &binding;
+                if (o_count) (*o_count)++;
             }
         }
     }
@@ -472,6 +477,19 @@ std::string Draw::statusString() const
     }
 
     return stream.str();
+}
+
+void Draw::setAttribute(const std::string & name, Type type, Blob data)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    std::cout << m_impl->program->interface.toString() << std::endl;
+
+    Assert(m_impl->program->interface.hasAttribute(name), "No such attribute '" + name + "'");
+    Assert(type == m_impl->program->interface.attribute(name).type(), "");
+    Assert(m_impl->attributes.count(name) == 0, "Value of '" + name + "' already set");
+
+    m_impl->attributes.emplace(name, detail::AttributeBinding(name, std::move(data)));
 }
 
 }

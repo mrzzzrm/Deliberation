@@ -10,7 +10,7 @@ namespace deliberation
 ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute():
     m_name(),
     m_location(-1),
-    m_type(gl::GL_NONE),
+    m_type(Type_None),
     m_size(0)
 {
 
@@ -18,7 +18,7 @@ ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute():
 
 ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute(const std::string & name,
                                                            gl::GLint location,
-                                                           gl::GLenum type,
+                                                           Type type,
                                                            gl::GLint size):
     m_name(name),
     m_location(location),
@@ -38,7 +38,7 @@ gl::GLint ProgramInterfaceVertexAttribute::location() const
     return m_location;
 }
 
-gl::GLenum ProgramInterfaceVertexAttribute::type() const
+Type ProgramInterfaceVertexAttribute::type() const
 {
     return m_type;
 }
@@ -64,7 +64,7 @@ bool ProgramInterfaceVertexAttribute::operator!=(const ProgramInterfaceVertexAtt
 std::string ProgramInterfaceVertexAttribute::toString() const
 {
     std::stringstream stream;
-    stream << m_location << ": " << m_type << " " << m_name << " (size: " << m_size << ")";
+    stream << m_location << ": " << m_type.name() << " " << m_name << " (size: " << m_size << ")";
 
     return stream.str();
 }

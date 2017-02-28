@@ -4,11 +4,14 @@
 #include <string>
 #include <memory>
 
+#include <glm/glm.hpp>
+
 #include <SDL2/SDL.h>
 
-#include <Deliberation/Deliberation_API.h>
-
+#include <Deliberation/Core/Types.h>
 #include <Deliberation/Draw/TextureBinary.h>
+
+#include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
@@ -23,6 +26,9 @@ public:
     TextureLoader(const std::string & path);
     TextureLoader(void * data, size_t length);
 
+    template<typename T>
+    TextureLoader(const glm::uvec2 size, const T & value);
+
     // Cube map
     TextureLoader(const std::array<std::string, 6> & paths);
 
@@ -35,4 +41,3 @@ private:
 };
 
 }
-

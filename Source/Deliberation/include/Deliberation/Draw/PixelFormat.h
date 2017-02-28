@@ -149,6 +149,10 @@ namespace detail
 class PixelFormat final
 {
 public:
+    template<typename T>
+    static constexpr PixelFormatEnum resolve();
+
+public:
     PixelFormat();
     PixelFormat(PixelFormatEnum format);
 
@@ -181,3 +185,4 @@ private:
 
 }
 
+#include <Deliberation/Draw/PixelFormat.inl>

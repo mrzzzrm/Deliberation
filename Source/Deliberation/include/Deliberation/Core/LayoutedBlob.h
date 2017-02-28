@@ -50,6 +50,12 @@ public:
     CBlobValueAccessor field(const DataLayoutField & field) const;
 
     template<typename T>
+    TypedBlobIterator<T> iterator(const std::string & name);
+
+    template<typename T>
+    TypedBlobIterator<T> iterator(const DataLayoutField & field);
+
+    template<typename T>
     void assign(const std::string & name, const std::vector<T> & values);
 
     void append(const CLayoutedBlobElement & element);

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
 #include <glbinding/gl/types.h>
@@ -10,6 +11,7 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/DrawState.h>
 
+#include "AttributeBinding.h"
 #include "BufferBinding.h"
 #include "SamplerImpl.h"
 #include "UniformBufferBinding.h"
@@ -37,6 +39,8 @@ public:
     std::shared_ptr<BufferImpl>                 indexBuffer;
     std::vector<BufferBinding>                  vertexBuffers;
     std::vector<BufferBinding>                  instanceBuffers;
+    std::unordered_map<std::string, AttributeBinding>
+                                                attributes;
     DrawState                                   state;
     Framebuffer                                 framebuffer;
     gl::GLuint                                  glVertexArray;

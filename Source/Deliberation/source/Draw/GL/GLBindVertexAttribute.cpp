@@ -27,7 +27,7 @@ void GLBindVertexAttribute(
     const auto & bufferField = buffer.layout.field(name);
     const auto & bufferFieldType = bufferField.type();
     const auto & bufferFieldElementalType = bufferFieldType.elementalType();
-    const auto & attributeType = GLTypeToType(attribute.type());
+    const auto & attributeType = attribute.type();
     const auto & attributeElementalType = attributeType.elementalType();
 
     Assert(attributeType.numColumns() == bufferField.type().numColumns() &&
@@ -66,6 +66,32 @@ void GLBindVertexAttribute(
     } 
 }
 
+void DELIBERATION_API GLBindVertexAttribute(gl::GLuint vao,
+                                            const ProgramInterfaceVertexAttribute & attribute,
+                                            const Blob & data)
+{
+    const auto i = (gl::GLuint)attribute.location();
+
+    switch(attribute.type().id())
+    {
+        case TYPE_I32:      gl::glVertexAttribI1iv(i, (gl::GLint*)data.ptr()); break;
+        case TYPE_U32:      gl::glVertexAttribI1uiv(i, (gl::GLuint*)data.ptr()); break;
+        case TYPE_FLOAT:    gl::glVertexAttrib1fv(i, (gl::GLfloat*)data.ptr()); break;
+        case TYPE_DOUBLE:   gl::glVertexAttrib1dv(i, (gl::GLdouble*)data.ptr()); break;
+        case TYPE_VEC2:     gl::glVertexAttrib2fv(i, (gl::GLfloat*)data.ptr()); break;
+        case TYPE_VEC3:     gl::glVertexAttrib3fv(i, (gl::GLfloat*)data.ptr()); break;
+        case TYPE_VEC4:     gl::glVertexAttrib4fv(i, (gl::GLfloat*)data.ptr()); break;
+        case TYPE_I32VEC2:  gl::glVertexAttribI2iv(i, (gl::GLint*)data.ptr()); break;
+        case TYPE_I32VEC3:  gl::glVertexAttribI3iv(i, (gl::GLint*)data.ptr()); break;
+        case TYPE_I32VEC4:  gl::glVertexAttribI4iv(i, (gl::GLint*)data.ptr()); break;
+        case TYPE_U32VEC2:  gl::glVertexAttribI2uiv(i, (gl::GLuint*)data.ptr()); break;
+        case TYPE_U32VEC3:  gl::glVertexAttribI3uiv(i, (gl::GLuint*)data.ptr()); break;
+        case TYPE_U32VEC4:  gl::glVertexAttribI4uiv(i, (gl::GLuint*)data.ptr()); break;
+
+        default:
+            Fail("Vertex attribute type not (yet?) supported");
+    }
+}
 
 }
 

@@ -10,9 +10,10 @@
 #include <glbinding/ContextInfo.h>
 #include <glbinding/Version.h>
 
-#include <Deliberation/Deliberation.h>
-
+#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/MainLoop.h>
+
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
@@ -64,7 +65,7 @@ int Application::run(int argc,
 
     if (!cmdPrefix.empty())
     {
-        std::cout << "Prefix override: '" + cmdPrefix + "'" << std::endl;
+        std::cout << "Prefix override: '" << cmdPrefix << "'" << std::endl;
         m_prefixPath = cmdPrefix;
     }
 
@@ -176,13 +177,20 @@ void Application::init()
     m_glContext = SDL_GL_CreateContext(m_displayWindow);
     SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
+    glm::ivec4 contextColorSize;
+    SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &contextColorSize.x);
+    SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &contextColorSize.y);
+    SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &contextColorSize.z);
+    SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &contextColorSize.w);
+
     // Init glbinding
     glbinding::Binding::initialize();
 
     std::cout << std::endl
-              << "OpenGL Version:  " << glbinding::ContextInfo::version() << std::endl
+              << "OpenGL Version:  " << glbinding::ContextInfo::version().toString() << std::endl
               << "OpenGL Vendor:   " << glbinding::ContextInfo::vendor() << std::endl
-              << "OpenGL Renderer: " << glbinding::ContextInfo::renderer() << std::endl;
+              << "OpenGL Renderer: " << glbinding::ContextInfo::renderer() << std::endl
+              << "Context RGBA-bits: " << contextColorSize << std::endl;
 
     deliberation::init();
     deliberation::setPrefixPath(m_prefixPath);

@@ -1,11 +1,17 @@
 #version 430
 
-in vec3 f_Color;
+uniform float Fade;
 
-out vec3 o_Color;
+in vec4 f_Color;
+in vec2 f_UV;
+
+out vec4 o_Color;
 
 void main()
 {
-	o_Color = f_Color;
+    float intensity = max(1.0f - length(f_UV), 0.0f);
+
+    o_Color.rgb = vec3(1.0f, 1.0f, 1.0f);
+    o_Color.a = intensity * Fade;
 }
 

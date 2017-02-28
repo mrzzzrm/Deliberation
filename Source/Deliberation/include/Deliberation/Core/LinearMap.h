@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <experimental/optional>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
@@ -76,7 +77,8 @@ private:
     /* Number of active keys */
     std::size_t                  m_size;
 
-    std::vector<Optional<Value>> m_vec;
+    std::vector<std::experimental::optional<Value>>
+                                m_vec;
 };
 
 }

@@ -61,6 +61,9 @@ public:
     void addInstanceBuffer(const Buffer & buffer, unsigned int divisor = 1u);
     void addInstanceBufferRange(const Buffer & buffer, unsigned int first, unsigned int count, unsigned int divisor = 1u);
 
+    template<typename T>
+    void setAttribute(const std::string & name, const T & value);
+
     void setFramebuffer(const Framebuffer & framebuffer);
 
     void setRenderTarget(unsigned int index, Surface * surface);
@@ -93,6 +96,8 @@ private:
                                           unsigned int * o_count) const;
 
     std::string statusString() const;
+
+    void setAttribute(const std::string & name, Type type, Blob data);
 
 private:
     std::shared_ptr<detail::DrawImpl> m_impl;

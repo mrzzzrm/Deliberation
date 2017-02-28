@@ -4,6 +4,7 @@
 #include "TextureLoaderDataImpl.h"
 #include "TextureLoaderFileImpl.h"
 #include "TextureLoaderSDLSurfaceImpl.h"
+#include "TextureLoaderUnicolorImpl.h"
 
 namespace deliberation
 {
@@ -26,6 +27,13 @@ TextureLoader::TextureLoader(void * data, size_t length):
 
 TextureLoader::TextureLoader(const std::array<std::string, 6> & paths):
     m_impl(new TextureLoaderCubeFilesImpl(paths))
+{
+
+}
+
+template<>
+TextureLoader::TextureLoader(const glm::uvec2 size, const glm::vec3 & value):
+    m_impl(std::make_unique<TextureLoaderUnicolorImpl<glm::vec3>>(size, value))
 {
 
 }

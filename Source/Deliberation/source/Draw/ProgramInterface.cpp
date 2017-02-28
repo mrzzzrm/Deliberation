@@ -62,7 +62,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             m_attributeIndexByLocation[location] = i;
             m_attributeIndexByName[name] = i;
-            m_attributes.push_back({name, location, type, size});
+            m_attributes.push_back({name, location, GLTypeToType(type), size});
 
             i++;
         }
@@ -126,9 +126,9 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     m_samplerIndexByLocation.resize(location + 1, (unsigned int)-1);
                 }
 
-                if (uniformBlockIndex[u] >= -1)
+                if (uniformBlockIndex[u] > -1)
                 {
-                    std::cout << "Sample '" << name << "' in block, not supported" << std::endl;
+                    std::cout << "Sampler '" << name << "' in block (" << uniformBlockIndex[u] << "), not supported" << std::endl;
                 }
                 else
                 {

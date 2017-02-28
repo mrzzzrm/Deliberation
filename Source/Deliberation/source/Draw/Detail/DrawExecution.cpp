@@ -129,6 +129,12 @@ void DrawExecution::perform()
                 gl::glUniform4fv(location, count, fdata);
                 break;
             }
+            case gl::GL_FLOAT_MAT2:
+                gl::glUniformMatrix2fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
+                break;
+            case gl::GL_FLOAT_MAT3:
+                gl::glUniformMatrix3fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
+                break;
             case gl::GL_FLOAT_MAT4:
                 gl::glUniformMatrix4fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
                 break;

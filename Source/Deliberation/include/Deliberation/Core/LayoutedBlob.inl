@@ -26,6 +26,18 @@ CTypedBlobValueAccessor<T> LayoutedBlob::field(const DataLayoutField & field) co
 }
 
 template<typename T>
+TypedBlobIterator<T> LayoutedBlob::iterator(const std::string & name)
+{
+    return field<T>(name).iterator();
+}
+
+template<typename T>
+TypedBlobIterator<T> LayoutedBlob::iterator(const DataLayoutField & field)
+{
+    return this->field<T>(field).iterator();
+}
+
+template<typename T>
 void LayoutedBlob::assign(const std::string & name, const std::vector<T> & values)
 {
     field<T>(name).assign(values);
