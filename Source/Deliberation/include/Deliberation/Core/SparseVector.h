@@ -54,8 +54,14 @@ public:
     std::size_t insert(T && value);
     std::size_t insert(const T & value);
 
+    void insert_at(size_t index, T && value);
+    void insert_at(size_t index, const T & value);
+
     template<typename ... Args>
     std::size_t emplace(Args &&... args);
+
+    template<typename ... Args>
+    void emplace_at(size_t index, Args &&... args);
 
     void erase(std::size_t index);
     Iterator erase(const Iterator & i);
@@ -77,8 +83,12 @@ private:
     template<typename, typename> friend class IteratorT;
 
 private:
+    void ensureSize(size_t size);
+
+private:
     std::vector<std::experimental::optional<T>> m_vec;
     std::stack<std::size_t>                     m_pool;
+    size_t                                      m_count = 0;
 };
 
 }

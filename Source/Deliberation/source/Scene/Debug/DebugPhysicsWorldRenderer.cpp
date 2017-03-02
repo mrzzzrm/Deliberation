@@ -39,8 +39,8 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Allocate enough arrows for contact points
      */
-    m_contactNormalRenderer->resizeArrows(numContactPoints/*, {0.2f, 1.0f, 0.2}, true*/);
-    m_contactVelocityRenderer->resizeArrows(numContactPoints * 2/*, {0.2f, 0.7f, 0.4}, true*/);
+//    m_contactNormalRenderer->resizeArrows(numContactPoints/*, {0.2f, 1.0f, 0.2}, true*/);
+//    m_contactVelocityRenderer->resizeArrows(numContactPoints * 2/*, {0.2f, 0.7f, 0.4}, true*/);
 
     /**
      * Setup contacts

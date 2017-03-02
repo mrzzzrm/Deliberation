@@ -71,7 +71,7 @@ size_t SparseVector<T>::capacity() const
 
 template<typename T>
 size_t SparseVector<T>::count() const {
-    return m_vec.size() - m_pool.size();
+    return m_count;
 }
 
 template<typename T>
@@ -114,20 +114,30 @@ std::size_t SparseVector<T>::insert(T && value)
 {
     std::size_t result;
 
-    if (m_pool.empty())
+    while (true)
     {
-        result = m_vec.size();
-        m_vec.push_back(std::move(value));
-    }
-    else
-    {
-        result = m_pool.top();
-        m_pool.pop();
+        if (m_pool.empty())
+        {
+            result = m_vec.size();
+            m_vec.push_back(std::move(value));
+            break;
+        }
+        else
+        {
+            result = m_pool.top();
+            m_pool.pop();
 
-        Assert(result < m_vec.size(), "");
+            Assert(result < m_vec.size(), "");
 
-        m_vec[result] = std::move(value);
+            if (m_vec[result]) continue; // Using an index without notifying the pool is possible
+
+            m_vec[result] = std::move(value);
+
+            break;
+        }
     }
+
+    m_count++;
 
     return result;
 }
@@ -139,27 +149,71 @@ std::size_t SparseVector<T>::insert(const T & value)
 }
 
 template<typename T>
+void SparseVector<T>::insert_at(size_t index, T && value)
+{
+    Assert(!contains(index), "Slot already taken");
+
+    m_vec.reserve(index + 1);
+
+    ensureSize(index);
+
+    if (index >= m_vec.size()) m_vec.emplace_back(std::experimental::in_place, std::move(value));
+    else m_vec[index].emplace(std::move(value));
+
+    m_count++;
+}
+
+template<typename T>
+void SparseVector<T>::insert_at(size_t index, const T & value)
+{
+    insert_at(index, T(value));
+}
+
+template<typename T>
 template<typename ... Args>
 std::size_t SparseVector<T>::emplace(Args &&... args)
 {
     std::size_t result;
 
-    if (m_pool.empty())
+    while (true)
     {
-        result = m_vec.size();
-        m_vec.emplace_back(std::experimental::in_place, std::forward<Args>(args)...);
-    }
-    else
-    {
-        result = m_pool.top();
-        m_pool.pop();
+        if (m_pool.empty())
+        {
+            result = m_vec.size();
+            m_vec.emplace_back(std::experimental::in_place, std::forward<Args>(args)...);
+            break;
+        }
+        else
+        {
+            result = m_pool.top();
+            m_pool.pop();
 
-        Assert(result < m_vec.size(), "");
+            Assert(result < m_vec.size(), "");
+            if (m_vec[result]) continue; // Using an index without notifying the pool is possible
 
-        m_vec[result] = T{std::forward<Args>(args)...};
+            m_vec[result] = T{std::forward<Args>(args)...};
+        }
     }
+
+    m_count++;
 
     return result;
+}
+
+template<typename T>
+template<typename ... Args>
+void SparseVector<T>::emplace_at(size_t index, Args &&... args)
+{
+    Assert(!contains(index), "Slot already taken");
+
+    m_vec.reserve(index + 1);
+
+    ensureSize(index);
+
+    if (index >= m_vec.size()) m_vec.emplace_back(std::experimental::in_place, std::forward<Args>(args)...);
+    else m_vec[index].emplace(std::forward<Args>(args)...);
+
+    m_count++;
 }
 
 template<typename T>
@@ -167,6 +221,8 @@ void SparseVector<T>::erase(std::size_t index)
 {
     Assert(index < m_vec.size(), "");
     Assert(!!m_vec[index], "");
+
+    m_count--;
 
     m_vec[index] = std::experimental::optional<T>{};
     m_pool.push(index);
@@ -188,6 +244,7 @@ void SparseVector<T>::clear()
 {
     m_vec.clear();
     m_pool = decltype(m_pool)();
+    m_count = 0;
 }
 
 template<typename T>
@@ -237,10 +294,7 @@ std::string SparseVector<T>::toString() const
 
     for (auto & o : m_vec)
     {
-        if (!o)
-        {
-            continue;
-        }
+        if (!o) continue;
 
         stream << *o << "; ";
     }
@@ -248,6 +302,16 @@ std::string SparseVector<T>::toString() const
     stream << "}";
 
     return stream.str();
+}
+
+template<typename T>
+void SparseVector<T>::ensureSize(size_t size)
+{
+    if (size <= m_vec.size()) return;
+
+    for (size_t i = m_vec.size(); i < size; i++) m_pool.push(i);
+
+    m_vec.resize(size);
 }
 
 }
