@@ -12,36 +12,46 @@ namespace deliberation
 template<typename T>
 bool Entity::hasComponent() const
 {
-    return hasComponent(ComponentWrapper<T>::indexStatic());
+    static_assert(std::is_base_of<ComponentBase, T>::value, "");
+    return hasComponent(T::indexStatic());
 }
 
 template<typename T>
 T & Entity::component()
 {
-    return dynamic_cast<ComponentWrapper<T>&>(component(ComponentWrapper<T>::indexStatic())).value();
+    static_assert(std::is_base_of<ComponentBase, T>::value, "");
+
+    return dynamic_cast<T&>(component(T::indexStatic()));
 }
 
 template<typename T>
 const T & Entity::component() const
 {
-    return dynamic_cast<ComponentWrapper<T>&>(component(ComponentWrapper<T>::indexStatic())).value();
+    static_assert(std::is_base_of<ComponentBase, T>::value, "");
+
+    return dynamic_cast<T&>(component(T::indexStatic())).value();
 }
 
 template<typename T, typename ... Args>
 T & Entity::addComponent(Args &&... args)
 {
-    auto component = std::make_unique<ComponentWrapper<T>>(std::forward<Args>(args)...);
-    auto & ref = *component;
+    static_assert(std::is_base_of<ComponentBase, T>::value, "");
 
-    addComponent(ComponentWrapper<T>::indexStatic(), std::move(component));
+    auto * ptr = (T*)nullptr;
 
-    return ref.value();
+    auto component = std::make_shared<T>(std::forward<Args>(args)...);
+    ptr = component.get();
+    addComponent(ptr->index(), std::move(component));
+
+    return *ptr;
 }
 
 template<typename T>
 void Entity::removeComponent()
 {
-    removeComponent(ComponentWrapper<T>::indexStatic());
+    static_assert(std::is_base_of<ComponentBase, T>::value, "");
+
+    removeComponent(T::indexStatic());
 }
 
 }

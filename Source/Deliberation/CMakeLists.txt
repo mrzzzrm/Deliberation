@@ -159,6 +159,7 @@ set(sources
 
     ${source_path}/ECS/ComponentBase.cpp
     ${source_path}/ECS/ComponentFilter.cpp
+    ${source_path}/ECS/ComponentSubscriptions.cpp
     ${source_path}/ECS/Entity.cpp
     ${source_path}/ECS/EventManager.cpp
     ${source_path}/ECS/SystemBase.cpp
@@ -344,6 +345,7 @@ set(api_includes
     ${include_path}/Draw/Uniform.h
     ${include_path}/Draw/Uniform.inl
 
+    ${include_path}/ECS/AbstractWorld.h
     ${include_path}/ECS/ComponentFilter.h
     ${include_path}/ECS/Component.h
     ${include_path}/ECS/Component.inl
