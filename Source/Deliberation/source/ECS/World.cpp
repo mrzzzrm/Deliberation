@@ -113,6 +113,19 @@ std::string World::toString() const
     return stream.str();
 }
 
+void World::emit(size_t entityIndex, TypeID::value_t eventType, const void * event)
+{
+    const auto * const entityComponentSetup = m_entities[entityIndex].componentSetup;
+
+    const auto iter = entityComponentSetup->componentIndicesByEventType.find(eventType);
+    if (iter == entityComponentSetup->componentIndicesByEventType.end()) return;
+
+    for (const auto & index : iter->second)
+    {
+        m_components[index][entityIndex]->dispatchEvent(eventType, event);
+    }
+}
+
 bool World::isValid(entity_id_t id) const
 {
     return m_entityIndexByID.find(id) != m_entityIndexByID.end();
@@ -178,18 +191,23 @@ std::shared_ptr<const ComponentBase> World::component(entity_id_t id, TypeID::va
     return m_components.at(index).at(i);
 }
 
-void World::addComponent(entity_id_t id, TypeID::value_t index, std::unique_ptr<ComponentBase> component)
+void World::addComponent(entity_id_t id, TypeID::value_t index, std::shared_ptr<ComponentBase> component)
 {
     Assert(isValid(id), "");
-
 
     auto i = entityIndex(id);
     auto & entity = m_entities[i];
     auto * prevComponentSetup = entity.componentSetup;
 
+    component->m_world = this;
+    component->m_entityIndex = i;
+
     entity.componentBits.set(index);
     entity.componentSetup = componentSetup(entity.componentBits);
-    m_components[index][i] = std::move(component);
+
+    Assert(!m_components[index][i], "Entity already had this component");
+
+    m_components[index][i] = component;
 
 #if VERBOSE
     std::cout << "World::addComponent()" << std::endl;
@@ -256,6 +274,8 @@ EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBi
 
     auto & setup = m_entityComponentSetups[componentBits];
 
+
+
     for (auto b = 0; b < ECS_MAX_NUM_COMPONENTS; b++)
     {
         if (componentBits.test(b))
@@ -266,6 +286,16 @@ EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBi
             setup.componentIndices.push_back(b);
         }
     }
+
+    for (const auto & componentIndex : setup.componentIndices)
+    {
+        const auto & componentSubscriptions = ComponentSubscriptionsBase::subscriptionsByComponentType[componentIndex];
+        for (const auto & componentSubscription : componentSubscriptions)
+        {
+            setup.componentIndicesByEventType[componentSubscription].emplace_back(componentIndex);
+        }
+    }
+
     for (std::size_t s = 0; s < m_systems.keyUpperBound(); s++)
     {
         if (!m_systems.contains(s))

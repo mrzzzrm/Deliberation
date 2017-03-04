@@ -14,6 +14,7 @@
 #include <Deliberation/Core/Optional.h>
 #include <Deliberation/Core/TypeID.h>
 
+#include <Deliberation/ECS/AbstractWorld.h>
 #include <Deliberation/ECS/Component.h>
 #include <Deliberation/ECS/Defines.h>
 #include <Deliberation/ECS/Entity.h>
@@ -25,7 +26,8 @@
 namespace deliberation
 {
 
-class World final
+class World final:
+    public AbstractWorld
 {
 public:
     World();
@@ -47,6 +49,11 @@ public:
 
     std::string toString() const;
 
+    /**
+     * From AbstractWorld
+     */
+    void emit(size_t entityIndex, TypeID::value_t eventType, const void * event) final override;
+
 private:
     friend class Entity;
 
@@ -55,7 +62,7 @@ private:
     void remove(entity_id_t id);
     std::shared_ptr<ComponentBase> component(entity_id_t id, TypeID::value_t index);
     std::shared_ptr<const ComponentBase> component(entity_id_t id, TypeID::value_t index) const;
-    void addComponent(entity_id_t id, TypeID::value_t index, std::unique_ptr<ComponentBase> component);
+    void addComponent(entity_id_t id, TypeID::value_t index, std::shared_ptr<ComponentBase> component);
     void removeComponent(entity_id_t id, TypeID::value_t index);
 
     std::size_t entityIndex(entity_id_t id) const;
@@ -76,6 +83,8 @@ private:
     LinearMap<std::unique_ptr<SystemBase>>      m_systems;
 
     EventManager                                m_eventManager;
+
+
 };
 
 }

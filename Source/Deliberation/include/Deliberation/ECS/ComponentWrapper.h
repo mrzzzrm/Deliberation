@@ -9,7 +9,7 @@ namespace deliberation
 
 template<typename T>
 class ComponentWrapper final:
-    public Component<ComponentWrapper<T>>
+    public Component<ComponentWrapper<T>, ComponentSubscriptions<ComponentWrapper<T>>>
 {
 public:
     template<typename ... Args>

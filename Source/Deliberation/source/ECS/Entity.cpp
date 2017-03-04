@@ -99,7 +99,7 @@ const ComponentBase & Entity::component(TypeID::value_t c) const
     return *component;
 }
 
-void Entity::addComponent(TypeID::value_t c, std::unique_ptr<ComponentBase> component)
+void Entity::addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component)
 {
     Assert(m_world, "Entity is hollow");
 

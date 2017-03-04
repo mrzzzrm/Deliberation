@@ -12,7 +12,8 @@
 
 using namespace deliberation;
 
-struct PositionComponent
+struct PositionComponent:
+    public Component<PositionComponent>
 {
     PositionComponent(const glm::vec3 & position):
         position(position)
@@ -22,7 +23,8 @@ struct PositionComponent
     glm::vec3 position;
 };
 
-struct ColliderComponent
+struct ColliderComponent:
+    public Component<ColliderComponent>
 {
 //    virtual void onCreate() override
 //    {
@@ -31,20 +33,37 @@ struct ColliderComponent
 //    }
 };
 
-struct GunComponent
+
+struct GunFired
+{
+    GunFired(Entity gun, Entity bullet):
+        gun(gun),
+        bullet(bullet)
+    {}
+
+    Entity gun;
+    Entity bullet;
+};
+
+struct GunComponent:
+    Component<GunComponent, ComponentSubscriptions<GunComponent, GunFired>>
 {
     GunComponent(float freq):
         freq(freq)
     {
     }
 
-    float freq;
-};
+    void fire()
+    {
+        emit(GunFired(Entity(), Entity()));
+    }
 
-struct GunFired
-{
-    Entity gun;
-    Entity bullet;
+    void receive(const GunFired & event)
+    {
+        std::cout << "I heard a shot" << std::endl;
+    }
+
+    float freq;
 };
 
 struct GunSystem:
@@ -120,14 +139,13 @@ int main(int argc, char * argv[])
     world.addSystem<PhysicsSystem>();
 
     std::cout << "------ Setup ------" << std::endl;
-
     auto ship = world.createEntity("Ship");
     ship.addComponent<PositionComponent>(glm::vec3(1.0f, 33.0f, 7.0f));
     ship.addComponent<ColliderComponent>();
 
     auto bigShip = world.createEntity("BigShip");
-    ship.addComponent<PositionComponent>(glm::vec3(10.0f, 330.0f, 70.0f));
-    ship.addComponent<ColliderComponent>();
+    bigShip.addComponent<PositionComponent>(glm::vec3(10.0f, 330.0f, 70.0f));
+    bigShip.addComponent<ColliderComponent>();
 
     auto gun0 = bigShip.createChild("BigShipGun0");
     gun0.addComponent<GunComponent>(3.0f);
@@ -140,8 +158,11 @@ int main(int argc, char * argv[])
 
     std::cout << "------------------ Update1 ------------------" << std::endl;
     world.update(1.0f);
+
     std::cout << "------------------ Update2 ------------------" << std::endl;
     world.update(1.0f);
+
+    gun0.component<GunComponent>().fire();
 
     std::cout << "------------------ End ------------------" << std::endl;
     return 0;

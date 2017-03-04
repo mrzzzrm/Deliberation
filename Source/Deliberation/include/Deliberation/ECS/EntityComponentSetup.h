@@ -2,18 +2,22 @@
 
 #include <cstdlib>
 
-#include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Core/TypeID.h>
 #include <Deliberation/ECS/Defines.h>
+
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
 
 struct DELIBERATION_API EntityComponentSetup
 {
-    std::vector<std::size_t> componentIndices;
-    std::vector<std::size_t> systemIndices;
-    SystemBitset             systemBits;
+    std::vector<std::size_t>    componentIndices;
+    std::vector<std::size_t>    systemIndices;
+    SystemBitset                systemBits;
+    std::unordered_map<TypeID::value_t, std::vector<size_t>>
+                                componentIndicesByEventType;
 };
 
 }
