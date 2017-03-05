@@ -1,0 +1,4 @@
+set(JSON_ROOT ${PROJECT_SOURCE_DIR}/Extern/json-2.1.1)
+
+set(JSON_INCLUDE_DIR ${JSON_ROOT}/)
+    

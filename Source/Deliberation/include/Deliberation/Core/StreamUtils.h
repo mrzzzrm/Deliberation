@@ -47,11 +47,11 @@ template<typename StreamType>
 StreamType & operator<<(StreamType && os, const AABB & aabb);
 
 
-template<typename T>
-std::string operator+(const std::string & s, const T & value);
-
-template<typename T>
-std::string operator+(const T & value, const std::string & s);
+//template<typename T>
+//std::string operator+(const std::string & s, const T & value);
+//
+//template<typename T>
+//std::string operator+(const T & value, const std::string & s);
 //
 //template<typename T>
 //std::string operator+(const char * s, const T & value);

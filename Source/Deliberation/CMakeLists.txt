@@ -15,6 +15,7 @@ set(DELIBERATION_INCLUDE_DIRS
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
+    ${JSON_INCLUDE_DIR}
     
     CACHE INTERAL "All Deliberation include dirs" 
 )

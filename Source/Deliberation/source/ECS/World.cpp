@@ -144,17 +144,9 @@ void World::remove(entity_id_t id)
     std::cout << "  num children=" << entity.children.size() << std::endl;
 #endif
 
-    for (auto child : entity.children)
-    {
-        remove(child);
-    }
+    for (auto child : entity.children) remove(child);
 
-
-    for (auto componentIndex : componentSetup->componentIndices)
-    {
-        removeComponent(id, componentIndex);
-    }
-
+    for (auto componentIndex : componentSetup->componentIndices) removeComponent(id, componentIndex);
 
     m_entities.erase(i);
     m_entityIndexByID.erase(id);

@@ -121,21 +121,21 @@ StreamType & operator<<(StreamType && os, const Sphere & s)
     return os;
 }
 
-template<typename T>
-std::string operator+(const std::string & s, const T & value)
-{
-    std::stringstream stream;
-    stream << s << value;
-    return stream.str();
-}
-
-template<typename T>
-std::string operator+(const T & value, const std::string & s)
-{
-    std::stringstream stream;
-    stream << value << s;
-    return stream.str();
-}
+//template<typename T>
+//std::string operator+(const std::string & s, const T & value)
+//{
+//    std::stringstream stream;
+//    stream << s << value;
+//    return stream.str();
+//}
+//
+//template<typename T>
+//std::string operator+(const T & value, const std::string & s)
+//{
+//    std::stringstream stream;
+//    stream << value << s;
+//    return stream.str();
+//}
 //
 //template<typename T>
 //std::string operator+(const char * s, const T & value)
