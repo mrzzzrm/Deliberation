@@ -42,11 +42,14 @@ TextureBinary::TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces):
 {
     m_width = cubeFaces[0].width();
     m_height = cubeFaces[0].height();
+    m_format = cubeFaces[0].format();
 
     m_faces.reserve(6);
     for (auto & face : cubeFaces)
     {
         Assert(face.width() == m_width && face.height() == m_height, "");
+        Assert(face.format() == m_format, "");
+
         m_faces.push_back(std::move(face));
     }
 }

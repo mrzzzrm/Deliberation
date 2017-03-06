@@ -84,6 +84,8 @@ private:
 
 private:
     void ensureSize(size_t size);
+    void incCount();
+    void decCount();
 
 private:
     std::vector<std::experimental::optional<T>> m_vec;

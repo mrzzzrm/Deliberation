@@ -137,7 +137,7 @@ std::size_t SparseVector<T>::insert(T && value)
         }
     }
 
-    m_count++;
+    incCount();
 
     return result;
 }
@@ -160,7 +160,7 @@ void SparseVector<T>::insert_at(size_t index, T && value)
     if (index >= m_vec.size()) m_vec.emplace_back(std::experimental::in_place, std::move(value));
     else m_vec[index].emplace(std::move(value));
 
-    m_count++;
+    incCount();
 }
 
 template<typename T>
@@ -192,10 +192,11 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
             if (m_vec[result]) continue; // Using an index without notifying the pool is possible
 
             m_vec[result] = T{std::forward<Args>(args)...};
+            break;
         }
     }
 
-    m_count++;
+    incCount();
 
     return result;
 }
@@ -213,16 +214,15 @@ void SparseVector<T>::emplace_at(size_t index, Args &&... args)
     if (index >= m_vec.size()) m_vec.emplace_back(std::experimental::in_place, std::forward<Args>(args)...);
     else m_vec[index].emplace(std::forward<Args>(args)...);
 
-    m_count++;
+    incCount();
 }
 
 template<typename T>
 void SparseVector<T>::erase(std::size_t index)
 {
-    Assert(index < m_vec.size(), "");
-    Assert(!!m_vec[index], "");
+    Assert(contains(index), "");
 
-    m_count--;
+    decCount();
 
     m_vec[index] = std::experimental::optional<T>{};
     m_pool.push(index);
@@ -312,6 +312,19 @@ void SparseVector<T>::ensureSize(size_t size)
     for (size_t i = m_vec.size(); i < size; i++) m_pool.push(i);
 
     m_vec.resize(size);
+}
+
+template<typename T>
+void SparseVector<T>::incCount()
+{
+    m_count++;
+}
+
+template<typename T>
+void SparseVector<T>::decCount()
+{
+    Assert(m_count > 0, "");
+    m_count--;
 }
 
 }

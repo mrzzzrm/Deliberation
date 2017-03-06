@@ -63,12 +63,14 @@ void SystemBase::beforeUpdate()
 
 void SystemBase::update(float seconds)
 {
+    onUpdate(seconds);
+
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
-        onUpdate(entity, seconds);
+        onEntityUpdate(entity, seconds);
     }
 }
 
@@ -79,7 +81,7 @@ void SystemBase::prePhysicsUpdate(float seconds)
         if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
-        onPrePhysicsUpdate(entity, seconds);
+        onEntityPrePhysicsUpdate(entity, seconds);
     }
 }
 
@@ -98,12 +100,17 @@ void SystemBase::onEntityRemoved(Entity & entity)
     // dummy
 }
 
-void SystemBase::onUpdate(Entity & entity, float seconds)
+void SystemBase::onEntityUpdate(Entity &entity, float seconds)
 {
     // dummy
 }
 
-void SystemBase::onPrePhysicsUpdate(Entity & entity, float physicsTimestep)
+void SystemBase::onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep)
+{
+
+}
+
+void SystemBase::onUpdate(float seconds)
 {
 
 }

@@ -119,7 +119,10 @@ Clear Context::createClear(Framebuffer & framebuffer)
 
 Texture Context::createTexture(const TextureBinary & binary)
 {
-    auto texture = Texture(detail::TextureImpl::build(*this, binary.width(), binary.height(), 1, binary.format()));
+    auto texture = Texture(detail::TextureImpl::build(*this, binary.width(),
+                                                      binary.height(),
+                                                      binary.numFaces(),
+                                                      binary.format()));
     texture.createUpload(binary).schedule();
 
     return texture;

@@ -18,7 +18,7 @@ public:
     static std::size_t indexStatic();
 
 public:
-    System(World & world, const ComponentFilter & filter);
+    System(World & world, const ComponentFilter & filter = ComponentFilter());
 
     virtual std::size_t index() const override;
 

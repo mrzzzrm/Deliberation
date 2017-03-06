@@ -210,7 +210,8 @@ set(sources
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/RenderNode.cpp
-    ${source_path}/Scene/RenderPipeline.cpp)
+    ${source_path}/Scene/RenderPipeline.cpp
+    ${source_path}/Scene/SkyboxRenderer.cpp)
 
 # api_includes
 set(api_includes
@@ -408,7 +409,8 @@ set(api_includes
     ${include_path}/Scene/PostprocessingEffect.h
     ${include_path}/Scene/UVSphere.h
     ${include_path}/Scene/RenderNode.h
-    ${include_path}/Scene/RenderPipeline.h)
+    ${include_path}/Scene/RenderPipeline.h
+    ${include_path}/Scene/SkyboxRenderer.h)
 
 # libs
 set(libs

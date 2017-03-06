@@ -38,8 +38,9 @@ public:
 protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
-    virtual void onUpdate(Entity & entity, float seconds);
-    virtual void onPrePhysicsUpdate(Entity & entity, float physicsTimestep);
+    virtual void onEntityUpdate(Entity &entity, float seconds);
+    virtual void onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep);
+    virtual void onUpdate(float seconds);
     virtual void onRender();
 
 private:

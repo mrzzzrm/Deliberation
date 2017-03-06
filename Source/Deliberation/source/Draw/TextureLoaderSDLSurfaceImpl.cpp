@@ -26,6 +26,7 @@ TextureLoaderSDLSurfaceImpl::TextureLoaderSDLSurfaceImpl(SDL_Surface * surface):
     switch (format)
     {
     case SDL_PIXELFORMAT_RGB888:
+    case SDL_PIXELFORMAT_RGB24:
         m_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
         break;
     case SDL_PIXELFORMAT_RGBA8888:

@@ -41,7 +41,7 @@ public:
                         entity_id_t parent = ECS_INVALID_ENTITY_ID);
 
     template<typename T, typename ... Args>
-    T & addSystem(Args &&... args);
+    std::shared_ptr<T> addSystem(Args &&... args);
 
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
@@ -80,11 +80,9 @@ private:
     LinearMap<LinearMap<
         std::shared_ptr<ComponentBase>>>        m_components;
 
-    LinearMap<std::unique_ptr<SystemBase>>      m_systems;
+    LinearMap<std::shared_ptr<SystemBase>>      m_systems;
 
     EventManager                                m_eventManager;
-
-
 };
 
 }

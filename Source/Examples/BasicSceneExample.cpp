@@ -14,6 +14,7 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Context.h>
 #include <Deliberation/Draw/Texture.h>
+#include <Deliberation/Draw/TextureLoader.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/PixelFormat.h>
@@ -21,6 +22,7 @@
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
 #include <Deliberation/Scene/UVSphere.h>
+#include <Deliberation/Scene/SkyboxRenderer.h>
 #include <Deliberation/Scene/MeshCompiler.h>
 #include <Deliberation/Platform/Application.h>
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
@@ -31,6 +33,8 @@ struct Vertex
     glm::vec3 position;
     glm::vec3 normal;
 };
+
+using namespace deliberation;
 
 class BasicSceneExample:
     public deliberation::Application
@@ -61,6 +65,20 @@ public:
         m_transformHandle = m_draw.uniform("Transform");
 
         m_navigator.reset(m_camera, input(), 1.0f);
+
+        auto skyboxPaths = std::array<std::string, 6> {
+            deliberation::dataPath("Data/Skybox/Right.png"),
+            deliberation::dataPath("Data/Skybox/Left.png"),
+            deliberation::dataPath("Data/Skybox/Top.png"),
+            deliberation::dataPath("Data/Skybox/Bottom.png"),
+            deliberation::dataPath("Data/Skybox/Front.png"),
+            deliberation::dataPath("Data/Skybox/Back.png")
+        };
+
+        auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
+        auto skyboxCubemap = context().createTexture(skyboxCubemapBinary);
+
+        m_skyboxRenderer.reset(context(), m_camera, skyboxCubemap);
     }
 
     deliberation::Draw createDraw()
@@ -94,9 +112,12 @@ public:
         m_viewProjectionHandle.set(m_camera.viewProjection());
         m_transformHandle.set(m_transform.matrix());
 
-        m_clear.schedule();
+        m_clear.render();
+
+        m_skyboxRenderer->render();
+
         m_draw.schedule();
-        m_ground.get().schedule();
+  //      m_ground.get().render();
     }
 
 private:
@@ -112,6 +133,8 @@ private:
     deliberation::Uniform               m_transformHandle;
     deliberation::Optional<deliberation::DebugCameraNavigator3D>
                                         m_navigator;
+    deliberation::Optional<deliberation::SkyboxRenderer>
+                                        m_skyboxRenderer;
 
 };
 
