@@ -296,7 +296,7 @@ void DrawExecution::applyDepthState()
 {
     auto & state = m_drawImpl.state.depthState();
 
-    Assert(!state.depthMask() || state.depthTest(), "Combination not implemented yet, see glDepthFunc");
+//    Assert(!state.depthMask() || state.depthTest(), "Combination not implemented yet, see glDepthFunc");
 
     m_glStateManager.enableDepthTest(state.depthTest());
     m_glStateManager.setDepthMask(state.depthMask());

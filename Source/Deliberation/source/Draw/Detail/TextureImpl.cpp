@@ -19,19 +19,19 @@ gl::GLenum faceTarget(gl::GLenum type, unsigned int face)
     {
         Assert(face <= 6u, "");
 
+        static gl::GLenum targets[] =
+            {
+                gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+                gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+                gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+                gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+                gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+            };
         /*
             TODO
                 This is duplicated in Framebuffer!
         */
-        static gl::GLenum targets[] =
-        {
-            gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-            gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-            gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-            gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-            gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-        };
         return targets[face];
     }
     default:

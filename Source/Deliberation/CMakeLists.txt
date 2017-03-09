@@ -195,9 +195,11 @@ set(sources
     ${source_path}/Scene/Debug/DebugGeometryManager.cpp
     ${source_path}/Scene/Debug/DebugGeometryRenderer.cpp
     ${source_path}/Scene/Debug/DebugCameraNavigator3D.cpp
+    ${source_path}/Scene/Debug/DebugCubemapRenderer.cpp
     ${source_path}/Scene/Debug/DebugGrid3DRenderer.cpp
     ${source_path}/Scene/Debug/DebugGroundPlaneRenderer.cpp
     ${source_path}/Scene/Debug/DebugPhysicsWorldRenderer.cpp
+    ${source_path}/Scene/Debug/DebugTexture2dRenderer.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/CameraDolly3D.cpp
@@ -394,9 +396,11 @@ set(api_includes
     ${include_path}/Scene/Debug/DebugGeometryManager.h
     ${include_path}/Scene/Debug/DebugGeometryRenderer.h
     ${include_path}/Scene/Debug/DebugCameraNavigator3D.h
+    ${include_path}/Scene/Debug/DebugCubemapRenderer.h
     ${include_path}/Scene/Debug/DebugGrid3DRenderer.h
     ${include_path}/Scene/Debug/DebugGroundPlaneRenderer.h
     ${include_path}/Scene/Debug/DebugPhysicsWorldRenderer.h
+    ${include_path}/Scene/Debug/DebugTexture2dRenderer.h
     ${include_path}/Scene/Blit.h
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/CameraDolly3D.h

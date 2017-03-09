@@ -70,7 +70,7 @@ TextureBinary TextureLoaderSDLSurfaceImpl::load()
 
     Uint8 r, g, b, a;
 
-    for (auto y = m_surface->h - 1; y >= 0; y--)
+    for (auto y = 0; y < m_surface->h; y++)
     {
         for (auto x = 0; x < m_surface->w; x++)
         {

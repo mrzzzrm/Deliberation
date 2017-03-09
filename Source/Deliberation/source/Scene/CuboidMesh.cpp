@@ -6,6 +6,37 @@
 namespace deliberation
 {
 
+std::vector<glm::vec3> CuboidMesh::positions(const glm::vec3 & size)
+{
+    std::vector<glm::vec3> positions(8);
+    
+    auto hw = size.x / 2.0f;
+    auto hh = size.y / 2.0f;
+    auto hd = size.z / 2.0f;
+
+    positions[0] = {-hw, -hh,  hd};
+    positions[1] = {-hw, -hh, -hd};
+    positions[2] = { hw, -hh, -hd};
+    positions[3] = { hw, -hh,  hd};
+    positions[4] = {-hw,  hh,  hd};
+    positions[5] = { hw,  hh,  hd};
+    positions[6] = { hw,  hh, -hd};
+    positions[7] = {-hw,  hh, -hd};
+
+    return positions;
+}
+
+std::vector<u32> CuboidMesh::indices() 
+{
+    return {
+        0, 4, 7, 0, 7, 1, // l
+        6, 5, 3, 6, 3, 2, // r
+        0, 1, 2, 0, 2, 3, // b
+        4, 5, 6, 4, 6, 7, // r
+        1, 7, 6, 1, 6, 2, // b
+        0, 3, 5, 0, 5, 4};
+}
+
 CuboidMesh::CuboidMesh(const glm::vec3 & size):
     m_size(size)
 {
