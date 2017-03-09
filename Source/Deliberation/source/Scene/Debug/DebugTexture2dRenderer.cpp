@@ -27,7 +27,7 @@ DebugTexture2dRenderer::DebugTexture2dRenderer(Context & context, const Texture 
 
     m_draw.addVertices(vertices);
     m_draw.setIndices(indices);
-    m_draw.state().setDepthState({false, true});
+    m_draw.state().setDepthState({});
     m_draw.sampler("Texture").setTexture(texture);
 }
 

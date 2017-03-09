@@ -59,7 +59,7 @@ public:
         m_draw = context().createDraw(program, gl::GL_TRIANGLES);
         m_draw.addVertices(vertices);
         m_draw.setIndices(indicesBlob);
-        m_draw.state().setDepthState(deliberation::DepthState(false, false));
+        m_draw.state().setDepthState(deliberation::DepthState::disabledRW());
         m_draw.state().setCullState(deliberation::CullState::disabled());
         m_draw.state().setBlendState({gl::GL_FUNC_ADD, gl::GL_SRC_ALPHA, gl::GL_ONE_MINUS_SRC_ALPHA});
 

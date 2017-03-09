@@ -25,6 +25,7 @@ public:
     */
     void enableTextureCubeMapSeamless(bool enabled);
     void enableDepthTest(bool enabled);
+    void setDepthFunc(gl::GLenum func);
     void setDepthMask(bool enabled);
     void enableBlend(bool enabled);
     void setBlendEquation(gl::GLenum equation);
@@ -107,6 +108,7 @@ private:
     */
     bool                                m_glTextureCubeMapSeamless;
     bool                                m_glDepthTest;
+    gl::GLenum                          m_glDepthFunc;
     bool                                m_glDepthMask;
     bool                                m_glBlend;
     gl::GLenum                          m_glBlendEquation;

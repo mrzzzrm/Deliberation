@@ -296,10 +296,29 @@ void DrawExecution::applyDepthState()
 {
     auto & state = m_drawImpl.state.depthState();
 
-//    Assert(!state.depthMask() || state.depthTest(), "Combination not implemented yet, see glDepthFunc");
+    if (state.depthWrite() == DepthWrite::Disabled && state.depthTest() == DepthTest::Disabled)
+    {
+        m_glStateManager.enableDepthTest(false);
+    }
+    else
+    {
+        m_glStateManager.enableDepthTest(true);
 
-    m_glStateManager.enableDepthTest(state.depthTest());
-    m_glStateManager.setDepthMask(state.depthMask());
+        auto depthFunc = gl::GL_NONE;
+
+        switch(state.depthTest())
+        {
+            case DepthTest::Less:           depthFunc = gl::GL_LESS; break;
+            case DepthTest::Always:         depthFunc = gl::GL_ALWAYS; break;
+            case DepthTest::Equal:          depthFunc = gl::GL_EQUAL; break;
+            case DepthTest::LessOrEqual:    depthFunc = gl::GL_LEQUAL; break;
+            case DepthTest::Greater:        depthFunc = gl::GL_GREATER; break;
+            case DepthTest::NotEqual:       depthFunc = gl::GL_NOTEQUAL; break;
+            case DepthTest::GreaterOrEqual: depthFunc = gl::GL_GEQUAL; break;
+        }
+        m_glStateManager.setDepthFunc(depthFunc);
+        m_glStateManager.setDepthMask(state.depthWrite() == DepthWrite::Enabled);
+    }
 }
 
 void DrawExecution::applyBlendState()

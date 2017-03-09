@@ -37,6 +37,7 @@ DebugCubemapRenderer::DebugCubemapRenderer(Context & context,
     }
 
     m_draw.sampler("Texture").setTexture(cubemap);
+    m_draw.state().setCullState(CullState::disabled());
 
     m_viewProjectionUniform = m_draw.uniform("ViewProjection");
     m_transformUniform = m_draw.uniform("Transform");

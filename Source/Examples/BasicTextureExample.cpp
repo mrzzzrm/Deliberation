@@ -55,7 +55,7 @@ public:
         m_draw.sampler("Texture").setTexture(m_texture);
         m_draw.addVertexBuffer(vbuffer);
         m_draw.setIndexBuffer(ibuffer);
-        m_draw.state().setDepthState(deliberation::DepthState(false, false));
+        m_draw.state().setDepthState(deliberation::DepthState::disabledRW());
         m_draw.state().setCullState(deliberation::CullState::disabled());
         Assert(m_draw.isComplete(), m_draw.toString());
 

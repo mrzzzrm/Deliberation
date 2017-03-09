@@ -43,7 +43,7 @@ PostprocessingEffect::PostprocessingEffect(Context & context,
 
     m_draw = context.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "PostprocessingEffect" : name);
     m_draw.addVertexBuffer(m_vertexBuffer);
-    m_draw.state().setDepthState({false, false});
+    m_draw.state().setDepthState(DepthState::disabledRW());
 }
 
 Draw & PostprocessingEffect::draw()

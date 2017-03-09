@@ -9,41 +9,52 @@
 namespace deliberation
 {
 
-DepthState:: DepthState():
-    m_depthTestEnabled(true),
-    m_depthMask(true)
+DepthState DepthState::disabledRW()
 {
+    return {DepthTest::Disabled, DepthWrite::Disabled};
 }
 
-DepthState::DepthState(bool depthTestEnabled, bool depthMask):
-    m_depthTestEnabled(depthTestEnabled),
-    m_depthMask(depthMask)
+DepthState DepthState::disabledR()
 {
+    return {DepthTest::Always, DepthWrite::Enabled};
 }
 
-bool DepthState::depthTest() const
+DepthState DepthState::disabledW(DepthTest depthTest)
 {
-    return m_depthTestEnabled;
+    return {depthTest, DepthWrite::Disabled};
 }
 
-bool DepthState::depthMask() const
+DepthState::DepthState(DepthTest depthTest, DepthWrite depthWrite):
+    m_depthTest(depthTest),
+    m_depthWrite(depthWrite)
 {
-    return m_depthMask;
+
 }
 
-void DepthState::setDepthTest(bool enabled)
+DepthTest DepthState::depthTest() const
 {
-    m_depthTestEnabled = enabled;
+    return m_depthTest;
 }
 
-void DepthState::setDepthMask(bool mask)
+DepthWrite DepthState::depthWrite() const
 {
-    m_depthMask = mask;
+    return m_depthWrite;
+}
+
+
+void DepthState::setDepthTest(DepthTest depthTest)
+{
+    m_depthTest = depthTest;
+}
+
+void DepthState::setDepthWrite(DepthWrite depthWrite)
+{
+    m_depthWrite = depthWrite;
 }
 
 std::string DepthState::toString() const
 {
-    return std::string("DepthTestEnabled: ") + (m_depthTestEnabled ? "true" : "false") + "; DepthMask: " + (m_depthMask ? "true" : "false");
+    return {};
 }
 
 }

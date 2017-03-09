@@ -43,7 +43,7 @@ LabelRenderer::LabelRenderer(Context & context):
 
     m_draw = m_context->createDraw(m_program, gl::GL_TRIANGLE_STRIP, "LabelRenderer");
     m_draw.addVertexBuffer(m_vertexBuffer);
-    m_draw.state().setDepthState({false, false});
+    m_draw.state().setDepthState(DepthState::disabledRW());
     m_draw.state().setCullState(CullState::disabled());
     m_draw.state().setBlendState({gl::GL_FUNC_ADD, gl::GL_SRC_ALPHA, gl::GL_ONE});
 

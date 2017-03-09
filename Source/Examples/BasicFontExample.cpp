@@ -81,7 +81,7 @@ public:
         m_draw.sampler("Texture").setTexture(texture);
         m_draw.addVertexBuffer(vbuffer);
         m_draw.setIndexBuffer(ibuffer);
-        m_draw.state().setDepthState(deliberation::DepthState(false, false));
+        m_draw.state().setDepthState(deliberation::DepthState::disabledRW());
         m_draw.state().setCullState(deliberation::CullState::disabled());
 
         m_clear = context().createClear();

@@ -8,5 +8,12 @@ out vec3 f_Color;
 
 void main()
 {
-    f_Color = texture(Texture, f_UVW).rgb;
+    vec3 uvw = f_UVW;
+
+     uvw.x = -uvw.x;
+
+    uvw.y = -uvw.y;
+   // uvw.z = -uvw.z;
+
+    f_Color = texture(Texture, uvw).rgb;
 }

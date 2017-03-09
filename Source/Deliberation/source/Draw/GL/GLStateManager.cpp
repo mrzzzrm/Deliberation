@@ -20,6 +20,7 @@ namespace deliberation
 GLStateManager::GLStateManager():
     m_glTextureCubeMapSeamless(false),
     m_glDepthTest(false),
+    m_glDepthFunc(gl::GL_LESS),
     m_glDepthMask(false),
     m_glBlend(false),
     m_glBlendEquation(GL_INVALID_ENUM),
@@ -83,6 +84,15 @@ GLStateManager::GLStateManager():
 void GLStateManager::enableTextureCubeMapSeamless(bool enabled)
 {
     applyEnableDisableState(GL_TEXTURE_CUBE_MAP_SEAMLESS, m_glTextureCubeMapSeamless, enabled);
+}
+
+void GLStateManager::setDepthFunc(gl::GLenum func)
+{
+    if (m_glDepthFunc == func) return;
+
+    m_glDepthFunc = func;
+
+    glDepthFunc(func);
 }
 
 void GLStateManager::enableDepthTest(bool enabled)

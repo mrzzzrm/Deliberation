@@ -7,23 +7,47 @@
 namespace deliberation
 {
 
+enum class DepthTest
+{
+    Less = 0,
+    Enabled = Less,
+    Always = 1,
+    Disabled = Always,
+    Equal,
+    LessOrEqual,
+    Greater,
+    NotEqual,
+    GreaterOrEqual
+};
+
+enum class DepthWrite
+{
+    Enabled,
+    Disabled
+};
+
 class DELIBERATION_API DepthState final
 {
 public:
-    DepthState();
-    DepthState(bool depthTestEnabled, bool depthMask);
+    static DepthState disabledRW();
+    static DepthState disabledR();
+    static DepthState disabledW(DepthTest depthTest = DepthTest::Enabled);
 
-    bool depthTest() const;
-    bool depthMask() const;
+public:
+    DepthState() = default;
+    DepthState(DepthTest depthTest, DepthWrite depthWrite);
 
-    void setDepthTest(bool enabled);
-    void setDepthMask(bool mask);
+    DepthTest depthTest() const;
+    DepthWrite depthWrite() const;
+
+    void setDepthTest(DepthTest depthTest);
+    void setDepthWrite(DepthWrite depthWrite);
 
     std::string toString() const;
 
 private:
-    bool m_depthTestEnabled;
-    bool m_depthMask;
+    DepthTest   m_depthTest = DepthTest::Enabled;
+    DepthWrite  m_depthWrite = DepthWrite::Enabled;
 };
 
 }

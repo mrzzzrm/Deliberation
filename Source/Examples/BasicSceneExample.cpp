@@ -69,12 +69,24 @@ public:
         m_navigator.reset(m_camera, input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6> {
+//            deliberation::dataPath("Data/Skybox/Yokohama3/posx.png"),
+//            deliberation::dataPath("Data/Skybox/Yokohama3/negx.png"),
+//            deliberation::dataPath("Data/Skybox/Yokohama3/posy.png"),
+//            deliberation::dataPath("Data/Skybox/Yokohama3/negy.png"),
+//            deliberation::dataPath("Data/Skybox/Yokohama3/posz.png"),
+//            deliberation::dataPath("Data/Skybox/Yokohama3/negz.png")
             deliberation::dataPath("Data/Skybox/Debug/Right.png"),
             deliberation::dataPath("Data/Skybox/Debug/Left.png"),
             deliberation::dataPath("Data/Skybox/Debug/Top.png"),
             deliberation::dataPath("Data/Skybox/Debug/Bottom.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Front.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Back.png")
+            deliberation::dataPath("Data/Skybox/Debug/Back.png"),
+            deliberation::dataPath("Data/Skybox/Debug/Front.png")
+//            deliberation::dataPath("Data/Skybox/skybox/right.jpg"),
+//            deliberation::dataPath("Data/Skybox/skybox/left.jpg"),
+//            deliberation::dataPath("Data/Skybox/skybox/top.jpg"),
+//            deliberation::dataPath("Data/Skybox/skybox/bottom.jpg"),
+//            deliberation::dataPath("Data/Skybox/skybox/back.jpg"),
+//            deliberation::dataPath("Data/Skybox/skybox/front.jpg")
         };
 
         auto faceTexture = context().createTexture(
@@ -124,14 +136,14 @@ public:
 
         m_clear.render();
 
-        m_textureRenderer->render();
+  //      m_textureRenderer->render();
+//
+//        m_cubemapRenderer->render();
 
-        m_cubemapRenderer->render();
-
-      //  m_skyboxRenderer->render();
-
+        m_skyboxRenderer->render();
+//
         m_draw.schedule();
-  //      m_ground.get().render();
+        m_ground.get().render();
     }
 
 private:

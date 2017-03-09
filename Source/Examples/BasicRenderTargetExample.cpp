@@ -97,7 +97,7 @@ deliberation::Draw createOnscreenDraw(deliberation::Context & context,
     onscreenDraw.sampler("Texture").setTexture(sourceTexture);
     onscreenDraw.addVertices(layout, vertices);
     onscreenDraw.setIndices32(indices);
-    onscreenDraw.state().setDepthState(deliberation::DepthState(false, false));
+    onscreenDraw.state().setDepthState(deliberation::DepthState::disabledRW());
     onscreenDraw.state().setCullState(deliberation::CullState::disabled());
 
     return onscreenDraw;
