@@ -147,8 +147,8 @@ public:
             auto marchingCubes = VoxelClusterMarchingCubes(marchingCubesTriangulation, clusters[0]);
             marchingCubes.run();
 
-            m_program = context().createProgram({deliberation::dataPath("Data/Shaders/VoxelExample.vert"),
-                                                 deliberation::dataPath("Data/Shaders/VoxelExample.frag")});
+            m_program = context().createProgram({deliberation::dataPath("Data/Shaders/Voxel.vert"),
+                                                 deliberation::dataPath("Data/Shaders/Voxel.frag")});
             m_draw = context().createDraw(m_program);
 
             m_draw.addVertices(marchingCubes.takeVertices());

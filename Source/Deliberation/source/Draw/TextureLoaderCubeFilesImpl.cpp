@@ -18,7 +18,7 @@ TextureBinary TextureLoaderCubeFilesImpl::load()
     for (auto p = 0u; p < m_paths.size(); p++)
     {
         auto & path = m_paths[p];
-        auto texture = TextureLoaderFileImpl(path, TextureLoaderFileImpl::Origin::LowerLeft).load();
+        auto texture = TextureLoaderFileImpl(path, TextureLoaderOrigin::UpperLeft).load();
         auto surface = SurfaceBinary(texture.surface(0));
 
         surfaces[p] = std::move(surface);

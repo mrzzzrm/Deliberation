@@ -18,8 +18,9 @@
 namespace deliberation
 {
 
-TextureLoaderSDLSurfaceImpl::TextureLoaderSDLSurfaceImpl(SDL_Surface * surface):
-    m_surface(nullptr)
+TextureLoaderSDLSurfaceImpl::TextureLoaderSDLSurfaceImpl(SDL_Surface * surface, TextureLoaderOrigin origin):
+    m_surface(nullptr),
+    m_origin(origin)
 {
     auto format = surface->format->format;
 
@@ -70,8 +71,7 @@ TextureBinary TextureLoaderSDLSurfaceImpl::load()
 
     Uint8 r, g, b, a;
 
-    for (auto y = 0; y <m_surface->h; y++)
-    //for (auto y = m_surface->h - 1; y >= 0; y--)
+    auto readLine = [&] (int y)
     {
         for (auto x = 0; x < m_surface->w; x++)
         {
@@ -81,26 +81,32 @@ TextureBinary TextureLoaderSDLSurfaceImpl::load()
 
             switch (m_surface->format->format)
             {
-            case SDL_PIXELFORMAT_RGB888:
-                SDL_GetRGB(value, m_surface->format, &r, &g, &b);
-                pixels.push_back(r/255.0f);
-                pixels.push_back(g/255.0f);
-                pixels.push_back(b/255.0f);
-                break;
-            case SDL_PIXELFORMAT_RGBA8888:
-            case SDL_PIXELFORMAT_ARGB8888:
-                SDL_GetRGBA(value, m_surface->format, &r, &g, &b, &a);
+                case SDL_PIXELFORMAT_RGB888:
+                    SDL_GetRGB(value, m_surface->format, &r, &g, &b);
+                    pixels.push_back(r/255.0f);
+                    pixels.push_back(g/255.0f);
+                    pixels.push_back(b/255.0f);
+                    break;
+                case SDL_PIXELFORMAT_RGBA8888:
+                case SDL_PIXELFORMAT_ARGB8888:
+                    SDL_GetRGBA(value, m_surface->format, &r, &g, &b, &a);
 
-                pixels.push_back(r/255.0f);
-                pixels.push_back(g/255.0f);
-                pixels.push_back(b/255.0f);
-                pixels.push_back(a/255.0f);
-                break;
-            default:
+                    pixels.push_back(r/255.0f);
+                    pixels.push_back(g/255.0f);
+                    pixels.push_back(b/255.0f);
+                    pixels.push_back(a/255.0f);
+                    break;
+                default:
                 Fail(std::string("Yet unsupported SDL Format: ") + SDL_GetPixelFormatName(format));
 
             }
         }
+    };
+
+    switch (m_origin)
+    {
+        case TextureLoaderOrigin::LowerLeft: for (auto y = m_surface->h - 1; y >= 0; y--) readLine(y); break;
+        case TextureLoaderOrigin::UpperLeft: for (auto y = 0; y < m_surface->h; y++) readLine(y); break;
     }
 
     return TextureBinary(SurfaceBinary(std::move(pixels), m_surface->w, m_surface->h, format));

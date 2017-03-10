@@ -69,24 +69,12 @@ public:
         m_navigator.reset(m_camera, input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6> {
-//            deliberation::dataPath("Data/Skybox/Yokohama3/posx.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/negx.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/posy.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/negy.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/posz.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/negz.png")
-            deliberation::dataPath("Data/Skybox/Debug/Right.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Left.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Top.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Bottom.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Back.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Front.png")
-//            deliberation::dataPath("Data/Skybox/skybox/right.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/left.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/top.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/bottom.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/back.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/front.jpg")
+            deliberation::dataPath("Data/Skybox/Cloudy/Right.png"),
+            deliberation::dataPath("Data/Skybox/Cloudy/Left.png"),
+            deliberation::dataPath("Data/Skybox/Cloudy/Top.png"),
+            deliberation::dataPath("Data/Skybox/Cloudy/Bottom.png"),
+            deliberation::dataPath("Data/Skybox/Cloudy/Back.png"),
+            deliberation::dataPath("Data/Skybox/Cloudy/Front.png")
         };
 
         auto faceTexture = context().createTexture(
@@ -98,7 +86,7 @@ public:
         m_skyboxRenderer.reset(context(), m_camera, skyboxCubemap);
 
         m_cubemapRenderer.reset(context(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
-        m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 0.0f, 0.0f}));
+        m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
 
         m_textureRenderer.reset(context(), faceTexture);
     }
@@ -127,21 +115,13 @@ public:
     {
         m_navigator.get().update(seconds);
 
-//        m_transform.worldRotate(glm::quat({glm::pi<float>() * 0.3f * seconds,
-//                                           glm::pi<float>() * 0.2f * seconds,
-//                                           glm::pi<float>() * 0.1f * seconds}));
-
         m_viewProjectionHandle.set(m_camera.viewProjection());
         m_transformHandle.set(m_transform.matrix());
 
         m_clear.render();
 
-  //      m_textureRenderer->render();
-//
-//        m_cubemapRenderer->render();
-
+        m_cubemapRenderer->render();
         m_skyboxRenderer->render();
-//
         m_draw.schedule();
         m_ground.get().render();
     }

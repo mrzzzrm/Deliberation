@@ -10,13 +10,13 @@ namespace deliberation
 {
 
 TextureLoader::TextureLoader(SDL_Surface * surface):
-    m_impl(new TextureLoaderSDLSurfaceImpl(surface))
+    m_impl(new TextureLoaderSDLSurfaceImpl(surface, TextureLoaderOrigin::LowerLeft))
 {
 
 }
 
 TextureLoader::TextureLoader(const std::string & path):
-    m_impl(new TextureLoaderFileImpl(path, TextureLoaderFileImpl::Origin::LowerLeft))
+    m_impl(new TextureLoaderFileImpl(path, TextureLoaderOrigin::LowerLeft))
 {
 }
 
