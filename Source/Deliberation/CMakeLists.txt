@@ -4,6 +4,8 @@ message(STATUS "Deliberation")
 set(include_path 	"${CMAKE_CURRENT_SOURCE_DIR}/include/Deliberation")
 set(source_path 	"${CMAKE_CURRENT_SOURCE_DIR}/source")
 
+message("Json: ${JSON_INCLUDE_DIR}")
+
 set(DELIBERATION_INCLUDE_DIRS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -18,11 +20,6 @@ set(DELIBERATION_INCLUDE_DIRS
     ${JSON_INCLUDE_DIR}
     
     CACHE INTERAL "All Deliberation include dirs" 
-)
-
-# include
-include_directories(
-    ${DELIBERATION_INCLUDE_DIRS}
 )
 
 # library type
@@ -438,6 +435,12 @@ set(DELIBERATION_LIBRARIES
 add_library(Deliberation STATIC ${api_includes} ${sources})
 target_link_libraries(Deliberation
     ${libs})
+
+# include
+target_include_directories(Deliberation
+    PUBLIC
+    ${DELIBERATION_INCLUDE_DIRS}
+)
     
 target_compile_definitions(Deliberation
     PUBLIC
