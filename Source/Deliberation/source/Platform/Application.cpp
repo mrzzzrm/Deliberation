@@ -51,6 +51,11 @@ const Context & Application::context() const
     return m_context.get();
 }
 
+float Application::fps() const
+{
+    return m_fpsCounter.fps();
+}
+
 int Application::run(int argc,
                      char ** argv)
 {
@@ -107,6 +112,8 @@ int Application::run(int argc,
         m_input->step();
 
         SDL_RenderPresent(m_displayRenderer);
+
+        m_fpsCounter.onFrame();
 
         return m_running;
     });

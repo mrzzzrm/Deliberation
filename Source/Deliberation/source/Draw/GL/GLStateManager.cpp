@@ -1,5 +1,6 @@
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
+#include <algorithm>
 #include <iostream>
 
 #include <glbinding/gl/enum.h>
@@ -40,7 +41,9 @@ GLStateManager::GLStateManager():
     m_glViewportX(0),
     m_glViewportY(0),
     m_glViewportWidth(640),
-    m_glViewportHeight(480)
+    m_glViewportHeight(480),
+    m_program(0),
+    m_activeTextureUnit(0)
 {
     m_glStencilFunc[0] = GL_ALWAYS;
     m_glStencilFunc[1] = GL_ALWAYS;
@@ -79,6 +82,8 @@ GLStateManager::GLStateManager():
     {
         boundFramebuffer = 0;
     }
+
+    for (auto & boundTexture : m_boundTextures) boundTexture = 0u;
 }
 
 void GLStateManager::enableTextureCubeMapSeamless(bool enabled)
@@ -541,6 +546,52 @@ void GLStateManager::endQuery(gl::GLenum target)
     glEndQuery(target);
 
     m_activeQueries[t] = 0;
+}
+
+void GLStateManager::useProgram(gl::GLuint program)
+{
+    if (program == m_program) return;
+
+    m_program = program;
+
+    gl::glUseProgram(m_program);
+}
+
+void GLStateManager::setActiveTexture(gl::GLuint textureUnit)
+{
+    if (textureUnit == m_activeTextureUnit) return;
+
+    Assert(textureUnit < (gl::GLuint)gl::GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, "Invalid texture unit");
+
+    m_activeTextureUnit = textureUnit;
+
+    gl::glActiveTexture(gl::GL_TEXTURE0 + textureUnit);
+}
+
+void GLStateManager::bindTexture(gl::GLenum target, gl::GLuint texture)
+{
+    TextureTarget targetIndex;
+
+    switch (target)
+    {
+        case gl::GL_TEXTURE_1D: targetIndex = Texture1d; break;
+        case gl::GL_TEXTURE_2D: targetIndex = Texture2d; break;
+        case gl::GL_TEXTURE_3D: targetIndex = Texture3d; break;
+        case gl::GL_TEXTURE_1D_ARRAY: targetIndex = Texture1dArray; break;
+        case gl::GL_TEXTURE_2D_ARRAY: targetIndex = Texture1dArray; break;
+        case gl::GL_TEXTURE_RECTANGLE: targetIndex = TextureRectangle; break;
+        case gl::GL_TEXTURE_CUBE_MAP: targetIndex = TextureCubeMap; break;
+        case gl::GL_TEXTURE_BUFFER: targetIndex = TextureBuffer; break;
+        case gl::GL_TEXTURE_2D_MULTISAMPLE: targetIndex = Texture2dMultisample; break;
+        case gl::GL_TEXTURE_2D_MULTISAMPLE_ARRAY: targetIndex = Texture2dMultisampleArray; break;
+
+        default: Fail("");
+    }
+
+    if (m_boundTextures[targetIndex] == texture) return;
+
+    m_boundTextures[targetIndex] = texture;
+    gl::glBindTexture(target, texture);
 }
 
 GLStateManager::QueryTarget GLStateManager::glEnumToQueryTarget(gl::GLenum e) const

@@ -3,7 +3,7 @@ namespace deliberation
 namespace detail
 {
 
-float JsonParseFloatString(const nlohmann::json & obj)
+inline float JsonParseFloatString(const nlohmann::json & obj)
 {
     if (obj == "PI") return M_PI;
 

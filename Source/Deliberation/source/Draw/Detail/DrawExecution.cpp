@@ -46,7 +46,7 @@ void DrawExecution::perform()
     applyStencilState();
     applyViewport();
 
-    gl::glUseProgram(m_drawImpl.program->glProgramName);
+    m_glStateManager.useProgram(m_drawImpl.program->glProgramName);
 
     // Setup texture units
     for (auto b = 0u; b < m_drawImpl.samplers.size(); b++)
@@ -61,16 +61,8 @@ void DrawExecution::perform()
             texture->allocate();
         }
 
-        gl::glActiveTexture(gl::GL_TEXTURE0 + b);
-        gl::glBindTexture(texture->type, texture->glName);
-
-        gl::glTexParameteri(texture->type, gl::GL_TEXTURE_BASE_LEVEL, texture->baseLevel);
-        gl::glTexParameteri(texture->type, gl::GL_TEXTURE_MAX_LEVEL, texture->maxLevel);
-
-        gl::glBindSampler(b, sampler.glSampler.name());
-        gl::glSamplerParameteri(sampler.glSampler.name(), gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)texture->minFilter);
-        gl::glSamplerParameteri(sampler.glSampler.name(), gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)texture->maxFilter);
-
+        m_glStateManager.setActiveTexture(b);
+        m_glStateManager.bindTexture(texture->type, texture->glName);
         gl::glUniform1i(sampler.location, b);
     }
 

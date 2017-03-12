@@ -44,6 +44,7 @@ set(sources
     ${source_path}/Core/DataLayout.cpp
     ${source_path}/Core/DataLayoutField.cpp
     ${source_path}/Core/ElementalTypes.cpp
+    ${source_path}/Core/FpsCounter.cpp
     ${source_path}/Core/LayoutedBlob.cpp
     ${source_path}/Core/LayoutedBlobElement.cpp
     ${source_path}/Core/FileUtils.cpp
@@ -247,6 +248,7 @@ set(api_includes
     ${include_path}/Core/Dispatch.inl
     ${include_path}/Core/ElementalTypes.h
     ${include_path}/Core/FileUtils.h
+    ${include_path}/Core/FpsCounter.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl
     ${include_path}/Core/IntTypes.h

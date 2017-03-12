@@ -4,11 +4,13 @@
 
 #include <SDL2/SDL.h>
 
+#include <Deliberation/Core/FpsCounter.h>
+
 #include <Deliberation/Draw/Context.h>
 
-#include <Deliberation/Deliberation_API.h>
-
 #include <Deliberation/Platform/Input.h>
+
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
@@ -25,6 +27,8 @@ public:
 
     Context & context();
     const Context & context() const;
+
+    float fps() const;
 
     int run(int argc,
             char ** argv);
@@ -45,6 +49,8 @@ private:
     bool                m_running = false;
     bool                m_initialized = false;
     int                 m_returnCode = 0;
+
+    FpsCounter          m_fpsCounter;
 
     Optional<Context>   m_context;
 

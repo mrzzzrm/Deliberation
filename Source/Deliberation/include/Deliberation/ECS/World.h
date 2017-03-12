@@ -43,6 +43,9 @@ public:
     template<typename T, typename ... Args>
     std::shared_ptr<T> addSystem(Args &&... args);
 
+    template<typename T>
+    T & system();
+
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
     void render();
