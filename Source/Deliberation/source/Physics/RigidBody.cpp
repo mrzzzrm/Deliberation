@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+#include <glm/gtx/transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include <Deliberation/Core/Assert.h>

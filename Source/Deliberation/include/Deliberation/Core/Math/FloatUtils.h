@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/gtx/quaternion.hpp>
+
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
