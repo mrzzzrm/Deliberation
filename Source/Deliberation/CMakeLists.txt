@@ -4,8 +4,6 @@ message(STATUS "Deliberation")
 set(include_path 	"${CMAKE_CURRENT_SOURCE_DIR}/include/Deliberation")
 set(source_path 	"${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-message("Json: ${JSON_INCLUDE_DIR}")
-
 set(DELIBERATION_INCLUDE_DIRS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
