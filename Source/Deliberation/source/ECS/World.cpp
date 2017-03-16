@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/ScopeProfiler.h>
 
 #define VERBOSE 0
 
@@ -34,6 +35,11 @@ World::~World()
 EventManager & World::eventManager()
 {
     return m_eventManager;
+}
+
+const WorldProfiler & World::profiler() const
+{
+    return m_profiler;
 }
 
 EntityData & World::entityData(entity_id_t id)
@@ -67,18 +73,60 @@ Entity World::createEntity(const std::string & name, entity_id_t parent)
 
 void World::update(float seconds)
 {
-    for (auto & pair : m_systems) pair.second->beforeUpdate();
-    for (auto & pair : m_systems) pair.second->update(seconds);
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.beforeUpdate();
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "BeforeUpdate", micros});
+    }
+
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.update(seconds);
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "Update", micros});
+    }
 }
 
 void World::prePhysicsUpdate(float seconds)
 {
-    for (auto & pair : m_systems) pair.second->prePhysicsUpdate(seconds);
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.prePhysicsUpdate(seconds);
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "PrePhysicsUpdate", micros});
+    }
 }
 
 void World::render()
 {
-    for (auto & pair : m_systems) pair.second->render();
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.render();
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "Render", micros});
+    }
+}
+
+void World::frameComplete()
+{
+    m_profiler.frameComplete();
 }
 
 std::string World::toString() const

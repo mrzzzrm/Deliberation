@@ -34,17 +34,24 @@ bool DELIBERATION_API HalfspaceContainsSphere(const glm::vec3 & normal,
                                               const glm::vec3 & center,
                                               float radius);
 
-bool DELIBERATION_API PlaneRay3DIntersection(const glm::vec3 & normal,
+bool DELIBERATION_API Ray3DPlaneIntersection(const glm::vec3 & normal,
                                              float d,
                                              const glm::vec3 & origin,
                                              const glm::vec3 & delta,
                                              float & t);
 
-glm::vec3 DELIBERATION_API PlaneRay3DIntersectionPoint(const glm::vec3 & normal,
+glm::vec3 DELIBERATION_API Ray3DPlaneIntersectionPoint(const glm::vec3 & normal,
                                                        float d,
                                                        const glm::vec3 & origin,
                                                        const glm::vec3 & delta,
                                                        bool & valid);
+
+glm::vec2 DELIBERATION_API Rect3DRay3DIntersectionPoint(const glm::vec3 & base,
+                                                        const glm::vec3 & right,
+                                                        const glm::vec3 & up,
+                                                        const glm::vec3 & origin,
+                                                        const glm::vec3 & delta,
+                                                        bool & valid);
 
 bool DELIBERATION_API Rect3DRay3DIntersection(const glm::vec3 & base,
                                               const glm::vec3 & right,

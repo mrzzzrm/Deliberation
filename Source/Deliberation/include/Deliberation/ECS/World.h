@@ -22,6 +22,7 @@
 #include <Deliberation/ECS/EntityData.h>
 #include <Deliberation/ECS/EventManager.h>
 #include <Deliberation/ECS/SystemBase.h>
+#include <Deliberation/ECS/WorldProfiler.h>
 
 namespace deliberation
 {
@@ -34,6 +35,7 @@ public:
     ~World();
 
     EventManager & eventManager();
+    const WorldProfiler & profiler() const;
 
     EntityData & entityData(entity_id_t id);
 
@@ -49,6 +51,8 @@ public:
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
     void render();
+
+    void frameComplete();
 
     std::string toString() const;
 
@@ -86,6 +90,8 @@ private:
     LinearMap<std::shared_ptr<SystemBase>>      m_systems;
 
     EventManager                                m_eventManager;
+
+    WorldProfiler                               m_profiler;
 };
 
 }

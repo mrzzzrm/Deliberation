@@ -133,6 +133,8 @@ void Label::renderText() const
 {
     Assert(m_font, "Hollow Label object can't set text");
 
+    if (!m_textureDirty) return;
+
     m_texture = m_font->render(m_text, m_fontSize, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
     m_textureDirty = false;

@@ -24,6 +24,7 @@ public:
     const ComponentFilter & filter() const;
 
     virtual std::size_t index() const = 0;
+    virtual std::string name() const = 0;
 
     bool accepts(const Entity & entity);
 

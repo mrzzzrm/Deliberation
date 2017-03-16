@@ -28,7 +28,7 @@ public:
 
 private:
     Camera3D &  m_camera;
-    float       m_linearAcceleration = 750.0f;
+    float       m_linearAcceleration = 1750.0f;
     float       m_angularAcceleration = glm::pi<float>() * 10;
     Pose3D      m_relativePose;
 };

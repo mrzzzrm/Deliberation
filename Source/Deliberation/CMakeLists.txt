@@ -161,10 +161,12 @@ set(sources
     ${source_path}/ECS/EventManager.cpp
     ${source_path}/ECS/SystemBase.cpp
     ${source_path}/ECS/World.cpp
+    ${source_path}/ECS/WorldProfiler.cpp
 
     ${source_path}/Font/Font.cpp
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
+    ${source_path}/Font/MultilineLabel.cpp
 
     ${source_path}/Physics/Contacts/BoxContact.cpp
     ${source_path}/Physics/Contacts/Contact.cpp
@@ -363,10 +365,12 @@ set(api_includes
     ${include_path}/ECS/System.h
     ${include_path}/ECS/World.h
     ${include_path}/ECS/World.inl
+    ${include_path}/ECS/WorldProfiler.h
 
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
+    ${include_path}/Font/MultilineLabel.h
 
     ${include_path}/Physics/Contacts/BoxContact.h
     ${include_path}/Physics/Contacts/Contact.h

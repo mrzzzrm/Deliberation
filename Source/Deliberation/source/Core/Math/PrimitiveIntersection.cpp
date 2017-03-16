@@ -101,7 +101,7 @@ bool HalfspaceContainsSphere(const glm::vec3 & normal,
     return distance > radius;
 }
 
-bool PlaneRay3DIntersection(const glm::vec3 & normal,
+bool Ray3DPlaneIntersection(const glm::vec3 & normal,
                             float d,
                             const glm::vec3 & origin,
                             const glm::vec3 & delta,
@@ -120,14 +120,14 @@ bool PlaneRay3DIntersection(const glm::vec3 & normal,
     }
 }
 
-glm::vec3 PlaneRay3DIntersectionPoint(const glm::vec3 & normal,
-                                      float d,
-                                      const glm::vec3 & origin,
-                                      const glm::vec3 & delta,
-                                      bool & valid)
+glm::vec3 Ray3DPlaneIntersection(const glm::vec3 & normal,
+                                 float d,
+                                 const glm::vec3 & origin,
+                                 const glm::vec3 & delta,
+                                 bool & valid)
 {
     float t;
-    if (!PlaneRay3DIntersection(normal, d, origin, delta, t))
+    if (!Ray3DPlaneIntersection(normal, d, origin, delta, t))
     {
         valid = false;
         return {};
@@ -138,6 +138,28 @@ glm::vec3 PlaneRay3DIntersectionPoint(const glm::vec3 & normal,
     }
 }
 
+glm::vec2 DELIBERATION_API Rect3DRay3DIntersectionPoint(const glm::vec3 & base,
+                                                        const glm::vec3 & right,
+                                                        const glm::vec3 & up,
+                                                        const glm::vec3 & origin,
+                                                        const glm::vec3 & delta,
+                                                        bool & valid)
+{
+    float t;
+    valid = Rect3DRay3DIntersection(base, right, up, origin, delta, t);
+
+    if (!valid) return {};
+
+    auto intersectionPoint3d = (origin + delta * t) - base;
+
+    glm::mat3 rotation(right, up, glm::cross(right, up));
+    auto inverseRotation = glm::transpose(rotation);
+
+    auto intersectionPointInRectCoords = inverseRotation * intersectionPoint3d;
+
+    return {intersectionPointInRectCoords.x, intersectionPointInRectCoords.y};
+}
+
 bool Rect3DRay3DIntersection(const glm::vec3 & base,
                              const glm::vec3 & right,
                              const glm::vec3 & up,
@@ -146,7 +168,7 @@ bool Rect3DRay3DIntersection(const glm::vec3 & base,
                              float & t)
 {
     auto plane = Rect3D(base, right, up).plane();
-    auto valid = PlaneRay3DIntersection(plane.normal(), plane.d(),
+    auto valid = Ray3DPlaneIntersection(plane.normal(), plane.d(),
                                       origin, dir, t);
     if (!valid)
     {
