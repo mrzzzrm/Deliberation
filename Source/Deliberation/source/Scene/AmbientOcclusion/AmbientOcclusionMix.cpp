@@ -28,8 +28,8 @@ AmbientOcclusionMix::AmbientOcclusionMix(const Surface & occlusion,
                                        color.format());
 
     m_effect = PostprocessingEffect(context,
-                                    {deliberation::dataPath("Data/Shaders/AmbientOcclusionMix.vert"),
-                                     deliberation::dataPath("Data/Shaders/AmbientOcclusionMix.frag")},
+                                    {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.vert"),
+                                     deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.frag")},
                                     "AmbientOcclusionMix");
 
     m_effect.draw().setRenderTarget(0, &m_output.surface());

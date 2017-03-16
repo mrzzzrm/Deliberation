@@ -141,14 +141,14 @@ public:
          */
         VoxReader voxReader;
 
-        auto clusters = voxReader.read(deliberation::dataPath("Data/VoxelCluster/ship.vox"));
+        auto clusters = voxReader.read(deliberation::DeliberationDataPath("Data/VoxelCluster/ship.vox"));
         if (!clusters.empty())
         {
             auto marchingCubes = VoxelClusterMarchingCubes(marchingCubesTriangulation, clusters[0]);
             marchingCubes.run();
 
-            m_program = context().createProgram({deliberation::dataPath("Data/Shaders/Voxel.vert"),
-                                                 deliberation::dataPath("Data/Shaders/Voxel.frag")});
+            m_program = context().createProgram({deliberation::DeliberationDataPath("Data/Shaders/Voxel.vert"),
+                                                 deliberation::DeliberationDataPath("Data/Shaders/Voxel.frag")});
             m_draw = context().createDraw(m_program);
 
             m_draw.addVertices(marchingCubes.takeVertices());

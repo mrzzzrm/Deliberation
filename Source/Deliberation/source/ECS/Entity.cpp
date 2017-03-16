@@ -48,7 +48,7 @@ const ComponentBitset & Entity::componentBits() const
 
 bool Entity::isValid() const
 {
-    return !m_world || m_world->isValid(m_id);
+    return m_world && m_world->isValid(m_id);
 }
 
 void Entity::remove()
@@ -118,6 +118,26 @@ Entity Entity::createChild(const std::string & name)
     Assert(m_world, "Entity is hollow");
 
     return m_world->createEntity(name, m_id);
+}
+
+std::string Entity::toString() const
+{
+    std::stringstream stream;
+    stream << "{" << name() << ": ";
+
+    const auto & bits = componentBits();
+
+    for (size_t b = 0; b < bits.size(); b++)
+    {
+        if (!bits.test(b)) continue;
+
+        const auto & component = this->component(b);
+        stream << component.name() << ", ";
+    }
+
+    stream << "}";
+
+    return stream.str();
 }
 
 bool Entity::operator==(const Entity & rhs) const

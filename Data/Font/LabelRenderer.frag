@@ -9,6 +9,6 @@ out vec3 o_Color;
 
 void main()
 {
-    o_Color = Color * texture(Texture, f_UV).a;
+    o_Color = vec3(1.0) + Color * texture(Texture, f_UV).a;
 }
 

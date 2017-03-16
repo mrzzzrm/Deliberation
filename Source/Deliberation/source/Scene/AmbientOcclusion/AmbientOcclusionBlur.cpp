@@ -26,8 +26,8 @@ AmbientOcclusionBlur::AmbientOcclusionBlur(const Surface & occlusion, const Surf
                                        PixelFormat_R_8_UN);
 
     m_effect = PostprocessingEffect(context,
-                                    {deliberation::dataPath("Data/Shaders/AmbientOcclusionBlur.vert"),
-                                     deliberation::dataPath("Data/Shaders/AmbientOcclusionBlur.frag")},
+                                    {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionBlur.vert"),
+                                     deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionBlur.frag")},
                                     "AmbientOcclusionBlur");
 
     m_effect.draw().setRenderTarget(0, &m_output.surface());

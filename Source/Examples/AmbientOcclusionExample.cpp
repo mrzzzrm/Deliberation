@@ -53,7 +53,7 @@
 //
 //Mesh<Vertex> createBunnyMesh()
 //{
-//    auto path = deliberation::dataPath("Data/Examples/bunny.obj");
+//    auto path = deliberation::DeliberationDataPath("Data/Examples/bunny.obj");
 //
 //    Mesh<Vertex>::Vertices vertices;
 //    Mesh<Vertex>::Faces faces;
@@ -107,8 +107,8 @@
 //deliberation::Draw createSphereDraw(deliberation::Context & context, deliberation::Framebuffer & framebuffer)
 //{
 //    auto program = context.createProgram({
-//       deliberation::dataPath("Data/Examples/AmbientOcclusionExample.vert"),
-//       deliberation::dataPath("Data/Examples/AmbientOcclusionExample.frag")
+//       deliberation::DeliberationDataPath("Data/Examples/AmbientOcclusionExample.vert"),
+//       deliberation::DeliberationDataPath("Data/Examples/AmbientOcclusionExample.frag")
 //    });
 //
 //    deliberation::UVSphere sphere(7, 7);

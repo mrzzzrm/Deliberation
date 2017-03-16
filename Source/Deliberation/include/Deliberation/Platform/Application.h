@@ -19,7 +19,7 @@ class DELIBERATION_API Application
 {
 public:
     Application(const std::string & name,
-                const std::string & prefixPath = "Deliberation2");
+                const std::string & prefixPath = ".");
     virtual ~Application();
 
     InputBase & input();
@@ -30,8 +30,7 @@ public:
 
     float fps() const;
 
-    int run(int argc,
-            char ** argv);
+    int run(int argc, char ** argv);
 
     void quit(int returnCode = 0);
 

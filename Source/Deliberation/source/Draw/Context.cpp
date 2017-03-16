@@ -239,8 +239,8 @@ Program & Context::blitProgram()
     if (!m_blitProgram.engaged())
     {
         m_blitProgram.reset(createProgram({
-            deliberation::dataPath("Data/Shaders/Blit.vert"),
-            deliberation::dataPath("Data/Shaders/Blit.frag")
+            deliberation::DeliberationDataPath("Data/Shaders/Blit.vert"),
+            deliberation::DeliberationDataPath("Data/Shaders/Blit.frag")
         }));
     }
     return m_blitProgram.get();

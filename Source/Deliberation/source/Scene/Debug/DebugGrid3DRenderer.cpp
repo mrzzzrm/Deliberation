@@ -69,8 +69,8 @@ void DebugGrid3DRenderer::init(float scale)
     m_vertexBuffer = m_context.createBuffer(layout);
     m_vertexBuffer.createUpload(vertices).schedule();
 
-    m_program = m_context.createProgram({deliberation::dataPath("Data/Shaders/GridRenderer.vert"),
-                                         deliberation::dataPath("Data/Shaders/GridRenderer.frag")});
+    m_program = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.vert"),
+                                         deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.frag")});
 
     m_normalLines = m_context.createDraw(m_program, gl::GL_LINES, "GridRenderer - normal lines");
     m_normalLines.addVertexBufferRange(m_vertexBuffer, 0u, vertices.size() - 4);

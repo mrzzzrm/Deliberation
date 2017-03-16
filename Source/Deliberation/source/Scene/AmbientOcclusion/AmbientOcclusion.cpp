@@ -41,8 +41,8 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
                                        m_normalDepth.height(),
                                        PixelFormat_RGB_32_F);
     m_effect = PostprocessingEffect(context,
-                                    {deliberation::dataPath("Data/Shaders/AmbientOcclusion.vert"),
-                                     deliberation::dataPath("Data/Shaders/AmbientOcclusion.frag")},
+                                    {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusion.vert"),
+                                     deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusion.frag")},
                                     "AmbientOcclusion");
     m_effect.draw().setRenderTarget(0, &m_output.surface());
 

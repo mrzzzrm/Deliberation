@@ -57,7 +57,12 @@ void setPrefixPath(const std::string & prefixPath)
     }
 }
 
-std::string dataPath(const std::string path)
+std::string DeliberationDataPath(const std::string path)
+{
+    return prefixPath() + "/Deliberation2/" + path;
+}
+
+std::string GameDataPath(const std::string path)
 {
     return prefixPath() + "/" + path;
 }

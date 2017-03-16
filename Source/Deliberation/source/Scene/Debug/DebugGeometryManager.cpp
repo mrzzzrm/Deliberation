@@ -18,14 +18,14 @@ DebugGeometryManager::DebugGeometryManager(Context & context):
     /**
      * Load programs
      */
-    m_buildIns.shadedProgram = m_context.createProgram({deliberation::dataPath("Data/Shaders/DebugGeometryShaded.vert"),
-                                               deliberation::dataPath("Data/Shaders/DebugGeometryShaded.frag")});
+    m_buildIns.shadedProgram = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryShaded.vert"),
+                                               deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryShaded.frag")});
 
-    m_buildIns.unicolorProgram = m_context.createProgram({deliberation::dataPath("Data/Shaders/DebugGeometryUnicolor.vert"),
-                                                 deliberation::dataPath("Data/Shaders/DebugGeometryUnicolor.frag")});
+    m_buildIns.unicolorProgram = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryUnicolor.vert"),
+                                                 deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryUnicolor.frag")});
 
-    m_buildIns.vertexColorProgram = m_context.createProgram({deliberation::dataPath("Data/Shaders/DebugGeometryVertexColor.vert"),
-                                                    deliberation::dataPath("Data/Shaders/DebugGeometryVertexColor.frag")});
+    m_buildIns.vertexColorProgram = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryVertexColor.vert"),
+                                                    deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryVertexColor.frag")});
 
 
     /**
