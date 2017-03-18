@@ -145,22 +145,48 @@ glm::vec2 DELIBERATION_API Rect3DRay3DIntersectionPoint(const glm::vec3 & base,
                                                         const glm::vec3 & delta,
                                                         bool & valid)
 {
+    auto plane = Rect3D(base, right, up).plane();
     float t;
-    valid = Rect3DRay3DIntersection(base, right, up, origin, delta, t);
+    valid = Ray3DPlaneIntersection(plane.normal(), plane.d(),
+                                        origin, delta, t);
+    if (!valid)
+    {
+        return {};
+    }
 
-    if (!valid) return {};
+    auto point = origin + t * delta;
+    point -= base;
 
-    auto intersectionPoint3d = (origin + delta * t) - base;
+    // Project point on right and up
+    // Projection on r=pr, Projection on u=pu
 
-    glm::mat3 rotation(right, up, glm::cross(right, up));
-    auto inverseRotation = glm::transpose(rotation);
+    auto pr = glm::dot(point, right) / glm::dot(right, right);
+    if (pr < 0.0f || pr > 1.0f)
+    {
+        valid = false;
+        return {};
+    }
 
-    auto intersectionPointInRectCoords = inverseRotation * intersectionPoint3d;
+    auto pu = glm::dot(point, up) / glm::dot(up, up);
+    if (pu < 0.0f || pu > 1.0f)
+    {
+        valid = false;
+        return {};
+    }
 
-    return {intersectionPointInRectCoords.x, intersectionPointInRectCoords.y};
+    valid = true;
+    return {pr, pu};
 }
 
-bool Rect3DRay3DIntersection(const glm::vec3 & base,
+glm::vec2 Rect3DRay3DIntersectionPoint(const Rect3D & rect,
+                                       const Ray3D & ray,
+                                       bool & valid)
+{
+    return Rect3DRay3DIntersectionPoint(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), valid);
+}
+
+
+bool Ray3DRect3DIntersection(const glm::vec3 & base,
                              const glm::vec3 & right,
                              const glm::vec3 & up,
                              const glm::vec3 & origin,
@@ -223,11 +249,11 @@ void Ray3DClosestApproach(const glm::vec3 & oA,
 }
 
 
-bool Rect3DRay3DIntersection(const Rect3D & rect,
+bool Ray3DRect3DIntersection(const Rect3D & rect,
                          const Ray3D & ray,
                          float & t)
 {
-    return Rect3DRay3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
+    return Ray3DRect3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
 }
 
 float PointRay2DHalfspace(const glm::vec2 & point,
