@@ -2,6 +2,8 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Core/Types.h>
+
 namespace deliberation
 {
 
@@ -31,7 +33,7 @@ private:
     unsigned int vertexCount() const;
     unsigned int instanceCount() const;
 
-    gl::GLenum elementType() const;
+    Type elementType() const;
 
     void applyDepthState();
     void applyBlendState();

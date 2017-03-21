@@ -112,6 +112,14 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                 case gl::GL_SAMPLER_2D_RECT_SHADOW:
                     isSampler = true;
                     break;
+                case gl::GL_INT_SAMPLER_1D: case gl::GL_INT_SAMPLER_2D: case gl::GL_INT_SAMPLER_3D: case gl::GL_INT_SAMPLER_CUBE:
+                case gl::GL_INT_SAMPLER_2D_RECT:
+                    isSampler = true;
+                    break;
+                case gl::GL_UNSIGNED_INT_SAMPLER_1D: case gl::GL_UNSIGNED_INT_SAMPLER_2D: case gl::GL_UNSIGNED_INT_SAMPLER_3D: case gl::GL_UNSIGNED_INT_SAMPLER_CUBE:
+                case gl::GL_UNSIGNED_INT_SAMPLER_2D_RECT:
+                    isSampler = true;
+                    break;
                 default:
                     isSampler = false;
                     break;
@@ -237,16 +245,18 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             auto nameLength = params[0];
             Assert(nameLength > 1, "Program output " + std::to_string(r) + " has no characters in its name. That shouldn't be the case");
 
+            gl::glGetProgramResourceName(glProgramName, gl::GL_PROGRAM_OUTPUT, r, nameData.size(), nullptr, nameData.data());
+            std::string name(nameData.data(), nameLength - 1);
+
+            if (StringStartsWith(name, "gl_")) continue;
+
             auto type = gl::GLenum(params[1]);
             auto location = params[3];
-            Assert(location >= 0, "Program output " + std::to_string(r) + " has a location < 0. That shouldn't be the case");
+            Assert(location >= 0, "Program output " + std::to_string(r) + "/'" + name + "' has a location < 0 (" +
+                std::to_string(location) + "). That shouldn't be the case");
 
             auto arraySize = params[2];
             auto locationIndex = params[4];
-
-            gl::glGetProgramResourceName(glProgramName, gl::GL_PROGRAM_OUTPUT, r, nameData.size(), nullptr, nameData.data());
-
-            std::string name(nameData.data(), nameLength - 1);
 
             if (location >= (gl::GLint)m_fragmentOutputIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
             {

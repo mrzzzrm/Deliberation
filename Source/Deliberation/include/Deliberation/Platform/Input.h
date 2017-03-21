@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <SDL2/SDL.h>
 
 #include <Deliberation/Core/InputBase.h>
@@ -20,7 +22,7 @@ public:
     void onSDLInputEvent(const SDL_Event & event);
 
 private:
-    const Context & m_context;
+    const Context &  m_context;
 };
 
 }

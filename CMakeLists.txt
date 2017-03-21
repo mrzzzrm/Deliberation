@@ -37,6 +37,7 @@ find_package(SDL2       REQUIRED)
 find_package(SDL2_ttf   REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(json       REQUIRED)
+find_package(imgui      REQUIRED)
 
 # Include projects
 add_subdirectory(Extern/googletest-1.8.0)

@@ -54,6 +54,7 @@ public:
 
     std::string toString() const;
 
+    bool operator<(const Entity & rhs) const;
     bool operator==(const Entity & rhs) const;
     bool operator!=(const Entity & rhs) const;
 

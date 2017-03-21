@@ -25,8 +25,10 @@ gl::GLenum SamplerImpl::textureType() const
 {
     switch(type)
     {
-    case gl::GL_SAMPLER_2D:     return gl::GL_TEXTURE_2D; break;
-    case gl::GL_SAMPLER_CUBE:   return gl::GL_TEXTURE_CUBE_MAP; break;
+    case gl::GL_SAMPLER_2D:                 return gl::GL_TEXTURE_2D; break;
+    case gl::GL_INT_SAMPLER_2D:             return gl::GL_TEXTURE_2D; break;
+    case gl::GL_UNSIGNED_INT_SAMPLER_2D:    return gl::GL_TEXTURE_2D; break;
+    case gl::GL_SAMPLER_CUBE:               return gl::GL_TEXTURE_CUBE_MAP; break;
 
     default:
         Fail("Unsupported sampler type");

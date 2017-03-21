@@ -115,14 +115,14 @@ public:
     {
         m_navigator.get().update(seconds);
 
-        m_viewProjectionHandle.set(m_camera.viewProjection());
-        m_transformHandle.set(m_transform.matrix());
+//        m_viewProjectionHandle.set(m_camera.viewProjection());
+//        m_transformHandle.set(m_transform.matrix());
 
         m_clear.render();
 
-        m_cubemapRenderer->render();
-        m_skyboxRenderer->render();
-        m_draw.schedule();
+//        m_cubemapRenderer->render();
+//        m_skyboxRenderer->render();
+//        m_draw.schedule();
         m_ground.get().render();
     }
 

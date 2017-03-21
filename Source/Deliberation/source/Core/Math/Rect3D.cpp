@@ -28,6 +28,11 @@ const glm::vec3 & Rect3D::up() const
     return m_up;
 }
 
+glm::vec2 Rect3D::size() const
+{
+    return {glm::length(m_right), glm::length(m_up)};
+}
+
 void Rect3D::setOrigin(const glm::vec3 & origin)
 {
     m_origin = origin;

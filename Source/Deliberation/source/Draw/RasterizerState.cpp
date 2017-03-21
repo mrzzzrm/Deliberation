@@ -45,6 +45,16 @@ gl::GLfloat RasterizerState::lineWidth() const
     return m_lineWidth;
 }
 
+const glm::uvec4 & RasterizerState::scissorRect() const
+{
+    return m_scissorRect;
+}
+
+bool RasterizerState::scissorRectEnabled() const
+{
+    return m_scissorRectEnabled;
+}
+
 void RasterizerState::setPrimitive(gl::GLenum primitive)
 {
     m_primitive = primitive;
@@ -58,6 +68,17 @@ void RasterizerState::setPointSize(gl::GLfloat pointSize)
 void RasterizerState::setLineWidth(gl::GLfloat lineWidth)
 {
     m_lineWidth = lineWidth;
+}
+
+void RasterizerState::enableScissorRect(u32 x, u32 y, u32 width, u32 height)
+{
+    m_scissorRect = {x, y, width, height};
+    m_scissorRectEnabled = true;
+}
+
+void RasterizerState::disableScissorRect()
+{
+    m_scissorRectEnabled = false;
 }
 
 std::string RasterizerState::toString() const

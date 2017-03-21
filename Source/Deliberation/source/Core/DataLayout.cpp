@@ -35,7 +35,7 @@ DataLayout::DataLayout(const std::vector<DataLayoutField::Desc> & descs)
 
     for (auto & desc : descs)
     {
-        addField(desc.name, desc.type);
+        addField({desc.name, desc.type});
     }
 }
 
@@ -82,10 +82,18 @@ const DataLayoutField & DataLayout::field(const std::string & name) const
     Fail("No such field '" + name + "' in DataLayout");
 }
 
-DataLayoutField DataLayout::addField(const std::string & name, const Type & type)
+void DataLayout::addField(const DataLayoutField & field)
 {
-    m_fields.push_back(DataLayoutField(name, type, m_stride));
-    m_stride += type.size();
+    Assert(field.offset() >= m_stride, "Fields not added in offset-order, or fields are interleaving");
+
+    m_fields.push_back(field);
+    m_stride = field.offset() + field.type().size();
+}
+
+DataLayoutField DataLayout::addField(const DataLayoutField::Desc & desc)
+{
+    m_fields.push_back(DataLayoutField(desc.name, desc.type, m_stride));
+    m_stride += desc.type.size();
 
     return m_fields.back();
 }

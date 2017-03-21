@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include <Deliberation/ECS/Components.h>
 #include <Deliberation/ECS/System.h>
@@ -18,6 +18,8 @@ public:
         Base(world, ComponentFilter::requires<RigidBodyComponent>()),
         m_physicsWorld(physicsWorld)
     {}
+
+    PhysicsWorld & physicsWorld() const { return m_physicsWorld; }
 
 protected:
     void onEntityAdded(Entity & entity) override

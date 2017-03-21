@@ -53,6 +53,11 @@ void SystemBase::removeEntity(Entity & entity)
     onEntityRemoved(entity);
 }
 
+void SystemBase::frameBegin()
+{
+    onFrameBegin();
+}
+
 void SystemBase::beforeUpdate()
 {
     for (auto & entry : m_entities)
@@ -106,6 +111,11 @@ void SystemBase::onEntityUpdate(Entity &entity, float seconds)
 }
 
 void SystemBase::onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep)
+{
+
+}
+
+void SystemBase::onFrameBegin()
 {
 
 }

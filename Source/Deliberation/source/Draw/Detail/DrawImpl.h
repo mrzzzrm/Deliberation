@@ -36,7 +36,8 @@ public:
     Context &                                   context;
     std::string                                 name;
     std::shared_ptr<ProgramImpl>                program;
-    std::shared_ptr<BufferImpl>                 indexBuffer;
+    BufferBinding                               indexBufferBinding;
+    bool                                        indexBufferBindingDirty = true;
     std::vector<BufferBinding>                  vertexBuffers;
     std::vector<BufferBinding>                  instanceBuffers;
     std::unordered_map<std::string, AttributeBinding>

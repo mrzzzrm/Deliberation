@@ -140,6 +140,12 @@ std::string Entity::toString() const
     return stream.str();
 }
 
+bool Entity::operator<(const Entity & rhs) const
+{
+    Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
+    return m_id < rhs.m_id;
+}
+
 bool Entity::operator==(const Entity & rhs) const
 {
     Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");

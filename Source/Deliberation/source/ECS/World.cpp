@@ -71,6 +71,21 @@ Entity World::createEntity(const std::string & name, entity_id_t parent)
     return Entity(*this, id);
 }
 
+void World::frameBegin()
+{
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.frameBegin();
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "FrameBegin", micros});
+    }
+
+}
+
 void World::update(float seconds)
 {
     for (auto & pair : m_systems)

@@ -58,6 +58,8 @@ public:
     void useProgram(gl::GLuint program);
     void setActiveTexture(gl::GLuint textureUnit);
     void bindTexture(gl::GLenum target, gl::GLuint texture);
+    void enableScissorTest(bool enabled);
+    void setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
 
     /*
         Framebuffer caching
@@ -165,6 +167,9 @@ private:
     std::array<gl::GLuint , (size_t)TextureTargetCount>
                                         m_boundTextures;
     gl::GLuint                          m_activeTextureUnit;
+    bool                                m_scissorTestEnabled;
+    std::tuple<gl::GLint, gl::GLint, gl::GLsizei, gl::GLsizei>
+                                        m_scissorRect;
 
     /*
 

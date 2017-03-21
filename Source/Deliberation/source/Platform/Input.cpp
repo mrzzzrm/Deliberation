@@ -1,41 +1,46 @@
 #include <Deliberation/Platform/Input.h>
 
+#include <algorithm>
+
 #include <Deliberation/Draw/Context.h>
+
+#include <Deliberation/Platform/KeyMap.h>
+#include <Deliberation/Platform/InputLayer.h>
 
 namespace
 {
 
 using namespace deliberation;
 
-deliberation::InputBase::Key SDLKeyToDeliberation(SDL_Keycode code)
+deliberation::Key SDLKeyToDeliberation(SDL_Keycode code)
 {
     if (code >= SDLK_a && code <= SDLK_z)
     {
-        return (InputBase::Key)(InputBase::Key_A + (code - SDLK_a));
+        return (Key)(Key_A + (code - SDLK_a));
     }
 
     switch(code) {
-        case SDLK_RIGHT: return InputBase::Key_RIGHT;
-        case SDLK_LEFT: return InputBase::Key_LEFT;
-        case SDLK_UP: return InputBase::Key_UP;
-        case SDLK_DOWN: return InputBase::Key_DOWN;
-        case SDLK_SPACE: return InputBase::Key_SPACE;
+        case SDLK_RIGHT: return Key_RIGHT;
+        case SDLK_LEFT: return Key_LEFT;
+        case SDLK_UP: return Key_UP;
+        case SDLK_DOWN: return Key_DOWN;
+        case SDLK_SPACE: return Key_SPACE;
     }
 
-    return deliberation::InputBase::Key_UNKNOWN;
+    return deliberation::Key_UNKNOWN;
 }
 
-    deliberation::InputBase::MouseButton SDLMouseButtonToDeliberation(uint8_t button)
+    deliberation::MouseButton SDLMouseButtonToDeliberation(uint8_t button)
 {
     switch (button)
     {
         case SDL_BUTTON_LEFT:
-            return deliberation::InputBase::MouseButton_Left;
+            return deliberation::MouseButton_Left;
         case SDL_BUTTON_RIGHT:
-            return deliberation::InputBase::MouseButton_Right;
+            return deliberation::MouseButton_Right;
     }
 
-    return deliberation::InputBase::MouseButton_Unknown;
+    return deliberation::MouseButton_Unknown;
 }
 
 }
@@ -77,7 +82,6 @@ void Input::onSDLInputEvent(const SDL_Event & event)
             setMousePosition(normalized);
             break;
     }
-
 }
 
 }

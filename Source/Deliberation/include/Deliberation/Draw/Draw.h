@@ -56,6 +56,7 @@ public:
     Buffer addInstances(const LayoutedBlob & data, unsigned int divisor = 1u);
 
     void setIndexBuffer(const Buffer & buffer);
+    void setIndexBufferRange(const Buffer & buffer, unsigned int first, unsigned int count);
     void addVertexBuffer(const Buffer & buffer);
     void addVertexBufferRange(const Buffer & buffer, unsigned int first, unsigned int count);
     void addInstanceBuffer(const Buffer & buffer, unsigned int divisor = 1u);

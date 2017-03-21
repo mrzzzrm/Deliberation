@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <imgui.h>
+
 #include <cxxopts.hpp>
 
 #include <SDL_image.h>

@@ -149,9 +149,19 @@ Buffer Draw::addInstances(const LayoutedBlob & data, unsigned int divisor)
 void Draw::setIndexBuffer(const Buffer & buffer)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    Assert(!m_impl->indexBuffer, "Re-setting index buffer not supported (yet)");
 
-    m_impl->indexBuffer = buffer.m_impl;
+    m_impl->indexBufferBinding.buffer = buffer.m_impl;
+    m_impl->indexBufferBinding.ranged = false;
+    m_impl->indexBufferBindingDirty = true;
+}
+
+void Draw::setIndexBufferRange(const Buffer & buffer, unsigned int first, unsigned int count)
+{
+    m_impl->indexBufferBinding.buffer = buffer.m_impl;
+    m_impl->indexBufferBinding.ranged = true;
+    m_impl->indexBufferBinding.first = first;
+    m_impl->indexBufferBinding.count = count;
+    m_impl->indexBufferBindingDirty = true;
 }
 
 void Draw::addVertexBuffer(const Buffer & buffer)
@@ -222,9 +232,13 @@ void Draw::schedule() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    if (!isBuild())
+    if (!isBuild()) build();
+
+    if (m_impl->indexBufferBindingDirty && m_impl->indexBufferBinding.buffer)
     {
-        build();
+        gl::glBindVertexArray(m_impl->glVertexArray);
+        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBufferBinding.buffer->glName);
+        m_impl->indexBufferBindingDirty = false;
     }
 
     m_impl->context.scheduleDraw(*this);
@@ -357,12 +371,6 @@ void Draw::build() const
                 );
         }
 
-    }
-
-    if (m_impl->indexBuffer)
-    {
-        gl::glBindVertexArray(m_impl->glVertexArray);
-        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBuffer->glName);
     }
 }
 

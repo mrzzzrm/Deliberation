@@ -14,6 +14,8 @@ public:
     template<typename T>
     static Blob fromValue(const T & value);
 
+    static Blob fromRawData(const void * src, size_t size);
+
 public:
     Blob();
 
@@ -43,7 +45,7 @@ public:
     template<typename T>
     void write(std::size_t offset, const T & value);
 
-    void write(std::size_t offset, void * src, size_t length);
+    void write(std::size_t offset, const void * src, size_t length);
 
     template<typename T>
     void read(std::size_t offset, T & value) const;

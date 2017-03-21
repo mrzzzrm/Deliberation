@@ -48,6 +48,7 @@ public:
     template<typename T>
     T & system();
 
+    void frameBegin();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
     void render();

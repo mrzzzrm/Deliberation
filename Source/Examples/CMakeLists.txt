@@ -92,7 +92,7 @@ target_link_libraries(PhysicsExample ${libs})
 add_executable(EdgeToFaceSmoothingExample EdgeToFaceSmoothingExample.cpp)
 target_link_libraries(EdgeToFaceSmoothingExample ${libs})
 
-# VoxelExample
-add_executable(VoxelExample VoxelExample.cpp)
-target_link_libraries(VoxelExample ${libs})
+# ImguiSandbox
+add_executable(ImguiSandbox ImguiSandbox.cpp)
+target_link_libraries(ImguiSandbox ${libs})
 

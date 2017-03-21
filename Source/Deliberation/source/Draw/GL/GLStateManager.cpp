@@ -43,7 +43,9 @@ GLStateManager::GLStateManager():
     m_glViewportWidth(640),
     m_glViewportHeight(480),
     m_program(0),
-    m_activeTextureUnit(0)
+    m_activeTextureUnit(0),
+    m_scissorTestEnabled(false),
+    m_scissorRect(0, 0, -1, -1)
 {
     m_glStencilFunc[0] = GL_ALWAYS;
     m_glStencilFunc[1] = GL_ALWAYS;
@@ -592,6 +594,22 @@ void GLStateManager::bindTexture(gl::GLenum target, gl::GLuint texture)
 
     m_boundTextures[targetIndex] = texture;
     gl::glBindTexture(target, texture);
+}
+
+void GLStateManager::enableScissorTest(bool enabled)
+{
+    applyEnableDisableState(gl::GL_SCISSOR_TEST, m_scissorTestEnabled, enabled);
+}
+
+void GLStateManager::setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height)
+{
+    const auto rect = std::tie(x, y, width, height);
+
+    if (m_scissorRect == rect) return;
+
+    m_scissorRect = rect;
+
+    gl::glScissor(x, y, width, height);
 }
 
 GLStateManager::QueryTarget GLStateManager::glEnumToQueryTarget(gl::GLenum e) const

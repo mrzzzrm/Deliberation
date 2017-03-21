@@ -16,7 +16,8 @@ set(DELIBERATION_INCLUDE_DIRS
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${JSON_INCLUDE_DIR}
-    
+    ${IMGUI_INCLUDE_DIRS}
+
     CACHE INTERAL "All Deliberation include dirs" 
 )
 
@@ -147,6 +148,8 @@ set(sources
     ${source_path}/Draw/TextureLoaderDataImpl.h
     ${source_path}/Draw/TextureLoaderFileImpl.cpp
     ${source_path}/Draw/TextureLoaderFileImpl.h
+    ${source_path}/Draw/TextureLoaderPixelDataImpl.cpp
+    ${source_path}/Draw/TextureLoaderPixelDataImpl.h
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.cpp
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.h
     ${source_path}/Draw/TextureUpload.cpp
@@ -168,6 +171,8 @@ set(sources
     ${source_path}/Font/LabelRenderer.cpp
     ${source_path}/Font/MultilineLabel.cpp
 
+    ${source_path}/ImGui/ImGuiSystem.cpp
+
     ${source_path}/Physics/Contacts/BoxContact.cpp
     ${source_path}/Physics/Contacts/Contact.cpp
     ${source_path}/Physics/Contacts/ContactDispatcher.cpp
@@ -186,6 +191,7 @@ set(sources
 
     ${source_path}/Platform/Application.cpp
     ${source_path}/Platform/Input.cpp
+    ${source_path}/Platform/InputLayer.cpp
 
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
@@ -372,6 +378,8 @@ set(api_includes
     ${include_path}/Font/LabelRenderer.h
     ${include_path}/Font/MultilineLabel.h
 
+    ${include_path}/ImGui/ImGuiSystem.h
+
     ${include_path}/Physics/Contacts/BoxContact.h
     ${include_path}/Physics/Contacts/Contact.h
     ${include_path}/Physics/Contacts/ContactDispatcher.h
@@ -390,6 +398,11 @@ set(api_includes
 
     ${include_path}/Platform/Application.h
     ${include_path}/Platform/Input.h
+    ${include_path}/Platform/InputEvent.h
+    ${include_path}/Platform/InputLayer.h
+    ${include_path}/Platform/KeyMap.h
+    ${include_path}/Platform/MouseButton.h
+    ${include_path}/Platform/MouseButtonEvent.h
 
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
@@ -417,19 +430,19 @@ set(api_includes
     ${include_path}/Scene/RenderPipeline.h
     ${include_path}/Scene/SkyboxRenderer.h)
 
-# libs
 set(libs
     ${GLBINDING_LIBRARIES}
     ${GLFW_LIBRARY}
     ${SDL2_IMAGE_LIBRARY}
-)
+    ${SDL2_LIBRARY}
+    ${SDL2TTF_LIBRARY}
+    ${OPENGL_gl_LIBRARY}
+    ${IMGUI_LIBRARIES}
+    )
 
 set(DELIBERATION_LIBRARIES
     Deliberation
     ${libs}
-    ${SDL2_LIBRARY}
-    ${SDL2TTF_LIBRARY}
-    ${OPENGL_gl_LIBRARY}
     CACHE INTERNAL ""
 )
 

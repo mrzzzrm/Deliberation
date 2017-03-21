@@ -155,7 +155,7 @@ void DrawExecution::perform()
     }
 
     // Dispatch draw
-    if (m_drawImpl.indexBuffer)
+    if (m_drawImpl.indexBufferBinding.buffer)
     {
         if (!m_drawImpl.instanceBuffers.empty())
         {
@@ -187,20 +187,29 @@ void DrawExecution::perform()
 void DrawExecution::drawElementsInstanced() const
 {
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
+
+    const auto offset = m_drawImpl.indexBufferBinding.ranged ? m_drawImpl.indexBufferBinding.first : 0;
+
+    const auto type = elementType();
+
     gl::glDrawElementsInstanced(m_drawImpl.state.rasterizerState().primitive(),
-                                elementCount(),
-                                elementType(),
-                                nullptr,
-                                instanceCount());
+                                          elementCount(),
+                                          TypeToGLType(type),
+                                          (void*)(intptr_t)(offset * type.size()),
+                                          instanceCount());
 }
 
 void DrawExecution::drawElements() const
 {
     gl::glBindVertexArray(m_drawImpl.glVertexArray);
+
+    const auto offset = m_drawImpl.indexBufferBinding.ranged ? m_drawImpl.indexBufferBinding.first : 0;
+    const auto type = elementType();
+
     gl::glDrawElements(m_drawImpl.state.rasterizerState().primitive(),
                        elementCount(),
-                       elementType(),
-                       nullptr);
+                       TypeToGLType(type),
+                       (void*)(intptr_t)(offset * type.size()));
 }
 
 void DrawExecution::drawArrays() const
@@ -222,10 +231,13 @@ void DrawExecution::drawArraysInstanced() const
 
 unsigned int DrawExecution::elementCount() const
 {
-    Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
-    Assert(m_drawImpl.indexBuffer->count > 0, "Index buffer is empty");
+    const auto & binding = m_drawImpl.indexBufferBinding;
 
-    return m_drawImpl.indexBuffer->count;
+    Assert(binding.buffer.get(), "No index buffer set");
+    Assert(binding.buffer->count > 0, "Index buffer is empty");
+
+    if (binding.ranged) return binding.count;
+    else return binding.buffer->count;
 }
 
 unsigned int DrawExecution::vertexCount() const
@@ -276,12 +288,12 @@ unsigned int DrawExecution::instanceCount() const
     return ref;
 }
 
-gl::GLenum DrawExecution::elementType() const
+Type DrawExecution::elementType() const
 {
-    Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
-    Assert(m_drawImpl.indexBuffer->layout.fields().size() == 1u, "Invalid index buffer layout");
+    Assert(m_drawImpl.indexBufferBinding.buffer.get(), "No index buffer set");
+    Assert(m_drawImpl.indexBufferBinding.buffer->layout.fields().size() == 1u, "Invalid index buffer layout");
 
-    return TypeToGLType(m_drawImpl.indexBuffer->layout.fields()[0].type());
+    return m_drawImpl.indexBufferBinding.buffer->layout.fields()[0].type();
 }
 
 void DrawExecution::applyDepthState()
@@ -348,6 +360,13 @@ void DrawExecution::applyRasterizerState()
 
     m_glStateManager.setPointSize(state.pointSize());
     m_glStateManager.setLineWidth(state.lineWidth());
+
+    m_glStateManager.enableScissorTest(state.scissorRectEnabled());
+    if (state.scissorRectEnabled())
+    {
+        const auto & scissorRect = state.scissorRect();
+        m_glStateManager.setScissor(scissorRect.x, scissorRect.y, scissorRect.z, scissorRect.w);
+    }
 }
 
 void DrawExecution::applyStencilState()

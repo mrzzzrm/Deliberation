@@ -13,6 +13,8 @@ std::shared_ptr<T> World::addSystem(Args &&... args)
     auto system = std::make_shared<T>(*this, std::forward<Args>(args)...);
     m_systems.emplace(system->index(), system);
 
+    system->onCreated();
+
     return system;
 }
 

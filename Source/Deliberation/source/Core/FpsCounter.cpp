@@ -15,7 +15,7 @@ float FpsCounter::fps() const
     const auto duration = m_backlog.back() - m_backlog.front();
     Assert(EpsilonGt(duration, 0.0f), "");
 
-    return 1000.0f / (duration / numFrames);
+    return 1000.0f / ((float)duration / numFrames);
 }
 
 void FpsCounter::onFrame()

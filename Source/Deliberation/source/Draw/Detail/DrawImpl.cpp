@@ -23,7 +23,6 @@ DrawImpl::DrawImpl(Context & context,
                    const Program & program):
     context(context),
     program(program.m_impl),
-    indexBuffer(nullptr),
     glVertexArray(0u)
 {
     /*

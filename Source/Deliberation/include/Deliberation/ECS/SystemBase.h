@@ -31,16 +31,21 @@ public:
     void addEntity(Entity & entity);
     void removeEntity(Entity & entity);
 
+    void frameBegin();
     void beforeUpdate();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
     void render();
+
+    virtual void onCreated() {}
+    virtual void onRemoved() {}
 
 protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
     virtual void onEntityUpdate(Entity &entity, float seconds);
     virtual void onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep);
+    virtual void onFrameBegin();
     virtual void onUpdate(float seconds);
     virtual void onRender();
 

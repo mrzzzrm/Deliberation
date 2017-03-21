@@ -17,6 +17,7 @@ public:
     const glm::vec3 & origin() const;
     const glm::vec3 & right() const;
     const glm::vec3 & up() const;
+    glm::vec2 size() const;
 
     void setOrigin(const glm::vec3 & origin);
     void setRight(const glm::vec3 & right);
