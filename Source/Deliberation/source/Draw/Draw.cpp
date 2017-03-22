@@ -241,6 +241,19 @@ void Draw::schedule() const
         m_impl->indexBufferBindingDirty = false;
     }
 
+    for (auto & attribute : m_impl->dirtyAttributes)
+    {
+        const auto iter = m_impl->attributes.find(attribute);
+
+        Assert(iter != m_impl->attributes.end(), "");
+
+        GLBindVertexAttribute(
+            m_impl->glVertexArray,
+            m_impl->program->interface.attribute(attribute),
+            iter->second.data
+        );
+    }
+
     m_impl->context.scheduleDraw(*this);
 }
 
@@ -490,14 +503,23 @@ std::string Draw::statusString() const
 void Draw::setAttribute(const std::string & name, Type type, Blob data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    std::cout << m_impl->program->interface.toString() << std::endl;
-
     Assert(m_impl->program->interface.hasAttribute(name), "No such attribute '" + name + "'");
     Assert(type == m_impl->program->interface.attribute(name).type(), "");
-    Assert(m_impl->attributes.count(name) == 0, "Value of '" + name + "' already set");
 
-    m_impl->attributes.emplace(name, detail::AttributeBinding(name, std::move(data)));
+    auto iter = m_impl->attributes.find(name);
+
+    if (iter == m_impl->attributes.end())
+    {
+        m_impl->attributes.emplace(name, detail::AttributeBinding(name, std::move(data)));
+    }
+    else
+    {
+        iter->second.data = std::move(data);
+    }
+
+    m_impl->dirtyAttributes.emplace_back(name);
+
+
 }
 
 }

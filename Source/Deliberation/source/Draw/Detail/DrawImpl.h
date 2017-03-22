@@ -42,6 +42,7 @@ public:
     std::vector<BufferBinding>                  instanceBuffers;
     std::unordered_map<std::string, AttributeBinding>
                                                 attributes;
+    std::vector<std::string>                    dirtyAttributes;
     DrawState                                   state;
     Framebuffer                                 framebuffer;
     gl::GLuint                                  glVertexArray;

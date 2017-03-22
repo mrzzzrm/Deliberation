@@ -147,7 +147,7 @@ Rect3D Camera3D::nearPlane() const
     origin = m_pose.position() + m_pose.orientation() * origin;
 
     auto right = m_pose.orientation() * glm::vec3(size.x, 0.0f, 0.0f);
-    auto up = m_pose.orientation() * glm::vec3(0.0f, size.x, 0.0f);
+    auto up = m_pose.orientation() * glm::vec3(0.0f, size.y, 0.0f);
 
     return {origin, right, up};
 }

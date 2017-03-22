@@ -13,7 +13,7 @@ float FpsCounter::fps() const
     if (numFrames < 2) return 0.0f;
 
     const auto duration = m_backlog.back() - m_backlog.front();
-    Assert(EpsilonGt(duration, 0.0f), "");
+    if (!EpsilonGt(duration, 0.0f)) return 9999.9f;
 
     return 1000.0f / ((float)duration / numFrames);
 }
