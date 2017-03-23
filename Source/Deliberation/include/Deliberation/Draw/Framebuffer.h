@@ -32,6 +32,8 @@ public:
     Framebuffer();
     ~Framebuffer();
 
+    glm::uvec2 size() const { return {width(), height()}; }
+
     unsigned int width() const;
     unsigned int height() const;
 
