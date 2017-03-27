@@ -17,6 +17,7 @@ set(DELIBERATION_INCLUDE_DIRS
     ${GLFW_INCLUDE_DIR}
     ${JSON_INCLUDE_DIR}
     ${IMGUI_INCLUDE_DIRS}
+    ${VARIANT_INCLUDE_DIRS}
 
     CACHE INTERAL "All Deliberation include dirs" 
 )

@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
+#include <variant>
 
 #include <glbinding/gl/types.h>
 
@@ -27,6 +28,30 @@ namespace detail
 
 class ProgramImpl;
 
+
+using VertexAttributeValueBinding = std::experimental::variant<
+    u32, i32, float, double,
+    glm::uvec2, glm::ivec2, glm::vec2, glm::dvec2,
+    glm::uvec3, glm::ivec3, glm::vec3, glm::dvec3,
+    glm::uvec4, glm::ivec4, glm::vec4, glm::dvec4,
+    glm::mat2, glm::mat3, std::unique_ptr<glm::mat4>,
+    std::unique_ptr<glm::dmat2>, std::unique_ptr<glm::dmat3>, std::unique_ptr<glm::dmat4>
+    >;
+
+struct VertexAttributeBufferBinding
+{
+    std::shared_ptr<BufferImpl> buffer;
+    size_t                      fieldIndex = 0;
+
+    bool                        ranged = false;
+    size_t                      first = 0;
+    size_t                      count = 0;
+    size_t                      divisor = 0;
+};
+
+using VertexAttributeBinding = std::experimental::variant<VertexAttributeValueBinding,
+    VertexAttributeBufferBinding>;
+
 class DrawImpl final
 {
 public:
@@ -38,11 +63,8 @@ public:
     std::shared_ptr<ProgramImpl>                program;
     BufferBinding                               indexBufferBinding;
     bool                                        indexBufferBindingDirty = true;
-    std::vector<BufferBinding>                  vertexBuffers;
-    std::vector<BufferBinding>                  instanceBuffers;
-    std::unordered_map<std::string, AttributeBinding>
-                                                attributes;
-    std::vector<std::string>                    dirtyAttributes;
+    std::vector<VertexAttributeBinding>         vertexAttributes;
+    std::vector<size_t>                         dirtyVertexAttributes;
     DrawState                                   state;
     Framebuffer                                 framebuffer;
     gl::GLuint                                  glVertexArray;

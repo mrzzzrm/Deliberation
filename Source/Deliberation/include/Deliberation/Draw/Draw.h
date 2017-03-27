@@ -65,6 +65,12 @@ public:
     template<typename T>
     void setAttribute(const std::string & name, const T & value);
 
+    template<typename T>
+    void setAttribute(size_t index, const T & value);
+
+    template<typename T>
+    VertexAttribute attribute(const std::string & name);
+
     void setFramebuffer(const Framebuffer & framebuffer);
 
     void setRenderTarget(unsigned int index, Surface * surface);
