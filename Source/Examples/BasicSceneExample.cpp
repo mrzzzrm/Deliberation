@@ -50,6 +50,8 @@ public:
 
     virtual void onStartup() override
     {
+        EnableGLErrorChecksAndLogging();
+
         m_ground.reset(context(), m_camera);
         m_ground.get().setSize(30.0f);
         m_ground.get().setRadius(10.0f);
@@ -58,13 +60,13 @@ public:
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
         m_camera.setAspectRatio((float)context().backbuffer().width() / context().backbuffer().height());
 
-        m_draw = createDraw();
+//        m_draw = createDraw();
         m_clear = context().createClear();
 
         m_transform.setPosition({0.0f, 1.0f, 0.0f});
 
-        m_viewProjectionHandle = m_draw.uniform("ViewProjection");
-        m_transformHandle = m_draw.uniform("Transform");
+//        m_viewProjectionHandle = m_draw.uniform("ViewProjection");
+//        m_transformHandle = m_draw.uniform("Transform");
 
         m_navigator.reset(m_camera, input(), 10.0f);
 
@@ -88,28 +90,28 @@ public:
         m_cubemapRenderer.reset(context(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
 
-        m_textureRenderer.reset(context(), faceTexture);
+//        m_textureRenderer.reset(context(), faceTexture);
     }
 
-    deliberation::Draw createDraw()
-    {
-        auto program = context().createProgram({
-                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.vert"),
-                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.frag")
-                                             });
-
-        deliberation::UVSphere sphere(7, 7);
-        auto mesh = sphere.generateMesh();
-
-        deliberation::MeshCompiler compiler;
-        auto compilation = compiler.compile(mesh);
-
-        auto draw = context().createDraw(program, gl::GL_TRIANGLES);
-        draw.addVertices(compilation.vertices);
-        draw.setIndices(compilation.indices);
-
-        return draw;
-    }
+//    deliberation::Draw createDraw()
+//    {
+//        auto program = context().createProgram({
+//                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.vert"),
+//                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.frag")
+//                                             });
+//
+//        deliberation::UVSphere sphere(7, 7);
+//        auto mesh = sphere.generateMesh();
+//
+//        deliberation::MeshCompiler compiler;
+//        auto compilation = compiler.compile(mesh);
+//
+//        auto draw = context().createDraw(program, gl::GL_TRIANGLES);
+//        draw.addVertices(compilation.vertices);
+//        draw.setIndices(compilation.indices);
+//
+//        return draw;
+//    }
 
     virtual void onFrame(float seconds) override
     {
@@ -120,8 +122,8 @@ public:
 
         m_clear.render();
 
-//        m_cubemapRenderer->render();
-//        m_skyboxRenderer->render();
+        m_cubemapRenderer->render();
+        m_skyboxRenderer->render();
 //        m_draw.schedule();
         m_ground.get().render();
     }
@@ -143,8 +145,8 @@ private:
                                         m_skyboxRenderer;
     deliberation::Optional<deliberation::DebugCubemapRenderer>
                                         m_cubemapRenderer;
-    deliberation::Optional<deliberation::DebugTexture2dRenderer>
-                                        m_textureRenderer;
+//    deliberation::Optional<deliberation::DebugTexture2dRenderer>
+//                                        m_textureRenderer;
 
 };
 

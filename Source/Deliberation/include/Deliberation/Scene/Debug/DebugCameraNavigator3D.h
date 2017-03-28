@@ -15,7 +15,7 @@ class DELIBERATION_API DebugCameraNavigator3D final
 public:
     DebugCameraNavigator3D(Camera3D & camera,
                            const InputBase & inputAdapter,
-                           float speed);
+                           float speed = 10.0f);
 
     Camera3D & camera() const;
     float speed() const;

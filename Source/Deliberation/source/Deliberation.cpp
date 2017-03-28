@@ -13,6 +13,7 @@ namespace
 {
 
 std::string prefixPath(".");
+bool loggingEnabled = false;
 
 }
 
@@ -138,11 +139,18 @@ void EnableGLErrorChecksAndLogging()
         }
         glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
     });
+
+    loggingEnabled = true;
 }
 
 void DisableGLErrorChecks()
 {
     glbinding::setCallbackMask(glbinding::CallbackMask::None);
+}
+
+bool GLLoggingEnabled()
+{
+    return loggingEnabled;
 }
 
 }

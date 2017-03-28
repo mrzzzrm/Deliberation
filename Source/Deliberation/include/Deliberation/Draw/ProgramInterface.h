@@ -22,11 +22,17 @@ public:
     ProgramInterface();
     ProgramInterface(gl::GLuint glProgramName);
 
-    const ProgramInterfaceVertexAttribute & attribute(const std::string & name) const;
-    const ProgramInterfaceUniform & uniform(const std::string & name) const;
-    const ProgramInterfaceSampler & sampler(const std::string & name) const;
-    const ProgramInterfaceFragmentOutput & fragmentOutput(const std::string & name) const;
-    const ProgramInterfaceUniformBlock & uniformBlock(const std::string & name) const;
+    const ProgramInterfaceVertexAttribute * attribute(const std::string & name) const;
+    const ProgramInterfaceUniform * uniform(const std::string & name) const;
+    const ProgramInterfaceSampler * sampler(const std::string & name) const;
+    const ProgramInterfaceFragmentOutput * fragmentOutput(const std::string & name) const;
+    const ProgramInterfaceUniformBlock * uniformBlock(const std::string & name) const;
+
+    const ProgramInterfaceVertexAttribute & attributeRef(const std::string & name) const;
+    const ProgramInterfaceUniform & uniformRef(const std::string & name) const;
+    const ProgramInterfaceSampler & samplerRef(const std::string & name) const;
+    const ProgramInterfaceFragmentOutput & fragmentOutputRef(const std::string & name) const;
+    const ProgramInterfaceUniformBlock & uniformBlockRef(const std::string & name) const;
 
     const ProgramInterfaceVertexAttribute * attributeByLocation(unsigned int location) const;
     const ProgramInterfaceUniform * uniformByLocation(unsigned int location) const;
@@ -38,12 +44,6 @@ public:
     const std::vector<ProgramInterfaceSampler> & samplers() const;
     const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs() const;
     const std::vector<ProgramInterfaceUniformBlock> & uniformBlocks() const;
-
-    bool hasAttribute(const std::string & name) const;
-    bool hasUniform(const std::string & name) const;
-    bool hasSampler(const std::string & name) const;
-    bool hasFragmentOutput(const std::string & name) const;
-    bool hasUniformBlock(const std::string & name) const;
 
     bool operator==(const ProgramInterface & other) const;
     bool operator!=(const ProgramInterface & other) const;

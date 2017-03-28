@@ -19,7 +19,7 @@ Blob::Blob():
 }
 
 Blob::Blob(std::size_t size):
-    m_impl(std::unique_ptr<detail::IBlobImpl>(new detail::VectorBlobImpl<char>(size)))
+    m_impl(std::make_unique<detail::VectorBlobImpl<char>>(size))
 {
 
 }

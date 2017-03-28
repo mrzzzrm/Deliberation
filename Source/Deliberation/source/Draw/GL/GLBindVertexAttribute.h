@@ -17,30 +17,22 @@ namespace detail
 
 /**
  * From Buffer
- * @param vao
- * @param programInterface
- * @param buffer
- * @param divisor
- * @param name
- * @param baseoffset
  */
-void DELIBERATION_API GLBindVertexAttribute(gl::GLuint vao,
-                                            const ProgramInterface & programInterface,
-                                            const detail::BufferImpl & buffer,
-                                            gl::GLuint divisor,
-                                            const std::string & name,
-                                            gl::GLint baseoffset);
+void DELIBERATION_API GLBindVertexAttribute(
+    gl::GLuint vao,
+    const ProgramInterfaceVertexAttribute & attribute,
+    const detail::BufferImpl & buffer,
+    u32 bufferFieldIndex,
+    gl::GLuint divisor,
+    gl::GLint baseOffset);
 
 /**
- * Fixed
- * @param vao
- * @param programInterface
- * @param name
- * @param data
+ * From Value
  */
-void DELIBERATION_API GLBindVertexAttribute(gl::GLuint vao,
-                                            const ProgramInterfaceVertexAttribute & attribute,
-                                            const Blob & data);
+void DELIBERATION_API GLBindVertexAttribute(
+    gl::GLuint vao,
+    const ProgramInterfaceVertexAttribute & attribute,
+    const void * data);
 
 }
 

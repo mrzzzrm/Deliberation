@@ -17,14 +17,13 @@ namespace deliberation
 {
 void GLBindVertexAttribute(
     gl::GLuint vao,
-    const ProgramInterface & programInterface,
+    const ProgramInterfaceVertexAttribute & attribute,
     const detail::BufferImpl & buffer,
+    u32 bufferFieldIndex,
     gl::GLuint divisor,
-    const std::string & name,
-    gl::GLint baseoffset)
+    gl::GLint baseOffset)
 {
-    const auto & attribute = programInterface.attribute(name);
-    const auto & bufferField = buffer.layout.field(name);
+    const auto & bufferField = buffer.layout.fields()[bufferFieldIndex];
     const auto & bufferFieldType = bufferField.type();
     const auto & bufferFieldElementalType = bufferFieldType.elementalType();
     const auto & attributeType = attribute.type();
@@ -32,9 +31,9 @@ void GLBindVertexAttribute(
 
     Assert(attributeType.numColumns() == bufferField.type().numColumns() &&
            attributeType.numRows() == bufferField.type().numRows(),
-           std::string("Cannot bind ") + bufferField.type().name() + " to " + attributeType.name());
+           attribute.name() + ": " + std::string("Cannot bind ") + bufferField.type().name() + " to " + attributeType.name());
 
-    auto startLocation = attribute.location();
+    auto startLocation = attribute.glLocation();
 
     Assert(startLocation >= 0, "");
 
@@ -53,40 +52,40 @@ void GLBindVertexAttribute(
         gl::glEnableVertexAttribArray(l);
         gl::glVertexAttribDivisor(l, divisor);
 
-        auto localLocation = l - startLocation;
+        //auto localLocation = l - startLocation;
         auto offset = bufferField.offset()/* + format.relativeOffsetOfLocation(localLocation)*/;
 
         if (attributeElementalType.isFloat()) {
             gl::glVertexAttribPointer(l, size, type, normalize, buffer.layout.stride(),
-                                      (const gl::GLvoid*)(baseoffset + offset));
+                                      (const gl::GLvoid*)(baseOffset + offset));
         } else {
             gl::glVertexAttribIPointer(l, size, type, buffer.layout.stride(),
-                                       (const gl::GLvoid*)(baseoffset + offset));
+                                       (const gl::GLvoid*)(baseOffset + offset));
         }
     } 
 }
 
 void DELIBERATION_API GLBindVertexAttribute(gl::GLuint vao,
                                             const ProgramInterfaceVertexAttribute & attribute,
-                                            const Blob & data)
+                                            const void * data)
 {
-    const auto i = (gl::GLuint)attribute.location();
+    const auto i = (gl::GLuint)attribute.glLocation();
 
     switch(attribute.type().id())
     {
-        case TYPE_I32:      gl::glVertexAttribI1iv(i, (gl::GLint*)data.ptr()); break;
-        case TYPE_U32:      gl::glVertexAttribI1uiv(i, (gl::GLuint*)data.ptr()); break;
-        case TYPE_FLOAT:    gl::glVertexAttrib1fv(i, (gl::GLfloat*)data.ptr()); break;
-        case TYPE_DOUBLE:   gl::glVertexAttrib1dv(i, (gl::GLdouble*)data.ptr()); break;
-        case TYPE_VEC2:     gl::glVertexAttrib2fv(i, (gl::GLfloat*)data.ptr()); break;
-        case TYPE_VEC3:     gl::glVertexAttrib3fv(i, (gl::GLfloat*)data.ptr()); break;
-        case TYPE_VEC4:     gl::glVertexAttrib4fv(i, (gl::GLfloat*)data.ptr()); break;
-        case TYPE_I32VEC2:  gl::glVertexAttribI2iv(i, (gl::GLint*)data.ptr()); break;
-        case TYPE_I32VEC3:  gl::glVertexAttribI3iv(i, (gl::GLint*)data.ptr()); break;
-        case TYPE_I32VEC4:  gl::glVertexAttribI4iv(i, (gl::GLint*)data.ptr()); break;
-        case TYPE_U32VEC2:  gl::glVertexAttribI2uiv(i, (gl::GLuint*)data.ptr()); break;
-        case TYPE_U32VEC3:  gl::glVertexAttribI3uiv(i, (gl::GLuint*)data.ptr()); break;
-        case TYPE_U32VEC4:  gl::glVertexAttribI4uiv(i, (gl::GLuint*)data.ptr()); break;
+        case TYPE_I32:      gl::glVertexAttribI1iv(i, (gl::GLint*)data); break;
+        case TYPE_U32:      gl::glVertexAttribI1uiv(i, (gl::GLuint*)data); break;
+        case TYPE_FLOAT:    gl::glVertexAttrib1fv(i, (gl::GLfloat*)data); break;
+        case TYPE_DOUBLE:   gl::glVertexAttrib1dv(i, (gl::GLdouble*)data); break;
+        case TYPE_VEC2:     gl::glVertexAttrib2fv(i, (gl::GLfloat*)data); break;
+        case TYPE_VEC3:     gl::glVertexAttrib3fv(i, (gl::GLfloat*)data); break;
+        case TYPE_VEC4:     gl::glVertexAttrib4fv(i, (gl::GLfloat*)data); break;
+        case TYPE_I32VEC2:  gl::glVertexAttribI2iv(i, (gl::GLint*)data); break;
+        case TYPE_I32VEC3:  gl::glVertexAttribI3iv(i, (gl::GLint*)data); break;
+        case TYPE_I32VEC4:  gl::glVertexAttribI4iv(i, (gl::GLint*)data); break;
+        case TYPE_U32VEC2:  gl::glVertexAttribI2uiv(i, (gl::GLuint*)data); break;
+        case TYPE_U32VEC3:  gl::glVertexAttribI3uiv(i, (gl::GLuint*)data); break;
+        case TYPE_U32VEC4:  gl::glVertexAttribI4uiv(i, (gl::GLuint*)data); break;
 
         default:
             Fail("Vertex attribute type not (yet?) supported");

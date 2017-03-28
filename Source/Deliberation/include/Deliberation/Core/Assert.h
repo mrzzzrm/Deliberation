@@ -47,6 +47,24 @@ inline void DELIBERATION_API AssertImpl(const char * file,
     AssertImpl(file, function, line, expr, msg.c_str());
 }
 
+inline void DELIBERATION_API AssertImpl(const char * file,
+                                 const char * function,
+                                 unsigned int line,
+                                 const void * ptr,
+                                 const char * msg)
+{
+    AssertImpl(file, function, line, ptr != nullptr, msg);
+}
+
+inline void DELIBERATION_API AssertImpl(const char * file,
+                                 const char * function,
+                                 unsigned int line,
+                                 const void * ptr,
+                                 const std::string & msg)
+{
+    AssertImpl(file, function, line, ptr != nullptr, msg);
+}
+
 inline void DELIBERATION_API FailImpl(const char * file,
                                const char * function,
                                unsigned int line,

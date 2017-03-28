@@ -18,6 +18,7 @@
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
 
 #include <Deliberation/Deliberation.h>
+#include <Deliberation/ECS/Systems/ApplicationSystem.h>
 
 using namespace deliberation;
 
@@ -39,11 +40,12 @@ public:
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
         m_camera.setAspectRatio((float)context().backbuffer().width() / context().backbuffer().height());
 
-        m_ground = std::make_shared<DebugGroundPlaneRenderer>(context(), m_camera);
-        m_ground->setSize(30.0f);
-        m_ground->setRadius(10.0f);
+//        m_ground = std::make_shared<DebugGroundPlaneRenderer>(context(), m_camera);
+//        m_ground->setSize(30.0f);
+//        m_ground->setRadius(10.0f);
 
-        m_world.addSystem<ImGuiSystem>(context(), input());
+        m_world.addSystem<ApplicationSystem>(*this);
+        m_world.addSystem<ImGuiSystem>();
 
         m_clear = context().createClear();
     }
@@ -54,7 +56,7 @@ public:
 
         m_world.frameBegin();
 
-        m_ground->render();
+        //m_ground->render();
 
         {
             bool open = false;
@@ -67,7 +69,7 @@ public:
 private:
     Camera3D                                    m_camera;
     Clear                                       m_clear;
-    std::shared_ptr<DebugGroundPlaneRenderer>   m_ground;
+//    std::shared_ptr<DebugGroundPlaneRenderer>   m_ground;
     World                                       m_world;
 };
 

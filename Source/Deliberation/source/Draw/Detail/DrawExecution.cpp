@@ -155,145 +155,103 @@ void DrawExecution::perform()
     }
 
     // Dispatch draw
-    if (m_drawImpl.indexBufferBinding.buffer)
+    u32 instanceCount = 0;
+    u32 vertexCount = 0;
+
+    const auto useIndices = m_drawImpl.indexBufferBinding.buffer != nullptr;
+
+    for (const auto & attributeBinding : m_drawImpl.attributeBindings)
     {
-        if (!m_drawImpl.instanceBuffers.empty())
+        if (attributeBinding.index() == 1) continue; // Value binding
+
+        const auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(attributeBinding);
+
+        if (bufferBinding.ranged)
         {
-            drawElementsInstanced();
+            Assert(bufferBinding.count + bufferBinding.first < bufferBinding.buffer->count, "Buffer too small");
+
+            if (bufferBinding.divisor > 0)
+            {
+                Assert(instanceCount == 0 || bufferBinding.count == instanceCount, "Instance count mismatch");
+                instanceCount = bufferBinding.count;
+            }
+            else if (!m_drawImpl.indexBufferBinding.buffer)
+            {
+                Assert(vertexCount == 0 || bufferBinding.count == vertexCount, "Vertex count mismatch");
+                vertexCount = bufferBinding.count;
+            }
         }
         else
         {
-            drawElements();
+            if (bufferBinding.divisor > 0)
+            {
+                Assert(instanceCount == 0 || bufferBinding.buffer->count == instanceCount, "Instance count mismatch");
+                instanceCount = bufferBinding.buffer->count;
+            }
+            else
+            {
+                if (!useIndices)
+                {
+                    Assert(vertexCount == 0 || bufferBinding.buffer->count == vertexCount, "Vertex count mismatch");
+                    vertexCount = bufferBinding.buffer->count;
+                }
+            }
+        }
+    }
+
+    gl::glBindVertexArray(m_drawImpl.glVertexArray);
+
+    if (useIndices)
+    {
+        const auto type = m_drawImpl.indexBufferBinding.buffer->layout.fields()[0].type();
+
+        u32 elementCount = 0;
+        u32 offset = 0;
+
+        if (m_drawImpl.indexBufferBinding.ranged)
+        {
+            elementCount = m_drawImpl.indexBufferBinding.count;
+            offset = (u32)(m_drawImpl.indexBufferBinding.first * type.size());
+        }
+        else
+        {
+            elementCount = m_drawImpl.indexBufferBinding.buffer->count;
+            offset = 0;
+        }
+
+        if (instanceCount != 0)
+        {
+            gl::glDrawElementsInstanced(m_drawImpl.state.rasterizerState().primitive(),
+                                        elementCount,
+                                        TypeToGLType(type),
+                                        (void*)(intptr_t)offset,
+                                        instanceCount);
+
+        }
+        else
+        {
+            gl::glDrawElements(m_drawImpl.state.rasterizerState().primitive(),
+                               elementCount,
+                               TypeToGLType(type),
+                               (void*)(intptr_t)offset);
         }
     }
     else
     {
-        if (!m_drawImpl.instanceBuffers.empty())
+        if (instanceCount != 0)
         {
-            drawArraysInstanced();
+            gl::glDrawArraysInstanced(m_drawImpl.state.rasterizerState().primitive(),
+                                      0u,
+                                      vertexCount,
+                                      instanceCount);
         }
         else
         {
-            drawArrays();
+            gl::glDrawArrays(m_drawImpl.state.rasterizerState().primitive(),
+                             0u,
+                             vertexCount);
         }
     }
-}
-
-/*
-    TODO
-        Use GLStateManager for VAO
-*/
-
-void DrawExecution::drawElementsInstanced() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-
-    const auto offset = m_drawImpl.indexBufferBinding.ranged ? m_drawImpl.indexBufferBinding.first : 0;
-
-    const auto type = elementType();
-
-    gl::glDrawElementsInstanced(m_drawImpl.state.rasterizerState().primitive(),
-                                          elementCount(),
-                                          TypeToGLType(type),
-                                          (void*)(intptr_t)(offset * type.size()),
-                                          instanceCount());
-}
-
-void DrawExecution::drawElements() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-
-    const auto offset = m_drawImpl.indexBufferBinding.ranged ? m_drawImpl.indexBufferBinding.first : 0;
-    const auto type = elementType();
-
-    gl::glDrawElements(m_drawImpl.state.rasterizerState().primitive(),
-                       elementCount(),
-                       TypeToGLType(type),
-                       (void*)(intptr_t)(offset * type.size()));
-}
-
-void DrawExecution::drawArrays() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawArrays(m_drawImpl.state.rasterizerState().primitive(),
-                     0u,
-                     vertexCount());
-}
-
-void DrawExecution::drawArraysInstanced() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawArraysInstanced(m_drawImpl.state.rasterizerState().primitive(),
-                                        0u,
-                                        vertexCount(),
-                                        instanceCount());
-}
-
-unsigned int DrawExecution::elementCount() const
-{
-    const auto & binding = m_drawImpl.indexBufferBinding;
-
-    Assert(binding.buffer.get(), "No index buffer set");
-    Assert(binding.buffer->count > 0, "Index buffer is empty");
-
-    if (binding.ranged) return binding.count;
-    else return binding.buffer->count;
-}
-
-unsigned int DrawExecution::vertexCount() const
-{
-    Assert(!m_drawImpl.vertexBuffers.empty(), "No vertex buffer bound to command");
-
-    auto ref = m_drawImpl.vertexBuffers[0].ranged ?
-               m_drawImpl.vertexBuffers[0].count :
-               m_drawImpl.vertexBuffers[0].buffer->count;
-
-    Assert(ref > 0, "Vertex buffer is empty");
-
-    {
-        for (auto b = 1u; b < m_drawImpl.vertexBuffers.size(); b++)
-        {
-            auto cmp = m_drawImpl.vertexBuffers[b].ranged ?
-                       m_drawImpl.vertexBuffers[b].count :
-                       m_drawImpl.vertexBuffers[0].buffer->count;
-            Assert(cmp == ref, "");
-        }
-    }
-
-    return ref;
-}
-
-unsigned int DrawExecution::instanceCount() const
-{
-    assert(!m_drawImpl.instanceBuffers.empty());
-
-    auto & buffer = *m_drawImpl.instanceBuffers[0].buffer;
-    auto divisor = m_drawImpl.instanceBuffers[0].divisor;
-
-    Assert(buffer.count > 0, "Instance buffer is empty");
-    Assert(divisor > 0, "Divisor of instance buffer is zero");
-
-    auto ref = buffer.count * divisor;
-
-    for (auto b = 1u; b < m_drawImpl.instanceBuffers.size(); b++)
-    {
-        auto & buffer = *m_drawImpl.instanceBuffers[b].buffer;
-        auto divisor = m_drawImpl.instanceBuffers[b].divisor;
-
-        auto test = buffer.count * divisor;
-
-        Assert(test == ref, "Differing instance count in buffer " + std::to_string(b) + ": " + std::to_string(test) + " != " + std::to_string(ref));
-    }
-
-    return ref;
-}
-
-Type DrawExecution::elementType() const
-{
-    Assert(m_drawImpl.indexBufferBinding.buffer.get(), "No index buffer set");
-    Assert(m_drawImpl.indexBufferBinding.buffer->layout.fields().size() == 1u, "Invalid index buffer layout");
-
-    return m_drawImpl.indexBufferBinding.buffer->layout.fields()[0].type();
 }
 
 void DrawExecution::applyDepthState()

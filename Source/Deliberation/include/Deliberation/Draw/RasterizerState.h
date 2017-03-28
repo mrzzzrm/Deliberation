@@ -1,12 +1,13 @@
 #pragma once
 
-#include <experimental/optional>
 #include <string>
 
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
 #include <glm/glm.hpp>
+
+#include <Deliberation/Core/Experimental.h>
 
 #include <Deliberation/Deliberation.h>
 

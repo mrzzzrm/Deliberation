@@ -85,6 +85,8 @@ int Application::run(int argc,
 
     onStartup();
 
+    if (deliberation::GLLoggingEnabled()) std::cout << "--- Frame ---" << std::endl;
+
     MainLoop().run([this](float seconds)
     {
         SDL_Event event;
@@ -116,6 +118,8 @@ int Application::run(int argc,
         SDL_RenderPresent(m_displayRenderer);
 
         m_fpsCounter.onFrame();
+
+        if (deliberation::GLLoggingEnabled()) std::cout << "--- Frame ---" << std::endl;
 
         return m_running;
     });

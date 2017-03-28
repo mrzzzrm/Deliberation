@@ -24,17 +24,6 @@ public:
     void perform();
 
 private:
-    void drawElementsInstanced() const;
-    void drawElements() const;
-    void drawArrays() const;
-    void drawArraysInstanced() const;
-
-    unsigned int elementCount() const;
-    unsigned int vertexCount() const;
-    unsigned int instanceCount() const;
-
-    Type elementType() const;
-
     void applyDepthState();
     void applyBlendState();
     void applyCullState();

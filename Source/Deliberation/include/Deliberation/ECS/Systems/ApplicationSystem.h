@@ -21,6 +21,7 @@ public:
         m_application(application)
     {}
 
+    Application & application() const { return m_application; }
     Context & context() const { return m_application.context(); }
     InputBase & input() const  { return m_application.input(); }
 

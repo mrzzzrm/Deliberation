@@ -17,12 +17,14 @@ public:
     ProgramInterfaceVertexAttribute();
     ProgramInterfaceVertexAttribute(
         const std::string & name,
-        gl::GLint location,
+        u32 index,
+        gl::GLint glLocation,
         Type type,
         gl::GLint size);
 
     const std::string & name() const;
-    gl::GLint location() const;
+    u32 index() const;
+    gl::GLint glLocation() const;
     Type type() const;
     gl::GLint size() const;
 
@@ -33,9 +35,10 @@ public:
 
 private:
     std::string     m_name;
-    gl::GLint       m_location;
+    u32             m_index = 0;
+    gl::GLint       m_glLocation = 0;
     Type            m_type;
-    gl::GLint       m_size;
+    gl::GLint       m_size = 0;
 };
 
 }

@@ -22,5 +22,7 @@ void EnableGLErrorChecks();
 void EnableGLErrorChecksAndLogging();
 void DisableGLErrorChecks();
 
+bool GLLoggingEnabled();
+
 }
 

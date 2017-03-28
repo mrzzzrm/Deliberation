@@ -55,7 +55,11 @@ DrawImpl::DrawImpl(Context & context,
     framebuffer = context.backbuffer();
 
     // Allocate Uniform Buffer Bindings
-    uniformBuffers.resize(program.interface().uniformBlocks().size());
+    uniformBuffers.resize(this->program->interface.uniformBlocks().size());
+    
+    // Allocate vertex attribute bindings
+    attributeBindings.resize(this->program->interface.attributes().size());
+    valueAttributes = Blob(0);
 }
 
 }

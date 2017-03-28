@@ -18,15 +18,21 @@ add_library(ExampleCommon
     SceneExampleApplication.h
 )
 
+target_link_libraries(ExampleCommon
+    ${DELIBERATION_LIBRARIES})
+
 # libs
 set(libs
     ExampleCommon
-    ${DELIBERATION_LIBRARIES}
 )
 
 # AmbientOcclusionExample
 add_executable(AmbientOcclusionExample AmbientOcclusionExample.cpp)
 target_link_libraries(AmbientOcclusionExample ${libs})
+
+# DrawSandbox
+add_executable(DrawSandbox DrawSandbox.cpp)
+target_link_libraries(DrawSandbox ${libs})
 
 # BoxBoxSandbox
 add_executable(BoxBoxSandbox BoxBoxSandbox.cpp)

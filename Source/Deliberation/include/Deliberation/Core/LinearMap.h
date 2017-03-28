@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cstdlib>
-#include <experimental/optional>
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Core/Experimental.h>
 #include <Deliberation/Core/Optional.h>
 
 namespace deliberation

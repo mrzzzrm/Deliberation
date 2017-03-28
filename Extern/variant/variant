@@ -61,12 +61,13 @@ struct __in_place_private{
     struct __value_holder;
 };
 
-
 struct in_place_tag {
     in_place_tag() = delete;
 };
 
+/*
 using in_place_t = in_place_tag(&)(__in_place_private&);
+*/
 
 template <class _Type>
 using in_place_type_t = in_place_tag(&)(__in_place_private::__type_holder<_Type>&);
@@ -74,7 +75,9 @@ using in_place_type_t = in_place_tag(&)(__in_place_private::__type_holder<_Type>
 template <size_t _Index>
 using in_place_index_t = in_place_tag(&)(__in_place_private::__value_holder<_Index>&);
 
+/*
 in_place_tag in_place(__in_place_private&);
+*/
 
 template <class _Type>
 in_place_tag in_place(__in_place_private::__type_holder<_Type> &) {
@@ -85,6 +88,7 @@ template <size_t _Index>
 in_place_tag in_place(__in_place_private::__value_holder<_Index> &) {
     throw __in_place_private();
 }
+
 
 class bad_variant_access: public std::logic_error{
 public:
