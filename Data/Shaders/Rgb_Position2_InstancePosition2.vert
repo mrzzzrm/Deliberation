@@ -1,4 +1,4 @@
-#version 330
+#version 150 core
 
 in vec3 Rgb;
 in vec2 Position;

@@ -303,8 +303,6 @@ void Draw::build() const
 
         const auto baseOffset = bufferBinding.ranged ? bufferBinding.first * bufferBinding.buffer->layout.stride() : 0;
 
-        std::cout << "GLbinding: " << attribute.name() << "->" << bufferBinding.fieldIndex << std::endl;
-
         GLBindVertexAttribute(m_impl->glVertexArray,
                               attribute,
                               *bufferBinding.buffer,
@@ -334,8 +332,6 @@ void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 co
         binding = detail::VertexAttributeBufferBinding{};
 
         auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(binding);
-
-        std::cout << "Binding attribute " << attribute->name() << ": BufferField=" << f << "; AttributeIndex: " << attribute->index() << std::endl;
 
         bufferBinding.buffer = buffer.m_impl;
         bufferBinding.fieldIndex = (u32)f;

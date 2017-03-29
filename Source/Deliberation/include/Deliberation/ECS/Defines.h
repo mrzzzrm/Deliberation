@@ -3,6 +3,8 @@
 #include <bitset>
 #include <limits>
 
+#include <Deliberation/Core/TypeID.h>
+
 namespace deliberation
 {
 
@@ -11,9 +13,10 @@ const auto ECS_MAX_NUM_SYSTEMS = 128;
 
 typedef std::bitset<ECS_MAX_NUM_COMPONENTS> ComponentBitset;
 typedef std::bitset<ECS_MAX_NUM_SYSTEMS> SystemBitset;
-typedef uint64_t entity_id_t;
+typedef uint64_t EntityId;
+typedef TypeID::value_t ComponentTypeId;
 
-const auto ECS_INVALID_ENTITY_ID = std::numeric_limits<entity_id_t>::max();
+const auto ECS_INVALID_ENTITY_ID = std::numeric_limits<EntityId>::max();
 
 struct ComponentEventFamily {};
 

@@ -47,11 +47,11 @@ T & Entity::addComponent(Args &&... args)
 }
 
 template<typename T>
-void Entity::removeComponent()
+void Entity::scheduleComponentRemoval()
 {
     static_assert(std::is_base_of<ComponentBase, T>::value, "");
 
-    removeComponent(T::indexStatic());
+    scheduleComponentRemoval(T::indexStatic());
 }
 
 }

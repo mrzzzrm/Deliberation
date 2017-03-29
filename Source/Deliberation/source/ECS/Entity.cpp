@@ -21,7 +21,7 @@ World & Entity::world() const
     return *m_world;
 }
 
-entity_id_t Entity::id() const
+EntityId Entity::id() const
 {
     return m_id;
 }
@@ -31,12 +31,12 @@ const std::string & Entity::name() const
     return data().name;
 }
 
-entity_id_t Entity::parent() const
+EntityId Entity::parent() const
 {
     return data().parent;
 }
 
-const std::vector<entity_id_t> & Entity::children() const
+const std::vector<EntityId> & Entity::children() const
 {
     return data().children;
 }
@@ -51,14 +51,14 @@ bool Entity::isValid() const
     return m_world && m_world->isValid(m_id);
 }
 
-void Entity::remove()
+void Entity::scheduleRemoval()
 {
     Assert(m_world, "Entity is hollow");
 
-    m_world->remove(m_id);
+    m_world->scheduleEntityRemoval(m_id);
 }
 
-Entity::Entity(World & world, entity_id_t id):
+Entity::Entity(World & world, EntityId id):
     m_world(&world),
     m_id(id)
 {
@@ -106,11 +106,11 @@ void Entity::addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> comp
     m_world->addComponent(m_id, c, std::move(component));
 }
 
-void Entity::removeComponent(TypeID::value_t c)
+void Entity::scheduleComponentRemoval(TypeID::value_t c)
 {
     Assert(m_world, "Entity is hollow");
 
-    m_world->removeComponent(m_id, c);
+    m_world->scheduleComponentRemoval(m_id, c);
 }
 
 Entity Entity::createChild(const std::string & name)

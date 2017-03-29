@@ -30,7 +30,7 @@ public:
 
     void onStartup() override
     {
-        EnableGLErrorChecksAndLogging();
+        DisableGLErrorChecks();
 
         m_clear = context().createClear();
 

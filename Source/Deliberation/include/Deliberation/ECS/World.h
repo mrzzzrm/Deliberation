@@ -37,10 +37,11 @@ public:
     EventManager & eventManager();
     const WorldProfiler & profiler() const;
 
-    EntityData & entityData(entity_id_t id);
+    EntityData & entityData(EntityId id);
+    Entity entity(EntityId id);
 
     Entity createEntity(const std::string & name = "Entity",
-                        entity_id_t parent = ECS_INVALID_ENTITY_ID);
+                        EntityId parent = ECS_INVALID_ENTITY_ID);
 
     template<typename T, typename ... Args>
     std::shared_ptr<T> addSystem(Args &&... args);
@@ -66,27 +67,44 @@ private:
     friend class Entity;
 
 private:
-    bool isValid(entity_id_t id) const;
-    void remove(entity_id_t id);
-    std::shared_ptr<ComponentBase> component(entity_id_t id, TypeID::value_t index);
-    std::shared_ptr<const ComponentBase> component(entity_id_t id, TypeID::value_t index) const;
-    void addComponent(entity_id_t id, TypeID::value_t index, std::shared_ptr<ComponentBase> component);
-    void removeComponent(entity_id_t id, TypeID::value_t index);
+    struct ComponentRemoval
+    {
+        ComponentRemoval(EntityId entityId, ComponentTypeId componentTypeId):
+            entityId(entityId),
+            componentTypeId(componentTypeId)
+        {}
 
-    std::size_t entityIndex(entity_id_t id) const;
+        EntityId        entityId;
+        ComponentTypeId componentTypeId;
+    };
+
+private:
+    bool isValid(EntityId id) const;
+    void scheduleEntityRemoval(EntityId id);
+    std::shared_ptr<ComponentBase> component(EntityId id, TypeID::value_t index);
+    std::shared_ptr<const ComponentBase> component(EntityId id, TypeID::value_t index) const;
+    void addComponent(EntityId id, TypeID::value_t index, std::shared_ptr<ComponentBase> component);
+    void scheduleComponentRemoval(EntityId id, TypeID::value_t index);
+    void removeComponent(const ComponentRemoval & componentRemoval);
+    void removeEntity(EntityId entityId);
+
+    std::size_t entityIndex(EntityId id) const;
     EntityComponentSetup * componentSetup(const ComponentBitset & componentBits);
 
 private:
     SparseVector<EntityData>                    m_entities;
-    std::unordered_map<entity_id_t,
+    std::unordered_map<EntityId,
         std::size_t>                            m_entityIndexByID;
-    entity_id_t                                 m_entityIDCounter;
+    EntityId                                    m_entityIDCounter;
 
     std::unordered_map<ComponentBitset,
         EntityComponentSetup>                   m_entityComponentSetups;
 
     LinearMap<LinearMap<
         std::shared_ptr<ComponentBase>>>        m_components;
+
+    std::vector<EntityId>                       m_entityRemovals;
+    std::vector<ComponentRemoval>               m_componentRemovals;
 
     LinearMap<std::shared_ptr<SystemBase>>      m_systems;
 

@@ -15,7 +15,7 @@ public:
     virtual void emit(size_t entityIndex, TypeID::value_t eventType, const void * event) = 0;
 
 protected:
-    ~AbstractWorld() = default;
+    virtual ~AbstractWorld() = default;
 };
 
 }

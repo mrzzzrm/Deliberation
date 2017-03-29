@@ -52,7 +52,7 @@ protected:
 private:
     struct EntityEntry
     {
-        entity_id_t id;
+        EntityId id;
         bool        active;
     };
 
@@ -60,7 +60,7 @@ private:
     World &                          m_world;
     ComponentFilter                  m_filter;
     SparseVector<EntityEntry>        m_entities;
-    std::unordered_map<entity_id_t,
+    std::unordered_map<EntityId,
         std::size_t>                 m_entityIndexByID;
 };
 

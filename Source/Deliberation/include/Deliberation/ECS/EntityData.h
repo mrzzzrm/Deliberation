@@ -15,19 +15,27 @@ namespace deliberation
 
 class EntityComponentSetup;
 
+enum class EntityPhase
+{
+    Active,
+    ScheduledForRemoval
+};
+
 struct DELIBERATION_API EntityData
 {
     EntityData();
-    EntityData(entity_id_t id, const std::string & name, entity_id_t parent);
+    EntityData(EntityId id, const std::string & name, EntityId parent);
 
-    entity_id_t                 id;
+    EntityId                 id;
     std::string                 name;
-    entity_id_t                 parent;
-    std::vector<entity_id_t>    children;
+    EntityId                 parent;
+    std::vector<EntityId>    children;
 
     ComponentBitset             componentBits;
 
     EntityComponentSetup *      componentSetup;
+
+    EntityPhase                 phase = EntityPhase::Active;
 };
 
 }

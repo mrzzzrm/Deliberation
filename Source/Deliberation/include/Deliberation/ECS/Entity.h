@@ -25,10 +25,10 @@ public:
     Entity();
 
     World & world() const;
-    entity_id_t id() const;
+    EntityId id() const;
     const std::string & name() const;
-    entity_id_t parent() const;
-    const std::vector<entity_id_t> & children() const;
+    EntityId parent() const;
+    const std::vector<EntityId> & children() const;
     const ComponentBitset & componentBits() const;
 
     bool isValid() const;
@@ -46,9 +46,9 @@ public:
     T & addComponent(Args &&... args);
 
     template<typename T>
-    void removeComponent();
+    void scheduleComponentRemoval();
 
-    void remove();
+    void scheduleRemoval();
 
     Entity createChild(const std::string & name = "Entity");
 
@@ -63,7 +63,7 @@ private:
     friend class SystemBase;
 
 private:
-    Entity(World & world, entity_id_t id);
+    Entity(World & world, EntityId id);
 
     EntityData & data() const;
 
@@ -71,11 +71,11 @@ private:
     ComponentBase & component(TypeID::value_t c);
     const ComponentBase & component(TypeID::value_t c) const;
     void addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component);
-    void removeComponent(TypeID::value_t c);
+    void scheduleComponentRemoval(TypeID::value_t c);
 
 private:
     World *     m_world;
-    entity_id_t m_id;
+    EntityId m_id;
 };
 
 }
