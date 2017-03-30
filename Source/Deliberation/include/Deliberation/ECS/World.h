@@ -46,9 +46,6 @@ public:
     template<typename T, typename ... Args>
     std::shared_ptr<T> addSystem(Args &&... args);
 
-    template<typename T>
-    T & system();
-
     void frameBegin();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
@@ -62,6 +59,7 @@ public:
      * From AbstractWorld
      */
     void emit(size_t entityIndex, TypeID::value_t eventType, const void * event) final override;
+
 
 private:
     friend class Entity;

@@ -18,14 +18,5 @@ std::shared_ptr<T> World::addSystem(Args &&... args)
     return system;
 }
 
-template<typename T>
-T & World::system()
-{
-    Assert((std::is_base_of<System<T>, T>::value), "");
-
-    auto systemBase = m_systems.at(System<T>::indexStatic());
-    return *std::static_pointer_cast<T>(systemBase);
-}
-
 }
 
