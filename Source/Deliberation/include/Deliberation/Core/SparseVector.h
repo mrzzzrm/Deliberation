@@ -4,9 +4,10 @@
 #include <stack>
 #include <string>
 
+#include <boost/optional.hpp>
+
 #include <Deliberation/Deliberation_API.h>
 
-#include <Deliberation/Core/Experimental.h>
 #include <Deliberation/Core/Optional.h>
 
 namespace deliberation
@@ -88,7 +89,7 @@ private:
     void decCount();
 
 private:
-    std::vector<std::experimental::optional<T>> m_vec;
+    std::vector<boost::optional<T>>             m_vec;
     std::stack<std::size_t>                     m_pool;
     size_t                                      m_count = 0;
 };

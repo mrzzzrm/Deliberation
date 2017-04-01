@@ -1,6 +1,8 @@
 #include <iostream>
 #include <chrono>
 
+#include <boost/variant.hpp>
+
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Core/DataLayout.h>
@@ -17,9 +19,9 @@
 
 using namespace deliberation;
 
-void LinearMapExample()
+void LinearMapSandbox()
 {
-    std::cout << "----------- LinearMapExample ----------" << std::endl;
+    std::cout << "----------- LinearMapSandbox ----------" << std::endl;
 
     LinearMap<float> map;
     const auto & cmap = map;
@@ -39,9 +41,9 @@ void LinearMapExample()
     }
 }
 
-void LinearOctreeExample()
+void LinearOctreeSandbox()
 {
-    std::cout << "----------- LinearOctreeExample ----------" << std::endl;
+    std::cout << "----------- LinearOctreeSandbox ----------" << std::endl;
 
     LinearOctree<int> tree(3);
     for (auto & node : tree.nodes())
@@ -73,9 +75,9 @@ void LinearOctreeExample()
     std::cout << tree.toString() << std::endl;
 }
 
-void RingBufferExample()
+void RingBufferSandbox()
 {
-    std::cout << "----------- RingBufferExample - push() ----------" << std::endl;
+    std::cout << "----------- RingBufferSandbox - push() ----------" << std::endl;
     RingBuffer<int> buf(3);
 
     std::cout << buf.toString() << std::endl;
@@ -103,7 +105,7 @@ void RingBufferExample()
 
     std::cout << buf.toString() << std::endl;
 
-    std::cout << "----------- RingBufferExample - reserve() ----------" << std::endl;
+    std::cout << "----------- RingBufferSandbox - reserve() ----------" << std::endl;
 
     buf.reserve(5);
     std::cout << buf.toString() << std::endl;
@@ -119,14 +121,14 @@ void RingBufferExample()
     std::cout << buf.toString() << std::endl;
 }
 
-void TypeIDExample()
+void TypeIDSandbox()
 {
     struct A {};
     struct B {};
     class C {};
     class D {};
 
-    std::cout << "----------- TypeIDExample ----------" << std::endl;
+    std::cout << "----------- TypeIDSandbox ----------" << std::endl;
 
     std::cout << "TypeID<A>: " << TypeID::value<A>() << std::endl;
     std::cout << "TypeID<B>: " << TypeID::value<B>() << std::endl;
@@ -140,9 +142,9 @@ void TypeIDExample()
     std::cout << "TypeID<B, B>: " << TypeID::value<B, B>() << std::endl;
 }
 
-void SparseVectorExample()
+void SparseVectorSandbox()
 {
-    std::cout << "----------- SparseVectorExample -----------" << std::endl;
+    std::cout << "----------- SparseVectorSandbox -----------" << std::endl;
 
     SparseVector<int> vec;
 
@@ -175,16 +177,16 @@ void SparseVectorExample()
     std::cout << vec.toString() << std::endl;
 }
 
-void DataLayoutExample()
+void DataLayoutSandbox()
 {
-    std::cout << "----------- DataLayoutExample -----------" << std::endl;
+    std::cout << "----------- DataLayoutSandbox -----------" << std::endl;
 
     DataLayout layout{};
 }
 
-void BlobExample()
+void BlobSandbox()
 {
-    std::cout << "----------- BlobExample -----------" << std::endl;
+    std::cout << "----------- BlobSandbox -----------" << std::endl;
 
     Blob blob(6);
     blob.access<u32>(0) = 0xFF00A3B4;
@@ -199,9 +201,9 @@ void BlobExample()
 
 }
 
-void LayoutedBlobExample()
+void LayoutedBlobSandbox()
 {
-    std::cout << "----------- LayoutedBlobExample -----------" << std::endl;
+    std::cout << "----------- LayoutedBlobSandbox -----------" << std::endl;
 
     std::cout << Type_I32.name() << ": " << Type_I32.id() << std::endl;
     std::cout << Type_Vec3.name() << ": " << Type_Vec3.id() << std::endl;
@@ -259,9 +261,9 @@ void LayoutedBlobExample()
     }
 }
 
-void TrajectoryExample()
+void TrajectorySandbox()
 {
-    std::cout << "----------- TrajectoryExample -----------" << std::endl;
+    std::cout << "----------- TrajectorySandbox -----------" << std::endl;
 
     auto success = false;
 
@@ -283,15 +285,15 @@ void TrajectoryExample()
 
 int main(int argc, char * argv[])
 {
-    TrajectoryExample();
-//    LinearMapExample();
-//    LinearOctreeExample();
-//    RingBufferExample();
-//    TypeIDExample();
-//    SparseVectorExample();
-//    DataLayoutExample();
-//    BlobExample();
-//    LayoutedBlobExample();
+//    TrajectorySandbox();
+//    LinearMapSandbox();
+//    LinearOctreeSandbox();
+//    RingBufferSandbox();
+//    TypeIDSandbox();
+//    SparseVectorSandbox();
+//    DataLayoutSandbox();
+//    BlobSandbox();
+//    LayoutedBlobSandbox();
 
     return 0;
 }

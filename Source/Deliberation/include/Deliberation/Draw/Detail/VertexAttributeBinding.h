@@ -2,7 +2,9 @@
 
 #include <memory>
 
-#include <Deliberation/Core/Experimental.h>
+#include <boost/variant.hpp>
+
+#include <Deliberation/Core/Monostate.h>
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
@@ -28,8 +30,8 @@ struct VertexAttributeBufferBinding {
     u32 divisor = 0;
 };
 
-using VertexAttributeBinding = std::experimental::variant<
-    std::experimental::monostate,
+using VertexAttributeBinding = boost::variant<
+    Monostate,
     VertexAttributeValueBinding,
     VertexAttributeBufferBinding>;
 

@@ -7,8 +7,6 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Core/Experimental.h>
-
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation

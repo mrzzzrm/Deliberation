@@ -7,8 +7,6 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Core/Experimental.h>
-
 #include <Deliberation/Draw/Detail/UniformImpl.h>
 #include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/Framebuffer.h>

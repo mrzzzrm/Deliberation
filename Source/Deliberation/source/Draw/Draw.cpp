@@ -243,7 +243,7 @@ void Draw::schedule() const
             Assert(a < attributes.size(), "");
 
             const auto & valueBinding =
-                std::experimental::get<detail::VertexAttributeValueBinding>(m_impl->attributeBindings[a]);
+                boost::get<detail::VertexAttributeValueBinding>(m_impl->attributeBindings[a]);
 
             GLBindVertexAttribute(
                 m_impl->glVertexArray,
@@ -295,11 +295,11 @@ void Draw::build() const
         const auto & attribute = m_impl->program->interface.attributes()[a];
         const auto & attributeBinding = m_impl->attributeBindings[a];
 
-        Assert (attributeBinding.index() != 0, "Attribute '" + attribute.name() + "' is not supplied");
+        Assert (attributeBinding.which() != 0, "Attribute '" + attribute.name() + "' is not supplied");
 
-        if (attributeBinding.index() == 1) continue; // value attribute
+        if (attributeBinding.which() == 1) continue; // value attribute
 
-        const auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(attributeBinding);
+        const auto & bufferBinding = boost::get<detail::VertexAttributeBufferBinding>(attributeBinding);
 
         const auto baseOffset = bufferBinding.ranged ? bufferBinding.first * bufferBinding.buffer->layout.stride() : 0;
 
@@ -327,11 +327,11 @@ void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 co
         if (!attribute) continue;
 
         auto & binding = m_impl->attributeBindings[attribute->index()];
-        Assert(binding.index() == 0, "Vertex attribute '" + field.name() + "' is already supplied.");
+        Assert(binding.which() == 0, "Vertex attribute '" + field.name() + "' is already supplied.");
 
         binding = detail::VertexAttributeBufferBinding{};
 
-        auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(binding);
+        auto & bufferBinding = boost::get<detail::VertexAttributeBufferBinding>(binding);
 
         bufferBinding.buffer = buffer.m_impl;
         bufferBinding.fieldIndex = (u32)f;
@@ -349,16 +349,16 @@ void Draw::setAttribute(const ProgramInterfaceVertexAttribute & attribute, const
 
     auto & binding = m_impl->attributeBindings[attribute.index()];
 
-    if (binding.index() == 0) // Attribute not yet assigned, allocate new space in value blob
+    if (binding.which() == 0) // Attribute not yet assigned, allocate new space in value blob
     {
         const auto offset = m_impl->valueAttributes.size();
         m_impl->valueAttributes.resize(offset + attribute.type().size());
         binding = detail::VertexAttributeValueBinding{offset, (u32)attribute.index()};
     }
 
-    Assert(binding.index() != 2, "Vertex attribute '" + attribute.name() + "' is already bound to buffer");
+    Assert(binding.which() != 2, "Vertex attribute '" + attribute.name() + "' is already bound to buffer");
 
-    auto & valueBinding = std::experimental::get<detail::VertexAttributeValueBinding>(binding);
+    auto & valueBinding = boost::get<detail::VertexAttributeValueBinding>(binding);
 
     m_impl->valueAttributes.write(valueBinding.offset, data, attribute.type().size());
     m_impl->dirtyValueAttributes.emplace_back(attribute.index());
