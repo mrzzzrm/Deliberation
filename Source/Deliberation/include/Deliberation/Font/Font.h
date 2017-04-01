@@ -28,6 +28,8 @@ public:
     Font(Context & context, const std::string & path);
     ~Font();
 
+    Context & context() const;
+
     Texture render(const std::string & text, unsigned int size, const glm::vec4 & color) const;
 
 private:

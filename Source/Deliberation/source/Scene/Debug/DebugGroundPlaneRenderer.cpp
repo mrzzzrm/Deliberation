@@ -15,8 +15,8 @@ DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(Context & context, const Came
     m_context(context),
     m_camera(camera)
 {
-    m_program = m_context.createProgram({deliberation::dataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
-                                         deliberation::dataPath("Data/Shaders/DebugGroundPlaneRenderer.frag")});
+    m_program = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
+                                         deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.frag")});
     m_draw = m_context.createDraw(m_program, gl::GL_TRIANGLE_STRIP);
 
     m_view = m_draw.uniform("View");

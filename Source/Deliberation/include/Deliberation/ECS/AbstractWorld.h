@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <Deliberation/Core/TypeID.h>
 
 #include <Deliberation/ECS/Defines.h>
@@ -9,13 +11,18 @@
 namespace deliberation
 {
 
+class SystemBase;
+
 class AbstractWorld
 {
 public:
     virtual void emit(size_t entityIndex, TypeID::value_t eventType, const void * event) = 0;
 
 protected:
-    ~AbstractWorld() = default;
+    virtual ~AbstractWorld() = default;
+
 };
 
 }
+
+#include <Deliberation/ECS/AbstractWorld.inl>

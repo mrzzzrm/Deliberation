@@ -70,7 +70,7 @@ Uniform Draw::uniform(const std::string & name)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto location = m_impl->program->interface.uniform(name).location();
+    auto location = m_impl->program->interface.uniformRef(name).location();
 
     /*
         TODO
@@ -92,7 +92,7 @@ Sampler Draw::sampler(const std::string & name)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto location = m_impl->program->interface.sampler(name).location();
+    auto location = m_impl->program->interface.samplerRef(name).location();
 
     /*
         TODO
@@ -134,7 +134,7 @@ Buffer Draw::addVertices(const LayoutedBlob & data)
     return buffer;
 }
 
-Buffer Draw::addInstances(const LayoutedBlob & data, unsigned int divisor)
+Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -149,41 +149,43 @@ Buffer Draw::addInstances(const LayoutedBlob & data, unsigned int divisor)
 void Draw::setIndexBuffer(const Buffer & buffer)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    Assert(!m_impl->indexBuffer, "Re-setting index buffer not supported (yet)");
+    Assert(buffer.layout().fields().size() == 1, "Invalid index buffer layout");
 
-    m_impl->indexBuffer = buffer.m_impl;
+    m_impl->indexBufferBinding.buffer = buffer.m_impl;
+    m_impl->indexBufferBinding.ranged = false;
+    m_impl->indexBufferBindingDirty = true;
+}
+
+void Draw::setIndexBufferRange(const Buffer & buffer, u32 first, u32 count)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    Assert(buffer.layout().fields().size() == 1, "Invalid index buffer layout");
+
+    m_impl->indexBufferBinding.buffer = buffer.m_impl;
+    m_impl->indexBufferBinding.ranged = true;
+    m_impl->indexBufferBinding.first = first;
+    m_impl->indexBufferBinding.count = count;
+    m_impl->indexBufferBindingDirty = true;
 }
 
 void Draw::addVertexBuffer(const Buffer & buffer)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    verifyVertexBuffer(buffer);
-    m_impl->vertexBuffers.push_back(detail::BufferBinding{buffer.m_impl, false, 0u, 0u, 0u});
+    addVertexBuffer(buffer, false, 0, 0, 0);
 }
 
-void Draw::addVertexBufferRange(const Buffer & buffer, unsigned int first, unsigned int count)
+void Draw::addVertexBufferRange(const Buffer & buffer, u32 first, u32 count)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    verifyVertexBuffer(buffer);
-    m_impl->vertexBuffers.push_back(detail::BufferBinding{buffer.m_impl, true, first, count, 0u});
+    addVertexBuffer(buffer, true, first, count, 0);
 }
 
-void Draw::addInstanceBuffer(const Buffer & buffer, unsigned int divisor)
+void Draw::addInstanceBuffer(const Buffer & buffer, u32 divisor)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    verifyInstanceBuffer(buffer);
-    m_impl->instanceBuffers.push_back(detail::BufferBinding{buffer.m_impl, false, 0u, 0u, divisor});
+    addVertexBuffer(buffer, false, 0, 0, divisor);
 }
 
-void Draw::addInstanceBufferRange(const Buffer & buffer, unsigned int first, unsigned int count, unsigned int divisor)
+void Draw::addInstanceBufferRange(const Buffer & buffer, u32 first, u32 count, u32 divisor)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    verifyInstanceBuffer(buffer);
-    m_impl->instanceBuffers.push_back(detail::BufferBinding{buffer.m_impl, true, first, count, divisor});
+    addVertexBuffer(buffer, true, first, count, divisor);
 }
 
 void Draw::setFramebuffer(const Framebuffer & framebuffer)
@@ -203,7 +205,7 @@ void Draw::setRenderTarget(const std::string & name, Surface * surface)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto index = m_impl->program->interface.fragmentOutput(name).location();
+    auto index = m_impl->program->interface.fragmentOutputRef(name).location();
     m_impl->framebuffer.setRenderTarget(index, surface);
 }
 
@@ -211,7 +213,7 @@ void Draw::setUniformBuffer(const std::string & name, const Buffer & buffer, uns
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto index = m_impl->program->interface.uniformBlock(name).index();
+    auto index = m_impl->program->interface.uniformBlockRef(name).index();
 
     detail::UniformBufferBinding binding{buffer.m_impl, begin};
 
@@ -222,9 +224,35 @@ void Draw::schedule() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    if (!isBuild())
+    if (m_impl->glVertexArray == 0) build();
+
+    if (m_impl->indexBufferBindingDirty && m_impl->indexBufferBinding.buffer)
     {
-        build();
+        gl::glBindVertexArray(m_impl->glVertexArray);
+        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBufferBinding.buffer->glName);
+        m_impl->indexBufferBindingDirty = false;
+    }
+
+    if (!m_impl->dirtyValueAttributes.empty())
+    {
+        gl::glBindVertexArray(m_impl->glVertexArray);
+
+        auto & attributes = m_impl->program->interface.attributes();
+        for (const auto & a : m_impl->dirtyValueAttributes)
+        {
+            Assert(a < attributes.size(), "");
+
+            const auto & valueBinding =
+                std::experimental::get<detail::VertexAttributeValueBinding>(m_impl->attributeBindings[a]);
+
+            GLBindVertexAttribute(
+                m_impl->glVertexArray,
+                attributes[a],
+                m_impl->valueAttributes.ptr(valueBinding.offset)
+            );
+        }
+
+        m_impl->dirtyValueAttributes.clear();
     }
 
     m_impl->context.scheduleDraw(*this);
@@ -242,31 +270,6 @@ std::string Draw::toString() const
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
     std::stringstream stream;
-    stream << statusString() << std::endl;
-//    stream << "Draw:" << std::endl;
-//    stream << "{" << std::endl;
-//    stream << "  Program: " << (m_program.toString()) << std::endl;
-//    stream << "  State: " << m_state.toString() << std::endl;
-//    stream << "  VAO: " << m_vao.toString() << std::endl;
-////    stream << "  InstanceCount: " << (m_instanceBuffers.empty() ? 0 : instanceCount()) << std::endl;
-////    stream << "  VertexCount: " << vertexCount() << std::endl;
-////    stream << "  IndexCount: " << (m_indexBuffer ? elementCount() : 0u) << std::endl;
-//    stream << "  InstanceBuffers:" << std::endl;
-//    for (auto & pair : m_instanceBuffers)
-//    {
-//        stream << "    " << &pair.first << ": " << pair.first.get().count() << " instances; Divisor = " << pair.second << "; ID = " << pair.first.get().buffer().id() << std::endl;
-//    }
-//
-//    if (!d_unsetUniformLocations.empty())
-//    {
-//        stream << "  Unset uniforms: " << std::endl;
-//        for (auto location : d_unsetUniformLocations)
-//        {
-//            stream << "    " << m_program.layout().uniformByLocation(location).toString() << std::endl;
-//        }
-//    }
-//
-//    stream << "}" << std::endl;
 
     return stream.str();
 }
@@ -277,219 +280,88 @@ Draw::Draw(const std::shared_ptr<detail::DrawImpl> & impl):
 
 }
 
-bool Draw::isBuild() const
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    return m_impl->glVertexArray != 0u;
-}
-
-bool Draw::isComplete() const
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    if (isBuild())
-    {
-        return true;
-    }
-
-    for (auto & attribute : m_impl->program->interface.attributes())
-    {
-        auto count = 0u;
-        bufferField(attribute.name(), nullptr, nullptr, &count);
-
-        if (count != 1u)
-        {
-            if (m_impl->attributes.find(attribute.name()) == m_impl->attributes.end()) return false;
-        }
-    }
-
-    return true;
-}
-
 void Draw::build() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    Assert(isComplete(), statusString());
-
     /*
         ToDo
             Move all gl-stuff to Context/GLStateManager
     */
 
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);
-    Assert(m_impl->glVertexArray != 0u, "");
+    Assert(m_impl->glVertexArray != 0, "");
 
-    for (auto & attribute : m_impl->program->interface.attributes())
+    for (size_t a = 0; a < m_impl->attributeBindings.size(); a++)
     {
-        auto count = 0u;
-        auto binding = (detail::BufferBinding*)nullptr;
-        auto divisor = 0u;
+        const auto & attribute = m_impl->program->interface.attributes()[a];
+        const auto & attributeBinding = m_impl->attributeBindings[a];
 
-        auto bufferField = this->bufferField(attribute.name(), &binding, &divisor, &count);
+        Assert (attributeBinding.index() != 0, "Attribute '" + attribute.name() + "' is not supplied");
 
-        if (bufferField)
-        {
-            Assert(count == 1u, "");
-            Assert(binding, "");
+        if (attributeBinding.index() == 1) continue; // value attribute
 
-            auto baseoffset = binding->ranged ? binding->first * binding->buffer->layout.stride() : 0;
+        const auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(attributeBinding);
 
-            GLBindVertexAttribute(m_impl->glVertexArray,
-                                  m_impl->program->interface,
-                                  *binding->buffer,
-                                  divisor,
-                                  bufferField->name(),
-                                  baseoffset);
-        }
-        else
-        {
-            const auto iter = m_impl->attributes.find(attribute.name());
+        const auto baseOffset = bufferBinding.ranged ? bufferBinding.first * bufferBinding.buffer->layout.stride() : 0;
 
-            Assert(iter != m_impl->attributes.end(), "Attribute '" + attribute.name() +
-                "' is neither supplied by buffer nor by fixed attribute");
-
-            GLBindVertexAttribute(
-                m_impl->glVertexArray,
-                attribute,
-                iter->second.data
-                );
-        }
-
-    }
-
-    if (m_impl->indexBuffer)
-    {
-        gl::glBindVertexArray(m_impl->glVertexArray);
-        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBuffer->glName);
+        GLBindVertexAttribute(m_impl->glVertexArray,
+                              attribute,
+                              *bufferBinding.buffer,
+                              bufferBinding.fieldIndex,
+                              bufferBinding.divisor,
+                              baseOffset);
     }
 }
 
-void Draw::verifyVertexBuffer(const Buffer & buffer) const
+void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
+    const auto & layout = buffer.layout();
+    const auto & interface = m_impl->program->interface;
+
+    for (size_t f = 0; f < layout.fields().size(); f++)
     {
-        auto iter = std::find_if(m_impl->vertexBuffers.begin(), m_impl->vertexBuffers.end(),
-                                 [&buffer] (const detail::BufferBinding & other) { return other.buffer.get() == buffer.m_impl.get(); });
-        Assert(iter == m_impl->vertexBuffers.end(), "Duplicate buffer");
+        const auto & field = layout.fields()[f];
+
+        const auto * attribute = interface.attribute(field.name());
+        if (!attribute) continue;
+
+        auto & binding = m_impl->attributeBindings[attribute->index()];
+        Assert(binding.index() == 0, "Vertex attribute '" + field.name() + "' is already supplied.");
+
+        binding = detail::VertexAttributeBufferBinding{};
+
+        auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(binding);
+
+        bufferBinding.buffer = buffer.m_impl;
+        bufferBinding.fieldIndex = (u32)f;
+        bufferBinding.ranged = ranged;
+        bufferBinding.first = first;
+        bufferBinding.count = count;
+        bufferBinding.divisor = divisor;
     }
 
-    //Assert(
-    //    !isComplete(),
-    //    "Can't add vertex buffer, is already complete.\n"
-    //    "Buffer: " + buffer.toString() + "\n"
-    //    "ProgramInterface: " + m_impl->program->interface.toString()
-    //);
 }
 
-void Draw::verifyInstanceBuffer(const Buffer & buffer) const
+void Draw::setAttribute(const ProgramInterfaceVertexAttribute & attribute, const void * data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
+    auto & binding = m_impl->attributeBindings[attribute.index()];
+
+    if (binding.index() == 0) // Attribute not yet assigned, allocate new space in value blob
     {
-        auto iter = std::find_if(m_impl->instanceBuffers.begin(), m_impl->instanceBuffers.end(),
-                                 [&buffer] (const detail::BufferBinding & other) { return other.buffer.get() == buffer.m_impl.get(); });
-        Assert(iter == m_impl->instanceBuffers.end(), "Duplicate buffer");
+        const auto offset = m_impl->valueAttributes.size();
+        m_impl->valueAttributes.resize(offset + attribute.type().size());
+        binding = detail::VertexAttributeValueBinding{offset, (u32)attribute.index()};
     }
 
-    Assert(
-        !isComplete(),
-        "Can't add instance buffer, VAO is already complete.\n"
-        "Buffer: " + buffer.toString()
-    );
-}
+    Assert(binding.index() != 2, "Vertex attribute '" + attribute.name() + "' is already bound to buffer");
 
-const DataLayoutField * Draw::bufferField(
-    const std::string & name,
-    detail::BufferBinding ** o_binding,
-    gl::GLuint * o_divisor,
-    unsigned int * o_count) const
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    auto & valueBinding = std::experimental::get<detail::VertexAttributeValueBinding>(binding);
 
-    if (o_count) *o_count = 0u;
-
-    auto * field = (const DataLayoutField*)nullptr;
-
-    for (auto b = 0u; b < m_impl->vertexBuffers.size() + m_impl->instanceBuffers.size(); b++)
-    {
-        auto & binding =  b < m_impl->vertexBuffers.size() ?
-                            m_impl->vertexBuffers[b] :
-                            m_impl->instanceBuffers[b - m_impl->vertexBuffers.size()];
-
-        auto & buffer = *binding.buffer;
-
-        for (auto & bufferField : buffer.layout.fields())
-        {
-            if (bufferField.name() == name)
-            {
-                field = &bufferField;
-
-                if (o_divisor) *o_divisor = binding.divisor;
-                if (o_binding) *o_binding = &binding;
-                if (o_count) (*o_count)++;
-            }
-        }
-    }
-
-    return field;
-}
-
-std::string Draw::statusString() const
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    std::stringstream stream;
-
-    if (isBuild())
-    {
-        stream << "VertexArray is build (" << m_impl->program->interface.attributes().size() << " attributes), glName = " << m_impl->glVertexArray << std::endl;
-    }
-    else
-    {
-        stream << "VertexArray is not build (" << m_impl->program->interface.attributes().size() << " attributes)" << std::endl;
-    }
-
-    for (auto & attribute :  m_impl->program->interface.attributes())
-    {
-        stream << "  " << attribute.name() << std::endl;
-    }
-
-    for (auto & programField :  m_impl->program->interface.attributes())
-    {
-        auto count = 0u;
-
-        bufferField(programField.name(), nullptr, nullptr, &count);
-
-        if (count > 1u)
-        {
-            stream << "Draw is supplied with multiple attributes '" << programField.name() << "'";
-            return stream.str();
-        }
-
-        if (count == 0u)
-        {
-            stream << "Draw isn't supplied with attribute '" << programField.name() << "'";
-            return stream.str();
-        }
-    }
-
-    return stream.str();
-}
-
-void Draw::setAttribute(const std::string & name, Type type, Blob data)
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    std::cout << m_impl->program->interface.toString() << std::endl;
-
-    Assert(m_impl->program->interface.hasAttribute(name), "No such attribute '" + name + "'");
-    Assert(type == m_impl->program->interface.attribute(name).type(), "");
-    Assert(m_impl->attributes.count(name) == 0, "Value of '" + name + "' already set");
-
-    m_impl->attributes.emplace(name, detail::AttributeBinding(name, std::move(data)));
+    m_impl->valueAttributes.write(valueBinding.offset, data, attribute.type().size());
+    m_impl->dirtyValueAttributes.emplace_back(attribute.index());
 }
 
 }

@@ -101,7 +101,7 @@ bool HalfspaceContainsSphere(const glm::vec3 & normal,
     return distance > radius;
 }
 
-bool PlaneRay3DIntersection(const glm::vec3 & normal,
+bool Ray3DPlaneIntersection(const glm::vec3 & normal,
                             float d,
                             const glm::vec3 & origin,
                             const glm::vec3 & delta,
@@ -120,14 +120,14 @@ bool PlaneRay3DIntersection(const glm::vec3 & normal,
     }
 }
 
-glm::vec3 PlaneRay3DIntersectionPoint(const glm::vec3 & normal,
-                                      float d,
-                                      const glm::vec3 & origin,
-                                      const glm::vec3 & delta,
-                                      bool & valid)
+glm::vec3 Ray3DPlaneIntersection(const glm::vec3 & normal,
+                                 float d,
+                                 const glm::vec3 & origin,
+                                 const glm::vec3 & delta,
+                                 bool & valid)
 {
     float t;
-    if (!PlaneRay3DIntersection(normal, d, origin, delta, t))
+    if (!Ray3DPlaneIntersection(normal, d, origin, delta, t))
     {
         valid = false;
         return {};
@@ -138,7 +138,55 @@ glm::vec3 PlaneRay3DIntersectionPoint(const glm::vec3 & normal,
     }
 }
 
-bool Rect3DRay3DIntersection(const glm::vec3 & base,
+glm::vec2 DELIBERATION_API Rect3DRay3DIntersectionPoint(const glm::vec3 & base,
+                                                        const glm::vec3 & right,
+                                                        const glm::vec3 & up,
+                                                        const glm::vec3 & origin,
+                                                        const glm::vec3 & delta,
+                                                        bool & valid)
+{
+    auto plane = Rect3D(base, right, up).plane();
+    float t;
+    valid = Ray3DPlaneIntersection(plane.normal(), plane.d(),
+                                        origin, delta, t);
+    if (!valid)
+    {
+        return {};
+    }
+
+    auto point = origin + t * delta;
+    point -= base;
+
+    // Project point on right and up
+    // Projection on r=pr, Projection on u=pu
+
+    auto pr = glm::dot(point, right) / glm::dot(right, right);
+    if (pr < 0.0f || pr > 1.0f)
+    {
+        valid = false;
+        return {};
+    }
+
+    auto pu = glm::dot(point, up) / glm::dot(up, up);
+    if (pu < 0.0f || pu > 1.0f)
+    {
+        valid = false;
+        return {};
+    }
+
+    valid = true;
+    return {pr, pu};
+}
+
+glm::vec2 Rect3DRay3DIntersectionPoint(const Rect3D & rect,
+                                       const Ray3D & ray,
+                                       bool & valid)
+{
+    return Rect3DRay3DIntersectionPoint(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), valid);
+}
+
+
+bool Ray3DRect3DIntersection(const glm::vec3 & base,
                              const glm::vec3 & right,
                              const glm::vec3 & up,
                              const glm::vec3 & origin,
@@ -146,7 +194,7 @@ bool Rect3DRay3DIntersection(const glm::vec3 & base,
                              float & t)
 {
     auto plane = Rect3D(base, right, up).plane();
-    auto valid = PlaneRay3DIntersection(plane.normal(), plane.d(),
+    auto valid = Ray3DPlaneIntersection(plane.normal(), plane.d(),
                                       origin, dir, t);
     if (!valid)
     {
@@ -201,11 +249,11 @@ void Ray3DClosestApproach(const glm::vec3 & oA,
 }
 
 
-bool Rect3DRay3DIntersection(const Rect3D & rect,
+bool Ray3DRect3DIntersection(const Rect3D & rect,
                          const Ray3D & ray,
                          float & t)
 {
-    return Rect3DRay3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
+    return Ray3DRect3DIntersection(rect.origin(), rect.right(), rect.up(), ray.origin(), ray.direction(), t);
 }
 
 float PointRay2DHalfspace(const glm::vec2 & point,

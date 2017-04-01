@@ -27,8 +27,8 @@ LabelRenderer::LabelRenderer():
 LabelRenderer::LabelRenderer(Context & context):
     m_context(&context)
 {
-    m_program = m_context->createProgram({deliberation::dataPath("Data/Font/LabelRenderer.vert"),
-                                          deliberation::dataPath("Data/Font/LabelRenderer.frag")});
+    m_program = m_context->createProgram({deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),
+                                          deliberation::DeliberationDataPath("Data/Font/LabelRenderer.frag")});
 
     std::vector<glm::vec2> vertices({
         {-0.5f, -0.5f},
@@ -43,7 +43,7 @@ LabelRenderer::LabelRenderer(Context & context):
 
     m_draw = m_context->createDraw(m_program, gl::GL_TRIANGLE_STRIP, "LabelRenderer");
     m_draw.addVertexBuffer(m_vertexBuffer);
-    m_draw.state().setDepthState(DepthState::disabledRW());
+    m_draw.state().setDepthState(DepthState::disabledR());
     m_draw.state().setCullState(CullState::disabled());
     m_draw.state().setBlendState({gl::GL_FUNC_ADD, gl::GL_SRC_ALPHA, gl::GL_ONE});
 

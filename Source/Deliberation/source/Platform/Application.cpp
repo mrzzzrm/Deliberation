@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <imgui.h>
+
 #include <cxxopts.hpp>
 
 #include <SDL_image.h>
@@ -51,6 +53,11 @@ const Context & Application::context() const
     return m_context.get();
 }
 
+float Application::fps() const
+{
+    return m_fpsCounter.fps();
+}
+
 int Application::run(int argc,
                      char ** argv)
 {
@@ -77,6 +84,8 @@ int Application::run(int argc,
     m_running = true;
 
     onStartup();
+
+    if (deliberation::GLLoggingEnabled()) std::cout << "--- Frame ---" << std::endl;
 
     MainLoop().run([this](float seconds)
     {
@@ -107,6 +116,10 @@ int Application::run(int argc,
         m_input->step();
 
         SDL_RenderPresent(m_displayRenderer);
+
+        m_fpsCounter.onFrame();
+
+        if (deliberation::GLLoggingEnabled()) std::cout << "--- Frame ---" << std::endl;
 
         return m_running;
     });
@@ -142,7 +155,7 @@ void Application::init()
     m_initialized = false;
 
     // Init SDL
-    if (!SDL_Init(SDL_INIT_VIDEO))
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         m_returnCode = -1;
     }
@@ -159,7 +172,7 @@ void Application::init()
         }
     }
 
-    SDL_CreateWindowAndRenderer(1600, 900, SDL_WINDOW_OPENGL, &m_displayWindow, &m_displayRenderer);
+    SDL_CreateWindowAndRenderer(1800, 1080, SDL_WINDOW_OPENGL, &m_displayWindow, &m_displayRenderer);
     if (!m_displayWindow || !m_displayRenderer)
     {
         SDL_Quit();
@@ -202,7 +215,7 @@ void Application::init()
 
     std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
 
-    m_context.reset(1600, 900);
+    m_context.reset(1800, 1080);
 
     /**
      * Init input

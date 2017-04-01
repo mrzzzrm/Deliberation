@@ -107,11 +107,11 @@ public:
 
     virtual void onFrame(float seconds) override
     {
-        if (input().keyPressed(InputBase::Key_RIGHT))
+        if (input().keyPressed(Key_RIGHT))
         {
             m_world.get().update(m_world.get().timestep());
         }
-        if (input().keyDown(InputBase::Key_SPACE))
+        if (input().keyDown(Key_SPACE))
         {
             m_world.get().update(seconds);
         }

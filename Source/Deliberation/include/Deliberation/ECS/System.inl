@@ -27,5 +27,11 @@ std::size_t System<T>::index() const
     return indexStatic();
 }
 
+template<typename T>
+std::string System<T>::name() const
+{
+    return typeid(T).name();
+}
+
 }
 

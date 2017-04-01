@@ -5,10 +5,15 @@ uniform sampler2D Texture;
 
 in vec2 f_UV;
 
-out vec3 o_Color;
+out vec4 o_Color;
 
 void main()
 {
-    o_Color = Color * texture(Texture, f_UV).a;
+    vec3 rgb = Color;
+    float a = texture(Texture, f_UV).a;
+
+    if (a == 0.0f) discard;
+
+    o_Color = texture(Texture, f_UV) + vec4(Color, 0.0f) * 0.00001f;//vec4(rgb, a);
 }
 

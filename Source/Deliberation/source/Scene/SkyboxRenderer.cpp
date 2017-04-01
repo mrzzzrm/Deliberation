@@ -12,8 +12,8 @@ SkyboxRenderer::SkyboxRenderer(Context & context, const Camera3D & camera, const
     m_camera(camera)
 {
     const auto program = context.createProgram({
-        deliberation::dataPath("Data/Shaders/SkyboxRenderer.vert"),
-        deliberation::dataPath("Data/Shaders/SkyboxRenderer.frag")});
+        deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.vert"),
+        deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.frag")});
 
     m_draw = context.createDraw(program, gl::GL_TRIANGLES);
 

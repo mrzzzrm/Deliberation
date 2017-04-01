@@ -34,7 +34,8 @@ public:
     const DataLayoutField & field(size_t index) const;
     const DataLayoutField & field(const std::string & name) const;
 
-    DataLayoutField addField(const std::string & name, const Type & type);
+    void addField(const DataLayoutField & field);
+    DataLayoutField addField(const DataLayoutField::Desc & desc);
 
     bool equals(const DataLayout & rhs) const;
 

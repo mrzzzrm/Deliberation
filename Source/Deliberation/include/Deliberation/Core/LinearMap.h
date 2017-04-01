@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cstdlib>
-#include "optional.hpp"
 #include <vector>
 
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Core/Experimental.h>
 #include <Deliberation/Core/Optional.h>
 
 namespace deliberation
@@ -77,7 +77,7 @@ private:
     /* Number of active keys */
     std::size_t                  m_size;
 
-    std::vector<std::experimental::optional<Value>>
+    std::vector<optional_ns::optional<Value>>
                                 m_vec;
 };
 

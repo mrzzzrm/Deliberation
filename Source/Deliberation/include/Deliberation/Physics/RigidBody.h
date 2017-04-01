@@ -4,12 +4,14 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
-
 #include <Deliberation/Core/Math/Transform3D.h>
+
+#include <Deliberation/ECS/Entity.h>
 
 #include <Deliberation/Physics/CollisionShape.h>
 #include <Deliberation/Physics/CollisionObject.h>
+
+#include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
@@ -41,8 +43,7 @@ public:
     const glm::vec3 & force() const;
     bool isStatic() const;
     size_t index() const;
-    std::shared_ptr<RigidBodyPayload> & payload();
-    const std::shared_ptr<RigidBodyPayload> & payload() const;
+    Entity & entity() const;
 
     glm::vec3 localVelocity(const glm::vec3 & r) const;
 
@@ -53,7 +54,7 @@ public:
     void setForce(const glm::vec3 & force);
     void setStatic(bool isStatic);
     void setIndex(size_t index);
-    void setPayload(const std::shared_ptr<RigidBodyPayload> & payload);
+    void setEntity(Entity entity);
 
     void applyForce(const glm::vec3 & force);
     void applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse);
@@ -80,8 +81,7 @@ private:
     bool                m_static = false;
     size_t              m_index = INVALID_INDEX;
 
-    std::shared_ptr<RigidBodyPayload>
-                        m_payload;
+    mutable Entity      m_entity;
 };
 
 }

@@ -374,7 +374,7 @@ void DebugPoseInstance::schedule() const {
 
 DebugGeometryRenderer::DebugGeometryRenderer(DebugGeometryManager &manager) :
     m_manager(manager) {
-    auto globalsLayout = manager.buildIns().shadedProgram.interface().uniformBlock("Globals").layout();
+    auto globalsLayout = manager.buildIns().shadedProgram.interface().uniformBlockRef("Globals").layout();
     m_globals = LayoutedBlob(globalsLayout, 1);
     m_globalsBuffer = m_manager.context().createBuffer(globalsLayout);
 }

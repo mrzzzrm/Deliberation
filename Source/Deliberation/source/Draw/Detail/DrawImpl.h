@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -7,9 +8,13 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Core/Experimental.h>
+
 #include <Deliberation/Draw/Detail/UniformImpl.h>
+#include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/DrawState.h>
+#include <Deliberation/Draw/VertexAttribute.h>
 
 #include "AttributeBinding.h"
 #include "BufferBinding.h"
@@ -36,11 +41,16 @@ public:
     Context &                                   context;
     std::string                                 name;
     std::shared_ptr<ProgramImpl>                program;
-    std::shared_ptr<BufferImpl>                 indexBuffer;
-    std::vector<BufferBinding>                  vertexBuffers;
-    std::vector<BufferBinding>                  instanceBuffers;
-    std::unordered_map<std::string, AttributeBinding>
-                                                attributes;
+    BufferBinding                               indexBufferBinding;
+    bool                                        indexBufferBindingDirty = true;
+
+    /**
+     * Vertex attributes
+     */
+    std::vector<VertexAttributeBinding>         attributeBindings;
+    std::vector<u32>                            dirtyValueAttributes;
+    Blob                                        valueAttributes;
+
     DrawState                                   state;
     Framebuffer                                 framebuffer;
     gl::GLuint                                  glVertexArray;

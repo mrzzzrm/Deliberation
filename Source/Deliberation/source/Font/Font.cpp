@@ -49,6 +49,12 @@ Font::Font(Context & context, const std::string & path):
 
 Font::~Font() = default;
 
+Context & Font::context() const
+{
+    Assert(m_context, "");
+    return *m_context;
+}
+
 Texture Font::render(const std::string & text,
                      unsigned int size,
                      const glm::vec4 & color) const

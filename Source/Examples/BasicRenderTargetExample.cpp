@@ -27,8 +27,8 @@ GLFWwindow * window;
 deliberation::Draw createOffscreenDraw(deliberation::Context & context)
 {
     auto program = context.createProgram({
-       deliberation::dataPath("Data/Examples/Offscreen.vert"),
-       deliberation::dataPath("Data/Examples/Offscreen.frag")
+       deliberation::DeliberationDataPath("Data/Examples/Offscreen.vert"),
+       deliberation::DeliberationDataPath("Data/Examples/Offscreen.frag")
     });
 
     deliberation::UVSphere sphere(7, 7);
@@ -87,8 +87,8 @@ deliberation::Draw createOnscreenDraw(deliberation::Context & context,
 
     auto program = context.createProgram
     ({
-        deliberation::dataPath("Data/Examples/Onscreen.vert"),
-        deliberation::dataPath("Data/Examples/Onscreen.frag")
+        deliberation::DeliberationDataPath("Data/Examples/Onscreen.vert"),
+        deliberation::DeliberationDataPath("Data/Examples/Onscreen.frag")
     });
 
     auto sourceTexture = surface.texture();

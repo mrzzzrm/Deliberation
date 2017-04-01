@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+#include <glm/gtx/transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include <Deliberation/Core/Assert.h>
@@ -84,14 +85,9 @@ size_t RigidBody::index() const
     return m_index;
 }
 
-std::shared_ptr<RigidBodyPayload> & RigidBody::payload()
+Entity & RigidBody::entity() const
 {
-    return m_payload;
-}
-
-const std::shared_ptr<RigidBodyPayload> & RigidBody::payload() const
-{
-    return m_payload;
+    return m_entity;
 }
 
 bool RigidBody::isStatic() const
@@ -157,9 +153,9 @@ void RigidBody::setIndex(size_t index)
     m_index = index;
 }
 
-void RigidBody::setPayload(const std::shared_ptr<RigidBodyPayload> & payload)
+void RigidBody::setEntity(Entity entity)
 {
-    m_payload = payload;
+    m_entity = entity;
 }
 
 void RigidBody::applyForce(const glm::vec3 & force)

@@ -42,8 +42,8 @@ public:
 
     virtual void onStartup() override
     {
-        m_program = context().createProgram({dataPath("Data/Examples/EdgeToFaceSmoothingExample.vert"),
-                                             dataPath("Data/Examples/EdgeToFaceSmoothingExample.frag")});
+        m_program = context().createProgram({DeliberationDataPath("Data/Examples/EdgeToFaceSmoothingExample.vert"),
+                                             DeliberationDataPath("Data/Examples/EdgeToFaceSmoothingExample.frag")});
 
         m_grid.reset(context(), 0.5f, m_camera);
 

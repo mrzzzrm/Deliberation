@@ -1,8 +1,9 @@
 #include <Deliberation/Draw/GL/GLType.h>
 
-#include <glbinding/gl/enum.h>
-
+#include <iostream>
 #include <unordered_map>
+
+#include <glbinding/gl/enum.h>
 
 #include <glm/glm.hpp>
 
@@ -17,61 +18,61 @@ namespace
 
 std::unordered_map<u8, gl::GLenum> ELEMENTAL_TYPE_TO_GL_TYPE
     {
-        {ElementalType_U8.id(), GL_UNSIGNED_BYTE},
-        {ElementalType_U16.id(), GL_UNSIGNED_SHORT},
-        {ElementalType_U32.id(), GL_UNSIGNED_INT},
-        {ElementalType_I8.id(),  GL_BYTE},
-        {ElementalType_I16.id(), GL_SHORT},
-        {ElementalType_I32.id(), GL_INT},
-        {ElementalType_Float.id(), GL_FLOAT},
+        {ELEMENTAL_TYPE_U8, GL_UNSIGNED_BYTE},
+        {ELEMENTAL_TYPE_U16, GL_UNSIGNED_SHORT},
+        {ELEMENTAL_TYPE_U32, GL_UNSIGNED_INT},
+        {ELEMENTAL_TYPE_I8,  GL_BYTE},
+        {ELEMENTAL_TYPE_I16, GL_SHORT},
+        {ELEMENTAL_TYPE_I32, GL_INT},
+        {ELEMENTAL_TYPE_FLOAT, GL_FLOAT},
     };
 
 std::unordered_map<u8, gl::GLenum> TYPE_TO_GL_TYPE
     {
-        {Type_U8.id(), GL_UNSIGNED_BYTE},
-        {Type_U16.id(), GL_UNSIGNED_SHORT},
-        {Type_U32.id(), GL_UNSIGNED_INT},
-        {Type_I8.id(),  GL_BYTE},
-        {Type_I16.id(), GL_SHORT},
-        {Type_I32.id(), GL_INT},
-        {Type_Float.id(), GL_FLOAT},
-        {Type_Double.id(), GL_DOUBLE},
-        {Type_Vec2.id(), GL_FLOAT_VEC2},
-        {Type_Vec3.id(), GL_FLOAT_VEC3},
-        {Type_Vec4.id(), GL_FLOAT_VEC4},
-        {Type_IVec2.id(), GL_INT_VEC2},
-        {Type_IVec3.id(), GL_INT_VEC3},
-        {Type_IVec4.id(), GL_INT_VEC4},
-        {Type_UVec2.id(), GL_UNSIGNED_INT_VEC2},
-        {Type_UVec3.id(), GL_UNSIGNED_INT_VEC3},
-        {Type_UVec4.id(), GL_UNSIGNED_INT_VEC4},
-        {Type_Mat2.id(), GL_FLOAT_MAT2},
-        {Type_Mat3.id(), GL_FLOAT_MAT3},
-        {Type_Mat4.id(), GL_FLOAT_MAT4}
+        {TYPE_U8, GL_UNSIGNED_BYTE},
+        {TYPE_U16, GL_UNSIGNED_SHORT},
+        {TYPE_U32, GL_UNSIGNED_INT},
+        {TYPE_I8,  GL_BYTE},
+        {TYPE_I16, GL_SHORT},
+        {TYPE_I32, GL_INT},
+        {TYPE_FLOAT, GL_FLOAT},
+        {TYPE_DOUBLE, GL_DOUBLE},
+        {TYPE_VEC2, GL_FLOAT_VEC2},
+        {TYPE_VEC3, GL_FLOAT_VEC3},
+        {TYPE_VEC4, GL_FLOAT_VEC4},
+        {TYPE_IVEC2, GL_INT_VEC2},
+        {TYPE_IVEC3, GL_INT_VEC3},
+        {TYPE_IVEC4, GL_INT_VEC4},
+        {TYPE_UVEC2, GL_UNSIGNED_INT_VEC2},
+        {TYPE_UVEC3, GL_UNSIGNED_INT_VEC3},
+        {TYPE_UVEC4, GL_UNSIGNED_INT_VEC4},
+        {TYPE_MAT2, GL_FLOAT_MAT2},
+        {TYPE_MAT3, GL_FLOAT_MAT3},
+        {TYPE_MAT4, GL_FLOAT_MAT4}
     };
 
 std::unordered_map<i32, u8> GL_TYPE_TO_TYPE
     {
-        {(i32)GL_UNSIGNED_BYTE, Type_U8.id()},
-        {(i32)GL_UNSIGNED_SHORT, Type_U16.id()},
-        {(i32)GL_UNSIGNED_INT, Type_U32.id()},
-        {(i32)GL_BYTE, Type_I8.id()},
-        {(i32)GL_SHORT, Type_I16.id()},
-        {(i32)GL_INT, Type_I32.id()},
-        {(i32)GL_FLOAT, Type_Float.id()},
-        {(i32)GL_DOUBLE, Type_Double.id()},
-        {(i32)GL_FLOAT_VEC2, Type_Vec2.id()},
-        {(i32)GL_FLOAT_VEC3, Type_Vec3.id()},
-        {(i32)GL_FLOAT_VEC4, Type_Vec4.id()},
-        {(i32)GL_INT_VEC2, Type_IVec2.id()},
-        {(i32)GL_INT_VEC3, Type_IVec3.id()},
-        {(i32)GL_INT_VEC4, Type_IVec4.id()},
-        {(i32)GL_UNSIGNED_INT_VEC2, Type_UVec2.id()},
-        {(i32)GL_UNSIGNED_INT_VEC3, Type_UVec3.id()},
-        {(i32)GL_UNSIGNED_INT_VEC4, Type_UVec4.id()},
-        {(i32)GL_FLOAT_MAT2, Type_Mat2.id()},
-        {(i32)GL_FLOAT_MAT3, Type_Mat3.id()},
-        {(i32)GL_FLOAT_MAT4, Type_Mat4.id()}
+        {(i32)GL_UNSIGNED_BYTE, TYPE_U8},
+        {(i32)GL_UNSIGNED_SHORT, TYPE_U16},
+        {(i32)GL_UNSIGNED_INT, TYPE_U32},
+        {(i32)GL_BYTE, TYPE_I8},
+        {(i32)GL_SHORT, TYPE_I16},
+        {(i32)GL_INT, TYPE_I32},
+        {(i32)GL_FLOAT, TYPE_FLOAT},
+        {(i32)GL_DOUBLE, TYPE_DOUBLE},
+        {(i32)GL_FLOAT_VEC2, TYPE_VEC2},
+        {(i32)GL_FLOAT_VEC3, TYPE_VEC3},
+        {(i32)GL_FLOAT_VEC4, TYPE_VEC4},
+        {(i32)GL_INT_VEC2, TYPE_IVEC2},
+        {(i32)GL_INT_VEC3, TYPE_IVEC3},
+        {(i32)GL_INT_VEC4, TYPE_IVEC4},
+        {(i32)GL_UNSIGNED_INT_VEC2, TYPE_UVEC2},
+        {(i32)GL_UNSIGNED_INT_VEC3, TYPE_UVEC3},
+        {(i32)GL_UNSIGNED_INT_VEC4, TYPE_UVEC4},
+        {(i32)GL_FLOAT_MAT2, TYPE_MAT2},
+        {(i32)GL_FLOAT_MAT3, TYPE_MAT3},
+        {(i32)GL_FLOAT_MAT4, TYPE_MAT4}
     };
 
 }

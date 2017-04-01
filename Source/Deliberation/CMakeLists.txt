@@ -17,8 +17,9 @@ set(DELIBERATION_INCLUDE_DIRS
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${JSON_INCLUDE_DIR}
-
-	${PROJECT_SOURCE_DIR}/Extern/optional
+    ${IMGUI_INCLUDE_DIRS}
+    ${VARIANT_INCLUDE_DIRS}
+	${OPTIONAL_INCLUDE_DIRS}
     
     CACHE INTERAL "All Deliberation include dirs" 
 )
@@ -42,6 +43,7 @@ set(sources
     ${source_path}/Core/DataLayout.cpp
     ${source_path}/Core/DataLayoutField.cpp
     ${source_path}/Core/ElementalTypes.cpp
+    ${source_path}/Core/FpsCounter.cpp
     ${source_path}/Core/LayoutedBlob.cpp
     ${source_path}/Core/LayoutedBlobElement.cpp
     ${source_path}/Core/FileUtils.cpp
@@ -149,6 +151,8 @@ set(sources
     ${source_path}/Draw/TextureLoaderDataImpl.h
     ${source_path}/Draw/TextureLoaderFileImpl.cpp
     ${source_path}/Draw/TextureLoaderFileImpl.h
+    ${source_path}/Draw/TextureLoaderPixelDataImpl.cpp
+    ${source_path}/Draw/TextureLoaderPixelDataImpl.h
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.cpp
     ${source_path}/Draw/TextureLoaderSDLSurfaceImpl.h
     ${source_path}/Draw/TextureUpload.cpp
@@ -163,10 +167,14 @@ set(sources
     ${source_path}/ECS/EventManager.cpp
     ${source_path}/ECS/SystemBase.cpp
     ${source_path}/ECS/World.cpp
+    ${source_path}/ECS/WorldProfiler.cpp
 
     ${source_path}/Font/Font.cpp
     ${source_path}/Font/Label.cpp
     ${source_path}/Font/LabelRenderer.cpp
+    ${source_path}/Font/MultilineLabel.cpp
+
+    ${source_path}/ImGui/ImGuiSystem.cpp
 
     ${source_path}/Physics/Contacts/BoxContact.cpp
     ${source_path}/Physics/Contacts/Contact.cpp
@@ -186,6 +194,7 @@ set(sources
 
     ${source_path}/Platform/Application.cpp
     ${source_path}/Platform/Input.cpp
+    ${source_path}/Platform/InputLayer.cpp
 
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusion.cpp
     ${source_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
@@ -245,6 +254,7 @@ set(api_includes
     ${include_path}/Core/Dispatch.inl
     ${include_path}/Core/ElementalTypes.h
     ${include_path}/Core/FileUtils.h
+    ${include_path}/Core/FpsCounter.h
     ${include_path}/Core/HashUtils.h
     ${include_path}/Core/HashUtils.inl
     ${include_path}/Core/IntTypes.h
@@ -364,10 +374,14 @@ set(api_includes
     ${include_path}/ECS/System.h
     ${include_path}/ECS/World.h
     ${include_path}/ECS/World.inl
+    ${include_path}/ECS/WorldProfiler.h
 
     ${include_path}/Font/Font.h
     ${include_path}/Font/Label.h
     ${include_path}/Font/LabelRenderer.h
+    ${include_path}/Font/MultilineLabel.h
+
+    ${include_path}/ImGui/ImGuiSystem.h
 
     ${include_path}/Physics/Contacts/BoxContact.h
     ${include_path}/Physics/Contacts/Contact.h
@@ -387,6 +401,11 @@ set(api_includes
 
     ${include_path}/Platform/Application.h
     ${include_path}/Platform/Input.h
+    ${include_path}/Platform/InputEvent.h
+    ${include_path}/Platform/InputLayer.h
+    ${include_path}/Platform/KeyMap.h
+    ${include_path}/Platform/MouseButton.h
+    ${include_path}/Platform/MouseButtonEvent.h
 
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusion.h
     ${include_path}/Scene/AmbientOcclusion/AmbientOcclusionBlur.h
@@ -414,19 +433,19 @@ set(api_includes
     ${include_path}/Scene/RenderPipeline.h
     ${include_path}/Scene/SkyboxRenderer.h)
 
-# libs
 set(libs
     ${GLBINDING_LIBRARIES}
     ${GLFW_LIBRARY}
+    ${SDL2_LIBRARY}
     ${SDL2_IMAGE_LIBRARY}
-)
+    ${SDL2_TTF_LIBRARY}
+    ${OPENGL_gl_LIBRARY}
+    ${IMGUI_LIBRARIES}
+    )
 
 set(DELIBERATION_LIBRARIES
     Deliberation
     ${libs}
-    ${SDL2_LIBRARY}
-    ${SDL2_TTF_LIBRARY}
-    ${OPENGL_gl_LIBRARY}
     CACHE INTERNAL ""
 )
 
@@ -440,9 +459,10 @@ target_link_libraries(Deliberation
     ${libs})
 	
 # include
-target_include_directories(
-	Deliberation
-	PUBLIC
+message("Deliberation include dirs: ${DELIBERATION_INCLUDE_DIRS}")
+
+target_include_directories(Deliberation
+    PUBLIC
     ${DELIBERATION_INCLUDE_DIRS}
 )
     

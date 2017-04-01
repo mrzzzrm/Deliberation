@@ -21,6 +21,7 @@ public:
     System(World & world, const ComponentFilter & filter = ComponentFilter());
 
     virtual std::size_t index() const override;
+    virtual std::string name() const override;
 
     template<typename EventType>
     void subscribe();

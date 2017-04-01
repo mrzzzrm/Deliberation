@@ -53,8 +53,8 @@ public:
         auto indicesBlob = deliberation::LayoutedBlob(DataLayout("Index", Type_U32), 6);
         indicesBlob.assign<u32>("Index", {0, 1, 2, 0, 2, 3});
 
-        auto program = context().createProgram({deliberation::dataPath("Data/BasicTriangleTest.vert"),
-                                                deliberation::dataPath("Data/BasicTriangleTest.frag")});
+        auto program = context().createProgram({deliberation::DeliberationDataPath("Data/BasicTriangleTest.vert"),
+                                                deliberation::DeliberationDataPath("Data/BasicTriangleTest.frag")});
 
         m_draw = context().createDraw(program, gl::GL_TRIANGLES);
         m_draw.addVertices(vertices);

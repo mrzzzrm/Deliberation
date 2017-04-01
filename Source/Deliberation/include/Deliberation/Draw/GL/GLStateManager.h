@@ -55,6 +55,11 @@ public:
     void deleteQueries(gl::GLsizei n, gl::GLuint * ids);
     void beginQuery(gl::GLenum target, gl::GLuint id);
     void endQuery(gl::GLenum target);
+    void useProgram(gl::GLuint program);
+    void setActiveTexture(gl::GLuint textureUnit);
+    void bindTexture(gl::GLenum target, gl::GLuint texture);
+    void enableScissorTest(bool enabled);
+    void setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
 
     /*
         Framebuffer caching
@@ -97,6 +102,22 @@ private:
         QueryTransformFeedbackPrimitivesTarget,
 
         QueryTargetCount
+    };
+
+    enum TextureTarget
+    {
+        Texture1d = 0,
+        Texture2d,
+        Texture3d,
+        Texture1dArray,
+        Texture2dArray,
+        TextureRectangle,
+        TextureCubeMap,
+        TextureBuffer,
+        Texture2dMultisample,
+        Texture2dMultisampleArray,
+
+        TextureTargetCount
     };
 
 private:
@@ -142,6 +163,13 @@ private:
  	gl::GLsizei                         m_glViewportHeight;
  	std::array<gl::GLuint,
                QueryTargetCount>        m_activeQueries;
+    gl::GLuint                          m_program;
+    std::array<gl::GLuint , (size_t)TextureTargetCount>
+                                        m_boundTextures;
+    gl::GLuint                          m_activeTextureUnit;
+    bool                                m_scissorTestEnabled;
+    std::tuple<gl::GLint, gl::GLint, gl::GLsizei, gl::GLsizei>
+                                        m_scissorRect;
 
     /*
 

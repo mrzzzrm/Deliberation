@@ -4,11 +4,13 @@
 
 #include <SDL.h>
 
+#include <Deliberation/Core/FpsCounter.h>
+
 #include <Deliberation/Draw/Context.h>
 
-#include <Deliberation/Deliberation_API.h>
-
 #include <Deliberation/Platform/Input.h>
+
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
@@ -17,7 +19,7 @@ class DELIBERATION_API Application
 {
 public:
     Application(const std::string & name,
-                const std::string & prefixPath = "Deliberation2");
+                const std::string & prefixPath = ".");
     virtual ~Application();
 
     InputBase & input();
@@ -26,8 +28,9 @@ public:
     Context & context();
     const Context & context() const;
 
-    int run(int argc,
-            char ** argv);
+    float fps() const;
+
+    int run(int argc, char ** argv);
 
     void quit(int returnCode = 0);
 
@@ -45,6 +48,8 @@ private:
     bool                m_running = false;
     bool                m_initialized = false;
     int                 m_returnCode = 0;
+
+    FpsCounter          m_fpsCounter;
 
     Optional<Context>   m_context;
 

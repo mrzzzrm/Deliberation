@@ -153,5 +153,30 @@ StreamType & operator<<(StreamType && os, const Sphere & s)
 //    return stream.str();
 //}
 
+template<typename T, glm::precision precision>
+std::string ToString(const glm::tvec2<T, precision> & v)
+{
+    std::stringstream stream;
+    stream << v;
+    return stream.str();
+}
+
+template<typename T, glm::precision precision>
+std::string ToString(const glm::tvec3<T, precision> & v)
+{
+    std::stringstream stream;
+    stream << v;
+    return stream.str();
+}
+
+template<typename T, glm::precision precision>
+std::string ToString(const glm::tvec4<T, precision> & v)
+{
+    std::stringstream stream;
+    stream << v;
+    return stream.str();
+}
+
+
 }
 

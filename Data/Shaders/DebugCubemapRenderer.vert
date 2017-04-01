@@ -9,6 +9,9 @@ out vec3 f_UVW;
 
 void main()
 {
-    gl_Position = ViewProjection * (Transform * vec4(Position, 1.0f));
+    vec4 pos = ViewProjection * Transform * vec4(Position, 1.0);
     f_UVW = Position;
+
+    // no model, no projection - our coordinates are device coordinates already
+    gl_Position = pos;
 }

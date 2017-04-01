@@ -8,8 +8,8 @@ namespace deliberation
 DebugTexture2dRenderer::DebugTexture2dRenderer(Context & context, const Texture & texture)
 {
     const auto program = context.createProgram({
-       deliberation::dataPath("Data/Shaders/DebugTexture2dRenderer.vert"),
-       deliberation::dataPath("Data/Shaders/DebugTexture2dRenderer.frag")
+       deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.vert"),
+       deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.frag")
     });
 
     m_draw = context.createDraw(program, gl::GL_TRIANGLES);

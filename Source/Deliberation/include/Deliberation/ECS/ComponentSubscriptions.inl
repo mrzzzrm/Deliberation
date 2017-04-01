@@ -39,15 +39,6 @@ void ComponentSubscriptions<ComponentType, Subscriptions...>::registerDispatch()
 
     subscriptionsByComponentType[ComponentType::indexStatic()].emplace_back(eventType);
 
-    for (auto & pair : subscriptionsByComponentType)
-    {
-        std::cout << pair.first << std::endl;
-        for (auto & event : pair.second)
-        {
-            std::cout << "  " << event << std::endl;
-        }
-    }
-
     m_dispatcherByEvent[eventType] = [](ComponentBase & componentBase, const void * event) {
         auto & component = *static_cast<ComponentType*>(&componentBase);
         component.receive(*(const Subscription*)event);

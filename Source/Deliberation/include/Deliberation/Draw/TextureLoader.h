@@ -25,6 +25,7 @@ public:
     TextureLoader(SDL_Surface * surface);
     TextureLoader(const std::string & path);
     TextureLoader(void * data, size_t length);
+    TextureLoader(const Blob & blob, u32 width, u32 height, PixelFormat format);
 
     template<typename T>
     TextureLoader(const glm::uvec2 size, const T & value);

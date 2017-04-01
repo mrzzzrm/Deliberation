@@ -141,15 +141,13 @@ Rect3D Camera3D::nearPlane() const
             Remove code duplication with farPlane()
     */
 
-    auto halfYFoV = m_yFoV / 2.0f;
-    auto height = 2.0f * (std::tan(halfYFoV) * m_zNear);
-    auto width = m_aspectRatio * height;
+    const auto size = zPlaneSize(m_zNear);
 
-    auto origin = glm::vec3(-width/2.0f, -height/2.0f, -m_zNear);
+    auto origin = glm::vec3(-size.x/2.0f, -size.y/2.0f, -m_zNear);
     origin = m_pose.position() + m_pose.orientation() * origin;
 
-    auto right = m_pose.orientation() * glm::vec3(width, 0.0f, 0.0f);
-    auto up = m_pose.orientation() * glm::vec3(0.0f, height, 0.0f);
+    auto right = m_pose.orientation() * glm::vec3(size.x, 0.0f, 0.0f);
+    auto up = m_pose.orientation() * glm::vec3(0.0f, size.y, 0.0f);
 
     return {origin, right, up};
 }
@@ -161,17 +159,39 @@ Rect3D Camera3D::farPlane() const
             Remove code duplication with nearPlane()
     */
 
-    auto halfYFoV = m_yFoV / 2.0f;
-    auto height = 2.0f * (std::tan(halfYFoV) * m_zFar);
-    auto width = m_aspectRatio * height;
+    const auto size = zPlaneSize(m_zFar);
 
-    auto origin = glm::vec3(-width/2.0f, -height/2.0f, -m_zFar);
+    auto origin = glm::vec3(-size.x/2.0f, -size.y/2.0f, -m_zFar);
     origin = m_pose.position() + m_pose.orientation() * origin;
 
-    auto right = m_pose.orientation() * glm::vec3(width, 0.0f, 0.0f);
-    auto up = m_pose.orientation() * glm::vec3(0.0f, height, 0.0f);
+    auto right = m_pose.orientation() * glm::vec3(size.x, 0.0f, 0.0f);
+    auto up = m_pose.orientation() * glm::vec3(0.0f, size.y, 0.0f);
 
     return {origin, right, up};
+}
+
+glm::vec2 Camera3D::projectToNearPlane(const glm::vec3 & point, bool & success) const
+{
+    const auto nearPlaneForward =  m_pose.orientation() * glm::vec3(0.0f, 0.0f, -1.0f);
+    const auto relativePosition = point - m_pose.position();
+
+    if (glm::dot(relativePosition, nearPlaneForward) < 0)
+    {
+        success = false;
+        return {};
+    }
+
+    const auto localRelativePosition = glm::transpose(m_pose.basis()) * relativePosition;
+
+    const auto factor = m_zNear / -localRelativePosition.z;
+
+    const auto nearPlanePositionWS = (localRelativePosition * factor);
+    const auto nearPlanePosition2dWS = glm::vec2(nearPlanePositionWS.x, nearPlanePositionWS.y);
+    const auto nearPlanePosition = 2.0f * nearPlanePosition2dWS / zPlaneSize(m_zNear);
+
+    success = true;
+
+    return nearPlanePosition;
 }
 
 std::string Camera3D::toString() const
@@ -187,6 +207,15 @@ std::string Camera3D::toString() const
 
     return stream.str();
 
+}
+
+glm::vec2 Camera3D::zPlaneSize(float z) const
+{
+    const auto halfYFoV = m_yFoV / 2.0f;
+    const auto height = 2.0f * (std::tan(halfYFoV) * z);
+    const auto width = m_aspectRatio * height;
+
+    return {width, height};
 }
 
 }

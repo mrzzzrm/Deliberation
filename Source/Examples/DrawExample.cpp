@@ -32,10 +32,10 @@ public:
     {
         std::cout << "------------------------ UniformBufferExample ------------------------" << std::endl;
 
-        m_program = context().createProgram({deliberation::dataPath("Data/Examples/UniformBufferExample.vert"),
-                                             deliberation::dataPath("Data/Examples/UniformBufferExample.frag")});
-        m_globalUniforms = context().createBuffer(m_program.interface().uniformBlock("GlobalBlock").layout());
-        m_localUniforms = context().createBuffer(m_program.interface().uniformBlock("LocalBlock").layout());
+        m_program = context().createProgram({deliberation::DeliberationDataPath("Data/Examples/UniformBufferExample.vert"),
+                                             deliberation::DeliberationDataPath("Data/Examples/UniformBufferExample.frag")});
+        m_globalUniforms = context().createBuffer(m_program.interface().uniformBlockRef("GlobalBlock").layout());
+        m_localUniforms = context().createBuffer(m_program.interface().uniformBlockRef("LocalBlock").layout());
         m_clear = context().createClear();
 
         m_globals = LayoutedBlob(m_globalUniforms.layout(), 1);

@@ -62,10 +62,10 @@ public:
                                                });
         ibuffer.createUpload(indices).schedule();
 
-        auto program = context().createProgram({deliberation::dataPath("Data/BasicFontTest.vert"),
-                                                deliberation::dataPath("Data/BasicFontTest.frag")});
+        auto program = context().createProgram({deliberation::DeliberationDataPath("Data/BasicFontTest.vert"),
+                                                deliberation::DeliberationDataPath("Data/BasicFontTest.frag")});
 
-        m_font.reset(context(), deliberation::dataPath("Data/Xolonium.ttf"));
+        m_font.reset(context(), deliberation::DeliberationDataPath("Data/Xolonium.ttf"));
 
         auto texture = m_font.get().render("Hello Font World", 64, glm::vec4(0.2f, 0.4f, 0.6f, 0.8f));
 

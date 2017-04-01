@@ -41,9 +41,14 @@ float PhysicsWorld::timestep() const
     return m_timestep;
 }
 
-float PhysicsWorld::nextSimulationStep(float seconds)
+float PhysicsWorld::nextSimulationStepSeconds(float seconds)
 {
-    return std::floor((m_timeAccumulator + seconds) / m_timestep) * m_timestep;
+    return numNextSimulationSteps(seconds) * m_timestep;
+}
+
+u32 PhysicsWorld::numNextSimulationSteps(float seconds)
+{
+    return (u32)std::floor((m_timeAccumulator + seconds) / m_timestep);
 }
 
 Narrowphase & PhysicsWorld::narrowphase()
@@ -85,8 +90,10 @@ float PhysicsWorld::update(float seconds)
 {
     auto simulatedTime = 0.0f;
 
+    const auto numSteps = numNextSimulationSteps(seconds);
     m_timeAccumulator += seconds;
-    while (m_timeAccumulator >= m_timestep)
+
+    for (u32 s = 0; s < numSteps; s++)
     {
         performTimestep(m_timestep);
         m_timeAccumulator -= m_timestep;

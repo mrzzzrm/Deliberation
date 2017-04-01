@@ -33,8 +33,9 @@ public:
     void setText(const std::string & text);
     void setFontSize(unsigned int fontSize);
 
-private:
     void renderText() const;
+
+private:
     void updateTransform(const Viewport & viewport) const;
 
 private:

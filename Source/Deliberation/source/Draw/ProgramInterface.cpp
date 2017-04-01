@@ -62,7 +62,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             m_attributeIndexByLocation[location] = i;
             m_attributeIndexByName[name] = i;
-            m_attributes.push_back({name, location, GLTypeToType(type), size});
+            m_attributes.push_back({name, i, location, GLTypeToType(type), size});
 
             i++;
         }
@@ -110,6 +110,14 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                 case gl::GL_SAMPLER_1D: case gl::GL_SAMPLER_2D: case gl::GL_SAMPLER_3D: case gl::GL_SAMPLER_CUBE:
                 case gl::GL_SAMPLER_1D_SHADOW: case gl::GL_SAMPLER_2D_SHADOW: case gl::GL_SAMPLER_2D_RECT:
                 case gl::GL_SAMPLER_2D_RECT_SHADOW:
+                    isSampler = true;
+                    break;
+                case gl::GL_INT_SAMPLER_1D: case gl::GL_INT_SAMPLER_2D: case gl::GL_INT_SAMPLER_3D: case gl::GL_INT_SAMPLER_CUBE:
+                case gl::GL_INT_SAMPLER_2D_RECT:
+                    isSampler = true;
+                    break;
+                case gl::GL_UNSIGNED_INT_SAMPLER_1D: case gl::GL_UNSIGNED_INT_SAMPLER_2D: case gl::GL_UNSIGNED_INT_SAMPLER_3D: case gl::GL_UNSIGNED_INT_SAMPLER_CUBE:
+                case gl::GL_UNSIGNED_INT_SAMPLER_2D_RECT:
                     isSampler = true;
                     break;
                 default:
@@ -237,16 +245,18 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             auto nameLength = params[0];
             Assert(nameLength > 1, "Program output " + std::to_string(r) + " has no characters in its name. That shouldn't be the case");
 
+            gl::glGetProgramResourceName(glProgramName, gl::GL_PROGRAM_OUTPUT, r, nameData.size(), nullptr, nameData.data());
+            std::string name(nameData.data(), nameLength - 1);
+
+            if (StringStartsWith(name, "gl_")) continue;
+
             auto type = gl::GLenum(params[1]);
             auto location = params[3];
-            Assert(location >= 0, "Program output " + std::to_string(r) + " has a location < 0. That shouldn't be the case");
+            Assert(location >= 0, "Program output " + std::to_string(r) + "/'" + name + "' has a location < 0 (" +
+                std::to_string(location) + "). That shouldn't be the case");
 
             auto arraySize = params[2];
             auto locationIndex = params[4];
-
-            gl::glGetProgramResourceName(glProgramName, gl::GL_PROGRAM_OUTPUT, r, nameData.size(), nullptr, nameData.data());
-
-            std::string name(nameData.data(), nameLength - 1);
 
             if (location >= (gl::GLint)m_fragmentOutputIndexByLocation.size()) // TODO: Just map location -> uniform, no need for index->
             {
@@ -260,48 +270,80 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
     }
 }
 
-const ProgramInterfaceVertexAttribute & ProgramInterface::attribute(const std::string & name) const
+const ProgramInterfaceVertexAttribute * ProgramInterface::attribute(const std::string & name) const
 {
     auto iter = m_attributeIndexByName.find(name);
-    if (iter == m_attributeIndexByName.end())
-    {
-        std::cout << "No such attribute '" << name << "'" << std::endl;
-        assert(false);
-    }
+    if (iter == m_attributeIndexByName.end()) return nullptr;
 
-    return m_attributes[iter->second];
+    return &m_attributes[iter->second];
 }
 
-const ProgramInterfaceUniform & ProgramInterface::uniform(const std::string & name) const
+const ProgramInterfaceUniform * ProgramInterface::uniform(const std::string & name) const
 {
     auto iter = m_uniformIndexByName.find(name);
-    Assert (iter != m_uniformIndexByName.end(), "No such uniform '" + name + "'");
+    if (iter == m_uniformIndexByName.end()) return nullptr;
 
-    return m_uniforms[iter->second];
+    return &m_uniforms[iter->second];
 }
 
-const ProgramInterfaceSampler & ProgramInterface::sampler(const std::string & name) const
+const ProgramInterfaceSampler * ProgramInterface::sampler(const std::string & name) const
 {
     auto iter = m_samplerIndexByName.find(name);
-    Assert (iter != m_samplerIndexByName.end(), "No such sampler '" + name + "'");
+    if (iter == m_samplerIndexByName.end()) return nullptr;
 
-    return m_samplers[iter->second];
+    return &m_samplers[iter->second];
 }
 
-const ProgramInterfaceFragmentOutput & ProgramInterface::fragmentOutput(const std::string & name) const
+const ProgramInterfaceFragmentOutput * ProgramInterface::fragmentOutput(const std::string & name) const
 {
     auto iter = m_fragmentOutputIndexByName.find(name);
-    Assert (iter != m_fragmentOutputIndexByName.end(), "No such fragmentOutput '" + name + "'");
+    if (iter == m_fragmentOutputIndexByName.end()) return nullptr;
 
-    return m_fragmentOutputs[iter->second];
+    return &m_fragmentOutputs[iter->second];
 }
 
-const ProgramInterfaceUniformBlock & ProgramInterface::uniformBlock(const std::string & name) const
+const ProgramInterfaceUniformBlock * ProgramInterface::uniformBlock(const std::string & name) const
 {
     auto iter = m_uniformBlockByName.find(name);
-    Assert (iter != m_uniformBlockByName.end(), "No such uniform block '" + name + "'");
+    if (iter == m_uniformBlockByName.end()) return nullptr;
 
-    return m_uniformBlocks[iter->second];
+    return &m_uniformBlocks[iter->second];
+}
+
+const ProgramInterfaceVertexAttribute & ProgramInterface::attributeRef(const std::string & name) const
+{
+    const auto * ptr = attribute(name);
+    Assert(ptr, "No such attribute '" + name + "'");
+    return *ptr;
+}
+
+const ProgramInterfaceUniform & ProgramInterface::uniformRef(const std::string & name) const
+{
+    const auto * ptr = uniform(name);
+    Assert(ptr, "No such uniform '" + name + "'");
+    return *ptr;
+}
+
+const ProgramInterfaceSampler & ProgramInterface::samplerRef(const std::string & name) const
+{
+    const auto * ptr = sampler(name);
+    Assert(ptr, "No such sampler '" + name + "'");
+    return *ptr;
+}
+
+const ProgramInterfaceFragmentOutput & ProgramInterface::fragmentOutputRef(const std::string & name) const
+{
+    const auto * ptr = fragmentOutput(name);
+    Assert(ptr, "No such fragmentOutput '" + name + "'");
+    return *ptr;
+
+}
+
+const ProgramInterfaceUniformBlock & ProgramInterface::uniformBlockRef(const std::string & name) const
+{
+    const auto * ptr = uniformBlock(name);
+    Assert(ptr, "No such uniformBlock '" + name + "'");
+    return *ptr;
 }
 
 const ProgramInterfaceVertexAttribute * ProgramInterface::attributeByLocation(unsigned int location) const
@@ -390,36 +432,6 @@ const std::vector<ProgramInterfaceFragmentOutput> & ProgramInterface::fragmentOu
 const std::vector<ProgramInterfaceUniformBlock> & ProgramInterface::uniformBlocks() const
 {
     return m_uniformBlocks;
-}
-
-bool ProgramInterface::hasAttribute(const std::string & name) const
-{
-    auto iter = m_attributeIndexByName.find(name);
-    return iter != m_attributeIndexByName.end();
-}
-
-bool ProgramInterface::hasUniform(const std::string & name) const
-{
-    auto iter = m_uniformIndexByName.find(name);
-    return iter != m_uniformIndexByName.end();
-}
-
-bool ProgramInterface::hasSampler(const std::string & name) const
-{
-    auto iter = m_samplerIndexByName.find(name);
-    return iter != m_samplerIndexByName.end();
-}
-
-bool ProgramInterface::hasFragmentOutput(const std::string & name) const
-{
-    auto iter = m_fragmentOutputIndexByName.find(name);
-    return iter != m_fragmentOutputIndexByName.end();
-}
-
-bool ProgramInterface::hasUniformBlock(const std::string & name) const
-{
-    auto iter = m_uniformBlockByName.find(name);
-    return iter != m_uniformBlockByName.end();
 }
 
 bool ProgramInterface::operator==(const ProgramInterface & other) const

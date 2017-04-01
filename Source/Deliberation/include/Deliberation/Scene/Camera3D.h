@@ -38,7 +38,12 @@ public:
     Rect3D nearPlane() const;
     Rect3D farPlane() const;
 
+    glm::vec2 projectToNearPlane(const glm::vec3 & point, bool & success) const;
+
     std::string toString() const;
+
+private:
+    glm::vec2 zPlaneSize(float z) const;
 
 private:
     Pose3D              m_pose;

@@ -21,7 +21,7 @@ World & Entity::world() const
     return *m_world;
 }
 
-entity_id_t Entity::id() const
+EntityId Entity::id() const
 {
     return m_id;
 }
@@ -31,12 +31,12 @@ const std::string & Entity::name() const
     return data().name;
 }
 
-entity_id_t Entity::parent() const
+EntityId Entity::parent() const
 {
     return data().parent;
 }
 
-const std::vector<entity_id_t> & Entity::children() const
+const std::vector<EntityId> & Entity::children() const
 {
     return data().children;
 }
@@ -48,17 +48,17 @@ const ComponentBitset & Entity::componentBits() const
 
 bool Entity::isValid() const
 {
-    return !m_world || m_world->isValid(m_id);
+    return m_world && m_world->isValid(m_id);
 }
 
-void Entity::remove()
+void Entity::scheduleRemoval()
 {
     Assert(m_world, "Entity is hollow");
 
-    m_world->remove(m_id);
+    m_world->scheduleEntityRemoval(m_id);
 }
 
-Entity::Entity(World & world, entity_id_t id):
+Entity::Entity(World & world, EntityId id):
     m_world(&world),
     m_id(id)
 {
@@ -106,11 +106,11 @@ void Entity::addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> comp
     m_world->addComponent(m_id, c, std::move(component));
 }
 
-void Entity::removeComponent(TypeID::value_t c)
+void Entity::scheduleComponentRemoval(TypeID::value_t c)
 {
     Assert(m_world, "Entity is hollow");
 
-    m_world->removeComponent(m_id, c);
+    m_world->scheduleComponentRemoval(m_id, c);
 }
 
 Entity Entity::createChild(const std::string & name)
@@ -120,8 +120,38 @@ Entity Entity::createChild(const std::string & name)
     return m_world->createEntity(name, m_id);
 }
 
+std::string Entity::toString() const
+{
+    std::stringstream stream;
+    stream << "{" << name() << ": ";
+
+    const auto & bits = componentBits();
+
+    for (size_t b = 0; b < bits.size(); b++)
+    {
+        if (!bits.test(b)) continue;
+
+        const auto & component = this->component(b);
+        stream << component.name() << ", ";
+    }
+
+    stream << "}";
+
+    return stream.str();
+}
+
+bool Entity::operator<(const Entity & rhs) const
+{
+    if (m_world == nullptr || rhs.m_world == nullptr) return false;
+
+    Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
+    return m_id < rhs.m_id;
+}
+
 bool Entity::operator==(const Entity & rhs) const
 {
+    if (m_world == nullptr || rhs.m_world == nullptr) return false;
+
     Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
     return m_id == rhs.m_id;
 }

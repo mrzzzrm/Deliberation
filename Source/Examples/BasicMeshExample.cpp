@@ -103,8 +103,8 @@ public:
         deliberation::MeshCompiler compiler;
         auto compiledMesh = compiler.compile(mesh);
 
-        auto program = context().createProgram({deliberation::dataPath("Data/BasicMeshTest.vert"),
-                                                deliberation::dataPath("Data/BasicMeshTest.frag")});
+        auto program = context().createProgram({deliberation::DeliberationDataPath("Data/BasicMeshTest.vert"),
+                                                deliberation::DeliberationDataPath("Data/BasicMeshTest.frag")});
 
         auto cpositions = compiledMesh.vertices.field<glm::vec3>("Position");
         std::cout << "Vertices: " << std::endl;

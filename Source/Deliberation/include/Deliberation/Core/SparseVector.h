@@ -1,12 +1,14 @@
 #pragma once
 
-#include "optional.hpp"
 #include <vector>
 #include <stack>
 #include <string>
 
+#include <optional.hpp>
+
 #include <Deliberation/Deliberation_API.h>
 
+#include <Deliberation/Core/Experimental.h>
 #include <Deliberation/Core/Optional.h>
 
 namespace deliberation
@@ -88,7 +90,7 @@ private:
     void decCount();
 
 private:
-    std::vector<std::experimental::optional<T>> m_vec;
+    std::vector<optional_ns::optional<T>> m_vec;
     std::stack<std::size_t>                     m_pool;
     size_t                                      m_count = 0;
 };

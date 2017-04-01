@@ -9,7 +9,7 @@ namespace deliberation
 
 ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute():
     m_name(),
-    m_location(-1),
+    m_glLocation(-1),
     m_type(Type_None),
     m_size(0)
 {
@@ -17,11 +17,13 @@ ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute():
 }
 
 ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute(const std::string & name,
-                                                           gl::GLint location,
+                                                           u32 index,
+                                                           gl::GLint glLocation,
                                                            Type type,
                                                            gl::GLint size):
     m_name(name),
-    m_location(location),
+    m_index(index),
+    m_glLocation(glLocation),
     m_type(type),
     m_size(size)
 {
@@ -33,9 +35,14 @@ const std::string & ProgramInterfaceVertexAttribute::name() const
     return m_name;
 }
 
-gl::GLint ProgramInterfaceVertexAttribute::location() const
+u32 ProgramInterfaceVertexAttribute::index() const
 {
-    return m_location;
+    return m_index;
+}
+
+gl::GLint ProgramInterfaceVertexAttribute::glLocation() const
+{
+    return m_glLocation;
 }
 
 Type ProgramInterfaceVertexAttribute::type() const
@@ -51,7 +58,7 @@ gl::GLint ProgramInterfaceVertexAttribute::size() const
 bool ProgramInterfaceVertexAttribute::operator==(const ProgramInterfaceVertexAttribute & other) const
 {
     return m_name == other.m_name &&
-           m_location == other.m_location &&
+           m_glLocation == other.m_glLocation &&
            m_type == other.m_type &&
            m_size == other.m_size;
 }
@@ -64,7 +71,7 @@ bool ProgramInterfaceVertexAttribute::operator!=(const ProgramInterfaceVertexAtt
 std::string ProgramInterfaceVertexAttribute::toString() const
 {
     std::stringstream stream;
-    stream << m_location << ": " << m_type.name() << " " << m_name << " (size: " << m_size << ")";
+    stream << m_glLocation << ": " << m_type.name() << " " << m_name << " (size: " << m_size << ")";
 
     return stream.str();
 }

@@ -46,10 +46,10 @@ public:
                                                });
         ibuffer.createUpload(indices).schedule();
 
-        auto program = context().createProgram({deliberation::dataPath("Data/BasicTextureTest.vert"),
-                                                deliberation::dataPath("Data/BasicTextureTest.frag")});
+        auto program = context().createProgram({deliberation::DeliberationDataPath("Data/BasicTextureTest.vert"),
+                                                deliberation::DeliberationDataPath("Data/BasicTextureTest.frag")});
 
-        m_texture = context().createTexture(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/testimage.png")).load());
+        m_texture = context().createTexture(deliberation::TextureLoader(deliberation::DeliberationDataPath("Data/Examples/testimage.png")).load());
 
         m_draw = context().createDraw(program, gl::GL_TRIANGLES);
         m_draw.sampler("Texture").setTexture(m_texture);
@@ -61,9 +61,9 @@ public:
 
         m_transform = m_draw.uniform("T");
 
-        m_binaries.push_back(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/0.png")).load());
-        m_binaries.push_back(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/1.png")).load());
-        m_binaries.push_back(deliberation::TextureLoader(deliberation::dataPath("Data/Examples/2.png")).load());
+        m_binaries.push_back(deliberation::TextureLoader(deliberation::DeliberationDataPath("Data/Examples/0.png")).load());
+        m_binaries.push_back(deliberation::TextureLoader(deliberation::DeliberationDataPath("Data/Examples/1.png")).load());
+        m_binaries.push_back(deliberation::TextureLoader(deliberation::DeliberationDataPath("Data/Examples/2.png")).load());
 
         m_morphingTexture = context().createTexture(m_binaries.front());
         m_lastTextureMorph = std::chrono::system_clock::now();

@@ -18,8 +18,9 @@ add_library(ExampleCommon
     SceneExampleApplication.h
 )
 
-target_link_libraries(ExampleCommon 
-    ${DELIBERATION_LIBRARIES})
+target_link_libraries(ExampleCommon
+    ${DELIBERATION_LIBRARIES}
+)
 
 # libs
 set(libs
@@ -29,6 +30,10 @@ set(libs
 # AmbientOcclusionExample
 add_executable(AmbientOcclusionExample AmbientOcclusionExample.cpp)
 target_link_libraries(AmbientOcclusionExample ${libs})
+
+# DrawSandbox
+add_executable(DrawSandbox DrawSandbox.cpp)
+target_link_libraries(DrawSandbox ${libs})
 
 # BoxBoxSandbox
 add_executable(BoxBoxSandbox BoxBoxSandbox.cpp)
@@ -94,7 +99,7 @@ target_link_libraries(PhysicsExample ${libs})
 add_executable(EdgeToFaceSmoothingExample EdgeToFaceSmoothingExample.cpp)
 target_link_libraries(EdgeToFaceSmoothingExample ${libs})
 
-# VoxelExample
-add_executable(VoxelExample VoxelExample.cpp)
-target_link_libraries(VoxelExample ${libs})
+# ImguiSandbox
+add_executable(ImguiSandbox ImguiSandbox.cpp)
+target_link_libraries(ImguiSandbox ${libs})
 

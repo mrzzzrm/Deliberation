@@ -50,6 +50,8 @@ public:
 
     virtual void onStartup() override
     {
+        EnableGLErrorChecksAndLogging();
+
         m_ground.reset(context(), m_camera);
         m_ground.get().setSize(30.0f);
         m_ground.get().setRadius(10.0f);
@@ -58,39 +60,27 @@ public:
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
         m_camera.setAspectRatio((float)context().backbuffer().width() / context().backbuffer().height());
 
-        m_draw = createDraw();
+//        m_draw = createDraw();
         m_clear = context().createClear();
 
         m_transform.setPosition({0.0f, 1.0f, 0.0f});
 
-        m_viewProjectionHandle = m_draw.uniform("ViewProjection");
-        m_transformHandle = m_draw.uniform("Transform");
+//        m_viewProjectionHandle = m_draw.uniform("ViewProjection");
+//        m_transformHandle = m_draw.uniform("Transform");
 
         m_navigator.reset(m_camera, input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6> {
-//            deliberation::dataPath("Data/Skybox/Yokohama3/posx.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/negx.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/posy.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/negy.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/posz.png"),
-//            deliberation::dataPath("Data/Skybox/Yokohama3/negz.png")
-            deliberation::dataPath("Data/Skybox/Debug/Right.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Left.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Top.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Bottom.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Back.png"),
-            deliberation::dataPath("Data/Skybox/Debug/Front.png")
-//            deliberation::dataPath("Data/Skybox/skybox/right.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/left.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/top.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/bottom.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/back.jpg"),
-//            deliberation::dataPath("Data/Skybox/skybox/front.jpg")
+            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Right.png"),
+            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Left.png"),
+            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Top.png"),
+            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Bottom.png"),
+            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Back.png"),
+            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Front.png")
         };
 
         auto faceTexture = context().createTexture(
-            TextureLoader(deliberation::dataPath("Data/Skybox/Debug/Right.png")).load());
+            TextureLoader(deliberation::DeliberationDataPath("Data/Skybox/Debug/Right.png")).load());
 
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
         auto skyboxCubemap = context().createTexture(skyboxCubemapBinary);
@@ -98,51 +88,43 @@ public:
         m_skyboxRenderer.reset(context(), m_camera, skyboxCubemap);
 
         m_cubemapRenderer.reset(context(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
-        m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 0.0f, 0.0f}));
+        m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
 
-        m_textureRenderer.reset(context(), faceTexture);
+//        m_textureRenderer.reset(context(), faceTexture);
     }
 
-    deliberation::Draw createDraw()
-    {
-        auto program = context().createProgram({
-                                                 deliberation::dataPath("Data/Examples/BasicSceneExample.vert"),
-                                                 deliberation::dataPath("Data/Examples/BasicSceneExample.frag")
-                                             });
-
-        deliberation::UVSphere sphere(7, 7);
-        auto mesh = sphere.generateMesh();
-
-        deliberation::MeshCompiler compiler;
-        auto compilation = compiler.compile(mesh);
-
-        auto draw = context().createDraw(program, gl::GL_TRIANGLES);
-        draw.addVertices(compilation.vertices);
-        draw.setIndices(compilation.indices);
-
-        return draw;
-    }
+//    deliberation::Draw createDraw()
+//    {
+//        auto program = context().createProgram({
+//                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.vert"),
+//                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.frag")
+//                                             });
+//
+//        deliberation::UVSphere sphere(7, 7);
+//        auto mesh = sphere.generateMesh();
+//
+//        deliberation::MeshCompiler compiler;
+//        auto compilation = compiler.compile(mesh);
+//
+//        auto draw = context().createDraw(program, gl::GL_TRIANGLES);
+//        draw.addVertices(compilation.vertices);
+//        draw.setIndices(compilation.indices);
+//
+//        return draw;
+//    }
 
     virtual void onFrame(float seconds) override
     {
         m_navigator.get().update(seconds);
 
-//        m_transform.worldRotate(glm::quat({glm::pi<float>() * 0.3f * seconds,
-//                                           glm::pi<float>() * 0.2f * seconds,
-//                                           glm::pi<float>() * 0.1f * seconds}));
-
-        m_viewProjectionHandle.set(m_camera.viewProjection());
-        m_transformHandle.set(m_transform.matrix());
+//        m_viewProjectionHandle.set(m_camera.viewProjection());
+//        m_transformHandle.set(m_transform.matrix());
 
         m_clear.render();
 
-  //      m_textureRenderer->render();
-//
-//        m_cubemapRenderer->render();
-
+        m_cubemapRenderer->render();
         m_skyboxRenderer->render();
-//
-        m_draw.schedule();
+//        m_draw.schedule();
         m_ground.get().render();
     }
 
@@ -163,8 +145,8 @@ private:
                                         m_skyboxRenderer;
     deliberation::Optional<deliberation::DebugCubemapRenderer>
                                         m_cubemapRenderer;
-    deliberation::Optional<deliberation::DebugTexture2dRenderer>
-                                        m_textureRenderer;
+//    deliberation::Optional<deliberation::DebugTexture2dRenderer>
+//                                        m_textureRenderer;
 
 };
 

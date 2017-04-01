@@ -13,6 +13,7 @@ class Transform3D final
 public:
     static Transform3D atPosition(const glm::vec3 & position);
     static Transform3D atOrientation(const glm::quat & orientation);
+    static Transform3D withScale(float sclae);
     static const Transform3D & identity();
 
 public:

@@ -75,13 +75,13 @@ bool ElementalType::operator!=(const ElementalType & other) const
     return m_id != other.m_id;
 }
 
-ElementalType ElementalType_None(0);
-ElementalType ElementalType_Bool(1);
-ElementalType ElementalType_U8(2);
-ElementalType ElementalType_U16(3);
-ElementalType ElementalType_U32(4);
-ElementalType ElementalType_I8(5);
-ElementalType ElementalType_I16(6);
-ElementalType ElementalType_I32(7);
-ElementalType ElementalType_Float(8);
+ElementalType ElementalType_None(ELEMENTAL_TYPE_NONE);
+ElementalType ElementalType_Bool(ELEMENTAL_TYPE_BOOL);
+ElementalType ElementalType_U8(ELEMENTAL_TYPE_U8);
+ElementalType ElementalType_U16(ELEMENTAL_TYPE_U16);
+ElementalType ElementalType_U32(ELEMENTAL_TYPE_U32);
+ElementalType ElementalType_I8(ELEMENTAL_TYPE_I8);
+ElementalType ElementalType_I16(ELEMENTAL_TYPE_I16);
+ElementalType ElementalType_I32(ELEMENTAL_TYPE_I32);
+ElementalType ElementalType_Float(ELEMENTAL_TYPE_FLOAT);
 }

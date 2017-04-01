@@ -113,15 +113,17 @@ void TextureImpl::upload(const TextureBinary & binary)
 
 void TextureImpl::bind() const
 {
-    /*
-        TODO
-            GLStateManager
-    */
-
     if (glName == 0u)
     {
         gl::glGenTextures(1, &glName);
         Assert(glName != 0, "glGenTextures() failed");
+
+        gl::glBindTexture(type, glName);
+
+        gl::glTexParameteri(type, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
+        gl::glTexParameteri(type, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
+        gl::glTexParameteri(type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
+        gl::glTexParameteri(type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
     }
 
     gl::glBindTexture(type, glName);

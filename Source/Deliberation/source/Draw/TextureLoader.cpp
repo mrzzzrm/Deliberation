@@ -3,6 +3,7 @@
 #include "TextureLoaderCubeFilesImpl.h"
 #include "TextureLoaderDataImpl.h"
 #include "TextureLoaderFileImpl.h"
+#include "TextureLoaderPixelDataImpl.h"
 #include "TextureLoaderSDLSurfaceImpl.h"
 #include "TextureLoaderUnicolorImpl.h"
 
@@ -10,13 +11,13 @@ namespace deliberation
 {
 
 TextureLoader::TextureLoader(SDL_Surface * surface):
-    m_impl(new TextureLoaderSDLSurfaceImpl(surface))
+    m_impl(new TextureLoaderSDLSurfaceImpl(surface, TextureLoaderOrigin::LowerLeft))
 {
 
 }
 
 TextureLoader::TextureLoader(const std::string & path):
-    m_impl(new TextureLoaderFileImpl(path, TextureLoaderFileImpl::Origin::LowerLeft))
+    m_impl(new TextureLoaderFileImpl(path, TextureLoaderOrigin::LowerLeft))
 {
 }
 
@@ -34,6 +35,12 @@ TextureLoader::TextureLoader(const std::array<std::string, 6> & paths):
 template<>
 TextureLoader::TextureLoader(const glm::uvec2 size, const glm::vec3 & value):
     m_impl(std::make_unique<TextureLoaderUnicolorImpl<glm::vec3>>(size, value))
+{
+
+}
+
+TextureLoader::TextureLoader(const Blob & blob, u32 width, u32 height, PixelFormat format):
+    m_impl(std::make_unique<TextureLoaderPixelDataImpl>(blob, width, height, format))
 {
 
 }

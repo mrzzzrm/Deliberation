@@ -46,7 +46,7 @@ void DrawExecution::perform()
     applyStencilState();
     applyViewport();
 
-    gl::glUseProgram(m_drawImpl.program->glProgramName);
+    m_glStateManager.useProgram(m_drawImpl.program->glProgramName);
 
     // Setup texture units
     for (auto b = 0u; b < m_drawImpl.samplers.size(); b++)
@@ -61,16 +61,8 @@ void DrawExecution::perform()
             texture->allocate();
         }
 
-        gl::glActiveTexture(gl::GL_TEXTURE0 + b);
-        gl::glBindTexture(texture->type, texture->glName);
-
-        gl::glTexParameteri(texture->type, gl::GL_TEXTURE_BASE_LEVEL, texture->baseLevel);
-        gl::glTexParameteri(texture->type, gl::GL_TEXTURE_MAX_LEVEL, texture->maxLevel);
-
-        gl::glBindSampler(b, sampler.glSampler.name());
-        gl::glSamplerParameteri(sampler.glSampler.name(), gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)texture->minFilter);
-        gl::glSamplerParameteri(sampler.glSampler.name(), gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)texture->maxFilter);
-
+        m_glStateManager.setActiveTexture(b);
+        m_glStateManager.bindTexture(texture->type, texture->glName);
         gl::glUniform1i(sampler.location, b);
     }
 
@@ -163,133 +155,103 @@ void DrawExecution::perform()
     }
 
     // Dispatch draw
-    if (m_drawImpl.indexBuffer)
+    u32 instanceCount = 0;
+    u32 vertexCount = 0;
+
+    const auto useIndices = m_drawImpl.indexBufferBinding.buffer != nullptr;
+
+    for (const auto & attributeBinding : m_drawImpl.attributeBindings)
     {
-        if (!m_drawImpl.instanceBuffers.empty())
+        if (attributeBinding.index() == 1) continue; // Value binding
+
+        const auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(attributeBinding);
+
+        if (bufferBinding.ranged)
         {
-            drawElementsInstanced();
+            Assert(bufferBinding.count + bufferBinding.first < bufferBinding.buffer->count, "Buffer too small");
+
+            if (bufferBinding.divisor > 0)
+            {
+                Assert(instanceCount == 0 || bufferBinding.count == instanceCount, "Instance count mismatch");
+                instanceCount = bufferBinding.count;
+            }
+            else if (!m_drawImpl.indexBufferBinding.buffer)
+            {
+                Assert(vertexCount == 0 || bufferBinding.count == vertexCount, "Vertex count mismatch");
+                vertexCount = bufferBinding.count;
+            }
         }
         else
         {
-            drawElements();
+            if (bufferBinding.divisor > 0)
+            {
+                Assert(instanceCount == 0 || bufferBinding.buffer->count == instanceCount, "Instance count mismatch");
+                instanceCount = bufferBinding.buffer->count;
+            }
+            else
+            {
+                if (!useIndices)
+                {
+                    Assert(vertexCount == 0 || bufferBinding.buffer->count == vertexCount, "Vertex count mismatch");
+                    vertexCount = bufferBinding.buffer->count;
+                }
+            }
+        }
+    }
+
+    gl::glBindVertexArray(m_drawImpl.glVertexArray);
+
+    if (useIndices)
+    {
+        const auto type = m_drawImpl.indexBufferBinding.buffer->layout.fields()[0].type();
+
+        u32 elementCount = 0;
+        u32 offset = 0;
+
+        if (m_drawImpl.indexBufferBinding.ranged)
+        {
+            elementCount = m_drawImpl.indexBufferBinding.count;
+            offset = (u32)(m_drawImpl.indexBufferBinding.first * type.size());
+        }
+        else
+        {
+            elementCount = m_drawImpl.indexBufferBinding.buffer->count;
+            offset = 0;
+        }
+
+        if (instanceCount != 0)
+        {
+            gl::glDrawElementsInstanced(m_drawImpl.state.rasterizerState().primitive(),
+                                        elementCount,
+                                        TypeToGLType(type),
+                                        (void*)(intptr_t)offset,
+                                        instanceCount);
+
+        }
+        else
+        {
+            gl::glDrawElements(m_drawImpl.state.rasterizerState().primitive(),
+                               elementCount,
+                               TypeToGLType(type),
+                               (void*)(intptr_t)offset);
         }
     }
     else
     {
-        if (!m_drawImpl.instanceBuffers.empty())
+        if (instanceCount != 0)
         {
-            drawArraysInstanced();
+            gl::glDrawArraysInstanced(m_drawImpl.state.rasterizerState().primitive(),
+                                      0u,
+                                      vertexCount,
+                                      instanceCount);
         }
         else
         {
-            drawArrays();
+            gl::glDrawArrays(m_drawImpl.state.rasterizerState().primitive(),
+                             0u,
+                             vertexCount);
         }
     }
-}
-
-/*
-    TODO
-        Use GLStateManager for VAO
-*/
-
-void DrawExecution::drawElementsInstanced() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawElementsInstanced(m_drawImpl.state.rasterizerState().primitive(),
-                                elementCount(),
-                                elementType(),
-                                nullptr,
-                                instanceCount());
-}
-
-void DrawExecution::drawElements() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawElements(m_drawImpl.state.rasterizerState().primitive(),
-                       elementCount(),
-                       elementType(),
-                       nullptr);
-}
-
-void DrawExecution::drawArrays() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawArrays(m_drawImpl.state.rasterizerState().primitive(),
-                     0u,
-                     vertexCount());
-}
-
-void DrawExecution::drawArraysInstanced() const
-{
-    gl::glBindVertexArray(m_drawImpl.glVertexArray);
-    gl::glDrawArraysInstanced(m_drawImpl.state.rasterizerState().primitive(),
-                                        0u,
-                                        vertexCount(),
-                                        instanceCount());
-}
-
-unsigned int DrawExecution::elementCount() const
-{
-    Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
-    Assert(m_drawImpl.indexBuffer->count > 0, "Index buffer is empty");
-
-    return m_drawImpl.indexBuffer->count;
-}
-
-unsigned int DrawExecution::vertexCount() const
-{
-    Assert(!m_drawImpl.vertexBuffers.empty(), "No vertex buffer bound to command");
-
-    auto ref = m_drawImpl.vertexBuffers[0].ranged ?
-               m_drawImpl.vertexBuffers[0].count :
-               m_drawImpl.vertexBuffers[0].buffer->count;
-
-    Assert(ref > 0, "Vertex buffer is empty");
-
-    {
-        for (auto b = 1u; b < m_drawImpl.vertexBuffers.size(); b++)
-        {
-            auto cmp = m_drawImpl.vertexBuffers[b].ranged ?
-                       m_drawImpl.vertexBuffers[b].count :
-                       m_drawImpl.vertexBuffers[0].buffer->count;
-            Assert(cmp == ref, "");
-        }
-    }
-
-    return ref;
-}
-
-unsigned int DrawExecution::instanceCount() const
-{
-    assert(!m_drawImpl.instanceBuffers.empty());
-
-    auto & buffer = *m_drawImpl.instanceBuffers[0].buffer;
-    auto divisor = m_drawImpl.instanceBuffers[0].divisor;
-
-    Assert(buffer.count > 0, "Instance buffer is empty");
-    Assert(divisor > 0, "Divisor of instance buffer is zero");
-
-    auto ref = buffer.count * divisor;
-
-    for (auto b = 1u; b < m_drawImpl.instanceBuffers.size(); b++)
-    {
-        auto & buffer = *m_drawImpl.instanceBuffers[b].buffer;
-        auto divisor = m_drawImpl.instanceBuffers[b].divisor;
-
-        auto test = buffer.count * divisor;
-
-        Assert(test == ref, "Differing instance count in buffer " + std::to_string(b) + ": " + std::to_string(test) + " != " + std::to_string(ref));
-    }
-
-    return ref;
-}
-
-gl::GLenum DrawExecution::elementType() const
-{
-    Assert(m_drawImpl.indexBuffer.get(), "No index buffer set");
-    Assert(m_drawImpl.indexBuffer->layout.fields().size() == 1u, "Invalid index buffer layout");
-
-    return TypeToGLType(m_drawImpl.indexBuffer->layout.fields()[0].type());
 }
 
 void DrawExecution::applyDepthState()
@@ -356,6 +318,13 @@ void DrawExecution::applyRasterizerState()
 
     m_glStateManager.setPointSize(state.pointSize());
     m_glStateManager.setLineWidth(state.lineWidth());
+
+    m_glStateManager.enableScissorTest(state.scissorRectEnabled());
+    if (state.scissorRectEnabled())
+    {
+        const auto & scissorRect = state.scissorRect();
+        m_glStateManager.setScissor(scissorRect.x, scissorRect.y, scissorRect.z, scissorRect.w);
+    }
 }
 
 void DrawExecution::applyStencilState()

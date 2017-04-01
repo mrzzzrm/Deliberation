@@ -14,10 +14,12 @@ class DELIBERATION_API CameraDolly3D
 public:
     CameraDolly3D(Camera3D & camera);
 
-    float acceleration() const;
+    float linearAcceleration() const;
+    float angularAcceleration() const;
     const Pose3D & relativePose() const;
 
-    void setAcceleration(float acceleration);
+    void setLinearAcceleration(float acceleration);
+    void setAngularAcceleration(float angularAcceleraton);
     void setRelativePose(const Pose3D & pose);
 
     void update(const glm::vec3 & position,
@@ -26,7 +28,8 @@ public:
 
 private:
     Camera3D &  m_camera;
-    float       m_acceleration = 750.0f;
+    float       m_linearAcceleration = 1750.0f;
+    float       m_angularAcceleration = glm::pi<float>() * 10;
     Pose3D      m_relativePose;
 };
 

@@ -25,7 +25,12 @@ void ClearExecution::perform()
     Assert(m_clear.m_impl.get(), "");
     Assert(m_clear.m_impl->framebuffer.m_impl.get(), "");
 
+    auto & framebuffer = m_clear.m_impl->framebuffer;
+
     m_clear.m_impl->framebuffer.m_impl->bind(m_glStateManager);
+
+    m_glStateManager.setViewport(0, 0, framebuffer.width(), framebuffer.height());
+    m_glStateManager.setScissor(0, 0, framebuffer.width(), framebuffer.height());
 
     m_glStateManager.setDepthMask(true);
     m_glStateManager.setStencilMask(~0);

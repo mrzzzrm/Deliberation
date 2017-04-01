@@ -7,7 +7,7 @@ inline EntityData::EntityData():
 
 }
 
-inline EntityData::EntityData(entity_id_t id, const std::string & name, entity_id_t parent):
+inline EntityData::EntityData(EntityId id, const std::string & name, EntityId parent):
     id(id),
     name(name),
     parent(parent),

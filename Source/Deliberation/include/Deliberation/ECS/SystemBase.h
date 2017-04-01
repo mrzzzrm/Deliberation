@@ -24,29 +24,36 @@ public:
     const ComponentFilter & filter() const;
 
     virtual std::size_t index() const = 0;
+    virtual std::string name() const = 0;
 
     bool accepts(const Entity & entity);
 
     void addEntity(Entity & entity);
     void removeEntity(Entity & entity);
 
+    void frameBegin();
     void beforeUpdate();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
     void render();
+
+    virtual void onCreated() {}
+    virtual void onRemoved() {}
 
 protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
     virtual void onEntityUpdate(Entity &entity, float seconds);
     virtual void onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep);
+    virtual void onFrameBegin();
     virtual void onUpdate(float seconds);
+    virtual void onPrePhysicsUpdate(float seconds);
     virtual void onRender();
 
 private:
     struct EntityEntry
     {
-        entity_id_t id;
+        EntityId id;
         bool        active;
     };
 
@@ -54,7 +61,7 @@ private:
     World &                          m_world;
     ComponentFilter                  m_filter;
     SparseVector<EntityEntry>        m_entities;
-    std::unordered_map<entity_id_t,
+    std::unordered_map<EntityId,
         std::size_t>                 m_entityIndexByID;
 };
 
