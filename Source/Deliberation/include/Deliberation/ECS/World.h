@@ -39,6 +39,10 @@ public:
 
     EntityData & entityData(EntityId id);
     Entity entity(EntityId id);
+    Entity entityByIndex(size_t index);
+    Entity entityById(EntityId id);
+
+    const SparseVector<EntityData> & entities() const { return m_entities; }
 
     Entity createEntity(const std::string & name = "Entity",
                         EntityId parent = ECS_INVALID_ENTITY_ID);
@@ -54,6 +58,9 @@ public:
     void frameComplete();
 
     std::string toString() const;
+
+    template<typename T>
+    T & system();
 
     /**
      * From AbstractWorld

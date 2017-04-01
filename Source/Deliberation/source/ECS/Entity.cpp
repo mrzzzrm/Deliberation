@@ -142,12 +142,16 @@ std::string Entity::toString() const
 
 bool Entity::operator<(const Entity & rhs) const
 {
+    if (m_world == nullptr || rhs.m_world == nullptr) return false;
+
     Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
     return m_id < rhs.m_id;
 }
 
 bool Entity::operator==(const Entity & rhs) const
 {
+    if (m_world == nullptr || rhs.m_world == nullptr) return false;
+
     Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
     return m_id == rhs.m_id;
 }

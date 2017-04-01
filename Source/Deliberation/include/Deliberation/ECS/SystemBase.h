@@ -47,6 +47,7 @@ protected:
     virtual void onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep);
     virtual void onFrameBegin();
     virtual void onUpdate(float seconds);
+    virtual void onPrePhysicsUpdate(float seconds);
     virtual void onRender();
 
 private:

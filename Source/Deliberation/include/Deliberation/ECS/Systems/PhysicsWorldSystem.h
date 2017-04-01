@@ -24,7 +24,10 @@ public:
 protected:
     void onEntityAdded(Entity & entity) override
     {
-        m_physicsWorld.addRigidBody(entity.component<RigidBodyComponent>().value());
+        auto rigidBody = entity.component<RigidBodyComponent>().value();
+        rigidBody->setEntity(entity);
+
+        m_physicsWorld.addRigidBody(rigidBody);
     }
 
     void onEntityRemoved(Entity & entity) override

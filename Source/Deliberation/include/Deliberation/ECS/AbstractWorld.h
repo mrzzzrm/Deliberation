@@ -18,11 +18,6 @@ class AbstractWorld
 public:
     virtual void emit(size_t entityIndex, TypeID::value_t eventType, const void * event) = 0;
 
-    template<typename T>
-    T & system();
-
-    virtual std::shared_ptr<SystemBase> system(SystemTypeId systemTypeId) = 0;
-
 protected:
     virtual ~AbstractWorld() = default;
 

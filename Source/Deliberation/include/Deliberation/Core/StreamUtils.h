@@ -59,6 +59,15 @@ StreamType & operator<<(StreamType && os, const AABB & aabb);
 //template<typename T>
 //std::string operator+(const T & value, const char * s);
 
+template<typename T, glm::precision precision>
+std::string ToString(const glm::tvec2<T, precision> & v);
+
+template<typename T, glm::precision precision>
+std::string ToString(const glm::tvec3<T, precision> & v);
+
+template<typename T, glm::precision precision>
+std::string ToString(const glm::tvec4<T, precision> & v);
+
 }
 
 #include <Deliberation/Core/StreamUtils.inl>

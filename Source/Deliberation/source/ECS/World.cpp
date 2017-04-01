@@ -54,6 +54,16 @@ Entity World::entity(EntityId id)
     return Entity(*this, id);
 }
 
+Entity World::entityByIndex(size_t index)
+{
+    return Entity(*this, m_entities[index].id);
+}
+
+Entity World::entityById(EntityId id)
+{
+    return Entity(*this, id);
+}
+
 Entity World::createEntity(const std::string & name, EntityId parent)
 {
     auto id = m_entityIDCounter++;
@@ -309,6 +319,7 @@ void World::addComponent(EntityId id, TypeID::value_t index, std::shared_ptr<Com
 
     component->m_world = this;
     component->m_entityIndex = i;
+    component->m_entityId = id;
 
     entity.componentBits.set(index);
     entity.componentSetup = componentSetup(entity.componentBits);

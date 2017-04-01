@@ -13,7 +13,7 @@
 #include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
 #include <Deliberation/Core/IntTypes.h>
-#include <Deliberation/Core/Math/Trajetory.h>
+#include <Deliberation/Core/Math/Trajectory.h>
 
 using namespace deliberation;
 
