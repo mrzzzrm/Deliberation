@@ -1,5 +1,8 @@
 message(STATUS "Configuring for platform Windows/MSVC.")
 
+set (DELIBERATION_BUILD_TARGET_OS 		  win64)
+set (DELIBERATION_BUILD_COMPILER_PLATFORM msvc2015-x64)
+
 set(WIN32_COMPILE_DEFS
     WIN32                       # Windows system
     UNICODE                     # Use unicode

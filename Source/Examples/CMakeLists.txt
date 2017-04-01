@@ -18,10 +18,12 @@ add_library(ExampleCommon
     SceneExampleApplication.h
 )
 
+target_link_libraries(ExampleCommon 
+    ${DELIBERATION_LIBRARIES})
+
 # libs
 set(libs
     ExampleCommon
-    ${DELIBERATION_LIBRARIES}
 )
 
 # AmbientOcclusionExample

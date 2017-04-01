@@ -334,13 +334,13 @@ void DebugSphereInstance::schedule() const {
 
 DebugPoseInstance::DebugPoseInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
-    m_arrows[0].reset(renderer);
+    m_arrows[0].emplace(renderer);
     m_arrows[0]->setColor({1.0f, 0.0f, 0.0f});
 
-    m_arrows[1].reset(renderer);
+    m_arrows[1].emplace(renderer);
     m_arrows[1]->setColor({0.0f, 1.0f, 0.0f});
 
-    m_arrows[2].reset(renderer);
+    m_arrows[2].emplace(renderer);
     m_arrows[2]->setColor({0.0f, 0.0f, 1.0f});
 }
 

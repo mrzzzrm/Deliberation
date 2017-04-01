@@ -186,10 +186,14 @@ void Application::init()
     // Init glbinding
     glbinding::Binding::initialize();
 
+	auto versionString = glbinding::ContextInfo::version().toString();
+	auto vendorString = glbinding::ContextInfo::vendor();
+	auto rendererString = glbinding::ContextInfo::renderer();
+
     std::cout << std::endl
-              << "OpenGL Version:  " << glbinding::ContextInfo::version().toString() << std::endl
-              << "OpenGL Vendor:   " << glbinding::ContextInfo::vendor() << std::endl
-              << "OpenGL Renderer: " << glbinding::ContextInfo::renderer() << std::endl
+              << "OpenGL Version:  " << versionString << std::endl
+              << "OpenGL Vendor:   " << vendorString << std::endl
+              << "OpenGL Renderer: " << rendererString << std::endl
               << "Context RGBA-bits: " << contextColorSize << std::endl;
 
     deliberation::init();

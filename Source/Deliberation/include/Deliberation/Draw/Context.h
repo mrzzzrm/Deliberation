@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include "SDL.h"
 
 #include <Deliberation/Deliberation_API.h>
 

@@ -1,5 +1,6 @@
 #include <Deliberation/Core/MainLoop.h>
 
+#include <algorithm>
 #include <chrono>
 
 namespace deliberation

@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 
 #include <Deliberation/Deliberation_API.h>
 

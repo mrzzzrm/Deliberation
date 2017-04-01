@@ -376,12 +376,12 @@ void Draw::verifyVertexBuffer(const Buffer & buffer) const
         Assert(iter == m_impl->vertexBuffers.end(), "Duplicate buffer");
     }
 
-    Assert(
-        !isComplete(),
-        "Can't add vertex buffer, is already complete.\n"
-        "Buffer: " + buffer.toString() + "\n"
-        "ProgramInterface: " + m_impl->program->interface.toString()
-    );
+    //Assert(
+    //    !isComplete(),
+    //    "Can't add vertex buffer, is already complete.\n"
+    //    "Buffer: " + buffer.toString() + "\n"
+    //    "ProgramInterface: " + m_impl->program->interface.toString()
+    //);
 }
 
 void Draw::verifyInstanceBuffer(const Buffer & buffer) const

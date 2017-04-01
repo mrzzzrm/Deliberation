@@ -39,7 +39,7 @@ QValT & SparseVector<T>::IteratorT<QVecT, QValT>::operator*()
 
 template<typename T>
 template<typename QVecT, typename QValT>
-SparseVector<T>::IteratorT<QVecT, QValT> & SparseVector<T>::IteratorT<QVecT, QValT>::operator++()
+typename SparseVector<T>::IteratorT<QVecT, QValT> & SparseVector<T>::IteratorT<QVecT, QValT>::operator++()
 {
     do
     {

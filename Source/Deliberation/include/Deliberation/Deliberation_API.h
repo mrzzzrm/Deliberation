@@ -1,8 +1,8 @@
 #pragma once
 
-#ifdef _MSC_VER
-#   define DELIBERATION_API_EXPORT_DECLARATION __declspec(dllexport)
-#   define DELIBERATION_API_IMPORT_DECLARATION __declspec(dllimport)
+#ifdef _MSC_VER 
+#   define DELIBERATION_API_EXPORT_DECLARATION //__declspec(dllexport)
+#   define DELIBERATION_API_IMPORT_DECLARATION //__declspec(dllimport)
 #elif __GNUC__
 #	define DELIBERATION_API_EXPORT_DECLARATION __attribute__ ((visibility ("default")))
 #	define DELIBERATION_API_IMPORT_DECLARATION __attribute__ ((visibility ("default")))

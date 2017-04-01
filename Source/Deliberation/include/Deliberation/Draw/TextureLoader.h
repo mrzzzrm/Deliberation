@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <Deliberation/Core/Types.h>
 #include <Deliberation/Draw/TextureBinary.h>

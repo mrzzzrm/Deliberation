@@ -193,7 +193,7 @@ private:
     Draw                                 m_draw;
     Pose3D                               m_pose;
     mutable std::array<
-        Optional<DebugArrowInstance>, 3> m_arrows;
+        std::experimental::optional<DebugArrowInstance>, 3> m_arrows;
 };
 
 class DELIBERATION_API DebugGeometryRenderer final

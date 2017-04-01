@@ -39,7 +39,7 @@ public:
         bool hasParent() const;
         bool isValid() const;
 
-        IteratorT firstChild() const;
+        IteratorT<QualifiedNodeType, QualifiedTreeType> firstChild() const;
         IteratorT nextSibling() const;
         IteratorT parent() const;
 

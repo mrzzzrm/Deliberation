@@ -10,19 +10,17 @@ set(DELIBERATION_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
     ${CXXOPTS_INCLUDE_DIR}
-    ${SDL2TTF_INCLUDE_DIR}
-    ${SDL2IMAGE_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIR}
+    ${SDL2_TTF_INCLUDE_DIR}
+    ${SDL2_IMAGE_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${JSON_INCLUDE_DIR}
+
+	${PROJECT_SOURCE_DIR}/Extern/optional
     
     CACHE INTERAL "All Deliberation include dirs" 
-)
-
-# include
-include_directories(
-    ${DELIBERATION_INCLUDE_DIRS}
 )
 
 # library type
@@ -427,15 +425,26 @@ set(DELIBERATION_LIBRARIES
     Deliberation
     ${libs}
     ${SDL2_LIBRARY}
-    ${SDL2TTF_LIBRARY}
+    ${SDL2_TTF_LIBRARY}
     ${OPENGL_gl_LIBRARY}
     CACHE INTERNAL ""
 )
 
 # library
-add_library(Deliberation STATIC ${api_includes} ${sources})
+add_library(Deliberation 
+	STATIC 
+	${api_includes} 
+	${sources})
+	
 target_link_libraries(Deliberation
     ${libs})
+	
+# include
+target_include_directories(
+	Deliberation
+	PUBLIC
+    ${DELIBERATION_INCLUDE_DIRS}
+)
     
 target_compile_definitions(Deliberation
     PUBLIC

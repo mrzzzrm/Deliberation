@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <functional>
 #include <sstream>
 
@@ -34,7 +35,7 @@ QualifiedT & RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::oper
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> & RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++()
+typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> & RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++()
 {
     m_index++;
     return *this;
@@ -42,7 +43,7 @@ RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> & RingBuffer<T>::I
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++(int)
+typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++(int)
 {
     auto result = *this;
     m_index++;

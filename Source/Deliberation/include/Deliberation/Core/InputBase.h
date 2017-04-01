@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
