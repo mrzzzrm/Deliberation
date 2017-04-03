@@ -115,7 +115,7 @@ int Application::run(int argc,
 
         m_input->step();
 
-        SDL_RenderPresent(m_displayRenderer);
+        SDL_GL_SwapWindow(m_displayWindow);
 
         m_fpsCounter.onFrame();
 
@@ -169,23 +169,21 @@ void Application::init()
             std::cerr << "IMG_Init: Failed to init required jpg and png support!" << std::endl;
             std::cerr << "IMG_Init: " << IMG_GetError() << std::endl;
             m_returnCode = -1;
+			return;
         }
     }
 
-    SDL_CreateWindowAndRenderer(1800, 1080, SDL_WINDOW_OPENGL, &m_displayWindow, &m_displayRenderer);
-    if (!m_displayWindow || !m_displayRenderer)
-    {
-        SDL_Quit();
-        m_returnCode =  -1;
-    }
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
 
-    SDL_GetRendererInfo(m_displayRenderer, &m_displayRendererInfo);
-
-    if ((m_displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) == 0 ||
-        (m_displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE) == 0) {
-        m_returnCode = -1;
-        return;
-    }
+	m_displayWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 1080, SDL_WINDOW_OPENGL);
+	if (!m_displayWindow)
+	{
+		SDL_Quit();
+		m_returnCode = -1;
+		return;
+	}
 
     m_glContext = SDL_GL_CreateContext(m_displayWindow);
     SDL_GL_MakeCurrent(m_displayWindow, m_glContext);

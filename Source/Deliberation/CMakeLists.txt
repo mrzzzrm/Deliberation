@@ -18,9 +18,8 @@ set(DELIBERATION_INCLUDE_DIRS
     ${GLFW_INCLUDE_DIR}
     ${JSON_INCLUDE_DIR}
     ${IMGUI_INCLUDE_DIRS}
-    ${VARIANT_INCLUDE_DIRS}
-	${OPTIONAL_INCLUDE_DIRS}
-    
+    ${BOOST_INCLUDE_DIRS}
+
     CACHE INTERAL "All Deliberation include dirs" 
 )
 
@@ -434,13 +433,13 @@ set(api_includes
     ${include_path}/Scene/SkyboxRenderer.h)
 
 set(libs
-    ${GLBINDING_LIBRARIES}
     ${GLFW_LIBRARY}
     ${SDL2_LIBRARY}
     ${SDL2_IMAGE_LIBRARY}
     ${SDL2_TTF_LIBRARY}
     ${OPENGL_gl_LIBRARY}
     ${IMGUI_LIBRARIES}
+    ${GLBINDING_LIBRARIES}
     )
 
 set(DELIBERATION_LIBRARIES

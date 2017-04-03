@@ -245,7 +245,7 @@ void LinearMap<Value>::erase(std::size_t key)
 {
     Assert(contains(key), "");
 
-    m_vec[key] = optional_ns::optional<Value>();
+    m_vec[key] = boost::optional<Value>();
     m_size--;
 }
 

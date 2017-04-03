@@ -162,9 +162,9 @@ void DrawExecution::perform()
 
     for (const auto & attributeBinding : m_drawImpl.attributeBindings)
     {
-        if (attributeBinding.index() == 1) continue; // Value binding
+        if (attributeBinding.which() == 1) continue; // Value binding
 
-        const auto & bufferBinding = std::experimental::get<detail::VertexAttributeBufferBinding>(attributeBinding);
+        const auto & bufferBinding = boost::get<detail::VertexAttributeBufferBinding>(attributeBinding);
 
         if (bufferBinding.ranged)
         {
