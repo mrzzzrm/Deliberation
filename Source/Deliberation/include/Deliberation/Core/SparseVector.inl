@@ -157,7 +157,7 @@ void SparseVector<T>::insert_at(size_t index, T && value)
 
     ensureSize(index);
 
-    if (index >= m_vec.size()) m_vec.emplace_back(std::experimental::fundamentals_v1::in_place, std::move(value));
+    if (index >= m_vec.size()) m_vec.emplace_back(boost::in_place, std::move(value));
     else m_vec[index].emplace(std::move(value));
 
     incCount();
@@ -180,7 +180,7 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
         if (m_pool.empty())
         {
             result = m_vec.size();
-            m_vec.emplace_back(std::experimental::fundamentals_v1::in_place, std::forward<Args>(args)...);
+            m_vec.emplace_back(T(std::forward<Args>(args)...));
             break;
         }
         else
@@ -211,7 +211,7 @@ void SparseVector<T>::emplace_at(size_t index, Args &&... args)
 
     ensureSize(index);
 
-    if (index >= m_vec.size()) m_vec.emplace_back(std::experimental::fundamentals_v1::in_place, std::forward<Args>(args)...);
+    if (index >= m_vec.size()) m_vec.emplace_back(T(std::forward<Args>(args)...));
     else m_vec[index].emplace(std::forward<Args>(args)...);
 
     incCount();
@@ -224,7 +224,7 @@ void SparseVector<T>::erase(std::size_t index)
 
     decCount();
 
-    m_vec[index] = std::experimental::optional<T>{};
+    m_vec[index] = boost::optional<T>{};
     m_pool.push(index);
 }
 

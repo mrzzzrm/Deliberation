@@ -3,10 +3,11 @@
 #include <cstdlib>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+#include <boost/optional.hpp>
 
-#include <Deliberation/Core/Experimental.h>
 #include <Deliberation/Core/Optional.h>
+
+#include <Deliberation/Deliberation_API.h>
 
 namespace deliberation
 {
@@ -77,7 +78,7 @@ private:
     /* Number of active keys */
     std::size_t                  m_size;
 
-    std::vector<std::experimental::optional<Value>>
+    std::vector<boost::optional<Value>>
                                 m_vec;
 };
 
