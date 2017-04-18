@@ -1,5 +1,7 @@
 #include <Deliberation/Core/StringUtils.h>
 
+#include <numeric>
+
 #include <Deliberation/Core/Assert.h>
 
 namespace deliberation
@@ -72,6 +74,27 @@ std::string StringRErased(const std::string & str, const std::string & testStr)
 {
     auto cpy = str;
     return StringRErase(cpy, testStr);
+}
+
+std::string StringJoin(const std::vector<std::string> & strs, const std::string & sep)
+{
+    if (strs.empty()) return {};
+
+    const auto len =
+        std::accumulate(strs.begin(), strs.end(), 0u, [] (size_t sum, const std::string & s) { return sum + s.size(); }) +
+        sep.size() * (strs.size() - 1);
+
+    std::string result;
+    result.reserve(len);
+
+    for (size_t i = 0; i < strs.size() - 1; i++)
+    {
+        result += strs[i] + sep;
+    }
+
+    result += strs.back();
+
+    return result;
 }
 
 }
