@@ -4,7 +4,7 @@ set(GLBINDING_ROOT ${PROJECT_SOURCE_DIR}/Extern/glbinding-2.1.1)
 if (${DELIBERATION_BUILD_TARGET_OS} STREQUAL "win64")
 	set(NAME glbinding.lib)
 else()
-	set(NAME glbinding.a)
+	set(NAME libglbinding.a)
 endif()
 
 set(GLBINDING_INCLUDE_DIR ${GLBINDING_ROOT}/include)

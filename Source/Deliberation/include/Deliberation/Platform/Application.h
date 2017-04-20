@@ -41,6 +41,7 @@ protected:
 
 private:
     void init();
+    void handleWindowEvent(const SDL_Event & event);
 
 private:
     std::string         m_name;
@@ -59,6 +60,9 @@ private:
     SDL_GLContext       m_glContext;
 
     Optional<Input>     m_input;
+
+    int                 m_displayWidth = 1600;
+    int                 m_displayHeight = 900;
 };
 
 }

@@ -30,27 +30,21 @@
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 #include <Deliberation/Scene/MeshCompiler.h>
 
-struct Vertex
-{
-    glm::vec3 position;
-    glm::vec3 normal;
-};
-
 using namespace deliberation;
 
-class BasicSceneExample:
-    public deliberation::Application
+class SceneSandbox:
+    public Application
 {
 public:
-    BasicSceneExample():
-        deliberation::Application("BasicSceneExample")
+    SceneSandbox():
+        Application("SceneSandbox")
     {
 
     }
 
     virtual void onStartup() override
     {
-        EnableGLErrorChecksAndLogging();
+       // EnableGLErrorChecksAndLogging();
 
         m_ground.reset(context(), m_camera);
         m_ground.get().setSize(30.0f);
@@ -60,27 +54,22 @@ public:
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
         m_camera.setAspectRatio((float)context().backbuffer().width() / context().backbuffer().height());
 
-//        m_draw = createDraw();
         m_clear = context().createClear();
 
         m_transform.setPosition({0.0f, 1.0f, 0.0f});
-
-//        m_viewProjectionHandle = m_draw.uniform("ViewProjection");
-//        m_transformHandle = m_draw.uniform("Transform");
-
         m_navigator.reset(m_camera, input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6> {
-            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Right.png"),
-            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Left.png"),
-            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Top.png"),
-            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Bottom.png"),
-            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Back.png"),
-            deliberation::DeliberationDataPath("Data/Skybox/Cloudy/Front.png")
+            DeliberationDataPath("Data/Skybox/Cloudy/Right.png"),
+            DeliberationDataPath("Data/Skybox/Cloudy/Left.png"),
+            DeliberationDataPath("Data/Skybox/Cloudy/Top.png"),
+            DeliberationDataPath("Data/Skybox/Cloudy/Bottom.png"),
+            DeliberationDataPath("Data/Skybox/Cloudy/Back.png"),
+            DeliberationDataPath("Data/Skybox/Cloudy/Front.png")
         };
 
         auto faceTexture = context().createTexture(
-            TextureLoader(deliberation::DeliberationDataPath("Data/Skybox/Debug/Right.png")).load());
+            TextureLoader(DeliberationDataPath("Data/Skybox/Debug/Right.png")).load());
 
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
         auto skyboxCubemap = context().createTexture(skyboxCubemapBinary);
@@ -89,69 +78,33 @@ public:
 
         m_cubemapRenderer.reset(context(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
-
-//        m_textureRenderer.reset(context(), faceTexture);
     }
 
-//    deliberation::Draw createDraw()
-//    {
-//        auto program = context().createProgram({
-//                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.vert"),
-//                                                 deliberation::DeliberationDataPath("Data/Examples/BasicSceneExample.frag")
-//                                             });
-//
-//        deliberation::UVSphere sphere(7, 7);
-//        auto mesh = sphere.generateMesh();
-//
-//        deliberation::MeshCompiler compiler;
-//        auto compilation = compiler.compile(mesh);
-//
-//        auto draw = context().createDraw(program, gl::GL_TRIANGLES);
-//        draw.addVertices(compilation.vertices);
-//        draw.setIndices(compilation.indices);
-//
-//        return draw;
-//    }
 
     virtual void onFrame(float seconds) override
     {
         m_navigator.get().update(seconds);
 
-//        m_viewProjectionHandle.set(m_camera.viewProjection());
-//        m_transformHandle.set(m_transform.matrix());
-
         m_clear.render();
 
         m_cubemapRenderer->render();
         m_skyboxRenderer->render();
-//        m_draw.schedule();
         m_ground.get().render();
     }
 
 private:
-    deliberation::Draw                  m_draw;
-    deliberation::Clear                 m_clear;
-    deliberation::Optional<deliberation::DebugGroundPlaneRenderer>
-                                        m_ground;
-    deliberation::Camera3D              m_camera;
-    deliberation::Transform3D           m_transform;
-    deliberation::Texture               m_depthBuffer;
-    deliberation::Texture               m_colorBuffer;
-    deliberation::Uniform               m_viewProjectionHandle;
-    deliberation::Uniform               m_transformHandle;
-    deliberation::Optional<deliberation::DebugCameraNavigator3D>
-                                        m_navigator;
-    deliberation::Optional<deliberation::SkyboxRenderer>
-                                        m_skyboxRenderer;
-    deliberation::Optional<deliberation::DebugCubemapRenderer>
-                                        m_cubemapRenderer;
-//    deliberation::Optional<deliberation::DebugTexture2dRenderer>
-//                                        m_textureRenderer;
-
+    Draw                                m_draw;
+    Clear                               m_clear;
+    Optional<DebugGroundPlaneRenderer>  m_ground;
+    Camera3D                            m_camera;
+    Transform3D                         m_transform;
+    Optional<DebugCameraNavigator3D>    m_navigator;
+    Optional<SkyboxRenderer>            m_skyboxRenderer;
+    Optional<DebugCubemapRenderer>      m_cubemapRenderer;
 };
 
 int main(int argc, char * argv[])
 {
-    return BasicSceneExample().run(argc, argv);
+    return SceneSandbox().run(argc, argv);
 }
 

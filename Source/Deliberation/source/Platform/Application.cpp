@@ -103,6 +103,10 @@ int Application::run(int argc,
                     m_input->onSDLInputEvent(event);
                     break;
 
+                case SDL_WINDOWEVENT:
+                    handleWindowEvent(event);
+                    break;
+
                 case SDL_QUIT:
                     quit(0);
                     break;
@@ -177,7 +181,8 @@ void Application::init()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
 
-	m_displayWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 1080, SDL_WINDOW_OPENGL);
+	m_displayWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                       m_displayWidth, m_displayHeight, SDL_WINDOW_OPENGL);
 	if (!m_displayWindow)
 	{
 		SDL_Quit();
@@ -213,7 +218,7 @@ void Application::init()
 
     std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
 
-    m_context.reset(1800, 1080);
+    m_context.reset(m_displayWidth, m_displayHeight);
 
     /**
      * Init input
@@ -221,6 +226,10 @@ void Application::init()
     m_input.reset(*m_context);
 
     m_initialized = true;
+}
+
+void Application::handleWindowEvent(const SDL_Event & event)
+{
 }
 
 }
