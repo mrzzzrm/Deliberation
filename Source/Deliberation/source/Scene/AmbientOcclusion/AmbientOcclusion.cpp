@@ -11,7 +11,7 @@
 #include <Deliberation/Core/Math/Random.h>
 #include <Deliberation/Core/Math/Vec.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/SurfaceBinary.h>
 
 #include <Deliberation/Scene/Camera3D.h>

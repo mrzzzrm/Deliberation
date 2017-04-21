@@ -1,6 +1,6 @@
 #include "ClearImpl.h"
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
@@ -8,7 +8,7 @@ namespace deliberation
 namespace detail
 {
 
-ClearImpl::ClearImpl(Context & context,
+ClearImpl::ClearImpl(DrawContext & context,
                      const std::shared_ptr<FramebufferImpl> & framebuffer):
     context(context),
     color({0.0f, 0.0f, 0.0f, 0.0f}),

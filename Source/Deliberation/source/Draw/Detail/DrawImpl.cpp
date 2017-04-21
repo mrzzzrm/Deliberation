@@ -7,7 +7,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
@@ -19,7 +19,7 @@ namespace deliberation
 namespace detail
 {
 
-DrawImpl::DrawImpl(Context & context,
+DrawImpl::DrawImpl(DrawContext & context,
                    const Program & program):
     context(context),
     program(program.m_impl),

@@ -6,12 +6,12 @@
 #include <Deliberation/Core/DataLayout.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
 
-BufferUpload::BufferUpload(Context & context,
+BufferUpload::BufferUpload(DrawContext & context,
                            Buffer & buffer,
                            const Blob & data):
     m_context(context),
@@ -22,7 +22,7 @@ BufferUpload::BufferUpload(Context & context,
     Assert(data.size() % buffer.layout().stride() == 0, "");
 }
 
-BufferUpload::BufferUpload(Context & context,
+BufferUpload::BufferUpload(DrawContext & context,
                            Buffer & buffer,
                            const Blob & data,
                            unsigned int count):

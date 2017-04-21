@@ -6,7 +6,7 @@
 namespace deliberation
 {
 
-DebugCubemapRenderer::DebugCubemapRenderer(Context & context,
+DebugCubemapRenderer::DebugCubemapRenderer(DrawContext & context,
                                            const Camera3D & camera,
                                            const Texture & cubemap,
                                            MeshType meshType):

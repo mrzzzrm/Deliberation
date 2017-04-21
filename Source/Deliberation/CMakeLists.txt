@@ -114,7 +114,7 @@ set(sources
     ${source_path}/Draw/Clear.cpp
     ${source_path}/Draw/ClearExecution.cpp
     ${source_path}/Draw/ClearExecution.h
-    ${source_path}/Draw/Context.cpp
+    ${source_path}/Draw/DrawContext.cpp
     ${source_path}/Draw/CullState.cpp
     ${source_path}/Draw/DepthState.cpp
     ${source_path}/Draw/Draw.cpp
@@ -214,7 +214,7 @@ set(sources
     ${source_path}/Scene/CuboidMesh.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
     ${source_path}/Scene/Mesh.cpp
-    ${source_path}/Scene/Mesh2.cpp
+    ${source_path}/Scene/MeshData.cpp
     ${source_path}/Scene/MeshCompiler.cpp
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
@@ -325,8 +325,7 @@ set(api_includes
     ${include_path}/Draw/Buffer.h
     ${include_path}/Draw/BufferUpload.h
     ${include_path}/Draw/Clear.h
-    ${include_path}/Draw/Context.h
-    ${include_path}/Draw/Context.inl
+    ${include_path}/Draw/DrawContext.h
     ${include_path}/Draw/CullState.h
     ${include_path}/Draw/DepthState.h
     ${include_path}/Draw/Draw.h
@@ -425,7 +424,7 @@ set(api_includes
     ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
     ${include_path}/Scene/Mesh.h
-    ${include_path}/Scene/Mesh2.h
+    ${include_path}/Scene/MeshData.h
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/PostprocessingEffect.h
     ${include_path}/Scene/UVSphere.h

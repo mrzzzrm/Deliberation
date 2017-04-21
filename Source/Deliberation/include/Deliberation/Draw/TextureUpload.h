@@ -7,25 +7,25 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Texture;
 class TextureBinary;
 
 class DELIBERATION_API TextureUpload final
 {
 public:
-    TextureUpload(Context & context,
+    TextureUpload(DrawContext & context,
                   Texture & texture,
                   const TextureBinary & binary);
 
-    Context & context() const;
+    DrawContext & context() const;
     Texture & texture() const;
     const TextureBinary & binary() const;
 
     void schedule();
 
 private:
-    Context & m_context;
+    DrawContext & m_context;
     Texture & m_texture;
     TextureBinary m_binary;
 };

@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Math/Pose3D.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/Uniform.h>
@@ -24,7 +24,7 @@ public:
     };
 
 public:
-    DebugCubemapRenderer(Context & context,
+    DebugCubemapRenderer(DrawContext & context,
                          const Camera3D & camera,
                          const Texture & cubemap,
                          MeshType meshType = MeshType::Cube);

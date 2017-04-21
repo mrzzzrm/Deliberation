@@ -23,7 +23,7 @@ namespace detail
 }
 
 class ClearExecution;
-class Context;
+class DrawContext;
 class Surface;
 
 class DELIBERATION_API Framebuffer final
@@ -59,7 +59,7 @@ public:
     Clear createClear();
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class ClearExecution;
     friend class detail::DrawExecution;
     friend class detail::ClearImpl;

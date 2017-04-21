@@ -21,7 +21,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Camera3D;
 class DebugGeometryRenderer;
 class DebugGeometryManager;

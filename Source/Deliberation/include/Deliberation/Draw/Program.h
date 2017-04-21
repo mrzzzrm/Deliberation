@@ -14,7 +14,7 @@ namespace detail
     class ProgramImpl;
 }
 
-class Context;
+class DrawContext;
 class ProgramInterface;
 
 class DELIBERATION_API Program final
@@ -22,12 +22,12 @@ class DELIBERATION_API Program final
 public:
     Program();
 
-    Context & context() const;
+    DrawContext & context() const;
 
     const ProgramInterface & interface() const;
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class Draw;
     friend class detail::DrawImpl;
     friend class detail::DrawExecution;

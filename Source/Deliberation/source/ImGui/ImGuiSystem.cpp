@@ -2,7 +2,7 @@
 
 #include <glbinding/gl/gl.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/TextureLoader.h>

@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/TextureLoader.h>
 
 namespace deliberation
@@ -40,7 +40,7 @@ Font::Font():
 
 }
 
-Font::Font(Context & context, const std::string & path):
+Font::Font(DrawContext & context, const std::string & path):
     m_context(&context),
     m_path(path)
 {
@@ -49,7 +49,7 @@ Font::Font(Context & context, const std::string & path):
 
 Font::~Font() = default;
 
-Context & Font::context() const
+DrawContext & Font::context() const
 {
     Assert(m_context, "");
     return *m_context;

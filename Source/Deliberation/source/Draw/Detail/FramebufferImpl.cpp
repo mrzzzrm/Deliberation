@@ -6,7 +6,7 @@
 
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -20,7 +20,7 @@ namespace deliberation
 namespace detail
 {
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(Context & context,
+std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & context,
                                                              unsigned int width,
                                                              unsigned int height)
 {
@@ -33,7 +33,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(Context & context,
     return result;
 }
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(Context & context,
+std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & context,
                                                          unsigned int width,
                                                          unsigned int height)
 {
@@ -46,7 +46,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(Context & context,
     return result;
 }
 
-Context & FramebufferImpl::context() const
+DrawContext & FramebufferImpl::context() const
 {
     return m_context;
 }
@@ -202,7 +202,7 @@ void FramebufferImpl::bind(GLStateManager & glStateManager) const
     }
 }
 
-FramebufferImpl::FramebufferImpl(Context & context):
+FramebufferImpl::FramebufferImpl(DrawContext & context):
     m_context(context),
     m_isBackbuffer(true),
     m_glFramebufferDirty(false),

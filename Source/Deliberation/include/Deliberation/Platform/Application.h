@@ -6,7 +6,7 @@
 
 #include <Deliberation/Core/FpsCounter.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Platform/Input.h>
 
@@ -25,8 +25,8 @@ public:
     InputBase & input();
     const InputBase & input() const;
 
-    Context & context();
-    const Context & context() const;
+    DrawContext & context();
+    const DrawContext & context() const;
 
     float fps() const;
 
@@ -52,7 +52,7 @@ private:
 
     FpsCounter          m_fpsCounter;
 
-    Optional<Context>   m_context;
+    Optional<DrawContext>   m_context;
 
     SDL_Window *        m_displayWindow;
     SDL_Renderer *      m_displayRenderer;

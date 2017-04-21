@@ -7,7 +7,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class SurfaceDownloadImpl;
 
 class DELIBERATION_API SurfaceDownload final
@@ -22,7 +22,7 @@ public:
     const SurfaceBinary & result() const;
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class Surface;
 
 private:

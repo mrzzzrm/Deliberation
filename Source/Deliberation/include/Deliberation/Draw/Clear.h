@@ -42,7 +42,7 @@ public:
     void render();
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class ClearExecution;
 
 private:

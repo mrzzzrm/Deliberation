@@ -10,7 +10,7 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 #include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
@@ -285,7 +285,7 @@ void Draw::build() const
 {
     /*
         ToDo
-            Move all gl-stuff to Context/GLStateManager
+            Move all gl-stuff to DrawContext/GLStateManager
     */
 
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);

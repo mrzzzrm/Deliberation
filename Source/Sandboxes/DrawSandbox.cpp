@@ -6,7 +6,7 @@
 
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Framebuffer.h>
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/TextureLoader.h>
 #include <Deliberation/Draw/Surface.h>

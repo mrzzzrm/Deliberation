@@ -11,7 +11,7 @@
 #include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/GL/GLType.h>
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Program.h>
 

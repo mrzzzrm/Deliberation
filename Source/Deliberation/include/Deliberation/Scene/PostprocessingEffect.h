@@ -12,13 +12,13 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 
 class DELIBERATION_API PostprocessingEffect final
 {
 public:
     PostprocessingEffect();
-    PostprocessingEffect(Context & context,
+    PostprocessingEffect(DrawContext & context,
                          const std::vector<std::string> & shaders,
                          const std::string & name = std::string());
 

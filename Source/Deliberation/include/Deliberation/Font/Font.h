@@ -18,22 +18,22 @@ namespace detail
     class TTF_Font_Wrapper;
 }
 
-class Context;
+class DrawContext;
 class Texture;
 
 class DELIBERATION_API Font final
 {
 public:
     Font();
-    Font(Context & context, const std::string & path);
+    Font(DrawContext & context, const std::string & path);
     ~Font();
 
-    Context & context() const;
+    DrawContext & context() const;
 
     Texture render(const std::string & text, unsigned int size, const glm::vec4 & color) const;
 
 private:
-    Context * m_context;
+    DrawContext * m_context;
     std::string m_path;
     mutable std::unordered_map<unsigned int,
                                std::shared_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;

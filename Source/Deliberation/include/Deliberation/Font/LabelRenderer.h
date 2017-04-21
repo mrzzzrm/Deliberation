@@ -11,7 +11,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Label;
 class Viewport;
 
@@ -19,16 +19,16 @@ class DELIBERATION_API LabelRenderer final
 {
 public:
     LabelRenderer();
-    LabelRenderer(Context & context);
+    LabelRenderer(DrawContext & context);
 
     /*
         TODO
-            Draw/Context should insert the Viewport
+            Draw/DrawContext should insert the Viewport
     */
     void render(const Label & label, const Viewport & viewport);
 
 //private:
-    Context *       m_context;
+    DrawContext *       m_context;
     Program         m_program;
     Buffer          m_vertexBuffer;
     Draw            m_draw;

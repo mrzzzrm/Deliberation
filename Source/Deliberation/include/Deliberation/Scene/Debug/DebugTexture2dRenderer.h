@@ -7,13 +7,13 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Texture;
 
 class DELIBERATION_API DebugTexture2dRenderer final
 {
 public:
-    DebugTexture2dRenderer(Context & context, const Texture & texture);
+    DebugTexture2dRenderer(DrawContext & context, const Texture & texture);
 
     void render();
 

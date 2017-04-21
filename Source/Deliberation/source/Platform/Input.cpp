@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Platform/KeyMap.h>
 #include <Deliberation/Platform/InputLayer.h>
@@ -48,7 +48,7 @@ deliberation::Key SDLKeyToDeliberation(SDL_Keycode code)
 namespace deliberation
 {
 
-Input::Input(const Context & context):
+Input::Input(const DrawContext & context):
     m_context(context)
 {
 

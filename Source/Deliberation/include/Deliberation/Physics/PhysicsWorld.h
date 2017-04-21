@@ -16,7 +16,7 @@ namespace deliberation
 
 class Broadphase;
 class Contact;
-class Context;
+class DrawContext;
 class Narrowphase;
 class RigidBody;
 

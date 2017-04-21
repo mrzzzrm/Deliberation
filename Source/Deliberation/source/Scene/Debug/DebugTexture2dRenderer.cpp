@@ -1,11 +1,11 @@
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
 
-DebugTexture2dRenderer::DebugTexture2dRenderer(Context & context, const Texture & texture)
+DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & context, const Texture & texture)
 {
     const auto program = context.createProgram({
        deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.vert"),

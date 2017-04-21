@@ -1,4 +1,4 @@
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <iostream>
 
@@ -28,22 +28,22 @@
 namespace deliberation
 {
 
-Context::Context(unsigned int backbufferWidth, unsigned int backbufferHeight)
+DrawContext::DrawContext(unsigned int backbufferWidth, unsigned int backbufferHeight)
 {
     m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(*this, backbufferWidth, backbufferHeight));
 }
 
-Framebuffer Context::backbuffer()
+Framebuffer DrawContext::backbuffer()
 {
     return Framebuffer(detail::FramebufferImpl::backbuffer(*this, m_backbuffer.width(), m_backbuffer.height()));
 }
 
-const Framebuffer & Context::backbuffer() const
+const Framebuffer & DrawContext::backbuffer() const
 {
     return m_backbuffer;
 }
 
-void Context::setBackbufferResolution(unsigned int width, unsigned height)
+void DrawContext::setBackbufferResolution(unsigned int width, unsigned height)
 {
     if (m_backbuffer.width() == width && m_backbuffer.height() == height)
     {
@@ -53,43 +53,43 @@ void Context::setBackbufferResolution(unsigned int width, unsigned height)
     m_backbuffer = Framebuffer(detail::FramebufferImpl::backbuffer(*this, width, height));
 }
 
-Buffer Context::createBuffer(const DataLayout & layout)
+Buffer DrawContext::createBuffer(const DataLayout & layout)
 {
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
-Buffer Context::createBuffer(const LayoutedBlob & data)
+Buffer DrawContext::createBuffer(const LayoutedBlob & data)
 {
     auto buffer = createBuffer(data.layout());
     buffer.scheduleUpload(data);
     return buffer;
 }
 
-Buffer Context::createIndexBuffer8()
+Buffer DrawContext::createIndexBuffer8()
 {
     DataLayout layout({{"Index8", Type_U8}});
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
-Buffer Context::createIndexBuffer16()
+Buffer DrawContext::createIndexBuffer16()
 {
     DataLayout layout({{"Index16", Type_U16}});
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
-Buffer Context::createIndexBuffer32()
+Buffer DrawContext::createIndexBuffer32()
 {
     DataLayout layout({{"Index32", Type_U32}});
     return Buffer(std::make_shared<detail::BufferImpl>(*this, layout));
 }
 
-Program Context::createProgram(const std::vector<std::string> & paths)
+Program DrawContext::createProgram(const std::vector<std::string> & paths)
 {
     Program program(std::make_shared<detail::ProgramImpl>(*this, paths));
     return program;
 }
 
-Draw Context::createDraw(const Program & program, gl::GLenum primitive, const std::string & name)
+Draw DrawContext::createDraw(const Program & program, gl::GLenum primitive, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
     impl->state.rasterizerState().setPrimitive(primitive);
@@ -98,7 +98,7 @@ Draw Context::createDraw(const Program & program, gl::GLenum primitive, const st
     return Draw(impl);
 }
 
-Draw Context::createDraw(const Program & program, const DrawState & drawState, const std::string & name)
+Draw DrawContext::createDraw(const Program & program, const DrawState & drawState, const std::string & name)
 {
     auto impl = std::make_shared<detail::DrawImpl>(*this, program);
     impl->state = drawState;
@@ -107,17 +107,17 @@ Draw Context::createDraw(const Program & program, const DrawState & drawState, c
     return Draw(impl);
 }
 
-Clear Context::createClear()
+Clear DrawContext::createClear()
 {
     return Clear(std::make_shared<detail::ClearImpl>(*this, backbuffer().m_impl));
 }
 
-Clear Context::createClear(Framebuffer & framebuffer)
+Clear DrawContext::createClear(Framebuffer & framebuffer)
 {
     return Clear(std::make_shared<detail::ClearImpl>(*this, framebuffer.m_impl));
 }
 
-Texture Context::createTexture(const TextureBinary & binary)
+Texture DrawContext::createTexture(const TextureBinary & binary)
 {
     auto texture = Texture(detail::TextureImpl::build(*this, binary.width(),
                                                       binary.height(),
@@ -128,7 +128,7 @@ Texture Context::createTexture(const TextureBinary & binary)
     return texture;
 }
 
-Texture Context::createTexture2D(unsigned int width,
+Texture DrawContext::createTexture2D(unsigned int width,
                                  unsigned int height,
                                  PixelFormat format,
                                  bool clear)
@@ -152,17 +152,17 @@ Texture Context::createTexture2D(unsigned int width,
     return texture;
 }
 
-Framebuffer Context::createFramebuffer(unsigned int width, unsigned int height)
+Framebuffer DrawContext::createFramebuffer(unsigned int width, unsigned int height)
 {
     return Framebuffer(detail::FramebufferImpl::custom(*this, width, height));
 }
 
-Query Context::createQuery(QueryType type)
+Query DrawContext::createQuery(QueryType type)
 {
     return Query(std::make_shared<detail::QueryImpl>(*this, type));
 }
 
-void Context::allocateBuffer(detail::BufferImpl & buffer)
+void DrawContext::allocateBuffer(detail::BufferImpl & buffer)
 {
     Assert(buffer.glName == 0u, "");
 
@@ -173,7 +173,7 @@ void Context::allocateBuffer(detail::BufferImpl & buffer)
     buffer.glName = glName;
 }
 
-void Context::deallocateBuffer(detail::BufferImpl & buffer)
+void DrawContext::deallocateBuffer(detail::BufferImpl & buffer)
 {
     Assert(buffer.glName != 0u, "");
 
@@ -182,7 +182,7 @@ void Context::deallocateBuffer(detail::BufferImpl & buffer)
     buffer.glName = 0u;
 }
 
-void Context::scheduleBufferUpload(const BufferUpload & upload)
+void DrawContext::scheduleBufferUpload(const BufferUpload & upload)
 {
 //    switch(m_mode)
 //    {
@@ -198,12 +198,12 @@ void Context::scheduleBufferUpload(const BufferUpload & upload)
 //   }
 }
 
-void Context::scheduleTextureUpload(const TextureUpload & upload)
+void DrawContext::scheduleTextureUpload(const TextureUpload & upload)
 {
     executeTextureUpload(upload);
 }
 
-void Context::scheduleDraw(const Draw & draw)
+void DrawContext::scheduleDraw(const Draw & draw)
 {
 //    switch(m_mode)
 //    {
@@ -219,7 +219,7 @@ void Context::scheduleDraw(const Draw & draw)
 //    }
 }
 
-void Context::scheduleClear(const Clear & clear)
+void DrawContext::scheduleClear(const Clear & clear)
 {
 //    switch(m_mode)
 //    {
@@ -234,7 +234,7 @@ void Context::scheduleClear(const Clear & clear)
 //    }
 }
 
-Program & Context::blitProgram()
+Program & DrawContext::blitProgram()
 {
     if (!m_blitProgram.engaged())
     {
@@ -246,7 +246,7 @@ Program & Context::blitProgram()
     return m_blitProgram.get();
 }
 
-Buffer & Context::blitVertexBuffer()
+Buffer & DrawContext::blitVertexBuffer()
 {
     if (!m_blitVertexBuffer.engaged())
     {
@@ -265,17 +265,17 @@ Buffer & Context::blitVertexBuffer()
     return m_blitVertexBuffer.get();
 }
 
-void Context::executeBufferUpload(const BufferUpload & upload)
+void DrawContext::executeBufferUpload(const BufferUpload & upload)
 {
     BufferUploadExecution(m_glStateManager, upload).perform();
 }
 
-void Context::executeTextureUpload(const TextureUpload & upload)
+void DrawContext::executeTextureUpload(const TextureUpload & upload)
 {
     TextureUploadExecution(m_glStateManager, upload).perform();
 }
 
-void Context::executeDraw(const Draw & draw)
+void DrawContext::executeDraw(const Draw & draw)
 {
 //    if (!command.hasOutput())
 //    {
@@ -300,7 +300,7 @@ void Context::executeDraw(const Draw & draw)
    detail::DrawExecution(m_glStateManager, draw).perform();
 }
 
-void Context::executeClear(const Clear & clear)
+void DrawContext::executeClear(const Clear & clear)
 {
     ClearExecution(m_glStateManager, clear).perform();
 }

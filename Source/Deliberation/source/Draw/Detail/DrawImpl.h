@@ -22,7 +22,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Program;
 
 namespace detail
@@ -33,10 +33,10 @@ class ProgramImpl;
 class DrawImpl final
 {
 public:
-    DrawImpl(Context & context,
+    DrawImpl(DrawContext & context,
              const Program & program);
 
-    Context &                                   context;
+    DrawContext &                                   context;
     std::string                                 name;
     std::shared_ptr<ProgramImpl>                program;
     BufferBinding                               indexBufferBinding;

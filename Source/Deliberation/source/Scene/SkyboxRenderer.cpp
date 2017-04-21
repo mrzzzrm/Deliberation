@@ -1,6 +1,6 @@
 #include <Deliberation/Scene/SkyboxRenderer.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/CuboidMesh.h>
@@ -8,7 +8,7 @@
 namespace deliberation
 {
 
-SkyboxRenderer::SkyboxRenderer(Context & context, const Camera3D & camera, const Texture & cubemap):
+SkyboxRenderer::SkyboxRenderer(DrawContext & context, const Camera3D & camera, const Texture & cubemap):
     m_camera(camera)
 {
     const auto program = context.createProgram({

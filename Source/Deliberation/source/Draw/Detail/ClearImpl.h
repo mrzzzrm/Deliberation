@@ -12,7 +12,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 
 namespace detail
 {
@@ -22,11 +22,11 @@ class FramebufferImpl;
 class ClearImpl
 {
 public:
-    ClearImpl(Context & context,
+    ClearImpl(DrawContext & context,
               const std::shared_ptr<FramebufferImpl> & framebuffer);
 
 public:
-    Context &               context;
+    DrawContext &               context;
     glm::vec4               color;
     LinearMap<glm::vec4>    colorOverrides;
     float                   depth;

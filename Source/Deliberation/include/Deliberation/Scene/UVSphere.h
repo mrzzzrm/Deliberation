@@ -4,7 +4,7 @@
 
 #include <Deliberation/Scene/Vertices.h>
 #include <Deliberation/Scene/Mesh.h>
-#include <Deliberation/Scene/Mesh2.h>
+#include <Deliberation/Scene/MeshData.h>
 
 #include <Deliberation/Deliberation_API.h>
 
@@ -18,7 +18,7 @@ public:
     UVSphere(unsigned int numParallels, unsigned int numMeridians);
 
     Mesh generateMesh() const;
-    Mesh2 generateMesh2() const;
+    MeshData generateMesh2() const;
 
 private:
     unsigned int m_numParallels;

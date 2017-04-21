@@ -24,7 +24,7 @@ namespace detail
     class BufferImpl;
 }
 
-class Context;
+class DrawContext;
 class LayoutedBlob;
 
 class DELIBERATION_API Buffer final
@@ -48,7 +48,7 @@ public:
 
 private:
     friend class BufferUploadExecution;
-    friend class Context;
+    friend class DrawContext;
     friend class Draw;
     friend class GLVertexAttributeBinder;
 

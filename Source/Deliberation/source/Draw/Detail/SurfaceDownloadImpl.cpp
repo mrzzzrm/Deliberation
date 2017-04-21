@@ -6,7 +6,7 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Surface.h>
 
 #include "TextureImpl.h"

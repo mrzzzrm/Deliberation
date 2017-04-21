@@ -1,6 +1,6 @@
 #include "BufferImpl.h"
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
@@ -8,7 +8,7 @@ namespace deliberation
 namespace detail
 {
 
-BufferImpl::BufferImpl(Context & context, const DataLayout & layout):
+BufferImpl::BufferImpl(DrawContext & context, const DataLayout & layout):
     context(context),
     glName(0u),
     count(0u),

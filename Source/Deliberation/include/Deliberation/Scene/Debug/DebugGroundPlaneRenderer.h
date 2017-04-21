@@ -10,13 +10,13 @@ namespace deliberation
 {
 
 class Camera3D;
-class Context;
+class DrawContext;
 class Framebuffer;
 
 class DELIBERATION_API DebugGroundPlaneRenderer final
 {
 public:
-    DebugGroundPlaneRenderer(Context & context, const Camera3D & camera);
+    DebugGroundPlaneRenderer(DrawContext & context, const Camera3D & camera);
 
     void setFramebuffer(Framebuffer & framebuffer);
     void setSize(float size);
@@ -26,7 +26,7 @@ public:
     void render();
 
 private:
-    Context &           m_context;
+    DrawContext &           m_context;
     const Camera3D &    m_camera;
 
     Program             m_program;

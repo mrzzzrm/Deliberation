@@ -4,14 +4,14 @@
 
 #include <Deliberation/Deliberation.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Scene/Camera3D.h>
 
 namespace deliberation
 {
 
-DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(Context & context, const Camera3D & camera):
+DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(DrawContext & context, const Camera3D & camera):
     m_context(context),
     m_camera(camera)
 {

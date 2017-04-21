@@ -9,7 +9,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
 namespace deliberation
@@ -21,7 +21,7 @@ PostprocessingEffect::PostprocessingEffect():
 
 }
 
-PostprocessingEffect::PostprocessingEffect(Context & context,
+PostprocessingEffect::PostprocessingEffect(DrawContext & context,
                                            const std::vector<std::string> & shaders,
                                            const std::string & name):
     m_initialised(true)

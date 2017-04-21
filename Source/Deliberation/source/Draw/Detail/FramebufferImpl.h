@@ -16,7 +16,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class GLFramebuffer;
 class GLStateManager;
 class Surface;
@@ -32,17 +32,17 @@ namespace detail
 class DELIBERATION_API FramebufferImpl final
 {
 public:
-    static std::shared_ptr<FramebufferImpl> backbuffer(Context & context,
+    static std::shared_ptr<FramebufferImpl> backbuffer(DrawContext & context,
                                                        unsigned int width,
                                                        unsigned int height);
-    static std::shared_ptr<FramebufferImpl> custom(Context & context,
+    static std::shared_ptr<FramebufferImpl> custom(DrawContext & context,
                                                    unsigned int width,
                                                    unsigned int height);
 
 public:
-    FramebufferImpl(Context & context);
+    FramebufferImpl(DrawContext & context);
 
-    Context & context() const;
+    DrawContext & context() const;
 
     unsigned int width() const;
     unsigned int height() const;
@@ -67,7 +67,7 @@ public:
     void bind(GLStateManager & glStateManager) const;
 
 public:
-    Context &                                   m_context;
+    DrawContext &                                   m_context;
     bool                                        m_isBackbuffer;
 
     // For RenderTargets created by the Framebuffer (via addRenderTarget(format), e.g.)

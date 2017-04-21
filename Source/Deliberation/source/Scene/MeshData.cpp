@@ -1,10 +1,10 @@
-#include <Deliberation/Scene/Mesh2.h>
+#include <Deliberation/Scene/MeshData.h>
 
 
 namespace deliberation
 {
 
-Mesh2::Mesh2(LayoutedBlob && vertices, LayoutedBlob && indices, std::vector<Texture> textures):
+MeshData::MeshData(LayoutedBlob && vertices, LayoutedBlob && indices, std::vector<Texture> textures):
     m_vertices(std::move(vertices)),
     m_indices(std::move(indices)),
     m_textures(std::move(textures))
@@ -12,29 +12,29 @@ Mesh2::Mesh2(LayoutedBlob && vertices, LayoutedBlob && indices, std::vector<Text
 
 }
 
-const LayoutedBlob & Mesh2::vertices() const
+const LayoutedBlob & MeshData::vertices() const
 {
     return m_vertices;
 }
 
-const LayoutedBlob & Mesh2::indices() const
+const LayoutedBlob & MeshData::indices() const
 {
     return m_indices;
 }
 
-const std::vector<Texture> & Mesh2::textures() const
+const std::vector<Texture> & MeshData::textures() const
 {
     return m_textures;
 }
 
-LayoutedBlob Mesh2::takeVertices()
+LayoutedBlob MeshData::takeVertices()
 {
     auto result = std::move(m_vertices);
     m_vertices = LayoutedBlob();
     return result;
 }
 
-LayoutedBlob Mesh2::takeIndices()
+LayoutedBlob MeshData::takeIndices()
 {
     auto result = std::move(m_indices);
     m_indices = LayoutedBlob();

@@ -4,7 +4,7 @@
 
 #include <Deliberation/Deliberation.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/StencilState.h>
 
 #include <Deliberation/Scene/Camera3D.h>
@@ -12,7 +12,7 @@
 namespace deliberation
 {
 
-DebugGrid3DRenderer::DebugGrid3DRenderer(Context & context,
+DebugGrid3DRenderer::DebugGrid3DRenderer(DrawContext & context,
                                          float scale,
                                          const Camera3D & camera):
     m_context(context),

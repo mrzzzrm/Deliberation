@@ -30,10 +30,10 @@ namespace detail
     class QueryImpl;
 }
 
-class DELIBERATION_API Context final
+class DELIBERATION_API DrawContext final
 {
 public:
-    Context(unsigned int backbufferWidth = 640u, unsigned int backbufferHeight = 480u);
+    DrawContext(unsigned int backbufferWidth = 640u, unsigned int backbufferHeight = 480u);
 
     Framebuffer backbuffer();
     const Framebuffer & backbuffer() const;
@@ -101,5 +101,3 @@ private:
 };
 
 };
-
-#include <Deliberation/Draw/Context.inl>

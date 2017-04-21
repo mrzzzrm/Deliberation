@@ -33,7 +33,7 @@ public:
     void end();
 
 private:
-    friend class Context;
+    friend class DrawContext;
 
 private:
     Query(const std::shared_ptr<detail::QueryImpl> & impl);

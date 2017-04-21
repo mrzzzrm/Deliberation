@@ -16,7 +16,7 @@ namespace detail
     class TextureImpl;
 }
 
-class Context;
+class DrawContext;
 class SurfaceDownloadImpl;
 
 class DELIBERATION_API Surface final
@@ -25,7 +25,7 @@ public:
     Surface();
     Surface(const Surface & surface);
 
-    Context & context() const;
+    DrawContext & context() const;
     Texture texture() const;
     unsigned int face() const;
     unsigned int width() const;

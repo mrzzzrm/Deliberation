@@ -42,7 +42,7 @@ public:
     void scheduleUpload(const TextureBinary & binary);
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class detail::DrawExecution;
     friend class TextureUploadExecution;
     friend class Sampler;

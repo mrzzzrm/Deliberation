@@ -5,7 +5,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
 namespace deliberation
@@ -14,7 +14,7 @@ namespace deliberation
 namespace detail
 {
 
-QueryImpl::QueryImpl(Context & context, QueryType type):
+QueryImpl::QueryImpl(DrawContext & context, QueryType type):
     m_context(context),
     m_type(type),
     m_glName(0),

@@ -10,7 +10,7 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/Viewport.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
 #include <Deliberation/Font/Label.h>
@@ -24,7 +24,7 @@ LabelRenderer::LabelRenderer():
 
 }
 
-LabelRenderer::LabelRenderer(Context & context):
+LabelRenderer::LabelRenderer(DrawContext & context):
     m_context(&context)
 {
     m_program = m_context->createProgram({deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),

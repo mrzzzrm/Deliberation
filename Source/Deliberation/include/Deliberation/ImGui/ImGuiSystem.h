@@ -15,7 +15,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class InputBase;
 
 class DELIBERATION_API ImGuiSystem:
@@ -37,7 +37,7 @@ protected:
     void onMouseButtonDown(MouseButtonEvent & event) override;
 
 private:
-    Context &   m_context;
+    DrawContext &   m_context;
     InputBase & m_input;
 
     Draw        m_draw;

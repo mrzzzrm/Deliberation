@@ -9,11 +9,11 @@
 namespace deliberation
 {
 
-class DELIBERATION_API Mesh2
+class DELIBERATION_API MeshData
 {
 public:
-    Mesh2() = default;
-    Mesh2(LayoutedBlob && vertices, LayoutedBlob && indices, std::vector<Texture> textures = {});
+    MeshData() = default;
+    MeshData(LayoutedBlob && vertices, LayoutedBlob && indices, std::vector<Texture> textures = {});
 
     const LayoutedBlob & vertices() const;
     const LayoutedBlob & indices() const;

@@ -1,6 +1,6 @@
 #include <Deliberation/Scene/Debug/DebugGeometryManager.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Scene/ConeMesh.h>
 #include <Deliberation/Scene/CuboidMesh.h>
@@ -12,7 +12,7 @@ namespace deliberation
 
 constexpr float DebugGeometryManager::ARROW_CONE_HEIGHT;
 
-DebugGeometryManager::DebugGeometryManager(Context & context):
+DebugGeometryManager::DebugGeometryManager(DrawContext & context):
     m_context(context)
 {
     /**
@@ -83,7 +83,7 @@ DebugGeometryManager::DebugGeometryManager(Context & context):
     m_buildIns.shadedDataLayout = DataLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 }
 
-Context & DebugGeometryManager::context() const
+DrawContext & DebugGeometryManager::context() const
 {
     return m_context;
 }

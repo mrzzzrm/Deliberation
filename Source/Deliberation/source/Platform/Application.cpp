@@ -43,12 +43,12 @@ const InputBase & Application::input() const
     return *m_input;
 }
 
-Context & Application::context()
+DrawContext & Application::context()
 {
     return m_context.get();
 }
 
-const Context & Application::context() const
+const DrawContext & Application::context() const
 {
     return m_context.get();
 }
@@ -210,7 +210,7 @@ void Application::init()
               << "OpenGL Version:  " << versionString << std::endl
               << "OpenGL Vendor:   " << vendorString << std::endl
               << "OpenGL Renderer: " << rendererString << std::endl
-              << "Context RGBA-bits: " << contextColorSize << std::endl;
+              << "DrawContext RGBA-bits: " << contextColorSize << std::endl;
 
     deliberation::init();
     deliberation::setPrefixPath(m_prefixPath);

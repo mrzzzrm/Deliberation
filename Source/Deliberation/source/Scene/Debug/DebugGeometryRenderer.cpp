@@ -10,7 +10,7 @@
 #include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
 #include <Deliberation/Scene/Camera3D.h>

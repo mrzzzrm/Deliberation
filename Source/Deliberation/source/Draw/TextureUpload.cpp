@@ -1,11 +1,11 @@
 #include <Deliberation/Draw/TextureUpload.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
 
-TextureUpload::TextureUpload(Context & context,
+TextureUpload::TextureUpload(DrawContext & context,
                              Texture & texture,
                              const TextureBinary & binary):
     m_context(context),
@@ -14,7 +14,7 @@ TextureUpload::TextureUpload(Context & context,
 {
 }
 
-Context & TextureUpload::context() const
+DrawContext & TextureUpload::context() const
 {
     return m_context;
 }
