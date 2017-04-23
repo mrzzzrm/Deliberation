@@ -6,8 +6,12 @@ namespace deliberation
 enum class RenderPhase
 {
     GBuffer,
-    PostGBuffer,
-    HDR
+    PostGBuffer, // e.g. SSAO
+    PreLighting, // e.g. ShadowMaps
+    Lighting,
+    HDR,
+
+    Count
 };
 
 }
