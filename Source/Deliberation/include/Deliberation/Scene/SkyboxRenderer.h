@@ -14,7 +14,7 @@ class DrawContext;
 class DELIBERATION_API SkyboxRenderer final
 {
 public:
-    SkyboxRenderer(DrawContext & context, const Camera3D & camera, const Texture & cubemap);
+    SkyboxRenderer(DrawContext & drawContext, const Camera3D & camera, const Texture & cubemap);
 
     void render();
 

@@ -207,6 +207,8 @@ set(sources
     ${source_path}/Scene/Debug/DebugGroundPlaneRenderer.cpp
     ${source_path}/Scene/Debug/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/Debug/DebugTexture2dRenderer.cpp
+    ${source_path}/Scene/Model/ModelRenderer.cpp
+    ${source_path}/Scene/Pipeline/RenderManager.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/CameraDolly3D.cpp
@@ -218,8 +220,6 @@ set(sources
     ${source_path}/Scene/MeshCompiler.cpp
     ${source_path}/Scene/PostprocessingEffect.cpp
     ${source_path}/Scene/UVSphere.cpp
-    ${source_path}/Scene/RenderNode.cpp
-    ${source_path}/Scene/RenderPipeline.cpp
     ${source_path}/Scene/SkyboxRenderer.cpp)
 
 # api_includes
@@ -417,6 +417,13 @@ set(api_includes
     ${include_path}/Scene/Debug/DebugGroundPlaneRenderer.h
     ${include_path}/Scene/Debug/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/Debug/DebugTexture2dRenderer.h
+    ${include_path}/Scene/Model/Model.h
+    ${include_path}/Scene/Model/ModelInstance.h
+    ${include_path}/Scene/Model/ModelRenderer.h
+    ${include_path}/Scene/Pipeline/Renderer.h
+    ${include_path}/Scene/Pipeline/RenderManager.h
+    ${include_path}/Scene/Pipeline/RenderNode.h
+    ${include_path}/Scene/Pipeline/RenderPhase.h
     ${include_path}/Scene/Blit.h
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/CameraDolly3D.h
@@ -428,8 +435,6 @@ set(api_includes
     ${include_path}/Scene/MeshCompiler.h
     ${include_path}/Scene/PostprocessingEffect.h
     ${include_path}/Scene/UVSphere.h
-    ${include_path}/Scene/RenderNode.h
-    ${include_path}/Scene/RenderPipeline.h
     ${include_path}/Scene/SkyboxRenderer.h)
 
 set(libs
@@ -451,7 +456,7 @@ set(DELIBERATION_LIBRARIES
 
 # library
 add_library(Deliberation 
-	STATIC 
+	STATIC
 	${api_includes} 
 	${sources})
 	

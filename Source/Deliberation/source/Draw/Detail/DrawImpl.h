@@ -33,7 +33,7 @@ class ProgramImpl;
 class DrawImpl final
 {
 public:
-    DrawImpl(DrawContext & context,
+    DrawImpl(DrawContext & drawContext,
              const Program & program);
 
     DrawContext &                                   context;

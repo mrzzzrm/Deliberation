@@ -25,8 +25,8 @@ public:
     InputBase & input();
     const InputBase & input() const;
 
-    DrawContext & context();
-    const DrawContext & context() const;
+    DrawContext & drawContext();
+    const DrawContext & drawContext() const;
 
     float fps() const;
 
@@ -52,7 +52,7 @@ private:
 
     FpsCounter          m_fpsCounter;
 
-    Optional<DrawContext>   m_context;
+    Optional<DrawContext>   m_drawContext;
 
     SDL_Window *        m_displayWindow;
     SDL_Renderer *      m_displayRenderer;

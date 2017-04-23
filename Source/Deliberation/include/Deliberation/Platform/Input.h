@@ -17,12 +17,12 @@ class DELIBERATION_API Input:
     public InputBase
 {
 public:
-    Input(const DrawContext & context);
+    Input(const DrawContext & drawContext);
 
     void onSDLInputEvent(const SDL_Event & event);
 
 private:
-    const DrawContext &  m_context;
+    const DrawContext &  m_drawContext;
 };
 
 }

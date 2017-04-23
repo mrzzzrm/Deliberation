@@ -32,17 +32,17 @@ namespace detail
 class DELIBERATION_API FramebufferImpl final
 {
 public:
-    static std::shared_ptr<FramebufferImpl> backbuffer(DrawContext & context,
+    static std::shared_ptr<FramebufferImpl> backbuffer(DrawContext & drawContext,
                                                        unsigned int width,
                                                        unsigned int height);
-    static std::shared_ptr<FramebufferImpl> custom(DrawContext & context,
+    static std::shared_ptr<FramebufferImpl> custom(DrawContext & drawContext,
                                                    unsigned int width,
                                                    unsigned int height);
 
 public:
-    FramebufferImpl(DrawContext & context);
+    FramebufferImpl(DrawContext & drawContext);
 
-    DrawContext & context() const;
+    DrawContext & drawContext() const;
 
     unsigned int width() const;
     unsigned int height() const;
@@ -67,7 +67,7 @@ public:
     void bind(GLStateManager & glStateManager) const;
 
 public:
-    DrawContext &                                   m_context;
+    DrawContext &                                   m_drawContext;
     bool                                        m_isBackbuffer;
 
     // For RenderTargets created by the Framebuffer (via addRenderTarget(format), e.g.)

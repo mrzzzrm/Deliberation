@@ -61,6 +61,8 @@ public:
     CIterator begin() const;
     CIterator end() const;
 
+    void clear();
+
     void erase(std::size_t key);
     Iterator erase(const Iterator & i);
 

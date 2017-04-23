@@ -32,14 +32,14 @@ public:
     {
         DisableGLErrorChecks();
 
-        m_clear = context().createClear();
+        m_clear = drawContext().createClear();
 
-        const auto program = context().createProgram({
+        const auto program = drawContext().createProgram({
             DeliberationDataPath("Data/Shaders/Rgb_Position2_InstancePosition2.vert"),
             DeliberationDataPath("Data/Shaders/Rgb.frag")
                                                      });
 
-        m_draw = context().createDraw(program);
+        m_draw = drawContext().createDraw(program);
 
         const auto vertexLayout = DataLayout("Position", Type_Vec2);
 

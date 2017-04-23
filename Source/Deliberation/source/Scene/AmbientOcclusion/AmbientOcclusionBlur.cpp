@@ -19,7 +19,7 @@ AmbientOcclusionBlur::AmbientOcclusionBlur(const Surface & occlusion, const Surf
     m_initialized(true),
     m_occlusion(occlusion)
 {
-    auto & context = m_occlusion.context();
+    auto & context = m_occlusion.drawContext();
 
     m_output = context.createTexture2D(m_occlusion.width(),
                                        m_occlusion.height(),

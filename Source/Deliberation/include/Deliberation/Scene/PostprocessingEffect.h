@@ -18,7 +18,7 @@ class DELIBERATION_API PostprocessingEffect final
 {
 public:
     PostprocessingEffect();
-    PostprocessingEffect(DrawContext & context,
+    PostprocessingEffect(DrawContext & drawContext,
                          const std::vector<std::string> & shaders,
                          const std::string & name = std::string());
 

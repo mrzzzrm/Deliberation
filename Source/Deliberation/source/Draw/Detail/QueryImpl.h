@@ -17,7 +17,7 @@ namespace detail
 class QueryImpl final
 {
 public:
-    QueryImpl(DrawContext & context, QueryType type);
+    QueryImpl(DrawContext & drawContext, QueryType type);
     ~QueryImpl();
 
     QueryType type() const;
@@ -32,7 +32,7 @@ public:
     void end();
 
 private:
-    DrawContext &           m_context;
+    DrawContext &           m_drawContext;
     QueryType           m_type;
     gl::GLuint          m_glName;
     gl::GLenum          m_glTarget;

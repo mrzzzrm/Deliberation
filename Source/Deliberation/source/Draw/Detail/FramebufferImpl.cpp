@@ -20,7 +20,7 @@ namespace deliberation
 namespace detail
 {
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & context,
+std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & drawContext,
                                                              unsigned int width,
                                                              unsigned int height)
 {
@@ -33,7 +33,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & conte
     return result;
 }
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & context,
+std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawContext,
                                                          unsigned int width,
                                                          unsigned int height)
 {
@@ -46,9 +46,9 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & context,
     return result;
 }
 
-DrawContext & FramebufferImpl::context() const
+DrawContext & FramebufferImpl::drawContext() const
 {
-    return m_context;
+    return m_drawContext;
 }
 
 unsigned int FramebufferImpl::width() const
@@ -167,7 +167,7 @@ void FramebufferImpl::setDepthTarget(Surface * surface)
 
 void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
 {
-    auto texture = m_context.createTexture2D(m_width, m_height, format, true);
+    auto texture = m_drawContext.createTexture2D(m_width, m_height, format, true);
     if (index < 0)
     {
         index = m_renderTargets.size();
@@ -178,7 +178,7 @@ void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
 
 void FramebufferImpl::addDepthTarget(PixelFormat format)
 {
-    auto texture = m_context.createTexture2D(m_width, m_height, format, true);
+    auto texture = m_drawContext.createTexture2D(m_width, m_height, format, true);
     m_depthTargetTexture.reset(texture);
     setDepthTarget(&texture.surface(0));
 }
@@ -202,8 +202,8 @@ void FramebufferImpl::bind(GLStateManager & glStateManager) const
     }
 }
 
-FramebufferImpl::FramebufferImpl(DrawContext & context):
-    m_context(context),
+FramebufferImpl::FramebufferImpl(DrawContext & drawContext):
+    m_drawContext(context),
     m_isBackbuffer(true),
     m_glFramebufferDirty(false),
     m_resolutionDirty(true),

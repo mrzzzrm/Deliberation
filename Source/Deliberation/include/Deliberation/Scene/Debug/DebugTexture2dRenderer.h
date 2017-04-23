@@ -13,7 +13,7 @@ class Texture;
 class DELIBERATION_API DebugTexture2dRenderer final
 {
 public:
-    DebugTexture2dRenderer(DrawContext & context, const Texture & texture);
+    DebugTexture2dRenderer(DrawContext & drawContext, const Texture & texture);
 
     void render();
 

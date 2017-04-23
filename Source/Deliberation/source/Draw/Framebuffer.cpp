@@ -103,7 +103,7 @@ Clear & Framebuffer::clear()
 
     if (!m_impl->m_clear.engaged())
     {
-        m_impl->m_clear.reset(m_impl->m_context.createClear(*this));
+        m_impl->m_clear.reset(m_impl->m_drawContext.createClear(*this));
     }
 
     return m_impl->m_clear.get();
@@ -113,7 +113,7 @@ Clear Framebuffer::createClear()
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->context().createClear(*this);
+    return m_impl->drawContext().createClear(*this);
 }
 
 Framebuffer::Framebuffer(const std::shared_ptr<detail::FramebufferImpl> & impl):

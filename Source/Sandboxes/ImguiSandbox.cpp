@@ -38,16 +38,16 @@ public:
 
         m_camera.setPosition({0.0f, 1.0f, 3.0f});
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
-        m_camera.setAspectRatio((float)context().backbuffer().width() / context().backbuffer().height());
+        m_camera.setAspectRatio((float)drawContext().backbuffer().width() / drawContext().backbuffer().height());
 
-//        m_ground = std::make_shared<DebugGroundPlaneRenderer>(context(), m_camera);
+//        m_ground = std::make_shared<DebugGroundPlaneRenderer>(drawContext(), m_camera);
 //        m_ground->setSize(30.0f);
 //        m_ground->setRadius(10.0f);
 
         m_world.addSystem<ApplicationSystem>(*this);
         m_world.addSystem<ImGuiSystem>();
 
-        m_clear = context().createClear();
+        m_clear = drawContext().createClear();
     }
 
     virtual void onFrame(float seconds) override

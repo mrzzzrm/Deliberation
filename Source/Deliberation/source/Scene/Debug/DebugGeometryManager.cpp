@@ -12,19 +12,19 @@ namespace deliberation
 
 constexpr float DebugGeometryManager::ARROW_CONE_HEIGHT;
 
-DebugGeometryManager::DebugGeometryManager(DrawContext & context):
-    m_context(context)
+DebugGeometryManager::DebugGeometryManager(DrawContext & drawContext):
+    m_drawContext(context)
 {
     /**
      * Load programs
      */
-    m_buildIns.shadedProgram = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryShaded.vert"),
+    m_buildIns.shadedProgram = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryShaded.vert"),
                                                deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryShaded.frag")});
 
-    m_buildIns.unicolorProgram = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryUnicolor.vert"),
+    m_buildIns.unicolorProgram = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryUnicolor.vert"),
                                                  deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryUnicolor.frag")});
 
-    m_buildIns.vertexColorProgram = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryVertexColor.vert"),
+    m_buildIns.vertexColorProgram = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryVertexColor.vert"),
                                                     deliberation::DeliberationDataPath("Data/Shaders/DebugGeometryVertexColor.frag")});
 
 
@@ -35,15 +35,15 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & context):
     {
         auto compilation = MeshCompiler().compile(mesh, Primitive_Triangles);
 
-        m_buildIns.boxTrianglesVertexBuffer = m_context.createBuffer(compilation.vertices);
-        m_buildIns.boxTrianglesIndexBuffer = m_context.createBuffer(compilation.indices);
+        m_buildIns.boxTrianglesVertexBuffer = m_drawContext.createBuffer(compilation.vertices);
+        m_buildIns.boxTrianglesIndexBuffer = m_drawContext.createBuffer(compilation.indices);
     }
 
     {
         auto compilation = MeshCompiler().compile(mesh, Primitive_Lines);
 
-        m_buildIns.boxLinesVertexBuffer = m_context.createBuffer(compilation.vertices);
-        m_buildIns.boxLinesIndexBuffer = m_context.createBuffer(compilation.indices);
+        m_buildIns.boxLinesVertexBuffer = m_drawContext.createBuffer(compilation.vertices);
+        m_buildIns.boxLinesIndexBuffer = m_drawContext.createBuffer(compilation.indices);
     }
 
     /**
@@ -53,8 +53,8 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & context):
         auto mesh = ConeMesh(0.1f, ARROW_CONE_HEIGHT).generate();
         auto compilation = MeshCompiler().compile(mesh, Primitive_Triangles);
 
-        m_buildIns.coneVertexBuffer = m_context.createBuffer(compilation.vertices);
-        m_buildIns.coneIndexBuffer = m_context.createBuffer(compilation.indices);
+        m_buildIns.coneVertexBuffer = m_drawContext.createBuffer(compilation.vertices);
+        m_buildIns.coneIndexBuffer = m_drawContext.createBuffer(compilation.indices);
     }
 
     /**
@@ -62,8 +62,8 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & context):
      */
     {
         auto sphereMesh = UVSphere(16, 16).generateMesh2();
-        m_buildIns.sphereVertexBuffer = m_context.createBuffer(sphereMesh.takeVertices());
-        m_buildIns.sphereIndexBuffer = m_context.createBuffer(sphereMesh.takeIndices());
+        m_buildIns.sphereVertexBuffer = m_drawContext.createBuffer(sphereMesh.takeVertices());
+        m_buildIns.sphereIndexBuffer = m_drawContext.createBuffer(sphereMesh.takeIndices());
     }
 
     /**
@@ -72,7 +72,7 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & context):
     {
         LayoutedBlob vertex(DataLayout("Position", Type_Vec3), 1);
         vertex.field<glm::vec3>("Position")[0] = glm::vec3(0.0f, 0.0f, 0.0f);
-        m_buildIns.pointVertexBuffer = m_context.createBuffer(vertex);
+        m_buildIns.pointVertexBuffer = m_drawContext.createBuffer(vertex);
     }
 
     /**
@@ -83,9 +83,9 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & context):
     m_buildIns.shadedDataLayout = DataLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 }
 
-DrawContext & DebugGeometryManager::context() const
+DrawContext & DebugGeometryManager::drawContext() const
 {
-    return m_context;
+    return m_drawContext;
 }
 
 const DebugGeometryManager::BuildIns & DebugGeometryManager::buildIns() const

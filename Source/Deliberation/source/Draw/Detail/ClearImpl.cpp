@@ -8,7 +8,7 @@ namespace deliberation
 namespace detail
 {
 
-ClearImpl::ClearImpl(DrawContext & context,
+ClearImpl::ClearImpl(DrawContext & drawContext,
                      const std::shared_ptr<FramebufferImpl> & framebuffer):
     context(context),
     color({0.0f, 0.0f, 0.0f, 0.0f}),

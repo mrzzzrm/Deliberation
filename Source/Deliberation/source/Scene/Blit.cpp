@@ -33,7 +33,7 @@ void Blit::schedule()
 
     if (!m_draw.engaged())
     {
-        auto & context = m_source.get().context();
+        auto & context = m_source.get().drawContext();
 
         m_draw.reset(context.createDraw(context.blitProgram(), gl::GL_TRIANGLE_STRIP));
         m_draw.get().addVertexBuffer(context.blitVertexBuffer());

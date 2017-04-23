@@ -48,8 +48,8 @@ deliberation::Key SDLKeyToDeliberation(SDL_Keycode code)
 namespace deliberation
 {
 
-Input::Input(const DrawContext & context):
-    m_context(context)
+Input::Input(const DrawContext & drawContext):
+    m_drawContext(context)
 {
 
 }
@@ -75,7 +75,7 @@ void Input::onSDLInputEvent(const SDL_Event & event)
             break;
 
         case SDL_MOUSEMOTION:
-            glm::vec2 canvasSize(m_context.backbuffer().width(), m_context.backbuffer().height());
+            glm::vec2 canvasSize(m_drawContext.backbuffer().width(), m_drawContext.backbuffer().height());
             auto normalized = glm::vec2(event.motion.x, event.motion.y) / canvasSize * 2.0f - 1.0f;
             normalized.y *= -1.0f;
 

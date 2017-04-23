@@ -21,7 +21,7 @@ AmbientOcclusionMix::AmbientOcclusionMix(const Surface & occlusion,
 {
     Assert(occlusion.width() == color.width() && occlusion.height() == color.height(), "");
 
-    auto & context = occlusion.context();
+    auto & context = occlusion.drawContext();
 
     m_output = context.createTexture2D(occlusion.width(),
                                        occlusion.height(),

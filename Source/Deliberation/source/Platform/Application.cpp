@@ -43,14 +43,14 @@ const InputBase & Application::input() const
     return *m_input;
 }
 
-DrawContext & Application::context()
+DrawContext & Application::drawContext()
 {
-    return m_context.get();
+    return m_drawContext.get();
 }
 
-const DrawContext & Application::context() const
+const DrawContext & Application::drawContext() const
 {
-    return m_context.get();
+    return m_drawContext.get();
 }
 
 float Application::fps() const
@@ -218,12 +218,12 @@ void Application::init()
 
     std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
 
-    m_context.reset(m_displayWidth, m_displayHeight);
+    m_drawContext.reset(m_displayWidth, m_displayHeight);
 
     /**
      * Init input
      */
-    m_input.reset(*m_context);
+    m_input.reset(*m_drawContext);
 
     m_initialized = true;
 }

@@ -19,15 +19,15 @@ namespace deliberation
 {
 
 LabelRenderer::LabelRenderer():
-    m_context(nullptr)
+    m_drawContext(nullptr)
 {
 
 }
 
-LabelRenderer::LabelRenderer(DrawContext & context):
-    m_context(&context)
+LabelRenderer::LabelRenderer(DrawContext & drawContext):
+    m_drawContext(&context)
 {
-    m_program = m_context->createProgram({deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),
+    m_program = m_drawContext->createProgram({deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),
                                           deliberation::DeliberationDataPath("Data/Font/LabelRenderer.frag")});
 
     std::vector<glm::vec2> vertices({
@@ -38,10 +38,10 @@ LabelRenderer::LabelRenderer(DrawContext & context):
     });
 
     DataLayout layout = DataLayout({"Position", Type_Vec2});
-    m_vertexBuffer = m_context->createBuffer(layout);
+    m_vertexBuffer = m_drawContext->createBuffer(layout);
     m_vertexBuffer.createUpload(vertices).schedule();
 
-    m_draw = m_context->createDraw(m_program, gl::GL_TRIANGLE_STRIP, "LabelRenderer");
+    m_draw = m_drawContext->createDraw(m_program, gl::GL_TRIANGLE_STRIP, "LabelRenderer");
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.state().setDepthState(DepthState::disabledR());
     m_draw.state().setCullState(CullState::disabled());
@@ -56,7 +56,7 @@ LabelRenderer::LabelRenderer(DrawContext & context):
 
 void LabelRenderer::render(const Label & label, const Viewport & viewport)
 {
-    Assert(m_context, "Hollow LabelRenderer can't render");
+    Assert(m_drawContext, "Hollow LabelRenderer can't render");
 
     m_sampler.setTexture(label.texture());
     m_colorUniform.set(label.color());

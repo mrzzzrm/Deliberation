@@ -47,7 +47,7 @@ namespace deliberation
 namespace detail
 {
 
-std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & context,
+std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & drawContext,
                                                 unsigned int width,
                                                 unsigned int height,
                                                 unsigned int numFaces,
@@ -67,7 +67,7 @@ std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & context,
     return impl;
 }
 
-TextureImpl::TextureImpl(DrawContext & context, unsigned int numFaces):
+TextureImpl::TextureImpl(DrawContext & drawContext, unsigned int numFaces):
     context(context),
     glName(0u),
     width(0u),

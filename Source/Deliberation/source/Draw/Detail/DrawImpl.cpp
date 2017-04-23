@@ -19,7 +19,7 @@ namespace deliberation
 namespace detail
 {
 
-DrawImpl::DrawImpl(DrawContext & context,
+DrawImpl::DrawImpl(DrawContext & drawContext,
                    const Program & program):
     context(context),
     program(program.m_impl),

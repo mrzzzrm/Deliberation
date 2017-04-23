@@ -15,7 +15,7 @@ namespace detail
 class BufferImpl final
 {
 public:
-    BufferImpl(DrawContext & context, const DataLayout & layout);
+    BufferImpl(DrawContext & drawContext, const DataLayout & layout);
     ~BufferImpl();
 
     DrawContext &       context;

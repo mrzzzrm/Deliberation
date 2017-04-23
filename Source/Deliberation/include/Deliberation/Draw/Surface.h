@@ -25,7 +25,7 @@ public:
     Surface();
     Surface(const Surface & surface);
 
-    DrawContext & context() const;
+    DrawContext & drawContext() const;
     Texture texture() const;
     unsigned int face() const;
     unsigned int width() const;

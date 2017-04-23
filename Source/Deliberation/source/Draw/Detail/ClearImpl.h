@@ -22,7 +22,7 @@ class FramebufferImpl;
 class ClearImpl
 {
 public:
-    ClearImpl(DrawContext & context,
+    ClearImpl(DrawContext & drawContext,
               const std::shared_ptr<FramebufferImpl> & framebuffer);
 
 public:

@@ -22,7 +22,7 @@ class DELIBERATION_API Program final
 public:
     Program();
 
-    DrawContext & context() const;
+    DrawContext & drawContext() const;
 
     const ProgramInterface & interface() const;
 

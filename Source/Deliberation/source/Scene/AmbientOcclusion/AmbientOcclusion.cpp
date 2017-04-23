@@ -35,7 +35,7 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
     m_color(color),
     m_camera(&camera)
 {
-    auto & context = m_normalDepth.context();
+    auto & context = m_normalDepth.drawContext();
 
     m_output = context.createTexture2D(m_normalDepth.width(),
                                        m_normalDepth.height(),

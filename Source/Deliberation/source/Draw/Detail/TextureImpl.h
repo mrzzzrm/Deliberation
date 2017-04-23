@@ -18,14 +18,14 @@ namespace detail
 class TextureImpl final
 {
 public:
-    static std::shared_ptr<TextureImpl> build(DrawContext & context,
+    static std::shared_ptr<TextureImpl> build(DrawContext & drawContext,
                                               unsigned int width,
                                               unsigned int height,
                                               unsigned int numFaces,
                                               PixelFormat format);
 
 public:
-    TextureImpl(DrawContext & context, unsigned int numFaces);
+    TextureImpl(DrawContext & drawContext, unsigned int numFaces);
 
     void allocate() const;
     void upload(const TextureBinary & binary);

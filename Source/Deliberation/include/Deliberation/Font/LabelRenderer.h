@@ -19,7 +19,7 @@ class DELIBERATION_API LabelRenderer final
 {
 public:
     LabelRenderer();
-    LabelRenderer(DrawContext & context);
+    LabelRenderer(DrawContext & drawContext);
 
     /*
         TODO
@@ -28,7 +28,7 @@ public:
     void render(const Label & label, const Viewport & viewport);
 
 //private:
-    DrawContext *       m_context;
+    DrawContext *       m_drawContext;
     Program         m_program;
     Buffer          m_vertexBuffer;
     Draw            m_draw;

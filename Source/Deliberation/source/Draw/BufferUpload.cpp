@@ -11,10 +11,10 @@
 namespace deliberation
 {
 
-BufferUpload::BufferUpload(DrawContext & context,
+BufferUpload::BufferUpload(DrawContext & drawContext,
                            Buffer & buffer,
                            const Blob & data):
-    m_context(context),
+    m_drawContext(context),
     m_buffer(buffer),
     m_blob(data),
     m_count(data.size() / buffer.layout().stride())
@@ -22,11 +22,11 @@ BufferUpload::BufferUpload(DrawContext & context,
     Assert(data.size() % buffer.layout().stride() == 0, "");
 }
 
-BufferUpload::BufferUpload(DrawContext & context,
+BufferUpload::BufferUpload(DrawContext & drawContext,
                            Buffer & buffer,
                            const Blob & data,
                            unsigned int count):
-    m_context(context),
+    m_drawContext(context),
     m_buffer(buffer),
     m_blob(data),
     m_count(count)
@@ -57,7 +57,7 @@ unsigned int BufferUpload::count() const
 
 void BufferUpload::schedule()
 {
-    m_context.scheduleBufferUpload(*this);
+    m_drawContext.scheduleBufferUpload(*this);
 }
 
 }

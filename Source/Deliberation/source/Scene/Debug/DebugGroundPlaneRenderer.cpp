@@ -11,13 +11,13 @@
 namespace deliberation
 {
 
-DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(DrawContext & context, const Camera3D & camera):
-    m_context(context),
+DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(DrawContext & drawContext, const Camera3D & camera):
+    m_drawContext(context),
     m_camera(camera)
 {
-    m_program = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
+    m_program = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
                                          deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.frag")});
-    m_draw = m_context.createDraw(m_program, gl::GL_TRIANGLE_STRIP);
+    m_draw = m_drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP);
 
     m_view = m_draw.uniform("View");
     m_projection = m_draw.uniform("Projection");

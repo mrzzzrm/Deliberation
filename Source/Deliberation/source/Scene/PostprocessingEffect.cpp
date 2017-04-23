@@ -21,7 +21,7 @@ PostprocessingEffect::PostprocessingEffect():
 
 }
 
-PostprocessingEffect::PostprocessingEffect(DrawContext & context,
+PostprocessingEffect::PostprocessingEffect(DrawContext & drawContext,
                                            const std::vector<std::string> & shaders,
                                            const std::string & name):
     m_initialised(true)

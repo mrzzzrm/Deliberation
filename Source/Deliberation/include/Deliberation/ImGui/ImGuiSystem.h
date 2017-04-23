@@ -37,7 +37,7 @@ protected:
     void onMouseButtonDown(MouseButtonEvent & event) override;
 
 private:
-    DrawContext &   m_context;
+    DrawContext &   m_drawContext;
     InputBase & m_input;
 
     Draw        m_draw;

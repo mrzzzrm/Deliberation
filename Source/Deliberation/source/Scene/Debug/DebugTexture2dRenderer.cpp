@@ -5,7 +5,7 @@
 namespace deliberation
 {
 
-DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & context, const Texture & texture)
+DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & drawContext, const Texture & texture)
 {
     const auto program = context.createProgram({
        deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.vert"),

@@ -8,7 +8,7 @@ namespace deliberation
 namespace detail
 {
 
-BufferImpl::BufferImpl(DrawContext & context, const DataLayout & layout):
+BufferImpl::BufferImpl(DrawContext & drawContext, const DataLayout & layout):
     context(context),
     glName(0u),
     count(0u),

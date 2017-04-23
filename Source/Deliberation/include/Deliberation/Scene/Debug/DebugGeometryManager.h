@@ -53,13 +53,13 @@ public:
     };
     
 public:
-    DebugGeometryManager(DrawContext & context);
+    DebugGeometryManager(DrawContext & drawContext);
 
-    DrawContext & context() const;
+    DrawContext & drawContext() const;
     const BuildIns & buildIns() const;
 
 private:
-    DrawContext &   m_context;
+    DrawContext &   m_drawContext;
     BuildIns    m_buildIns;
 };
 

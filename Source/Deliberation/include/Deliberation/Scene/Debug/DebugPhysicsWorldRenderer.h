@@ -16,14 +16,14 @@ class PhysicsWorld;
 class DELIBERATION_API DebugPhysicsWorldRenderer final
 {
 public:
-    DebugPhysicsWorldRenderer(DrawContext & context,
+    DebugPhysicsWorldRenderer(DrawContext & drawContext,
                               const PhysicsWorld & physicsWorld,
                               const Camera3D & camera);
 
     void schedule();
 
 private:
-    DrawContext &                       m_context;
+    DrawContext &                       m_drawContext;
     const PhysicsWorld &            m_physicsWorld;
     const Camera3D &                m_camera;
 

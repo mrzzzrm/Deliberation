@@ -23,7 +23,7 @@ namespace detail
 class ProgramImpl final
 {
 public:
-    ProgramImpl(DrawContext & context, const std::vector<std::string> & paths);
+    ProgramImpl(DrawContext & drawContext, const std::vector<std::string> & paths);
 
     DrawContext &           context;
     gl::GLuint          glProgramName;

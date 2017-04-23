@@ -8,7 +8,7 @@
 namespace deliberation
 {
 
-SkyboxRenderer::SkyboxRenderer(DrawContext & context, const Camera3D & camera, const Texture & cubemap):
+SkyboxRenderer::SkyboxRenderer(DrawContext & drawContext, const Camera3D & camera, const Texture & cubemap):
     m_camera(camera)
 {
     const auto program = context.createProgram({

@@ -250,6 +250,13 @@ void LinearMap<Value>::erase(std::size_t key)
 }
 
 template<typename Value>
+void LinearMap<Value>::clear()
+{
+    m_size = 0;
+    m_vec.clear();
+}
+
+template<typename Value>
 typename LinearMap<Value>::Iterator LinearMap<Value>::erase(const Iterator & i)
 {
     auto index = i.pair.first;

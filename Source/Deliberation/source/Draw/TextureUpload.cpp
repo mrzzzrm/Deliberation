@@ -5,18 +5,18 @@
 namespace deliberation
 {
 
-TextureUpload::TextureUpload(DrawContext & context,
+TextureUpload::TextureUpload(DrawContext & drawContext,
                              Texture & texture,
                              const TextureBinary & binary):
-    m_context(context),
+    m_drawContext(context),
     m_texture(texture),
     m_binary(binary)
 {
 }
 
-DrawContext & TextureUpload::context() const
+DrawContext & TextureUpload::drawContext() const
 {
-    return m_context;
+    return m_drawContext;
 }
 
 Texture & TextureUpload::texture() const
@@ -31,7 +31,7 @@ const TextureBinary & TextureUpload::binary() const
 
 void TextureUpload::schedule()
 {
-    m_context.scheduleTextureUpload(*this);
+    m_drawContext.scheduleTextureUpload(*this);
 }
 
 }

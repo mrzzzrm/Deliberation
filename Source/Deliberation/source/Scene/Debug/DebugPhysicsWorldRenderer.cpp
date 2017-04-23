@@ -10,17 +10,17 @@
 namespace deliberation
 {
 
-DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(DrawContext & context,
+DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(DrawContext & drawContext,
                                                      const PhysicsWorld & physicsWorld,
                                                      const Camera3D & camera):
-    m_context(context),
+    m_drawContext(context),
     m_physicsWorld(physicsWorld),
     m_camera(camera)
 {
-//    m_contactNormalRenderer.reset(m_context, m_camera);
-//    m_contactVelocityRenderer.reset(m_context, m_camera);
-//    m_linearVelocityRenderer.reset(m_context, m_camera);
-//    m_angularVelocityRenderer.reset(m_context, m_camera);
+//    m_contactNormalRenderer.reset(m_drawContext, m_camera);
+//    m_contactVelocityRenderer.reset(m_drawContext, m_camera);
+//    m_linearVelocityRenderer.reset(m_drawContext, m_camera);
+//    m_angularVelocityRenderer.reset(m_drawContext, m_camera);
 }
 
 void DebugPhysicsWorldRenderer::schedule()

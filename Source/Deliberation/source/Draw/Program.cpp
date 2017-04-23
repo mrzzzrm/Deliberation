@@ -9,7 +9,7 @@ namespace deliberation
 
 Program::Program() = default;
 
-DrawContext & Program::context() const
+DrawContext & Program::drawContext() const
 {
     Assert(m_impl.get(), "Program is hollow");
 

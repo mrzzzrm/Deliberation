@@ -16,7 +16,7 @@ class Framebuffer;
 class DELIBERATION_API DebugGroundPlaneRenderer final
 {
 public:
-    DebugGroundPlaneRenderer(DrawContext & context, const Camera3D & camera);
+    DebugGroundPlaneRenderer(DrawContext & drawContext, const Camera3D & camera);
 
     void setFramebuffer(Framebuffer & framebuffer);
     void setSize(float size);
@@ -26,7 +26,7 @@ public:
     void render();
 
 private:
-    DrawContext &           m_context;
+    DrawContext &           m_drawContext;
     const Camera3D &    m_camera;
 
     Program             m_program;

@@ -46,15 +46,15 @@ public:
     {
        // EnableGLErrorChecksAndLogging();
 
-        m_ground.reset(context(), m_camera);
+        m_ground.reset(drawContext(), m_camera);
         m_ground.get().setSize(30.0f);
         m_ground.get().setRadius(10.0f);
 
         m_camera.setPosition({0.0f, 1.0f, 3.0f});
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
-        m_camera.setAspectRatio((float)context().backbuffer().width() / context().backbuffer().height());
+        m_camera.setAspectRatio((float)drawContext().backbuffer().width() / drawContext().backbuffer().height());
 
-        m_clear = context().createClear();
+        m_clear = drawContext().createClear();
 
         m_transform.setPosition({0.0f, 1.0f, 0.0f});
         m_navigator.reset(m_camera, input(), 10.0f);
@@ -68,15 +68,15 @@ public:
             DeliberationDataPath("Data/Skybox/Cloudy/Front.png")
         };
 
-        auto faceTexture = context().createTexture(
+        auto faceTexture = drawContext().createTexture(
             TextureLoader(DeliberationDataPath("Data/Skybox/Debug/Right.png")).load());
 
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
-        auto skyboxCubemap = context().createTexture(skyboxCubemapBinary);
+        auto skyboxCubemap = drawContext().createTexture(skyboxCubemapBinary);
 
-        m_skyboxRenderer.reset(context(), m_camera, skyboxCubemap);
+        m_skyboxRenderer.reset(drawContext(), m_camera, skyboxCubemap);
 
-        m_cubemapRenderer.reset(context(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
+        m_cubemapRenderer.reset(drawContext(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
     }
 
