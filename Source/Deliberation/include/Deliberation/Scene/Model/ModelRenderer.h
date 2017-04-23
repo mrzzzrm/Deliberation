@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <Deliberation/Draw/Program.h>
+
 #include <Deliberation/Scene/Pipeline/Renderer.h>
 
 namespace deliberation
@@ -32,6 +34,7 @@ private:
 private:
     std::unordered_map<std::shared_ptr<Model>,
         std::vector<std::shared_ptr<ModelInstance>>> m_instancesByModel;
+    Program m_gbufferProgram;
 };
 
 }

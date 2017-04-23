@@ -27,6 +27,7 @@ public:
     };
 
 public:
+    DataLayoutField() = default;
     DataLayoutField(const std::string & name, Type type, size_t offset);
 
     const std::string & name() const;

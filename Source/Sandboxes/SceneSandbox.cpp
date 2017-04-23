@@ -19,16 +19,18 @@
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/PixelFormat.h>
 
+#include <Deliberation/Platform/Application.h>
+
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
-#include <Deliberation/Scene/UVSphere.h>
 #include <Deliberation/Scene/SkyboxRenderer.h>
 #include <Deliberation/Scene/Debug/DebugCubemapRenderer.h>
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
-#include <Deliberation/Scene/MeshCompiler.h>
-#include <Deliberation/Platform/Application.h>
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
-#include <Deliberation/Scene/MeshCompiler.h>
+#include <Deliberation/Scene/Model/Model.h>
+#include <Deliberation/Scene/Model/ModelRenderer.h>
+#include <Deliberation/Scene/Model/ModelInstance.h>
+#include <Deliberation/Scene/Pipeline/RenderManager.h>
 
 using namespace deliberation;
 
@@ -78,6 +80,11 @@ public:
 
         m_cubemapRenderer.reset(drawContext(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
+
+        m_renderManager = std::make_shared<RenderManager>(drawContext());
+        m_modelRenderer = std::make_shared<ModelRenderer>(*m_renderManager);
+        m_bunnyModel = m_modelRenderer->addModel(DeliberationDataPath("Data/Models/bunny.obj"));
+        m_bunnyInstance = m_modelRenderer->addModelInstance(m_bunnyModel);
     }
 
 
@@ -90,6 +97,8 @@ public:
         m_cubemapRenderer->render();
         m_skyboxRenderer->render();
         m_ground.get().render();
+
+        m_renderManager->render();
     }
 
 private:
@@ -101,6 +110,11 @@ private:
     Optional<DebugCameraNavigator3D>    m_navigator;
     Optional<SkyboxRenderer>            m_skyboxRenderer;
     Optional<DebugCubemapRenderer>      m_cubemapRenderer;
+
+    std::shared_ptr<RenderManager>      m_renderManager;
+    std::shared_ptr<ModelRenderer>      m_modelRenderer;
+    std::shared_ptr<Model>              m_bunnyModel;
+    std::shared_ptr<ModelInstance>      m_bunnyInstance;
 };
 
 int main(int argc, char * argv[])
