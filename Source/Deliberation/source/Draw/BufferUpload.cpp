@@ -14,7 +14,7 @@ namespace deliberation
 BufferUpload::BufferUpload(DrawContext & drawContext,
                            Buffer & buffer,
                            const Blob & data):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_buffer(buffer),
     m_blob(data),
     m_count(data.size() / buffer.layout().stride())
@@ -26,7 +26,7 @@ BufferUpload::BufferUpload(DrawContext & drawContext,
                            Buffer & buffer,
                            const Blob & data,
                            unsigned int count):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_buffer(buffer),
     m_blob(data),
     m_count(count)

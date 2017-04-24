@@ -21,13 +21,13 @@ AmbientOcclusionMix::AmbientOcclusionMix(const Surface & occlusion,
 {
     Assert(occlusion.width() == color.width() && occlusion.height() == color.height(), "");
 
-    auto & context = occlusion.drawContext();
+    auto & drawContext = occlusion.drawContext();
 
-    m_output = context.createTexture2D(occlusion.width(),
+    m_output = drawContext.createTexture2D(occlusion.width(),
                                        occlusion.height(),
                                        color.format());
 
-    m_effect = PostprocessingEffect(context,
+    m_effect = PostprocessingEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.frag")},
                                     "AmbientOcclusionMix");

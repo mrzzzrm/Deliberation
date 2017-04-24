@@ -56,7 +56,7 @@ void SurfaceDownloadImpl::start()
     Assert(!started, "");
     Assert(surface.m_texture.get(), "");
 
-    auto & context = surface.m_texture->context;
+    auto & drawContext = surface.m_texture->drawContext;
 
     auto & texture = *surface.m_texture;
     size = surface.width() * surface.height() * format.bytesPerPixel();
@@ -64,7 +64,7 @@ void SurfaceDownloadImpl::start()
     gl::glGenBuffers(1, &glName);
     Assert(glName != 0, "");
 
-    context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
+    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
     gl::glBufferData(gl::GL_PIXEL_PACK_BUFFER, size, nullptr, gl::GL_STREAM_READ);
 
     texture.bind();
@@ -76,7 +76,7 @@ void SurfaceDownloadImpl::start()
 
     sync = gl::glFenceSync(gl::GL_SYNC_GPU_COMMANDS_COMPLETE, (gl::UnusedMask)0);
 
-    context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
+    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
 
     started = true;
 }
@@ -107,12 +107,12 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
         }
     }
 
-    auto & context = surface.m_texture->context;
+    auto & drawContext = surface.m_texture->drawContext;
     auto & texture = *surface.m_texture;
     auto numValues = surface.width() * surface.height() * texture.format.componentsPerPixel();
     auto type = format.glType();
 
-    context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
+    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
 
     switch (type)
     {
@@ -141,7 +141,7 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
             Fail("Unknown format");
     }
 
-    context.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
+    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
 
     return surfaceBinary.get();
 }

@@ -13,7 +13,7 @@ namespace deliberation
 constexpr float DebugGeometryManager::ARROW_CONE_HEIGHT;
 
 DebugGeometryManager::DebugGeometryManager(DrawContext & drawContext):
-    m_drawContext(context)
+    m_drawContext(drawContext)
 {
     /**
      * Load programs

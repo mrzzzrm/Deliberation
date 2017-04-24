@@ -8,7 +8,7 @@ namespace deliberation
 TextureUpload::TextureUpload(DrawContext & drawContext,
                              Texture & texture,
                              const TextureBinary & binary):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_texture(texture),
     m_binary(binary)
 {

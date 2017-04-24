@@ -11,11 +11,11 @@ namespace deliberation
 SkyboxRenderer::SkyboxRenderer(DrawContext & drawContext, const Camera3D & camera, const Texture & cubemap):
     m_camera(camera)
 {
-    const auto program = context.createProgram({
+    const auto program = drawContext.createProgram({
         deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.vert"),
         deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.frag")});
 
-    m_draw = context.createDraw(program, gl::GL_TRIANGLES);
+    m_draw = drawContext.createDraw(program, gl::GL_TRIANGLES);
 
     const auto vertexLayout = DataLayout{{{"Position", Type_Vec3}}};
 

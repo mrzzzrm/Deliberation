@@ -53,7 +53,7 @@ std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & drawContext,
                                                 unsigned int numFaces,
                                                 PixelFormat format)
 {
-    auto impl = std::make_shared<TextureImpl>(context, numFaces);
+    auto impl = std::make_shared<TextureImpl>(drawContext, numFaces);
 
     for (auto f = 0u; f < numFaces; f++)
     {
@@ -68,7 +68,7 @@ std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & drawContext,
 }
 
 TextureImpl::TextureImpl(DrawContext & drawContext, unsigned int numFaces):
-    context(context),
+    drawContext(drawContext),
     glName(0u),
     width(0u),
     height(0u),

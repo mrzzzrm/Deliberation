@@ -13,7 +13,7 @@
 
 using namespace deliberation;
 
-namespace
+namespace deliberation
 {
 
 struct ModelInstancesDraw
@@ -33,9 +33,9 @@ public:
         m_instanceLayout = DataLayout("Transform", Type_Mat4);
         m_instanceDataStaging = LayoutedBlob(m_instanceLayout);
 
-        auto & viewUniformBlockLayout = m_modelRenderer.m_gbufferProgram.interface().uniformBlock("View")->layout();
+        auto & viewUniformBlockLayout = m_modelRenderer.m_gbufferProgram.interface().uniformBlock("ViewBlock")->layout();
         m_viewUniformBuffer = renderManager.drawContext().createBuffer(viewUniformBlockLayout);
-        m_viewUniformData = LayoutedBlob(viewUniformBlockLayout);
+        m_viewUniformData = LayoutedBlob(viewUniformBlockLayout, 1);
 
         m_viewField = m_viewUniformData.field<glm::mat4>("View");
         m_projectionField = m_viewUniformData.field<glm::mat4>("Projection");
@@ -64,13 +64,18 @@ public:
                 ModelInstancesDraw modelRenderContext;
 
                 modelRenderContext.instanceBuffer = m_renderManager.drawContext().createBuffer(m_instanceLayout);
-
-                modelRenderContext.draw = drawContext.createDraw(m_modelRenderer.m_gbufferProgram);
-                modelRenderContext.draw.setUniformBuffer("View", m_viewUniformBuffer);
-                modelRenderContext.draw.addInstanceBuffer(modelRenderContext.instanceBuffer);
-                modelRenderContext.draw.addVertexBuffer(model->vertexBuffer);
-                modelRenderContext.draw.setIndexBuffer(model->indexBuffer);
-                modelRenderContext.draw.setFramebuffer(m_renderManager.gbuffer());
+                
+                auto & draw = modelRenderContext.draw;
+                draw = drawContext.createDraw(m_modelRenderer.m_gbufferProgram);
+                draw.setUniformBuffer("ViewBlock", m_viewUniformBuffer);
+                draw.addInstanceBuffer(modelRenderContext.instanceBuffer);
+                draw.addVertexBuffer(model->vertexBuffer);
+                if (model->hasIndices) draw.setIndexBuffer(model->indexBuffer);
+                draw.setFramebuffer(m_renderManager.gbuffer());
+                
+                const auto & vertexLayout = model->vertexBuffer.layout();
+                if (!vertexLayout.hasField("Color")) draw.setAttribute("Color", glm::vec3(1.0f, 0.0f, 0.5f));
+                if (!vertexLayout.hasField("Normal")) draw.setAttribute("Normal", glm::vec3(0.0f, 1.0f, 0.0f));
 
                 auto result = m_drawPerModel.emplace(model, modelRenderContext);
                 iter = result.first;
@@ -78,8 +83,8 @@ public:
 
             const auto & instances = pair.second;
 
-            m_instanceDataStaging.reserve(instances.size());
-            auto transforms = m_instanceDataStaging.iterator("Transform");
+            m_instanceDataStaging.resize(instances.size());
+            auto transforms = m_instanceDataStaging.iterator<glm::mat4>("Transform");
             for (const auto & instance : pair.second)
             {
                 transforms.put(instance->transform.matrix());
@@ -113,12 +118,12 @@ namespace deliberation
 ModelRenderer::ModelRenderer(RenderManager & renderManager):
     Renderer(renderManager)
 {
-    renderManager.registerRenderer(shared_from_this());
-
     m_gbufferProgram = renderManager.drawContext().createProgram({
             DeliberationDataPath("Data/Shaders/ModelRenderer.vert"),
             DeliberationDataPath("Data/Shaders/ModelRenderer_GBuffer.frag")
     });
+
+    std::cout << m_gbufferProgram.interface().toString() << std::endl;
 }
 
 std::shared_ptr<Model> ModelRenderer::addModel(const std::string & path)
@@ -136,45 +141,75 @@ std::shared_ptr<Model> ModelRenderer::addModel(const std::string & path)
         return {};
     }
 
-    LayoutedBlob vertices({{{"Position", Type_Vec3}, {"Normal", Type_Vec3}}});
-    LayoutedBlob indices({{"Index", Type_U32}});
-
-    for (size_t s = 0; s < shapes.size(); s++)
+    for (const auto & shape : shapes)
     {
-        // Loop over faces(polygon)
-        size_t index_offset = 0;
-        for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++)
+        size_t shapeNumVertices = 0;
+        for (const auto & numVertices : shape.mesh.num_face_vertices)
         {
-            int fv = shapes[s].mesh.num_face_vertices[f];
-
-            // Loop over vertices in the face.
-            for (size_t v = 0; v < fv; v++) {
-                // access to vertex
-                tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
-                float vx = attrib.vertices[3*idx.vertex_index+0];
-                float vy = attrib.vertices[3*idx.vertex_index+1];
-                float vz = attrib.vertices[3*idx.vertex_index+2];
-                float nx = attrib.normals[3*idx.normal_index+0];
-                float ny = attrib.normals[3*idx.normal_index+1];
-                float nz = attrib.normals[3*idx.normal_index+2];
-                float tx = attrib.texcoords[2*idx.texcoord_index+0];
-                float ty = attrib.texcoords[2*idx.texcoord_index+1];
-            }
-            index_offset += fv;
-
-            // per-face material
-            shapes[s].mesh.material_ids[f];
+            Assert(numVertices == 3, "ModelRenderer: Model not triangulated");
+            shapeNumVertices += numVertices;
         }
-    }
 
-    return MeshData(vertices, indices);
+        DataLayout vertexDataLayout("Position", Type_Vec3);
+
+        auto hasNormals = false;
+        if (!attrib.normals.empty())
+        {
+            vertexDataLayout.addField({"Normal", Type_Vec3});
+            hasNormals = true;
+        }
+
+        LayoutedBlob vertices(vertexDataLayout, shapeNumVertices);
+
+        auto positions = vertices.iterator<glm::vec3>("Position");
+
+        TypedBlobIterator<glm::vec3> normals;
+        if (hasNormals) normals = vertices.iterator<glm::vec3>("Normal");
+
+        size_t indexOffset = 0;
+        for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++)
+        {
+            for (auto v = 0; v < 3; v++)
+            {
+                tinyobj::index_t idx = shape.mesh.indices[indexOffset + v];
+
+                const auto vx = attrib.vertices[3*idx.vertex_index+0];
+                const auto vy = attrib.vertices[3*idx.vertex_index+1];
+                const auto vz = attrib.vertices[3*idx.vertex_index+2];
+
+                positions.put({vx, vy, vz});
+
+                if (hasNormals)
+                {
+                    const auto nx = attrib.normals[3*idx.normal_index+0];
+                    const auto ny = attrib.normals[3*idx.normal_index+1];
+                    const auto nz = attrib.normals[3*idx.normal_index+2];
+
+                    normals.put({nx, ny, nz});
+                }
+            }
+
+            indexOffset += 3;
+        }
+
+        return addModel(MeshData(std::move(vertices), {}));
+    }
 }
 
 std::shared_ptr<Model> ModelRenderer::addModel(const MeshData & meshData)
 {
     auto model = std::make_shared<Model>();
     model->vertexBuffer = m_renderManager.drawContext().createBuffer(meshData.vertices());
-    model->indexBuffer = m_renderManager.drawContext().createBuffer(meshData.indices());
+
+    if (meshData.indices().empty())
+    {
+        model->hasIndices = false;
+    }
+    else
+    {
+        model->indexBuffer = m_renderManager.drawContext().createBuffer(meshData.indices());
+        model->hasIndices = true;
+    }
 
     return model;
 }

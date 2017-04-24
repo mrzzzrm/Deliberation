@@ -35,12 +35,12 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
     m_color(color),
     m_camera(&camera)
 {
-    auto & context = m_normalDepth.drawContext();
+    auto & drawContext = m_normalDepth.drawContext();
 
-    m_output = context.createTexture2D(m_normalDepth.width(),
+    m_output = drawContext.createTexture2D(m_normalDepth.width(),
                                        m_normalDepth.height(),
                                        PixelFormat_RGB_32_F);
-    m_effect = PostprocessingEffect(context,
+    m_effect = PostprocessingEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusion.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusion.frag")},
                                     "AmbientOcclusion");
@@ -76,7 +76,7 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
         }
     }
 
-    m_rotation = context.createTexture2D(4, 4, surface.format());
+    m_rotation = drawContext.createTexture2D(4, 4, surface.format());
     m_rotation.scheduleUpload(surface);
     m_effect.draw().sampler("Rotation").setTexture(m_rotation);
 

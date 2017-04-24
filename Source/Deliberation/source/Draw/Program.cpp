@@ -13,7 +13,7 @@ DrawContext & Program::drawContext() const
 {
     Assert(m_impl.get(), "Program is hollow");
 
-    return m_impl->context;
+    return m_impl->drawContext;
 }
 
 const ProgramInterface & Program::interface() const

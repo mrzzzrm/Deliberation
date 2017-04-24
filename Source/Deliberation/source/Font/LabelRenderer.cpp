@@ -25,7 +25,7 @@ LabelRenderer::LabelRenderer():
 }
 
 LabelRenderer::LabelRenderer(DrawContext & drawContext):
-    m_drawContext(&context)
+    m_drawContext(&drawContext)
 {
     m_program = m_drawContext->createProgram({deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),
                                           deliberation::DeliberationDataPath("Data/Font/LabelRenderer.frag")});

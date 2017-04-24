@@ -19,7 +19,7 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world):
     Base(world),
     InputLayer(200),
-    m_drawContext(world.system<ApplicationSystem>().context()),
+    m_drawContext(world.system<ApplicationSystem>().drawContext()),
     m_input(world.system<ApplicationSystem>().input())
 {
     auto & io = ImGui::GetIO();

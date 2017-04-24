@@ -78,7 +78,7 @@ void Clear::disableStencil()
 void Clear::render()
 {
     Assert(m_impl.get(), "Clear is hollow");
-    m_impl->context.scheduleClear(*this);
+    m_impl->drawContext.scheduleClear(*this);
 }
 
 Clear::Clear(const std::shared_ptr<detail::ClearImpl> & impl):

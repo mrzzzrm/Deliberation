@@ -115,8 +115,8 @@ Buffer Draw::setIndices(const LayoutedBlob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & context = m_impl->context;
-    auto buffer = context.createBuffer(data.layout());
+    auto & drawContext = m_impl->drawContext;
+    auto buffer = drawContext.createBuffer(data.layout());
     buffer.scheduleUpload(data);
     setIndexBuffer(buffer);
 
@@ -127,8 +127,8 @@ Buffer Draw::addVertices(const LayoutedBlob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & context = m_impl->context;
-    auto buffer = context.createBuffer(data.layout());
+    auto & drawContext = m_impl->drawContext;
+    auto buffer = drawContext.createBuffer(data.layout());
     buffer.scheduleUpload(data);
     addVertexBuffer(buffer);
 
@@ -139,8 +139,8 @@ Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & context = m_impl->context;
-    auto buffer = context.createBuffer(data.layout());
+    auto & drawContext = m_impl->drawContext;
+    auto buffer = drawContext.createBuffer(data.layout());
     buffer.scheduleUpload(data);
     addInstanceBuffer(buffer, divisor);
 
@@ -256,7 +256,7 @@ void Draw::schedule() const
         m_impl->dirtyValueAttributes.clear();
     }
 
-    m_impl->context.scheduleDraw(*this);
+    m_impl->drawContext.scheduleDraw(*this);
 }
 
 void Draw::setState(const DrawState & state)

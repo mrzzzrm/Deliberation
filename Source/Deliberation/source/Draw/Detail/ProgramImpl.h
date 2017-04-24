@@ -25,7 +25,7 @@ class ProgramImpl final
 public:
     ProgramImpl(DrawContext & drawContext, const std::vector<std::string> & paths);
 
-    DrawContext &           context;
+    DrawContext &           drawContext;
     gl::GLuint          glProgramName;
     ProgramInterface    interface;
 };

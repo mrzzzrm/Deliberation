@@ -15,7 +15,7 @@ namespace detail
 {
 
 QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_type(type),
     m_glName(0),
     m_glTarget(gl::GL_NONE),

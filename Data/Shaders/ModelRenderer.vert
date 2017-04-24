@@ -1,6 +1,6 @@
 #version 330
 
-uniform View
+uniform ViewBlock
 {
     mat4 View;
     mat4 Projection;

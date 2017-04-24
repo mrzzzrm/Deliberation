@@ -12,14 +12,9 @@ RenderManager::RenderManager(DrawContext & drawContext):
     m_drawContext(drawContext)
 {}
 
-void RenderManager::registerRenderer(const std::shared_ptr<Renderer> & renderer)
-{
-    m_renderers.emplace_back(renderer);
-}
-
 void RenderManager::registerRenderNode(const std::shared_ptr<RenderNode> & node, const RenderPhase & phase)
 {
-    m_renderNodesByPhase[phase].emplace_back(node);
+    m_renderNodesByPhase[(size_t)phase].emplace_back(node);
 }
 
 void RenderManager::render()
@@ -40,6 +35,8 @@ void RenderManager::render()
 
         m_pipelineBuild = true;
     }
+
+    m_gbuffer.clear().render();
 
     for (auto & pair : m_renderNodesByPhase)
     {

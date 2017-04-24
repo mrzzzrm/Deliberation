@@ -9,17 +9,17 @@ namespace detail
 {
 
 BufferImpl::BufferImpl(DrawContext & drawContext, const DataLayout & layout):
-    context(context),
+    drawContext(drawContext),
     glName(0u),
     count(0u),
     layout(layout)
 {
-    context.allocateBuffer(*this);
+    drawContext.allocateBuffer(*this);
 }
 
 BufferImpl::~BufferImpl()
 {
-    context.deallocateBuffer(*this);
+    drawContext.deallocateBuffer(*this);
 }
 
 }

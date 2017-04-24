@@ -9,6 +9,8 @@ class Model final
 {
 public:
     Buffer vertexBuffer;
+
+    bool hasIndices = false;
     Buffer indexBuffer;
 };
 

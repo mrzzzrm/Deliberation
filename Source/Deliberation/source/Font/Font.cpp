@@ -41,7 +41,7 @@ Font::Font():
 }
 
 Font::Font(DrawContext & drawContext, const std::string & path):
-    m_drawContext(&context),
+    m_drawContext(&drawContext),
     m_path(path)
 {
 

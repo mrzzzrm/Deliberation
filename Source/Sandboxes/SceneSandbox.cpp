@@ -46,20 +46,25 @@ public:
 
     virtual void onStartup() override
     {
+        m_renderManager = std::make_shared<RenderManager>(drawContext());
+        m_modelRenderer = m_renderManager->addRenderer<ModelRenderer>();
+        m_bunnyModel = m_modelRenderer->addModel(DeliberationDataPath("Data/Models/bunny.obj"));
+        m_bunnyInstance = m_modelRenderer->addModelInstance(m_bunnyModel);
+        
        // EnableGLErrorChecksAndLogging();
 
-        m_ground.reset(drawContext(), m_camera);
+        m_ground.reset(drawContext(), m_renderManager->mainCamera());
         m_ground.get().setSize(30.0f);
         m_ground.get().setRadius(10.0f);
 
-        m_camera.setPosition({0.0f, 1.0f, 3.0f});
-        m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
-        m_camera.setAspectRatio((float)drawContext().backbuffer().width() / drawContext().backbuffer().height());
+        m_renderManager->mainCamera().setPosition({0.0f, 1.0f, 3.0f});
+        m_renderManager->mainCamera().setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
+        m_renderManager->mainCamera().setAspectRatio((float)drawContext().backbuffer().width() / drawContext().backbuffer().height());
 
         m_clear = drawContext().createClear();
 
         m_transform.setPosition({0.0f, 1.0f, 0.0f});
-        m_navigator.reset(m_camera, input(), 10.0f);
+        m_navigator.reset(m_renderManager->mainCamera(), input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6> {
             DeliberationDataPath("Data/Skybox/Cloudy/Right.png"),
@@ -76,15 +81,10 @@ public:
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
         auto skyboxCubemap = drawContext().createTexture(skyboxCubemapBinary);
 
-        m_skyboxRenderer.reset(drawContext(), m_camera, skyboxCubemap);
+        m_skyboxRenderer.reset(drawContext(), m_renderManager->mainCamera(), skyboxCubemap);
 
-        m_cubemapRenderer.reset(drawContext(), m_camera, skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
+        m_cubemapRenderer.reset(drawContext(), m_renderManager->mainCamera(), skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
-
-        m_renderManager = std::make_shared<RenderManager>(drawContext());
-        m_modelRenderer = std::make_shared<ModelRenderer>(*m_renderManager);
-        m_bunnyModel = m_modelRenderer->addModel(DeliberationDataPath("Data/Models/bunny.obj"));
-        m_bunnyInstance = m_modelRenderer->addModelInstance(m_bunnyModel);
     }
 
 
@@ -105,7 +105,6 @@ private:
     Draw                                m_draw;
     Clear                               m_clear;
     Optional<DebugGroundPlaneRenderer>  m_ground;
-    Camera3D                            m_camera;
     Transform3D                         m_transform;
     Optional<DebugCameraNavigator3D>    m_navigator;
     Optional<SkyboxRenderer>            m_skyboxRenderer;

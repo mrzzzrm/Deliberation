@@ -13,7 +13,7 @@ namespace deliberation
 DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(DrawContext & drawContext,
                                                      const PhysicsWorld & physicsWorld,
                                                      const Camera3D & camera):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_physicsWorld(physicsWorld),
     m_camera(camera)
 {

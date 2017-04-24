@@ -27,8 +27,10 @@ public:
     Camera3D & mainCamera() { return m_mainCamera; }
     Framebuffer & gbuffer() { return m_gbuffer; }
 
+    template<typename T, typename ... Args>
+    std::shared_ptr<T> addRenderer(Args &&... args);
+
     // Callbacks for Renderers
-    void registerRenderer(const std::shared_ptr<Renderer> & renderer);
     void registerRenderNode(const std::shared_ptr<RenderNode> & node, const RenderPhase & phase);
 
     void render();
@@ -43,3 +45,5 @@ private:
 };
 
 }
+
+#include <Deliberation/Scene/Pipeline/RenderManager.inl>

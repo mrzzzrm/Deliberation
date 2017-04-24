@@ -26,7 +26,7 @@ PostprocessingEffect::PostprocessingEffect(DrawContext & drawContext,
                                            const std::string & name):
     m_initialised(true)
 {
-    m_program = context.createProgram(shaders);
+    m_program = drawContext.createProgram(shaders);
 
     std::cout << m_program.interface().toString() << std::endl;
 
@@ -38,10 +38,10 @@ PostprocessingEffect::PostprocessingEffect(DrawContext & drawContext,
     });
 
     auto layout = DataLayout("Position", Type_Vec2);
-    m_vertexBuffer = context.createBuffer(layout);
+    m_vertexBuffer = drawContext.createBuffer(layout);
     m_vertexBuffer.scheduleUpload(vertices);
 
-    m_draw = context.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "PostprocessingEffect" : name);
+    m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "PostprocessingEffect" : name);
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.state().setDepthState(DepthState::disabledRW());
 }

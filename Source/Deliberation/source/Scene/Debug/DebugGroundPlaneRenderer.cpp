@@ -12,7 +12,7 @@ namespace deliberation
 {
 
 DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(DrawContext & drawContext, const Camera3D & camera):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_camera(camera)
 {
     m_program = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),

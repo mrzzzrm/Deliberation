@@ -17,7 +17,7 @@ namespace detail
 {
 
 ProgramImpl::ProgramImpl(DrawContext & drawContext, const std::vector<std::string> & paths):
-    context(context),
+    drawContext(drawContext),
     glProgramName(0u)
 {
     glProgramName = gl::glCreateProgram();

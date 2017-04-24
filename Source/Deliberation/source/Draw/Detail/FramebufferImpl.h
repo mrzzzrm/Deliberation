@@ -67,7 +67,7 @@ public:
     void bind(GLStateManager & glStateManager) const;
 
 public:
-    DrawContext &                                   m_drawContext;
+    DrawContext &                               m_drawContext;
     bool                                        m_isBackbuffer;
 
     // For RenderTargets created by the Framebuffer (via addRenderTarget(format), e.g.)
@@ -81,14 +81,11 @@ public:
     mutable std::shared_ptr<GLFramebuffer>      m_glFramebuffer;
     mutable unsigned int                        m_width;
     mutable unsigned int                        m_height;
-    mutable bool                                m_resolutionDirty;
 
     mutable Optional<Clear>                     m_clear;
 
 private:
     void updateFramebufferDesc() const;
-    void updateResolution() const;
-
 };
 
 }

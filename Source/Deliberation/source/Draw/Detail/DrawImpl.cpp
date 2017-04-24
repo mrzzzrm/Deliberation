@@ -21,7 +21,7 @@ namespace detail
 
 DrawImpl::DrawImpl(DrawContext & drawContext,
                    const Program & program):
-    context(context),
+    drawContext(drawContext),
     program(program.m_impl),
     glVertexArray(0u)
 {
@@ -52,7 +52,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
     }
 
     // Create framebuffer
-    framebuffer = context.backbuffer();
+    framebuffer = drawContext.backbuffer();
 
     // Allocate Uniform Buffer Bindings
     uniformBuffers.resize(this->program->interface.uniformBlocks().size());

@@ -27,7 +27,7 @@ Surface::Surface(const Surface & other):
 DrawContext & Surface::drawContext() const
 {
     Assert(m_texture.get(), "Surface object is hollow");
-    return m_texture->context;
+    return m_texture->drawContext;
 }
 
 Texture Surface::texture() const

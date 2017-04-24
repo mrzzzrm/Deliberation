@@ -18,7 +18,7 @@ public:
     BufferImpl(DrawContext & drawContext, const DataLayout & layout);
     ~BufferImpl();
 
-    DrawContext &       context;
+    DrawContext &       drawContext;
     gl::GLuint      glName;
     unsigned int    count;
     DataLayout      layout;

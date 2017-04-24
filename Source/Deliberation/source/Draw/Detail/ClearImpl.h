@@ -26,7 +26,7 @@ public:
               const std::shared_ptr<FramebufferImpl> & framebuffer);
 
 public:
-    DrawContext &               context;
+    DrawContext &               drawContext;
     glm::vec4               color;
     LinearMap<glm::vec4>    colorOverrides;
     float                   depth;

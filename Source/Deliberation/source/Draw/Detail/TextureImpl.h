@@ -30,7 +30,7 @@ public:
     void allocate() const;
     void upload(const TextureBinary & binary);
 
-    DrawContext &               context;
+    DrawContext &               drawContext;
 
     mutable gl::GLuint      glName;
 

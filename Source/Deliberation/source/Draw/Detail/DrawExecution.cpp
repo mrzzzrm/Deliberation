@@ -387,8 +387,8 @@ void DrawExecution::applyViewport()
     {
         if (framebuffer.isBackbuffer())
         {
-            m_glStateManager.setViewport(0, 0, m_drawImpl.context.backbuffer().width(),
-                                               m_drawImpl.context.backbuffer().height());
+            m_glStateManager.setViewport(0, 0, m_drawImpl.drawContext.backbuffer().width(),
+                                               m_drawImpl.drawContext.backbuffer().height());
         }
         else
         {

@@ -36,7 +36,7 @@ public:
     DrawImpl(DrawContext & drawContext,
              const Program & program);
 
-    DrawContext &                                   context;
+    DrawContext &                                   drawContext;
     std::string                                 name;
     std::shared_ptr<ProgramImpl>                program;
     BufferBinding                               indexBufferBinding;

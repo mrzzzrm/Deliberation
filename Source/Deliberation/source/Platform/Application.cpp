@@ -193,11 +193,11 @@ void Application::init()
     m_glContext = SDL_GL_CreateContext(m_displayWindow);
     SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
-    glm::ivec4 contextColorSize;
-    SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &contextColorSize.x);
-    SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &contextColorSize.y);
-    SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &contextColorSize.z);
-    SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &contextColorSize.w);
+    glm::ivec4 drawContextColorSize;
+    SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &drawContextColorSize.x);
+    SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &drawContextColorSize.y);
+    SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &drawContextColorSize.z);
+    SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &drawContextColorSize.w);
 
     // Init glbinding
     glbinding::Binding::initialize();
@@ -210,7 +210,7 @@ void Application::init()
               << "OpenGL Version:  " << versionString << std::endl
               << "OpenGL Vendor:   " << vendorString << std::endl
               << "OpenGL Renderer: " << rendererString << std::endl
-              << "DrawContext RGBA-bits: " << contextColorSize << std::endl;
+              << "DrawContext RGBA-bits: " << drawContextColorSize << std::endl;
 
     deliberation::init();
     deliberation::setPrefixPath(m_prefixPath);

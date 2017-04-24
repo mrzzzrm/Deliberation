@@ -24,9 +24,8 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & drawC
                                                              unsigned int width,
                                                              unsigned int height)
 {
-    auto result = std::make_shared<FramebufferImpl>(context);
+    auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->m_isBackbuffer = true;
-    result->m_resolutionDirty = false;
     result->m_width = width;
     result->m_height = height;
 
@@ -37,9 +36,8 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawConte
                                                          unsigned int width,
                                                          unsigned int height)
 {
-    auto result = std::make_shared<FramebufferImpl>(context);
+    auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->m_isBackbuffer = false;
-    result->m_resolutionDirty = false;
     result->m_width = width;
     result->m_height = height;
 
@@ -53,19 +51,11 @@ DrawContext & FramebufferImpl::drawContext() const
 
 unsigned int FramebufferImpl::width() const
 {
-    if (m_resolutionDirty)
-    {
-        updateResolution();
-    }
     return m_width;
 }
 
 unsigned int FramebufferImpl::height() const
 {
-    if (m_resolutionDirty)
-    {
-        updateResolution();
-    }
     return m_height;
 }
 
@@ -133,6 +123,7 @@ void FramebufferImpl::setRenderTarget(unsigned int index, Surface * surface)
 
     if (surface)
     {
+        Assert(surface->width() == m_width && surface->height() == m_height, "Resolution mistach");
         m_renderTargets[index].reset(*surface);
     }
     else
@@ -141,7 +132,6 @@ void FramebufferImpl::setRenderTarget(unsigned int index, Surface * surface)
     }
 
     m_isBackbuffer = false;
-    m_resolutionDirty = true;
 }
 
 void FramebufferImpl::setDepthTarget(Surface * surface)
@@ -153,6 +143,7 @@ void FramebufferImpl::setDepthTarget(Surface * surface)
 
     if (surface)
     {
+        Assert(surface->width() == m_width && surface->height() == m_height, "Resolution mistach");
         m_depthTarget.reset(*surface);
     }
     else
@@ -162,7 +153,6 @@ void FramebufferImpl::setDepthTarget(Surface * surface)
 
     m_glFramebufferDirty = true;
     m_isBackbuffer = false;
-    m_resolutionDirty = true;
 }
 
 void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
@@ -203,10 +193,9 @@ void FramebufferImpl::bind(GLStateManager & glStateManager) const
 }
 
 FramebufferImpl::FramebufferImpl(DrawContext & drawContext):
-    m_drawContext(context),
+    m_drawContext(drawContext),
     m_isBackbuffer(true),
     m_glFramebufferDirty(false),
-    m_resolutionDirty(true),
     m_width(0u),
     m_height(0u)
 {
@@ -281,31 +270,6 @@ void FramebufferImpl::updateFramebufferDesc() const
     depthAttachment.glName = glName;
 
     m_glFramebufferDesc.reset(GLFramebufferDesc(colorAttachments, depthAttachment));
-}
-
-void FramebufferImpl::updateResolution() const
-{
-    bool foundFirst = false;
-
-    for (auto rt = 0u; rt < m_renderTargets.size(); rt++)
-    {
-        if (m_renderTargets[rt].engaged())
-        {
-            if (!foundFirst)
-            {
-                m_width = m_renderTargets[rt].get().width();
-                m_height = m_renderTargets[rt].get().height();
-                foundFirst = true;
-            }
-
-            Assert(m_width == m_renderTargets[rt].get().width(), "");
-            Assert(m_height == m_renderTargets[rt].get().height(), "");
-        }
-    }
-
-    Assert(foundFirst, "");
-
-    m_resolutionDirty = false;
 }
 
 }

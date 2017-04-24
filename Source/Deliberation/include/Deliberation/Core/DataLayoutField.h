@@ -38,8 +38,8 @@ public:
     std::string toString() const;
 
 private:
-    Desc            m_desc;
-    size_t          m_offset;
+    Desc    m_desc;
+    size_t  m_offset;
 };
 
 }

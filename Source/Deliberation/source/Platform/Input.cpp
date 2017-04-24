@@ -49,7 +49,7 @@ namespace deliberation
 {
 
 Input::Input(const DrawContext & drawContext):
-    m_drawContext(context)
+    m_drawContext(drawContext)
 {
 
 }
