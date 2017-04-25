@@ -26,6 +26,7 @@ public:
     DrawContext & drawContext() { return m_drawContext; }
     Camera3D & mainCamera() { return m_mainCamera; }
     Framebuffer & gbuffer() { return m_gbuffer; }
+    Framebuffer & hdrBuffer() { return m_hdrBuffer; }
 
     template<typename T, typename ... Args>
     std::shared_ptr<T> addRenderer(Args &&... args);
@@ -42,6 +43,7 @@ private:
     bool                                                m_pipelineBuild = false;
     LinearMap<std::vector<std::shared_ptr<RenderNode>>> m_renderNodesByPhase;
     Framebuffer                                         m_gbuffer;
+    Framebuffer                                         m_hdrBuffer;
 };
 
 }

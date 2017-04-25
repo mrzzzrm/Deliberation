@@ -110,10 +110,12 @@ private:
     Optional<SkyboxRenderer>            m_skyboxRenderer;
     Optional<DebugCubemapRenderer>      m_cubemapRenderer;
 
-    std::shared_ptr<RenderManager>      m_renderManager;
-    std::shared_ptr<ModelRenderer>      m_modelRenderer;
-    std::shared_ptr<Model>              m_bunnyModel;
-    std::shared_ptr<ModelInstance>      m_bunnyInstance;
+    std::shared_ptr<RenderManager>          m_renderManager;
+    std::shared_ptr<AmbientLightRenderer>   m_ambientLightRenderer;
+    std::shared_ptr<HdrRenderer>            m_hdrRenderer;
+    std::shared_ptr<ModelRenderer>          m_modelRenderer;
+    std::shared_ptr<Model>                  m_bunnyModel;
+    std::shared_ptr<ModelInstance>          m_bunnyInstance;
 };
 
 int main(int argc, char * argv[])

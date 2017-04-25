@@ -21,11 +21,17 @@ void RenderManager::render()
 {
     if (!m_pipelineBuild)
     {
-        m_gbuffer = m_drawContext.createFramebuffer(m_drawContext.backbuffer().width(), m_drawContext.backbuffer().height());
+        const auto w = m_drawContext.backbuffer().width();
+        const auto h = m_drawContext.backbuffer().height();
+
+        m_gbuffer = m_drawContext.createFramebuffer(w, h);
         m_gbuffer.addDepthTarget(PixelFormat_Depth_16_UN);
         m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Color
         m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Position
         m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Normal
+
+        m_hdrBuffer = m_drawContext.createFramebuffer(w, h);
+        m_hdrBuffer.addRenderTarget(PixelFormat_RGB_32_F);
 
         m_renderNodesByPhase.clear();
         for (auto & renderer : m_renderers)

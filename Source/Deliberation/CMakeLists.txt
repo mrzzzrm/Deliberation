@@ -207,6 +207,7 @@ set(sources
     ${source_path}/Scene/Debug/DebugGroundPlaneRenderer.cpp
     ${source_path}/Scene/Debug/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/Debug/DebugTexture2dRenderer.cpp
+	${source_path}/Scene/Lighting/AmbientLightRenderer.cpp
     ${source_path}/Scene/Model/ModelRenderer.cpp
     ${source_path}/Scene/Pipeline/RenderManager.cpp
     ${source_path}/Scene/Blit.cpp
@@ -417,6 +418,7 @@ set(api_includes
     ${include_path}/Scene/Debug/DebugGroundPlaneRenderer.h
     ${include_path}/Scene/Debug/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/Debug/DebugTexture2dRenderer.h
+    ${include_path}/Scene/Lighting/AmbientLightRenderer.h
     ${include_path}/Scene/Model/Model.h
     ${include_path}/Scene/Model/ModelInstance.h
     ${include_path}/Scene/Model/ModelRenderer.h
