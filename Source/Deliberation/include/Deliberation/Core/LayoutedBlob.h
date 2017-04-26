@@ -56,6 +56,12 @@ public:
     TypedBlobIterator<T> iterator(const DataLayoutField & field);
 
     template<typename T>
+    CTypedBlobIterator<T> citerator(const std::string & name) const;
+
+    template<typename T>
+    CTypedBlobIterator<T> citerator(const DataLayoutField & field) const;
+
+    template<typename T>
     void assign(const std::string & name, const std::vector<T> & values);
 
     void append(const CLayoutedBlobElement & element);

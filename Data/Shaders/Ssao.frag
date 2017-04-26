@@ -36,7 +36,8 @@ void main()
 
         float sampleDepth = texture(Position, offset.xy).z;
 
-        occlusion += (sampleDepth >= s.z + Bias ? 1.0f : 0.0f);
+        float rangeCheck = smoothstep(0.0, 1.0, Radius / abs(s.z - sampleDepth));
+        occlusion += (sampleDepth >= s.z + Bias ? 1.0f : 0.0f) * rangeCheck;
     }
 
     occlusion /= 16.0f;

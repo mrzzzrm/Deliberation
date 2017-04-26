@@ -135,10 +135,10 @@ std::shared_ptr<Model> ModelRenderer::addModel(const std::string & path)
     std::string error;
     bool success = tinyobj::LoadObj(&attrib, &shapes, &materials, &error, path.c_str());
 
-    if (!error.empty() || !success)
+    if (!error.empty())
     {
         std::cout << "ModelRenderer: Error loading '" << path << "': " << error << std::endl;
-        return {};
+        if (!success) return {};
     }
 
     for (const auto & shape : shapes)
@@ -209,6 +209,17 @@ std::shared_ptr<Model> ModelRenderer::addModel(const MeshData & meshData)
     {
         model->indexBuffer = m_renderManager.drawContext().createBuffer(meshData.indices());
         model->hasIndices = true;
+    }
+
+    // Bounds
+    auto positions = meshData.vertices().citerator<glm::vec3>("Position");
+
+    auto position = positions.get();
+    model->bounds = AABB(position, position);
+    for (size_t i = 1; i < meshData.vertices().count(); i++)
+    {
+        auto position = positions.get();
+        model->bounds.enlargedToContain(position);
     }
 
     return model;

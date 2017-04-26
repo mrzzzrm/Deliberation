@@ -22,5 +22,5 @@ void main()
     gl_Position = Projection * positionVS;
     f_Position = positionVS.xyz;
     f_Color = Color;
-    f_Normal = Normal;
+    f_Normal = (View * Transform * vec4(Normal, 0.0f)).xyz;
 }

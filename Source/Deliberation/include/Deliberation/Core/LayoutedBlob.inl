@@ -38,6 +38,18 @@ TypedBlobIterator<T> LayoutedBlob::iterator(const DataLayoutField & field)
 }
 
 template<typename T>
+CTypedBlobIterator<T> LayoutedBlob::citerator(const std::string & name) const
+{
+    return field<T>(name).citerator();
+}
+
+template<typename T>
+CTypedBlobIterator<T> LayoutedBlob::citerator(const DataLayoutField & field) const
+{
+    return this->field<T>(field).citerator();
+}
+
+template<typename T>
 void LayoutedBlob::assign(const std::string & name, const std::vector<T> & values)
 {
     field<T>(name).assign(values);

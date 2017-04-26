@@ -60,6 +60,11 @@ public:
         m_bunnyInstance->transform.setPosition({0.0f, 0.32f, 0.0f});
        // EnableGLErrorChecksAndLogging();
 
+
+        auto cubeModel = m_modelRenderer->addModel(DeliberationDataPath("Data/Models/cube.obj"));
+        auto cubeInstance = m_modelRenderer->addModelInstance(cubeModel);
+        cubeInstance->transform.setPosition({2.0f, 0.0f, 3.0f});
+
         m_ground->setRenderToGBuffer(true);
         m_ground->setSize(30.0f);
         m_ground->setRadius(30.0f);
@@ -116,14 +121,14 @@ private:
     Optional<SkyboxRenderer>            m_skyboxRenderer;
     Optional<DebugCubemapRenderer>      m_cubemapRenderer;
 
-    std::shared_ptr<RenderManager>          m_renderManager;
+    std::shared_ptr<RenderManager>              m_renderManager;
     std::shared_ptr<DebugGroundPlaneRenderer>   m_ground;
-    std::shared_ptr<AmbientLightRenderer>   m_ambientLightRenderer;
-    std::shared_ptr<HdrRenderer>            m_hdrRenderer;
-    std::shared_ptr<SsaoRenderer>           m_ssaoRenderer;
-    std::shared_ptr<ModelRenderer>          m_modelRenderer;
-    std::shared_ptr<Model>                  m_bunnyModel;
-    std::shared_ptr<ModelInstance>          m_bunnyInstance;
+    std::shared_ptr<AmbientLightRenderer>       m_ambientLightRenderer;
+    std::shared_ptr<HdrRenderer>                m_hdrRenderer;
+    std::shared_ptr<SsaoRenderer>               m_ssaoRenderer;
+    std::shared_ptr<ModelRenderer>              m_modelRenderer;
+    std::shared_ptr<Model>                      m_bunnyModel;
+    std::shared_ptr<ModelInstance>              m_bunnyInstance;
 };
 
 int main(int argc, char * argv[])
