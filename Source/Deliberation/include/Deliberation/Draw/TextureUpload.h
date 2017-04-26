@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/TextureBinary.h>
 
@@ -11,7 +11,7 @@ class DrawContext;
 class Texture;
 class TextureBinary;
 
-class DELIBERATION_API TextureUpload final
+class TextureUpload final
 {
 public:
     TextureUpload(DrawContext & drawContext,

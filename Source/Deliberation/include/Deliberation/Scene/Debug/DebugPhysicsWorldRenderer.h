@@ -4,7 +4,7 @@
 
 #include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -13,7 +13,7 @@ class Camera3D;
 class DrawContext;
 class PhysicsWorld;
 
-class DELIBERATION_API DebugPhysicsWorldRenderer final
+class DebugPhysicsWorldRenderer final
 {
 public:
     DebugPhysicsWorldRenderer(DrawContext & drawContext,

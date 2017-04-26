@@ -40,7 +40,7 @@ AmbientOcclusion::AmbientOcclusion(const Surface & normalDepth,
     m_output = drawContext.createTexture2D(m_normalDepth.width(),
                                        m_normalDepth.height(),
                                        PixelFormat_RGB_32_F);
-    m_effect = PostprocessingEffect(drawContext,
+    m_effect = ScreenSpaceEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusion.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusion.frag")},
                                     "AmbientOcclusion");

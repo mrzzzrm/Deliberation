@@ -2,7 +2,7 @@
 
 #include <glbinding/gl/enum.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/Types.h>
@@ -13,7 +13,7 @@ namespace deliberation
 namespace detail
 {
 
-class DELIBERATION_API UniformImpl final
+class UniformImpl final
 {
 public:
     UniformImpl();

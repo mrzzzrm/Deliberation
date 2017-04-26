@@ -7,16 +7,16 @@
 namespace deliberation
 {
 
-glm::vec3 DELIBERATION_API AnyPerpendicularVectorTo(const glm::vec3 & v);
+glm::vec3 AnyPerpendicularVectorTo(const glm::vec3 & v);
 
-glm::mat3 DELIBERATION_API RotationMatrixFromDirectionY(const glm::vec3 & y);
+glm::mat3 RotationMatrixFromDirectionY(const glm::vec3 & y);
 
-glm::mat3 DELIBERATION_API InverseDiagonalMatrix(const glm::mat3 & m);
+glm::mat3 InverseDiagonalMatrix(const glm::mat3 & m);
 
-glm::quat DELIBERATION_API QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a);
+glm::quat QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a);
 
-glm::vec2 DELIBERATION_API RotateHalfPiCW(const glm::vec2 & v);
-glm::vec2 DELIBERATION_API RotateHalfPiCCW(const glm::vec2 & v);
+glm::vec2 RotateHalfPiCW(const glm::vec2 & v);
+glm::vec2 RotateHalfPiCCW(const glm::vec2 & v);
 
 // 1, 0, -1
 template <typename T>

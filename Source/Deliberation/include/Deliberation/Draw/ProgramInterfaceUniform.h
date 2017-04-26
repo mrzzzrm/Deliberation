@@ -7,12 +7,12 @@
 
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API ProgramInterfaceUniform final
+class ProgramInterfaceUniform final
 {
 public:
     ProgramInterfaceUniform(const std::string & name,

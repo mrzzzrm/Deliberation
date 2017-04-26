@@ -7,71 +7,120 @@
 #include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Scene/Camera3D.h>
+#include <Deliberation/Scene/Pipeline/RenderNode.h>
 
 namespace deliberation
 {
 
-DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(DrawContext & drawContext, const Camera3D & camera):
-    m_drawContext(drawContext),
-    m_camera(camera)
+class DebugGroundPlaneNode:
+    public RenderNode
 {
-    m_program = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
-                                         deliberation::DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.frag")});
-    m_draw = m_drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP);
+public:
+    DebugGroundPlaneNode(DebugGroundPlaneRenderer & renderer, const std::vector<std::string> & shaders):
+        RenderNode(renderer.renderManager()),
+        m_renderer(renderer)
+    {
+        auto & drawContext = renderer.renderManager().drawContext();
 
-    m_view = m_draw.uniform("View");
-    m_projection = m_draw.uniform("Projection");
+        m_program = drawContext.createProgram(shaders);
+        m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP);
 
-    m_size = m_draw.uniform("Size");
-    m_size.set(3.0f);
+        m_view = m_draw.uniform("View");
+        m_projection = m_draw.uniform("Projection");
 
-    m_quadSize = m_draw.uniform("QuadSize");
-    m_quadSize.set(0.5f);
+        m_size = m_draw.uniform("Size");
+        m_quadSize = m_draw.uniform("QuadSize");
+        m_radius = m_draw.uniform("Radius");
 
-    m_radius = m_draw.uniform("Radius");
-    m_radius.set(3.0f);
+        LayoutedBlob vertices({"Position", Type_Vec3}, 4);
 
-    LayoutedBlob vertices({"Position", Type_Vec3}, 4);
+        auto positions = vertices.field<glm::vec3>("Position");
 
-    auto positions = vertices.field<glm::vec3>("Position");
+        positions[0] = {-1.0f, 0.0f, 1.0f};
+        positions[1] = {-1.0f, 0.0f,-1.0f};
+        positions[2] = { 1.0f, 0.0f, 1.0f};
+        positions[3] = { 1.0f, 0.0f,-1.0f};
 
-    positions[0] = {-1.0f, 0.0f, 1.0f};
-    positions[1] = {-1.0f, 0.0f,-1.0f};
-    positions[2] = { 1.0f, 0.0f, 1.0f};
-    positions[3] = { 1.0f, 0.0f,-1.0f};
+        m_draw.state().setCullState(CullState::disabled());
+        m_draw.addVertices(vertices);
+    }
 
-    m_draw.state().setCullState(CullState::disabled());
-    m_draw.addVertices(vertices);
-}
+    void render() override
+    {
+        m_size.set(m_renderer.m_size);
+        m_quadSize.set(m_renderer.m_quadSize);
+        m_radius.set(m_renderer.m_radius);
 
-void DebugGroundPlaneRenderer::setFramebuffer(Framebuffer & framebuffer)
+        m_view.set(m_renderManager.mainCamera().view());
+        m_projection.set(m_renderManager.mainCamera().projection());
+
+        m_draw.schedule();
+    }
+
+protected:
+    DebugGroundPlaneRenderer &  m_renderer;
+    Program                     m_program;
+    Draw                        m_draw;
+    Uniform                     m_view;
+    Uniform                     m_projection;
+    Uniform                     m_size;
+    Uniform                     m_quadSize;
+    Uniform                     m_radius;
+};
+
+class DebugGroundPlaneForwardNode:
+    public DebugGroundPlaneNode
 {
-    m_draw.setFramebuffer(framebuffer);
+public:
+    DebugGroundPlaneForwardNode(DebugGroundPlaneRenderer & renderer):
+        DebugGroundPlaneNode(renderer, {DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
+                                        DeliberationDataPath("Data/Shaders/DebugGroundPlaneRendererForward.frag")})
+    {}
+};
+
+class DebugGroundPlaneGBufferNode:
+    public DebugGroundPlaneNode
+{
+public:
+    DebugGroundPlaneGBufferNode(DebugGroundPlaneRenderer & renderer):
+        DebugGroundPlaneNode(renderer, {DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
+                                        DeliberationDataPath("Data/Shaders/DebugGroundPlaneRendererGBuffer.frag")})
+    {
+        m_draw.setFramebuffer(m_renderManager.gbuffer());
+    }
+};
+
+DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(RenderManager & renderManager):
+    Renderer(renderManager)
+{
 }
 
 void DebugGroundPlaneRenderer::setSize(float size)
 {
-    m_size.set(size);
+    m_size = size;
 }
 
 void DebugGroundPlaneRenderer::setQuadSize(float quadSize)
 {
-    m_quadSize.set(quadSize);
+    m_quadSize = quadSize;
 }
 
 void DebugGroundPlaneRenderer::setRadius(float radius)
 {
-    m_radius.set(radius);
+    m_radius = radius;
 }
 
-void DebugGroundPlaneRenderer::render()
+void DebugGroundPlaneRenderer::registerRenderNodes()
 {
-    m_view.set(m_camera.view());
-    m_projection.set(m_camera.projection());
-
-    m_draw.schedule();
+    if (m_renderToGBuffer)
+    {
+        m_renderManager.registerRenderNode(std::make_shared<DebugGroundPlaneGBufferNode>(*this), RenderPhase::GBuffer);
+    }
+    else
+    {
+        m_renderManager.registerRenderNode(std::make_shared<DebugGroundPlaneForwardNode>(*this), RenderPhase::Forward);
+    }
 }
-
 
 }
 

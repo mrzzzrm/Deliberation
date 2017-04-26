@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/SparseVector.h>
 
@@ -14,7 +14,7 @@ namespace deliberation
 
 class World;
 
-class DELIBERATION_API SystemBase
+class SystemBase
 {
 public:
     SystemBase(World & world, const ComponentFilter & filter);

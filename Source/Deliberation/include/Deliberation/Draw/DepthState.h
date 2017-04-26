@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -26,9 +26,10 @@ enum class DepthWrite
     Disabled
 };
 
-class DELIBERATION_API DepthState final
+class DepthState final
 {
 public:
+    static DepthState enabled();
     static DepthState disabledRW();
     static DepthState disabledR();
     static DepthState disabledW(DepthTest depthTest = DepthTest::Enabled);

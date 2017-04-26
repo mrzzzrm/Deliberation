@@ -25,7 +25,7 @@ AmbientOcclusionBlur::AmbientOcclusionBlur(const Surface & occlusion, const Surf
                                        m_occlusion.height(),
                                        PixelFormat_R_8_UN);
 
-    m_effect = PostprocessingEffect(drawContext,
+    m_effect = ScreenSpaceEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionBlur.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionBlur.frag")},
                                     "AmbientOcclusionBlur");

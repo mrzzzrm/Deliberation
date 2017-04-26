@@ -11,7 +11,7 @@ namespace deliberation
 class Camera3D;
 class DrawContext;
 
-class DELIBERATION_API SkyboxRenderer final
+class SkyboxRenderer final
 {
 public:
     SkyboxRenderer(DrawContext & drawContext, const Camera3D & camera, const Texture & cubemap);

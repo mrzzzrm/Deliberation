@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/SurfaceDownload.h>
 #include <Deliberation/Draw/Texture.h>
@@ -19,7 +19,7 @@ namespace detail
 class DrawContext;
 class SurfaceDownloadImpl;
 
-class DELIBERATION_API Surface final
+class Surface final
 {
 public:
     Surface();

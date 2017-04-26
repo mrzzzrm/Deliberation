@@ -4,12 +4,12 @@
 
 #include <Deliberation/Scene/Mesh.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API ConeMesh final
+class ConeMesh final
 {
 public:
     ConeMesh(float radius, float height, uint numSegments = 8);

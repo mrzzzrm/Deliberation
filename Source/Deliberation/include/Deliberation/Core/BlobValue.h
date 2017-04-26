@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -25,7 +25,7 @@ protected:
     Type      m_type;
 };
 
-class DELIBERATION_API CBlobValue final:
+class CBlobValue final:
     public BlobValueBase<const void>
 {
 public:
@@ -35,7 +35,7 @@ private:
     friend class BlobValue;
 };
 
-class DELIBERATION_API BlobValue final:
+class BlobValue final:
     public BlobValueBase<void>
 {
 public:

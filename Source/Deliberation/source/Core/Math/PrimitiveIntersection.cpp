@@ -37,7 +37,7 @@ bool NormalizedRay3DSphereIntersection(const glm::vec3 & origin,
     return b * b - c >= 0;
 }
 
-bool DELIBERATION_API LineSphereIntersection(const glm::vec3 & origin,
+bool LineSphereIntersection(const glm::vec3 & origin,
                                              const glm::vec3 & delta,
                                              const glm::vec3 & center,
                                              float radius)
@@ -138,7 +138,7 @@ glm::vec3 Ray3DPlaneIntersection(const glm::vec3 & normal,
     }
 }
 
-glm::vec2 DELIBERATION_API Rect3DRay3DIntersectionPoint(const glm::vec3 & base,
+glm::vec2 Rect3DRay3DIntersectionPoint(const glm::vec3 & base,
                                                         const glm::vec3 & right,
                                                         const glm::vec3 & up,
                                                         const glm::vec3 & origin,

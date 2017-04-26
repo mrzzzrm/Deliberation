@@ -5,12 +5,12 @@
 
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API DataLayoutField final
+class DataLayoutField final
 {
 public:
     struct Desc

@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Detail/INamedDataMemberOfImpl.h>
 #include <Deliberation/Core/OffsetOf.h>
@@ -16,7 +16,7 @@ namespace detail
 {
 
 template<typename T>
-class DELIBERATION_API NamedDataMemberOf final
+class NamedDataMemberOf final
 {
 public:
     template<typename U>

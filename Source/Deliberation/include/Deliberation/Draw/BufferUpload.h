@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Blob.h>
 
@@ -12,7 +12,7 @@ namespace deliberation
 class Buffer;
 class DrawContext;
 
-class DELIBERATION_API BufferUpload final
+class BufferUpload final
 {
 public:
     BufferUpload(DrawContext & drawContext, Buffer & buffer, const Blob & data);

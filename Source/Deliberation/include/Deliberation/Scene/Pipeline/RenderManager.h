@@ -27,6 +27,7 @@ public:
     Camera3D & mainCamera() { return m_mainCamera; }
     Framebuffer & gbuffer() { return m_gbuffer; }
     Framebuffer & hdrBuffer() { return m_hdrBuffer; }
+    Framebuffer & ssaoBuffer() { return m_ssaoBuffer; }
 
     template<typename T, typename ... Args>
     std::shared_ptr<T> addRenderer(Args &&... args);
@@ -44,6 +45,7 @@ private:
     LinearMap<std::vector<std::shared_ptr<RenderNode>>> m_renderNodesByPhase;
     Framebuffer                                         m_gbuffer;
     Framebuffer                                         m_hdrBuffer;
+    Framebuffer                                         m_ssaoBuffer;
 };
 
 }

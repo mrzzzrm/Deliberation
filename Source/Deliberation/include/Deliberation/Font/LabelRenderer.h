@@ -6,7 +6,7 @@
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Sampler.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -15,7 +15,7 @@ class DrawContext;
 class Label;
 class Viewport;
 
-class DELIBERATION_API LabelRenderer final
+class LabelRenderer final
 {
 public:
     LabelRenderer();

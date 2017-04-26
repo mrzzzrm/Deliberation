@@ -4,7 +4,7 @@
 
 #include <glbinding/gl/enum.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {

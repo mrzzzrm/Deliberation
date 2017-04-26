@@ -5,12 +5,12 @@
 #include <Deliberation/Core/ElementalTypes.h>
 #include <Deliberation/Core/IntTypes.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API Type final
+class Type final
 {
 public:
     template<typename T>

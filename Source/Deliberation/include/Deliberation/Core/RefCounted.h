@@ -7,7 +7,7 @@
 //namespace deliberation
 //{
 //
-//class DELIBERATION_API RefCounted
+//class RefCounted
 //{
 //public:
 //    virtual ~RefCounted() = default;

@@ -2,12 +2,12 @@
 
 #include <Deliberation/Core/DataLayout.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API ProgramInterfaceUniformBlock final
+class ProgramInterfaceUniformBlock final
 {
 public:
     ProgramInterfaceUniformBlock(const std::string & name, const DataLayout & layout, unsigned int index);

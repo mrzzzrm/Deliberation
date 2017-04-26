@@ -14,6 +14,8 @@ public:
     Renderer(RenderManager & renderManager): m_renderManager(renderManager) {}
     virtual ~Renderer() = default;
 
+    RenderManager & renderManager() const { return m_renderManager; }
+
     virtual void registerRenderNodes() = 0;
 
 protected:

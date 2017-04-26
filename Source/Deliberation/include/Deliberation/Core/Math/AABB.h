@@ -4,14 +4,14 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class Sphere;
 
-class DELIBERATION_API AABB final
+class AABB final
 {
 public:
     static AABB containingPoints(const std::vector<glm::vec3> & points);

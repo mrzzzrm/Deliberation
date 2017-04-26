@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/BlobValue.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 #include "DataLayoutField.h"
 
 namespace deliberation
@@ -16,7 +16,7 @@ class LayoutedBlob;
 class LayoutedBlobElement;
 
 template<typename BlobType>
-class DELIBERATION_API LayoutedBlobElementBase
+class LayoutedBlobElementBase
 {
 public:
     using Base = LayoutedBlobElementBase<BlobType>;
@@ -40,7 +40,7 @@ protected:
     size_t              m_index = 0;
 };
 
-class DELIBERATION_API CLayoutedBlobElement final:
+class CLayoutedBlobElement final:
     public LayoutedBlobElementBase<const Blob>
 {
 public:
@@ -54,7 +54,7 @@ private:
     CLayoutedBlobElement(const Blob & blob, const DataLayout & layout, size_t index);
 };
 
-class DELIBERATION_API LayoutedBlobElement final:
+class LayoutedBlobElement final:
     public LayoutedBlobElementBase<Blob>
 {
 public:

@@ -4,7 +4,7 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/TextureUpload.h>
@@ -21,7 +21,7 @@ namespace detail
 class Surface;
 class TextureBinary;
 
-class DELIBERATION_API Texture final
+class Texture final
 {
 public:
     Texture();

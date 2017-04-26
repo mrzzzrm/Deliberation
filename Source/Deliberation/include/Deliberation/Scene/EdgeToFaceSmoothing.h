@@ -4,14 +4,14 @@
 
 #include <Deliberation/Core/IntTypes.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class Mesh;
 
-class DELIBERATION_API EdgeToFaceSmoothing final
+class EdgeToFaceSmoothing final
 {
 public:
     EdgeToFaceSmoothing(const Mesh & sourceMesh);

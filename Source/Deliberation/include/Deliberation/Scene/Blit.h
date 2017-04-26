@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Optional.h>
 #include <Deliberation/Core/Viewport.h>
@@ -17,7 +17,7 @@ namespace deliberation
         Blit from Surface to another Surface
 */
 
-class DELIBERATION_API Blit final
+class Blit final
 {
 public:
     Blit();

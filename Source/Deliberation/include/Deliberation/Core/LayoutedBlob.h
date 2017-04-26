@@ -8,14 +8,14 @@
 #include <Deliberation/Core/LayoutedBlobElement.h>
 #include <Deliberation/Core/TypedBlobValueAccessor.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class DataLayout;
 
-class DELIBERATION_API LayoutedBlob final
+class LayoutedBlob final
 {
 public:
     template<typename T> using Field = TypedBlobValueAccessor<T>;

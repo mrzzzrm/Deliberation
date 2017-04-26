@@ -16,7 +16,7 @@ class DataLayout;
 class DataLayoutField;
 
 template<typename BlobType>
-struct DELIBERATION_API BlobValueAccessorData final
+struct BlobValueAccessorData final
 {
     BlobValueAccessorData(BlobType & data,
                           const DataLayout & layout,
@@ -27,7 +27,7 @@ struct DELIBERATION_API BlobValueAccessorData final
     const DataLayoutField & field;
 };
 
-class DELIBERATION_API CBlobValueAccessor final
+class CBlobValueAccessor final
 {
 public:
     CBlobValueAccessor() = default;
@@ -39,7 +39,7 @@ private:
     Optional<BlobValueAccessorData<const Blob>> m_data;
 };
 
-class DELIBERATION_API BlobValueAccessor final
+class BlobValueAccessor final
 {
 public:
     BlobValueAccessor() = default;

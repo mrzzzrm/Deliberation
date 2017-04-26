@@ -6,12 +6,12 @@
 #include <Deliberation/Scene/Mesh.h>
 #include <Deliberation/Scene/MeshData.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API UVSphere
+class UVSphere
 {
 public:
     UVSphere();

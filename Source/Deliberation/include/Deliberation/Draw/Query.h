@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <memory>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/Enum.h>
 
@@ -15,7 +15,7 @@ namespace detail
     class QueryImpl;
 }
 
-class DELIBERATION_API Query final
+class Query final
 {
 public:
     Query();

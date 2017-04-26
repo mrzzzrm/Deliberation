@@ -7,12 +7,12 @@
 #include <Deliberation/Core/Detail/NamedDataMemberOf.h>
 #include <Deliberation/Core/DataLayoutField.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API DataLayout final
+class DataLayout final
 {
 public:
     template<typename T>

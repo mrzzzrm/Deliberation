@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/Optional.h>
@@ -29,7 +29,7 @@ namespace detail
         Members should be public
 */
 
-class DELIBERATION_API FramebufferImpl final
+class FramebufferImpl final
 {
 public:
     static std::shared_ptr<FramebufferImpl> backbuffer(DrawContext & drawContext,

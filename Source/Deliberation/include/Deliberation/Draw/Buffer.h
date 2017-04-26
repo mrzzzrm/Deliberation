@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/DataLayout.h>
@@ -27,7 +27,7 @@ namespace detail
 class DrawContext;
 class LayoutedBlob;
 
-class DELIBERATION_API Buffer final
+class Buffer final
 {
 public:
     Buffer();

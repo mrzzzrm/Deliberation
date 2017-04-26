@@ -2,7 +2,7 @@
 
 #include <Deliberation/Physics/Contacts/Contact.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -10,7 +10,7 @@ namespace deliberation
 class CollisionObject;
 class SphereShape;
 
-class DELIBERATION_API SphereContact:
+class SphereContact:
     public Contact
 {
 public:

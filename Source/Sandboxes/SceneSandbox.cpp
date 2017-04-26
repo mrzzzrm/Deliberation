@@ -27,10 +27,13 @@
 #include <Deliberation/Scene/Debug/DebugCubemapRenderer.h>
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Lighting/AmbientLightRenderer.h>
 #include <Deliberation/Scene/Model/Model.h>
 #include <Deliberation/Scene/Model/ModelRenderer.h>
 #include <Deliberation/Scene/Model/ModelInstance.h>
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
+#include <Deliberation/Scene/HdrRenderer.h>
+#include <Deliberation/Scene/SsaoRenderer.h>
 
 using namespace deliberation;
 
@@ -48,14 +51,19 @@ public:
     {
         m_renderManager = std::make_shared<RenderManager>(drawContext());
         m_modelRenderer = m_renderManager->addRenderer<ModelRenderer>();
+        m_ambientLightRenderer = m_renderManager->addRenderer<AmbientLightRenderer>();
+        m_ssaoRenderer = m_renderManager->addRenderer<SsaoRenderer>();
+        m_hdrRenderer = m_renderManager->addRenderer<HdrRenderer>();
+        m_ground = m_renderManager->addRenderer<DebugGroundPlaneRenderer>();
         m_bunnyModel = m_modelRenderer->addModel(DeliberationDataPath("Data/Models/bunny.obj"));
         m_bunnyInstance = m_modelRenderer->addModelInstance(m_bunnyModel);
-        
+        m_bunnyInstance->transform.setPosition({0.0f, 0.32f, 0.0f});
        // EnableGLErrorChecksAndLogging();
 
-        m_ground.reset(drawContext(), m_renderManager->mainCamera());
-        m_ground.get().setSize(30.0f);
-        m_ground.get().setRadius(10.0f);
+        m_ground->setRenderToGBuffer(true);
+        m_ground->setSize(30.0f);
+        m_ground->setRadius(30.0f);
+        m_ground->setQuadSize(1.0f);
 
         m_renderManager->mainCamera().setPosition({0.0f, 1.0f, 3.0f});
         m_renderManager->mainCamera().setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
@@ -96,7 +104,6 @@ public:
 
         m_cubemapRenderer->render();
         m_skyboxRenderer->render();
-        m_ground.get().render();
 
         m_renderManager->render();
     }
@@ -104,15 +111,16 @@ public:
 private:
     Draw                                m_draw;
     Clear                               m_clear;
-    Optional<DebugGroundPlaneRenderer>  m_ground;
     Transform3D                         m_transform;
     Optional<DebugCameraNavigator3D>    m_navigator;
     Optional<SkyboxRenderer>            m_skyboxRenderer;
     Optional<DebugCubemapRenderer>      m_cubemapRenderer;
 
     std::shared_ptr<RenderManager>          m_renderManager;
+    std::shared_ptr<DebugGroundPlaneRenderer>   m_ground;
     std::shared_ptr<AmbientLightRenderer>   m_ambientLightRenderer;
     std::shared_ptr<HdrRenderer>            m_hdrRenderer;
+    std::shared_ptr<SsaoRenderer>           m_ssaoRenderer;
     std::shared_ptr<ModelRenderer>          m_modelRenderer;
     std::shared_ptr<Model>                  m_bunnyModel;
     std::shared_ptr<ModelInstance>          m_bunnyInstance;

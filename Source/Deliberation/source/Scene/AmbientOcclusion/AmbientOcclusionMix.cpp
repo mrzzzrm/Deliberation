@@ -27,7 +27,7 @@ AmbientOcclusionMix::AmbientOcclusionMix(const Surface & occlusion,
                                        occlusion.height(),
                                        color.format());
 
-    m_effect = PostprocessingEffect(drawContext,
+    m_effect = ScreenSpaceEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.frag")},
                                     "AmbientOcclusionMix");

@@ -2,7 +2,7 @@
 
 #include <glbinding/gl/enum.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -14,7 +14,7 @@ namespace detail
 
 class Texture;
 
-class DELIBERATION_API Sampler final
+class Sampler final
 {
 public:
     Sampler();

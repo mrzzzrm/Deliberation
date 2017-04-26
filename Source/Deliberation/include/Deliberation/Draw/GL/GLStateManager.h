@@ -7,7 +7,7 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -15,7 +15,7 @@ namespace deliberation
 class GLFramebuffer;
 class GLFramebufferDesc;
 
-class DELIBERATION_API GLStateManager final
+class GLStateManager final
 {
 public:
     GLStateManager();

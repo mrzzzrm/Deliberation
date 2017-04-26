@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Physics/Broadphase.h>
 
 namespace deliberation
 {
 
-class DELIBERATION_API ReferenceBroadphase final:
+class ReferenceBroadphase final:
     public Broadphase
 {
 public:

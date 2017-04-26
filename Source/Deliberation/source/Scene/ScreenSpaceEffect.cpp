@@ -1,4 +1,4 @@
-#include <Deliberation/Scene/PostprocessingEffect.h>
+#include <Deliberation/Scene/ScreenSpaceEffect.h>
 
 #include <iostream>
 #include <vector>
@@ -15,20 +15,18 @@
 namespace deliberation
 {
 
-PostprocessingEffect::PostprocessingEffect():
+ScreenSpaceEffect::ScreenSpaceEffect():
     m_initialised(false)
 {
 
 }
 
-PostprocessingEffect::PostprocessingEffect(DrawContext & drawContext,
+ScreenSpaceEffect::ScreenSpaceEffect(DrawContext & drawContext,
                                            const std::vector<std::string> & shaders,
                                            const std::string & name):
     m_initialised(true)
 {
     m_program = drawContext.createProgram(shaders);
-
-    std::cout << m_program.interface().toString() << std::endl;
 
     std::vector<glm::vec2> vertices({
         {-1.0f, -1.0f},
@@ -41,24 +39,35 @@ PostprocessingEffect::PostprocessingEffect(DrawContext & drawContext,
     m_vertexBuffer = drawContext.createBuffer(layout);
     m_vertexBuffer.scheduleUpload(vertices);
 
-    m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "PostprocessingEffect" : name);
+    m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "ScreenSpaceEffect" : name);
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.state().setDepthState(DepthState::disabledRW());
+
+    if (m_program.interface().attribute("UV"))
+    {
+        LayoutedBlob uvs({"UV", Type_Vec2}, 4);
+        uvs.assign<glm::vec2>("UV",
+                              {{0.0f, 0.0f},
+                               {1.0f, 0.0f},
+                               {0.0f, 1.0f},
+                               {1.0f, 1.0f}});
+        m_draw.addVertices(uvs);
+    }
 }
 
-Draw & PostprocessingEffect::draw()
+Draw & ScreenSpaceEffect::draw()
 {
     Assert(m_initialised, "");
     return m_draw;
 }
 
-const Draw & PostprocessingEffect::draw() const
+const Draw & ScreenSpaceEffect::draw() const
 {
     Assert(m_initialised, "");
     return m_draw;
 }
 
-void PostprocessingEffect::schedule()
+void ScreenSpaceEffect::schedule()
 {
     Assert(m_initialised, "");
     m_draw.schedule();

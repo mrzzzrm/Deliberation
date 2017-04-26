@@ -11,7 +11,7 @@
 
 #include <Deliberation/Font/Label.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -19,7 +19,7 @@ namespace deliberation
 class LabelRenderer;
 class Font;
 
-class DELIBERATION_API MultilineLabel final
+class MultilineLabel final
 {
 public:
     MultilineLabel(const Font & font);

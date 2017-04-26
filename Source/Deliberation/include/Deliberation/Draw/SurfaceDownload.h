@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/SurfaceBinary.h>
 
@@ -10,7 +10,7 @@ namespace deliberation
 class DrawContext;
 class SurfaceDownloadImpl;
 
-class DELIBERATION_API SurfaceDownload final
+class SurfaceDownload final
 {
 public:
     SurfaceDownload();

@@ -216,17 +216,18 @@ set(sources
     ${source_path}/Scene/ConeMesh.cpp
     ${source_path}/Scene/CuboidMesh.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
+    ${source_path}/Scene/HdrRenderer.cpp
     ${source_path}/Scene/Mesh.cpp
     ${source_path}/Scene/MeshData.cpp
     ${source_path}/Scene/MeshCompiler.cpp
-    ${source_path}/Scene/PostprocessingEffect.cpp
+    ${source_path}/Scene/ScreenSpaceEffect.cpp
+    ${source_path}/Scene/SsaoRenderer.cpp
     ${source_path}/Scene/UVSphere.cpp
     ${source_path}/Scene/SkyboxRenderer.cpp)
 
 # api_includes
 set(api_includes
     ${include_path}/Deliberation.h
-    ${include_path}/Deliberation_API.h
 
     ${include_path}/Core/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Core/Detail/INamedDataMemberOfImpl.inl
@@ -432,10 +433,12 @@ set(api_includes
     ${include_path}/Scene/ConeMesh.h
     ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
+    ${include_path}/Scene/HdrRenderer.h
     ${include_path}/Scene/Mesh.h
     ${include_path}/Scene/MeshData.h
     ${include_path}/Scene/MeshCompiler.h
-    ${include_path}/Scene/PostprocessingEffect.h
+    ${include_path}/Scene/ScreenSpaceEffect.h
+    ${include_path}/Scene/SsaoRenderer.h
     ${include_path}/Scene/UVSphere.h
     ${include_path}/Scene/SkyboxRenderer.h)
 

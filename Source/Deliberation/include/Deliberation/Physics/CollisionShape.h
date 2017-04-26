@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Math/AABB.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -18,7 +18,7 @@ enum CollisionShapeType
     CollisionShape_End
 };
 
-class DELIBERATION_API CollisionShape
+class CollisionShape
 {
 public:
     CollisionShape(int type);

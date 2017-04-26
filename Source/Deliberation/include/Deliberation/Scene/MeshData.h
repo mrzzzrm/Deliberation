@@ -4,12 +4,12 @@
 
 #include <Deliberation/Draw/Texture.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API MeshData
+class MeshData
 {
 public:
     MeshData() = default;

@@ -6,14 +6,14 @@
 
 #include <Deliberation/Core/InputBase.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class DrawContext;
 
-class DELIBERATION_API Input:
+class Input:
     public InputBase
 {
 public:

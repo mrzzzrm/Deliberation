@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Math/AABB.h>
 
@@ -9,7 +9,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API SphereShape:
+class SphereShape:
     public CollisionShape
 {
 public:

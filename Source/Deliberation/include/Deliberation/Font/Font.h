@@ -8,7 +8,7 @@
 
 #include <SDL_ttf.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -21,7 +21,7 @@ namespace detail
 class DrawContext;
 class Texture;
 
-class DELIBERATION_API Font final
+class Font final
 {
 public:
     Font();

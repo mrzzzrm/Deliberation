@@ -14,7 +14,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API DebugCubemapRenderer final
+class DebugCubemapRenderer final
 {
 public:
     enum class MeshType

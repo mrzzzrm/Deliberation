@@ -18,7 +18,7 @@ namespace deliberation
 class DrawContext;
 class InputBase;
 
-class DELIBERATION_API ImGuiSystem:
+class ImGuiSystem:
     public std::enable_shared_from_this<ImGuiSystem>,
     public System<ImGuiSystem>,
     public InputLayer

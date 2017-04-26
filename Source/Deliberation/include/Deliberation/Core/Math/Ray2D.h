@@ -2,14 +2,14 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class Sphere;
 
-class DELIBERATION_API Ray2D final
+class Ray2D final
 {
 public:
     static Ray2D fromTo(const glm::vec2 & from, const glm::vec2 & to);

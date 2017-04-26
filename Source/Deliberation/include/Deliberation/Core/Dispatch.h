@@ -4,13 +4,13 @@
 
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 template<typename T>
-class DELIBERATION_API DoubleDispatch final
+class DoubleDispatch final
 {
 public:
     bool contains(size_t a, size_t b) const;

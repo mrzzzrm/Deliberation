@@ -4,12 +4,12 @@
 
 #include <string>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API ProgramInterfaceFragmentOutput final
+class ProgramInterfaceFragmentOutput final
 {
 public:
     ProgramInterfaceFragmentOutput(const std::string & name,

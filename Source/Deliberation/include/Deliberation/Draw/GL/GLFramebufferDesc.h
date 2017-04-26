@@ -5,12 +5,12 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API GLFramebufferDesc final
+class GLFramebufferDesc final
 {
 public:
     struct DepthAttachment

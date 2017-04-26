@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -17,7 +17,7 @@ namespace detail
 class DrawContext;
 class ProgramInterface;
 
-class DELIBERATION_API Program final
+class Program final
 {
 public:
     Program();

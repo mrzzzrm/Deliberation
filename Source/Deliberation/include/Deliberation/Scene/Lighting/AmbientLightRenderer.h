@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Draw/Draw.h>
+
 #include <Deliberation/Scene/Pipeline/Renderer.h>
 
 namespace deliberation
@@ -17,11 +19,13 @@ public:
 
     void setColor(const glm::vec3 & color) { m_color = color; }
 
-    void render() override;
+    void registerRenderNodes() override;
 
 private:
-    glm::vec3   m_color;
-    Draw        m_draw;
+    friend class AmbientLightNode;
+
+private:
+    glm::vec3 m_color;
 };
 
 }

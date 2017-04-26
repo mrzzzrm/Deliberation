@@ -6,12 +6,12 @@
 
 #include <Deliberation/Physics/CollisionShape.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API BoxShape final:
+class BoxShape final:
     public CollisionShape
 {
 public:

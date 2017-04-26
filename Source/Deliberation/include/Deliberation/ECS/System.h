@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/ECS/SystemBase.h>
 
@@ -8,7 +8,7 @@ namespace deliberation
 {
 
 template<typename T>
-class DELIBERATION_API System:
+class System:
     public SystemBase
 {
 public:

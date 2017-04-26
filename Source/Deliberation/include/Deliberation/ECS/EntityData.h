@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/SparseVector.h>
 
@@ -21,7 +21,7 @@ enum class EntityPhase
     ScheduledForRemoval
 };
 
-struct DELIBERATION_API EntityData
+struct EntityData
 {
     EntityData();
     EntityData(EntityId id, const std::string & name, EntityId parent);

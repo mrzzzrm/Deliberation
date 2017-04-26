@@ -6,7 +6,7 @@
 
 #include <boost/optional.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Optional.h>
 
@@ -14,11 +14,11 @@ namespace deliberation
 {
 
 template<typename T>
-class DELIBERATION_API SparseVector final
+class SparseVector final
 {
 public:
     template<typename QVecT, typename QValT>
-    class DELIBERATION_API IteratorT final
+    class IteratorT final
     {
     public:
         IteratorT(QVecT & vec, std::size_t index);

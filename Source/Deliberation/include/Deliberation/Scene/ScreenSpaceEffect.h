@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Draw.h>
@@ -14,11 +14,11 @@ namespace deliberation
 
 class DrawContext;
 
-class DELIBERATION_API PostprocessingEffect final
+class ScreenSpaceEffect final
 {
 public:
-    PostprocessingEffect();
-    PostprocessingEffect(DrawContext & drawContext,
+    ScreenSpaceEffect();
+    ScreenSpaceEffect(DrawContext & drawContext,
                          const std::vector<std::string> & shaders,
                          const std::string & name = std::string());
 

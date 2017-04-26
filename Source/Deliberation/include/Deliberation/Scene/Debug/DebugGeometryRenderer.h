@@ -27,7 +27,7 @@ class DebugGeometryRenderer;
 class DebugGeometryManager;
 class Transform3D;
 
-class DELIBERATION_API DebugGeometryInstance
+class DebugGeometryInstance
 {
 public:
     DebugGeometryInstance(DebugGeometryRenderer & renderer);
@@ -51,7 +51,7 @@ protected:
     mutable bool            m_transformDirty = true;
 };
 
-class DELIBERATION_API DebugBoxInstance final:
+class DebugBoxInstance final:
     public DebugGeometryInstance
 {
 public:
@@ -79,7 +79,7 @@ private:
     mutable Uniform m_transformUniform;
 };
 
-class DELIBERATION_API DebugPointInstance final:
+class DebugPointInstance final:
     public DebugGeometryInstance
 {
 public:
@@ -98,7 +98,7 @@ private:
     Uniform         m_colorUniform;
 };
 
-class DELIBERATION_API DebugArrowInstance final:
+class DebugArrowInstance final:
     public DebugGeometryInstance
 {
 public:
@@ -131,7 +131,7 @@ private:
     glm::vec3       m_color;
 };
 
-class DELIBERATION_API DebugWireframeInstance final:
+class DebugWireframeInstance final:
     public DebugGeometryInstance
 {
 public:
@@ -154,7 +154,7 @@ private:
     glm::vec3       m_color;
 };
 
-class DELIBERATION_API DebugSphereInstance final:
+class DebugSphereInstance final:
     public DebugGeometryInstance
 {
 public:
@@ -177,7 +177,7 @@ private:
     bool            m_dirty = true;
 };
 
-class DELIBERATION_API DebugPoseInstance final:
+class DebugPoseInstance final:
     public DebugGeometryInstance
 {
 public:
@@ -196,7 +196,7 @@ private:
         boost::optional<DebugArrowInstance>, 3> m_arrows;
 };
 
-class DELIBERATION_API DebugGeometryRenderer final
+class DebugGeometryRenderer final
 {
 public:
     static constexpr size_t NO_INDEX = std::numeric_limits<size_t>::max();

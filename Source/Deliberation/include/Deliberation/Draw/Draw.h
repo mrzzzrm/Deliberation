@@ -30,7 +30,7 @@ class DrawContext;
 class Framebuffer;
 class DrawState;
 
-class DELIBERATION_API Draw final
+class Draw final
 {
 public:
     Draw();

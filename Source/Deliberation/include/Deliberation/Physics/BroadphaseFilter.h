@@ -7,7 +7,7 @@ namespace deliberation
 
 class BroadphaseProxy;
 
-class DELIBERATION_API BroadphaseFilter
+class BroadphaseFilter
 {
 public:
     virtual ~BroadphaseFilter();
@@ -15,7 +15,7 @@ public:
     virtual bool accepts(const BroadphaseProxy & proxy) const;
 };
 
-class DELIBERATION_API BroadphaseBlacklistFilter:
+class BroadphaseBlacklistFilter:
     public BroadphaseBlacklistFilter
 {
 public:

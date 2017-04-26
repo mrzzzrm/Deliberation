@@ -9,7 +9,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API FpsCounter
+class FpsCounter
 {
 public:
     static constexpr size_t BACKLOG_CAPACITY = 15;

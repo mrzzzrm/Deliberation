@@ -9,10 +9,6 @@
 namespace deliberation
 {
 
-Framebuffer::Framebuffer() = default;
-
-Framebuffer::~Framebuffer() = default;
-
 unsigned int Framebuffer::width() const
 {
     Assert(m_impl.get(), "Framebuffer is hollow");

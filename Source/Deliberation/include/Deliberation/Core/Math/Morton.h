@@ -4,14 +4,14 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 constexpr float INVALID_MORTON_KEY = std::numeric_limits<uint32_t>::max();
 
-class DELIBERATION_API Morton2D final
+class Morton2D final
 {
 public:
     static inline unsigned int NumKeysAtLevel(unsigned int depth);
@@ -29,7 +29,7 @@ private:
     uint32_t m_key;
 };
 
-class DELIBERATION_API Morton3D final
+class Morton3D final
 {
 public:
     static inline unsigned int NumKeysAtLevel(unsigned int depth);

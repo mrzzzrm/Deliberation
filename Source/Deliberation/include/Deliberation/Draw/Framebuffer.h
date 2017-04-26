@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Optional.h>
 
@@ -26,16 +26,14 @@ class ClearExecution;
 class DrawContext;
 class Surface;
 
-class DELIBERATION_API Framebuffer final
+class Framebuffer final
 {
 public:
-    Framebuffer();
-    ~Framebuffer();
-
-    glm::uvec2 size() const { return {width(), height()}; }
+    Framebuffer() = default;
 
     unsigned int width() const;
     unsigned int height() const;
+    glm::uvec2 size() const { return {width(), height()}; }
 
     bool isBackbuffer() const;
 
@@ -48,7 +46,6 @@ public:
     const Surface * depthTarget() const;
 
     void setRenderTarget(unsigned int index, Surface * surface);
-
     void setDepthTarget(Surface * surface);
 
     void addRenderTarget(PixelFormat format, int index = -1);

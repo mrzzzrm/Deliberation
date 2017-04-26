@@ -11,7 +11,7 @@ namespace deliberation
 
 class SystemBase;
 
-class DELIBERATION_API WorldProfilerScope final
+class WorldProfilerScope final
 {
 public:
     WorldProfilerScope(SystemBase & system,
@@ -28,7 +28,7 @@ private:
     DurationMicros      m_micros;
 };
 
-class DELIBERATION_API WorldProfiler final
+class WorldProfiler final
 {
 public:
     const std::vector<WorldProfilerScope> & scopes() const;

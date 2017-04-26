@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/SparseVector.h>

@@ -9,8 +9,8 @@ namespace deliberation
 
 constexpr float FLOAT_COMPARE_EPSILON = 0.0001f;
 
-inline bool DELIBERATION_API EpsilonEq(const float a, const float b);
-inline bool DELIBERATION_API EpsilonGt(const float a, const float b);
+inline bool EpsilonEq(const float a, const float b);
+inline bool EpsilonGt(const float a, const float b);
 
 }
 

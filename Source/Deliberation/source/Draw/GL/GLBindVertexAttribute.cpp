@@ -63,7 +63,7 @@ void GLBindVertexAttribute(
     } 
 }
 
-void DELIBERATION_API GLBindVertexAttribute(gl::GLuint vao,
+void GLBindVertexAttribute(gl::GLuint vao,
                                             const ProgramInterfaceVertexAttribute & attribute,
                                             const void * data)
 {

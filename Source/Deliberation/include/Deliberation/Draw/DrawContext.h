@@ -4,7 +4,7 @@
 
 #include "SDL.h"
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/DataLayout.h>
 
@@ -30,7 +30,7 @@ namespace detail
     class QueryImpl;
 }
 
-class DELIBERATION_API DrawContext final
+class DrawContext final
 {
 public:
     DrawContext(unsigned int backbufferWidth = 640u, unsigned int backbufferHeight = 480u);

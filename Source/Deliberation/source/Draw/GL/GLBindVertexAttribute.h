@@ -18,7 +18,7 @@ namespace detail
 /**
  * From Buffer
  */
-void DELIBERATION_API GLBindVertexAttribute(
+void GLBindVertexAttribute(
     gl::GLuint vao,
     const ProgramInterfaceVertexAttribute & attribute,
     const detail::BufferImpl & buffer,
@@ -29,7 +29,7 @@ void DELIBERATION_API GLBindVertexAttribute(
 /**
  * From Value
  */
-void DELIBERATION_API GLBindVertexAttribute(
+void GLBindVertexAttribute(
     gl::GLuint vao,
     const ProgramInterfaceVertexAttribute & attribute,
     const void * data);
