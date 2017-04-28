@@ -24,4 +24,4 @@ public:
 
 }
 
-#include "INamedDataMemberOfImpl.inl"
+#include <Deliberation/Core/Detail/INamedDataMemberOfImpl.inl>

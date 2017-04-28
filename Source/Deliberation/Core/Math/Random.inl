@@ -5,7 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include <Deliberation/Core/Assert.h>
-#include "FloatUtils.h"
+#include <Deliberation/Core/Math/FloatUtils.h>
 
 namespace deliberation
 {

@@ -10,9 +10,9 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Surface.h>
 
-#include "Draw/GL/GLFramebuffer.h"
+#include <Deliberation/Draw/GL/GLFramebuffer.h>
 
-#include "Draw/Detail/TextureImpl.h"
+#include <Deliberation/Draw/Detail/TextureImpl.h>
 
 namespace deliberation
 {

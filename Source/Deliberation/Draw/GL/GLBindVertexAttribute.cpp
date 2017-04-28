@@ -10,8 +10,7 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/GL/GLType.h>
-
-#include "Draw/Detail/BufferImpl.h"
+#include <Deliberation/Draw/Detail/BufferImpl.h>
 
 namespace deliberation
 {

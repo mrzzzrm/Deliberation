@@ -11,7 +11,7 @@
 
 #include <Deliberation/Draw/GL/GLFramebufferDesc.h>
 
-#include "Draw/GL/GLFramebuffer.h"
+#include <Deliberation/Draw/GL/GLFramebuffer.h>
 
 using namespace gl;
 

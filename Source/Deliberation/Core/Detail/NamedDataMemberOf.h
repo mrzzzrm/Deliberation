@@ -3,8 +3,6 @@
 #include <memory>
 #include <string>
 
-
-
 #include <Deliberation/Core/Detail/INamedDataMemberOfImpl.h>
 #include <Deliberation/Core/OffsetOf.h>
 #include <Deliberation/Core/Types.h>

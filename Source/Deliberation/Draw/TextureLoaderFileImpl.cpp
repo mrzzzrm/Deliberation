@@ -1,5 +1,4 @@
-#include "TextureLoaderFileImpl.h"
-#include "TextureLoaderSDLSurfaceImpl.h"
+#include <Deliberation/Draw/TextureLoaderFileImpl.h>
 
 #include <cinttypes>
 #include <iostream>
@@ -10,6 +9,7 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/PixelFormat.h>
+#include <Deliberation/Draw/TextureLoaderSDLSurfaceImpl.h>
 
 //#include "ILUtils.h"
 

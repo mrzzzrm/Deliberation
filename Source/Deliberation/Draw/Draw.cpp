@@ -14,13 +14,12 @@
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 #include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
+#include <Deliberation/Draw/Detail/BufferImpl.h>
+#include <Deliberation/Draw/Detail/DrawImpl.h>
+#include <Deliberation/Draw/Detail/ProgramImpl.h>
+#include <Deliberation/Draw/Detail/UniformBufferBinding.h>
 
-#include "Detail/BufferImpl.h"
-#include "Detail/DrawImpl.h"
-#include "Detail/ProgramImpl.h"
-#include "Detail/UniformBufferBinding.h"
-
-#include "Draw/GL/GLBindVertexAttribute.h"
+#include <Deliberation/Draw/GL/GLBindVertexAttribute.h>
 
 namespace deliberation
 {

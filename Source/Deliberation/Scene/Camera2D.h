@@ -3,10 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "ICamera.h"
-
-class Camera2D final:
-    public ICamera
+class Camera2D final
 {
 public:
     Camera2D();
@@ -23,11 +20,11 @@ public:
     void update() const;
 
     // From ICamera
-    virtual const glm::quat & orientation() const override;
-    virtual const glm::mat4 & view() const override;
-    virtual const glm::mat4 & projection() const override;
-    virtual const glm::mat4 & viewProjection() const override;
-    virtual const glm::mat4 & viewProjectionInverted() const override;
+    virtual const glm::quat & orientation() const;
+    virtual const glm::mat4 & view() const;
+    virtual const glm::mat4 & projection() const;
+    virtual const glm::mat4 & viewProjection() const;
+    virtual const glm::mat4 & viewProjectionInverted() const ;
 
 private:
     float m_scale;
