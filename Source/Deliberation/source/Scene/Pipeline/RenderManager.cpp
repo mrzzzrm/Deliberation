@@ -31,7 +31,6 @@ void RenderManager::render()
         m_gbuffer.clear().setColor(1, glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
         m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Normal
 
-
         m_hdrBuffer = m_drawContext.createFramebuffer(w, h);
         m_hdrBuffer.addRenderTarget(PixelFormat_RGB_32_F);
 

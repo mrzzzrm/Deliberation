@@ -18,6 +18,7 @@ namespace
 
 std::unordered_map<u8, gl::GLenum> ELEMENTAL_TYPE_TO_GL_TYPE
     {
+        {ELEMENTAL_TYPE_BOOL, GL_BOOL},
         {ELEMENTAL_TYPE_U8, GL_UNSIGNED_BYTE},
         {ELEMENTAL_TYPE_U16, GL_UNSIGNED_SHORT},
         {ELEMENTAL_TYPE_U32, GL_UNSIGNED_INT},
@@ -29,6 +30,7 @@ std::unordered_map<u8, gl::GLenum> ELEMENTAL_TYPE_TO_GL_TYPE
 
 std::unordered_map<u8, gl::GLenum> TYPE_TO_GL_TYPE
     {
+        {TYPE_BOOL, GL_BOOL},
         {TYPE_U8, GL_UNSIGNED_BYTE},
         {TYPE_U16, GL_UNSIGNED_SHORT},
         {TYPE_U32, GL_UNSIGNED_INT},
@@ -53,6 +55,7 @@ std::unordered_map<u8, gl::GLenum> TYPE_TO_GL_TYPE
 
 std::unordered_map<i32, u8> GL_TYPE_TO_TYPE
     {
+        {(i32)GL_BOOL, TYPE_BOOL},
         {(i32)GL_UNSIGNED_BYTE, TYPE_U8},
         {(i32)GL_UNSIGNED_SHORT, TYPE_U16},
         {(i32)GL_UNSIGNED_INT, TYPE_U32},

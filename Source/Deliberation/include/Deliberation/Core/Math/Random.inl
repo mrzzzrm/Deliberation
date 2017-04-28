@@ -5,6 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include <Deliberation/Core/Assert.h>
+#include "FloatUtils.h"
 
 namespace deliberation
 {
@@ -93,6 +94,18 @@ glm::vec3 RandomInHemisphere(const glm::vec3 & normal)
     } while(glm::dot(p, normal) < 0.0f); // Not kidding, no...
 
     return p * glm::length(normal);
+}
+
+glm::vec3 RandomOnHemisphere(const glm::vec3 & normal)
+{
+    glm::vec3 p;
+
+    do
+    {
+        p = RandomInHemisphere(normal);
+    } while(EpsilonEq(glm::dot(p, p), 0.0f)); // Not kidding, no...
+
+    return glm::normalize(p) * glm::length(normal);
 }
 
 }

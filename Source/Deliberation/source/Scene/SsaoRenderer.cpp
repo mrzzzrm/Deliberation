@@ -1,6 +1,7 @@
 #include <Deliberation/Scene/SsaoRenderer.h>
 
 #include <Deliberation/Core/Math/Random.h>
+#include <Deliberation/Core/Math/MathUtils.h>
 
 #include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/TextureLoader.h>
@@ -22,25 +23,35 @@ public:
         auto & drawContext = m_renderManager.drawContext();
 
         m_intermediateFb = drawContext.createFramebuffer(drawContext.backbuffer().width(), drawContext.backbuffer().height());
-        m_intermediateFb.addRenderTarget(PixelFormat_RGB_32_F);
+        m_intermediateFb.addRenderTarget(PixelFormat_R_32_F);
 
         m_effect = ScreenSpaceEffect(m_renderManager.drawContext(), {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
                                                                      DeliberationDataPath("Data/Shaders/Ssao.frag")}, "SSAO");
 
-        m_effect.draw().sampler("Position").setTexture(m_renderManager.gbuffer().renderTarget(1)->texture());
-        m_effect.draw().sampler("Normal").setTexture(m_renderManager.gbuffer().renderTarget(2)->texture());
-        m_effect.draw().setFramebuffer(m_renderManager.ssaoBuffer());
+        auto positionSampler = m_effect.draw().sampler("Position");
+        positionSampler.setTexture(m_renderManager.gbuffer().renderTarget(1)->texture());
+        positionSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+
+        auto normalSampler = m_effect.draw().sampler("Normal");
+        normalSampler.setTexture(m_renderManager.gbuffer().renderTarget(2)->texture());
+        normalSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+
+        m_effect.draw().setFramebuffer(m_intermediateFb);
 
         const auto & interface = m_effect.draw().program().interface();
 
         // Samples
-        const auto numSamples = interface.uniform("Samples")->arraySize();
+        const auto numSamples = std::min<int>(5, interface.uniform("Samples")->arraySize());
         m_samples = LayoutedBlob({"Sample", Type_Vec3}, numSamples);
         auto samples = m_samples.iterator<glm::vec3>("Sample");
 
         for (size_t s = 0; s < numSamples; s++)
         {
-            samples.put(RandomInHemisphere({0.0f, 0.0f, 1.0f}));
+            auto sample = RandomOnHemisphere({0.0f, 0.0f, 1.0f});
+            auto scale = (float)s / numSamples;
+            scale = glm::mix(0.1f, 1.0f, scale * scale);
+
+            samples.put(sample * scale);
         }
 
         m_effect.draw().uniform("Samples").set(m_samples);
@@ -74,9 +85,21 @@ public:
         m_effect.draw().uniform("NoiseScale").set(glm::vec2(noiseScaleX, noiseScaleY));
 
         // Etc uniforms
-        m_effect.draw().uniform("Radius").set(0.04f);
+        m_effect.draw().uniform("Radius").set(0.3f);
         m_effect.draw().uniform("Bias").set(0.02f);
+        m_effect.draw().uniform("NoiseEnabled").set(true);
+        m_effect.draw().uniform("NumSamples").set(numSamples);
         m_projectionUniform = m_effect.draw().uniform("Projection");
+
+        // Blur
+        m_blurEffect = ScreenSpaceEffect(drawContext, {DeliberationDataPath("Data/Shaders/Blur4x4.frag"),
+             DeliberationDataPath("Data/Shaders/UV_Position2.vert")}, "SSAO Blur");
+
+        auto inputSampler = m_blurEffect.draw().sampler("Input");
+        inputSampler.setTexture(m_intermediateFb.renderTarget(0)->texture());
+        inputSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+
+        m_blurEffect.draw().setFramebuffer(m_renderManager.ssaoBuffer());
     }
 
     void render() override
@@ -84,10 +107,12 @@ public:
         m_projectionUniform.set(m_renderManager.mainCamera().projection());
 
         m_effect.schedule();
+        m_blurEffect.schedule();
     }
 
 private:
     ScreenSpaceEffect   m_effect;
+    ScreenSpaceEffect   m_blurEffect;
     Framebuffer         m_intermediateFb;
     LayoutedBlob        m_samples;
     Uniform             m_projectionUniform;

@@ -13,6 +13,7 @@ constexpr Type & Type::resolve()
 
 #define GEN_RESOLVE(t, T) template<> constexpr Type & Type::resolve<t>() { return T; }
 
+GEN_RESOLVE(bool, Type_Bool)
 GEN_RESOLVE(u8,  Type_U8)
 GEN_RESOLVE(u16, Type_U16)
 GEN_RESOLVE(u32, Type_U32)

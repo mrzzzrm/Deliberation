@@ -17,6 +17,7 @@ inline glm::vec3 RandomUnitVec3();
 inline glm::vec3 RandomInSphere();
 inline glm::vec2 RandomOnCircle();
 inline glm::vec3 RandomInHemisphere(const glm::vec3 & normal);
+inline glm::vec3 RandomOnHemisphere(const glm::vec3 & normal);
 
 }
 

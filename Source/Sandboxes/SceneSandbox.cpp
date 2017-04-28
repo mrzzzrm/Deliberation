@@ -60,7 +60,6 @@ public:
         m_bunnyInstance->transform.setPosition({0.0f, 0.32f, 0.0f});
        // EnableGLErrorChecksAndLogging();
 
-
         auto cubeModel = m_modelRenderer->addModel(DeliberationDataPath("Data/Models/cube.obj"));
         auto cubeInstance = m_modelRenderer->addModelInstance(cubeModel);
         cubeInstance->transform.setPosition({2.0f, 0.0f, 3.0f});

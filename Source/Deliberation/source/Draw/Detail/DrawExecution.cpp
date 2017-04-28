@@ -88,6 +88,12 @@ void DrawExecution::perform()
 
             switch (TypeToGLType(uniform.type))
             {
+            case gl::GL_BOOL:
+            {
+                gl::GLint boolInt = *(const gl::GLboolean*)data ? 1 : 0;
+                gl::glUniform1iv(location, count, &boolInt);
+                break;
+            }
             case gl::GL_INT:
                 gl::glUniform1iv(location, count, ((const gl::GLint*)data));
                 break;
