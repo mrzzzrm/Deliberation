@@ -1,18 +1,18 @@
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
 
-DebugTexture2dRenderer::DebugTexture2dRenderer(Context & context, const Texture & texture)
+DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & drawContext, const Texture & texture)
 {
-    const auto program = context.createProgram({
+    const auto program = drawContext.createProgram({
        deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.vert"),
        deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.frag")
     });
 
-    m_draw = context.createDraw(program, gl::GL_TRIANGLES);
+    m_draw = drawContext.createDraw(program, gl::GL_TRIANGLES);
 
     LayoutedBlob vertices({"Position", Type_Vec2}, 4);
     vertices.field<glm::vec2>("Position").assign({

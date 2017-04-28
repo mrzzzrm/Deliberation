@@ -10,7 +10,7 @@
 //{
 //
 //template<typename T>
-//class DELIBERATION_API RefPtr final
+//class RefPtr final
 //{
 //public:
 //    RefPtr() = default;

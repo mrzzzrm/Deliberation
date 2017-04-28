@@ -9,7 +9,7 @@ namespace deliberation
 
 class Camera3D;
 
-class DELIBERATION_API CameraDolly3D
+class CameraDolly3D
 {
 public:
     CameraDolly3D(Camera3D & camera);

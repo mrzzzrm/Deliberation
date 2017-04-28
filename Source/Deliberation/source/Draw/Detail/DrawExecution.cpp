@@ -11,7 +11,7 @@
 #include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/GL/GLType.h>
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Program.h>
 
@@ -88,6 +88,12 @@ void DrawExecution::perform()
 
             switch (TypeToGLType(uniform.type))
             {
+            case gl::GL_BOOL:
+            {
+                gl::GLint boolInt = *(const gl::GLboolean*)data ? 1 : 0;
+                gl::glUniform1iv(location, count, &boolInt);
+                break;
+            }
             case gl::GL_INT:
                 gl::glUniform1iv(location, count, ((const gl::GLint*)data));
                 break;
@@ -387,8 +393,8 @@ void DrawExecution::applyViewport()
     {
         if (framebuffer.isBackbuffer())
         {
-            m_glStateManager.setViewport(0, 0, m_drawImpl.context.backbuffer().width(),
-                                               m_drawImpl.context.backbuffer().height());
+            m_glStateManager.setViewport(0, 0, m_drawImpl.drawContext.backbuffer().width(),
+                                               m_drawImpl.drawContext.backbuffer().height());
         }
         else
         {

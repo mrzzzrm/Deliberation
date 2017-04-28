@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/TextureLoader.h>
 
 namespace deliberation
@@ -35,13 +35,13 @@ public:
 }
 
 Font::Font():
-    m_context(nullptr)
+    m_drawContext(nullptr)
 {
 
 }
 
-Font::Font(Context & context, const std::string & path):
-    m_context(&context),
+Font::Font(DrawContext & drawContext, const std::string & path):
+    m_drawContext(&drawContext),
     m_path(path)
 {
 
@@ -49,17 +49,17 @@ Font::Font(Context & context, const std::string & path):
 
 Font::~Font() = default;
 
-Context & Font::context() const
+DrawContext & Font::drawContext() const
 {
-    Assert(m_context, "");
-    return *m_context;
+    Assert(m_drawContext, "");
+    return *m_drawContext;
 }
 
 Texture Font::render(const std::string & text,
                      unsigned int size,
                      const glm::vec4 & color) const
 {
-    Assert(m_context, "");
+    Assert(m_drawContext, "");
 
     auto i = m_fontBySize.find(size);
     if (i == m_fontBySize.end())
@@ -80,7 +80,7 @@ Texture Font::render(const std::string & text,
 
     auto * surface = TTF_RenderText_Blended(font->font, text.c_str(), sdlColor);
 
-    auto texture = m_context->createTexture(TextureLoader(surface).load());
+    auto texture = m_drawContext->createTexture(TextureLoader(surface).load());
 
     SDL_FreeSurface(surface);
 

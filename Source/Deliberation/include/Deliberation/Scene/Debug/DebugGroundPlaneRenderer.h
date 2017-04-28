@@ -1,41 +1,40 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
-
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Program.h>
+
+#include <Deliberation/Scene/Pipeline/RenderManager.h>
+#include <Deliberation/Scene/Pipeline/Renderer.h>
 
 namespace deliberation
 {
 
 class Camera3D;
-class Context;
+class DrawContext;
 class Framebuffer;
 
-class DELIBERATION_API DebugGroundPlaneRenderer final
+class DebugGroundPlaneRenderer:
+    public Renderer
 {
 public:
-    DebugGroundPlaneRenderer(Context & context, const Camera3D & camera);
+    DebugGroundPlaneRenderer(RenderManager & renderManager);
 
-    void setFramebuffer(Framebuffer & framebuffer);
     void setSize(float size);
     void setQuadSize(float quadSize);
     void setRadius(float radius);
+    void setRenderToGBuffer(bool enabled) { m_renderToGBuffer = enabled; }
 
-    void render();
+    void registerRenderNodes() override;
 
 private:
-    Context &           m_context;
-    const Camera3D &    m_camera;
+    friend class DebugGroundPlaneNode;
 
-    Program             m_program;
-    Draw                m_draw;
-    Uniform             m_view;
-    Uniform             m_projection;
-    Uniform             m_size;
-    Uniform             m_quadSize;
-    Uniform             m_radius;
+private:
+    float m_size = 3.0f;
+    float m_quadSize = 0.5f;
+    float m_radius = 3.0f;
+    bool m_renderToGBuffer = false;
 };
 
 }

@@ -22,7 +22,7 @@ public:
     {}
 
     Application & application() const { return m_application; }
-    Context & context() const { return m_application.context(); }
+    DrawContext & drawContext() const { return m_application.drawContext(); }
     InputBase & input() const  { return m_application.input(); }
 
 private:

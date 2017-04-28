@@ -10,14 +10,16 @@ set(DELIBERATION_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/source
 
     ${CXXOPTS_INCLUDE_DIR}
-    ${SDL2TTF_INCLUDE_DIR}
-    ${SDL2IMAGE_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIR}
+    ${SDL2_TTF_INCLUDE_DIR}
+    ${SDL2_IMAGE_INCLUDE_DIR}
     ${GLBINDING_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${JSON_INCLUDE_DIR}
     ${IMGUI_INCLUDE_DIRS}
     ${BOOST_INCLUDE_DIRS}
+    ${TINYOBJLOADER_INCLUDE_DIRS}
 
     CACHE INTERAL "All Deliberation include dirs" 
 )
@@ -112,7 +114,7 @@ set(sources
     ${source_path}/Draw/Clear.cpp
     ${source_path}/Draw/ClearExecution.cpp
     ${source_path}/Draw/ClearExecution.h
-    ${source_path}/Draw/Context.cpp
+    ${source_path}/Draw/DrawContext.cpp
     ${source_path}/Draw/CullState.cpp
     ${source_path}/Draw/DepthState.cpp
     ${source_path}/Draw/Draw.cpp
@@ -205,25 +207,27 @@ set(sources
     ${source_path}/Scene/Debug/DebugGroundPlaneRenderer.cpp
     ${source_path}/Scene/Debug/DebugPhysicsWorldRenderer.cpp
     ${source_path}/Scene/Debug/DebugTexture2dRenderer.cpp
+	${source_path}/Scene/Lighting/AmbientLightRenderer.cpp
+    ${source_path}/Scene/Model/ModelRenderer.cpp
+    ${source_path}/Scene/Pipeline/RenderManager.cpp
     ${source_path}/Scene/Blit.cpp
     ${source_path}/Scene/Camera3D.cpp
     ${source_path}/Scene/CameraDolly3D.cpp
     ${source_path}/Scene/ConeMesh.cpp
     ${source_path}/Scene/CuboidMesh.cpp
     ${source_path}/Scene/EdgeToFaceSmoothing.cpp
+    ${source_path}/Scene/HdrRenderer.cpp
     ${source_path}/Scene/Mesh.cpp
-    ${source_path}/Scene/Mesh2.cpp
+    ${source_path}/Scene/MeshData.cpp
     ${source_path}/Scene/MeshCompiler.cpp
-    ${source_path}/Scene/PostprocessingEffect.cpp
+    ${source_path}/Scene/ScreenSpaceEffect.cpp
+    ${source_path}/Scene/SsaoRenderer.cpp
     ${source_path}/Scene/UVSphere.cpp
-    ${source_path}/Scene/RenderNode.cpp
-    ${source_path}/Scene/RenderPipeline.cpp
     ${source_path}/Scene/SkyboxRenderer.cpp)
 
 # api_includes
 set(api_includes
     ${include_path}/Deliberation.h
-    ${include_path}/Deliberation_API.h
 
     ${include_path}/Core/Detail/INamedDataMemberOfImpl.h
     ${include_path}/Core/Detail/INamedDataMemberOfImpl.inl
@@ -323,8 +327,7 @@ set(api_includes
     ${include_path}/Draw/Buffer.h
     ${include_path}/Draw/BufferUpload.h
     ${include_path}/Draw/Clear.h
-    ${include_path}/Draw/Context.h
-    ${include_path}/Draw/Context.inl
+    ${include_path}/Draw/DrawContext.h
     ${include_path}/Draw/CullState.h
     ${include_path}/Draw/DepthState.h
     ${include_path}/Draw/Draw.h
@@ -416,29 +419,38 @@ set(api_includes
     ${include_path}/Scene/Debug/DebugGroundPlaneRenderer.h
     ${include_path}/Scene/Debug/DebugPhysicsWorldRenderer.h
     ${include_path}/Scene/Debug/DebugTexture2dRenderer.h
+    ${include_path}/Scene/Lighting/AmbientLightRenderer.h
+    ${include_path}/Scene/Model/Model.h
+    ${include_path}/Scene/Model/ModelInstance.h
+    ${include_path}/Scene/Model/ModelRenderer.h
+    ${include_path}/Scene/Pipeline/Renderer.h
+    ${include_path}/Scene/Pipeline/RenderManager.h
+    ${include_path}/Scene/Pipeline/RenderNode.h
+    ${include_path}/Scene/Pipeline/RenderPhase.h
     ${include_path}/Scene/Blit.h
     ${include_path}/Scene/Camera3D.h
     ${include_path}/Scene/CameraDolly3D.h
     ${include_path}/Scene/ConeMesh.h
     ${include_path}/Scene/CuboidMesh.h
     ${include_path}/Scene/EdgeToFaceSmoothing.h
+    ${include_path}/Scene/HdrRenderer.h
     ${include_path}/Scene/Mesh.h
-    ${include_path}/Scene/Mesh2.h
+    ${include_path}/Scene/MeshData.h
     ${include_path}/Scene/MeshCompiler.h
-    ${include_path}/Scene/PostprocessingEffect.h
+    ${include_path}/Scene/ScreenSpaceEffect.h
+    ${include_path}/Scene/SsaoRenderer.h
     ${include_path}/Scene/UVSphere.h
-    ${include_path}/Scene/RenderNode.h
-    ${include_path}/Scene/RenderPipeline.h
     ${include_path}/Scene/SkyboxRenderer.h)
 
 set(libs
-    ${GLBINDING_LIBRARIES}
     ${GLFW_LIBRARY}
-    ${SDL2_IMAGE_LIBRARY}
     ${SDL2_LIBRARY}
-    ${SDL2TTF_LIBRARY}
+    ${SDL2_IMAGE_LIBRARY}
+    ${SDL2_TTF_LIBRARY}
     ${OPENGL_gl_LIBRARY}
     ${IMGUI_LIBRARIES}
+    ${GLBINDING_LIBRARIES}
+    ${TINYOBJLOADER_LIBRARIES}
     )
 
 set(DELIBERATION_LIBRARIES
@@ -448,11 +460,17 @@ set(DELIBERATION_LIBRARIES
 )
 
 # library
-add_library(Deliberation STATIC ${api_includes} ${sources})
+add_library(Deliberation 
+	STATIC
+	${api_includes} 
+	${sources})
+	
 target_link_libraries(Deliberation
     ${libs})
-
+	
 # include
+message("Deliberation include dirs: ${DELIBERATION_INCLUDE_DIRS}")
+
 target_include_directories(Deliberation
     PUBLIC
     ${DELIBERATION_INCLUDE_DIRS}

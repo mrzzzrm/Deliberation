@@ -1,31 +1,31 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/TextureBinary.h>
 
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Texture;
 class TextureBinary;
 
-class DELIBERATION_API TextureUpload final
+class TextureUpload final
 {
 public:
-    TextureUpload(Context & context,
+    TextureUpload(DrawContext & drawContext,
                   Texture & texture,
                   const TextureBinary & binary);
 
-    Context & context() const;
+    DrawContext & drawContext() const;
     Texture & texture() const;
     const TextureBinary & binary() const;
 
     void schedule();
 
 private:
-    Context & m_context;
+    DrawContext & m_drawContext;
     Texture & m_texture;
     TextureBinary m_binary;
 };

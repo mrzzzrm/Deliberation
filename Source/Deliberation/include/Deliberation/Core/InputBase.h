@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -16,7 +17,7 @@ namespace deliberation
 
 class InputLayer;
 
-class DELIBERATION_API InputBase
+class InputBase
 {
 public:
     static constexpr DurationMillis CLICK_TIMEOUT = 300;

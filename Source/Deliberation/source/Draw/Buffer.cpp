@@ -51,28 +51,28 @@ BufferUpload Buffer::createUpload(const Blob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
 
-    return BufferUpload(m_impl->context, *this, data);
+    return BufferUpload(m_impl->drawContext, *this, data);
 }
 
 BufferUpload Buffer::createRawUpload(const Blob & data, unsigned int count)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
 
-    return BufferUpload(m_impl->context, *this, data, count);
+    return BufferUpload(m_impl->drawContext, *this, data, count);
 }
 
 void Buffer::scheduleUpload(const Blob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
 
-    BufferUpload(m_impl->context, *this, data).schedule();
+    BufferUpload(m_impl->drawContext, *this, data).schedule();
 }
 
 void Buffer::scheduleRawUpload(const Blob & data, unsigned int count)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
 
-    BufferUpload(m_impl->context, *this, data, count).schedule();
+    BufferUpload(m_impl->drawContext, *this, data, count).schedule();
 }
 
 void Buffer::scheduleUpload(const LayoutedBlob & data)
@@ -80,7 +80,7 @@ void Buffer::scheduleUpload(const LayoutedBlob & data)
     Assert(m_impl.get(), "Can't perform action on hollow object");
     Assert(layout().equals(data.layout()), "Layout mismatch");
 
-    BufferUpload(m_impl->context, *this, data.rawData(), data.count()).schedule();
+    BufferUpload(m_impl->drawContext, *this, data.rawData(), data.count()).schedule();
 }
 
 }

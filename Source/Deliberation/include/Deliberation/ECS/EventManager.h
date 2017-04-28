@@ -3,14 +3,14 @@
 #include <memory>
 #include <unordered_map>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/SparseVector.h>
 
 namespace deliberation
 {
 
-class DELIBERATION_API EventManager final
+class EventManager final
 {
 public:
     EventManager();

@@ -18,7 +18,7 @@ enum ELEMENTAL_TYPE
     ELEMENTAL_TYPE_FLOAT
 };
 
-class DELIBERATION_API ElementalType final
+class ElementalType final
 {
 public:
     ElementalType(u8 id);

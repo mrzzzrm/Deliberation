@@ -5,12 +5,12 @@
 
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API DataLayoutField final
+class DataLayoutField final
 {
 public:
     struct Desc
@@ -27,6 +27,7 @@ public:
     };
 
 public:
+    DataLayoutField() = default;
     DataLayoutField(const std::string & name, Type type, size_t offset);
 
     const std::string & name() const;
@@ -37,8 +38,8 @@ public:
     std::string toString() const;
 
 private:
-    Desc            m_desc;
-    size_t          m_offset;
+    Desc    m_desc;
+    size_t  m_offset;
 };
 
 }

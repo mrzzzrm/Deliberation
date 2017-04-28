@@ -2,27 +2,27 @@
 
 #include <memory>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <Deliberation/Core/InputBase.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 
-class DELIBERATION_API Input:
+class Input:
     public InputBase
 {
 public:
-    Input(const Context & context);
+    Input(const DrawContext & drawContext);
 
     void onSDLInputEvent(const SDL_Event & event);
 
 private:
-    const Context &  m_context;
+    const DrawContext &  m_drawContext;
 };
 
 }

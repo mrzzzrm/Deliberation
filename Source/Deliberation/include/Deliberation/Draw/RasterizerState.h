@@ -12,7 +12,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API RasterizerState final
+class RasterizerState final
 {
 public:
     RasterizerState();

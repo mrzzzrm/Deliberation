@@ -6,12 +6,12 @@
 
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API ProgramInterfaceVertexAttribute final
+class ProgramInterfaceVertexAttribute final
 {
 public:
     ProgramInterfaceVertexAttribute();

@@ -4,26 +4,26 @@
 
 #include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class Camera3D;
-class Context;
+class DrawContext;
 class PhysicsWorld;
 
-class DELIBERATION_API DebugPhysicsWorldRenderer final
+class DebugPhysicsWorldRenderer final
 {
 public:
-    DebugPhysicsWorldRenderer(Context & context,
+    DebugPhysicsWorldRenderer(DrawContext & drawContext,
                               const PhysicsWorld & physicsWorld,
                               const Camera3D & camera);
 
     void schedule();
 
 private:
-    Context &                       m_context;
+    DrawContext &                       m_drawContext;
     const PhysicsWorld &            m_physicsWorld;
     const Camera3D &                m_camera;
 

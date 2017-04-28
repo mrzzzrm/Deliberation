@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/Optional.h>
@@ -16,7 +16,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class GLFramebuffer;
 class GLStateManager;
 class Surface;
@@ -29,20 +29,20 @@ namespace detail
         Members should be public
 */
 
-class DELIBERATION_API FramebufferImpl final
+class FramebufferImpl final
 {
 public:
-    static std::shared_ptr<FramebufferImpl> backbuffer(Context & context,
+    static std::shared_ptr<FramebufferImpl> backbuffer(DrawContext & drawContext,
                                                        unsigned int width,
                                                        unsigned int height);
-    static std::shared_ptr<FramebufferImpl> custom(Context & context,
+    static std::shared_ptr<FramebufferImpl> custom(DrawContext & drawContext,
                                                    unsigned int width,
                                                    unsigned int height);
 
 public:
-    FramebufferImpl(Context & context);
+    FramebufferImpl(DrawContext & drawContext);
 
-    Context & context() const;
+    DrawContext & drawContext() const;
 
     unsigned int width() const;
     unsigned int height() const;
@@ -67,7 +67,7 @@ public:
     void bind(GLStateManager & glStateManager) const;
 
 public:
-    Context &                                   m_context;
+    DrawContext &                               m_drawContext;
     bool                                        m_isBackbuffer;
 
     // For RenderTargets created by the Framebuffer (via addRenderTarget(format), e.g.)
@@ -81,14 +81,11 @@ public:
     mutable std::shared_ptr<GLFramebuffer>      m_glFramebuffer;
     mutable unsigned int                        m_width;
     mutable unsigned int                        m_height;
-    mutable bool                                m_resolutionDirty;
 
     mutable Optional<Clear>                     m_clear;
 
 private:
     void updateFramebufferDesc() const;
-    void updateResolution() const;
-
 };
 
 }

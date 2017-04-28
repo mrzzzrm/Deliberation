@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -14,11 +14,11 @@ namespace deliberation
 inline std::size_t LinearOctreeLevelBaseIndex(unsigned int level);
 
 template<typename NodeType>
-class DELIBERATION_API LinearOctree final
+class LinearOctree final
 {
 public:
     template<typename QualifiedNodeType, typename QualifiedTreeType>
-    class DELIBERATION_API IteratorT final
+    class IteratorT final
     {
     public:
         typedef QualifiedNodeType Node;
@@ -39,7 +39,7 @@ public:
         bool hasParent() const;
         bool isValid() const;
 
-        IteratorT firstChild() const;
+        IteratorT<QualifiedNodeType, QualifiedTreeType> firstChild() const;
         IteratorT nextSibling() const;
         IteratorT parent() const;
 

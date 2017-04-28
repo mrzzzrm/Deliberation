@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -10,7 +10,7 @@ namespace deliberation
 class Camera3D;
 class InputBase;
 
-class DELIBERATION_API DebugCameraNavigator3D final
+class DebugCameraNavigator3D final
 {
 public:
     DebugCameraNavigator3D(Camera3D & camera,

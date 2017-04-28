@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Span.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -14,14 +14,14 @@ constexpr uint MAX_NUM_CONTACT_POINTS = 4;
 class Contact;
 class RigidBody;
 
-struct DELIBERATION_API Intersection
+struct Intersection
 {
     glm::vec3 position;
     glm::vec3 normal;
     float     depth = 0.0f;
 };
 
-struct DELIBERATION_API ContactPoint:
+struct ContactPoint:
     public Intersection
 {
     glm::vec3 relativePositionA;
@@ -36,7 +36,7 @@ struct DELIBERATION_API ContactPoint:
     void update(const Contact & contact, const Intersection & intersection);
 };
 
-class DELIBERATION_API Contact
+class Contact
 {
 public:
     Contact(RigidBody & bodyA, RigidBody & bodyB);

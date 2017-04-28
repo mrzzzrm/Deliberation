@@ -17,7 +17,7 @@ namespace deliberation
 
 class Contact;
 
-class DELIBERATION_API Narrowphase final
+class Narrowphase final
 {
 public:
     Narrowphase();

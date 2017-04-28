@@ -6,9 +6,9 @@
 
 #include <glm/glm.hpp>
 
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -18,22 +18,22 @@ namespace detail
     class TTF_Font_Wrapper;
 }
 
-class Context;
+class DrawContext;
 class Texture;
 
-class DELIBERATION_API Font final
+class Font final
 {
 public:
     Font();
-    Font(Context & context, const std::string & path);
+    Font(DrawContext & drawContext, const std::string & path);
     ~Font();
 
-    Context & context() const;
+    DrawContext & drawContext() const;
 
     Texture render(const std::string & text, unsigned int size, const glm::vec4 & color) const;
 
 private:
-    Context * m_context;
+    DrawContext * m_drawContext;
     std::string m_path;
     mutable std::unordered_map<unsigned int,
                                std::shared_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;

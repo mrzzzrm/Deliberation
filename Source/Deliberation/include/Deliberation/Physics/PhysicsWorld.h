@@ -16,11 +16,11 @@ namespace deliberation
 
 class Broadphase;
 class Contact;
-class Context;
+class DrawContext;
 class Narrowphase;
 class RigidBody;
 
-class DELIBERATION_API PhysicsWorld final
+class PhysicsWorld final
 {
 public:
     using RigidBodies = SparseVector<std::shared_ptr<RigidBody>>;

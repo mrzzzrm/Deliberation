@@ -5,7 +5,7 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/ProgramInterfaceFragmentOutput.h>
 #include <Deliberation/Draw/ProgramInterfaceSampler.h>
@@ -16,7 +16,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API ProgramInterface final
+class ProgramInterface final
 {
 public:
     ProgramInterface();

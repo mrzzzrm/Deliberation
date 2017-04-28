@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Blob.h>
 
@@ -13,7 +13,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API SurfaceBinary final
+class SurfaceBinary final
 {
 public:
     static SurfaceBinary empty(unsigned int width,

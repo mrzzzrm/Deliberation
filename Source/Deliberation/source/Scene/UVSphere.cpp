@@ -100,7 +100,7 @@ Mesh UVSphere::generateMesh() const
     return Mesh(std::move(vertices), std::move(faces));
 }
 
-Mesh2 UVSphere::generateMesh2() const
+MeshData UVSphere::generateMesh2() const
 {
     Assert(m_numParallels != 0 && m_numMeridians != 0, "");
 
@@ -187,7 +187,7 @@ Mesh2 UVSphere::generateMesh2() const
         indices[i++] = (u32)(b);
     }
 
-    return Mesh2(std::move(vertices), std::move(indexBlob));
+    return MeshData(std::move(vertices), std::move(indexBlob));
 }
 
 }

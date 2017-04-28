@@ -4,14 +4,14 @@
 
 #include <Deliberation/Core/Math/AABB.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class Transform3D;
 
-class DELIBERATION_API Box final
+class Box final
 {
 public:
     Box();

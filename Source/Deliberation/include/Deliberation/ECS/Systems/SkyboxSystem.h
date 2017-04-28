@@ -17,7 +17,7 @@ class SkyboxSystem:
 public:
     SkyboxSystem(World & world, const Camera3D & camera, const Texture & cubeMap):
         Base(world),
-        m_renderer(world.system<ApplicationSystem>().context(), camera, cubeMap)
+        m_renderer(world.system<ApplicationSystem>().drawContext(), camera, cubeMap)
     {}
 
 protected:

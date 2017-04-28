@@ -32,7 +32,7 @@ glm::mat3 RotationMatrixFromDirectionY(const glm::vec3 & y)
     return result;
 }
 
-glm::mat3 DELIBERATION_API InverseDiagonalMatrix(const glm::mat3 & m)
+glm::mat3 InverseDiagonalMatrix(const glm::mat3 & m)
 {
     auto x = m[0][0];
     auto y = m[1][1];

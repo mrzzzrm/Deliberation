@@ -4,12 +4,12 @@
 
 #include <Deliberation/Physics/CollisionObject.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API BroadphaseProxy final
+class BroadphaseProxy final
 {
 public:
     BroadphaseProxy(void * userData, const AABB & bounds = AABB());

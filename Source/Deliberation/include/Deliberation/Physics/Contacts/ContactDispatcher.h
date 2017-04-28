@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Dispatch.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -12,7 +12,7 @@ namespace deliberation
 class Contact;
 class RigidBody;
 
-class DELIBERATION_API ContactCreator
+class ContactCreator
 {
 public:
     ContactCreator(int typeL, int typeR);
@@ -25,7 +25,7 @@ protected:
     int m_typeR;
 };
 
-class DELIBERATION_API ContactDispatcher final
+class ContactDispatcher final
 {
 public:
     ContactDispatcher();

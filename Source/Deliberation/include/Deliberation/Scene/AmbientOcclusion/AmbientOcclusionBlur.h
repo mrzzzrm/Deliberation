@@ -1,16 +1,16 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Texture.h>
 
-#include <Deliberation/Scene/PostprocessingEffect.h>
+#include <Deliberation/Scene/ScreenSpaceEffect.h>
 
 namespace deliberation
 {
 
-class DELIBERATION_API AmbientOcclusionBlur final
+class AmbientOcclusionBlur final
 {
 public:
     AmbientOcclusionBlur();
@@ -27,7 +27,7 @@ private:
     Surface                 m_occlusion;
     Surface                 m_normalDepth;
     Texture                 m_output;
-    PostprocessingEffect    m_effect;
+    ScreenSpaceEffect    m_effect;
 };
 
 }

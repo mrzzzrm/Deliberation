@@ -5,7 +5,7 @@
 
 #include <Deliberation/Physics/Contacts/Contact.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -13,7 +13,7 @@ namespace deliberation
 class Manifold;
 struct CollideBox3DDebugInfo;
 
-struct DELIBERATION_API CollideBox3DDebugInfo
+struct CollideBox3DDebugInfo
 {
     bool edgeCollision = false;
 
@@ -29,7 +29,7 @@ struct DELIBERATION_API CollideBox3DDebugInfo
     glm::vec3 clipPoints[8];
 };
 
-class DELIBERATION_API CollideBox3D
+class CollideBox3D
 {
 public:
     CollideBox3D(const Box & boxA,
@@ -81,7 +81,7 @@ private:
     glm::vec3                   m_edgeCrossProducts[9];
 };
 
-class DELIBERATION_API BoxContact final:
+class BoxContact final:
     public Contact
 {
 public:

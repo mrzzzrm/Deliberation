@@ -2,12 +2,12 @@
 
 #include <chrono>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API LapTimer final
+class LapTimer final
 {
 public:
     LapTimer();

@@ -9,13 +9,13 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Camera3D;
 
 class DebugGrid3DRenderer final
 {
 public:
-    DebugGrid3DRenderer(Context & context,
+    DebugGrid3DRenderer(DrawContext & drawContext,
                         float scale,
                         const Camera3D & camera);
 
@@ -27,7 +27,7 @@ private:
     void init(float scale);
 
 private:
-    Context &           m_context;
+    DrawContext &           m_drawContext;
     const Camera3D &    m_camera;
     Draw                m_normalLines;
     Draw                m_fatLines;

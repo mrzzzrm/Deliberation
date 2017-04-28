@@ -6,7 +6,7 @@
 
 #include <Deliberation/Draw/GL/GLStateManager.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -20,52 +20,42 @@ namespace deliberation
 namespace detail
 {
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(Context & context,
+std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & drawContext,
                                                              unsigned int width,
                                                              unsigned int height)
 {
-    auto result = std::make_shared<FramebufferImpl>(context);
+    auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->m_isBackbuffer = true;
-    result->m_resolutionDirty = false;
     result->m_width = width;
     result->m_height = height;
 
     return result;
 }
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(Context & context,
+std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawContext,
                                                          unsigned int width,
                                                          unsigned int height)
 {
-    auto result = std::make_shared<FramebufferImpl>(context);
+    auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->m_isBackbuffer = false;
-    result->m_resolutionDirty = false;
     result->m_width = width;
     result->m_height = height;
 
     return result;
 }
 
-Context & FramebufferImpl::context() const
+DrawContext & FramebufferImpl::drawContext() const
 {
-    return m_context;
+    return m_drawContext;
 }
 
 unsigned int FramebufferImpl::width() const
 {
-    if (m_resolutionDirty)
-    {
-        updateResolution();
-    }
     return m_width;
 }
 
 unsigned int FramebufferImpl::height() const
 {
-    if (m_resolutionDirty)
-    {
-        updateResolution();
-    }
     return m_height;
 }
 
@@ -133,6 +123,7 @@ void FramebufferImpl::setRenderTarget(unsigned int index, Surface * surface)
 
     if (surface)
     {
+        Assert(surface->width() == m_width && surface->height() == m_height, "Resolution mistach");
         m_renderTargets[index].reset(*surface);
     }
     else
@@ -141,7 +132,6 @@ void FramebufferImpl::setRenderTarget(unsigned int index, Surface * surface)
     }
 
     m_isBackbuffer = false;
-    m_resolutionDirty = true;
 }
 
 void FramebufferImpl::setDepthTarget(Surface * surface)
@@ -153,6 +143,7 @@ void FramebufferImpl::setDepthTarget(Surface * surface)
 
     if (surface)
     {
+        Assert(surface->width() == m_width && surface->height() == m_height, "Resolution mistach");
         m_depthTarget.reset(*surface);
     }
     else
@@ -162,12 +153,11 @@ void FramebufferImpl::setDepthTarget(Surface * surface)
 
     m_glFramebufferDirty = true;
     m_isBackbuffer = false;
-    m_resolutionDirty = true;
 }
 
 void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
 {
-    auto texture = m_context.createTexture2D(m_width, m_height, format, true);
+    auto texture = m_drawContext.createTexture2D(m_width, m_height, format, true);
     if (index < 0)
     {
         index = m_renderTargets.size();
@@ -178,7 +168,7 @@ void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
 
 void FramebufferImpl::addDepthTarget(PixelFormat format)
 {
-    auto texture = m_context.createTexture2D(m_width, m_height, format, true);
+    auto texture = m_drawContext.createTexture2D(m_width, m_height, format, true);
     m_depthTargetTexture.reset(texture);
     setDepthTarget(&texture.surface(0));
 }
@@ -202,11 +192,10 @@ void FramebufferImpl::bind(GLStateManager & glStateManager) const
     }
 }
 
-FramebufferImpl::FramebufferImpl(Context & context):
-    m_context(context),
+FramebufferImpl::FramebufferImpl(DrawContext & drawContext):
+    m_drawContext(drawContext),
     m_isBackbuffer(true),
     m_glFramebufferDirty(false),
-    m_resolutionDirty(true),
     m_width(0u),
     m_height(0u)
 {
@@ -281,31 +270,6 @@ void FramebufferImpl::updateFramebufferDesc() const
     depthAttachment.glName = glName;
 
     m_glFramebufferDesc.reset(GLFramebufferDesc(colorAttachments, depthAttachment));
-}
-
-void FramebufferImpl::updateResolution() const
-{
-    bool foundFirst = false;
-
-    for (auto rt = 0u; rt < m_renderTargets.size(); rt++)
-    {
-        if (m_renderTargets[rt].engaged())
-        {
-            if (!foundFirst)
-            {
-                m_width = m_renderTargets[rt].get().width();
-                m_height = m_renderTargets[rt].get().height();
-                foundFirst = true;
-            }
-
-            Assert(m_width == m_renderTargets[rt].get().width(), "");
-            Assert(m_height == m_renderTargets[rt].get().height(), "");
-        }
-    }
-
-    Assert(foundFirst, "");
-
-    m_resolutionDirty = false;
 }
 
 }

@@ -10,9 +10,10 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
+#include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 
 #include "Detail/BufferImpl.h"
 #include "Detail/DrawImpl.h"
@@ -114,8 +115,8 @@ Buffer Draw::setIndices(const LayoutedBlob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & context = m_impl->context;
-    auto buffer = context.createBuffer(data.layout());
+    auto & drawContext = m_impl->drawContext;
+    auto buffer = drawContext.createBuffer(data.layout());
     buffer.scheduleUpload(data);
     setIndexBuffer(buffer);
 
@@ -126,8 +127,8 @@ Buffer Draw::addVertices(const LayoutedBlob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & context = m_impl->context;
-    auto buffer = context.createBuffer(data.layout());
+    auto & drawContext = m_impl->drawContext;
+    auto buffer = drawContext.createBuffer(data.layout());
     buffer.scheduleUpload(data);
     addVertexBuffer(buffer);
 
@@ -138,8 +139,8 @@ Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & context = m_impl->context;
-    auto buffer = context.createBuffer(data.layout());
+    auto & drawContext = m_impl->drawContext;
+    auto buffer = drawContext.createBuffer(data.layout());
     buffer.scheduleUpload(data);
     addInstanceBuffer(buffer, divisor);
 
@@ -255,7 +256,7 @@ void Draw::schedule() const
         m_impl->dirtyValueAttributes.clear();
     }
 
-    m_impl->context.scheduleDraw(*this);
+    m_impl->drawContext.scheduleDraw(*this);
 }
 
 void Draw::setState(const DrawState & state)
@@ -284,7 +285,7 @@ void Draw::build() const
 {
     /*
         ToDo
-            Move all gl-stuff to Context/GLStateManager
+            Move all gl-stuff to DrawContext/GLStateManager
     */
 
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);
@@ -353,7 +354,12 @@ void Draw::setAttribute(const ProgramInterfaceVertexAttribute & attribute, const
     {
         const auto offset = m_impl->valueAttributes.size();
         m_impl->valueAttributes.resize(offset + attribute.type().size());
-        binding = detail::VertexAttributeValueBinding{offset, (u32)attribute.index()};
+
+        auto valueBinding = detail::VertexAttributeValueBinding();
+		valueBinding.offset = offset;
+		valueBinding.attributeIndex = attribute.index();
+
+		binding = valueBinding;
     }
 
     Assert(binding.which() != 2, "Vertex attribute '" + attribute.name() + "' is already bound to buffer");

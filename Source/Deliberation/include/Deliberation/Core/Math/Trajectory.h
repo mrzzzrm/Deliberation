@@ -7,7 +7,7 @@
 namespace deliberation
 {
 
-inline glm::vec3 DELIBERATION_API CalculateTrajectory(
+inline glm::vec3 CalculateTrajectory(
     const glm::vec3 & originPosition,
     const glm::vec3 & originVelocity,
     float bulletSpeed,

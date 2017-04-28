@@ -9,7 +9,7 @@
 # (SDL2_image.dll, libsdl2_image.so, SDL2_image.framework, etc).
 # Set SDL2_IMAGE_LIBRARY_TEMP to point to your SDL2 library, and configure again.
 # Similarly, if you see an empty SDL2MAIN_LIBRARY, you should set this value
-# as appropriate. These values are used to generateMesh the final SDL2_IMAGE_LIBRARY
+# as appropriate. These values are used to generate the final SDL2_IMAGE_LIBRARY
 # variable, but when these values are unset, SDL2_IMAGE_LIBRARY does not get created.
 #
 # $SDL2 is an environment variable that would
@@ -76,7 +76,7 @@
 # HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# TYPE_DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -88,8 +88,8 @@
 # (To distribute this file outside of CMake, substitute the full
 # License text for the above reference.)
 
-FIND_PATH(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
-	HINTS
+SET(SDL2_IMAGE_SEARCH_PATHS
+	${PROJECT_SOURCE_DIR}/Extern/SDL2_image-2.0.1
 	${SDL2}
 	$ENV{SDL2}
 	$ENV{SDL2_IMAGE}
@@ -107,39 +107,30 @@ FIND_PATH(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
 	/opt
 )
 
+FIND_PATH(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
+	HINTS
+	${SDL2_IMAGE_SEARCH_PATHS}
+)
+
 # Lookup the 64 bit libs on x64
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	FIND_LIBRARY(SDL2_IMAGE_LIBRARY_TEMP
-		NAMES SDL2_image
-		HINTS
-		${SDL2}
-		$ENV{SDL2}
-		$ENV{SDL2_IMAGE}
+		NAMES SDL2_image		
 		PATH_SUFFIXES lib64 lib
 		lib/x64
 		x86_64-w64-mingw32/lib
-		PATHS
-		/sw
-		/opt/local
-		/opt/csw
-		/opt
+		HINTS
+		${SDL2_IMAGE_SEARCH_PATHS}
 	)
 # On 32bit build find the 32bit libs
 ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	FIND_LIBRARY(SDL2_IMAGE_LIBRARY_TEMP
 		NAMES SDL2_image
+		PATH_SUFFIXES lib64 lib
+		lib/x64
+		x86_64-w64-mingw32/lib
 		HINTS
-		${SDL2}
-		$ENV{SDL2}
-		$ENV{SDL2_IMAGE}
-		PATH_SUFFIXES lib
-		lib/x86
-		i686-w64-mingw32/lib
-		PATHS
-		/sw
-		/opt/local
-		/opt/csw
-		/opt
+		${SDL2_IMAGE_SEARCH_PATHS}
 	)
 ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
@@ -155,3 +146,4 @@ ENDIF(SDL2_IMAGE_LIBRARY_TEMP)
 INCLUDE(FindPackageHandleStandardArgs)
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2_IMAGE REQUIRED_VARS SDL2_IMAGE_LIBRARY SDL2_IMAGE_INCLUDE_DIR)
+

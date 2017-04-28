@@ -1,16 +1,16 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/SurfaceBinary.h>
 
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class SurfaceDownloadImpl;
 
-class DELIBERATION_API SurfaceDownload final
+class SurfaceDownload final
 {
 public:
     SurfaceDownload();
@@ -22,7 +22,7 @@ public:
     const SurfaceBinary & result() const;
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class Surface;
 
 private:

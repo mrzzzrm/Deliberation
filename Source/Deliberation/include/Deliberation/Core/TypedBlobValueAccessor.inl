@@ -9,16 +9,18 @@ namespace deliberation
 {
 
 template<typename T>
-TypedBlobIterator<T>::TypedBlobIterator(T * ptr, size_t stride):
-    m_ptr((u8*)ptr),
-    m_stride(stride)
-{}
+T TypedBlobIteratorBase<T>::get()
+{
+    auto value = *(T*)m_ptr;
+    m_ptr += m_stride;
+    return value;
+}
 
 template<typename T>
-inline void TypedBlobIterator<T>::put(const T & value)
+void TypedBlobIterator<T>::put(const T & value)
 {
-    *(T*)m_ptr = value;
-    m_ptr += m_stride;
+    *(T*)TypedBlobIteratorBase<T>::m_ptr = value;
+    TypedBlobIteratorBase<T>::m_ptr += TypedBlobIteratorBase<T>::m_stride;
 }
 
 template<typename T>
@@ -27,6 +29,16 @@ CTypedBlobValueAccessor<T>::CTypedBlobValueAccessor(const Blob & data,
                                                     const DataLayoutField & field):
     m_data(data, layout, field)
 {
+}
+
+template<typename T>
+CTypedBlobIterator<T> CTypedBlobValueAccessor<T>::citerator() const
+{
+    Assert(m_data, "Accessor is not initialized");
+
+    auto offset = m_data->field.offset();
+
+    return CTypedBlobIterator<T>((T*)&((char*)m_data->data.ptrRaw())[offset], m_data->layout.stride());
 }
 
 template<typename T>
@@ -54,6 +66,16 @@ TypedBlobIterator<T> TypedBlobValueAccessor<T>::iterator()
     auto offset = m_data->field.offset();
 
     return TypedBlobIterator<T>((T*)&((char*)m_data->data.ptrRaw())[offset], m_data->layout.stride());
+}
+
+template<typename T>
+CTypedBlobIterator<T> TypedBlobValueAccessor<T>::citerator() const
+{
+    Assert(m_data, "Accessor is not initialized");
+
+    auto offset = m_data->field.offset();
+
+    return CTypedBlobIterator<T>((T*)&((char*)m_data->data.ptrRaw())[offset], m_data->layout.stride());
 }
 
 template<typename T>

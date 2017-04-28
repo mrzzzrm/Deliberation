@@ -4,7 +4,7 @@
 
 #include <Deliberation/Deliberation.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/StencilState.h>
 
 #include <Deliberation/Scene/Camera3D.h>
@@ -12,10 +12,10 @@
 namespace deliberation
 {
 
-DebugGrid3DRenderer::DebugGrid3DRenderer(Context & context,
+DebugGrid3DRenderer::DebugGrid3DRenderer(DrawContext & drawContext,
                                          float scale,
                                          const Camera3D & camera):
-    m_context(context),
+    m_drawContext(drawContext),
     m_camera(camera)
 {
     init(scale);
@@ -66,18 +66,18 @@ void DebugGrid3DRenderer::init(float scale)
 
     auto layout = DataLayout({{"Position", Type_Vec3}});
 
-    m_vertexBuffer = m_context.createBuffer(layout);
+    m_vertexBuffer = m_drawContext.createBuffer(layout);
     m_vertexBuffer.createUpload(vertices).schedule();
 
-    m_program = m_context.createProgram({deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.vert"),
+    m_program = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.vert"),
                                          deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.frag")});
 
-    m_normalLines = m_context.createDraw(m_program, gl::GL_LINES, "GridRenderer - normal lines");
+    m_normalLines = m_drawContext.createDraw(m_program, gl::GL_LINES, "GridRenderer - normal lines");
     m_normalLines.addVertexBufferRange(m_vertexBuffer, 0u, vertices.size() - 4);
     m_normalLines.uniform("Color").set(glm::vec3(0.3f, 0.3f, 0.3f));
     //m_normalLines.state().setStencilState(StencilState::clearsBit(0));
 
-    m_fatLines = m_context.createDraw(m_program, gl::GL_LINES, "GridRenderer - origin lines");
+    m_fatLines = m_drawContext.createDraw(m_program, gl::GL_LINES, "GridRenderer - origin lines");
     m_fatLines.addVertexBufferRange(m_vertexBuffer, vertices.size() - 4, 4);
     m_fatLines.state().rasterizerState().setLineWidth(5.0f);
     m_fatLines.uniform("Color").set(glm::vec3(0.7f, 0.3f, 0.3f));

@@ -11,7 +11,7 @@
 namespace deliberation
 {
 
-struct DELIBERATION_API EntityComponentSetup
+struct EntityComponentSetup
 {
     std::vector<ComponentTypeId>    componentTypeIds;
     std::vector<std::size_t>        systemIndices;

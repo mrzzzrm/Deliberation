@@ -6,7 +6,7 @@
 #include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/SparseVector.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -18,7 +18,7 @@ class Narrowphase;
 class ProximityCache;
 class RigidBody;
 
-class DELIBERATION_API Broadphase
+class Broadphase
 {
 public:
     Broadphase(Narrowphase & narrowphase);

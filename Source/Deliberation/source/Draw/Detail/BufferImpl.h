@@ -7,7 +7,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 
 namespace detail
 {
@@ -15,10 +15,10 @@ namespace detail
 class BufferImpl final
 {
 public:
-    BufferImpl(Context & context, const DataLayout & layout);
+    BufferImpl(DrawContext & drawContext, const DataLayout & layout);
     ~BufferImpl();
 
-    Context &       context;
+    DrawContext &       drawContext;
     gl::GLuint      glName;
     unsigned int    count;
     DataLayout      layout;

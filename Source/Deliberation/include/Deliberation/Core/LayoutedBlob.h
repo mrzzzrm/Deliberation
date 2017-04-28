@@ -8,14 +8,14 @@
 #include <Deliberation/Core/LayoutedBlobElement.h>
 #include <Deliberation/Core/TypedBlobValueAccessor.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class DataLayout;
 
-class DELIBERATION_API LayoutedBlob final
+class LayoutedBlob final
 {
 public:
     template<typename T> using Field = TypedBlobValueAccessor<T>;
@@ -54,6 +54,12 @@ public:
 
     template<typename T>
     TypedBlobIterator<T> iterator(const DataLayoutField & field);
+
+    template<typename T>
+    CTypedBlobIterator<T> citerator(const std::string & name) const;
+
+    template<typename T>
+    CTypedBlobIterator<T> citerator(const DataLayoutField & field) const;
 
     template<typename T>
     void assign(const std::string & name, const std::vector<T> & values);

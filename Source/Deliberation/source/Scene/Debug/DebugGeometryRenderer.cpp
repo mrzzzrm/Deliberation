@@ -10,7 +10,7 @@
 #include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
 #include <Deliberation/Scene/Camera3D.h>
@@ -94,14 +94,14 @@ void DebugBoxInstance::setWireframe(bool wireframe) {
 void DebugBoxInstance::schedule() const {
     if (m_meshDirty) {
         if (m_wireframe) {
-            m_draw = manager().context().createDraw(
+            m_draw = manager().drawContext().createDraw(
                 buildIns().unicolorProgram,
                 gl::GL_LINES
             );
             m_draw.addVertexBuffer(buildIns().boxLinesVertexBuffer);
             m_draw.setIndexBuffer(buildIns().boxLinesIndexBuffer);
         } else {
-            m_draw = manager().context().createDraw(
+            m_draw = manager().drawContext().createDraw(
                 buildIns().shadedProgram,
                 gl::GL_TRIANGLES
             );
@@ -136,7 +136,7 @@ Box DebugBoxInstance::toBox() const {
 
 DebugPointInstance::DebugPointInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
-    m_draw = manager().context().createDraw(manager().buildIns().unicolorProgram, gl::GL_POINTS);
+    m_draw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram, gl::GL_POINTS);
     m_draw.addVertexBuffer(manager().buildIns().pointVertexBuffer);;
     m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_draw.state().rasterizerState().setPointSize(3.0f);
@@ -166,16 +166,16 @@ void DebugPointInstance::schedule() const {
 DebugArrowInstance::DebugArrowInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
     m_lineVertices = LayoutedBlob(DataLayout("Position", Type_Vec3), 2);
-    m_lineVertexBuffer = manager().context().createBuffer(m_lineVertices.layout());
+    m_lineVertexBuffer = manager().drawContext().createBuffer(m_lineVertices.layout());
 
-    m_lineDraw = manager().context().createDraw(manager().buildIns().unicolorProgram,
+    m_lineDraw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram,
                                                 gl::GL_LINES);
     m_lineDraw.addVertexBuffer(m_lineVertexBuffer);
     m_lineDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_lineDraw.uniform("Transform").set(glm::mat4(1.0f));
     m_lineColorUniform = m_lineDraw.uniform("Color");
 
-    m_coneDraw = manager().context().createDraw(manager().buildIns().shadedProgram,
+    m_coneDraw = manager().drawContext().createDraw(manager().buildIns().shadedProgram,
                                                 gl::GL_TRIANGLES);
     m_coneDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_coneDraw.addVertexBuffer(manager().buildIns().coneVertexBuffer);
@@ -244,9 +244,9 @@ DebugWireframeInstance::DebugWireframeInstance(DebugGeometryRenderer &renderer) 
     DebugGeometryInstance(renderer) {
     m_vertices = LayoutedBlob(DataLayout("Position", Type_Vec3));
 
-    m_vertexBuffer = manager().context().createBuffer(m_vertices.layout());
+    m_vertexBuffer = manager().drawContext().createBuffer(m_vertices.layout());
 
-    m_draw = manager().context().createDraw(manager().buildIns().unicolorProgram, gl::GL_LINES);
+    m_draw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram, gl::GL_LINES);
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
 
@@ -295,7 +295,7 @@ void DebugWireframeInstance::schedule() const {
 
 DebugSphereInstance::DebugSphereInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
-    m_draw = manager().context().createDraw(manager().buildIns().shadedProgram,
+    m_draw = manager().drawContext().createDraw(manager().buildIns().shadedProgram,
                                             gl::GL_TRIANGLES);
     m_draw.addVertexBuffer(manager().buildIns().sphereVertexBuffer);
     m_draw.setIndexBuffer(manager().buildIns().sphereIndexBuffer);
@@ -334,13 +334,13 @@ void DebugSphereInstance::schedule() const {
 
 DebugPoseInstance::DebugPoseInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
-    m_arrows[0].reset(renderer);
+    m_arrows[0].emplace(renderer);
     m_arrows[0]->setColor({1.0f, 0.0f, 0.0f});
 
-    m_arrows[1].reset(renderer);
+    m_arrows[1].emplace(renderer);
     m_arrows[1]->setColor({0.0f, 1.0f, 0.0f});
 
-    m_arrows[2].reset(renderer);
+    m_arrows[2].emplace(renderer);
     m_arrows[2]->setColor({0.0f, 0.0f, 1.0f});
 }
 
@@ -376,7 +376,7 @@ DebugGeometryRenderer::DebugGeometryRenderer(DebugGeometryManager &manager) :
     m_manager(manager) {
     auto globalsLayout = manager.buildIns().shadedProgram.interface().uniformBlockRef("Globals").layout();
     m_globals = LayoutedBlob(globalsLayout, 1);
-    m_globalsBuffer = m_manager.context().createBuffer(globalsLayout);
+    m_globalsBuffer = m_manager.drawContext().createBuffer(globalsLayout);
 }
 
 bool DebugGeometryRenderer::visible() const {

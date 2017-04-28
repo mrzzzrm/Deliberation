@@ -5,7 +5,7 @@
 #include <Deliberation/Core/Math/AABB.h>
 #include <Deliberation/Core/Math/Transform3D.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -13,7 +13,7 @@ namespace deliberation
 class BroadphaseProxy;
 class CollisionShape;
 
-class DELIBERATION_API CollisionObject
+class CollisionObject
 {
 public:
     CollisionObject(const std::shared_ptr<CollisionShape> & shape,

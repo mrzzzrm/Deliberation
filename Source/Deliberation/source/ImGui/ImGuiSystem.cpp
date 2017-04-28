@@ -2,7 +2,7 @@
 
 #include <glbinding/gl/gl.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/TextureLoader.h>
@@ -19,7 +19,7 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world):
     Base(world),
     InputLayer(200),
-    m_context(world.system<ApplicationSystem>().context()),
+    m_drawContext(world.system<ApplicationSystem>().drawContext()),
     m_input(world.system<ApplicationSystem>().input())
 {
     auto & io = ImGui::GetIO();
@@ -36,15 +36,15 @@ ImGuiSystem::ImGuiSystem(World & world):
 
     auto indexLayout = DataLayout("Index", sizeof(ImDrawIdx) == 2 ? Type_U16 : Type_U32);
 
-    m_vertexBuffer = m_context.createBuffer(vertexLayout);
-    m_indexBuffer = m_context.createBuffer(indexLayout);
+    m_vertexBuffer = m_drawContext.createBuffer(vertexLayout);
+    m_indexBuffer = m_drawContext.createBuffer(indexLayout);
 
-    auto program = m_context.createProgram({
+    auto program = m_drawContext.createProgram({
                                              DeliberationDataPath("Data/Shaders/ImGui.vert"),
                                              DeliberationDataPath("Data/Shaders/ImGui.frag")
                                          });
 
-    m_draw = m_context.createDraw(program);
+    m_draw = m_drawContext.createDraw(program);
 
     m_draw.addVertexBuffer(m_vertexBuffer);
 
@@ -64,7 +64,7 @@ ImGuiSystem::ImGuiSystem(World & world):
 
     const auto textureBinary =
         TextureLoader(Blob::fromRawData(pixels, width * height * 4), width, height, PixelFormat_RGBA_8_U).load();
-    const auto texture = m_context.createTexture(textureBinary);
+    const auto texture = m_drawContext.createTexture(textureBinary);
 
     auto sampler = m_draw.sampler("Texture");
     sampler.setTexture(texture);
@@ -98,7 +98,7 @@ void ImGuiSystem::onFrameBegin()
 {
     auto & io = ImGui::GetIO();
 
-    const auto & backbuffer = m_context.backbuffer();
+    const auto & backbuffer = m_drawContext.backbuffer();
 
     io.DisplaySize = ImVec2((float)backbuffer.width(), (float)backbuffer.height());
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);

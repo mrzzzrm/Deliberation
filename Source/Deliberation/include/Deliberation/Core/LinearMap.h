@@ -3,11 +3,11 @@
 #include <cstdlib>
 #include <vector>
 
-#include <boost/optional.hpp>
+#include "boost/optional.hpp"
 
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -60,6 +60,8 @@ public:
 
     CIterator begin() const;
     CIterator end() const;
+
+    void clear();
 
     void erase(std::size_t key);
     Iterator erase(const Iterator & i);

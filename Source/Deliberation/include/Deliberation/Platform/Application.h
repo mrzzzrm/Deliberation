@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <Deliberation/Core/FpsCounter.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Platform/Input.h>
 
@@ -15,7 +15,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API Application
+class Application
 {
 public:
     Application(const std::string & name,
@@ -25,8 +25,8 @@ public:
     InputBase & input();
     const InputBase & input() const;
 
-    Context & context();
-    const Context & context() const;
+    DrawContext & drawContext();
+    const DrawContext & drawContext() const;
 
     float fps() const;
 
@@ -41,6 +41,7 @@ protected:
 
 private:
     void init();
+    void handleWindowEvent(const SDL_Event & event);
 
 private:
     std::string         m_name;
@@ -51,7 +52,7 @@ private:
 
     FpsCounter          m_fpsCounter;
 
-    Optional<Context>   m_context;
+    Optional<DrawContext>   m_drawContext;
 
     SDL_Window *        m_displayWindow;
     SDL_Renderer *      m_displayRenderer;
@@ -59,6 +60,9 @@ private:
     SDL_GLContext       m_glContext;
 
     Optional<Input>     m_input;
+
+    int                 m_displayWidth = 1600;
+    int                 m_displayHeight = 900;
 };
 
 }

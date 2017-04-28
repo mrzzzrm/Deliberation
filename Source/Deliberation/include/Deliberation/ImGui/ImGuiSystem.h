@@ -15,10 +15,10 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class InputBase;
 
-class DELIBERATION_API ImGuiSystem:
+class ImGuiSystem:
     public std::enable_shared_from_this<ImGuiSystem>,
     public System<ImGuiSystem>,
     public InputLayer
@@ -37,7 +37,7 @@ protected:
     void onMouseButtonDown(MouseButtonEvent & event) override;
 
 private:
-    Context &   m_context;
+    DrawContext &   m_drawContext;
     InputBase & m_input;
 
     Draw        m_draw;

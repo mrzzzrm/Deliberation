@@ -105,7 +105,7 @@ bool LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::is
 
 template<typename NodeType>
 template<typename QualifiedNodeType, typename QualifiedTreeType>
-typename LinearOctree<NodeType>::template IteratorT<QualifiedNodeType, QualifiedTreeType>
+typename LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>
 LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::firstChild() const
 {
     auto iter = *this;
@@ -115,7 +115,7 @@ LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::firstCh
 
 template<typename NodeType>
 template<typename QualifiedNodeType, typename QualifiedTreeType>
-typename LinearOctree<NodeType>::template IteratorT<QualifiedNodeType, QualifiedTreeType>
+typename LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>
 LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::nextSibling() const
 {
     auto iter = *this;
@@ -125,7 +125,7 @@ LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::nextSib
 
 template<typename NodeType>
 template<typename QualifiedNodeType, typename QualifiedTreeType>
-typename LinearOctree<NodeType>::template IteratorT<QualifiedNodeType, QualifiedTreeType>
+typename LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>
 LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::parent() const
 {
     auto iter = *this;

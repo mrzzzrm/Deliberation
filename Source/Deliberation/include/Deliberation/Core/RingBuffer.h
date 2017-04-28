@@ -3,17 +3,17 @@
 #include <string>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 template<typename T>
-class DELIBERATION_API RingBuffer final
+class RingBuffer final
 {
 public:
     template<typename QualifiedRingBufferType, typename QualifiedT>
-    class DELIBERATION_API IteratorT final
+    class IteratorT final
     {
     public:
         IteratorT(QualifiedRingBufferType & buffer, std::size_t index);

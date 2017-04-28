@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -21,7 +22,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Program;
 
 namespace detail
@@ -32,10 +33,10 @@ class ProgramImpl;
 class DrawImpl final
 {
 public:
-    DrawImpl(Context & context,
+    DrawImpl(DrawContext & drawContext,
              const Program & program);
 
-    Context &                                   context;
+    DrawContext &                                   drawContext;
     std::string                                 name;
     std::shared_ptr<ProgramImpl>                program;
     BufferBinding                               indexBufferBinding;

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -14,20 +14,20 @@ namespace detail
     class ProgramImpl;
 }
 
-class Context;
+class DrawContext;
 class ProgramInterface;
 
-class DELIBERATION_API Program final
+class Program final
 {
 public:
     Program();
 
-    Context & context() const;
+    DrawContext & drawContext() const;
 
     const ProgramInterface & interface() const;
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class Draw;
     friend class detail::DrawImpl;
     friend class detail::DrawExecution;

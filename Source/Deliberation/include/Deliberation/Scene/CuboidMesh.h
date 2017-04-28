@@ -4,12 +4,12 @@
 
 #include <Deliberation/Scene/Mesh.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API CuboidMesh final
+class CuboidMesh final
 {
 public:
     static std::vector<glm::vec3> positions(const glm::vec3 & size);

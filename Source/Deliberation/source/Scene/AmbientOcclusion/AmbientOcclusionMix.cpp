@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
@@ -21,13 +21,13 @@ AmbientOcclusionMix::AmbientOcclusionMix(const Surface & occlusion,
 {
     Assert(occlusion.width() == color.width() && occlusion.height() == color.height(), "");
 
-    auto & context = occlusion.context();
+    auto & drawContext = occlusion.drawContext();
 
-    m_output = context.createTexture2D(occlusion.width(),
+    m_output = drawContext.createTexture2D(occlusion.width(),
                                        occlusion.height(),
                                        color.format());
 
-    m_effect = PostprocessingEffect(context,
+    m_effect = ScreenSpaceEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionMix.frag")},
                                     "AmbientOcclusionMix");

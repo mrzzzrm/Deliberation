@@ -6,6 +6,6 @@ namespace deliberation
 {
 
 template<typename ... T>
-void DELIBERATION_API Swallow(T &&...) {}
+void Swallow(T &&...) {}
 
 }

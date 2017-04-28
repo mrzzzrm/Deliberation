@@ -5,7 +5,6 @@
 #include <Deliberation/Core/Chrono.h>
 
 #include <Deliberation/Deliberation.h>
-#include <jmorecfg.h>
 
 namespace deliberation
 {

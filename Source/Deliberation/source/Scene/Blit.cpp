@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
@@ -33,10 +33,10 @@ void Blit::schedule()
 
     if (!m_draw.engaged())
     {
-        auto & context = m_source.get().context();
+        auto & drawContext = m_source.get().drawContext();
 
-        m_draw.reset(context.createDraw(context.blitProgram(), gl::GL_TRIANGLE_STRIP));
-        m_draw.get().addVertexBuffer(context.blitVertexBuffer());
+        m_draw.reset(drawContext.createDraw(drawContext.blitProgram(), gl::GL_TRIANGLE_STRIP));
+        m_draw.get().addVertexBuffer(drawContext.blitVertexBuffer());
         m_draw.get().sampler("Source").setTexture(m_source.get().texture());
         m_draw.get().state().setViewport(m_viewport);
     }

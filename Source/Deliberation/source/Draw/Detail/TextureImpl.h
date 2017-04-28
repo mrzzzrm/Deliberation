@@ -10,7 +10,7 @@
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 
 namespace detail
 {
@@ -18,19 +18,19 @@ namespace detail
 class TextureImpl final
 {
 public:
-    static std::shared_ptr<TextureImpl> build(Context & context,
+    static std::shared_ptr<TextureImpl> build(DrawContext & drawContext,
                                               unsigned int width,
                                               unsigned int height,
                                               unsigned int numFaces,
                                               PixelFormat format);
 
 public:
-    TextureImpl(Context & context, unsigned int numFaces);
+    TextureImpl(DrawContext & drawContext, unsigned int numFaces);
 
     void allocate() const;
     void upload(const TextureBinary & binary);
 
-    Context &               context;
+    DrawContext &               drawContext;
 
     mutable gl::GLuint      glName;
 

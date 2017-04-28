@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Viewport.h>
 #include <Deliberation/Core/Optional.h>
@@ -16,7 +16,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API DrawState final
+class DrawState final
 {
 public:
     DrawState();

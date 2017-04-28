@@ -1,9 +1,10 @@
 #include <functional>
 #include <sstream>
+#include <iostream>
+
+#include <boost/optional.hpp>
 
 #include <Deliberation/Core/Assert.h>
-
-#include <iostream>
 
 namespace deliberation
 {
@@ -39,7 +40,7 @@ QValT & SparseVector<T>::IteratorT<QVecT, QValT>::operator*()
 
 template<typename T>
 template<typename QVecT, typename QValT>
-SparseVector<T>::IteratorT<QVecT, QValT> & SparseVector<T>::IteratorT<QVecT, QValT>::operator++()
+typename SparseVector<T>::template IteratorT<QVecT, QValT> & SparseVector<T>::IteratorT<QVecT, QValT>::operator++()
 {
     do
     {
@@ -157,7 +158,7 @@ void SparseVector<T>::insert_at(size_t index, T && value)
 
     ensureSize(index);
 
-    if (index >= m_vec.size()) m_vec.emplace_back(boost::in_place, std::move(value));
+    if (index >= m_vec.size()) m_vec.emplace_back(boost::in_place_init, std::move(value));
     else m_vec[index].emplace(std::move(value));
 
     incCount();

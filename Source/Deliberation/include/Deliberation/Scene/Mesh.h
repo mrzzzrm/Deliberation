@@ -5,12 +5,12 @@
 #include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Core/IntTypes.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class DELIBERATION_API Mesh final
+class Mesh final
 {
 public:
     struct Face

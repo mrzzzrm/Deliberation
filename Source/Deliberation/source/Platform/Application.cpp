@@ -43,14 +43,14 @@ const InputBase & Application::input() const
     return *m_input;
 }
 
-Context & Application::context()
+DrawContext & Application::drawContext()
 {
-    return m_context.get();
+    return m_drawContext.get();
 }
 
-const Context & Application::context() const
+const DrawContext & Application::drawContext() const
 {
-    return m_context.get();
+    return m_drawContext.get();
 }
 
 float Application::fps() const
@@ -103,6 +103,10 @@ int Application::run(int argc,
                     m_input->onSDLInputEvent(event);
                     break;
 
+                case SDL_WINDOWEVENT:
+                    handleWindowEvent(event);
+                    break;
+
                 case SDL_QUIT:
                     quit(0);
                     break;
@@ -115,7 +119,7 @@ int Application::run(int argc,
 
         m_input->step();
 
-        SDL_RenderPresent(m_displayRenderer);
+        SDL_GL_SwapWindow(m_displayWindow);
 
         m_fpsCounter.onFrame();
 
@@ -169,41 +173,44 @@ void Application::init()
             std::cerr << "IMG_Init: Failed to init required jpg and png support!" << std::endl;
             std::cerr << "IMG_Init: " << IMG_GetError() << std::endl;
             m_returnCode = -1;
+			return;
         }
     }
 
-    SDL_CreateWindowAndRenderer(1800, 1080, SDL_WINDOW_OPENGL, &m_displayWindow, &m_displayRenderer);
-    if (!m_displayWindow || !m_displayRenderer)
-    {
-        SDL_Quit();
-        m_returnCode =  -1;
-    }
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
 
-    SDL_GetRendererInfo(m_displayRenderer, &m_displayRendererInfo);
-
-    if ((m_displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) == 0 ||
-        (m_displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE) == 0) {
-        m_returnCode = -1;
-        return;
-    }
+	m_displayWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                       m_displayWidth, m_displayHeight, SDL_WINDOW_OPENGL);
+	if (!m_displayWindow)
+	{
+		SDL_Quit();
+		m_returnCode = -1;
+		return;
+	}
 
     m_glContext = SDL_GL_CreateContext(m_displayWindow);
     SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
-    glm::ivec4 contextColorSize;
-    SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &contextColorSize.x);
-    SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &contextColorSize.y);
-    SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &contextColorSize.z);
-    SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &contextColorSize.w);
+    glm::ivec4 drawContextColorSize;
+    SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &drawContextColorSize.x);
+    SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &drawContextColorSize.y);
+    SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &drawContextColorSize.z);
+    SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &drawContextColorSize.w);
 
     // Init glbinding
     glbinding::Binding::initialize();
 
+	auto versionString = glbinding::ContextInfo::version().toString();
+	auto vendorString = glbinding::ContextInfo::vendor();
+	auto rendererString = glbinding::ContextInfo::renderer();
+
     std::cout << std::endl
-              << "OpenGL Version:  " << glbinding::ContextInfo::version().toString() << std::endl
-              << "OpenGL Vendor:   " << glbinding::ContextInfo::vendor() << std::endl
-              << "OpenGL Renderer: " << glbinding::ContextInfo::renderer() << std::endl
-              << "Context RGBA-bits: " << contextColorSize << std::endl;
+              << "OpenGL Version:  " << versionString << std::endl
+              << "OpenGL Vendor:   " << vendorString << std::endl
+              << "OpenGL Renderer: " << rendererString << std::endl
+              << "DrawContext RGBA-bits: " << drawContextColorSize << std::endl;
 
     deliberation::init();
     deliberation::setPrefixPath(m_prefixPath);
@@ -211,14 +218,18 @@ void Application::init()
 
     std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
 
-    m_context.reset(1800, 1080);
+    m_drawContext.reset(m_displayWidth, m_displayHeight);
 
     /**
      * Init input
      */
-    m_input.reset(*m_context);
+    m_input.reset(*m_drawContext);
 
     m_initialized = true;
+}
+
+void Application::handleWindowEvent(const SDL_Event & event)
+{
 }
 
 }

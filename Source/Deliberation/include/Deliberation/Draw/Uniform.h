@@ -3,7 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+#include <Deliberation/Core/LayoutedBlob.h>
+
+
 
 namespace deliberation
 {
@@ -15,7 +17,7 @@ namespace detail
 
 class Draw;
 
-class DELIBERATION_API Uniform
+class Uniform
 {
 public:
     Uniform();
@@ -25,6 +27,8 @@ public:
 
     template<typename T>
     void set(const std::vector<T> & vec);
+
+    void set(const LayoutedBlob & array);
 
 private:
     friend class Draw;

@@ -9,6 +9,11 @@
 namespace deliberation
 {
 
+DepthState DepthState::enabled()
+{
+    return {DepthTest::Enabled, DepthWrite::Enabled};
+}
+
 DepthState DepthState::disabledRW()
 {
     return {DepthTest::Disabled, DepthWrite::Disabled};

@@ -4,13 +4,13 @@
 
 #include <Deliberation/Core/Types.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-gl::GLenum DELIBERATION_API ElementalTypeToGLType(const ElementalType & type);
-gl::GLenum DELIBERATION_API TypeToGLType(const Type & type);
-Type DELIBERATION_API GLTypeToType(gl::GLenum glType);
+gl::GLenum ElementalTypeToGLType(const ElementalType & type);
+gl::GLenum TypeToGLType(const Type & type);
+Type GLTypeToType(gl::GLenum glType);
 
 }

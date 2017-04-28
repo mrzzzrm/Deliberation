@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Texture.h>
@@ -8,14 +8,14 @@
 
 #include <Deliberation/Scene/AmbientOcclusion/AmbientOcclusionBlur.h>
 #include <Deliberation/Scene/AmbientOcclusion/AmbientOcclusionMix.h>
-#include <Deliberation/Scene/PostprocessingEffect.h>
+#include <Deliberation/Scene/ScreenSpaceEffect.h>
 
 namespace deliberation
 {
 
 class Camera3D;
 
-class DELIBERATION_API AmbientOcclusion final
+class AmbientOcclusion final
 {
 public:
     AmbientOcclusion();
@@ -45,7 +45,7 @@ private:
     Surface                 m_positionVS;
     const Camera3D *        m_camera;
     Texture                 m_output;
-    PostprocessingEffect    m_effect;
+    ScreenSpaceEffect       m_effect;
     Texture                 m_rotation;
 
     Uniform                 m_viewProjection;

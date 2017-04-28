@@ -6,29 +6,29 @@
 #include <Deliberation/Draw/Uniform.h>
 #include <Deliberation/Draw/Sampler.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 class Label;
 class Viewport;
 
-class DELIBERATION_API LabelRenderer final
+class LabelRenderer final
 {
 public:
     LabelRenderer();
-    LabelRenderer(Context & context);
+    LabelRenderer(DrawContext & drawContext);
 
     /*
         TODO
-            Draw/Context should insert the Viewport
+            Draw/DrawContext should insert the Viewport
     */
     void render(const Label & label, const Viewport & viewport);
 
 //private:
-    Context *       m_context;
+    DrawContext *       m_drawContext;
     Program         m_program;
     Buffer          m_vertexBuffer;
     Draw            m_draw;

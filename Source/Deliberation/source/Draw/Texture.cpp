@@ -58,7 +58,7 @@ const Surface & Texture::surface(unsigned int face) const
 TextureUpload Texture::createUpload(const TextureBinary & binary)
 {
     Assert(m_impl.get(), "Texture is hollow");
-    return TextureUpload(m_impl->context, *this, binary);
+    return TextureUpload(m_impl->drawContext, *this, binary);
 }
 
 void Texture::scheduleUpload(const TextureBinary & binary)

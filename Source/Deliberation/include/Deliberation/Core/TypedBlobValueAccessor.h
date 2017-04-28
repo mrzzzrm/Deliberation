@@ -13,16 +13,43 @@ class DataLayout;
 class DataLayoutField;
 
 template<typename T>
-class TypedBlobIterator final
+class TypedBlobIteratorBase
 {
 public:
-    TypedBlobIterator(T * ptr = nullptr, size_t stride = 0);
+    TypedBlobIteratorBase(T * ptr, size_t stride):
+        m_ptr((u8*)ptr), m_stride(stride)
+    {}
 
-    inline void put(const T & value);
+    T get();
 
-private:
+protected:
+    ~TypedBlobIteratorBase() = default;
+
+protected:
     u8 *    m_ptr;
     size_t  m_stride;
+};
+
+template<typename T>
+class CTypedBlobIterator final:
+    public TypedBlobIteratorBase<T>
+{
+public:
+    CTypedBlobIterator(T * ptr = nullptr, size_t stride = 0):
+        TypedBlobIteratorBase<T>(ptr, stride)
+    {}
+};
+
+template<typename T>
+class TypedBlobIterator final:
+    public TypedBlobIteratorBase<T>
+{
+public:
+    TypedBlobIterator(T * ptr = nullptr, size_t stride = 0):
+        TypedBlobIteratorBase<T>(ptr, stride)
+    {}
+
+    void put(const T & value);
 };
 
 template<typename T>
@@ -31,6 +58,8 @@ class CTypedBlobValueAccessor final
 public:
     CTypedBlobValueAccessor() = default;
     CTypedBlobValueAccessor(const Blob & data, const DataLayout & layout, const DataLayoutField & field);
+
+    CTypedBlobIterator<T> citerator() const;
 
     const T & operator[](size_t index) const;
 
@@ -46,6 +75,7 @@ public:
     TypedBlobValueAccessor(Blob & data, const DataLayout & layout, const DataLayoutField & field);
 
     TypedBlobIterator<T> iterator();
+    CTypedBlobIterator<T> citerator() const;
 
     void assign(const std::vector<T> & values);
 

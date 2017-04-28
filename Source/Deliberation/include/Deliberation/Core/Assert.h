@@ -23,7 +23,7 @@ namespace deliberation
 
 #if DELIBERATION_BUILD_TYPE_DEBUG
 
-inline void DELIBERATION_API AssertImpl(const char * file,
+inline void AssertImpl(const char * file,
                                  const char * function,
                                  unsigned int line,
                                  bool expr,
@@ -38,7 +38,7 @@ inline void DELIBERATION_API AssertImpl(const char * file,
                                msg << std::endl;
 }
 
-inline void DELIBERATION_API AssertImpl(const char * file,
+inline void AssertImpl(const char * file,
                                  const char * function,
                                  unsigned int line,
                                  bool expr,
@@ -47,7 +47,7 @@ inline void DELIBERATION_API AssertImpl(const char * file,
     AssertImpl(file, function, line, expr, msg.c_str());
 }
 
-inline void DELIBERATION_API AssertImpl(const char * file,
+inline void AssertImpl(const char * file,
                                  const char * function,
                                  unsigned int line,
                                  const void * ptr,
@@ -56,7 +56,7 @@ inline void DELIBERATION_API AssertImpl(const char * file,
     AssertImpl(file, function, line, ptr != nullptr, msg);
 }
 
-inline void DELIBERATION_API AssertImpl(const char * file,
+inline void AssertImpl(const char * file,
                                  const char * function,
                                  unsigned int line,
                                  const void * ptr,
@@ -65,7 +65,7 @@ inline void DELIBERATION_API AssertImpl(const char * file,
     AssertImpl(file, function, line, ptr != nullptr, msg);
 }
 
-inline void DELIBERATION_API FailImpl(const char * file,
+inline void FailImpl(const char * file,
                                const char * function,
                                unsigned int line,
                                const char * msg)
@@ -74,7 +74,7 @@ inline void DELIBERATION_API FailImpl(const char * file,
                              msg << std::endl;
 }
 
-inline void DELIBERATION_API FailImpl(const char * file,
+inline void FailImpl(const char * file,
                                const char * function,
                                unsigned int line,
                                const std::string & msg)

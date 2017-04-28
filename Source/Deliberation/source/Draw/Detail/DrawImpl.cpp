@@ -7,7 +7,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
@@ -19,9 +19,9 @@ namespace deliberation
 namespace detail
 {
 
-DrawImpl::DrawImpl(Context & context,
+DrawImpl::DrawImpl(DrawContext & drawContext,
                    const Program & program):
-    context(context),
+    drawContext(drawContext),
     program(program.m_impl),
     glVertexArray(0u)
 {
@@ -52,7 +52,7 @@ DrawImpl::DrawImpl(Context & context,
     }
 
     // Create framebuffer
-    framebuffer = context.backbuffer();
+    framebuffer = drawContext.backbuffer();
 
     // Allocate Uniform Buffer Bindings
     uniformBuffers.resize(this->program->interface.uniformBlocks().size());

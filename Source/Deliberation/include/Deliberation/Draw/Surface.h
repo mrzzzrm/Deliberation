@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Draw/SurfaceDownload.h>
 #include <Deliberation/Draw/Texture.h>
@@ -16,16 +16,16 @@ namespace detail
     class TextureImpl;
 }
 
-class Context;
+class DrawContext;
 class SurfaceDownloadImpl;
 
-class DELIBERATION_API Surface final
+class Surface final
 {
 public:
     Surface();
     Surface(const Surface & surface);
 
-    Context & context() const;
+    DrawContext & drawContext() const;
     Texture texture() const;
     unsigned int face() const;
     unsigned int width() const;

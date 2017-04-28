@@ -11,7 +11,7 @@
 #include <Deliberation/Physics/CollisionShape.h>
 #include <Deliberation/Physics/CollisionObject.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -21,7 +21,7 @@ struct RigidBodyPayload
     virtual ~RigidBodyPayload() = default;
 };
 
-class DELIBERATION_API RigidBody final:
+class RigidBody final:
     public std::enable_shared_from_this<RigidBody>,
     public CollisionObject
 {

@@ -7,7 +7,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API RandomColorGenerator final
+class RandomColorGenerator final
 {
 public:
     RandomColorGenerator();

@@ -4,7 +4,7 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
@@ -19,13 +19,13 @@ AmbientOcclusionBlur::AmbientOcclusionBlur(const Surface & occlusion, const Surf
     m_initialized(true),
     m_occlusion(occlusion)
 {
-    auto & context = m_occlusion.context();
+    auto & drawContext = m_occlusion.drawContext();
 
-    m_output = context.createTexture2D(m_occlusion.width(),
+    m_output = drawContext.createTexture2D(m_occlusion.width(),
                                        m_occlusion.height(),
                                        PixelFormat_R_8_UN);
 
-    m_effect = PostprocessingEffect(context,
+    m_effect = ScreenSpaceEffect(drawContext,
                                     {deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionBlur.vert"),
                                      deliberation::DeliberationDataPath("Data/Shaders/AmbientOcclusionBlur.frag")},
                                     "AmbientOcclusionBlur");

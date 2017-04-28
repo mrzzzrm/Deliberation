@@ -45,15 +45,13 @@ void GLBindVertexAttribute(
     gl::glBindVertexArray(vao);
     gl::glBindBuffer(gl::GL_ARRAY_BUFFER, buffer.glName);
 
-    Assert(bufferFieldType.numColumns() == 1, "Implement this");
-
-    for (decltype(startLocation) l = startLocation; l < startLocation + bufferFieldType.numColumns(); l++)
+    for (i32 l = startLocation; l < startLocation + bufferFieldType.numColumns(); l++)
     {
         gl::glEnableVertexAttribArray(l);
         gl::glVertexAttribDivisor(l, divisor);
 
-        //auto localLocation = l - startLocation;
-        auto offset = bufferField.offset()/* + format.relativeOffsetOfLocation(localLocation)*/;
+        auto localLocation = l - startLocation;
+        auto offset = bufferField.offset() + localLocation * bufferFieldType.numRows() * bufferFieldType.elementalType().size();
 
         if (attributeElementalType.isFloat()) {
             gl::glVertexAttribPointer(l, size, type, normalize, buffer.layout.stride(),
@@ -65,7 +63,7 @@ void GLBindVertexAttribute(
     } 
 }
 
-void DELIBERATION_API GLBindVertexAttribute(gl::GLuint vao,
+void GLBindVertexAttribute(gl::GLuint vao,
                                             const ProgramInterfaceVertexAttribute & attribute,
                                             const void * data)
 {

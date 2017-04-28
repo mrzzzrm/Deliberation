@@ -2,16 +2,12 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 #include "Detail/FramebufferImpl.h"
 
 namespace deliberation
 {
-
-Framebuffer::Framebuffer() = default;
-
-Framebuffer::~Framebuffer() = default;
 
 unsigned int Framebuffer::width() const
 {
@@ -103,7 +99,7 @@ Clear & Framebuffer::clear()
 
     if (!m_impl->m_clear.engaged())
     {
-        m_impl->m_clear.reset(m_impl->m_context.createClear(*this));
+        m_impl->m_clear.reset(m_impl->m_drawContext.createClear(*this));
     }
 
     return m_impl->m_clear.get();
@@ -113,7 +109,7 @@ Clear Framebuffer::createClear()
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->context().createClear(*this);
+    return m_impl->drawContext().createClear(*this);
 }
 
 Framebuffer::Framebuffer(const std::shared_ptr<detail::FramebufferImpl> & impl):

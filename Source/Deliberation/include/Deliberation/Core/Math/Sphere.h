@@ -2,14 +2,14 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class AABB;
 
-class DELIBERATION_API Sphere final
+class Sphere final
 {
 public:
     static Sphere containingAABB(const AABB & aabb);

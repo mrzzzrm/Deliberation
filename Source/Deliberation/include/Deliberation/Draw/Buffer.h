@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/DataLayout.h>
@@ -24,10 +24,10 @@ namespace detail
     class BufferImpl;
 }
 
-class Context;
+class DrawContext;
 class LayoutedBlob;
 
-class DELIBERATION_API Buffer final
+class Buffer final
 {
 public:
     Buffer();
@@ -48,7 +48,7 @@ public:
 
 private:
     friend class BufferUploadExecution;
-    friend class Context;
+    friend class DrawContext;
     friend class Draw;
     friend class GLVertexAttributeBinder;
 

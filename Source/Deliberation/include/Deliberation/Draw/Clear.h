@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
@@ -19,7 +19,7 @@ namespace detail
 
 class Framebuffer;
 
-class DELIBERATION_API Clear final
+class Clear final
 {
 public:
     Clear();
@@ -42,7 +42,7 @@ public:
     void render();
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class ClearExecution;
 
 private:

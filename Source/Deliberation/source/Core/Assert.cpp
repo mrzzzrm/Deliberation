@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <string>
 
 void __Assert(const std::string & file,
               const std::string & function,

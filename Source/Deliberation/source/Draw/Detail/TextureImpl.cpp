@@ -47,13 +47,13 @@ namespace deliberation
 namespace detail
 {
 
-std::shared_ptr<TextureImpl> TextureImpl::build(Context & context,
+std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & drawContext,
                                                 unsigned int width,
                                                 unsigned int height,
                                                 unsigned int numFaces,
                                                 PixelFormat format)
 {
-    auto impl = std::make_shared<TextureImpl>(context, numFaces);
+    auto impl = std::make_shared<TextureImpl>(drawContext, numFaces);
 
     for (auto f = 0u; f < numFaces; f++)
     {
@@ -67,8 +67,8 @@ std::shared_ptr<TextureImpl> TextureImpl::build(Context & context,
     return impl;
 }
 
-TextureImpl::TextureImpl(Context & context, unsigned int numFaces):
-    context(context),
+TextureImpl::TextureImpl(DrawContext & drawContext, unsigned int numFaces):
+    drawContext(drawContext),
     glName(0u),
     width(0u),
     height(0u),

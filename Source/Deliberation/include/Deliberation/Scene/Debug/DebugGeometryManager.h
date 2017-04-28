@@ -12,7 +12,7 @@
 namespace deliberation
 {
 
-class DELIBERATION_API DebugGeometryManager final
+class DebugGeometryManager final
 {
 public:
     static constexpr float ARROW_CONE_HEIGHT = 0.2f;
@@ -53,13 +53,13 @@ public:
     };
     
 public:
-    DebugGeometryManager(Context & context);
+    DebugGeometryManager(DrawContext & drawContext);
 
-    Context & context() const;
+    DrawContext & drawContext() const;
     const BuildIns & buildIns() const;
 
 private:
-    Context &   m_context;
+    DrawContext &   m_drawContext;
     BuildIns    m_buildIns;
 };
 

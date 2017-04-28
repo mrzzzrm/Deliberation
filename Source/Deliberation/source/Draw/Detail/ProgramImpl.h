@@ -15,7 +15,7 @@ namespace globjects
 namespace deliberation
 {
 
-class Context;
+class DrawContext;
 
 namespace detail
 {
@@ -23,9 +23,9 @@ namespace detail
 class ProgramImpl final
 {
 public:
-    ProgramImpl(Context & context, const std::vector<std::string> & paths);
+    ProgramImpl(DrawContext & drawContext, const std::vector<std::string> & paths);
 
-    Context &           context;
+    DrawContext &           drawContext;
     gl::GLuint          glProgramName;
     ProgramInterface    interface;
 };

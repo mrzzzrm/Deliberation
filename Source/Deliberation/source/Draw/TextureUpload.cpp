@@ -1,22 +1,22 @@
 #include <Deliberation/Draw/TextureUpload.h>
 
-#include <Deliberation/Draw/Context.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
 
-TextureUpload::TextureUpload(Context & context,
+TextureUpload::TextureUpload(DrawContext & drawContext,
                              Texture & texture,
                              const TextureBinary & binary):
-    m_context(context),
+    m_drawContext(drawContext),
     m_texture(texture),
     m_binary(binary)
 {
 }
 
-Context & TextureUpload::context() const
+DrawContext & TextureUpload::drawContext() const
 {
-    return m_context;
+    return m_drawContext;
 }
 
 Texture & TextureUpload::texture() const
@@ -31,7 +31,7 @@ const TextureBinary & TextureUpload::binary() const
 
 void TextureUpload::schedule()
 {
-    m_context.scheduleTextureUpload(*this);
+    m_drawContext.scheduleTextureUpload(*this);
 }
 
 }

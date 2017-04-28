@@ -26,11 +26,11 @@ namespace detail
 }
 
 class Buffer;
-class Context;
+class DrawContext;
 class Framebuffer;
 class DrawState;
 
-class DELIBERATION_API Draw final
+class Draw final
 {
 public:
     Draw();
@@ -82,7 +82,7 @@ public:
     std::string toString() const;
 
 private:
-    friend class Context;
+    friend class DrawContext;
     friend class detail::DrawExecution;
     friend class DrawVerification;
     friend void detail::SetVertexAttribute(Draw & draw, const ProgramInterfaceVertexAttribute & attribute, const void * data);

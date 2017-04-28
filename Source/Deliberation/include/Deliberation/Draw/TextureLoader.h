@@ -6,19 +6,19 @@
 
 #include <glm/glm.hpp>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <Deliberation/Core/Types.h>
 #include <Deliberation/Draw/TextureBinary.h>
 
-#include <Deliberation/Deliberation_API.h>
+
 
 namespace deliberation
 {
 
 class ITextureLoaderImpl;
 
-class DELIBERATION_API TextureLoader final
+class TextureLoader final
 {
 public:
     // Single face

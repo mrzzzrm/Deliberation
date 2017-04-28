@@ -7,7 +7,7 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 
 namespace
 {
