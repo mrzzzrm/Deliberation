@@ -20,7 +20,6 @@ set(DELIBERATION_INCLUDE_DIRS
 
 # sources
 set(sources
-<<<<<<< HEAD
 	Core/Assert.cpp
 	Core/Assert.h
 	Core/BitUtils.cpp
@@ -393,7 +392,6 @@ set(sources
 	Scene/Pipeline/RenderManager.h
 	Scene/Pipeline/RenderNode.h
 	Scene/Pipeline/RenderPhase.h
-	Scene/Pipeline/SingleNodeRenderer.cpp
 	Scene/Pipeline/SingleNodeRenderer.h
 	Scene/ScreenSpaceEffect.cpp
 	Scene/ScreenSpaceEffect.h
