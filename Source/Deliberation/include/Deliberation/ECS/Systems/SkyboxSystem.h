@@ -5,6 +5,7 @@
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Scene/SkyboxRenderer.h>
+#include <Deliberation/Scene/Pipeline/RenderManager.h>
 
 #include <Deliberation/Deliberation.h>
 
@@ -15,19 +16,11 @@ class SkyboxSystem:
     public System<SkyboxSystem>
 {
 public:
-    SkyboxSystem(World & world, const Camera3D & camera, const Texture & cubeMap):
-        Base(world),
-        m_renderer(world.system<ApplicationSystem>().drawContext(), camera, cubeMap)
-    {}
-
-protected:
-    void onRender() override
+    SkyboxSystem(World & world, const Texture & cubeMap):
+        Base(world)
     {
-        m_renderer.render();
+        world.system<RenderManager>().addRenderer<SkyboxRenderer>(cubeMap);
     }
-
-private:
-    SkyboxRenderer m_renderer;
 };
 
 }

@@ -5,6 +5,7 @@
 namespace deliberation
 {
 
+class DrawContext;
 class RenderManager;
 
 class Renderer:
@@ -15,6 +16,7 @@ public:
     virtual ~Renderer() = default;
 
     RenderManager & renderManager() const { return m_renderManager; }
+    DrawContext & drawContext() const;
 
     virtual void registerRenderNodes() = 0;
 

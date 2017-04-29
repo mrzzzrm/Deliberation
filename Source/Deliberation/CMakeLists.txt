@@ -423,6 +423,7 @@ set(api_includes
     ${include_path}/Scene/Model/Model.h
     ${include_path}/Scene/Model/ModelInstance.h
     ${include_path}/Scene/Model/ModelRenderer.h
+    ${include_path}/Scene/Pipeline/Renderer.cpp
     ${include_path}/Scene/Pipeline/Renderer.h
     ${include_path}/Scene/Pipeline/RenderManager.h
     ${include_path}/Scene/Pipeline/RenderNode.h
