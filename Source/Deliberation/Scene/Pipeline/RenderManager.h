@@ -6,6 +6,7 @@
 #include <Deliberation/Core/LinearMap.h>
 
 #include <Deliberation/Draw/Framebuffer.h>
+#include <Deliberation/ECS/System.h>
 
 #include <Deliberation/Scene/Pipeline/RenderPhase.h>
 #include <Deliberation/Scene/Camera3D.h>
@@ -17,10 +18,11 @@ class DrawContext;
 class Renderer;
 class RenderNode;
 
-class RenderManager
+class RenderManager:
+    public System<RenderManager>
 {
 public:
-    RenderManager(DrawContext & drawContext);
+    RenderManager(World & world, DrawContext & drawContext);
     virtual ~RenderManager() = default;
 
     DrawContext & drawContext() { return m_drawContext; }

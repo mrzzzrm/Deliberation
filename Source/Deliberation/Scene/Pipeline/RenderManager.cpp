@@ -8,7 +8,8 @@
 namespace deliberation
 {
 
-RenderManager::RenderManager(DrawContext & drawContext):
+RenderManager::RenderManager(World & world, DrawContext & drawContext):
+    Base(world),
     m_drawContext(drawContext)
 {}
 

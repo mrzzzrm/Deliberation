@@ -20,6 +20,7 @@ set(DELIBERATION_INCLUDE_DIRS
 
 # sources
 set(sources
+<<<<<<< HEAD
 	Core/Assert.cpp
 	Core/Assert.h
 	Core/BitUtils.cpp
@@ -386,11 +387,14 @@ set(sources
 	Scene/Model/ModelInstance.h
 	Scene/Model/ModelRenderer.cpp
 	Scene/Model/ModelRenderer.h
+	Scene/Pipeline/Renderer.cpp
 	Scene/Pipeline/Renderer.h
 	Scene/Pipeline/RenderManager.cpp
 	Scene/Pipeline/RenderManager.h
 	Scene/Pipeline/RenderNode.h
 	Scene/Pipeline/RenderPhase.h
+	Scene/Pipeline/SingleNodeRenderer.cpp
+	Scene/Pipeline/SingleNodeRenderer.h
 	Scene/ScreenSpaceEffect.cpp
 	Scene/ScreenSpaceEffect.h
 	Scene/SkyboxRenderer.cpp

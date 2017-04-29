@@ -10,6 +10,8 @@ enum class RenderPhase
     PostGBuffer, // e.g. SSAO
     PreLighting, // e.g. ShadowMaps
     Lighting,
+    Alpha,
+    PostAlpha,
     Hdr,
 
     Count

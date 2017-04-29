@@ -8,9 +8,11 @@
 namespace deliberation
 {
 
-SkyboxRenderer::SkyboxRenderer(DrawContext & drawContext, const Camera3D & camera, const Texture & cubemap):
-    m_camera(camera)
+SkyboxRenderer::SkyboxRenderer(RenderManager & renderManager, const Texture & cubemap):
+    SingleNodeRenderer(renderManager, RenderPhase::Forward)
 {
+    auto & drawContext = renderManager.drawContext();
+
     const auto program = drawContext.createProgram({
         deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.vert"),
         deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.frag")});
@@ -45,11 +47,10 @@ SkyboxRenderer::SkyboxRenderer(DrawContext & drawContext, const Camera3D & camer
 
 void SkyboxRenderer::render()
 {
-
-    auto view = glm::mat4(glm::mat3(m_camera.view()));	// Remove any translation component of the view matrix
+    auto view = glm::mat4(glm::mat3(m_renderManager.mainCamera().view()));	// Remove any translation component of the view matrix
 
     m_draw.uniform("View").set(view);
-    m_draw.uniform("Projection").set(m_camera.projection());
+    m_draw.uniform("Projection").set(m_renderManager.mainCamera().projection());
     m_draw.schedule();
 }
 

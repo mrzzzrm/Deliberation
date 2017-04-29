@@ -3,6 +3,10 @@
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Texture.h>
 
+#include <Deliberation/Scene/Pipeline/RenderManager.h>
+#include <Deliberation/Scene/Pipeline/Renderer.h>
+#include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
+
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
@@ -10,16 +14,17 @@ namespace deliberation
 
 class Camera3D;
 class DrawContext;
+class RenderManager;
 
-class SkyboxRenderer final
+class SkyboxRenderer:
+    public SingleNodeRenderer
 {
 public:
-    SkyboxRenderer(DrawContext & drawContext, const Camera3D & camera, const Texture & cubemap);
+    SkyboxRenderer(RenderManager & renderManager, const Texture & cubemap);
 
-    void render();
+    void render() override;
 
 private:
-    const Camera3D &    m_camera;
     Draw                m_draw;
 };
 
