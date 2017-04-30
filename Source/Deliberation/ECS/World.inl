@@ -18,7 +18,7 @@ T & World::system()
 template<typename T, typename ... Args>
 std::shared_ptr<T> World::addSystem(Args &&... args)
 {
-    Assert((std::is_base_of<System<T>, T>::value), "");
+    Assert((std::is_base_of<SystemBase, T>::value), "");
 
     auto system = std::make_shared<T>(*this, std::forward<Args>(args)...);
     m_systems.emplace(system->index(), system);

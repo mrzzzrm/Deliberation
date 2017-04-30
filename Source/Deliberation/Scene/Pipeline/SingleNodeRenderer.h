@@ -12,8 +12,10 @@ class SingleNodeRenderer:
     public Renderer
 {
 public:
-    SingleNodeRenderer(RenderManager & renderManager, RenderPhase renderPhase):
-        Renderer(renderManager),
+    SingleNodeRenderer(RenderManager & renderManager,
+                       RenderPhase renderPhase,
+                       const std::string & name = {"Unnamed Renderer"}):
+        Renderer(renderManager, name),
         m_renderPhase(renderPhase)
     {
 
@@ -39,9 +41,13 @@ public:
         };
 
         m_renderManager.registerRenderNode(std::make_shared<SingleRenderNode>(*this), m_renderPhase);
+        onSetupRender();
     }
 
     virtual void render() = 0;
+
+protected:
+    virtual void onSetupRender() {};
 
 private:
     RenderPhase m_renderPhase;

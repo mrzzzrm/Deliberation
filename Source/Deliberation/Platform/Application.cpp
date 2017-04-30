@@ -31,13 +31,13 @@ Application::Application(const std::string & name,
 
 Application::~Application() = default;
 
-InputBase & Application::input()
+Input & Application::input()
 {
     Assert(m_input.engaged(), "Input not yet setup");
     return *m_input;
 }
 
-const InputBase & Application::input() const
+const Input & Application::input() const
 {
     Assert(m_input.engaged(), "Input not yet setup");
     return *m_input;
@@ -116,8 +116,6 @@ int Application::run(int argc,
         SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
         onFrame(seconds);
-
-        m_input->step();
 
         SDL_GL_SwapWindow(m_displayWindow);
 
@@ -223,7 +221,7 @@ void Application::init()
     /**
      * Init input
      */
-    m_input.reset(*m_drawContext);
+    m_input.reset();
 
     m_initialized = true;
 }

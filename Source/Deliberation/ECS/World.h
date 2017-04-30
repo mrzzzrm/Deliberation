@@ -53,7 +53,6 @@ public:
     void frameBegin();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
-    void render();
 
     void frameComplete();
 

@@ -22,8 +22,8 @@ public:
                 const std::string & prefixPath = ".");
     virtual ~Application();
 
-    InputBase & input();
-    const InputBase & input() const;
+    Input & input();
+    const Input & input() const;
 
     DrawContext & drawContext();
     const DrawContext & drawContext() const;

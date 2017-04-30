@@ -48,6 +48,7 @@ private:
     Framebuffer                                         m_gbuffer;
     Framebuffer                                         m_hdrBuffer;
     Framebuffer                                         m_ssaoBuffer;
+    Clear                                               m_backbufferClear;
 };
 
 }

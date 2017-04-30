@@ -16,7 +16,7 @@ namespace deliberation
 {
 
 class DrawContext;
-class InputBase;
+class Input;
 
 class ImGuiSystem:
     public std::enable_shared_from_this<ImGuiSystem>,
@@ -31,21 +31,17 @@ public:
 
 protected:
     void onFrameBegin() override;
-    void onRender() override;
 
     void onMouseButtonPressed(MouseButtonEvent & event) override;
-    void onMouseButtonDown(MouseButtonEvent & event) override;
+    void onMouseButtonReleased(MouseButtonEvent & event) override;
+    void onMouseWheel(MouseWheelEvent & event) override;
+    void onMouseMotion(MouseMotionEvent & event) override;
 
 private:
-    DrawContext &   m_drawContext;
-    InputBase & m_input;
-
-    Draw        m_draw;
-    Buffer      m_vertexBuffer;
-    Buffer      m_indexBuffer;
-    Uniform     m_projectionUniform;
+    Input &     m_input;
 
     bool        m_wantsCaptureMouse = false;
+    float       m_mouseWheel = 0;
 };
 
 }

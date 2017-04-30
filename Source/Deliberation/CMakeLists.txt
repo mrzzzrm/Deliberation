@@ -48,8 +48,6 @@ set(sources
 	Core/FpsCounter.cpp
 	Core/FpsCounter.h
 	Core/HashUtils.h
-	Core/InputBase.cpp
-	Core/InputBase.h
 	Core/IntTypes.h
 	Core/Json.h
 	Core/LapTimer.cpp
@@ -289,6 +287,8 @@ set(sources
 	Font/MultilineLabel.cpp
 	Font/MultilineLabel.h
 
+	ImGui/ImGuiRenderer.cpp
+	ImGui/ImGuiRenderer.h
 	ImGui/ImGuiSystem.cpp
 	ImGui/ImGuiSystem.h
 
@@ -327,9 +327,9 @@ set(sources
 	Platform/Application.cpp
 	Platform/Application.h
 	Platform/Input.cpp
+	Platform/Input.h
 	Platform/InputEvent.h
 	Platform/InputEventReceiver.h
-	Platform/Input.h
 	Platform/InputLayer.cpp
 	Platform/InputLayer.h
 	Platform/KeyMap.h

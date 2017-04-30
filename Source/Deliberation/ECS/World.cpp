@@ -173,20 +173,6 @@ void World::prePhysicsUpdate(float seconds)
     }
 }
 
-void World::render()
-{
-    for (auto & pair : m_systems)
-    {
-        auto & system = *pair.second;
-
-        ScopeProfiler profiler;
-        system.render();
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "Render", micros});
-    }
-}
-
 void World::frameComplete()
 {
     m_profiler.frameComplete();

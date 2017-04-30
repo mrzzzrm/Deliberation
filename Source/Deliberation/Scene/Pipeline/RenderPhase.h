@@ -14,6 +14,8 @@ enum class RenderPhase
     PostAlpha,
     Hdr,
 
+    Overlay,
+
     Count
 };
 

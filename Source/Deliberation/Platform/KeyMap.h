@@ -60,7 +60,7 @@ enum Key
     Key_WORLD_1,            /* non-US #1 */
     Key_WORLD_2,            /* non-US #2 */
     /* Function keys */
-        Key_ESCAPE,
+    Key_ESCAPE,
     Key_ENTER,
     Key_TAB,
     Key_BACKSPACE,

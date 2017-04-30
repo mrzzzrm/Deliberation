@@ -35,7 +35,6 @@ public:
     void beforeUpdate();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
-    void render();
 
     virtual void onCreated() {}
     virtual void onRemoved() {}
@@ -48,7 +47,6 @@ protected:
     virtual void onFrameBegin();
     virtual void onUpdate(float seconds);
     virtual void onPrePhysicsUpdate(float seconds);
-    virtual void onRender();
 
 private:
     struct EntityEntry

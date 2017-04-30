@@ -92,11 +92,6 @@ void SystemBase::prePhysicsUpdate(float seconds)
     }
 }
 
-void SystemBase::render()
-{
-    onRender();
-}
-
 void SystemBase::onEntityAdded(Entity & entity)
 {
     // dummy
@@ -128,11 +123,6 @@ void SystemBase::onPrePhysicsUpdate(float seconds)
 }
 
 void SystemBase::onUpdate(float seconds)
-{
-
-}
-
-void SystemBase::onRender()
 {
 
 }

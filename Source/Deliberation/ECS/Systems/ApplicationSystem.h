@@ -10,7 +10,7 @@ namespace deliberation
 {
 
 class Application;
-class InputBase;
+class Input;
 
 class ApplicationSystem:
     public System<ApplicationSystem>
@@ -23,7 +23,7 @@ public:
 
     Application & application() const { return m_application; }
     DrawContext & drawContext() const { return m_application.drawContext(); }
-    InputBase & input() const  { return m_application.input(); }
+    Input & input() const  { return m_application.input(); }
 
 private:
     Application & m_application;

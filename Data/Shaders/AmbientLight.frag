@@ -9,5 +9,5 @@ out vec3 o_Color;
 
 void main()
 {
-    o_Color = (texture(Ssao, f_UV).r * 0.5f + 0.5f) * texture(Diffuse, f_UV).rgb;
+    o_Color = texture(Ssao, f_UV).r * texture(Diffuse, f_UV).rgb;
 }

@@ -1,5 +1,7 @@
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
 
+#include <imgui.h>
+
 #include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Scene/Pipeline/Renderer.h>
@@ -11,7 +13,9 @@ namespace deliberation
 RenderManager::RenderManager(World & world, DrawContext & drawContext):
     Base(world),
     m_drawContext(drawContext)
-{}
+{
+    m_backbufferClear = m_drawContext.createClear();
+}
 
 void RenderManager::registerRenderNode(const std::shared_ptr<RenderNode> & node, const RenderPhase & phase)
 {
@@ -24,6 +28,8 @@ void RenderManager::render()
     {
         const auto w = m_drawContext.backbuffer().width();
         const auto h = m_drawContext.backbuffer().height();
+
+        m_mainCamera.setAspectRatio((float)w / (float)h);
 
         m_gbuffer = m_drawContext.createFramebuffer(w, h);
         m_gbuffer.addDepthTarget(PixelFormat_Depth_16_UN);
@@ -47,8 +53,24 @@ void RenderManager::render()
         m_pipelineBuild = true;
     }
 
+    // Debug GUI
+    if (ImGui::Begin("Renderers"))
+    {
+        for (auto & renderer : m_renderers)
+        {
+            if (ImGui::CollapsingHeader(renderer->name().c_str()))
+            {
+                renderer->renderDebugGui();
+            }
+        }
+    }
+    ImGui::End();
+
+    // Clear
+    m_backbufferClear.render();
     m_gbuffer.clear().render();
 
+    // Render Phases
     for (auto & pair : m_renderNodesByPhase)
     {
         for (auto & node : pair.second)

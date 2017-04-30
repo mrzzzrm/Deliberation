@@ -7,9 +7,13 @@ namespace deliberation
 
 enum MouseButton
 {
-    MouseButton_Left = 0,
-    MouseButton_Right,
-    MouseButton_Unknown
+    MouseButton_None    = 0,
+    MouseButton_Left    = 1 << 0,
+    MouseButton_Middle  = 1 << 1,
+    MouseButton_Right   = 1 << 2,
+    MouseButton_X1      = 1 << 3,
+    MouseButton_X2      = 1 << 4,
+    MouseButton_Unknown = 1 << 5
 };
 
 }
