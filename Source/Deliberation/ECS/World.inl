@@ -6,14 +6,25 @@ namespace deliberation
 {
 
 template<typename T>
-T & World::system()
+std::shared_ptr<T> World::system()
 {
-    Assert((std::is_base_of<System<T>, T>::value), "");
+    Assert((std::is_base_of<SystemBase, T>::value), "");
 
-    auto systemBase = m_systems.at(System<T>::indexStatic());
-    return *std::static_pointer_cast<T>(systemBase);
+    const auto index = System<T>::indexStatic();
+
+    if (!m_systems.contains(index)) return {};
+
+    auto systemBase = m_systems.at(index);
+    return std::static_pointer_cast<T>(systemBase);
 }
 
+template<typename T>
+T & World::systemRef()
+{
+    auto systemPtr = system<T>();
+    Assert((bool)systemPtr, "No such system");
+    return *systemPtr;
+}
 
 template<typename T, typename ... Args>
 std::shared_ptr<T> World::addSystem(Args &&... args)

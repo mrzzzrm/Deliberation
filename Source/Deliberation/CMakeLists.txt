@@ -376,6 +376,8 @@ set(sources
 	Scene/HdrRenderer.h
 	Scene/Lighting/AmbientLightRenderer.cpp
 	Scene/Lighting/AmbientLightRenderer.h
+	Scene/Lighting/PointLightRenderer.cpp
+	Scene/Lighting/PointLightRenderer.h
 	Scene/MeshCompiler.cpp
 	Scene/MeshCompiler.h
 	Scene/Mesh.cpp
@@ -392,6 +394,8 @@ set(sources
 	Scene/Pipeline/RenderManager.h
 	Scene/Pipeline/RenderNode.h
 	Scene/Pipeline/RenderPhase.h
+	Scene/Pipeline/RenderSystem.cpp
+	Scene/Pipeline/RenderSystem.h
 	Scene/Pipeline/SingleNodeRenderer.h
 	Scene/ScreenSpaceEffect.cpp
 	Scene/ScreenSpaceEffect.h

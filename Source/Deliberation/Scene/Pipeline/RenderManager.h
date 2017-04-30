@@ -18,15 +18,15 @@ class DrawContext;
 class Renderer;
 class RenderNode;
 
-class RenderManager:
-    public System<RenderManager>
+class RenderManager
 {
 public:
-    RenderManager(World & world, DrawContext & drawContext);
+    RenderManager(DrawContext & drawContext);
     virtual ~RenderManager() = default;
 
     DrawContext & drawContext() { return m_drawContext; }
     Camera3D & mainCamera() { return m_mainCamera; }
+    const std::vector<std::shared_ptr<Renderer>> & renderers() { return m_renderers; }
     Framebuffer & gbuffer() { return m_gbuffer; }
     Framebuffer & hdrBuffer() { return m_hdrBuffer; }
     Framebuffer & ssaoBuffer() { return m_ssaoBuffer; }

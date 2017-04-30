@@ -16,6 +16,7 @@
 #include <Deliberation/Platform/KeyMap.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
+#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 
 namespace deliberation
 {
@@ -23,9 +24,9 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world):
     Base(world),
     InputLayer(200),
-    m_input(world.system<ApplicationSystem>().input())
+    m_input(world.systemRef<ApplicationSystem>().input())
 {
-    auto & renderManager = world.system<RenderManager>();
+    auto & renderManager = world.systemRef<RenderSystem>().renderManager();
     renderManager.addRenderer<ImGuiRenderer>();
 
     auto & io = ImGui::GetIO();
@@ -60,7 +61,7 @@ void ImGuiSystem::onFrameBegin()
 {
     auto & io = ImGui::GetIO();
 
-    const auto & backbuffer = world().system<ApplicationSystem>().drawContext().backbuffer();
+    const auto & backbuffer = world().systemRef<ApplicationSystem>().drawContext().backbuffer();
 
     io.DisplaySize = ImVec2((float)backbuffer.width(), (float)backbuffer.height());
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);

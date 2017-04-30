@@ -19,7 +19,7 @@ public:
     SkyboxSystem(World & world, const Texture & cubeMap):
         Base(world)
     {
-        world.system<RenderManager>().addRenderer<SkyboxRenderer>(cubeMap);
+        world.systemRef<RenderSystem>().renderManager().addRenderer<SkyboxRenderer>(cubeMap);
     }
 };
 

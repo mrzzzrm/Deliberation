@@ -131,7 +131,7 @@ MeshData UVSphere::generateMesh2() const
             float sa = std::sin(azimuth);
             float ca = std::cos(azimuth);
 
-            positions[p * m_numMeridians + m] = {sp * ca, cp, sp * sa};
+            positions[p * m_numMeridians + m + 1] = {sp * ca, cp, sp * sa};
         }
     }
 

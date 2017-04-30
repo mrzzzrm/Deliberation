@@ -6,8 +6,6 @@
 #include <Deliberation/Scene/Mesh.h>
 #include <Deliberation/Scene/MeshData.h>
 
-
-
 namespace deliberation
 {
 

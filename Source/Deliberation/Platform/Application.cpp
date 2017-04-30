@@ -15,6 +15,8 @@
 #include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/MainLoop.h>
 
+#include <Deliberation/Platform/InputLayerWrapper.h>
+
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
@@ -222,6 +224,7 @@ void Application::init()
      * Init input
      */
     m_input.reset();
+    m_input->addLayer(std::make_shared<InputLayerWrapper>(*this, std::numeric_limits<i32>::min()));
 
     m_initialized = true;
 }

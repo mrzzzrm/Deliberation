@@ -23,7 +23,7 @@ public:
         Desc & operator=(Desc && rhs) = default;
 
         std::string name;
-        Type        type;
+        Type        type = Type_None;
     };
 
 public:

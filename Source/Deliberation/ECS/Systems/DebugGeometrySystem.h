@@ -14,7 +14,7 @@ class DebugGeometrySystem:
 public:
     DebugGeometrySystem(World & world):
         Base(world),
-        m_manager(world.system<ApplicationSystem>().drawContext())
+        m_manager(world.systemRef<ApplicationSystem>().drawContext())
     {}
 
     DebugGeometryManager & manager() { return m_manager; }

@@ -10,6 +10,6 @@ out vec3 o_Color;
 void main()
 {
     vec3 hdr = texture(Hdr, f_UV).rgb;
-    o_Color = hdr / (hdr * 0.1f + 1.0f);
+    o_Color = hdr / (hdr + 1.0f);
     gl_FragDepth = texture(Depth, f_UV).r;
 }

@@ -4,14 +4,17 @@
 
 #include <Deliberation/Draw/DrawContext.h>
 
+#include <Deliberation/ECS/World.h>
+
+#include <Deliberation/ImGui/ImGuiSystem.h>
+
 #include <Deliberation/Scene/Pipeline/Renderer.h>
 #include <Deliberation/Scene/Pipeline/RenderNode.h>
 
 namespace deliberation
 {
 
-RenderManager::RenderManager(World & world, DrawContext & drawContext):
-    Base(world),
+RenderManager::RenderManager(DrawContext & drawContext):
     m_drawContext(drawContext)
 {
     m_backbufferClear = m_drawContext.createClear();
@@ -53,18 +56,6 @@ void RenderManager::render()
         m_pipelineBuild = true;
     }
 
-    // Debug GUI
-    if (ImGui::Begin("Renderers"))
-    {
-        for (auto & renderer : m_renderers)
-        {
-            if (ImGui::CollapsingHeader(renderer->name().c_str()))
-            {
-                renderer->renderDebugGui();
-            }
-        }
-    }
-    ImGui::End();
 
     // Clear
     m_backbufferClear.render();

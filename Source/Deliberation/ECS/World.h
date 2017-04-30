@@ -59,7 +59,10 @@ public:
     std::string toString() const;
 
     template<typename T>
-    T & system();
+    std::shared_ptr<T> system();
+
+    template<typename T>
+    T & systemRef();
 
     /**
      * From AbstractWorld
