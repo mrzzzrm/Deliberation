@@ -24,6 +24,10 @@ Blob::Blob(std::size_t size):
 
 }
 
+Blob::Blob(std::unique_ptr<detail::IBlobImpl> && impl):
+    m_impl(std::move(impl))
+{}
+
 Blob::Blob(const Blob & blob):
     m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
 {

@@ -20,6 +20,14 @@ LayoutedBlob::LayoutedBlob(const DataLayout & layout, size_t count):
 
 }
 
+LayoutedBlob::LayoutedBlob(const DataLayout & layout, Blob && blob):
+    m_layout(layout),
+    m_data(std::move(blob))
+{
+    Assert(blob.size() % layout.stride() == 0, "Layout can't be matched to Blob size");
+    m_count = blob.size() / layout.stride();
+}
+
 const DataLayout & LayoutedBlob::layout() const
 {
     return m_layout;

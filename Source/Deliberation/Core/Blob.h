@@ -32,6 +32,8 @@ public:
     template<typename T>
     Blob(std::vector<T> && value);
 
+    Blob(std::unique_ptr<detail::IBlobImpl> && impl);
+
     Blob(const Blob & blob);
 
     Blob(Blob && blob);

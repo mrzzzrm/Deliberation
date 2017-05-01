@@ -50,7 +50,6 @@ private:
     Draw                    m_draw;
     Buffer                  m_lightBuffer;
     DataLayout              m_lightLayout;
-    LayoutedBlob            m_lightData;
     DataLayoutField         m_lightPositionField;
     DataLayoutField         m_intensityField;
     DataLayoutField         m_activeField;

@@ -27,22 +27,30 @@ namespace detail
 class DrawContext;
 class LayoutedBlob;
 
+enum class BufferMapping
+{
+    ReadOnly,
+    WriteOnly,
+    ReadWrite
+};
+
 class Buffer final
 {
 public:
     Buffer();
 
-    unsigned int count() const;
-    unsigned int size() const;
+    size_t count() const;
+    size_t size() const;
     const DataLayout & layout() const;
 
-    BufferUpload createUpload(const Blob & data);
-    BufferUpload createRawUpload(const Blob & data, unsigned int count);
-
     void scheduleUpload(const Blob & data);
-    void scheduleRawUpload(const Blob & data, unsigned int count);
-
+    void scheduleRawUpload(const Blob & data, size_t count);
     void scheduleUpload(const LayoutedBlob & data);
+
+    void reinit(size_t count);
+
+    LayoutedBlob & map(BufferMapping flags);
+    void unmap();
 
     std::string toString() const;
 

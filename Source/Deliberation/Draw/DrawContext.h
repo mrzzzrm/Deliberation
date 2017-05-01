@@ -82,6 +82,7 @@ public:
     */
 
 private:
+    friend class Buffer;
     friend class detail::QueryImpl;
     friend class SurfaceDownloadImpl;
 

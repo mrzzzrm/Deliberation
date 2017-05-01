@@ -25,6 +25,7 @@ public:
 public:
     LayoutedBlob();
     LayoutedBlob(const DataLayout & layout, size_t count = 0);
+    LayoutedBlob(const DataLayout & layout, Blob && blob);
 
     const DataLayout & layout() const;
     bool empty() const;

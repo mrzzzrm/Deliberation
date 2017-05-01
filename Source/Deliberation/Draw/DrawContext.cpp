@@ -123,7 +123,7 @@ Texture DrawContext::createTexture(const TextureBinary & binary)
                                                       binary.height(),
                                                       binary.numFaces(),
                                                       binary.format()));
-    texture.createUpload(binary).schedule();
+    texture.scheduleUpload(binary);
 
     return texture;
 }
@@ -260,7 +260,7 @@ Buffer & DrawContext::blitVertexBuffer()
             { 1.0f,  1.0f}
         });
 
-        m_blitVertexBuffer.get().createUpload(vertices).schedule();
+        m_blitVertexBuffer.get().scheduleUpload(vertices);
     }
     return m_blitVertexBuffer.get();
 }

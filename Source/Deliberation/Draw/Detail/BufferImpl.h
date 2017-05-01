@@ -3,6 +3,7 @@
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/LayoutedBlob.h>
 
 namespace deliberation
 {
@@ -18,10 +19,12 @@ public:
     BufferImpl(DrawContext & drawContext, const DataLayout & layout);
     ~BufferImpl();
 
-    DrawContext &       drawContext;
+    DrawContext &   drawContext;
     gl::GLuint      glName;
-    unsigned int    count;
+    size_t          count;
     DataLayout      layout;
+    LayoutedBlob    mappedBlob;
+    bool            mapped = false;
 };
 
 }

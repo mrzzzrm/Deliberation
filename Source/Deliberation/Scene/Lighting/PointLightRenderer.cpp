@@ -21,8 +21,6 @@ PointLightRenderer::PointLightRenderer(RenderManager & renderManager):
     m_lightPositionField = m_lightLayout.field("LightPosition");
     m_intensityField = m_lightLayout.field("Intensity");
     m_activeField = m_lightLayout.field("Active");
-
-    m_lightData = LayoutedBlob(m_lightLayout);
 }
 
 // Reference invalidated by add/removePointLight()
@@ -63,11 +61,16 @@ void PointLightRenderer::removePointLight(size_t index)
 
 void PointLightRenderer::render()
 {
-    m_lightData.resize(m_lights.size());
+    if (m_lightBuffer.count() != m_lights.size())
+    {
+        m_lightBuffer.reinit(m_lights.size());
+    }
 
-    auto positions = m_lightData.iterator<glm::vec3>(m_lightPositionField);
-    auto intensities = m_lightData.iterator<glm::vec3>(m_intensityField);
-    auto active = m_lightData.iterator<i32>(m_activeField);
+    auto & lightData = m_lightBuffer.map(BufferMapping::WriteOnly);
+
+    auto positions = lightData.iterator<glm::vec3>(m_lightPositionField);
+    auto intensities = lightData.iterator<glm::vec3>(m_intensityField);
+    auto active = lightData.iterator<i32>(m_activeField);
 
     for (size_t l = 0; l < m_lights.size(); l++)
     {
@@ -76,7 +79,7 @@ void PointLightRenderer::render()
         active.put(m_lights[l].active);
     }
 
-    m_lightBuffer.scheduleUpload(m_lightData);
+    m_lightBuffer.unmap();
 
     m_viewProjectionUniform.set(renderManager().mainCamera().viewProjection());
     m_viewUniform.set(renderManager().mainCamera().view());
@@ -96,7 +99,6 @@ void PointLightRenderer::onSetupRender()
     m_lightBuffer = drawContext().createBuffer(m_lightLayout);
     m_draw = drawContext().createDraw(program);
 
-    // TODO: Replace with circle or something
     m_draw.addVertices(mesh.vertices());
     m_draw.setIndices(mesh.indices());
 

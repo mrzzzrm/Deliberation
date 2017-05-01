@@ -39,7 +39,7 @@ LabelRenderer::LabelRenderer(DrawContext & drawContext):
 
     DataLayout layout = DataLayout({"Position", Type_Vec2});
     m_vertexBuffer = m_drawContext->createBuffer(layout);
-    m_vertexBuffer.createUpload(vertices).schedule();
+    m_vertexBuffer.scheduleUpload(vertices);
 
     m_draw = m_drawContext->createDraw(m_program, gl::GL_TRIANGLE_STRIP, "LabelRenderer");
     m_draw.addVertexBuffer(m_vertexBuffer);
