@@ -23,8 +23,8 @@ public:
             DeliberationDataPath("Data/Shaders/AmbientLight.frag")}, "AmbientLight");
 
         m_effect.draw().setFramebuffer(m_renderer.renderManager().hdrBuffer());
-        m_effect.draw().sampler("Ssao").setTexture(m_renderer.renderManager().ssaoBuffer().renderTarget(0)->texture());
-        m_effect.draw().sampler("Diffuse").setTexture(m_renderer.renderManager().gbuffer().renderTarget(0)->texture());
+        m_effect.draw().sampler("Ssao").setTexture(m_renderer.renderManager().ssaoBuffer().colorTargetRef("Ssao"));
+        m_effect.draw().sampler("Diffuse").setTexture(m_renderer.renderManager().gbuffer().colorTargetRef("Diffuse"));
     }
 
     void render() override

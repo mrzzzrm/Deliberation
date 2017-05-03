@@ -13,9 +13,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 ProgramImpl::ProgramImpl(DrawContext & drawContext, const std::vector<std::string> & paths):
     drawContext(drawContext),
     glProgramName(0u)
@@ -97,8 +94,6 @@ ProgramImpl::ProgramImpl(DrawContext & drawContext, const std::vector<std::strin
     }
 
     interface = ProgramInterface(glProgramName);
-}
-
 }
 
 }

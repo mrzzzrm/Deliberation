@@ -24,10 +24,6 @@ namespace deliberation
 
 class DrawContext;
 class Program;
-
-namespace detail
-{
-
 class ProgramImpl;
 
 class DrawImpl final
@@ -36,7 +32,7 @@ public:
     DrawImpl(DrawContext & drawContext,
              const Program & program);
 
-    DrawContext &                                   drawContext;
+    DrawContext &                               drawContext;
     std::string                                 name;
     std::shared_ptr<ProgramImpl>                program;
     BufferBinding                               indexBufferBinding;
@@ -50,14 +46,16 @@ public:
     Blob                                        valueAttributes;
 
     DrawState                                   state;
+
+    std::vector<gl::GLenum>                     drawBuffers;
     Framebuffer                                 framebuffer;
+
     gl::GLuint                                  glVertexArray;
     std::vector<UniformImpl>                    uniforms;
-    std::vector<SamplerImpl>                    samplers;
     std::vector<Optional<UniformBufferBinding>> uniformBuffers;
-};
 
-}
+    std::vector<std::shared_ptr<SamplerImpl>>   samplers;
+};
 
 }
 

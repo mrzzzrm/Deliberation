@@ -122,13 +122,7 @@ set(sources
 	Draw/BlendState.h
 	Draw/Buffer.cpp
 	Draw/Buffer.h
-	Draw/BufferUpload.cpp
-	Draw/BufferUploadExecution.cpp
-	Draw/BufferUploadExecution.h
-	Draw/BufferUpload.h
 	Draw/Clear.cpp
-	Draw/ClearExecution.cpp
-	Draw/ClearExecution.h
 	Draw/Clear.h
 	Draw/CullState.cpp
 	Draw/CullState.h
@@ -140,8 +134,6 @@ set(sources
 	Draw/Detail/BufferImpl.h
 	Draw/Detail/ClearImpl.cpp
 	Draw/Detail/ClearImpl.h
-	Draw/Detail/DrawExecution.cpp
-	Draw/Detail/DrawExecution.h
 	Draw/Detail/DrawImpl.cpp
 	Draw/Detail/DrawImpl.h
 	Draw/Detail/FramebufferImpl.cpp
@@ -166,8 +158,6 @@ set(sources
 	Draw/Draw.h
 	Draw/DrawState.cpp
 	Draw/DrawState.h
-	Draw/DrawVerification.cpp
-	Draw/DrawVerification.h
 	Draw/Enum.h
 	Draw/Framebuffer.cpp
 	Draw/Framebuffer.h
@@ -240,10 +230,6 @@ set(sources
 	Draw/TextureLoaderSDLSurfaceImpl.cpp
 	Draw/TextureLoaderSDLSurfaceImpl.h
 	Draw/TextureLoaderUnicolorImpl.h
-	Draw/TextureUpload.cpp
-	Draw/TextureUploadExecution.cpp
-	Draw/TextureUploadExecution.h
-	Draw/TextureUpload.h
 	Draw/Uniform.cpp
 	Draw/Uniform.h
 	Draw/VertexAttribute.cpp
@@ -336,14 +322,6 @@ set(sources
 	Platform/MouseButtonEvent.h
 	Platform/MouseButton.h
 
-	Scene/AmbientOcclusion/AmbientOcclusionBlur.cpp
-	Scene/AmbientOcclusion/AmbientOcclusionBlur.h
-	Scene/AmbientOcclusion/AmbientOcclusion.cpp
-	Scene/AmbientOcclusion/AmbientOcclusion.h
-	Scene/AmbientOcclusion/AmbientOcclusionMix.cpp
-	Scene/AmbientOcclusion/AmbientOcclusionMix.h
-	Scene/Blit.cpp
-	Scene/Blit.h
 	Scene/Camera2D.cpp
 	Scene/Camera2D.h
 	Scene/Camera3D.cpp

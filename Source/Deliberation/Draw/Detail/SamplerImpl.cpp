@@ -7,17 +7,13 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 SamplerImpl::SamplerImpl(gl::GLenum uniformType,
                          gl::GLenum valueType,
                          gl::GLuint location):
     glSampler(),
     type(uniformType),
     valueType(valueType),
-    location(location),
-    texture(nullptr)
+    location(location)
 {
 }
 
@@ -33,8 +29,6 @@ gl::GLenum SamplerImpl::textureType() const
     default:
         Fail("Unsupported sampler type");
     }
-}
-
 }
 
 }

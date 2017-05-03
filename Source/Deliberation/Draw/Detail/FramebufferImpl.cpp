@@ -1,6 +1,7 @@
 #include "FramebufferImpl.h"
 
 #include <glbinding/gl/enum.h>
+#include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
 
@@ -14,264 +15,171 @@
 
 #include <Deliberation/Draw/Detail/TextureImpl.h>
 
+namespace
+{
+
+using namespace deliberation;
+
+void RenderTargetFromDesc(
+    DrawContext & drawContext,
+    RenderTarget & renderTarget,
+    const FramebufferDesc & framebufferDesc,
+    const RenderTargetDesc & renderTargetDesc)
+{
+    renderTarget.name = renderTargetDesc.name;
+
+    if (renderTargetDesc.format != PixelFormat_None)
+    {
+        auto texture = drawContext.createTexture2D(
+            framebufferDesc.width,
+            framebufferDesc.height,
+            renderTargetDesc.format);
+        renderTarget.surface = texture.surface(0);
+    }
+    else
+    {
+        renderTarget.surface = renderTargetDesc.surface;
+    }
+}
+
+}
+
 namespace deliberation
 {
 
-namespace detail
-{
-
 std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & drawContext,
-                                                             unsigned int width,
-                                                             unsigned int height)
+                                                             u32 width,
+                                                             u32 height)
 {
     auto result = std::make_shared<FramebufferImpl>(drawContext);
-    result->m_isBackbuffer = true;
-    result->m_width = width;
-    result->m_height = height;
+    result->isBackbuffer = true;
+    result->width = width;
+    result->height = height;
 
     return result;
 }
 
 std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawContext,
-                                                         unsigned int width,
-                                                         unsigned int height)
+                                                         const FramebufferDesc & framebufferDesc)
 {
     auto result = std::make_shared<FramebufferImpl>(drawContext);
-    result->m_isBackbuffer = false;
-    result->m_width = width;
-    result->m_height = height;
+    result->isBackbuffer = false;
+    result->width = framebufferDesc.width;
+    result->height = framebufferDesc.height;
+
+    // Init RenderTargets, create Textures where necessary
+    result->colorTargets.reserve(framebufferDesc.colorTargetDescs.size());
+    for (const auto & renderTargetDesc : framebufferDesc.colorTargetDescs)
+    {
+        RenderTarget colorTarget;
+
+        RenderTargetFromDesc(
+            drawContext, colorTarget, framebufferDesc, renderTargetDesc
+        );
+
+        result->colorTargets.emplace_back(colorTarget);
+    }
+
+    if (framebufferDesc.depthTargetDesc)
+    {
+        RenderTarget depthTarget;
+
+        RenderTargetFromDesc(
+            drawContext, depthTarget, framebufferDesc, *framebufferDesc.depthTargetDesc
+        );
+
+        result->depthTarget = depthTarget;
+    }
+
+    // Setup GL framebuffer
+    auto & glStateManager = drawContext.m_glStateManager;
+
+    glStateManager.genFramebuffers(1, &result->glName);
+    Assert(result->glName != 0, "Failed to create GL Framebuffer Object");
+
+    glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, result->glName);
+
+    for (auto a = 0u; a < result->colorTargets.size(); a++)
+    {
+        const auto & target = result->colorTargets[a];
+
+        glStateManager.framebufferTexture2D(gl::GL_DRAW_FRAMEBUFFER,
+                                            (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + a),
+                                            target.surface.m_impl->glTarget,
+                                            target.surface.m_impl->textureImpl->glName,
+                                            0);
+    }
+
+    if (result->depthTarget)
+    {
+        glStateManager.framebufferTexture2D(gl::GL_DRAW_FRAMEBUFFER,
+                                            gl::GL_DEPTH_ATTACHMENT,
+                                            gl::GL_TEXTURE_2D,
+                                            result->depthTarget->surface.m_impl->textureImpl->glName,
+                                            0);
+    }
+
+
+    // Framebuffer should be complete now
+    auto status = gl::glCheckFramebufferStatus(gl::GL_DRAW_FRAMEBUFFER);
+    Assert(status != gl::GL_FRAMEBUFFER_UNDEFINED, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER, "");
+    Assert(status != gl::GL_FRAMEBUFFER_UNSUPPORTED, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE, "");
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS, "");
+    Assert(status == gl::GL_FRAMEBUFFER_COMPLETE, "");
 
     return result;
 }
 
-DrawContext & FramebufferImpl::drawContext() const
+FramebufferImpl::FramebufferImpl(DrawContext & drawContext):
+    drawContext(drawContext)
 {
-    return m_drawContext;
+
 }
 
-unsigned int FramebufferImpl::width() const
+FramebufferImpl::~FramebufferImpl()
 {
-    return m_width;
+    auto & glStateManager = drawContext.m_glStateManager;
+    glStateManager.deleteFramebuffers(1, &glName);
 }
 
-unsigned int FramebufferImpl::height() const
+void FramebufferImpl::bind(const std::vector<gl::GLenum> & drawBuffers)
 {
-    return m_height;
-}
+    auto & glStateManager = drawContext.m_glStateManager;
 
-bool FramebufferImpl::isBackbuffer() const
-{
-    return m_isBackbuffer;
-}
-
-Surface * FramebufferImpl::renderTarget(unsigned int index)
-{
-    Assert(!m_isBackbuffer, "");
-
-    if (index < m_renderTargets.size())
-    {
-        return m_renderTargets[index].engaged() ? &m_renderTargets[index].get() : nullptr;
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-const Surface * FramebufferImpl::renderTarget(unsigned int index) const
-{
-    Assert(!m_isBackbuffer, "");
-
-    if (index < m_renderTargets.size())
-    {
-        return m_renderTargets[index].engaged() ? &m_renderTargets[index].get() : nullptr;
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-const std::vector<Optional<Surface>> & FramebufferImpl::renderTargets() const
-{
-    Assert(!m_isBackbuffer, "");
-
-    return m_renderTargets;
-}
-
-Surface * FramebufferImpl::depthTarget()
-{
-    return m_depthTarget.ptr();
-}
-
-const Surface * FramebufferImpl::depthTarget() const
-{
-    return m_depthTarget.ptr();
-}
-
-void FramebufferImpl::setRenderTarget(unsigned int index, Surface * surface)
-{
-    if (index >= m_renderTargets.size())
-    {
-        m_renderTargets.resize(index + 1);
-    }
-
-    if (m_renderTargets[index] != surface)
-    {
-        m_glFramebufferDirty = true;
-    }
-
-    if (surface)
-    {
-        Assert(surface->width() == m_width && surface->height() == m_height, "Resolution mistach");
-        m_renderTargets[index].reset(*surface);
-    }
-    else
-    {
-        m_renderTargets[index].disengage();
-    }
-
-    m_isBackbuffer = false;
-}
-
-void FramebufferImpl::setDepthTarget(Surface * surface)
-{
-    if (m_depthTarget == surface)
-    {
-        return;
-    }
-
-    if (surface)
-    {
-        Assert(surface->width() == m_width && surface->height() == m_height, "Resolution mistach");
-        m_depthTarget.reset(*surface);
-    }
-    else
-    {
-        m_depthTarget.disengage();
-    }
-
-    m_glFramebufferDirty = true;
-    m_isBackbuffer = false;
-}
-
-void FramebufferImpl::addRenderTarget(PixelFormat format, int index)
-{
-    auto texture = m_drawContext.createTexture2D(m_width, m_height, format, true);
-    if (index < 0)
-    {
-        index = m_renderTargets.size();
-    }
-    m_renderTargetTextures[index] = texture;
-    setRenderTarget(index, &texture.surface(0));
-}
-
-void FramebufferImpl::addDepthTarget(PixelFormat format)
-{
-    auto texture = m_drawContext.createTexture2D(m_width, m_height, format, true);
-    m_depthTargetTexture.reset(texture);
-    setDepthTarget(&texture.surface(0));
-}
-
-void FramebufferImpl::bind(GLStateManager & glStateManager) const
-{
-    if (m_isBackbuffer)
+    if (isBackbuffer)
     {
         glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, 0);
+        gl::glDrawBuffer(gl::GL_BACK);
     }
     else
     {
-        if (m_glFramebufferDirty)
-        {
-            updateFramebufferDesc();
-            m_glFramebuffer = glStateManager.framebuffer(m_glFramebufferDesc.get());
-            m_glFramebufferDirty = false;
-        }
-
-        m_glFramebuffer->bind();
+        glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, glName);
+        gl::glDrawBuffers(drawBuffers.size(), drawBuffers.data());
     }
 }
 
-FramebufferImpl::FramebufferImpl(DrawContext & drawContext):
-    m_drawContext(drawContext),
-    m_isBackbuffer(true),
-    m_glFramebufferDirty(false),
-    m_width(0u),
-    m_height(0u)
+size_t FramebufferImpl::colorTargetIndex(const std::string &name, bool * found) const
 {
+    auto iter = std::find_if(colorTargets.begin(), colorTargets.end(),
+                             [&name] (const RenderTarget & colorTarget) {
+                                 return colorTarget.name == name; });
 
-}
-
-void FramebufferImpl::updateFramebufferDesc() const
-{
-    std::vector<GLFramebufferDesc::ColorAttachment> colorAttachments(m_renderTargets.size());
-
-    Assert(m_renderTargets.size() > 0 || m_depthTarget.engaged(), "");
-
-    for (auto rt = 0u; rt < m_renderTargets.size(); rt++)
+    if (found)
     {
-        if (m_renderTargets[rt].engaged())
-        {
-            auto glName = m_renderTargets[rt].get().m_texture->glName;
-
-            if (glName == 0)
-            {
-                m_renderTargets[rt].get().m_texture->allocate();
-                glName = m_renderTargets[rt].get().m_texture->glName;
-            }
-
-            colorAttachments[rt].glName = glName;
-
-            Assert(m_renderTargets[rt].get().m_texture.get(), "");
-
-            if (m_renderTargets[rt].get().m_texture->numFaces == 1)
-            {
-                colorAttachments[rt].target = gl::GL_TEXTURE_2D;
-            }
-            else
-            {
-                Assert(m_renderTargets[rt].get().m_texture->numFaces == 6, "");
-
-                /*
-                    TODO
-                        This is duplicated in TextureUploadExecution!
-                */
-                static gl::GLenum targets[] =
-                {
-                    gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-                    gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-                    gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-                    gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-                    gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-                    gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-                };
-
-                colorAttachments[rt].target = targets[m_renderTargets[rt].get().face()];
-            }
-        }
-    }
-
-    GLFramebufferDesc::DepthAttachment depthAttachment;
-    gl::GLuint glName;
-
-    if (m_depthTarget.engaged())
-    {
-        if (m_depthTarget.get().m_texture->glName == 0)
-        {
-            m_depthTarget.get().m_texture->allocate();
-        }
-        glName = m_depthTarget.get().m_texture->glName;
+        *found = iter != colorTargets.end();
     }
     else
     {
-        glName = 0;
+        Assert(iter != colorTargets.end(), "No such color target '" + name + "' in Framebuffer");
     }
 
-    depthAttachment.glName = glName;
-
-    m_glFramebufferDesc.reset(GLFramebufferDesc(colorAttachments, depthAttachment));
-}
-
+    return (size_t)(iter - colorTargets.begin());
 }
 
 }

@@ -91,13 +91,10 @@ public:
             DeliberationDataPath("Data/Skybox/Cloudy/Front.png")
         };
 
-        auto faceTexture = drawContext().createTexture(
-            TextureLoader(DeliberationDataPath("Data/Skybox/Debug/Right.png")).load());
-
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
         auto skyboxCubemap = drawContext().createTexture(skyboxCubemapBinary);
 
-        m_skyboxRenderer = m_renderManager->addRenderer<SkyboxRenderer>(skyboxCubemap);
+       m_skyboxRenderer = m_renderManager->addRenderer<SkyboxRenderer>(skyboxCubemap);
 
         m_cubemapRenderer.reset(drawContext(), m_renderManager->mainCamera(), skyboxCubemap, DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
@@ -132,11 +129,6 @@ public:
         }
 
         m_navigator.get().update(seconds);
-
-        m_clear.render();
-
-        m_cubemapRenderer->render();
-        m_skyboxRenderer->render();
 
         m_renderManager->render();
     }

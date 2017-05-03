@@ -4,8 +4,7 @@ uniform sampler2D Input;
 
 in vec2 f_UV;
 
-out float f_Color;
-
+out float o_Ssao;
 
 void main() {
     vec2 texelSize = 1.0 / vec2(textureSize(Input, 0));
@@ -21,5 +20,5 @@ void main() {
         }
     }
 
-    f_Color = result / 16.0f;
+    o_Ssao = result / 16.0f;
 }

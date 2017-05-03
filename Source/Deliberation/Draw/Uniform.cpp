@@ -8,7 +8,7 @@ Uniform::Uniform():
 {
 }
 
-Uniform::Uniform(detail::UniformImpl & impl):
+Uniform::Uniform(UniformImpl & impl):
     m_impl(&impl)
 {
 

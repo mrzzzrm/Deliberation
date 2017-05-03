@@ -23,7 +23,7 @@ const ProgramInterface & Program::interface() const
     return m_impl->interface;
 }
 
-Program::Program(const std::shared_ptr<detail::ProgramImpl> & impl):
+Program::Program(const std::shared_ptr<ProgramImpl> & impl):
     m_impl(impl)
 {
 }

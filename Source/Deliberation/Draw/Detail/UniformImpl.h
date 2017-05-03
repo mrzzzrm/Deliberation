@@ -10,9 +10,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 class UniformImpl final
 {
 public:
@@ -27,8 +24,6 @@ public:
     unsigned int    arraySize; // Maximum array size
     unsigned int    count; // Number of array slots in blob
 };
-
-}
 
 }
 

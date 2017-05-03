@@ -3,9 +3,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 UniformImpl::UniformImpl():
     type(Type_None),
     location((unsigned int)-1),
@@ -25,8 +22,6 @@ UniformImpl::UniformImpl(Type type, unsigned int location, unsigned int arraySiz
     arraySize(arraySize),
     count(0)
 {
-
-}
 
 }
 

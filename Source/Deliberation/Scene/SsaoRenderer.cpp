@@ -43,18 +43,21 @@ void SsaoRenderer::init()
 {
     auto & drawContext = m_renderManager.drawContext();
 
-    m_intermediateFb = drawContext.createFramebuffer(drawContext.backbuffer().width(), drawContext.backbuffer().height());
-    m_intermediateFb.addRenderTarget(PixelFormat_R_32_F);
 
-    m_effect = ScreenSpaceEffect(m_renderManager.drawContext(), {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
-                                                                 DeliberationDataPath("Data/Shaders/Ssao.frag")}, "SSAO");
+    m_intermediateFb = drawContext.createFramebuffer({drawContext.backbuffer().width(), drawContext.backbuffer().height(),
+                                                      {{PixelFormat_R_32_F, "UnblurredSsao"}}});
+
+    m_effect = ScreenSpaceEffect(m_renderManager.drawContext(),
+                                 {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
+                                  DeliberationDataPath("Data/Shaders/Ssao.frag")},
+                                 "SSAO");
 
     auto positionSampler = m_effect.draw().sampler("Position");
-    positionSampler.setTexture(m_renderManager.gbuffer().renderTarget(1)->texture());
+    positionSampler.setTexture(m_renderManager.gbuffer().colorTargetRef("Position"));
     positionSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
 
     auto normalSampler = m_effect.draw().sampler("Normal");
-    normalSampler.setTexture(m_renderManager.gbuffer().renderTarget(2)->texture());
+    normalSampler.setTexture(m_renderManager.gbuffer().colorTargetRef("Normal"));
     normalSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
 
     m_effect.draw().setFramebuffer(m_intermediateFb);
@@ -116,7 +119,7 @@ void SsaoRenderer::init()
                                                    DeliberationDataPath("Data/Shaders/UV_Position2.vert")}, "SSAO Blur");
 
     auto inputSampler = m_blurEffect.draw().sampler("Input");
-    inputSampler.setTexture(m_intermediateFb.renderTarget(0)->texture());
+    inputSampler.setTexture(m_intermediateFb.colorTargetRef("UnblurredSsao"));
     inputSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
 
     m_blurEffect.draw().setFramebuffer(m_renderManager.ssaoBuffer());

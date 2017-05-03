@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
@@ -10,11 +12,8 @@
 namespace deliberation
 {
 
+class DrawImpl;
 class GLStateManager;
-
-namespace detail
-{
-
 class TextureImpl;
 
 class SamplerImpl
@@ -26,14 +25,14 @@ public:
 
     gl::GLenum textureType() const;
 
-    GLSamplerState      glSampler;
-    gl::GLenum          type;
-    gl::GLenum          valueType;
-    gl::GLuint          location;
-    const TextureImpl * texture;
+    GLSamplerState                  glSampler;
+    gl::GLenum                      type;
+    gl::GLenum                      valueType;
+    gl::GLuint                      location;
+    std::shared_ptr<TextureImpl>    textureImpl;
+    std::shared_ptr<DrawImpl>       drawImpl;
 };
 
-}
 
 }
 

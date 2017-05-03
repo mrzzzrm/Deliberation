@@ -34,18 +34,22 @@ void RenderManager::render()
 
         m_mainCamera.setAspectRatio((float)w / (float)h);
 
-        m_gbuffer = m_drawContext.createFramebuffer(w, h);
-        m_gbuffer.addDepthTarget(PixelFormat_Depth_16_UN);
-        m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Diffuse
-        m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Position
-        m_gbuffer.clear().setColor(1, glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
-        m_gbuffer.addRenderTarget(PixelFormat_RGB_32_F); // Normal
+        // Setup GBuffer
+        FramebufferDesc gbufferDesc(w, h, {
+            {PixelFormat_RGB_32_F, "Diffuse"},
+            {PixelFormat_RGB_32_F, "Position"},
+            {PixelFormat_RGB_32_F, "Normal"}},
+            {{PixelFormat_Depth_16_UN}}
+        );
 
-        m_hdrBuffer = m_drawContext.createFramebuffer(w, h);
-        m_hdrBuffer.addRenderTarget(PixelFormat_RGB_32_F);
+        m_gbuffer = m_drawContext.createFramebuffer(gbufferDesc);
+        m_gbuffer.clear().setColor("Position", glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
 
-        m_ssaoBuffer = m_drawContext.createFramebuffer(w, h);
-        m_ssaoBuffer.addRenderTarget(PixelFormat_R_32_F);
+        FramebufferDesc hdrBufferDesc(w, h, {{PixelFormat_RGB_32_F, "Hdr"}});
+        m_hdrBuffer = m_drawContext.createFramebuffer(hdrBufferDesc);
+
+        FramebufferDesc ssaoBufferDesc(w, h, {{PixelFormat_R_32_F, "Ssao"}});
+        m_ssaoBuffer = m_drawContext.createFramebuffer(ssaoBufferDesc);
 
         m_renderNodesByPhase.clear();
         for (auto & renderer : m_renderers)

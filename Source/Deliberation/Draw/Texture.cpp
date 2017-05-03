@@ -4,12 +4,28 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/PixelFormat.h>
+#include <Deliberation/Draw/TextureBinary.h>
+
 #include "Detail/TextureImpl.h"
+#include "DrawContext.h"
 
 namespace deliberation
 {
 
 Texture::Texture() = default;
+
+Texture::Texture(const std::shared_ptr<TextureImpl> & impl):
+    m_impl(impl)
+{
+}
+
+Texture::Texture(const Surface & surface)
+{
+    Assert(surface.m_impl.get(), "Surface is hollow");
+
+    m_impl = surface.m_impl->textureImpl;
+}
 
 unsigned int Texture::width() const
 {
@@ -32,7 +48,7 @@ unsigned int Texture::numFaces() const
 gl::GLenum Texture::type() const
 {
     Assert(m_impl.get(), "Texture is hollow");
-    return m_impl->type;
+    return m_impl->glType;
 }
 
 PixelFormat Texture::format() const
@@ -45,30 +61,24 @@ Surface & Texture::surface(unsigned int face)
 {
     Assert(m_impl.get(), "Texture is hollow");
     Assert(face < numFaces(), "Face out of index");
+
     return m_impl->surfaces[face];
 }
 
-const Surface & Texture::surface(unsigned int face) const
+void Texture::upload(const TextureBinary & binary)
 {
     Assert(m_impl.get(), "Texture is hollow");
-    Assert(face < numFaces(), "Face out of index");
-    return m_impl->surfaces[face];
-}
 
-TextureUpload Texture::createUpload(const TextureBinary & binary)
-{
-    Assert(m_impl.get(), "Texture is hollow");
-    return TextureUpload(m_impl->drawContext, *this, binary);
-}
+    Assert(binary.width() == width(), "Incompatible Texture/Binary resolution");
+    Assert(binary.height() == height(), "Incompatible Texture/Binary resolution");
+    Assert(binary.numFaces() == m_impl->surfaces.size(), "Incompatible Texture/Binary types");
+    Assert(binary.format() == format(), "Incompatible Texture/Binary types");
 
-void Texture::scheduleUpload(const TextureBinary & binary)
-{
-    createUpload(binary).schedule();
-}
+    auto & glStateManager = m_impl->drawContext.m_glStateManager;
 
-Texture::Texture(const std::shared_ptr<detail::TextureImpl> & impl):
-    m_impl(impl)
-{
+    glStateManager.bindTexture(m_impl->glType, m_impl->glName);
+
+    m_impl->texImage2DAllFaces(&binary);
 }
 
 }

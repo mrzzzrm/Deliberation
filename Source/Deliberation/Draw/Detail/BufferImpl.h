@@ -10,9 +10,6 @@ namespace deliberation
 
 class DrawContext;
 
-namespace detail
-{
-
 class BufferImpl final
 {
 public:
@@ -26,8 +23,6 @@ public:
     LayoutedBlob    mappedBlob;
     bool            mapped = false;
 };
-
-}
 
 }
 

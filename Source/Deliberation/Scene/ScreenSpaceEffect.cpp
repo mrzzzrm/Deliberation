@@ -37,7 +37,7 @@ ScreenSpaceEffect::ScreenSpaceEffect(DrawContext & drawContext,
 
     auto layout = DataLayout("Position", Type_Vec2);
     m_vertexBuffer = drawContext.createBuffer(layout);
-    m_vertexBuffer.scheduleUpload(vertices);
+    m_vertexBuffer.upload(vertices);
 
     m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "ScreenSpaceEffect" : name);
     m_draw.addVertexBuffer(m_vertexBuffer);

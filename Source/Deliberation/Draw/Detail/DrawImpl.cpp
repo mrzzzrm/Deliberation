@@ -16,9 +16,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 DrawImpl::DrawImpl(DrawContext & drawContext,
                    const Program & program):
     drawContext(drawContext),
@@ -42,16 +39,17 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
     // Create Samplers
     {
         auto numSamplers = this->program->interface.samplers().size();
-
         samplers.reserve(numSamplers);
-        for (auto s = 0u; s < this->program->interface.samplers().size(); s++)
+
+        for (auto s = 0u; s < numSamplers; s++)
         {
             auto & sampler = this->program->interface.samplers()[s];
-            samplers.emplace_back(sampler.type(), sampler.valueType(), sampler.location());
+            samplers.emplace_back(std::make_shared<SamplerImpl>(
+                sampler.type(), sampler.valueType(), sampler.location()));
         }
     }
 
-    // Create framebuffer
+        // Create framebuffer
     framebuffer = drawContext.backbuffer();
 
     // Allocate Uniform Buffer Bindings
@@ -60,7 +58,6 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
     // Allocate vertex attribute bindings
     attributeBindings.resize(this->program->interface.attributes().size());
     valueAttributes = Blob(0);
-}
 
 }
 

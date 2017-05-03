@@ -99,8 +99,8 @@ void ImGuiRenderer::render()
 
         u32 indexOffset = 0;
 
-        m_vertexBuffer.scheduleRawUpload(Blob::fromRawData(vertexData, vertexDataSize), cmdList->VtxBuffer.Size);
-        m_indexBuffer.scheduleRawUpload(Blob::fromRawData(indexData, indexDataSize), cmdList->IdxBuffer.Size);
+        m_vertexBuffer.rawUpload(Blob::fromRawData(vertexData, vertexDataSize), cmdList->VtxBuffer.Size);
+        m_indexBuffer.rawUpload(Blob::fromRawData(indexData, indexDataSize), cmdList->IdxBuffer.Size);
 
         //   std::cout << "  " << l << ": Cmds: " << cmdList->CmdBuffer.Size << std::endl;
         for (int c = 0; c < cmdList->CmdBuffer.Size; c++)

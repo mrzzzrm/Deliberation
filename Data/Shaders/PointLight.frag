@@ -9,7 +9,7 @@ in vec3 f_Intensity;
 //in vec2 f_UV;
 in float f_Radius;
 
-out vec3 f_Color;
+out vec3 o_Hdr;
 
 const float RadiusMin = 0.01f;
 
@@ -32,5 +32,5 @@ void main()
 
     float backside = step(0.0f, surfaceNormalLightDot);
 
-    f_Color = falloff * backside * (surfaceNormalLightDot) * f_Intensity * surfaceDiffuse;
+    o_Hdr = falloff * backside * (surfaceNormalLightDot) * f_Intensity * surfaceDiffuse;
 }

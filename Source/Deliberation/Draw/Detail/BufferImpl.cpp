@@ -1,27 +1,24 @@
 #include "BufferImpl.h"
 
+#include <glbinding/gl/gl.h>
+
 #include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
 
-namespace detail
-{
-
 BufferImpl::BufferImpl(DrawContext & drawContext, const DataLayout & layout):
     drawContext(drawContext),
-    glName(0u),
     count(0u),
     layout(layout)
 {
-    drawContext.allocateBuffer(*this);
+    gl::glGenBuffers(1, &glName);
+    Assert(glName != 0u, "Failed to create GL BufferObject");
 }
 
 BufferImpl::~BufferImpl()
 {
-    drawContext.deallocateBuffer(*this);
-}
-
+    drawContext.m_glStateManager.deleteBuffer(glName);
 }
 
 }

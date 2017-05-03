@@ -50,7 +50,7 @@ public:
         m_viewField[0] = camera.view();
         m_projectionField[0] = camera.projection();
         m_viewProjectionField[0] = camera.viewProjection();
-        m_viewUniformBuffer.scheduleUpload(m_viewUniformData);
+        m_viewUniformBuffer.upload(m_viewUniformData);
 
         // Render model instances
         for (auto & pair : m_modelRenderer.m_instancesByModel)
@@ -91,7 +91,7 @@ public:
             }
 
             auto & instancesDraw = iter->second;
-            instancesDraw.instanceBuffer.scheduleUpload(m_instanceDataStaging);
+            instancesDraw.instanceBuffer.upload(m_instanceDataStaging);
             instancesDraw.draw.schedule();
         }
     }

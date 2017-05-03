@@ -20,8 +20,8 @@ public:
     {
         m_effect = ScreenSpaceEffect(m_renderManager.drawContext(), {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
                                                                    DeliberationDataPath("Data/Shaders/Hdr.frag")}, "HDR");
-        m_effect.draw().sampler("Hdr").setTexture(m_renderManager.hdrBuffer().renderTarget(0)->texture());
-        m_effect.draw().sampler("Depth").setTexture(m_renderManager.gbuffer().depthTarget()->texture());
+        m_effect.draw().sampler("Hdr").setTexture(m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
+        m_effect.draw().sampler("Depth").setTexture(m_renderManager.gbuffer().depthTargetRef());
         m_effect.draw().state().setDepthState(DepthState::enabled());
     }
 

@@ -1,23 +1,19 @@
 #pragma once
 
+#include <memory>
+
 #include <glbinding/gl/enum.h>
-
-
 
 namespace deliberation
 {
 
-namespace detail
-{
-    class SamplerImpl;
-}
-
+class SamplerImpl;
 class Texture;
 
 class Sampler final
 {
 public:
-    Sampler();
+    Sampler() = default;
 
     void setTexture(const Texture & texture);
 
@@ -30,10 +26,10 @@ private:
     friend class Draw;
 
 private:
-    Sampler(detail::SamplerImpl & impl);
+    Sampler(const std::shared_ptr<SamplerImpl> & impl);
 
 private:
-    detail::SamplerImpl * m_impl;
+    std::shared_ptr<SamplerImpl> m_impl;
 };
 
 }

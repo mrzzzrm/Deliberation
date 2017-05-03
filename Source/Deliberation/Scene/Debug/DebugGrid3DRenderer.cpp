@@ -67,7 +67,7 @@ void DebugGrid3DRenderer::init(float scale)
     auto layout = DataLayout({{"Position", Type_Vec3}});
 
     m_vertexBuffer = m_drawContext.createBuffer(layout);
-    m_vertexBuffer.scheduleUpload(vertices);
+    m_vertexBuffer.upload(vertices);
 
     m_program = m_drawContext.createProgram({deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.vert"),
                                          deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.frag")});

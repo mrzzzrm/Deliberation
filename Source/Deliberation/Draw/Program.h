@@ -2,18 +2,11 @@
 
 #include <memory>
 
-
-
 namespace deliberation
 {
 
-namespace detail
-{
-    class DrawImpl;
-    class DrawExecution;
-    class ProgramImpl;
-}
-
+class DrawImpl;
+class ProgramImpl;
 class DrawContext;
 class ProgramInterface;
 
@@ -29,14 +22,13 @@ public:
 private:
     friend class DrawContext;
     friend class Draw;
-    friend class detail::DrawImpl;
-    friend class detail::DrawExecution;
+    friend class DrawImpl;
 
 private:
-    Program(const std::shared_ptr<detail::ProgramImpl> & impl);
+    Program(const std::shared_ptr<ProgramImpl> & impl);
 
 private:
-    std::shared_ptr<detail::ProgramImpl> m_impl;
+    std::shared_ptr<ProgramImpl> m_impl;
 };
 
 }

@@ -12,12 +12,6 @@
 namespace deliberation
 {
 
-Buffer::Buffer():
-    m_impl(nullptr)
-{
-
-}
-
 const DataLayout & Buffer::layout() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
@@ -46,31 +40,39 @@ std::string Buffer::toString() const
         "Count: " + std::to_string(count());
 }
 
-Buffer::Buffer(const std::shared_ptr<detail::BufferImpl> & impl):
+Buffer::Buffer(const std::shared_ptr<BufferImpl> & impl):
     m_impl(impl)
 {
 }
 
-void Buffer::scheduleUpload(const Blob & data)
+void Buffer::upload(const Blob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
+    Assert(data.size() % layout().stride() == 0, "");
 
-    BufferUpload(m_impl->drawContext, *this, data).schedule();
+    rawUpload(data, data.size() / layout().stride());
 }
 
-void Buffer::scheduleRawUpload(const Blob & data, size_t count)
+void Buffer::rawUpload(const Blob & data, size_t count)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
+    Assert(m_impl->glName != 0, "");
 
-    BufferUpload(m_impl->drawContext, *this, data, count).schedule();
+    const auto glTarget = gl::GL_COPY_WRITE_BUFFER;
+
+    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    glStateManager.bindBuffer(glTarget, m_impl->glName);
+    gl::glBufferData(glTarget, data.size(), data.ptr(), gl::GL_STATIC_DRAW);
+
+    m_impl->count = count;
 }
 
-void Buffer::scheduleUpload(const LayoutedBlob & data)
+void Buffer::upload(const LayoutedBlob & data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
     Assert(layout().equals(data.layout()), "Layout mismatch");
 
-    BufferUpload(m_impl->drawContext, *this, data.rawData(), data.count()).schedule();
+    rawUpload(data.rawData(), data.count());
 }
 
 void Buffer::reinit(size_t count)
@@ -88,15 +90,11 @@ void Buffer::reinit(size_t count)
     m_impl->count = count;
 }
 
-LayoutedBlob & Buffer::map(BufferMapping flags)
+LayoutedBlob Buffer::map(BufferMapping flags)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
     Assert(m_impl->glName != 0, "Buffer not backed by GL object");
-
-    if (m_impl->glName == 0)
-    {
-        m_impl->drawContext.allocateBuffer(*m_impl);
-    }
+    Assert(m_impl->count != 0, "Can't map empty buffer");
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);

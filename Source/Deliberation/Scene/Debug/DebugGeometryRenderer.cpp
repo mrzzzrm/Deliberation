@@ -218,7 +218,7 @@ void DebugArrowInstance::reset(const glm::vec3 &origin, const glm::vec3 &delta) 
     positions[0] = m_origin;
     positions[1] = m_origin + m_delta;
 
-    m_lineVertexBuffer.scheduleUpload(m_lineVertices);
+    m_lineVertexBuffer.upload(m_lineVertices);
 
     if (glm::length2(m_delta) < 0.001f) {
         m_coneTransformUniform.set(Transform3D::identity().matrix());
@@ -277,7 +277,7 @@ void DebugWireframeInstance::addLineStrip(const std::vector<BasicVertex> &vertic
         positions[oldNumVertices + l * 2 + 1] = vertices[l + 1].position;
     }
 
-    m_vertexBuffer.scheduleUpload(m_vertices);
+    m_vertexBuffer.upload(m_vertices);
 }
 
 void DebugWireframeInstance::schedule() const {
@@ -548,7 +548,7 @@ void DebugGeometryRenderer::removePose(size_t index) {
 
 void DebugGeometryRenderer::schedule(const Camera3D &camera) {
     m_globals.field<glm::mat4>("ViewProjection")[0] = camera.viewProjection();
-    m_globalsBuffer.scheduleUpload(m_globals);
+    m_globalsBuffer.upload(m_globals);
 
     for (auto &box : m_boxes) box->schedule();
     for (auto &point : m_points) point->schedule();

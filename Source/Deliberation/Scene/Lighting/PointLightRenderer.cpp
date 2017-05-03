@@ -61,12 +61,14 @@ void PointLightRenderer::removePointLight(size_t index)
 
 void PointLightRenderer::render()
 {
+    if (m_lights.empty()) return;
+
     if (m_lightBuffer.count() != m_lights.size())
     {
         m_lightBuffer.reinit(m_lights.size());
     }
 
-    auto & lightData = m_lightBuffer.map(BufferMapping::WriteOnly);
+    auto lightData = m_lightBuffer.map(BufferMapping::WriteOnly);
 
     auto positions = lightData.iterator<glm::vec3>(m_lightPositionField);
     auto intensities = lightData.iterator<glm::vec3>(m_intensityField);
@@ -110,9 +112,9 @@ void PointLightRenderer::onSetupRender()
 
     m_draw.setFramebuffer(renderManager().hdrBuffer());
 
-    m_draw.sampler("Diffuse").setTexture(renderManager().gbuffer().renderTarget(0)->texture());
-    m_draw.sampler("Position").setTexture(renderManager().gbuffer().renderTarget(1)->texture());
-    m_draw.sampler("Normal").setTexture(renderManager().gbuffer().renderTarget(2)->texture());
+    m_draw.sampler("Diffuse").setTexture(renderManager().gbuffer().colorTargetRef("Diffuse"));
+    m_draw.sampler("Position").setTexture(renderManager().gbuffer().colorTargetRef("Position"));
+    m_draw.sampler("Normal").setTexture(renderManager().gbuffer().colorTargetRef("Normal"));
 
     m_viewProjectionUniform = m_draw.uniform("ViewProjection");
     m_viewUniform = m_draw.uniform("View");

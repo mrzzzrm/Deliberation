@@ -2,54 +2,45 @@
 
 #include <memory>
 
-
-
 #include <Deliberation/Draw/SurfaceDownload.h>
-#include <Deliberation/Draw/Texture.h>
 
 namespace deliberation
 {
 
-namespace detail
-{
-    class FramebufferImpl;
-    class TextureImpl;
-}
-
+class FramebufferImpl;
 class DrawContext;
 class SurfaceDownloadImpl;
+class SurfaceImpl;
+class Texture;
+class TextureImpl;
 
 class Surface final
 {
 public:
-    Surface();
-    Surface(const Surface & surface);
+    Surface() = default;
+    Surface(const std::shared_ptr<SurfaceImpl> & impl);
 
     DrawContext & drawContext() const;
-    Texture texture() const;
-    unsigned int face() const;
-    unsigned int width() const;
-    unsigned int height() const;
+
+    u32 face() const;
+
+    u32 width() const;
+    u32 height() const;
+
     PixelFormat format() const;
 
     SurfaceDownload download() const;
 
-    bool operator==(const Surface & other) const;
-    bool operator!=(const Surface & other) const;
-
 private:
     friend class Framebuffer;
+    friend class FramebufferImpl;
     friend class SurfaceDownloadImpl;
-    friend class detail::FramebufferImpl;
-    friend class detail::TextureImpl;
+    friend class FramebufferImpl;
+    friend class TextureImpl;
+    friend class Texture;
 
 private:
-    Surface(const std::shared_ptr<detail::TextureImpl> & texture,
-            unsigned int face);
-
-private:
-    std::shared_ptr<detail::TextureImpl>    m_texture;
-    unsigned int                            m_face;
+    std::shared_ptr<SurfaceImpl> m_impl;
 };
 
 }

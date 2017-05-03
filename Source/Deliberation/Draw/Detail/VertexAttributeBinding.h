@@ -10,9 +10,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 class BufferImpl;
 
 struct VertexAttributeValueBinding {
@@ -35,5 +32,4 @@ using VertexAttributeBinding = boost::variant<
     VertexAttributeValueBinding,
     VertexAttributeBufferBinding>;
 
-}
 }

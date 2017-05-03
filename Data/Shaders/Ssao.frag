@@ -13,7 +13,7 @@ uniform int NumSamples;
 
 in vec2 f_UV;
 
-out float f_Color;
+out float o_UnblurredSsao;
 
 void main()
 {
@@ -49,5 +49,5 @@ void main()
 
     occlusion /= float(NumSamples);
 
-    f_Color = 1.0f - occlusion;
+    o_UnblurredSsao = 1.0f - occlusion;
 }

@@ -54,11 +54,9 @@ bool SurfaceDownloadImpl::isDone() const
 void SurfaceDownloadImpl::start()
 {
     Assert(!started, "");
-    Assert(surface.m_texture.get(), "");
 
-    auto & drawContext = surface.m_texture->drawContext;
+    auto & drawContext = surface.m_impl->textureImpl->drawContext;
 
-    auto & texture = *surface.m_texture;
     size = surface.width() * surface.height() * format.bytesPerPixel();
 
     gl::glGenBuffers(1, &glName);
@@ -67,8 +65,8 @@ void SurfaceDownloadImpl::start()
     drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
     gl::glBufferData(gl::GL_PIXEL_PACK_BUFFER, size, nullptr, gl::GL_STREAM_READ);
 
-    texture.bind();
-    gl::glGetTexImage(texture.type,
+    drawContext.m_glStateManager.bindTexture(surface.m_impl->textureImpl->glType, surface.m_impl->textureImpl->glName);
+    gl::glGetTexImage(surface.m_impl->textureImpl->glType,
                       0,
                       format.glFormat(),
                       format.glType(),
@@ -107,9 +105,8 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
         }
     }
 
-    auto & drawContext = surface.m_texture->drawContext;
-    auto & texture = *surface.m_texture;
-    auto numValues = surface.width() * surface.height() * texture.format.componentsPerPixel();
+    auto & drawContext = surface.m_impl->textureImpl->drawContext;
+    auto numValues = surface.width() * surface.height() * surface.format().componentsPerPixel();
     auto type = format.glType();
 
     drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
@@ -151,7 +148,7 @@ void SurfaceDownloadImpl::fillSurfaceBinary(std::size_t numValues) const
 {
     std::vector<T> data(numValues);
     gl::glGetBufferSubData(gl::GL_PIXEL_PACK_BUFFER, 0, size, data.data());
-    surfaceBinary.reset(std::move(data), surface.width(), surface.height(), surface.m_texture->format);
+    surfaceBinary.reset(std::move(data), surface.width(), surface.height(), surface.format());
 }
 
 }

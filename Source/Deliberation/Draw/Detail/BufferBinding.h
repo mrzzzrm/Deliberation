@@ -5,9 +5,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 class BufferImpl;
 
 struct BufferBinding
@@ -18,8 +15,6 @@ struct BufferBinding
 	unsigned int count = 0;
 	unsigned int divisor = 1;
 };
-
-}
 
 }
 

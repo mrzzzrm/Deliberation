@@ -10,11 +10,7 @@
 namespace deliberation
 {
 
-namespace detail
-{
-    class UniformImpl;
-}
-
+class UniformImpl;
 class Draw;
 
 class Uniform
@@ -34,10 +30,10 @@ private:
     friend class Draw;
 
 private:
-    Uniform(detail::UniformImpl & impl);
+    Uniform(UniformImpl & impl);
 
 private:
-    detail::UniformImpl * m_impl;
+    UniformImpl * m_impl;
 };
 
 }

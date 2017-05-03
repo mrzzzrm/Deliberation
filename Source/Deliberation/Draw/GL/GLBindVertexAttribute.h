@@ -21,7 +21,7 @@ namespace detail
 void GLBindVertexAttribute(
     gl::GLuint vao,
     const ProgramInterfaceVertexAttribute & attribute,
-    const detail::BufferImpl & buffer,
+    const BufferImpl & buffer,
     u32 bufferFieldIndex,
     gl::GLuint divisor,
     gl::GLint baseOffset);

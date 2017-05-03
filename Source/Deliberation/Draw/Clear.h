@@ -7,31 +7,24 @@
 
 #include <glm/glm.hpp>
 
-
-
 namespace deliberation
 {
 
-namespace detail
-{
-    class ClearImpl;
-}
-
+class ClearImpl;
 class Framebuffer;
 
 class Clear final
 {
 public:
-    Clear();
+    Clear() = default;
+    Clear(const std::shared_ptr<ClearImpl> & impl);
 
-    Framebuffer & framebuffer();
     const Framebuffer & framebuffer() const;
 
-    void setFramebuffer(Framebuffer & framebuffer);
-
     void setColor(const glm::vec4 & color);
-    void setColor(unsigned int rt, const glm::vec4 & color);
+    void setColor(const std::string & name, const glm::vec4 & color);
     void disableColor();
+    void disableColor(const std::string & name);
 
     void setDepth(float depth);
     void disableDepth();
@@ -46,10 +39,7 @@ private:
     friend class ClearExecution;
 
 private:
-    Clear(const std::shared_ptr<detail::ClearImpl> & impl);
-
-private:
-    std::shared_ptr<detail::ClearImpl> m_impl;
+    std::shared_ptr<ClearImpl> m_impl;
 };
 
 }

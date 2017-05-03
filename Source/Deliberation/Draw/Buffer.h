@@ -8,22 +8,10 @@
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/DataLayout.h>
 
-#include <Deliberation/Draw/BufferUpload.h>
-
-/*
-    TODO
-        Create buffers with immutable size only?
-        upload() = createUpload().schedule()
-*/
-
 namespace deliberation
 {
 
-namespace detail
-{
-    class BufferImpl;
-}
-
+class BufferImpl;
 class DrawContext;
 class LayoutedBlob;
 
@@ -37,19 +25,20 @@ enum class BufferMapping
 class Buffer final
 {
 public:
-    Buffer();
+    Buffer() = default;
+    Buffer(const std::shared_ptr<BufferImpl> & impl);
 
     size_t count() const;
     size_t size() const;
     const DataLayout & layout() const;
 
-    void scheduleUpload(const Blob & data);
-    void scheduleRawUpload(const Blob & data, size_t count);
-    void scheduleUpload(const LayoutedBlob & data);
+    void upload(const Blob & data);
+    void rawUpload(const Blob & data, size_t count);
+    void upload(const LayoutedBlob & data);
 
     void reinit(size_t count);
 
-    LayoutedBlob & map(BufferMapping flags);
+    LayoutedBlob map(BufferMapping flags);
     void unmap();
 
     std::string toString() const;
@@ -61,10 +50,7 @@ private:
     friend class GLVertexAttributeBinder;
 
 private:
-    Buffer(const std::shared_ptr<detail::BufferImpl> & impl);
-
-private:
-    std::shared_ptr<detail::BufferImpl> m_impl;
+    std::shared_ptr<BufferImpl> m_impl;
 };
 
 }

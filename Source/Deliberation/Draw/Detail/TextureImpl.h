@@ -4,6 +4,7 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/Detail/SurfaceImpl.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -11,34 +12,31 @@ namespace deliberation
 {
 
 class DrawContext;
-
-namespace detail
-{
+class TextureBinary;
 
 class TextureImpl final
 {
 public:
-    static std::shared_ptr<TextureImpl> build(DrawContext & drawContext,
-                                              unsigned int width,
-                                              unsigned int height,
-                                              unsigned int numFaces,
-                                              PixelFormat format);
+    TextureImpl(
+        DrawContext & drawContext,
+        u32 width,
+        u32 height,
+        u32 numFaces,
+        PixelFormat format
+    );
 
-public:
-    TextureImpl(DrawContext & drawContext, unsigned int numFaces);
+    void setupSurfaces(const std::shared_ptr<TextureImpl> & textureImpl);
+    void texImage2DAllFaces(const TextureBinary * binary) const;
 
-    void allocate() const;
-    void upload(const TextureBinary & binary);
+    DrawContext &           drawContext;
 
-    DrawContext &               drawContext;
+    gl::GLuint              glName;
 
-    mutable gl::GLuint      glName;
+    u32                     width;
+    u32                     height;
 
-    unsigned int            width;
-    unsigned int            height;
-
-    unsigned int            numFaces;
-    gl::GLenum              type;
+    u32                     numFaces;
+    gl::GLenum              glType;
     PixelFormat             format;
 
     gl::GLuint              baseLevel;
@@ -47,14 +45,7 @@ public:
     gl::GLenum              maxFilter;
 
     std::vector<Surface>    surfaces;
-
-    void bind() const;
-
-private:
-    void texImage2DAllFaces(const TextureBinary * binary) const;
 };
-
-}
 
 }
 

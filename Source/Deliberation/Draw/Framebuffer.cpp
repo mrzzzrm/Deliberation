@@ -9,113 +9,119 @@
 namespace deliberation
 {
 
+FramebufferDesc::FramebufferDesc(
+    u32 width,
+    u32 height,
+    const std::vector<RenderTargetDesc> & colorTargetDescs,
+    const boost::optional<RenderTargetDesc> & depthTargetDesc
+    ): width(width), height(height), colorTargetDescs(colorTargetDescs), depthTargetDesc(depthTargetDesc)
+{
+    Assert(!colorTargetDescs.empty() || depthTargetDesc,
+        "Framebuffer must at least have one color target or a depth target")
+
+    for (const auto & colorTargetDesc : colorTargetDescs)
+    {
+        Assert(!colorTargetDesc.name.empty(), "Color Target must be named");
+
+        if (colorTargetDesc.format == PixelFormat_None)
+        {
+            Assert(colorTargetDesc.surface.width() == width &&
+                   colorTargetDesc.surface.height() == height,
+                   "Framebuffer/RenderTarget resolution mistach");
+        }
+    }
+
+    if (depthTargetDesc && depthTargetDesc->format == PixelFormat_None)
+    {
+        Assert(depthTargetDesc->name.empty(), "Depth target must not be named");
+        Assert(depthTargetDesc->surface.width() == width &&
+                   depthTargetDesc->surface.height() == height,
+               "Framebuffer/RenderTarget resolution mistach");
+    }
+}
+
+Framebuffer::Framebuffer(const std::shared_ptr<FramebufferImpl> & impl):
+    m_impl(impl)
+{
+
+}
+
 unsigned int Framebuffer::width() const
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->width();
+    return m_impl->width;
 }
 
 unsigned int Framebuffer::height() const
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->height();
+    return m_impl->height;
 }
 
 bool Framebuffer::isBackbuffer() const
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->isBackbuffer();
+    return m_impl->isBackbuffer;
 }
 
-Surface * Framebuffer::renderTarget(unsigned int index)
+boost::optional<Surface> Framebuffer::colorTarget(const std::string & name)
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->renderTarget(index);
+    bool found;
+    auto index = m_impl->colorTargetIndex(name, &found);
+
+    if (!found) return {};
+
+    return {m_impl->colorTargets[index].surface};
 }
 
-const Surface * Framebuffer::renderTarget(unsigned int index) const
+Surface & Framebuffer::colorTargetRef(const std::string & name)
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->renderTarget(index);
+    bool found;
+    auto index = m_impl->colorTargetIndex(name, &found);
+    Assert(found, "No such color target '" + name + "'");
+
+    return m_impl->colorTargets[index].surface;
 }
 
-const std::vector<Optional<Surface>> & Framebuffer::renderTargets() const
+boost::optional<Surface> Framebuffer::depthTarget()
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->renderTargets();
+    if (!m_impl->depthTarget) return {};
+
+    return {m_impl->depthTarget->surface};
 }
 
-Surface * Framebuffer::depthTarget()
+Surface & Framebuffer::depthTargetRef()
 {
-    Assert(m_impl.get(), "Framebuffer is hollow");
-
-    return m_impl->depthTarget();
-}
-
-const Surface * Framebuffer::depthTarget() const
-{
-    Assert(m_impl.get(), "Framebuffer is hollow");
-
-    return m_impl->depthTarget();
-}
-
-void Framebuffer::setRenderTarget(unsigned int index, Surface * surface)
-{
-    Assert(m_impl.get(), "Framebuffer is hollow");
-
-    m_impl->setRenderTarget(index, surface);
-}
-
-void Framebuffer::setDepthTarget(Surface * surface)
-{
-    Assert(m_impl.get(), "Framebuffer is hollow");
-
-    m_impl->setDepthTarget(surface);
-}
-
-void Framebuffer::addRenderTarget(PixelFormat format, int index)
-{
-    Assert(m_impl.get(), "Framebuffer is hollow");
-
-    m_impl->addRenderTarget(format, index);
-}
-
-void Framebuffer::addDepthTarget(PixelFormat format)
-{
-    Assert(m_impl.get(), "Framebuffer is hollow");
-
-    m_impl->addDepthTarget(format);
+    Assert((bool)m_impl->depthTarget, "No depth target");
+    return m_impl->depthTarget->surface;
 }
 
 Clear & Framebuffer::clear()
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    if (!m_impl->m_clear.engaged())
+    if (!m_impl->clear)
     {
-        m_impl->m_clear.reset(m_impl->m_drawContext.createClear(*this));
+        m_impl->clear = m_impl->drawContext.createClear(*this);
     }
 
-    return m_impl->m_clear.get();
+    return *m_impl->clear;
 }
 
 Clear Framebuffer::createClear()
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->drawContext().createClear(*this);
-}
-
-Framebuffer::Framebuffer(const std::shared_ptr<detail::FramebufferImpl> & impl):
-    m_impl(impl)
-{
-
+    return m_impl->drawContext.createClear(*this);
 }
 
 }

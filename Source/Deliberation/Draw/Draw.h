@@ -72,9 +72,6 @@ public:
 
     void setFramebuffer(const Framebuffer & framebuffer);
 
-    void setRenderTarget(unsigned int index, Surface * surface);
-    void setRenderTarget(const std::string & name, Surface * surface);
-
     void setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin = 0);
 
     void schedule() const;
@@ -88,7 +85,7 @@ private:
     friend void detail::SetVertexAttribute(Draw & draw, const ProgramInterfaceVertexAttribute & attribute, const void * data);
 
 private:
-    Draw(const std::shared_ptr<detail::DrawImpl> & impl);
+    Draw(const std::shared_ptr<DrawImpl> & impl);
 
     void build() const;
 
@@ -96,7 +93,7 @@ private:
     void setAttribute(const ProgramInterfaceVertexAttribute & attribute, const void * data);
 
 private:
-    std::shared_ptr<detail::DrawImpl> m_impl;
+    std::shared_ptr<DrawImpl> m_impl;
 };
 
 }

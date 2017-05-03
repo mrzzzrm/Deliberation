@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-
+#include <boost/optional.hpp>
 
 #include <Deliberation/Core/Optional.h>
 
@@ -15,21 +15,66 @@ namespace deliberation
 
 namespace detail
 {
-    class ClearImpl;
-    class DrawExecution;
     class DrawImpl;
+    class DrawExecution;
     class ProgramImpl;
-    class FramebufferImpl;
 }
 
+class ClearImpl;
 class ClearExecution;
 class DrawContext;
 class Surface;
+class FramebufferImpl;
+
+struct RenderTargetDesc final
+{
+    // For DepthTargets
+    RenderTargetDesc(const Surface & surface):
+        surface(surface)
+    {}
+
+    RenderTargetDesc(PixelFormat format):
+        format(format)
+    {}
+
+    RenderTargetDesc(const Surface & surface, const std::string & name):
+        surface(surface),
+        name(name)
+    {}
+
+    RenderTargetDesc(PixelFormat format, const std::string & name):
+        format(format),
+        name(name)
+    {}
+
+    // Surface is valid if format != None. Could use variant<>, yeah...
+    PixelFormat format = PixelFormat_None;
+    Surface     surface;
+
+    std::string name;
+};
+
+struct FramebufferDesc final
+{
+public:
+    FramebufferDesc(
+        u32 width,
+        u32 height,
+        const std::vector<RenderTargetDesc> & colorTargetDescs,
+        const boost::optional<RenderTargetDesc> & depthTargetDesc = {}
+    );
+
+    u32                                 width;
+    u32                                 height;
+    std::vector<RenderTargetDesc>       colorTargetDescs;
+    boost::optional<RenderTargetDesc>   depthTargetDesc;
+};
 
 class Framebuffer final
 {
 public:
     Framebuffer() = default;
+    Framebuffer(const std::shared_ptr<FramebufferImpl> & impl);
 
     unsigned int width() const;
     unsigned int height() const;
@@ -37,36 +82,27 @@ public:
 
     bool isBackbuffer() const;
 
-    Surface * renderTarget(unsigned int index);
-    const Surface * renderTarget(unsigned int index) const;
+    boost::optional<Surface> colorTarget(const std::string & name);
+    Surface & colorTargetRef(const std::string & name);
 
-    const std::vector<Optional<Surface>> & renderTargets() const;
-
-    Surface * depthTarget();
-    const Surface * depthTarget() const;
-
-    void setRenderTarget(unsigned int index, Surface * surface);
-    void setDepthTarget(Surface * surface);
-
-    void addRenderTarget(PixelFormat format, int index = -1);
-    void addDepthTarget(PixelFormat format);
+    boost::optional<Surface> depthTarget();
+    Surface & depthTargetRef();
 
     Clear & clear();
 
     Clear createClear();
 
 private:
+    friend class Clear;
+    friend class Draw;
     friend class DrawContext;
     friend class ClearExecution;
     friend class detail::DrawExecution;
-    friend class detail::ClearImpl;
+    friend class ClearImpl;
     friend class detail::DrawImpl;
 
 private:
-    Framebuffer(const std::shared_ptr<detail::FramebufferImpl> & impl);
-
-private:
-    std::shared_ptr<detail::FramebufferImpl> m_impl;
+    std::shared_ptr<FramebufferImpl> m_impl;
 };
 
 }

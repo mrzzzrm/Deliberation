@@ -16,6 +16,7 @@ GLFramebuffer::GLFramebuffer(GLStateManager & glStateManager,
                              const GLFramebufferDesc & desc):
     m_glStateManager(glStateManager)
 {
+
     glStateManager.genFramebuffers(1, &m_glName);
 
     bind();

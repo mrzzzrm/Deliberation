@@ -5,6 +5,9 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/DrawContext.h>
+#include <Deliberation/Draw/TextureBinary.h>
+
 namespace
 {
 
@@ -28,10 +31,7 @@ gl::GLenum faceTarget(gl::GLenum type, unsigned int face)
                 gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
                 gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
             };
-        /*
-            TODO
-                This is duplicated in Framebuffer!
-        */
+
         return targets[face];
     }
     default:
@@ -44,35 +44,18 @@ gl::GLenum faceTarget(gl::GLenum type, unsigned int face)
 namespace deliberation
 {
 
-namespace detail
-{
-
-std::shared_ptr<TextureImpl> TextureImpl::build(DrawContext & drawContext,
-                                                unsigned int width,
-                                                unsigned int height,
-                                                unsigned int numFaces,
-                                                PixelFormat format)
-{
-    auto impl = std::make_shared<TextureImpl>(drawContext, numFaces);
-
-    for (auto f = 0u; f < numFaces; f++)
-    {
-        impl->surfaces.push_back({impl, f});
-    }
-
-    impl->width = width;
-    impl->height = height;
-    impl->format = format;
-
-    return impl;
-}
-
-TextureImpl::TextureImpl(DrawContext & drawContext, unsigned int numFaces):
+TextureImpl::TextureImpl(
+    DrawContext & drawContext,
+    u32 width,
+    u32 height,
+    u32 numFaces,
+    PixelFormat format
+):
     drawContext(drawContext),
-    glName(0u),
-    width(0u),
-    height(0u),
-    numFaces(numFaces)
+    width(width),
+    height(height),
+    numFaces(numFaces),
+    format(format)
 {
     baseLevel = 0;
     maxLevel = 0;
@@ -81,52 +64,38 @@ TextureImpl::TextureImpl(DrawContext & drawContext, unsigned int numFaces):
 
     if (numFaces == 1)
     {
-        type = gl::GL_TEXTURE_2D;
+        glType = gl::GL_TEXTURE_2D;
     }
     else
     {
         Assert(numFaces == 6, "");
-        type = gl::GL_TEXTURE_CUBE_MAP;
+        glType = gl::GL_TEXTURE_CUBE_MAP;
     }
-}
 
-void TextureImpl::allocate() const
-{
-    Assert(glName == 0, "");
+    // Create GL Texture object
+    gl::glGenTextures(1, &glName);
+    Assert(glName != 0, "Failed to create GL Texture Object");
 
-    bind();
+    auto & glStateManager = drawContext.m_glStateManager;
+
+    glStateManager.bindTexture(glType, glName);
+
+    gl::glTexParameteri(glType, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
+    gl::glTexParameteri(glType, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
+    gl::glTexParameteri(glType, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
+    gl::glTexParameteri(glType, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
+
+    // Create faces
     texImage2DAllFaces(nullptr);
 }
 
-void TextureImpl::upload(const TextureBinary & binary)
+void TextureImpl::setupSurfaces(const std::shared_ptr<TextureImpl> &textureImpl)
 {
-    bind();
-
-    Assert(binary.numFaces() == surfaces.size(), "Incompatible Texture/Binary types");
-    Assert(binary.format() == format, "Incompatible Texture/Binary types");
-
-    texImage2DAllFaces(&binary);
-
-    width = binary.width();
-    height = binary.height();
-}
-
-void TextureImpl::bind() const
-{
-    if (glName == 0u)
+    for (auto f = 0u; f < numFaces; f++)
     {
-        gl::glGenTextures(1, &glName);
-        Assert(glName != 0, "glGenTextures() failed");
-
-        gl::glBindTexture(type, glName);
-
-        gl::glTexParameteri(type, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
-        gl::glTexParameteri(type, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
-        gl::glTexParameteri(type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
-        gl::glTexParameteri(type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
+        surfaces.emplace_back(
+            std::make_shared<SurfaceImpl>(textureImpl, f, faceTarget(glType, f)));
     }
-
-    gl::glBindTexture(type, glName);
 }
 
 void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
@@ -135,7 +104,7 @@ void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
     {
         auto * binarySurface = binary ? &binary->surface(f) : nullptr;
 
-        gl::glTexImage2D(faceTarget(type, f),
+        gl::glTexImage2D(faceTarget(glType, f),
                          0,
                          (gl::GLint)format.glInternalFormat(),
                          binarySurface ? binarySurface->width() : width,
@@ -149,5 +118,4 @@ void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
 
 }
 
-}
 

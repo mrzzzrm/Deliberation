@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <glbinding/gl/types.h>
 
 #include <glm/glm.hpp>
@@ -13,31 +15,21 @@ namespace deliberation
 {
 
 class DrawContext;
-
-namespace detail
-{
-
 class FramebufferImpl;
 
-class ClearImpl
+struct ClearImpl
 {
-public:
     ClearImpl(DrawContext & drawContext,
-              const std::shared_ptr<FramebufferImpl> & framebuffer);
+              const std::shared_ptr<FramebufferImpl> & framebufferImpl);
 
-public:
-    DrawContext &               drawContext;
-    glm::vec4               color;
-    LinearMap<glm::vec4>    colorOverrides;
-    float                   depth;
-    gl::GLint               stencil;
-    bool                    clearColor;
-    bool                    clearDepth;
-    bool                    clearStencil;
-    Framebuffer             framebuffer;
+    DrawContext &                           drawContext;
+    Framebuffer                             framebuffer;
+
+    std::vector<gl::GLenum>                 drawBuffers;
+    std::vector<boost::optional<glm::vec4>> colors;
+    boost::optional<float>                  depth;
+    boost::optional<gl::GLint>              stencil;
 };
-
-}
 
 }
 
