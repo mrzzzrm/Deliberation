@@ -90,7 +90,7 @@ void Buffer::reinit(size_t count)
     m_impl->count = count;
 }
 
-LayoutedBlob Buffer::map(BufferMapping flags)
+void Buffer::mapped(BufferMapping flags, const std::function<void(LayoutedBlob & mapping)> & fn)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
     Assert(m_impl->glName != 0, "Buffer not backed by GL object");
@@ -107,27 +107,16 @@ LayoutedBlob Buffer::map(BufferMapping flags)
         case BufferMapping::ReadWrite: access = gl::GL_READ_WRITE; break;
     }
 
-    auto * mapped = gl::glMapBuffer(gl::GL_COPY_WRITE_BUFFER, access);
-    Assert(mapped, "Failed to map buffer");
+    do
+    {
+        auto * mapped = gl::glMapBuffer(gl::GL_COPY_WRITE_BUFFER, access);
+        Assert(mapped, "Failed to map buffer");
 
-    auto viewBlob = std::make_unique<detail::ViewBlobImpl>(mapped, size());
+        auto viewBlob = std::make_unique<detail::ViewBlobImpl>(mapped, size());
 
-    m_impl->mapped = true;
-    m_impl->mappedBlob = LayoutedBlob(m_impl->layout, Blob(std::move(viewBlob)));
-
-    return m_impl->mappedBlob;
-}
-
-void Buffer::unmap()
-{
-    Assert(m_impl.get(), "Can't perform action on hollow object");
-    Assert(m_impl->mapped, "Buffer not mapped");
-
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
-    glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
-
-    auto result = gl::glUnmapBuffer(gl::GL_COPY_WRITE_BUFFER);
-    Assert(result == gl::GL_TRUE, "GL be like: Here's my middle finger. Deal with it...")
+        auto mappedBlob = LayoutedBlob(m_impl->layout, Blob(std::move(viewBlob)));
+        fn(mappedBlob);
+    } while (gl::glUnmapBuffer(gl::GL_COPY_WRITE_BUFFER) == gl::GL_FALSE);
 }
 
 }

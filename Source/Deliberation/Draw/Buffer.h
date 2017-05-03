@@ -38,8 +38,7 @@ public:
 
     void reinit(size_t count);
 
-    LayoutedBlob map(BufferMapping flags);
-    void unmap();
+    void mapped(BufferMapping flags, const std::function<void(LayoutedBlob & mapping)> & fn);
 
     std::string toString() const;
 

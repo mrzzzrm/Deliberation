@@ -68,20 +68,18 @@ void PointLightRenderer::render()
         m_lightBuffer.reinit(m_lights.size());
     }
 
-    auto lightData = m_lightBuffer.map(BufferMapping::WriteOnly);
+    m_lightBuffer.mapped(BufferMapping::WriteOnly, [&](LayoutedBlob & lightData) {
+        auto positions = lightData.iterator<glm::vec3>(m_lightPositionField);
+        auto intensities = lightData.iterator<glm::vec3>(m_intensityField);
+        auto active = lightData.iterator<i32>(m_activeField);
 
-    auto positions = lightData.iterator<glm::vec3>(m_lightPositionField);
-    auto intensities = lightData.iterator<glm::vec3>(m_intensityField);
-    auto active = lightData.iterator<i32>(m_activeField);
-
-    for (size_t l = 0; l < m_lights.size(); l++)
-    {
-        positions.put(m_lights[l].position);
-        intensities.put(m_lights[l].intensity);
-        active.put(m_lights[l].active);
-    }
-
-    m_lightBuffer.unmap();
+        for (size_t l = 0; l < m_lights.size(); l++)
+        {
+            positions.put(m_lights[l].position);
+            intensities.put(m_lights[l].intensity);
+            active.put(m_lights[l].active);
+        }
+    });
 
     m_viewProjectionUniform.set(renderManager().mainCamera().viewProjection());
     m_viewUniform.set(renderManager().mainCamera().view());

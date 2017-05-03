@@ -178,8 +178,6 @@ set(sources
 	Draw/GL/GLType.h
 	Draw/GL/GLUtils.cpp
 	Draw/GL/GLUtils.h
-	Draw/ILUtils.cpp
-	Draw/ILUtils.h
 	Draw/ITextureLoaderImpl.cpp
 	Draw/ITextureLoaderImpl.h
 	Draw/PixelFormat.cpp

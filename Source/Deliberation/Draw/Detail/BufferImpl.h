@@ -20,8 +20,6 @@ public:
     gl::GLuint      glName;
     size_t          count;
     DataLayout      layout;
-    LayoutedBlob    mappedBlob;
-    bool            mapped = false;
 };
 
 }
