@@ -74,7 +74,7 @@ public:
 
     void setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin = 0);
 
-    void schedule() const;
+    void render() const;
 
     std::string toString() const;
 

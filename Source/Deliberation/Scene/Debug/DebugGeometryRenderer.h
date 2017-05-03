@@ -65,7 +65,7 @@ public:
     void setColor(const glm::vec3 & color);
     void setWireframe(bool wireframe);
 
-    void schedule() const;
+    void render() const;
 
     Box toBox() const;
 
@@ -89,7 +89,7 @@ public:
 
     void setColor(const glm::vec3 & color);
 
-    void schedule() const;
+    void render() const;
 
 private:
     Draw            m_draw;
@@ -114,7 +114,7 @@ public:
 
     void reset(const glm::vec3 & origin, const glm::vec3 & delta);
 
-    void schedule() const;
+    void render() const;
 
 private:
     Draw            m_lineDraw;
@@ -143,7 +143,7 @@ public:
 
     void addLineStrip(const std::vector<BasicVertex> & vertices);
 
-    void schedule() const;
+    void render() const;
 
 private:
     Draw            m_draw;
@@ -166,7 +166,7 @@ public:
     void setColor(const glm::vec3 & color);
     void setRadius(float radius);
 
-    void schedule() const;
+    void render() const;
 
 private:
     Draw            m_draw;
@@ -187,7 +187,7 @@ public:
 
     void setPose(const Pose3D & pose);
 
-    void schedule() const;
+    void render() const;
 
 private:
     Draw                                 m_draw;
@@ -231,7 +231,7 @@ public:
     void removeSphere(size_t index);
     void removePose(size_t index);
 
-    void schedule(const Camera3D & camera);
+    void render(const Camera3D & camera);
 
 private:
     DebugGeometryManager &                                  m_manager;

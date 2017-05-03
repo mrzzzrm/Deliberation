@@ -57,7 +57,7 @@ void DebugCubemapRenderer::render()
 {
     m_viewProjectionUniform.set(m_camera.viewProjection());
     m_transformUniform.set(m_pose.matrix());
-    m_draw.schedule();
+    m_draw.render();
 }
 
 }

@@ -20,7 +20,7 @@ public:
                               const PhysicsWorld & physicsWorld,
                               const Camera3D & camera);
 
-    void schedule();
+    void render();
 
 private:
     DrawContext &                       m_drawContext;

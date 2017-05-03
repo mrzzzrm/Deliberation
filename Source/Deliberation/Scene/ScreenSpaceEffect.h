@@ -25,7 +25,7 @@ public:
     Draw & draw();
     const Draw & draw() const;
 
-    void schedule();
+    void render();
 
 private:
     bool        m_initialised;

@@ -33,7 +33,7 @@ DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & drawContext, const 
 
 void DebugTexture2dRenderer::render()
 {
-    m_draw.schedule();
+    m_draw.render();
 }
 
 }

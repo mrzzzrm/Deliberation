@@ -68,7 +68,7 @@ public:
         m_position.x = std::abs(std::sin(m_secondsAccumulator * 0.1f));
 
         m_clear.render();
-        m_draw.schedule();
+        m_draw.render();
     }
 
 private:

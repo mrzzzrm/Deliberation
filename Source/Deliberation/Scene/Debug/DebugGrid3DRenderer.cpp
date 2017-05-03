@@ -30,10 +30,10 @@ void DebugGrid3DRenderer::setFramebuffer(deliberation::Framebuffer & fb)
 void DebugGrid3DRenderer::draw()
 {
     m_normalLines.uniform("viewProjection").set(m_camera.viewProjection());
-    m_normalLines.schedule();
+    m_normalLines.render();
 
     m_fatLines.uniform("viewProjection").set(m_camera.viewProjection());
-    m_fatLines.schedule();
+    m_fatLines.render();
 }
 
 void DebugGrid3DRenderer::init(float scale)

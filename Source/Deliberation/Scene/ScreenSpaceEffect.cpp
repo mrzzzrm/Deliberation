@@ -67,10 +67,10 @@ const Draw & ScreenSpaceEffect::draw() const
     return m_draw;
 }
 
-void ScreenSpaceEffect::schedule()
+void ScreenSpaceEffect::render()
 {
     Assert(m_initialised, "");
-    m_draw.schedule();
+    m_draw.render();
 }
 
 }

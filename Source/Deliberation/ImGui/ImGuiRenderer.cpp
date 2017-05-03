@@ -119,7 +119,7 @@ void ImGuiRenderer::render()
 
             m_draw.setIndexBufferRange(m_indexBuffer, indexOffset, drawCmd.ElemCount);
 
-            m_draw.schedule();
+            m_draw.render();
 
             indexOffset += drawCmd.ElemCount;
         }

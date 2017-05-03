@@ -92,7 +92,7 @@ public:
 
             auto & instancesDraw = iter->second;
             instancesDraw.instanceBuffer.upload(m_instanceDataStaging);
-            instancesDraw.draw.schedule();
+            instancesDraw.draw.render();
         }
     }
 

@@ -29,7 +29,7 @@ public:
 
     void render() override
     {
-        m_effect.schedule();
+        m_effect.render();
     }
 
 private:

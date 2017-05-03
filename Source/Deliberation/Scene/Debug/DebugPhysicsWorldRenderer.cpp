@@ -23,7 +23,7 @@ DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(DrawContext & drawContext,
 //    m_angularVelocityRenderer.reset(m_drawContext, m_camera);
 }
 
-void DebugPhysicsWorldRenderer::schedule()
+void DebugPhysicsWorldRenderer::render()
 {
     auto & narrowphase = m_physicsWorld.narrowphase();
 
@@ -110,10 +110,10 @@ void DebugPhysicsWorldRenderer::schedule()
     /**
      * Commit
      */
-//    m_linearVelocityRenderer->schedule();
-//    m_angularVelocityRenderer->schedule();
-//    m_contactNormalRenderer->schedule();
-//    m_contactVelocityRenderer->schedule();
+//    m_linearVelocityRenderer->render();
+//    m_angularVelocityRenderer->render();
+//    m_contactNormalRenderer->render();
+//    m_contactVelocityRenderer->render();
 }
 
 }

@@ -51,7 +51,7 @@ void SkyboxRenderer::render()
 
     m_draw.uniform("View").set(view);
     m_draw.uniform("Projection").set(m_renderManager.mainCamera().projection());
-    m_draw.schedule();
+    m_draw.render();
 }
 
 }

@@ -252,7 +252,7 @@ void Draw::setUniformBuffer(const std::string & name, const Buffer & buffer, uns
     m_impl->uniformBuffers[index].reset(binding);
 }
 
-void Draw::schedule() const
+void Draw::render() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 

@@ -64,7 +64,7 @@ void LabelRenderer::render(const Label & label, const Viewport & viewport)
 
     m_draw.state().setViewport(viewport);
 
-    m_draw.schedule();
+    m_draw.render();
 }
 
 }

@@ -91,7 +91,7 @@ void DebugBoxInstance::setWireframe(bool wireframe) {
     m_meshDirty = true;
 }
 
-void DebugBoxInstance::schedule() const {
+void DebugBoxInstance::render() const {
     if (m_meshDirty) {
         if (m_wireframe) {
             m_draw = manager().drawContext().createDraw(
@@ -127,7 +127,7 @@ void DebugBoxInstance::schedule() const {
         m_transformDirty = false;
     }
 
-    m_draw.schedule();
+    m_draw.render();
 }
 
 Box DebugBoxInstance::toBox() const {
@@ -154,13 +154,13 @@ void DebugPointInstance::setColor(const glm::vec3 &color) {
     m_colorUniform.set(m_color);
 }
 
-void DebugPointInstance::schedule() const {
+void DebugPointInstance::render() const {
     if (m_transformDirty) {
         m_transformUniform.set(m_transform.matrix());
         m_transformDirty = false;
     }
 
-    m_draw.schedule();
+    m_draw.render();
 }
 
 DebugArrowInstance::DebugArrowInstance(DebugGeometryRenderer &renderer) :
@@ -235,9 +235,9 @@ void DebugArrowInstance::reset(const glm::vec3 &origin, const glm::vec3 &delta) 
     m_coneTransformUniform.set(transform.matrix());
 }
 
-void DebugArrowInstance::schedule() const {
-    m_lineDraw.schedule();
-    m_coneDraw.schedule();
+void DebugArrowInstance::render() const {
+    m_lineDraw.render();
+    m_coneDraw.render();
 }
 
 DebugWireframeInstance::DebugWireframeInstance(DebugGeometryRenderer &renderer) :
@@ -280,7 +280,7 @@ void DebugWireframeInstance::addLineStrip(const std::vector<BasicVertex> &vertic
     m_vertexBuffer.upload(m_vertices);
 }
 
-void DebugWireframeInstance::schedule() const {
+void DebugWireframeInstance::render() const {
     if (m_vertices.empty()) {
         return;
     }
@@ -290,7 +290,7 @@ void DebugWireframeInstance::schedule() const {
         m_transformDirty = false;
     }
 
-    m_draw.schedule();
+    m_draw.render();
 }
 
 DebugSphereInstance::DebugSphereInstance(DebugGeometryRenderer &renderer) :
@@ -323,13 +323,13 @@ void DebugSphereInstance::setRadius(float radius) {
     m_transformDirty = true;
 }
 
-void DebugSphereInstance::schedule() const {
+void DebugSphereInstance::render() const {
     if (m_transformDirty) {
         m_transformUniform.set(m_transform.matrix() * glm::scale(glm::vec3(m_radius)));
         m_transformDirty = false;
     }
 
-    m_draw.schedule();
+    m_draw.render();
 }
 
 DebugPoseInstance::DebugPoseInstance(DebugGeometryRenderer &renderer) :
@@ -353,7 +353,7 @@ void DebugPoseInstance::setPose(const Pose3D &pose) {
     m_transformDirty = true;
 }
 
-void DebugPoseInstance::schedule() const {
+void DebugPoseInstance::render() const {
     if (m_transformDirty) {
         auto origin = m_pose.position();
         origin = m_transform.pointLocalToWorld(origin);
@@ -368,7 +368,7 @@ void DebugPoseInstance::schedule() const {
     }
 
     for (auto &arrow : m_arrows) {
-        arrow->schedule();
+        arrow->render();
     }
 }
 
@@ -546,16 +546,16 @@ void DebugGeometryRenderer::removePose(size_t index) {
     m_poses.erase(index);
 }
 
-void DebugGeometryRenderer::schedule(const Camera3D &camera) {
+void DebugGeometryRenderer::render(const Camera3D &camera) {
     m_globals.field<glm::mat4>("ViewProjection")[0] = camera.viewProjection();
     m_globalsBuffer.upload(m_globals);
 
-    for (auto &box : m_boxes) box->schedule();
-    for (auto &point : m_points) point->schedule();
-    for (auto &arrow : m_arrows) arrow->schedule();
-    for (auto &wireframe : m_wireframes) wireframe->schedule();
-    for (auto &sphere : m_spheres) sphere->schedule();
-    for (auto &pose : m_poses) pose->schedule();
+    for (auto &box : m_boxes) box->render();
+    for (auto &point : m_points) point->render();
+    for (auto &arrow : m_arrows) arrow->render();
+    for (auto &wireframe : m_wireframes) wireframe->render();
+    for (auto &sphere : m_spheres) sphere->render();
+    for (auto &pose : m_poses) pose->render();
 }
 
 }

@@ -29,8 +29,8 @@ void SsaoRenderer::render()
     m_effect.draw().uniform("NumSamples").set(m_numSamples);
     m_projectionUniform.set(m_renderManager.mainCamera().projection());
 
-    m_effect.schedule();
-    m_blurEffect.schedule();
+    m_effect.render();
+    m_blurEffect.render();
 }
 
 void SsaoRenderer::renderDebugGui()

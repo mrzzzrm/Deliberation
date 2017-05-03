@@ -54,7 +54,7 @@ public:
         m_view.set(m_renderManager.mainCamera().view());
         m_projection.set(m_renderManager.mainCamera().projection());
 
-        m_draw.schedule();
+        m_draw.render();
     }
 
 protected:

@@ -86,7 +86,7 @@ void PointLightRenderer::render()
     m_viewProjectionUniform.set(renderManager().mainCamera().viewProjection());
     m_viewUniform.set(renderManager().mainCamera().view());
 
-    m_draw.schedule();
+    m_draw.render();
 }
 
 void PointLightRenderer::onSetupRender()
