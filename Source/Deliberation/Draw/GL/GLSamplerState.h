@@ -16,6 +16,8 @@ public:
     gl::GLuint name() const;
 
     void setWrap(unsigned int index, gl::GLenum wrap);
+    void setMinFilter(gl::GLenum filter);
+    void setMagFilter(gl::GLenum filter);
 
 private:
     gl::GLuint       m_name;

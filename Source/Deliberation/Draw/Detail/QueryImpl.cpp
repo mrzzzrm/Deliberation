@@ -11,9 +11,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-
 QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type):
     m_drawContext(drawContext),
     m_type(type),
@@ -22,17 +19,6 @@ QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type):
     m_active(false),
     m_resultsAvailable(false)
 {
-    switch (type)
-    {
-    case Query_TimeElapsed:                 m_glTarget = gl::GL_TIME_ELAPSED; break;
-    case Query_SamplesPassed:               m_glTarget = gl::GL_SAMPLES_PASSED; break;
-    case Query_AnySamplesPassed:            m_glTarget = gl::GL_ANY_SAMPLES_PASSED; break;
-    case Query_PrimitivesGenerated:         m_glTarget = gl::GL_PRIMITIVES_GENERATED; break;
-    case Query_TransformFeedbackPrimitives: m_glTarget = gl::GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN; break;
-    default:
-        Fail("");
-    }
-
     m_drawContext.m_glStateManager.genQueries(1, &m_glName);
     Assert(m_glName != 0, "Failed to create Query");
 }
@@ -116,7 +102,7 @@ void QueryImpl::begin()
     Assert(!m_active, "Can't restart query");
     Assert(m_glName != 0, "");
 
-    m_drawContext.m_glStateManager.beginQuery(m_glTarget, m_glName);
+    m_drawContext.m_glStateManager.beginQuery((gl::GLenum)m_type, m_glName);
 
     m_active = true;
     m_resultsAvailable = false;
@@ -126,11 +112,9 @@ void QueryImpl::end()
 {
     Assert(m_glName != 0, "");
 
-    m_drawContext.m_glStateManager.endQuery(m_glTarget);
+    m_drawContext.m_glStateManager.endQuery((gl::GLenum)m_type);
 
     m_active = false;
-}
-
 }
 
 }

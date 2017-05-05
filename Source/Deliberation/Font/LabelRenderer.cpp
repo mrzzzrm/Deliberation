@@ -41,14 +41,14 @@ LabelRenderer::LabelRenderer(DrawContext & drawContext):
     m_vertexBuffer = m_drawContext->createBuffer(layout);
     m_vertexBuffer.upload(vertices);
 
-    m_draw = m_drawContext->createDraw(m_program, gl::GL_TRIANGLE_STRIP, "LabelRenderer");
+    m_draw = m_drawContext->createDraw(m_program, DrawPrimitive::TriangleStrip, "LabelRenderer");
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.state().setDepthState(DepthState::disabledR());
     m_draw.state().setCullState(CullState::disabled());
-    m_draw.state().setBlendState({gl::GL_FUNC_ADD, gl::GL_SRC_ALPHA, gl::GL_ONE});
+    m_draw.state().setBlendState({BlendEquation::Add, BlendFactor::SourceAlpha, BlendFactor::One});
 
     m_sampler = m_draw.sampler("Texture");
-    m_sampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+    m_sampler.setWrap(TextureWrap::ClampToEdge);
 
     m_colorUniform = m_draw.uniform("Color");
     m_transformUniform = m_draw.uniform("Transform");

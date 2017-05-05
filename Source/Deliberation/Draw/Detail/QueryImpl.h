@@ -4,15 +4,12 @@
 
 #include <glbinding/gl/types.h>
 
-#include <Deliberation/Draw/Enum.h>
+#include <Deliberation/Draw/Query.h>
 
 namespace deliberation
 {
 
 class DrawContext;
-
-namespace detail
-{
 
 class QueryImpl final
 {
@@ -32,7 +29,7 @@ public:
     void end();
 
 private:
-    DrawContext &           m_drawContext;
+    DrawContext &       m_drawContext;
     QueryType           m_type;
     gl::GLuint          m_glName;
     gl::GLenum          m_glTarget;
@@ -45,8 +42,6 @@ private:
         int64_t i;
     } m_result;
 };
-
-}
 
 }
 

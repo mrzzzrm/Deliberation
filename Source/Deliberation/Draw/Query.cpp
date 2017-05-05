@@ -60,7 +60,7 @@ void Query::end()
     return m_impl->end();
 }
 
-Query::Query(const std::shared_ptr<detail::QueryImpl> & impl):
+Query::Query(const std::shared_ptr<QueryImpl> & impl):
     m_impl(impl)
 {
 

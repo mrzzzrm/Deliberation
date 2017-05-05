@@ -26,30 +26,49 @@ void Sampler::setTexture(const Texture & texture)
     m_impl->textureImpl = texture.m_impl;
 }
 
-void Sampler::setWrap(gl::GLenum wrap)
+void Sampler::setWrap(TextureWrap wrap)
 {
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    m_impl->glSampler.setWrap(0, wrap);
-    m_impl->glSampler.setWrap(1, wrap);
-    m_impl->glSampler.setWrap(2, wrap);
+    m_impl->glSampler.setWrap(0, (gl::GLenum)wrap);
+    m_impl->glSampler.setWrap(1, (gl::GLenum)wrap);
+    m_impl->glSampler.setWrap(2, (gl::GLenum)wrap);
 }
 
-void Sampler::setWrapS(gl::GLenum wrap)
+void Sampler::setWrapS(TextureWrap wrap)
 {
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    m_impl->glSampler.setWrap(0, wrap);
+
+    m_impl->glSampler.setWrap(0, (gl::GLenum)wrap);
 }
 
-void Sampler::setWrapT(gl::GLenum wrap)
+void Sampler::setWrapT(TextureWrap wrap)
 {
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    m_impl->glSampler.setWrap(1, wrap);
+
+    m_impl->glSampler.setWrap(1, (gl::GLenum)wrap);
 }
 
-void Sampler::setWrapR(gl::GLenum wrap)
+void Sampler::setWrapR(TextureWrap wrap)
 {
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    m_impl->glSampler.setWrap(2, wrap);
+
+    m_impl->glSampler.setWrap(2, (gl::GLenum)wrap);
+}
+
+void Sampler::setMinFilter(TextureFilter minFilter)
+{
+    Assert((bool)m_impl, "Hollow Sampler can't be set");
+
+    m_impl->glSampler.setMinFilter((gl::GLenum)minFilter);
+}
+
+void Sampler::setMagFilter(TextureFilter magFilter)
+{
+    Assert((bool)m_impl, "Hollow Sampler can't be set");
+    Assert(magFilter == TextureFilter::Nearest || magFilter == TextureFilter::Linear,
+           "Invalid mag filter");
+
+    m_impl->glSampler.setMagFilter((gl::GLenum)magFilter);
 }
 
 Sampler::Sampler(const std::shared_ptr<SamplerImpl> & impl):

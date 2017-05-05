@@ -44,7 +44,7 @@ void ImGuiRenderer::onSetupRender()
 
     m_draw.addVertexBuffer(m_vertexBuffer);
 
-    m_draw.state().setBlendState({gl::GL_FUNC_ADD, gl::GL_SRC_ALPHA, gl::GL_ONE_MINUS_SRC_ALPHA});
+    m_draw.state().setBlendState({BlendEquation::Add, BlendFactor::SourceAlpha, BlendFactor::OneMinusSourceAlpha});
     m_draw.state().setCullState(CullState::disabled());
     m_draw.state().setDepthState(DepthState::disabledR());
 

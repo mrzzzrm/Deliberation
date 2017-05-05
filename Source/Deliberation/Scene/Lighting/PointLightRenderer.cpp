@@ -105,8 +105,8 @@ void PointLightRenderer::onSetupRender()
     m_draw.addInstanceBuffer(m_lightBuffer);
 
     m_draw.state().setDepthState(DepthState::disabledRW());
-    m_draw.state().setBlendState({gl::GL_FUNC_ADD, gl::GL_ONE, gl::GL_ONE});
-    m_draw.state().setCullState({gl::GL_FRONT});
+    m_draw.state().setBlendState({BlendEquation::Add, BlendFactor::One, BlendFactor::One});
+    m_draw.state().setCullState({CullFace::Front});
 
     m_draw.setFramebuffer(renderManager().hdrBuffer());
 

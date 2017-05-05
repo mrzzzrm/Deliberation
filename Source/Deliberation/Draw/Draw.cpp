@@ -303,20 +303,7 @@ void Draw::render() const
         else
         {
             glStateManager.enableDepthTest(true);
-
-            auto depthFunc = gl::GL_NONE;
-
-            switch(state.depthTest())
-            {
-                case DepthTest::Less:           depthFunc = gl::GL_LESS; break;
-                case DepthTest::Always:         depthFunc = gl::GL_ALWAYS; break;
-                case DepthTest::Equal:          depthFunc = gl::GL_EQUAL; break;
-                case DepthTest::LessOrEqual:    depthFunc = gl::GL_LEQUAL; break;
-                case DepthTest::Greater:        depthFunc = gl::GL_GREATER; break;
-                case DepthTest::NotEqual:       depthFunc = gl::GL_NOTEQUAL; break;
-                case DepthTest::GreaterOrEqual: depthFunc = gl::GL_GEQUAL; break;
-            }
-            glStateManager.setDepthFunc(depthFunc);
+            glStateManager.setDepthFunc((gl::GLenum)state.depthTest());
             glStateManager.setDepthMask(state.depthWrite() == DepthWrite::Enabled);
         }        
     }
@@ -329,8 +316,8 @@ void Draw::render() const
 
         if (state.enabled())
         {
-            glStateManager.setBlendEquation(state.equation());
-            glStateManager.setBlendFunc(state.sfactor(), state.dfactor());
+            glStateManager.setBlendEquation((gl::GLenum)state.equation());
+            glStateManager.setBlendFunc((gl::GLenum)state.sfactor(), (gl::GLenum)state.dfactor());
         }
     }
     
@@ -342,7 +329,7 @@ void Draw::render() const
 
         if (state.enabled())
         {
-            glStateManager.setCullFace(state.cullFace());
+            glStateManager.setCullFace((gl::GLenum)state.cullFace());
         }
     }
     
@@ -604,7 +591,7 @@ void Draw::render() const
 
         if (instanceCount != 0)
         {
-            gl::glDrawElementsInstanced(m_impl->state.rasterizerState().primitive(),
+            gl::glDrawElementsInstanced((gl::GLenum)m_impl->state.rasterizerState().primitive(),
                                         elementCount,
                                         TypeToGLType(type),
                                         (void*)(intptr_t)offset,
@@ -613,7 +600,7 @@ void Draw::render() const
         }
         else
         {
-            gl::glDrawElements(m_impl->state.rasterizerState().primitive(),
+            gl::glDrawElements((gl::GLenum)m_impl->state.rasterizerState().primitive(),
                                elementCount,
                                TypeToGLType(type),
                                (void*)(intptr_t)offset);
@@ -623,14 +610,14 @@ void Draw::render() const
     {
         if (instanceCount != 0)
         {
-            gl::glDrawArraysInstanced(m_impl->state.rasterizerState().primitive(),
+            gl::glDrawArraysInstanced((gl::GLenum)m_impl->state.rasterizerState().primitive(),
                                       0u,
                                       vertexCount,
                                       instanceCount);
         }
         else
         {
-            gl::glDrawArrays(m_impl->state.rasterizerState().primitive(),
+            gl::glDrawArrays((gl::GLenum)m_impl->state.rasterizerState().primitive(),
                              0u,
                              vertexCount);
         }

@@ -5,10 +5,23 @@
 
 #include <glbinding/gl/enum.h>
 
-
-
 namespace deliberation
 {
+
+enum class CullFace : unsigned int
+{
+    Front           = (unsigned int)gl::GL_FRONT,
+    Back            = (unsigned int)gl::GL_BACK,
+    FrontAndBack    = (unsigned int)gl::GL_FRONT_AND_BACK,
+
+    None
+};
+
+enum class FrontFace : unsigned int
+{
+    CW  = (unsigned int)gl::GL_CW,
+    CCW = (unsigned int)gl::GL_CCW
+};
 
 class CullState final
 {
@@ -16,22 +29,22 @@ public:
     static CullState disabled();
 
 public:
-    CullState(gl::GLenum cullFace = gl::GL_BACK, gl::GLenum frontFace = gl::GL_CCW);
+    CullState(CullFace cullFace = CullFace::Back, FrontFace frontFace = FrontFace::CCW);
 
     bool enabled() const;
-    gl::GLenum cullFace() const;
-    gl::GLenum frontFace() const;
+    CullFace cullFace() const;
+    FrontFace frontFace() const;
 
     void setEnabled(bool enabled);
-    void setCullFace(gl::GLenum cullFace);
-    void setFrontFace(gl::GLenum frontFace);
+    void setCullFace(CullFace cullFace);
+    void setFrontFace(FrontFace frontFace);
 
     std::string toString() const;
 
 private:
     bool        m_enabled;
-    gl::GLenum  m_cullFace;
-    gl::GLenum  m_frontFace;
+    CullFace    m_cullFace;
+    FrontFace   m_frontFace;
 };
 
 }

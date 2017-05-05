@@ -75,7 +75,7 @@ void Clear::disableDepth()
     m_impl->depth = boost::optional<float>();
 }
 
-void Clear::setStencil(gl::GLint stencil)
+void Clear::setStencil(u32 stencil)
 {
     Assert(m_impl.get(), "Clear is hollow");
     m_impl->stencil = stencil;
@@ -156,7 +156,7 @@ void Clear::render()
         if (impl.stencil)
         {
             Assert((bool)framebufferImpl.depthTarget, "Can't clear stencil: No depth target in Framebuffer");
-            gl::glClearBufferiv(gl::GL_STENCIL, 0, &*impl.stencil);
+            gl::glClearBufferiv(gl::GL_STENCIL, 0, (gl::GLint*)&*impl.stencil);
         }
     }
 }

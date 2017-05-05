@@ -7,6 +7,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Deliberation.h>
+
 namespace deliberation
 {
 
@@ -29,7 +31,7 @@ public:
     void setDepth(float depth);
     void disableDepth();
 
-    void setStencil(gl::GLint stencil);
+    void setStencil(u32 stencil);
     void disableStencil();
 
     void render();

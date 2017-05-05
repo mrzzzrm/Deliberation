@@ -12,7 +12,7 @@ DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & drawContext, const 
        deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.frag")
     });
 
-    m_draw = drawContext.createDraw(program, gl::GL_TRIANGLES);
+    m_draw = drawContext.createDraw(program);
 
     LayoutedBlob vertices({"Position", Type_Vec2}, 4);
     vertices.field<glm::vec2>("Position").assign({

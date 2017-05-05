@@ -1,19 +1,23 @@
 #pragma once
 
+#include <glbinding/gl/enum.h>
+
 #include <stdint.h>
 #include <memory>
-
-
-
-#include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
 {
 
-namespace detail
+enum class QueryType: unsigned int
 {
-    class QueryImpl;
-}
+    TimeElapsed                   = (unsigned int)gl::GL_TIME_ELAPSED,
+    SamplesPassed                 = (unsigned int)gl::GL_SAMPLES_PASSED,
+    AnySamplesPassed              = (unsigned int)gl::GL_ANY_SAMPLES_PASSED,
+    PrimitivesGenerated           = (unsigned int)gl::GL_PRIMITIVES_GENERATED,
+    TransformFeedbackPrimitives   = (unsigned int)gl::GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
+};
+
+class QueryImpl;
 
 class Query final
 {
@@ -36,10 +40,10 @@ private:
     friend class DrawContext;
 
 private:
-    Query(const std::shared_ptr<detail::QueryImpl> & impl);
+    Query(const std::shared_ptr<QueryImpl> & impl);
 
 private:
-    std::shared_ptr<detail::QueryImpl> m_impl;
+    std::shared_ptr<QueryImpl> m_impl;
 };
 
 }

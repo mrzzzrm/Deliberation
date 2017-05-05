@@ -33,14 +33,14 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & drawContext):
      */
     auto mesh = CuboidMesh({2.0f, 2.0f, 2.0f}).generate();
     {
-        auto compilation = MeshCompiler().compile(mesh, Primitive_Triangles);
+        auto compilation = MeshCompiler().compile(mesh, MeshCompilerPrimitive::Triangles);
 
         m_buildIns.boxTrianglesVertexBuffer = m_drawContext.createBuffer(compilation.vertices);
         m_buildIns.boxTrianglesIndexBuffer = m_drawContext.createBuffer(compilation.indices);
     }
 
     {
-        auto compilation = MeshCompiler().compile(mesh, Primitive_Lines);
+        auto compilation = MeshCompiler().compile(mesh, MeshCompilerPrimitive::Lines);
 
         m_buildIns.boxLinesVertexBuffer = m_drawContext.createBuffer(compilation.vertices);
         m_buildIns.boxLinesIndexBuffer = m_drawContext.createBuffer(compilation.indices);
@@ -51,7 +51,7 @@ DebugGeometryManager::DebugGeometryManager(DrawContext & drawContext):
      */
     {
         auto mesh = ConeMesh(0.1f, ARROW_CONE_HEIGHT).generate();
-        auto compilation = MeshCompiler().compile(mesh, Primitive_Triangles);
+        auto compilation = MeshCompiler().compile(mesh, MeshCompilerPrimitive::Triangles);
 
         m_buildIns.coneVertexBuffer = m_drawContext.createBuffer(compilation.vertices);
         m_buildIns.coneIndexBuffer = m_drawContext.createBuffer(compilation.indices);

@@ -66,7 +66,7 @@ Program DrawContext::createProgram(const std::vector<std::string> & paths)
     return program;
 }
 
-Draw DrawContext::createDraw(const Program & program, gl::GLenum primitive, const std::string & name)
+Draw DrawContext::createDraw(const Program & program, DrawPrimitive primitive, const std::string & name)
 {
     auto impl = std::make_shared<DrawImpl>(*this, program);
     impl->state.rasterizerState().setPrimitive(primitive);
@@ -131,7 +131,7 @@ Framebuffer DrawContext::createFramebuffer(const FramebufferDesc & framebufferDe
 
 Query DrawContext::createQuery(QueryType type)
 {
-    return Query(std::make_shared<detail::QueryImpl>(*this, type));
+    return Query(std::make_shared<QueryImpl>(*this, type));
 }
 
 };

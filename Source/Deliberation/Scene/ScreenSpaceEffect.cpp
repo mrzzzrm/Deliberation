@@ -39,7 +39,8 @@ ScreenSpaceEffect::ScreenSpaceEffect(DrawContext & drawContext,
     m_vertexBuffer = drawContext.createBuffer(layout);
     m_vertexBuffer.upload(vertices);
 
-    m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP, name.empty() ? "ScreenSpaceEffect" : name);
+    m_draw = drawContext.createDraw(m_program, DrawPrimitive::TriangleStrip,
+                                    name.empty() ? "ScreenSpaceEffect" : name);
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.state().setDepthState(DepthState::disabledRW());
 

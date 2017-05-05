@@ -1,23 +1,23 @@
 #pragma once
 
+#include <glbinding/gl/enum.h>
+
 #include <string>
-
-
 
 namespace deliberation
 {
 
-enum class DepthTest
+enum class DepthTest: unsigned int
 {
-    Less = 0,
-    Enabled = Less,
-    Always = 1,
-    Disabled = Always,
-    Equal,
-    LessOrEqual,
-    Greater,
-    NotEqual,
-    GreaterOrEqual
+    Less            = (unsigned int)gl::GL_LESS,
+    Enabled         = (unsigned int)Less,
+    Always          = (unsigned int)gl::GL_ALWAYS,
+    Disabled        = (unsigned int)Always,
+    Equal           = (unsigned int)gl::GL_EQUAL,
+    LessOrEqual     = (unsigned int)gl::GL_LEQUAL,
+    Greater         = (unsigned int)gl::GL_GREATER,
+    NotEqual        = (unsigned int)gl::GL_NOTEQUAL,
+    GreaterOrEqual  = (unsigned int)gl::GL_GEQUAL
 };
 
 enum class DepthWrite

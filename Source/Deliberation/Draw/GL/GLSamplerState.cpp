@@ -5,6 +5,8 @@
 
 #include <Deliberation/Core/Assert.h>
 
+#include <Deliberation/Draw/Sampler.h>
+
 namespace deliberation
 {
 
@@ -45,6 +47,16 @@ void GLSamplerState::setWrap(unsigned int index, gl::GLenum wrap)
 
     gl::glSamplerParameteri(m_name, mapping[index], (gl::GLint)wrap);
     m_wrap[index] = wrap;
+}
+
+void GLSamplerState::setMinFilter(gl::GLenum filter)
+{
+    gl::glSamplerParameteri(m_name, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)filter);
+}
+
+void GLSamplerState::setMagFilter(gl::GLenum filter)
+{
+    gl::glSamplerParameteri(m_name, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)filter);
 }
 
 }

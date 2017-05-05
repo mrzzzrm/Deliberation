@@ -16,7 +16,7 @@ DebugCubemapRenderer::DebugCubemapRenderer(DrawContext & drawContext,
                                                    deliberation::DeliberationDataPath("Data/Shaders/DebugCubemapRenderer.frag")
                                                });
 
-    m_draw = drawContext.createDraw(program, gl::GL_TRIANGLES);
+    m_draw = drawContext.createDraw(program);
 
     if (meshType == MeshType::Cube)
     {

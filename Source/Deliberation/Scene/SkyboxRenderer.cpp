@@ -17,7 +17,7 @@ SkyboxRenderer::SkyboxRenderer(RenderManager & renderManager, const Texture & cu
         deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.vert"),
         deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.frag")});
 
-    m_draw = drawContext.createDraw(program, gl::GL_TRIANGLES);
+    m_draw = drawContext.createDraw(program);
 
     const auto vertexLayout = DataLayout{{{"Position", Type_Vec3}}};
 

@@ -96,15 +96,13 @@ void DebugBoxInstance::render() const {
         if (m_wireframe) {
             m_draw = manager().drawContext().createDraw(
                 buildIns().unicolorProgram,
-                gl::GL_LINES
+                DrawPrimitive::Lines
             );
             m_draw.addVertexBuffer(buildIns().boxLinesVertexBuffer);
             m_draw.setIndexBuffer(buildIns().boxLinesIndexBuffer);
         } else {
             m_draw = manager().drawContext().createDraw(
-                buildIns().shadedProgram,
-                gl::GL_TRIANGLES
-            );
+                buildIns().shadedProgram);
             m_draw.addVertexBuffer(buildIns().boxTrianglesVertexBuffer);
             m_draw.setIndexBuffer(buildIns().boxTrianglesIndexBuffer);
         }
@@ -136,7 +134,7 @@ Box DebugBoxInstance::toBox() const {
 
 DebugPointInstance::DebugPointInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
-    m_draw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram, gl::GL_POINTS);
+    m_draw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram, DrawPrimitive::Points);
     m_draw.addVertexBuffer(manager().buildIns().pointVertexBuffer);;
     m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_draw.state().rasterizerState().setPointSize(3.0f);
@@ -169,14 +167,13 @@ DebugArrowInstance::DebugArrowInstance(DebugGeometryRenderer &renderer) :
     m_lineVertexBuffer = manager().drawContext().createBuffer(m_lineVertices.layout());
 
     m_lineDraw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram,
-                                                gl::GL_LINES);
+                                                DrawPrimitive::Lines);
     m_lineDraw.addVertexBuffer(m_lineVertexBuffer);
     m_lineDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_lineDraw.uniform("Transform").set(glm::mat4(1.0f));
     m_lineColorUniform = m_lineDraw.uniform("Color");
 
-    m_coneDraw = manager().drawContext().createDraw(manager().buildIns().shadedProgram,
-                                                gl::GL_TRIANGLES);
+    m_coneDraw = manager().drawContext().createDraw(manager().buildIns().shadedProgram);
     m_coneDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_coneDraw.addVertexBuffer(manager().buildIns().coneVertexBuffer);
     m_coneDraw.setIndexBuffer(manager().buildIns().coneIndexBuffer);
@@ -246,7 +243,7 @@ DebugWireframeInstance::DebugWireframeInstance(DebugGeometryRenderer &renderer) 
 
     m_vertexBuffer = manager().drawContext().createBuffer(m_vertices.layout());
 
-    m_draw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram, gl::GL_LINES);
+    m_draw = manager().drawContext().createDraw(manager().buildIns().unicolorProgram, DrawPrimitive::Lines);
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
 
@@ -295,8 +292,7 @@ void DebugWireframeInstance::render() const {
 
 DebugSphereInstance::DebugSphereInstance(DebugGeometryRenderer &renderer) :
     DebugGeometryInstance(renderer) {
-    m_draw = manager().drawContext().createDraw(manager().buildIns().shadedProgram,
-                                            gl::GL_TRIANGLES);
+    m_draw = manager().drawContext().createDraw(manager().buildIns().shadedProgram);
     m_draw.addVertexBuffer(manager().buildIns().sphereVertexBuffer);
     m_draw.setIndexBuffer(manager().buildIns().sphereIndexBuffer);
     m_draw.setUniformBuffer("Globals", m_renderer.globalsBuffer());

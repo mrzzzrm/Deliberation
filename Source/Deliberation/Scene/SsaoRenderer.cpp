@@ -54,11 +54,11 @@ void SsaoRenderer::init()
 
     auto positionSampler = m_effect.draw().sampler("Position");
     positionSampler.setTexture(m_renderManager.gbuffer().colorTargetRef("Position"));
-    positionSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+    positionSampler.setWrap(TextureWrap::ClampToEdge);
 
     auto normalSampler = m_effect.draw().sampler("Normal");
     normalSampler.setTexture(m_renderManager.gbuffer().colorTargetRef("Normal"));
-    normalSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+    normalSampler.setWrap(TextureWrap::ClampToEdge);
 
     m_effect.draw().setFramebuffer(m_intermediateFb);
 
@@ -101,8 +101,8 @@ void SsaoRenderer::init()
 
     auto noiseSampler = m_effect.draw().sampler("Noise");
     noiseSampler.setTexture(noiseTexture);
-    noiseSampler.setWrapS(gl::GL_REPEAT);
-    noiseSampler.setWrapT(gl::GL_REPEAT);
+    noiseSampler.setWrapS(TextureWrap::Repeat);
+    noiseSampler.setWrapT(TextureWrap::Repeat);
 
     // NoiseScale
     const auto noiseScaleX = (float)drawContext.backbuffer().width() / (float)noiseWidth;
@@ -120,7 +120,7 @@ void SsaoRenderer::init()
 
     auto inputSampler = m_blurEffect.draw().sampler("Input");
     inputSampler.setTexture(m_intermediateFb.colorTargetRef("UnblurredSsao"));
-    inputSampler.setWrap(gl::GL_CLAMP_TO_EDGE);
+    inputSampler.setWrap(TextureWrap::ClampToEdge);
 
     m_blurEffect.draw().setFramebuffer(m_renderManager.ssaoBuffer());
 

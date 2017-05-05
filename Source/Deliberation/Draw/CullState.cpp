@@ -15,7 +15,7 @@ CullState CullState::disabled()
     return cullState;
 }
 
-CullState::CullState(gl::GLenum cullFace, gl::GLenum frontFace):
+CullState::CullState(CullFace cullFace, FrontFace frontFace):
     m_enabled(true),
     m_cullFace(cullFace),
     m_frontFace(frontFace)
@@ -28,12 +28,12 @@ bool CullState::enabled() const
     return m_enabled;
 }
 
-gl::GLenum CullState::cullFace() const
+CullFace CullState::cullFace() const
 {
     return m_cullFace;
 }
 
-gl::GLenum CullState::frontFace() const
+FrontFace CullState::frontFace() const
 {
     return m_frontFace;
 }
@@ -43,12 +43,12 @@ void CullState::setEnabled(bool enabled)
     m_enabled = enabled;
 }
 
-void CullState::setCullFace(gl::GLenum cullFace)
+void CullState::setCullFace(CullFace cullFace)
 {
     m_cullFace = cullFace;
 }
 
-void CullState::setFrontFace(gl::GLenum frontFace)
+void CullState::setFrontFace(FrontFace frontFace)
 {
     m_frontFace = frontFace;
 }
@@ -61,8 +61,8 @@ std::string CullState::toString() const
     }
 
     std::stringstream stream;
-    stream << "CullFace: " << m_cullFace;
-    stream << "FrontFace: " << m_frontFace;
+    stream << "CullFace: " << (gl::GLenum)m_cullFace;
+    stream << "FrontFace: " << (gl::GLenum)m_frontFace;
 
     return stream.str();
 }

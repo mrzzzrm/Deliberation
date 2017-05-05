@@ -23,7 +23,7 @@ public:
         auto & drawContext = renderer.renderManager().drawContext();
 
         m_program = drawContext.createProgram(shaders);
-        m_draw = drawContext.createDraw(m_program, gl::GL_TRIANGLE_STRIP);
+        m_draw = drawContext.createDraw(m_program, DrawPrimitive::TriangleStrip);
 
         m_view = m_draw.uniform("View");
         m_projection = m_draw.uniform("Projection");

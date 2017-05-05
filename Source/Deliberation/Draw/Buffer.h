@@ -3,8 +3,6 @@
 #include <memory>
 #include <vector>
 
-
-
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/DataLayout.h>
 
@@ -38,7 +36,8 @@ public:
 
     void reinit(size_t count);
 
-    void mapped(BufferMapping flags, const std::function<void(LayoutedBlob & mapping)> & fn);
+    void mapped(BufferMapping flags,
+                const std::function<void(LayoutedBlob & mapping)> & fn);
 
     std::string toString() const;
 

@@ -4,8 +4,6 @@
 
 #include <glbinding/gl/enum.h>
 
-
-
 namespace deliberation
 {
 

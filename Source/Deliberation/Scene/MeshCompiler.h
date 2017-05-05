@@ -2,14 +2,16 @@
 
 #include <Deliberation/Core/LayoutedBlob.h>
 
-#include <Deliberation/Draw/Enum.h>
-
-
-
 namespace deliberation
 {
 
 class Mesh;
+
+enum class MeshCompilerPrimitive
+{
+    Triangles,
+    Lines
+};
 
 class MeshCompiler final
 {
@@ -25,7 +27,7 @@ public:
 public:
     MeshCompiler();
 
-    Compilation compile(const Mesh & mesh, PrimitiveType primitive = Primitive_Triangles) const;
+    Compilation compile(const Mesh & mesh, MeshCompilerPrimitive primitive = MeshCompilerPrimitive::Triangles) const;
 
 private:
     Compilation compileTriangles(const Mesh & mesh) const;

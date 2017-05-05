@@ -28,7 +28,7 @@ struct ClearImpl
     std::vector<gl::GLenum>                 drawBuffers;
     std::vector<boost::optional<glm::vec4>> colors;
     boost::optional<float>                  depth;
-    boost::optional<gl::GLint>              stencil;
+    boost::optional<u32>                    stencil;
 };
 
 }

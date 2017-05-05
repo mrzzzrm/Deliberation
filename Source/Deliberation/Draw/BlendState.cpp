@@ -5,6 +5,8 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
+#include <Deliberation/Core/Assert.h>
+
 namespace deliberation
 {
 
@@ -15,20 +17,22 @@ BlendState BlendState::disabled()
 
 BlendState::BlendState():
     m_enabled(false),
-    m_equation(gl::GL_NONE),
-    m_sfactor(gl::GL_NONE),
-    m_dfactor(gl::GL_NONE)
+    m_equation(BlendEquation::None),
+    m_sfactor(BlendFactor::None),
+    m_dfactor(BlendFactor::None)
 {
 
 }
 
-BlendState::BlendState(gl::GLenum equation, gl::GLenum sfactor, gl::GLenum dfactor):
+BlendState::BlendState(BlendEquation equation, BlendFactor sfactor, BlendFactor dfactor):
     m_enabled(true),
     m_equation(equation),
     m_sfactor(sfactor),
     m_dfactor(dfactor)
 {
-
+    Assert(m_equation != BlendEquation::None, "");
+    Assert(m_sfactor != BlendFactor::None, "");
+    Assert(m_dfactor != BlendFactor::None, "");
 }
 
 bool BlendState::enabled() const
@@ -36,17 +40,17 @@ bool BlendState::enabled() const
     return m_enabled;
 }
 
-gl::GLenum BlendState::equation() const
+BlendEquation BlendState::equation() const
 {
     return m_equation;
 }
 
-gl::GLenum BlendState::sfactor() const
+BlendFactor BlendState::sfactor() const
 {
     return m_sfactor;
 }
 
-gl::GLenum BlendState::dfactor() const
+BlendFactor BlendState::dfactor() const
 {
     return m_dfactor;
 }
@@ -59,7 +63,7 @@ std::string BlendState::toString() const
     }
 
     std::stringstream stream;
-    stream << "Equation: " << m_equation << "; SrcFactor: " << m_sfactor << "; DstFactor: " << m_dfactor;
+    stream << "Equation: " << (gl::GLenum)m_equation << "; SrcFactor: " << (gl::GLenum)m_sfactor << "; DstFactor: " << (gl::GLenum)m_dfactor;
 
     return stream.str();
 }

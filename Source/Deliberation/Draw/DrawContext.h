@@ -15,6 +15,7 @@
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/Query.h>
+#include <Deliberation/Draw/RasterizerState.h>
 #include <Deliberation/Draw/SurfaceDownload.h>
 
 namespace deliberation
@@ -41,8 +42,8 @@ public:
 
     Program createProgram(const std::vector<std::string> & paths);
 
-    Draw createDraw(const Program & program, 
-                    gl::GLenum primitive = gl::GL_TRIANGLES, 
+    Draw createDraw(const Program & program,
+                    DrawPrimitive primitive = DrawPrimitive::Triangles,
                     const std::string & name = std::string());
     Draw createDraw(const Program & program, 
                     const DrawState & drawState, 
@@ -66,7 +67,7 @@ private:
     friend class Clear;
     friend class Draw;
     friend class FramebufferImpl;
-    friend class detail::QueryImpl;
+    friend class QueryImpl;
     friend class SurfaceDownloadImpl;
     friend class Texture;
     friend class TextureImpl;

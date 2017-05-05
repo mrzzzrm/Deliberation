@@ -7,22 +7,22 @@ namespace deliberation
 {
 
 RasterizerState::RasterizerState():
-    m_primitive(gl::GL_TRIANGLES),
+    m_primitive(DrawPrimitive::Triangles),
     m_pointSize(1.0f),
     m_lineWidth(1.0f)
 {
 
 }
 
-RasterizerState::RasterizerState(gl::GLenum primitive):
+RasterizerState::RasterizerState(DrawPrimitive primitive):
     m_primitive(primitive)
 {
 
 }
 
-RasterizerState::RasterizerState(gl::GLenum primitive,
-                                 gl::GLfloat pointSize,
-                                 gl::GLfloat lineWidth):
+RasterizerState::RasterizerState(DrawPrimitive primitive,
+                                 float pointSize,
+                                 float lineWidth):
     m_primitive(primitive),
     m_pointSize(pointSize),
     m_lineWidth(lineWidth)
@@ -30,17 +30,17 @@ RasterizerState::RasterizerState(gl::GLenum primitive,
 
 }
 
-gl::GLenum RasterizerState::primitive() const
+DrawPrimitive RasterizerState::primitive() const
 {
     return m_primitive;
 }
 
-gl::GLfloat RasterizerState::pointSize() const
+float RasterizerState::pointSize() const
 {
     return m_pointSize;
 }
 
-gl::GLfloat RasterizerState::lineWidth() const
+float RasterizerState::lineWidth() const
 {
     return m_lineWidth;
 }
@@ -55,17 +55,17 @@ bool RasterizerState::scissorRectEnabled() const
     return m_scissorRectEnabled;
 }
 
-void RasterizerState::setPrimitive(gl::GLenum primitive)
+void RasterizerState::setPrimitive(DrawPrimitive primitive)
 {
     m_primitive = primitive;
 }
 
-void RasterizerState::setPointSize(gl::GLfloat pointSize)
+void RasterizerState::setPointSize(float pointSize)
 {
     m_pointSize = pointSize;
 }
 
-void RasterizerState::setLineWidth(gl::GLfloat lineWidth)
+void RasterizerState::setLineWidth(float lineWidth)
 {
     m_lineWidth = lineWidth;
 }
@@ -83,7 +83,8 @@ void RasterizerState::disableScissorRect()
 
 std::string RasterizerState::toString() const
 {
-    return "PointSize: " + std::to_string(m_pointSize) + "; LineWidth: " + std::to_string(m_lineWidth) + "; PrimitiveType: " + glbinding::Meta::getString(m_primitive);
+    return "PointSize: " + std::to_string(m_pointSize) + "; LineWidth: " + std::to_string(m_lineWidth) +
+        "; PrimitiveType: " + glbinding::Meta::getString((gl::GLenum)m_primitive);
 }
 
 }

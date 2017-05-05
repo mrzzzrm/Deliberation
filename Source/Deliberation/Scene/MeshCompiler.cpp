@@ -24,13 +24,13 @@ MeshCompiler::MeshCompiler()
 
 }
 
-MeshCompiler::Compilation MeshCompiler::compile(const Mesh & mesh, PrimitiveType primitive) const
+MeshCompiler::Compilation MeshCompiler::compile(const Mesh & mesh, MeshCompilerPrimitive primitive) const
 {
-    if (primitive == Primitive_Triangles)
+    if (primitive == MeshCompilerPrimitive::Triangles)
     {
         return compileTriangles(mesh);
     }
-    else if (primitive == Primitive_Lines)
+    else if (primitive == MeshCompilerPrimitive::Lines)
     {
         return compileLines(mesh);
     }
