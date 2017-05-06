@@ -1,4 +1,4 @@
-#include <Deliberation/Draw/TextureLoader.h>
+#include <Deliberation/Scene/Texture/TextureLoader.h>
 
 #include "TextureLoaderCubeFilesImpl.h"
 #include "TextureLoaderDataImpl.h"

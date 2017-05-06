@@ -8,7 +8,7 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Texture.h>
-#include <Deliberation/Draw/TextureLoader.h>
+#include <Deliberation/Scene/Texture/TextureLoader.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/PixelFormat.h>

@@ -5,7 +5,7 @@
 #include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Framebuffer.h>
-#include <Deliberation/Draw/TextureLoader.h>
+#include <Deliberation/Scene/Texture/TextureLoader.h>
 
 #include <Deliberation/ECS/Systems/ApplicationSystem.h>
 #include <Deliberation/ECS/World.h>

@@ -10,7 +10,7 @@
 
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Surface.h>
-#include <Deliberation/Draw/TextureLoader.h>
+#include <Deliberation/Scene/Texture/TextureLoader.h>
 
 #include "Detail/BufferImpl.h"
 #include "Detail/ClearImpl.h"

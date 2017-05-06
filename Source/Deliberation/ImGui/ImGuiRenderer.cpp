@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 #include <Deliberation/Draw/DrawContext.h>
-#include <Deliberation/Draw/TextureLoader.h>
+#include <Deliberation/Scene/Texture/TextureLoader.h>
 
 #include <Deliberation/Scene/Pipeline/RenderPhase.h>
 

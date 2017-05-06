@@ -11,8 +11,6 @@
 #include <Deliberation/Core/Types.h>
 #include <Deliberation/Draw/TextureBinary.h>
 
-
-
 namespace deliberation
 {
 

@@ -3,7 +3,7 @@
 #include <array>
 #include <string>
 
-#include "ITextureLoaderImpl.h"
+#include <Deliberation/Scene/Texture/ITextureLoaderImpl.h>
 
 namespace deliberation
 {

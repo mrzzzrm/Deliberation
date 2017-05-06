@@ -178,8 +178,6 @@ set(sources
 	Draw/GL/GLType.h
 	Draw/GL/GLUtils.cpp
 	Draw/GL/GLUtils.h
-	Draw/ITextureLoaderImpl.cpp
-	Draw/ITextureLoaderImpl.h
 	Draw/PixelFormat.cpp
 	Draw/PixelFormat.h
 	Draw/Program.cpp
@@ -214,20 +212,6 @@ set(sources
 	Draw/TextureBinary.h
 	Draw/Texture.cpp
 	Draw/Texture.h
-	Draw/TextureLoader.cpp
-	Draw/TextureLoaderCubeFilesImpl.cpp
-	Draw/TextureLoaderCubeFilesImpl.h
-	Draw/TextureLoaderDataImpl.cpp
-	Draw/TextureLoaderDataImpl.h
-	Draw/TextureLoaderFileImpl.cpp
-	Draw/TextureLoaderFileImpl.h
-	Draw/TextureLoader.h
-	Draw/TextureLoaderOrigin.h
-	Draw/TextureLoaderPixelDataImpl.cpp
-	Draw/TextureLoaderPixelDataImpl.h
-	Draw/TextureLoaderSDLSurfaceImpl.cpp
-	Draw/TextureLoaderSDLSurfaceImpl.h
-	Draw/TextureLoaderUnicolorImpl.h
 	Draw/Uniform.cpp
 	Draw/Uniform.h
 	Draw/VertexAttribute.cpp
@@ -354,6 +338,22 @@ set(sources
 	Scene/Lighting/AmbientLightRenderer.h
 	Scene/Lighting/PointLightRenderer.cpp
 	Scene/Lighting/PointLightRenderer.h
+	Scene/Texture/ITextureLoaderImpl.cpp
+	Scene/Texture/ITextureLoaderImpl.h
+	Scene/Texture/TextureLoader.cpp
+	Scene/Texture/TextureLoaderCubeFilesImpl.cpp
+	Scene/Texture/TextureLoaderCubeFilesImpl.h
+	Scene/Texture/TextureLoaderDataImpl.cpp
+	Scene/Texture/TextureLoaderDataImpl.h
+	Scene/Texture/TextureLoaderFileImpl.cpp
+	Scene/Texture/TextureLoaderFileImpl.h
+	Scene/Texture/TextureLoader.h
+	Scene/Texture/TextureLoaderOrigin.h
+	Scene/Texture/TextureLoaderPixelDataImpl.cpp
+	Scene/Texture/TextureLoaderPixelDataImpl.h
+	Scene/Texture/TextureLoaderSDLSurfaceImpl.cpp
+	Scene/Texture/TextureLoaderSDLSurfaceImpl.h
+	Scene/Texture/TextureLoaderUnicolorImpl.h
 	Scene/MeshCompiler.cpp
 	Scene/MeshCompiler.h
 	Scene/Mesh.cpp
