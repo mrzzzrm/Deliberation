@@ -65,8 +65,10 @@ void SurfaceDownloadImpl::start()
     drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
     gl::glBufferData(gl::GL_PIXEL_PACK_BUFFER, size, nullptr, gl::GL_STREAM_READ);
 
-    drawContext.m_glStateManager.bindTexture(surface.m_impl->textureImpl->glType, surface.m_impl->textureImpl->glName);
-    gl::glGetTexImage(surface.m_impl->textureImpl->glType,
+
+    const auto textureType = (gl::GLenum)surface.m_impl->textureImpl->type;
+    drawContext.m_glStateManager.bindTexture(textureType, surface.m_impl->textureImpl->glName);
+    gl::glGetTexImage(textureType,
                       0,
                       format.glFormat(),
                       format.glType(),

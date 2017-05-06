@@ -361,12 +361,12 @@ void Draw::render() const
 
             if (state.differentFaceFuncs())
             {
-                glStateManager.setStencilFuncSeparate(gl::GL_FRONT, front.func, front.ref, front.readMask);
-                glStateManager.setStencilFuncSeparate(gl::GL_BACK, back.func, back.ref, back.readMask);
+                glStateManager.setStencilFuncSeparate(gl::GL_FRONT, (gl::GLenum)front.func, front.ref, front.readMask);
+                glStateManager.setStencilFuncSeparate(gl::GL_BACK, (gl::GLenum)back.func, back.ref, back.readMask);
             }
             else
             {
-                glStateManager.setStencilFunc(state.func(), state.ref(), state.readMask());
+                glStateManager.setStencilFunc((gl::GLenum)state.func(), state.ref(), state.readMask());
             }
 
             if (state.differentFaceMasks())
@@ -381,12 +381,12 @@ void Draw::render() const
 
             if (state.differentFaceOps())
             {
-                glStateManager.setStencilOpSeparate(gl::GL_FRONT, front.sfail, front.dpfail, front.dppass);
-                glStateManager.setStencilOpSeparate(gl::GL_BACK, back.sfail, back.dpfail, back.dppass);
+                glStateManager.setStencilOpSeparate(gl::GL_FRONT, (gl::GLenum)front.sfail, (gl::GLenum)front.dpfail, (gl::GLenum)front.dppass);
+                glStateManager.setStencilOpSeparate(gl::GL_BACK, (gl::GLenum)back.sfail, (gl::GLenum)back.dpfail, (gl::GLenum)back.dppass);
             }
             else
             {
-                glStateManager.setStencilOp(state.sfail(), state.dpfail(), state.dppass());
+                glStateManager.setStencilOp((gl::GLenum)state.sfail(), (gl::GLenum)state.dpfail(), (gl::GLenum)state.dppass());
             }
         }
     }
@@ -428,7 +428,7 @@ void Draw::render() const
         Assert((bool)texture, "Sampler has no Texture bound to it");
 
         glStateManager.setActiveTexture(b);
-        glStateManager.bindTexture(texture->glType, texture->glName);
+        glStateManager.bindTexture((gl::GLenum)texture->type, texture->glName);
         gl::glUniform1i(sampler->location, b);
     }
 

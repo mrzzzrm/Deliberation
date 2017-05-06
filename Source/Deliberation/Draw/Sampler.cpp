@@ -16,7 +16,7 @@ void Sampler::setTexture(const Texture & texture)
 {
     Assert((bool)texture.m_impl, "Texture is hollow");
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    Assert(texture.type() == m_impl->textureType(), "Texture type mismatch");
+    Assert((gl::GLenum)texture.type() == m_impl->textureType(), "Texture type mismatch");
 
     Assert(m_impl->valueType == texture.format().glSamplerValueType(), "Sampler (" +
         glbinding::Meta::getString(m_impl->type) +

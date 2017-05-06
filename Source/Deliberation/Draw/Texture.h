@@ -4,6 +4,7 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/Enum.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -29,7 +30,7 @@ public:
     unsigned int width() const;
     unsigned int height() const;
 
-    gl::GLenum type() const;
+    TextureType type() const;
 
     PixelFormat format() const;
 

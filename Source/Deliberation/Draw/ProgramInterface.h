@@ -45,9 +45,6 @@ public:
     const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs() const;
     const std::vector<ProgramInterfaceUniformBlock> & uniformBlocks() const;
 
-    bool operator==(const ProgramInterface & other) const;
-    bool operator!=(const ProgramInterface & other) const;
-
     std::string toString() const;
 
 private:

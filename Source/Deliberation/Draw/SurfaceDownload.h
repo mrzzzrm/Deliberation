@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include <Deliberation/Draw/SurfaceBinary.h>
 
 namespace deliberation

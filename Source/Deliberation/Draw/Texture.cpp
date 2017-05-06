@@ -45,10 +45,10 @@ unsigned int Texture::numFaces() const
     return m_impl->numFaces;
 }
 
-gl::GLenum Texture::type() const
+TextureType Texture::type() const
 {
     Assert(m_impl.get(), "Texture is hollow");
-    return m_impl->glType;
+    return m_impl->type;
 }
 
 PixelFormat Texture::format() const
@@ -76,7 +76,7 @@ void Texture::upload(const TextureBinary & binary)
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
 
-    glStateManager.bindTexture(m_impl->glType, m_impl->glName);
+    glStateManager.bindTexture((gl::GLenum)m_impl->type, m_impl->glName);
 
     m_impl->texImage2DAllFaces(&binary);
 }

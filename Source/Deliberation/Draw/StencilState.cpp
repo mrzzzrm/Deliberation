@@ -7,6 +7,8 @@
 namespace
 {
 
+using namespace deliberation;
+
 constexpr int FUNC_SHIFT            = 0;
 constexpr int REF_SHIFT             = 1;
 constexpr int READMASK_SHIFT        = 2;
@@ -15,25 +17,21 @@ constexpr int SFAIL_SHIFT           = 4;
 constexpr int DPFAIL_SHIFT          = 5;
 constexpr int DPPASS_SHIFT          = 6;
 
-constexpr uint32_t FUNC_BIT         = 1 << FUNC_SHIFT;
-constexpr uint32_t REF_BIT          = 1 << REF_SHIFT;
-constexpr uint32_t READMASK_BIT     = 1 << READMASK_SHIFT;
-constexpr uint32_t WRITEMASK_BIT    = 1 << WRITEMASK_SHIFT;
-constexpr uint32_t SFAIL_BIT        = 1 << SFAIL_SHIFT;
-constexpr uint32_t DPFAIL_BIT       = 1 << DPFAIL_SHIFT;
-constexpr uint32_t DPPASS_BIT       = 1 << DPPASS_SHIFT;
+constexpr u32 FUNC_BIT         = 1 << FUNC_SHIFT;
+constexpr u32 REF_BIT          = 1 << REF_SHIFT;
+constexpr u32 READMASK_BIT     = 1 << READMASK_SHIFT;
+constexpr u32 WRITEMASK_BIT    = 1 << WRITEMASK_SHIFT;
+constexpr u32 SFAIL_BIT        = 1 << SFAIL_SHIFT;
+constexpr u32 DPFAIL_BIT       = 1 << DPFAIL_SHIFT;
+constexpr u32 DPPASS_BIT       = 1 << DPPASS_SHIFT;
 
-constexpr uint32_t FUNC_MASK        = FUNC_BIT | REF_BIT | READMASK_BIT;
-constexpr uint32_t MASK_MASK        = WRITEMASK_BIT;
-constexpr uint32_t OP_MASK          = SFAIL_BIT | DPFAIL_BIT | DPPASS_BIT;
+constexpr u32 FUNC_MASK        = FUNC_BIT | REF_BIT | READMASK_BIT;
+constexpr u32 MASK_MASK        = WRITEMASK_BIT;
+constexpr u32 OP_MASK          = SFAIL_BIT | DPFAIL_BIT | DPPASS_BIT;
 
-unsigned int faceToIndex(gl::GLenum face)
+unsigned int faceToIndex(StencilFace face)
 {
-    Assert(face == gl::GL_FRONT ||
-           face == gl::GL_BACK ||
-           face == gl::GL_FRONT_AND_BACK,
-           "");
-    return face == gl::GL_BACK ? 1 : 0;
+    return face == StencilFace::Back ? 1 : 0;
 }
 
 }
@@ -43,20 +41,20 @@ namespace deliberation
 
 StencilState::Face::Face() = default;
 
-StencilState::Face::Face(gl::GLenum func,
-                         gl::GLint ref,
-                         gl::GLuint readMask,
-                         gl::GLuint writeMask,
-                         gl::GLenum sfail,
-                         gl::GLenum dpfail,
-                         gl::GLenum dppass):
-                        func(func),
-                        ref(ref),
-                        readMask(readMask),
-                        writeMask(writeMask),
-                        sfail(sfail),
-                        dpfail(dpfail),
-                        dppass(dppass)
+StencilState::Face::Face(StencilFunction func,
+                         u32 ref,
+                         u32 readMask,
+                         u32 writeMask,
+                         StencilOp sfail,
+                         StencilOp dpfail,
+                         StencilOp dppass):
+    func(func),
+    ref(ref),
+    readMask(readMask),
+    writeMask(writeMask),
+    sfail(sfail),
+    dpfail(dpfail),
+    dppass(dppass)
 {
 }
 
@@ -75,13 +73,13 @@ StencilState::StencilState(const Face & frontAndBack):
     m_faces[1] = frontAndBack;
 }
 
-StencilState::StencilState(gl::GLenum func,
-                           gl::GLint ref,
-                           gl::GLuint readMask,
-                           gl::GLuint writeMask,
-                           gl::GLenum sfail,
-                           gl::GLenum dpfail,
-                           gl::GLenum dppass):
+StencilState::StencilState(StencilFunction func,
+                           u32 ref,
+                           u32 readMask,
+                           u32 writeMask,
+                           StencilOp sfail,
+                           StencilOp dpfail,
+                           StencilOp dppass):
     StencilState(Face(func, ref, readMask, writeMask, sfail, dpfail, dppass))
 {
 
@@ -97,17 +95,17 @@ StencilState::StencilState(const Face & front, const Face & back):
 
 bool StencilState::differentFaceFuncs() const
 {
-    return m_differentFrontAndBackBits & FUNC_MASK;
+    return (m_differentFrontAndBackBits & FUNC_MASK) != 0;
 }
 
 bool StencilState::differentFaceMasks() const
 {
-    return m_differentFrontAndBackBits & MASK_MASK;
+    return (m_differentFrontAndBackBits & MASK_MASK) != 0;
 }
 
 bool StencilState::differentFaceOps() const
 {
-    return m_differentFrontAndBackBits & OP_MASK;
+    return (m_differentFrontAndBackBits & OP_MASK) != 0;
 }
 
 const StencilState::Face & StencilState::frontFace() const
@@ -125,45 +123,45 @@ bool StencilState::enabled() const
     return m_enabled;
 }
 
-gl::GLenum StencilState::func(gl::GLenum face) const
+StencilFunction StencilState::func(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & FUNC_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & FUNC_BIT), "");
     return m_faces[faceToIndex(face)].func;
 }
 
-gl::GLint StencilState::ref(gl::GLenum face) const
+u32 StencilState::ref(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & REF_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & REF_BIT), "");
     return m_faces[faceToIndex(face)].ref;
 }
 
-gl::GLuint StencilState::readMask(gl::GLenum face) const
+u32 StencilState::readMask(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & READMASK_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & READMASK_BIT), "");
     return m_faces[faceToIndex(face)].readMask;
 }
 
-gl::GLuint StencilState::writeMask(gl::GLenum face) const
+u32 StencilState::writeMask(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & WRITEMASK_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & WRITEMASK_BIT), "");
     return m_faces[faceToIndex(face)].writeMask;
 }
 
-gl::GLenum StencilState::sfail(gl::GLenum face) const
+StencilOp StencilState::sfail(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & SFAIL_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & SFAIL_BIT), "");
     return m_faces[faceToIndex(face)].sfail;
 }
 
-gl::GLenum StencilState::dpfail(gl::GLenum face) const
+StencilOp StencilState::dpfail(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & DPFAIL_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & DPFAIL_BIT), "");
     return m_faces[faceToIndex(face)].dpfail;
 }
 
-gl::GLenum StencilState::dppass(gl::GLenum face) const
+StencilOp StencilState::dppass(StencilFace face) const
 {
-    Assert(face != gl::GL_FRONT_AND_BACK || !(m_differentFrontAndBackBits & DPPASS_BIT), "");
+    Assert(face != StencilFace::FrontAndBack || !(m_differentFrontAndBackBits & DPPASS_BIT), "");
     return m_faces[faceToIndex(face)].dppass;
 }
 
@@ -172,9 +170,9 @@ void StencilState::setEnabled(bool enabled)
     m_enabled = enabled;
 }
 
-void StencilState::setFunc(gl::GLenum func, gl::GLenum face)
+void StencilState::setFunc(StencilFunction func, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].func = func;
         m_faces[1].func = func;
@@ -186,9 +184,9 @@ void StencilState::setFunc(gl::GLenum func, gl::GLenum face)
     m_differentFrontAndBackBits = (m_faces[0].func != m_faces[1].func ? 1 : 0) << FUNC_SHIFT;
 }
 
-void StencilState::setRef(gl::GLint ref, gl::GLenum face)
+void StencilState::setRef(u32 ref, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].ref = ref;
         m_faces[1].ref = ref;
@@ -200,9 +198,9 @@ void StencilState::setRef(gl::GLint ref, gl::GLenum face)
     m_differentFrontAndBackBits = (m_faces[0].ref != m_faces[1].ref ? 1 : 0) << REF_SHIFT;
 }
 
-void StencilState::setReadMask(gl::GLuint readMask, gl::GLenum face)
+void StencilState::setReadMask(u32 readMask, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].readMask = readMask;
         m_faces[1].readMask = readMask;
@@ -214,9 +212,9 @@ void StencilState::setReadMask(gl::GLuint readMask, gl::GLenum face)
     m_differentFrontAndBackBits = (m_faces[0].readMask != m_faces[1].readMask ? 1 : 0) << READMASK_SHIFT;
 }
 
-void StencilState::setWriteMask(gl::GLuint writeMask, gl::GLenum face)
+void StencilState::setWriteMask(u32 writeMask, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].writeMask = writeMask;
         m_faces[1].writeMask = writeMask;
@@ -228,9 +226,9 @@ void StencilState::setWriteMask(gl::GLuint writeMask, gl::GLenum face)
     m_differentFrontAndBackBits = (m_faces[0].writeMask != m_faces[1].writeMask ? 1 : 0) << WRITEMASK_SHIFT;
 }
 
-void StencilState::setSFail(gl::GLenum sfail, gl::GLenum face)
+void StencilState::setSFail(StencilOp sfail, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].sfail = sfail;
         m_faces[1].sfail = sfail;
@@ -242,9 +240,9 @@ void StencilState::setSFail(gl::GLenum sfail, gl::GLenum face)
     m_differentFrontAndBackBits = (m_faces[0].sfail != m_faces[1].sfail ? 1 : 0) << SFAIL_SHIFT;
 }
 
-void StencilState::setDPFail(gl::GLenum dpfail, gl::GLenum face)
+void StencilState::setDPFail(StencilOp dpfail, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].dpfail = dpfail;
         m_faces[1].dpfail = dpfail;
@@ -256,9 +254,9 @@ void StencilState::setDPFail(gl::GLenum dpfail, gl::GLenum face)
     m_differentFrontAndBackBits = (m_faces[0].dpfail != m_faces[1].dpfail ? 1 : 0) << DPFAIL_SHIFT;
 }
 
-void StencilState::setDPPass(gl::GLenum dppass, gl::GLenum face)
+void StencilState::setDPPass(StencilOp dppass, StencilFace face)
 {
-    if (face == gl::GL_FRONT_AND_BACK)
+    if (face == StencilFace::FrontAndBack)
     {
         m_faces[0].dppass = dppass;
         m_faces[1].dppass = dppass;

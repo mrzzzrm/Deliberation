@@ -64,12 +64,12 @@ TextureImpl::TextureImpl(
 
     if (numFaces == 1)
     {
-        glType = gl::GL_TEXTURE_2D;
+        type = TextureType::Texture2d;
     }
     else
     {
         Assert(numFaces == 6, "");
-        glType = gl::GL_TEXTURE_CUBE_MAP;
+        type = TextureType::CubeMap;
     }
 
     // Create GL Texture object
@@ -78,12 +78,12 @@ TextureImpl::TextureImpl(
 
     auto & glStateManager = drawContext.m_glStateManager;
 
-    glStateManager.bindTexture(glType, glName);
+    glStateManager.bindTexture((gl::GLenum)type, glName);
 
-    gl::glTexParameteri(glType, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
-    gl::glTexParameteri(glType, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
-    gl::glTexParameteri(glType, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
-    gl::glTexParameteri(glType, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
+    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
+    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
+    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
+    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
 
     // Create faces
     texImage2DAllFaces(nullptr);
@@ -94,7 +94,7 @@ void TextureImpl::setupSurfaces(const std::shared_ptr<TextureImpl> &textureImpl)
     for (auto f = 0u; f < numFaces; f++)
     {
         surfaces.emplace_back(
-            std::make_shared<SurfaceImpl>(textureImpl, f, faceTarget(glType, f)));
+            std::make_shared<SurfaceImpl>(textureImpl, f, faceTarget((gl::GLenum)type, f)));
     }
 }
 
@@ -104,7 +104,7 @@ void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
     {
         auto * binarySurface = binary ? &binary->surface(f) : nullptr;
 
-        gl::glTexImage2D(faceTarget(glType, f),
+        gl::glTexImage2D(faceTarget((gl::GLenum)type, f),
                          0,
                          (gl::GLint)format.glInternalFormat(),
                          binarySurface ? binarySurface->width() : width,

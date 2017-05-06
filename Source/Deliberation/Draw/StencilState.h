@@ -5,10 +5,41 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
-
+#include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
+
+enum class StencilFunction: unsigned int
+{
+    Never           = (unsigned int)gl::GL_NEVER,
+    Less            = (unsigned int)gl::GL_LESS,
+    LessOrEqual     = (unsigned int)gl::GL_LEQUAL,
+    Greater         = (unsigned int)gl::GL_GREATER,
+    GreaterOrEqual  = (unsigned int)gl::GL_GEQUAL,
+    Equal           = (unsigned int)gl::GL_EQUAL,
+    NotEqual        = (unsigned int)gl::GL_NOTEQUAL,
+    Always          = (unsigned int)gl::GL_ALWAYS
+};
+
+enum class StencilOp: unsigned int
+{
+    Keep            = (unsigned int)gl::GL_KEEP,
+    Zero            = (unsigned int)gl::GL_ZERO,
+    Replace         = (unsigned int)gl::GL_REPLACE,
+    Increment       = (unsigned int)gl::GL_INCR,
+    IncrementWrap   = (unsigned int)gl::GL_INCR_WRAP,
+    Decrement       = (unsigned int)gl::GL_DECR,
+    DecrementWrap   = (unsigned int)gl::GL_DECR_WRAP,
+    Invert          = (unsigned int)gl::GL_INVERT
+};
+
+enum class StencilFace
+{
+    Front,
+    Back,
+    FrontAndBack
+};
 
 class StencilState final
 {
@@ -16,33 +47,33 @@ public:
     struct Face
     {
         Face();
-        Face(gl::GLenum func,
-             gl::GLint ref,
-             gl::GLuint readMask,
-             gl::GLuint writeMask,
-             gl::GLenum sfail,
-             gl::GLenum dpfail,
-             gl::GLenum dppass);
+        Face(StencilFunction func,
+             u32 ref,
+             u32 readMask,
+             u32 writeMask,
+             StencilOp sfail,
+             StencilOp dpfail,
+             StencilOp dppass);
 
-        gl::GLenum func = gl::GL_ALWAYS;
-        gl::GLint ref = 0;
-        gl::GLuint readMask = ~gl::GLuint(0);
-        gl::GLuint writeMask = ~gl::GLuint(0);
-        gl::GLenum sfail = gl::GL_KEEP;
-        gl::GLenum dpfail = gl::GL_KEEP;
-        gl::GLenum dppass = gl::GL_KEEP;
+        StencilFunction func = StencilFunction::Always;
+        u32             ref = 0;
+        u32             readMask = ~u32(0);
+        u32             writeMask = ~u32(0);
+        StencilOp       sfail = StencilOp::Keep;
+        StencilOp       dpfail = StencilOp::Keep;
+        StencilOp       dppass = StencilOp::Keep;
     };
 
 public:
     StencilState();
     StencilState(const Face & frontAndBack);
-    StencilState(gl::GLenum func,
-                 gl::GLint ref,
-                 gl::GLuint readMask,
-                 gl::GLuint writeMask,
-                 gl::GLenum sfail,
-                 gl::GLenum dpfail,
-                 gl::GLenum dppass);
+    StencilState(StencilFunction func,
+                 u32 ref,
+                 u32 readMask,
+                 u32 writeMask,
+                 StencilOp sfail,
+                 StencilOp dpfail,
+                 StencilOp dppass);
     StencilState(const Face & front, const Face & back);
 
     bool differentFaceFuncs() const;
@@ -53,32 +84,29 @@ public:
     const Face & backFace() const;
 
     bool enabled() const;
-    gl::GLenum func(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
-    gl::GLint ref(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
-    gl::GLuint readMask(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
-    gl::GLuint writeMask(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
-    gl::GLenum sfail(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
-    gl::GLenum dpfail(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
-    gl::GLenum dppass(gl::GLenum face = gl::GL_FRONT_AND_BACK) const;
+    StencilFunction func(StencilFace face = StencilFace::FrontAndBack) const;
+    u32 ref(StencilFace face = StencilFace::FrontAndBack) const;
+    u32 readMask(StencilFace face = StencilFace::FrontAndBack) const;
+    u32 writeMask(StencilFace face = StencilFace::FrontAndBack) const;
+    StencilOp sfail(StencilFace face = StencilFace::FrontAndBack) const;
+    StencilOp dpfail(StencilFace face = StencilFace::FrontAndBack) const;
+    StencilOp dppass(StencilFace face = StencilFace::FrontAndBack) const;
 
     void setEnabled(bool enabled);
-    void setFunc(gl::GLenum func, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-    void setRef(gl::GLint ref, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-    void setReadMask(gl::GLuint readMask, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-    void setWriteMask(gl::GLuint writeMask, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-    void setSFail(gl::GLenum sfail, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-    void setDPFail(gl::GLenum dpfail, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-    void setDPPass(gl::GLenum dppass, gl::GLenum face = gl::GL_FRONT_AND_BACK);
-
-    void apply() const;
-    void undo() const;
+    void setFunc(StencilFunction func, StencilFace face = StencilFace::FrontAndBack);
+    void setRef(u32 ref, StencilFace face = StencilFace::FrontAndBack);
+    void setReadMask(u32 readMask, StencilFace face = StencilFace::FrontAndBack);
+    void setWriteMask(u32 writeMask, StencilFace face = StencilFace::FrontAndBack);
+    void setSFail(StencilOp sfail, StencilFace face = StencilFace::FrontAndBack);
+    void setDPFail(StencilOp dpfail, StencilFace face = StencilFace::FrontAndBack);
+    void setDPPass(StencilOp dppass, StencilFace face = StencilFace::FrontAndBack);
 
     std::string toString() const;
 
 private:
-    bool m_enabled;
-    uint32_t m_differentFrontAndBackBits;
-    Face m_faces[2];
+    bool        m_enabled;
+    uint32_t    m_differentFrontAndBackBits;
+    Face        m_faces[2];
 };
 
 }

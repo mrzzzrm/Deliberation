@@ -5,6 +5,7 @@
 #include <glbinding/gl/types.h>
 
 #include <Deliberation/Draw/Detail/SurfaceImpl.h>
+#include <Deliberation/Draw/Enum.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -36,7 +37,7 @@ public:
     u32                     height;
 
     u32                     numFaces;
-    gl::GLenum              glType;
+    TextureType             type;
     PixelFormat             format;
 
     gl::GLuint              baseLevel;

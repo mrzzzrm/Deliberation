@@ -5,8 +5,6 @@
 
 #include <Deliberation/Core/LayoutedBlob.h>
 
-
-
 namespace deliberation
 {
 
