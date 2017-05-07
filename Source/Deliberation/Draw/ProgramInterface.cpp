@@ -62,7 +62,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             m_attributeIndexByLocation[location] = i;
             m_attributeIndexByName[name] = i;
-            m_attributes.push_back({name, i, location, GLTypeToType(type), size});
+            m_attributes.push_back({name, i, location, GLTypeToType(type), (u32)size});
 
             i++;
         }
@@ -142,7 +142,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                 {
                     m_samplerIndexByLocation[location] = m_samplers.size();
                     m_samplerIndexByName[name] = m_samplers.size();
-                    m_samplers.emplace_back(name, type, location, (gl::GLuint)uniformSizes[u]);
+                    m_samplers.emplace_back(name, (SamplerType)type, location, (gl::GLuint)uniformSizes[u]);
                 }
             }
             else
@@ -265,7 +265,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             m_fragmentOutputIndexByLocation[location] = m_fragmentOutputs.size();
             m_fragmentOutputIndexByName[name] = m_fragmentOutputs.size();
-            m_fragmentOutputs.push_back({name, type, (unsigned int)location});
+            m_fragmentOutputs.push_back({name, GLTypeToType(type), (unsigned int)location});
         }
     }
 }

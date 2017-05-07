@@ -10,6 +10,7 @@
 #include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
+#include <Deliberation/Draw/GL/GLType.h>
 
 #include "ProgramImpl.h"
 
@@ -51,7 +52,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
         {
             auto & sampler = this->program->interface.samplers()[s];
             samplers.emplace_back(std::make_shared<SamplerImpl>(
-                sampler.type(), sampler.valueType(), sampler.location()));
+                (gl::GLenum)sampler.type(), TypeToGLType(sampler.valueType()), sampler.location()));
         }
     }
 

@@ -225,10 +225,10 @@ void Draw::setFramebuffer(const Framebuffer & framebuffer)
 
                 if ("o_" + colorTarget.name == fragmentOutput.name())
                 {
-                    Assert (colorTarget.surface.format().glFragmentOutputType() == fragmentOutput.type(),
-                            "Fragment output " + fragmentOutput.name() + "(" + glbinding::Meta::getString(fragmentOutput.type()) +
+                    Assert (colorTarget.surface.format().fragmentOutputType() == fragmentOutput.type(),
+                            "Fragment output " + fragmentOutput.name() + "(" + fragmentOutput.type().name() +
                                 ") and RenderTarget (" + colorTarget.surface.format().toString() + " = " +
-                                glbinding::Meta::getString(colorTarget.surface.format().glFragmentOutputType()) +
+                                colorTarget.surface.format().fragmentOutputType().name() +
                                 ") are incompatible");
 
                     bufs[fragmentOutput.location()] = (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + t);

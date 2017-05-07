@@ -8,7 +8,7 @@ namespace deliberation
 ProgramInterfaceUniform::ProgramInterfaceUniform(const std::string & name,
                                                  Type type,
                                                  gl::GLint location,
-                                                 gl::GLuint arraySize):
+                                                 u32 arraySize):
     m_name(name),
     m_type(type),
     m_location(location),
@@ -31,7 +31,7 @@ gl::GLint ProgramInterfaceUniform::location() const
     return m_location;
 }
 
-gl::GLuint ProgramInterfaceUniform::arraySize() const
+u32 ProgramInterfaceUniform::arraySize() const
 {
     return m_arraySize;
 }

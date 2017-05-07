@@ -18,12 +18,12 @@ public:
     ProgramInterfaceUniform(const std::string & name,
                             Type type,
                             gl::GLint location,
-                            gl::GLuint arraySize);
+                            u32 arraySize);
 
     const std::string & name() const;
     Type type() const;
     gl::GLint location() const;
-    gl::GLuint arraySize() const;
+    u32 arraySize() const;
     bool isArray() const;
 
     std::string toString() const;
@@ -35,7 +35,7 @@ private:
     std::string m_name;
     Type        m_type;
     gl::GLint   m_location;
-    gl::GLuint  m_arraySize;
+    u32         m_arraySize;
 };
 
 }

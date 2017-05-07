@@ -20,7 +20,7 @@ ProgramInterfaceVertexAttribute::ProgramInterfaceVertexAttribute(const std::stri
                                                            u32 index,
                                                            gl::GLint glLocation,
                                                            Type type,
-                                                           gl::GLint size):
+                                                           u32 size):
     m_name(name),
     m_index(index),
     m_glLocation(glLocation),
@@ -50,7 +50,7 @@ Type ProgramInterfaceVertexAttribute::type() const
     return m_type;
 }
 
-gl::GLint ProgramInterfaceVertexAttribute::size() const
+u32 ProgramInterfaceVertexAttribute::size() const
 {
     return m_size;
 }

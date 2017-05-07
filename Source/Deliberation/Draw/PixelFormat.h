@@ -4,6 +4,8 @@
 
 #include <glbinding/gl/enum.h>
 
+#include <Deliberation/Core/Types.h>
+
 namespace deliberation
 {
 
@@ -161,6 +163,8 @@ public:
 
     PixelType pixelType() const;
 
+    Type fragmentOutputType() const;
+
     const std::string & toString() const;
 
     bool operator==(const PixelFormat & format) const;
@@ -173,7 +177,6 @@ public:
     */
     gl::GLenum glFormat() const;
     gl::GLenum glType() const;
-    gl::GLenum glFragmentOutputType() const;
     gl::GLenum glSamplerValueType() const;
     gl::GLenum glInternalFormat() const;
 

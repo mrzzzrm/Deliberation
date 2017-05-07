@@ -69,6 +69,3 @@ std::string BlendState::toString() const
 }
 
 }
-
-
-

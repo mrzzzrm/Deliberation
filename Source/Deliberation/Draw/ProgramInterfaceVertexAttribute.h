@@ -20,13 +20,13 @@ public:
         u32 index,
         gl::GLint glLocation,
         Type type,
-        gl::GLint size);
+        u32 size);
 
     const std::string & name() const;
     u32 index() const;
     gl::GLint glLocation() const;
     Type type() const;
-    gl::GLint size() const;
+    u32 size() const;
 
     bool operator==(const ProgramInterfaceVertexAttribute & other) const;
     bool operator!=(const ProgramInterfaceVertexAttribute & other) const;
@@ -38,7 +38,7 @@ private:
     u32             m_index = 0;
     gl::GLint       m_glLocation = 0;
     Type            m_type;
-    gl::GLint       m_size = 0;
+    u32             m_size = 0;
 };
 
 }
