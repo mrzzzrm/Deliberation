@@ -18,7 +18,7 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false
-BinPackParameters: true
+BinPackParameters: false
 BraceWrapping:   
   AfterClass:      true
   AfterControlStatement: true
@@ -30,7 +30,7 @@ BraceWrapping:
   AfterUnion:      true
   BeforeCatch:     true
   BeforeElse:      true
-  IndentBraces:    trze
+  IndentBraces:    false
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
