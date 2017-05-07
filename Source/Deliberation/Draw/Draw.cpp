@@ -198,7 +198,7 @@ VertexAttribute Draw::attribute(const std::string & name)
     return VertexAttribute(m_impl, attribute);
 }
 
-void Draw::setFramebuffer(const Framebuffer & framebuffer)
+void Draw::setFramebuffer(const Framebuffer & framebuffer, const FramebufferBinding & binding)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -219,11 +219,24 @@ void Draw::setFramebuffer(const Framebuffer & framebuffer)
         {
             auto & fragmentOutput = fragmentOutputs[o];
 
+            std::string mappedTargetName;
+
+            // Does the output have a mapping?
+            auto iter = std::find_if(binding.begin(), binding.end(), [&] (const FragmentOutputMapping & fragmentOutputMapping) {
+                return "o_" + fragmentOutputMapping.first == fragmentOutput.name();
+            });
+
+            if (iter != binding.end()) mappedTargetName = "o_" + iter->second;
+
+            std::cout << "Mapped target of " << fragmentOutput.name() + ": " << mappedTargetName << std::endl;
+
             for (size_t t = 0; t < colorTargets.size(); t++)
             {
                 auto & colorTarget = colorTargets[t];
+                const auto colorTargetName = "o_" + colorTarget.name;
 
-                if ("o_" + colorTarget.name == fragmentOutput.name())
+                // If no mapping exist, mappedTargetName will be empty and never match
+                if (colorTargetName == mappedTargetName || "o_" + colorTarget.name == fragmentOutput.name())
                 {
                     Assert (colorTarget.surface.format().fragmentOutputType() == fragmentOutput.type(),
                             "Fragment output " + fragmentOutput.name() + "(" + fragmentOutput.type().name() +

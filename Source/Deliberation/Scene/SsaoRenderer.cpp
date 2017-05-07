@@ -122,7 +122,9 @@ void SsaoRenderer::init()
     inputSampler.setTexture(m_intermediateFb.colorTargetRef("UnblurredSsao"));
     inputSampler.setWrap(TextureWrap::ClampToEdge);
 
-    m_blurEffect.draw().setFramebuffer(m_renderManager.ssaoBuffer());
+    FramebufferBinding blurBinding({{"Blurred", "Ssao"}});
+
+    m_blurEffect.draw().setFramebuffer(m_renderManager.ssaoBuffer(), blurBinding);
 
     m_dirty = false;
 }

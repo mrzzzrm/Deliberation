@@ -4,7 +4,7 @@ uniform sampler2D Input;
 
 in vec2 f_UV;
 
-out float o_Ssao;
+out float o_Blurred;
 
 void main() {
     vec2 texelSize = 1.0 / vec2(textureSize(Input, 0));
@@ -20,5 +20,5 @@ void main() {
         }
     }
 
-    o_Ssao = result / 16.0f;
+    o_Blurred = result / 16.0f;
 }

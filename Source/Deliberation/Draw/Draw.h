@@ -18,12 +18,8 @@
 namespace deliberation
 {
 
-namespace detail
-{
-    class DrawExecution;
-    class DrawImpl;
-    struct BufferBinding;
-}
+using FragmentOutputMapping = std::pair<std::string, std::string>;
+using FramebufferBinding = std::vector<FragmentOutputMapping>;
 
 class Buffer;
 class DrawContext;
@@ -69,7 +65,7 @@ public:
 
     VertexAttribute attribute(const std::string & name);
 
-    void setFramebuffer(const Framebuffer & framebuffer);
+    void setFramebuffer(const Framebuffer & framebuffer, const FramebufferBinding & binding = {});
 
     void setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin = 0);
 
