@@ -5,34 +5,12 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/Enum.h>
+
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-
-enum class StencilFunction: unsigned int
-{
-    Never           = (unsigned int)gl::GL_NEVER,
-    Less            = (unsigned int)gl::GL_LESS,
-    LessOrEqual     = (unsigned int)gl::GL_LEQUAL,
-    Greater         = (unsigned int)gl::GL_GREATER,
-    GreaterOrEqual  = (unsigned int)gl::GL_GEQUAL,
-    Equal           = (unsigned int)gl::GL_EQUAL,
-    NotEqual        = (unsigned int)gl::GL_NOTEQUAL,
-    Always          = (unsigned int)gl::GL_ALWAYS
-};
-
-enum class StencilOp: unsigned int
-{
-    Keep            = (unsigned int)gl::GL_KEEP,
-    Zero            = (unsigned int)gl::GL_ZERO,
-    Replace         = (unsigned int)gl::GL_REPLACE,
-    Increment       = (unsigned int)gl::GL_INCR,
-    IncrementWrap   = (unsigned int)gl::GL_INCR_WRAP,
-    Decrement       = (unsigned int)gl::GL_DECR,
-    DecrementWrap   = (unsigned int)gl::GL_DECR_WRAP,
-    Invert          = (unsigned int)gl::GL_INVERT
-};
 
 enum class StencilFace
 {

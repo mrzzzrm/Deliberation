@@ -7,26 +7,12 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Draw/Enum.h>
+
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-
-enum class DrawPrimitive: unsigned int
-{
-    Points                  = (unsigned int)gl::GL_POINTS,
-    LineStrip               = (unsigned int)gl::GL_LINE_STRIP,
-    LineLoop                = (unsigned int)gl::GL_LINE_LOOP,
-    Lines                   = (unsigned int)gl::GL_LINES,
-    LineStripAdjacency      = (unsigned int)gl::GL_LINE_STRIP_ADJACENCY,
-    LinesAdjacency          = (unsigned int)gl::GL_LINES_ADJACENCY,
-    TriangleStrip           = (unsigned int)gl::GL_TRIANGLE_STRIP,
-    TriangleFan             = (unsigned int)gl::GL_TRIANGLE_FAN,
-    Triangles               = (unsigned int)gl::GL_TRIANGLES,
-    TriangleStripAdjacency  = (unsigned int)gl::GL_TRIANGLE_STRIP_ADJACENCY,
-    TrianglesAdjacency      = (unsigned int)gl::GL_TRIANGLES_ADJACENCY,
-    Patches                 = (unsigned int)gl::GL_PATCHES
-};
 
 class RasterizerState final
 {

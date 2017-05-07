@@ -6,19 +6,14 @@
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/DataLayout.h>
 
+#include <Deliberation/Draw/Enum.h>
+
 namespace deliberation
 {
 
 class BufferImpl;
 class DrawContext;
 class LayoutedBlob;
-
-enum class BufferMapping
-{
-    ReadOnly,
-    WriteOnly,
-    ReadWrite
-};
 
 class Buffer final
 {

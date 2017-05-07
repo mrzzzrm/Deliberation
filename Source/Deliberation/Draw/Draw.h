@@ -75,7 +75,6 @@ public:
 
 private:
     friend class DrawContext;
-    friend class detail::DrawExecution;
     friend class DrawVerification;
 
 private:

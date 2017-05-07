@@ -11,11 +11,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-    class DrawExecution;
-}
-
 class TextureImpl;
 class TextureBinary;
 class Surface;
@@ -43,7 +38,6 @@ public:
 private:
     friend class DrawContext;
     friend class FramebufferImpl;
-    friend class detail::DrawExecution;
     friend class SurfaceDownloadImpl;
     friend class TextureUploadExecution;
     friend class Sampler;

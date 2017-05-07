@@ -5,17 +5,10 @@
 #include <stdint.h>
 #include <memory>
 
+#include <Deliberation/Draw/Enum.h>
+
 namespace deliberation
 {
-
-enum class QueryType: unsigned int
-{
-    TimeElapsed                   = (unsigned int)gl::GL_TIME_ELAPSED,
-    SamplesPassed                 = (unsigned int)gl::GL_SAMPLES_PASSED,
-    AnySamplesPassed              = (unsigned int)gl::GL_ANY_SAMPLES_PASSED,
-    PrimitivesGenerated           = (unsigned int)gl::GL_PRIMITIVES_GENERATED,
-    TransformFeedbackPrimitives   = (unsigned int)gl::GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
-};
 
 class QueryImpl;
 

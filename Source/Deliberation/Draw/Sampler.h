@@ -4,31 +4,13 @@
 
 #include <glbinding/gl/enum.h>
 
+#include <Deliberation/Draw/Enum.h>
+
 namespace deliberation
 {
 
 class SamplerImpl;
 class Texture;
-
-enum class TextureWrap: unsigned int
-{
-    ClampToEdge         = (unsigned int)gl::GL_CLAMP_TO_EDGE,
-    MirroredRepeat      = (unsigned int)gl::GL_MIRRORED_REPEAT,
-    Repeat              = (unsigned int)gl::GL_REPEAT,
-    ClampToBorder       = (unsigned int)gl::GL_CLAMP_TO_BORDER
-};
-
-enum class TextureFilter: unsigned int
-{
-    Nearest                 = (unsigned int)gl::GL_NEAREST,
-    Linear                  = (unsigned int)gl::GL_LINEAR,
-
-    // Only for min filter
-    NearestMipmapNearest    = (unsigned int)gl::GL_NEAREST_MIPMAP_NEAREST,
-    LinearMipmapNearest     = (unsigned int)gl::GL_LINEAR_MIPMAP_NEAREST,
-    NearestMipmapLinear     = (unsigned int)gl::GL_NEAREST_MIPMAP_LINEAR,
-    LinearMipmapLinear      = (unsigned int)gl::GL_LINEAR_MIPMAP_LINEAR
-};
 
 class Sampler final
 {
