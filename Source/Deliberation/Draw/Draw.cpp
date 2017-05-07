@@ -189,6 +189,15 @@ void Draw::addInstanceBufferRange(const Buffer & buffer, u32 first, u32 count, u
     addVertexBuffer(buffer, true, first, count, divisor);
 }
 
+VertexAttribute Draw::attribute(const std::string & name)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    const auto & attribute = program().interface().attributeRef(name);
+
+    return VertexAttribute(m_impl, attribute);
+}
+
 void Draw::setFramebuffer(const Framebuffer & framebuffer)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");

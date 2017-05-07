@@ -5,14 +5,17 @@
 namespace deliberation
 {
 
-namespace detail
+VertexAttribute::VertexAttribute(const std::shared_ptr<DrawImpl> & drawImpl,
+                                 const ProgramInterfaceVertexAttribute & attribute):
+    m_drawImpl(drawImpl),
+    m_attribute(attribute)
 {
 
-void SetVertexAttribute(DrawImpl & drawImpl, const ProgramInterfaceVertexAttribute & attribute, const void * data)
-{
-    drawImpl.setAttribute(attribute, data);
 }
 
+void VertexAttribute::set(const void * data)
+{
+    m_drawImpl->setAttribute(m_attribute, data);
 }
 
 }

@@ -67,8 +67,7 @@ public:
     template<typename T>
     void setAttribute(size_t index, const T & value);
 
-    template<typename T>
-    VertexAttribute<T> attribute(const std::string & name);
+    VertexAttribute attribute(const std::string & name);
 
     void setFramebuffer(const Framebuffer & framebuffer);
 

@@ -27,16 +27,4 @@ void Draw::setAttribute(size_t index, const T & value)
     setAttribute(attributes[index], (const void *)&value);
 }
 
-template<typename T>
-VertexAttribute<T> Draw::attribute(const std::string & name)
-{
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    const auto & attribute = program().interface().attributeRef(name);
-    Assert(attribute.type() == Type::resolve<T>(), std::string("Vertex attribute type mismatch: '") +
-        attribute.type().name() + "' and '" + Type::resolve<T>().name() + "'");
-
-    return VertexAttribute<T>(m_impl, attribute);
-}
-
 }

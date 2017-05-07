@@ -16,14 +16,16 @@ void SetVertexAttribute(DrawImpl & drawImpl,
                         const void * data);
 }
 
-template<typename T>
 class VertexAttribute final
 {
 public:
     VertexAttribute(const std::shared_ptr<DrawImpl> & drawImpl,
                     const ProgramInterfaceVertexAttribute & attribute);
 
+    template<typename T>
     void set(const T & value);
+
+    void set(const void * data);
 
 private:
     std::shared_ptr<DrawImpl>               m_drawImpl;
