@@ -5,15 +5,16 @@
 namespace deliberation
 {
 
-DataLayoutField::Desc::Desc(const std::string & name, Type type):
+DataLayoutField::Desc::Desc(const std::string & name, Type type, size_t arraySize):
     name(name),
-    type(type)
+    type(type),
+    arraySize(arraySize)
 {
 
 }
 
-DataLayoutField::DataLayoutField(const std::string & name, Type type, size_t offset):
-    m_desc({name, type}),
+DataLayoutField::DataLayoutField(const std::string & name, Type type, size_t offset, size_t arraySize):
+    m_desc({name, type, arraySize}),
     m_offset(offset)
 {
 

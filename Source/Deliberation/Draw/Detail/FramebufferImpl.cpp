@@ -11,8 +11,6 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Surface.h>
 
-#include <Deliberation/Draw/GL/GLFramebuffer.h>
-
 #include <Deliberation/Draw/Detail/TextureImpl.h>
 
 namespace
@@ -155,12 +153,12 @@ void FramebufferImpl::bind(const std::vector<gl::GLenum> & drawBuffers)
     if (isBackbuffer)
     {
         glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, 0);
-        gl::glDrawBuffer(gl::GL_BACK);
+        glStateManager.setDrawBuffer(gl::GL_BACK);
     }
     else
     {
         glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, glName);
-        gl::glDrawBuffers(drawBuffers.size(), drawBuffers.data());
+        glStateManager.setDrawBuffers(drawBuffers);
     }
 }
 

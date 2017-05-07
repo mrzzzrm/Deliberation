@@ -2,8 +2,8 @@ namespace deliberation
 {
 
 template<typename T>
-VertexAttribute<T>::VertexAttribute(Draw & draw, const ProgramInterfaceVertexAttribute & attribute):
-    m_draw(draw),
+VertexAttribute<T>::VertexAttribute(const std::shared_ptr<DrawImpl> & drawImpl, const ProgramInterfaceVertexAttribute & attribute):
+    m_drawImpl(drawImpl),
     m_attribute(attribute)
 {
 
@@ -12,7 +12,7 @@ VertexAttribute<T>::VertexAttribute(Draw & draw, const ProgramInterfaceVertexAtt
 template<typename T>
 void VertexAttribute<T>::set(const T & value)
 {
-    detail::SetVertexAttribute(m_draw, m_attribute, (const void*)&value);
+    detail::SetVertexAttribute(*m_drawImpl, m_attribute, (const void*)&value);
 }
 
 }

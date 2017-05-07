@@ -44,7 +44,8 @@ bool ProgramInterfaceUniform::isArray() const
 std::string ProgramInterfaceUniform::toString() const
 {
     std::stringstream stream;
-    stream << m_type.name() << " <" << m_name << "> (Size: " << m_arraySize << "; Location: " << m_location << ")";
+    stream << m_type.name() << " <" << m_name << "> (Size: " << m_arraySize << "; Location: " << m_location <<
+              "; ArraySize: " << m_arraySize << ")";
     return stream.str();
 }
 

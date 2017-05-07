@@ -28,9 +28,9 @@ DrawContext::DrawContext(unsigned int backbufferWidth, unsigned int backbufferHe
     m_backbuffer = Framebuffer(FramebufferImpl::backbuffer(*this, backbufferWidth, backbufferHeight));
 }
 
-Framebuffer DrawContext::backbuffer()
+Framebuffer & DrawContext::backbuffer()
 {
-    return Framebuffer(FramebufferImpl::backbuffer(*this, m_backbuffer.width(), m_backbuffer.height()));
+    return m_backbuffer;
 }
 
 const Framebuffer & DrawContext::backbuffer() const

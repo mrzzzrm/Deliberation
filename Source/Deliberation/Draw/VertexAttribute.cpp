@@ -1,6 +1,6 @@
 #include <Deliberation/Draw/VertexAttribute.h>
 
-#include <Deliberation/Draw/Draw.h>
+#include <Deliberation/Draw/Detail/DrawImpl.h>
 
 namespace deliberation
 {
@@ -8,9 +8,9 @@ namespace deliberation
 namespace detail
 {
 
-void SetVertexAttribute(Draw & draw, const ProgramInterfaceVertexAttribute & attribute, const void * data)
+void SetVertexAttribute(DrawImpl & drawImpl, const ProgramInterfaceVertexAttribute & attribute, const void * data)
 {
-    draw.setAttribute(attribute, data);
+    drawImpl.setAttribute(attribute, data);
 }
 
 }

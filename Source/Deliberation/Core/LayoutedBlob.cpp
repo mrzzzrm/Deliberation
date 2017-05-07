@@ -48,6 +48,11 @@ const Blob & LayoutedBlob::rawData() const
     return m_data;
 }
 
+void LayoutedBlob::write(std::size_t offset, const void * src, size_t length)
+{
+    m_data.write(offset, src, length);
+}
+
 BlobValueAccessor LayoutedBlob::field(const std::string & name)
 {
     return field(m_layout.field(name));

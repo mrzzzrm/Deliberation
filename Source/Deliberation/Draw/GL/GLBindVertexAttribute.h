@@ -5,20 +5,18 @@
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
-class Buffer;
-
 namespace deliberation
 {
 
-namespace detail
-{
-    class BufferImpl;
-}
+class BufferImpl;
+class GLStateManager;
+
 
 /**
  * From Buffer
  */
 void GLBindVertexAttribute(
+    GLStateManager & glStateManager,
     gl::GLuint vao,
     const ProgramInterfaceVertexAttribute & attribute,
     const BufferImpl & buffer,

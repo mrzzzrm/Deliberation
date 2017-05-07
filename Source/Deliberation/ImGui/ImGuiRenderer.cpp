@@ -26,9 +26,9 @@ void ImGuiRenderer::onSetupRender()
       * Setup draw
       */
     auto vertexLayout = DataLayout();
-    vertexLayout.addField({"Position", Type_Vec2, offsetof(ImDrawVert, pos)});
-    vertexLayout.addField({"UV", Type_Vec2, offsetof(ImDrawVert, uv)});
-    vertexLayout.addField({"Color", Type_U8Vec4, offsetof(ImDrawVert, col)});
+    vertexLayout.addField(DataLayoutField::Desc{"Position", Type_Vec2, offsetof(ImDrawVert, pos)});
+    vertexLayout.addField(DataLayoutField::Desc{"UV", Type_Vec2, offsetof(ImDrawVert, uv)});
+    vertexLayout.addField(DataLayoutField::Desc{"Color", Type_U8Vec4, offsetof(ImDrawVert, col)});
 
     auto indexLayout = DataLayout("Index", sizeof(ImDrawIdx) == 2 ? Type_U16 : Type_U32);
 

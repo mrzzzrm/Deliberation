@@ -32,7 +32,7 @@ class DrawContext final
 public:
     DrawContext(unsigned int backbufferWidth = 640u, unsigned int backbufferHeight = 480u);
 
-    Framebuffer backbuffer();
+    Framebuffer & backbuffer();
     const Framebuffer & backbuffer() const;
 
     void setBackbufferResolution(unsigned int width, unsigned height);
@@ -66,6 +66,7 @@ private:
     friend class BufferImpl;
     friend class Clear;
     friend class Draw;
+    friend class DrawImpl;
     friend class FramebufferImpl;
     friend class QueryImpl;
     friend class SurfaceDownloadImpl;

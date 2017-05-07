@@ -134,7 +134,7 @@ void Clear::render()
     {
         Assert(m_impl->colors.size() == framebufferImpl.colorTargets.size(), "");
 
-        gl::glDrawBuffers(m_impl->drawBuffers.size(), m_impl->drawBuffers.data());
+        glStateManager.setDrawBuffers(m_impl->drawBuffers);
 
         auto & impl = *m_impl;
 

@@ -10,11 +10,14 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/GL/GLType.h>
+#include <Deliberation/Draw/GL/GLStateManager.h>
 #include <Deliberation/Draw/Detail/BufferImpl.h>
 
 namespace deliberation
 {
+
 void GLBindVertexAttribute(
+    GLStateManager & glStateManager,
     gl::GLuint vao,
     const ProgramInterfaceVertexAttribute & attribute,
     const BufferImpl & buffer,
@@ -41,8 +44,8 @@ void GLBindVertexAttribute(
     const auto type = ElementalTypeToGLType(bufferFieldElementalType);
     const auto size = bufferFieldType.numRows();
 
-    gl::glBindVertexArray(vao);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, buffer.glName);
+    glStateManager.bindVertexArray(vao);
+    glStateManager.bindBuffer(gl::GL_ARRAY_BUFFER, buffer.glName);
 
     for (i32 l = startLocation; l < startLocation + bufferFieldType.numColumns(); l++)
     {

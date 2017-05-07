@@ -9,10 +9,6 @@
 
 #include <Deliberation/Core/Assert.h>
 
-#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
-
-#include <Deliberation/Draw/GL/GLFramebuffer.h>
-
 using namespace gl;
 
 namespace deliberation
@@ -86,6 +82,8 @@ GLStateManager::GLStateManager():
     }
 
     for (auto & boundTexture : m_boundTextures) boundTexture = 0u;
+
+    m_drawBuffers.emplace_back(gl::GL_BACK);
 }
 
 void GLStateManager::enableTextureCubeMapSeamless(bool enabled)
@@ -472,32 +470,6 @@ void GLStateManager::framebufferTexture2D(gl::GLenum target, gl::GLenum attachme
     glFramebufferTexture2D(target, attachment, textarget, texture, level);
 }
 
-std::shared_ptr<GLFramebuffer> GLStateManager::framebuffer(const GLFramebufferDesc & desc)
-{
-    auto i = m_glFramebuffers.find(desc.hash());
-    if (i != m_glFramebuffers.end())
-    {
-        if (!i->second.lock())
-        {
-            i = m_glFramebuffers.end();
-        }
-    }
-
-    std::shared_ptr<GLFramebuffer> result;
-
-    if (i == m_glFramebuffers.end())
-    {
-        result = std::make_shared<GLFramebuffer>(*this, desc);
-        m_glFramebuffers[desc.hash()] = result;
-    }
-    else
-    {
-        result = i->second.lock();
-    }
-
-    return result;
-}
-
 void GLStateManager::genQueries(gl::GLsizei n, gl::GLuint * ids)
 {
     glGenQueries(n, ids);
@@ -610,6 +582,39 @@ void GLStateManager::setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl:
     m_scissorRect = rect;
 
     gl::glScissor(x, y, width, height);
+}
+
+void GLStateManager::setDrawBuffer(gl::GLenum buf)
+{
+    if (m_drawBuffers.size() == 1 && m_drawBuffers[0] == buf) return;
+
+    m_drawBuffers.resize(1);
+    m_drawBuffers[0] = buf;
+
+    glDrawBuffer(buf);
+}
+
+void GLStateManager::setDrawBuffers(const std::vector<gl::GLenum> & bufs)
+{
+    if (bufs == m_drawBuffers) return;
+
+    m_drawBuffers = bufs;
+
+    glDrawBuffers(m_drawBuffers.size(), m_drawBuffers.data());
+}
+
+void GLStateManager::bindVertexArray(gl::GLuint vertexArray)
+{
+    if (m_vertexArray && m_vertexArray == vertexArray) return;
+
+    m_vertexArray = vertexArray;
+    glBindVertexArray(vertexArray);
+}
+
+void GLStateManager::deleteVertexArray(gl::GLuint vertexArray)
+{
+    if (m_vertexArray == vertexArray) m_vertexArray = boost::optional<gl::GLuint>();
+    glDeleteVertexArrays(1, &vertexArray);
 }
 
 GLStateManager::QueryTarget GLStateManager::glEnumToQueryTarget(gl::GLenum e) const

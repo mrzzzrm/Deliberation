@@ -8,13 +8,15 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Core/DataLayout.h>
+#include <Deliberation/Core/LayoutedBlob.h>
+
 #include <Deliberation/Draw/Detail/UniformImpl.h>
 #include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/DrawState.h>
 #include <Deliberation/Draw/VertexAttribute.h>
 
-#include "AttributeBinding.h"
 #include "BufferBinding.h"
 #include "SamplerImpl.h"
 #include "UniformBufferBinding.h"
@@ -29,8 +31,21 @@ class ProgramImpl;
 class DrawImpl final
 {
 public:
+    struct UniformBinding
+    {
+        size_t  count = 0;
+        bool    assigned = false;
+    };
+
+public:
+
+
     DrawImpl(DrawContext & drawContext,
              const Program & program);
+    ~DrawImpl();
+
+    void setAttribute(const ProgramInterfaceVertexAttribute & attribute,
+                            const void * data);
 
     DrawContext &                               drawContext;
     std::string                                 name;
@@ -50,8 +65,11 @@ public:
     std::vector<gl::GLenum>                     drawBuffers;
     Framebuffer                                 framebuffer;
 
-    gl::GLuint                                  glVertexArray;
-    std::vector<UniformImpl>                    uniforms;
+    DataLayout                                  uniformLayout;
+    LayoutedBlob                                uniformData;
+    std::vector<UniformBinding>                 uniforms;
+
+    gl::GLuint                                  glVertexArray = 0;
     std::vector<Optional<UniformBufferBinding>> uniformBuffers;
 
     std::vector<std::shared_ptr<SamplerImpl>>   samplers;

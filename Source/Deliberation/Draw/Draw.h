@@ -82,15 +82,15 @@ private:
     friend class DrawContext;
     friend class detail::DrawExecution;
     friend class DrawVerification;
-    friend void detail::SetVertexAttribute(Draw & draw, const ProgramInterfaceVertexAttribute & attribute, const void * data);
 
 private:
     Draw(const std::shared_ptr<DrawImpl> & impl);
 
     void build() const;
 
+    void setAttribute(const ProgramInterfaceVertexAttribute & attribute,
+                      const void * data);
     void addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor);
-    void setAttribute(const ProgramInterfaceVertexAttribute & attribute, const void * data);
 
 private:
     std::shared_ptr<DrawImpl> m_impl;

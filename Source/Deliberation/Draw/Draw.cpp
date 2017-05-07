@@ -74,18 +74,13 @@ Uniform Draw::uniform(const std::string & name)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto location = m_impl->program->interface.uniformRef(name).location();
+    const auto & uniforms = m_impl->program->interface.uniforms();
 
-    /*
-        TODO
-            O(n) complexity? You can do better!
-    */
-
-    for (auto & uniform : m_impl->uniforms)
+    for (size_t u = 0; u < uniforms.size(); u++)
     {
-        if (uniform.location == location)
+        if (uniforms[u].name() == name)
         {
-            return Uniform(uniform);
+            return Uniform(m_impl, u);
         }
     }
 
@@ -256,18 +251,20 @@ void Draw::render() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
+    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+
     if (m_impl->glVertexArray == 0) build();
 
     if (m_impl->indexBufferBindingDirty && m_impl->indexBufferBinding.buffer)
     {
-        gl::glBindVertexArray(m_impl->glVertexArray);
-        gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBufferBinding.buffer->glName);
+        glStateManager.bindVertexArray(m_impl->glVertexArray);
+        glStateManager.bindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBufferBinding.buffer->glName);
         m_impl->indexBufferBindingDirty = false;
     }
 
     if (!m_impl->dirtyValueAttributes.empty())
     {
-        gl::glBindVertexArray(m_impl->glVertexArray);
+        glStateManager.bindVertexArray(m_impl->glVertexArray);
 
         auto & attributes = m_impl->program->interface.attributes();
         for (const auto & a : m_impl->dirtyValueAttributes)
@@ -286,9 +283,6 @@ void Draw::render() const
 
         m_impl->dirtyValueAttributes.clear();
     }
-
-    // Execute
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
     
     glStateManager.enableTextureCubeMapSeamless(true);
 
@@ -437,20 +431,19 @@ void Draw::render() const
 
     // Set uniforms
     {
-        /*
-            TODO
-                Port to GLStateManager
-        */
-        for (auto & uniform : m_impl->uniforms)
+        for (size_t u = 0; u < m_impl->uniforms.size(); u++)
         {
-            Assert(uniform.isAssigned, "Uniform " + m_impl->program->interface.uniformByLocation(uniform.location)->name() + " not set");
-            Assert(uniform.count > 0, "");
+            const auto & uniformBinding = m_impl->uniforms[u];
+            const auto & uniformInterface = m_impl->program->interface.uniforms()[u];
 
-            auto count = uniform.count;
-            auto * data = uniform.blob.ptr();
-            auto location = uniform.location;
+            Assert(uniformBinding.assigned, "Uniform " + uniformInterface.name() + " not set");
+            Assert(uniformBinding.count > 0, "");
 
-            switch (TypeToGLType(uniform.type))
+            auto count = uniformBinding.count;
+            auto * data = m_impl->uniformData.rawData().ptr(m_impl->uniformLayout.field(u).offset());
+            auto location = m_impl->program->interface.uniforms()[u].location();
+
+            switch (TypeToGLType(uniformInterface.type()))
             {
                 case gl::GL_BOOL:
                 {
@@ -501,7 +494,7 @@ void Draw::render() const
                     gl::glUniformMatrix4fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
                     break;
                 default:
-                Fail(std::string("Not implemented for type ") + uniform.type.name());
+                Fail(std::string("Not implemented for type ") + uniformInterface.type().name());
             }
         }
     }
@@ -569,7 +562,7 @@ void Draw::render() const
         }
     }
 
-    gl::glBindVertexArray(m_impl->glVertexArray);
+    glStateManager.bindVertexArray(m_impl->glVertexArray);
 
     if (useIndices)
     {
@@ -669,7 +662,8 @@ void Draw::build() const
 
         const auto baseOffset = bufferBinding.ranged ? bufferBinding.first * bufferBinding.buffer->layout.stride() : 0;
 
-        GLBindVertexAttribute(m_impl->glVertexArray,
+        GLBindVertexAttribute(m_impl->drawContext.m_glStateManager,
+                              m_impl->glVertexArray,
                               attribute,
                               *bufferBinding.buffer,
                               bufferBinding.fieldIndex,
@@ -706,33 +700,14 @@ void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 co
         bufferBinding.count = count;
         bufferBinding.divisor = divisor;
     }
-
 }
 
-void Draw::setAttribute(const ProgramInterfaceVertexAttribute & attribute, const void * data)
+
+void Draw::setAttribute(const ProgramInterfaceVertexAttribute & attribute,
+                        const void * data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-
-    auto & binding = m_impl->attributeBindings[attribute.index()];
-
-    if (binding.which() == 0) // Attribute not yet assigned, allocate new space in value blob
-    {
-        const auto offset = m_impl->valueAttributes.size();
-        m_impl->valueAttributes.resize(offset + attribute.type().size());
-
-        auto valueBinding = VertexAttributeValueBinding();
-		valueBinding.offset = offset;
-		valueBinding.attributeIndex = attribute.index();
-
-		binding = valueBinding;
-    }
-
-    Assert(binding.which() != 2, "Vertex attribute '" + attribute.name() + "' is already bound to buffer");
-
-    auto & valueBinding = boost::get<VertexAttributeValueBinding>(binding);
-
-    m_impl->valueAttributes.write(valueBinding.offset, data, attribute.type().size());
-    m_impl->dirtyValueAttributes.emplace_back(attribute.index());
+    m_impl->setAttribute(attribute, data);
 }
 
 }

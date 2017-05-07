@@ -22,7 +22,7 @@ public:
 
 public:
     DataLayout();
-    DataLayout(const std::string & name, const Type & type);
+    DataLayout(const std::string & name, const Type & type, size_t arraySize = 1);
     DataLayout(const std::vector<DataLayoutField::Desc> & descs);
     DataLayout(std::vector<DataLayoutField> && fields, size_t stride);
 

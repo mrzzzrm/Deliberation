@@ -8,7 +8,6 @@
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Draw/GL/GLFramebufferDesc.h>
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Texture.h>
@@ -18,7 +17,6 @@ namespace deliberation
 
 class DrawContext;
 class FramebufferDesc;
-class GLFramebuffer;
 class GLStateManager;
 class Surface;
 

@@ -36,7 +36,7 @@ VertexAttribute<T> Draw::attribute(const std::string & name)
     Assert(attribute.type() == Type::resolve<T>(), std::string("Vertex attribute type mismatch: '") +
         attribute.type().name() + "' and '" + Type::resolve<T>().name() + "'");
 
-    return VertexAttribute<T>(*this, attribute);
+    return VertexAttribute<T>(m_impl, attribute);
 }
 
 }

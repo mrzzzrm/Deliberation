@@ -13,13 +13,6 @@
 namespace deliberation
 {
 
-namespace detail
-{
-    class DrawImpl;
-    class DrawExecution;
-    class ProgramImpl;
-}
-
 class ClearImpl;
 class ClearExecution;
 class DrawContext;
@@ -97,9 +90,8 @@ private:
     friend class Draw;
     friend class DrawContext;
     friend class ClearExecution;
-    friend class detail::DrawExecution;
     friend class ClearImpl;
-    friend class detail::DrawImpl;
+    friend class DrawImpl;
 
 private:
     std::shared_ptr<FramebufferImpl> m_impl;

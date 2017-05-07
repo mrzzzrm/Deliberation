@@ -24,8 +24,8 @@ DataLayout::DataLayout()
 {
 }
 
-DataLayout::DataLayout(const std::string & name, const Type & type):
-    DataLayout({{name, type}})
+DataLayout::DataLayout(const std::string & name, const Type & type, size_t arraySize):
+    DataLayout({{name, type, arraySize}})
 {
 }
 
@@ -35,7 +35,7 @@ DataLayout::DataLayout(const std::vector<DataLayoutField::Desc> & descs)
 
     for (auto & desc : descs)
     {
-        addField({desc.name, desc.type});
+        addField(desc);
     }
 }
 
@@ -87,13 +87,13 @@ void DataLayout::addField(const DataLayoutField & field)
     Assert(field.offset() >= m_stride, "Fields not added in offset-order, or fields are interleaving");
 
     m_fields.push_back(field);
-    m_stride = field.offset() + field.type().size();
+    m_stride = field.offset() + field.type().size() * field.arraySize();
 }
 
 DataLayoutField DataLayout::addField(const DataLayoutField::Desc & desc)
 {
-    m_fields.push_back(DataLayoutField(desc.name, desc.type, m_stride));
-    m_stride += desc.type.size();
+    m_fields.push_back(DataLayoutField(desc.name, desc.type, m_stride, desc.arraySize));
+    m_stride += desc.type.size() * desc.arraySize;
 
     return m_fields.back();
 }
@@ -111,7 +111,7 @@ bool DataLayout::equals(const DataLayout & rhs) const
 
     for (size_t f = 0; f < m_fields.size(); f++)
     {
-        if (m_fields[f].type() != rhs.m_fields[f].type())
+        if (m_fields[f].type() != rhs.m_fields[f].type() || m_fields[f].arraySize() != rhs.m_fields[f].arraySize())
         {
             return false;
         }

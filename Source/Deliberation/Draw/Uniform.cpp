@@ -1,29 +1,37 @@
 #include <Deliberation/Draw/Uniform.h>
+#include <Deliberation/Draw/Detail/DrawImpl.h>
 
 namespace deliberation
 {
 
-Uniform::Uniform():
-    m_impl(nullptr)
+Uniform::Uniform(
+    const std::shared_ptr<DrawImpl> & drawImpl,
+    size_t index
+):
+    m_drawImpl(drawImpl),
+    m_index(index),
+    m_field(&m_drawImpl->uniformLayout.field(index))
 {
-}
-
-Uniform::Uniform(UniformImpl & impl):
-    m_impl(&impl)
-{
-
 }
 
 void Uniform::set(const LayoutedBlob & array)
 {
-    Assert(m_impl, "Hollow Uniform can't be set");
+    Assert((bool)m_drawImpl, "Hollow uniform");
     Assert(array.layout().fields().size() == 1, "Uniform are primitive type structs");
-    Assert(array.layout().fields()[0].type() == m_impl->type, "Uniform type mismatch");
-    Assert(array.count() <= m_impl->arraySize, "Bounds exceeded or Uniform not an array");
 
-    m_impl->blob = array.rawData();
-    m_impl->isAssigned = true;
-    m_impl->count = array.count();
+    Assert(array.layout().fields()[0].type() == m_field->type(), "Uniform type mismatch");
+    Assert(array.count() <= m_field->arraySize(), "Bounds exceeded or Uniform not an array");
+
+    set(array.rawData().ptr(), array.rawData().size());
+}
+
+void Uniform::set(const void * data, size_t size)
+{
+    Assert(size <= m_field->type().size() * m_field->arraySize(), "Out of range");
+
+    m_drawImpl->uniformData.write(m_field->offset(), data, size);
+    m_drawImpl->uniforms[m_index].assigned = true;
+    m_drawImpl->uniforms[m_index].count = (m_field->type().size() * m_field->arraySize()) / size;
 }
 
 }

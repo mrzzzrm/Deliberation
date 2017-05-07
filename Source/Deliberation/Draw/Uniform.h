@@ -3,18 +3,23 @@
 #include <memory>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <Deliberation/Core/LayoutedBlob.h>
 
 namespace deliberation
 {
 
 class UniformImpl;
-class Draw;
+class DrawImpl;
+
 
 class Uniform
 {
 public:
-    Uniform();
+    Uniform() = default;
+    Uniform(const std::shared_ptr<DrawImpl> & drawImpl,
+            size_t index);
 
     template<typename T>
     void set(const T & value);
@@ -24,14 +29,12 @@ public:
 
     void set(const LayoutedBlob & array);
 
-private:
-    friend class Draw;
+    void set(const void * data, size_t size);
 
 private:
-    Uniform(UniformImpl & impl);
-
-private:
-    UniformImpl * m_impl;
+    std::shared_ptr<DrawImpl>   m_drawImpl;
+    const DataLayoutField *     m_field = nullptr;  // Ref into m_drawImpl
+    size_t                      m_index = 0;
 };
 
 }

@@ -163,10 +163,6 @@ set(sources
 	Draw/Framebuffer.h
 	Draw/GL/GLBindVertexAttribute.cpp
 	Draw/GL/GLBindVertexAttribute.h
-	Draw/GL/GLFramebuffer.cpp
-	Draw/GL/GLFramebufferDesc.cpp
-	Draw/GL/GLFramebufferDesc.h
-	Draw/GL/GLFramebuffer.h
 	Draw/GL/GLSamplerState.cpp
 	Draw/GL/GLSamplerState.h
 	Draw/GL/GLSLSizeOf.cpp

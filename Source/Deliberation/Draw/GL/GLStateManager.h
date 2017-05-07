@@ -3,17 +3,15 @@
 #include <array>
 #include <memory>
 #include <unordered_map>
+#include <vector>
+
+#include <boost/optional.hpp>
 
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
-
-
 namespace deliberation
 {
-
-class GLFramebuffer;
-class GLFramebufferDesc;
 
 class GLStateManager final
 {
@@ -60,11 +58,10 @@ public:
     void bindTexture(gl::GLenum target, gl::GLuint texture);
     void enableScissorTest(bool enabled);
     void setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
-
-    /*
-        Framebuffer caching
-    */
-    std::shared_ptr<GLFramebuffer> framebuffer(const GLFramebufferDesc & desc);
+    void setDrawBuffer(gl::GLenum buf);
+    void setDrawBuffers(const std::vector<gl::GLenum> & bufs);
+    void bindVertexArray(gl::GLuint vertexArray);
+    void deleteVertexArray(gl::GLuint vertexArray);
 
 private:
     void applyEnableDisableState(gl::GLenum state, bool & current, bool target);
@@ -170,12 +167,8 @@ private:
     bool                                m_scissorTestEnabled;
     std::tuple<gl::GLint, gl::GLint, gl::GLsizei, gl::GLsizei>
                                         m_scissorRect;
-
-    /*
-
-    */
-    std::unordered_map<std::size_t,
-                       std::weak_ptr<GLFramebuffer>> m_glFramebuffers;
+    std::vector<gl::GLenum>             m_drawBuffers;
+    boost::optional<gl::GLuint>         m_vertexArray;
 };
 
 }

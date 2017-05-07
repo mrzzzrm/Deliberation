@@ -32,6 +32,8 @@ public:
     size_t count() const;
     const Blob & rawData() const;
 
+    void write(std::size_t offset, const void * src, size_t length);
+
     template<typename T>
     TypedBlobValueAccessor<T> field(const std::string & name);
 
