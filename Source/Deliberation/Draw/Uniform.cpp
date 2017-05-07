@@ -31,10 +31,11 @@ void Uniform::set(const void * data, size_t size)
 {
     Assert(
         size <= m_field->type().size() * m_field->arraySize(), "Out of range");
+    Assert(size % m_field->type().size() == 0, "Incomplete array field");
 
     m_drawImpl->uniformData.write(m_field->offset(), data, size);
     m_drawImpl->uniforms[m_index].assigned = true;
     m_drawImpl->uniforms[m_index].count =
-        (m_field->type().size() * m_field->arraySize()) / size;
+        size / m_field->type().size();
 }
 }

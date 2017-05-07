@@ -223,9 +223,6 @@ void Draw::setFramebuffer(
 
             if (iter != binding.end()) mappedTargetName = "o_" + iter->second;
 
-            std::cout << "Mapped target of " << fragmentOutput.name() + ": "
-                      << mappedTargetName << std::endl;
-
             for (size_t t = 0; t < colorTargets.size(); t++)
             {
                 auto &     colorTarget = colorTargets[t];
