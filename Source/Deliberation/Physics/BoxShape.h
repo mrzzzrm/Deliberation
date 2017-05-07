@@ -6,15 +6,11 @@
 
 #include <Deliberation/Physics/CollisionShape.h>
 
-
-
 namespace deliberation
 {
-
-class BoxShape final:
-    public CollisionShape
+class BoxShape final : public CollisionShape
 {
-public:
+  public:
     BoxShape(const glm::vec3 & halfExtent = glm::vec3());
 
     const glm::vec3 & halfExtent();
@@ -24,11 +20,10 @@ public:
     Box instanciate(const Transform3D & transform) const;
 
     // From CollisionShape
-    virtual AABB bounds(const Transform3D & transform) const override;
+    virtual AABB      bounds(const Transform3D & transform) const override;
     virtual glm::mat3 localInertia() const override;
 
-private:
+  private:
     glm::vec3 m_halfExtent;
 };
-
 }

@@ -2,23 +2,22 @@
 
 #include <glbinding/gl/enum.h>
 
-#include <stdint.h>
 #include <memory>
+#include <stdint.h>
 
 #include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
 {
-
 class QueryImpl;
 
 class Query final
 {
-public:
+  public:
     Query();
     ~Query();
 
-    int64_t resultI() const;
+    int64_t  resultI() const;
     uint64_t resultU() const;
 
     QueryType type() const;
@@ -29,15 +28,13 @@ public:
     void begin();
     void end();
 
-private:
+  private:
     friend class DrawContext;
 
-private:
+  private:
     Query(const std::shared_ptr<QueryImpl> & impl);
 
-private:
+  private:
     std::shared_ptr<QueryImpl> m_impl;
 };
-
 }
-

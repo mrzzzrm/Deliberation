@@ -15,19 +15,16 @@
 
 namespace deliberation
 {
-
-class Application:
-    public InputEventReceiver
+class Application : public InputEventReceiver
 {
-public:
-    Application(const std::string & name,
-                const std::string & prefixPath = ".");
+  public:
+    Application(const std::string & name, const std::string & prefixPath = ".");
     virtual ~Application();
 
-    Input & input();
+    Input &       input();
     const Input & input() const;
 
-    DrawContext & drawContext();
+    DrawContext &       drawContext();
     const DrawContext & drawContext() const;
 
     float fps() const;
@@ -36,36 +33,34 @@ public:
 
     void quit(int returnCode = 0);
 
-protected:
+  protected:
     virtual void onStartup();
     virtual void onShutdown();
     virtual void onFrame(float seconds);
 
-private:
+  private:
     void init();
     void handleWindowEvent(const SDL_Event & event);
 
-private:
-    std::string         m_name;
-    std::string         m_prefixPath;
-    bool                m_running = false;
-    bool                m_initialized = false;
-    int                 m_returnCode = 0;
+  private:
+    std::string m_name;
+    std::string m_prefixPath;
+    bool        m_running = false;
+    bool        m_initialized = false;
+    int         m_returnCode = 0;
 
-    FpsCounter          m_fpsCounter;
+    FpsCounter m_fpsCounter;
 
-    Optional<DrawContext>   m_drawContext;
+    Optional<DrawContext> m_drawContext;
 
-    SDL_Window *        m_displayWindow;
-    SDL_Renderer *      m_displayRenderer;
-    SDL_RendererInfo    m_displayRendererInfo;
-    SDL_GLContext       m_glContext;
+    SDL_Window *     m_displayWindow;
+    SDL_Renderer *   m_displayRenderer;
+    SDL_RendererInfo m_displayRendererInfo;
+    SDL_GLContext    m_glContext;
 
-    Optional<Input>     m_input;
+    Optional<Input> m_input;
 
-    int                 m_displayWidth = 1600;
-    int                 m_displayHeight = 900;
+    int m_displayWidth = 1600;
+    int m_displayHeight = 900;
 };
-
 }
-

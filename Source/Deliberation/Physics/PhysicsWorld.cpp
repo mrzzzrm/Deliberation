@@ -8,22 +8,20 @@
 #include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Physics/Contacts/Contact.h>
-#include <Deliberation/Physics/ReferenceBroadphase.h>
 #include <Deliberation/Physics/Narrowphase.h>
+#include <Deliberation/Physics/ReferenceBroadphase.h>
 #include <Deliberation/Physics/RigidBody.h>
 
 namespace
 {
-    const auto BAUMGARTE = 0.005f;
-    const auto LINEAR_SLOP = 0.005f;
-    const auto MAX_LINEAR_CORRECTION = 0.2f;
+const auto BAUMGARTE = 0.005f;
+const auto LINEAR_SLOP = 0.005f;
+const auto MAX_LINEAR_CORRECTION = 0.2f;
 }
 
 namespace deliberation
 {
-
-PhysicsWorld::PhysicsWorld(float timestep):
-    m_timestep(timestep)
+PhysicsWorld::PhysicsWorld(float timestep) : m_timestep(timestep)
 {
     m_narrowphase.reset(new Narrowphase());
     m_broadphase.reset(new ReferenceBroadphase(*m_narrowphase));
@@ -36,10 +34,7 @@ const PhysicsWorld::RigidBodies & PhysicsWorld::rigidBodies() const
     return m_rigidBodies;
 }
 
-float PhysicsWorld::timestep() const
-{
-    return m_timestep;
-}
+float PhysicsWorld::timestep() const { return m_timestep; }
 
 float PhysicsWorld::nextSimulationStepSeconds(float seconds)
 {
@@ -51,15 +46,9 @@ u32 PhysicsWorld::numNextSimulationSteps(float seconds)
     return (u32)std::floor((m_timeAccumulator + seconds) / m_timestep);
 }
 
-Narrowphase & PhysicsWorld::narrowphase()
-{
-    return *m_narrowphase;
-}
+Narrowphase & PhysicsWorld::narrowphase() { return *m_narrowphase; }
 
-const Narrowphase & PhysicsWorld::narrowphase() const
-{
-    return *m_narrowphase;
-}
+const Narrowphase & PhysicsWorld::narrowphase() const { return *m_narrowphase; }
 
 void PhysicsWorld::addRigidBody(const std::shared_ptr<RigidBody> & body)
 {
@@ -73,7 +62,9 @@ void PhysicsWorld::addRigidBody(const std::shared_ptr<RigidBody> & body)
 void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
 {
     auto index = body->index();
-    Assert(index != RigidBody::INVALID_INDEX, "Body was never added to PhysicsWorld");
+    Assert(
+        index != RigidBody::INVALID_INDEX,
+        "Body was never added to PhysicsWorld");
 
     m_rigidBodies.erase(index);
     m_broadphase->removeProxy(*body->proxy());
@@ -81,10 +72,7 @@ void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
     body->setIndex(RigidBody::INVALID_INDEX);
 }
 
-void PhysicsWorld::setGravity(float gravity)
-{
-    m_gravity = gravity;
-}
+void PhysicsWorld::setGravity(float gravity) { m_gravity = gravity; }
 
 float PhysicsWorld::update(float seconds)
 {
@@ -103,7 +91,9 @@ float PhysicsWorld::update(float seconds)
     return simulatedTime;
 }
 
-void PhysicsWorld::lineCast(const Ray3D &ray, const std::function<bool(const RayCastIntersection &)> &handler) const
+void PhysicsWorld::lineCast(
+    const Ray3D &                                            ray,
+    const std::function<bool(const RayCastIntersection &)> & handler) const
 {
     auto broadphaseResult = m_broadphase->lineCast(ray);
 
@@ -220,13 +210,13 @@ void PhysicsWorld::warmStart(Contact & contact) const
     auto & bodyA = contact.bodyA();
     auto & bodyB = contact.bodyB();
 
-    auto mA = bodyA.inverseMass();
+    auto   mA = bodyA.inverseMass();
     auto & iA = bodyA.worldInverseInertia();
     auto & vA = bodyA.linearVelocity();
     auto & wA = bodyA.angularVelocity();
     auto & cA = bodyA.transform().position();
 
-    auto mB = bodyB.inverseMass();
+    auto   mB = bodyB.inverseMass();
     auto & iB = bodyB.worldInverseInertia();
     auto & vB = bodyB.linearVelocity();
     auto & wB = bodyB.angularVelocity();
@@ -263,13 +253,13 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
     auto & bodyA = contact.bodyA();
     auto & bodyB = contact.bodyB();
 
-    auto mA = bodyA.inverseMass();
+    auto   mA = bodyA.inverseMass();
     auto & iA = bodyA.worldInverseInertia();
     auto & vA = bodyA.linearVelocity();
     auto & wA = bodyA.angularVelocity();
     auto & cA = bodyA.transform().position();
 
-    auto mB = bodyB.inverseMass();
+    auto   mB = bodyB.inverseMass();
     auto & iB = bodyB.worldInverseInertia();
     auto & vB = bodyB.linearVelocity();
     auto & wB = bodyB.angularVelocity();
@@ -297,23 +287,31 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
         // Relative velocity along tangent
         auto vRelTangent = vRel - (vRelNormal * point.normal);
 
-        if (vRelTangent == glm::vec3(0.0f)) {
+        if (vRelTangent == glm::vec3(0.0f))
+        {
             continue;
         }
 
         auto tangent = glm::normalize(vRelTangent);
 
-        auto tangentMass = glm::dot(glm::cross(iA * glm::cross(rA, tangent), rA) +
-                                    glm::cross(iB * glm::cross(rB, tangent), rB), tangent) + mA + mB;
+        auto tangentMass = glm::dot(
+                               glm::cross(iA * glm::cross(rA, tangent), rA) +
+                                   glm::cross(iB * glm::cross(rB, tangent), rB),
+                               tangent) +
+                           mA + mB;
 
-        if (tangentMass == 0.0f) {
+        if (tangentMass == 0.0f)
+        {
             continue;
         }
 
         auto lambda = -glm::length(vRelTangent) / tangentMass;
 
         auto maxFriction = contact.friction() * point.normalImpulseAccumulator;
-        auto newImpulse = std::max(-maxFriction, std::min<float>(maxFriction, point.tangentImpulseAccumulator + lambda));
+        auto newImpulse = std::max(
+            -maxFriction,
+            std::min<float>(
+                maxFriction, point.tangentImpulseAccumulator + lambda));
         lambda = newImpulse - point.tangentImpulseAccumulator;
 
         auto P = lambda * tangent;
@@ -336,8 +334,8 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
         auto rB = point.position - cB;
 
         auto & n = point.normal;
-        auto normalMass = point.normalMass;
-        auto velocityBias = point.velocityBias;
+        auto   normalMass = point.normalMass;
+        auto   velocityBias = point.velocityBias;
 
         // Relative velocity along normal
         auto vra = bodyA.localVelocity(rA);
@@ -349,12 +347,14 @@ void PhysicsWorld::solveContactVelocities(Contact & contact)
 
         auto lambda = vDelta / normalMass;
 
-        auto newNormalImpulseAccumulator = std::max(lambda + point.normalImpulseAccumulator, 0.0f);
+        auto newNormalImpulseAccumulator =
+            std::max(lambda + point.normalImpulseAccumulator, 0.0f);
         lambda = newNormalImpulseAccumulator - point.normalImpulseAccumulator;
         point.normalImpulseAccumulator += lambda;
 
         // Bias lambda
-        auto bias = (BAUMGARTE * std::max(point.depth - LINEAR_SLOP, 0.0f)) / m_timestep;
+        auto bias = (BAUMGARTE * std::max(point.depth - LINEAR_SLOP, 0.0f)) /
+                    m_timestep;
 
         // J - impulse magnitude
         auto J = (lambda + bias) * n;
@@ -407,7 +407,9 @@ void PhysicsWorld::solvePositions(Contact & contact)
         //  auto minSeparation = std::min(minSeparation, separation);
 
         // Prevent large corrections and allow slop.
-        auto C = std::min(std::max(0.5f * (separation + LINEAR_SLOP), -MAX_LINEAR_CORRECTION), 0.0f);
+        auto C = std::min(
+            std::max(0.5f * (separation + LINEAR_SLOP), -MAX_LINEAR_CORRECTION),
+            0.0f);
 
         // Compute the effective mass.
         auto normalMass = point.normalMass;
@@ -417,15 +419,16 @@ void PhysicsWorld::solvePositions(Contact & contact)
 
         auto P = impulse * n;
 
-        std::cout << P << " " << separation << " " << (-mA * P) << " " << (mB * P) << std::endl;
+        std::cout << P << " " << separation << " " << (-mA * P) << " "
+                  << (mB * P) << std::endl;
 
         transformA.setPosition(transformA.position() - mA * P);
-        transformA.setOrientation(QuaternionAxisRotation(transformA.orientation(), iA * glm::cross(rA, -P)));
+        transformA.setOrientation(QuaternionAxisRotation(
+            transformA.orientation(), iA * glm::cross(rA, -P)));
 
         transformB.setPosition(transformB.position() + mB * P);
-        transformB.setOrientation(QuaternionAxisRotation(transformB.orientation(), iB * glm::cross(rB, P)));
+        transformB.setOrientation(QuaternionAxisRotation(
+            transformB.orientation(), iB * glm::cross(rB, P)));
     }
 }
-
 }
-

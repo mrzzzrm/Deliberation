@@ -6,16 +6,10 @@
 
 namespace deliberation
 {
-
 WorldProfilerScope::WorldProfilerScope(
-    SystemBase & system,
-    const std::string & phase,
-    DurationMicros micros):
-    m_system(&system),
-    m_phase(phase),
-    m_micros(micros)
+    SystemBase & system, const std::string & phase, DurationMicros micros)
+    : m_system(&system), m_phase(phase), m_micros(micros)
 {
-
 }
 
 std::string WorldProfilerScope::toString() const
@@ -44,5 +38,4 @@ void WorldProfiler::frameComplete()
     std::sort(m_lastFrameScopes.begin(), m_lastFrameScopes.end());
     m_currentFrameScopes.clear();
 }
-
 }

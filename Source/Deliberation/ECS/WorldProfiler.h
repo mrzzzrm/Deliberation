@@ -8,38 +8,35 @@
 
 namespace deliberation
 {
-
 class SystemBase;
 
 class WorldProfilerScope final
 {
-public:
-    WorldProfilerScope(SystemBase & system,
-                       const std::string & phase,
-                       DurationMicros micros);
+  public:
+    WorldProfilerScope(
+        SystemBase & system, const std::string & phase, DurationMicros micros);
 
     std::string toString() const;
 
     bool operator<(const WorldProfilerScope & rhs) const;
 
-private:
-    SystemBase *        m_system;
-    std::string         m_phase;
-    DurationMicros      m_micros;
+  private:
+    SystemBase *   m_system;
+    std::string    m_phase;
+    DurationMicros m_micros;
 };
 
 class WorldProfiler final
 {
-public:
+  public:
     const std::vector<WorldProfilerScope> & scopes() const;
 
     void addScope(const WorldProfilerScope & scope);
 
     void frameComplete();
 
-private:
+  private:
     std::vector<WorldProfilerScope> m_currentFrameScopes;
     std::vector<WorldProfilerScope> m_lastFrameScopes;
 };
-
 }

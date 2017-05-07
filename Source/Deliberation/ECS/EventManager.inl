@@ -2,25 +2,20 @@
 
 namespace deliberation
 {
-
 template<typename EventType, typename ReceiverType>
 void EventManager::subscribe(ReceiverType & receiver)
 {
-    class Callback:
-        public ICallback
+    class Callback : public ICallback
     {
-    public:
-        Callback(ReceiverType & receiver):
-            m_receiver(receiver)
-        {
-        }
+      public:
+        Callback(ReceiverType & receiver) : m_receiver(receiver) {}
 
         virtual void receive(const void * event) override
         {
-            m_receiver.receive(*(const EventType*)event);
+            m_receiver.receive(*(const EventType *)event);
         }
 
-    private:
+      private:
         ReceiverType & m_receiver;
     };
 
@@ -33,7 +28,6 @@ void EventManager::subscribe(ReceiverType & receiver)
 template<typename EventType, typename ReceiverType>
 void EventManager::unsubscribe(ReceiverType & receiver)
 {
-
 }
 
 template<typename EventType>
@@ -46,6 +40,4 @@ void EventManager::emit(const EventType & event)
         receiver->receive(&event);
     }
 }
-
 }
-

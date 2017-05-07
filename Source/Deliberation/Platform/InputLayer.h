@@ -6,21 +6,18 @@
 
 namespace deliberation
 {
-
 class Input;
 class MouseButtonEvent;
 
-class InputLayer:
-    public InputEventReceiver
+class InputLayer : public InputEventReceiver
 {
-public:
+  public:
     InputLayer(i32 inputPriority);
     virtual ~InputLayer() = default;
 
     i32 inputPriority() const { return m_inputPriority; }
 
-private:
-    i32     m_inputPriority;
+  private:
+    i32 m_inputPriority;
 };
-
 }

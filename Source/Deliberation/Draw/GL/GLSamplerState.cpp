@@ -9,7 +9,6 @@
 
 namespace deliberation
 {
-
 GLSamplerState::GLSamplerState()
 {
     gl::glGenSamplers(1, &m_name);
@@ -20,15 +19,9 @@ GLSamplerState::GLSamplerState()
     m_wrap[2] = gl::GL_REPEAT;
 }
 
-GLSamplerState::~GLSamplerState()
-{
-    gl::glDeleteSamplers(1, &m_name);
-}
+GLSamplerState::~GLSamplerState() { gl::glDeleteSamplers(1, &m_name); }
 
-gl::GLuint GLSamplerState::name() const
-{
-    return m_name;
-}
+gl::GLuint GLSamplerState::name() const { return m_name; }
 
 void GLSamplerState::setWrap(unsigned int index, gl::GLenum wrap)
 {
@@ -40,10 +33,7 @@ void GLSamplerState::setWrap(unsigned int index, gl::GLenum wrap)
     }
 
     static const gl::GLenum mapping[] = {
-        gl::GL_TEXTURE_WRAP_S,
-        gl::GL_TEXTURE_WRAP_T,
-        gl::GL_TEXTURE_WRAP_R
-    };
+        gl::GL_TEXTURE_WRAP_S, gl::GL_TEXTURE_WRAP_T, gl::GL_TEXTURE_WRAP_R};
 
     gl::glSamplerParameteri(m_name, mapping[index], (gl::GLint)wrap);
     m_wrap[index] = wrap;
@@ -51,13 +41,13 @@ void GLSamplerState::setWrap(unsigned int index, gl::GLenum wrap)
 
 void GLSamplerState::setMinFilter(gl::GLenum filter)
 {
-    gl::glSamplerParameteri(m_name, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)filter);
+    gl::glSamplerParameteri(
+        m_name, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)filter);
 }
 
 void GLSamplerState::setMagFilter(gl::GLenum filter)
 {
-    gl::glSamplerParameteri(m_name, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)filter);
+    gl::glSamplerParameteri(
+        m_name, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)filter);
 }
-
 }
-

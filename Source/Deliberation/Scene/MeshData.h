@@ -4,28 +4,27 @@
 
 #include <Deliberation/Draw/Texture.h>
 
-
-
 namespace deliberation
 {
-
 class MeshData
 {
-public:
+  public:
     MeshData() = default;
-    MeshData(LayoutedBlob && vertices, LayoutedBlob && indices, std::vector<Texture> textures = {});
+    MeshData(
+        LayoutedBlob &&      vertices,
+        LayoutedBlob &&      indices,
+        std::vector<Texture> textures = {});
 
-    const LayoutedBlob & vertices() const;
-    const LayoutedBlob & indices() const;
+    const LayoutedBlob &         vertices() const;
+    const LayoutedBlob &         indices() const;
     const std::vector<Texture> & textures() const;
 
     LayoutedBlob takeVertices();
     LayoutedBlob takeIndices();
 
-private:
-    LayoutedBlob            m_vertices;
-    LayoutedBlob            m_indices;
-    std::vector<Texture>    m_textures;
+  private:
+    LayoutedBlob         m_vertices;
+    LayoutedBlob         m_indices;
+    std::vector<Texture> m_textures;
 };
-
 }

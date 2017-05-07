@@ -8,42 +8,46 @@
 
 namespace deliberation
 {
-
 FramebufferDesc::FramebufferDesc(
-    u32 width,
-    u32 height,
-    const std::vector<RenderTargetDesc> & colorTargetDescs,
-    const boost::optional<RenderTargetDesc> & depthTargetDesc
-    ): width(width), height(height), colorTargetDescs(colorTargetDescs), depthTargetDesc(depthTargetDesc)
+    u32                                       width,
+    u32                                       height,
+    const std::vector<RenderTargetDesc> &     colorTargetDescs,
+    const boost::optional<RenderTargetDesc> & depthTargetDesc)
+    : width(width)
+    , height(height)
+    , colorTargetDescs(colorTargetDescs)
+    , depthTargetDesc(depthTargetDesc)
 {
-    Assert(!colorTargetDescs.empty() || depthTargetDesc,
+    Assert(
+        !colorTargetDescs.empty() || depthTargetDesc,
         "Framebuffer must at least have one color target or a depth target")
 
-    for (const auto & colorTargetDesc : colorTargetDescs)
+        for (const auto & colorTargetDesc : colorTargetDescs)
     {
         Assert(!colorTargetDesc.name.empty(), "Color Target must be named");
 
         if (colorTargetDesc.format == PixelFormat_None)
         {
-            Assert(colorTargetDesc.surface.width() == width &&
-                   colorTargetDesc.surface.height() == height,
-                   "Framebuffer/RenderTarget resolution mistach");
+            Assert(
+                colorTargetDesc.surface.width() == width &&
+                    colorTargetDesc.surface.height() == height,
+                "Framebuffer/RenderTarget resolution mistach");
         }
     }
 
     if (depthTargetDesc && depthTargetDesc->format == PixelFormat_None)
     {
         Assert(depthTargetDesc->name.empty(), "Depth target must not be named");
-        Assert(depthTargetDesc->surface.width() == width &&
-                   depthTargetDesc->surface.height() == height,
-               "Framebuffer/RenderTarget resolution mistach");
+        Assert(
+            depthTargetDesc->surface.width() == width &&
+                depthTargetDesc->surface.height() == height,
+            "Framebuffer/RenderTarget resolution mistach");
     }
 }
 
-Framebuffer::Framebuffer(const std::shared_ptr<FramebufferImpl> & impl):
-    m_impl(impl)
+Framebuffer::Framebuffer(const std::shared_ptr<FramebufferImpl> & impl)
+    : m_impl(impl)
 {
-
 }
 
 unsigned int Framebuffer::width() const
@@ -123,6 +127,4 @@ Clear Framebuffer::createClear()
 
     return m_impl->drawContext.createClear(*this);
 }
-
 }
-

@@ -8,20 +8,16 @@
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/DrawContext.h>
+#include <Deliberation/Draw/GL/GLType.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
-#include <Deliberation/Draw/GL/GLType.h>
 
 #include "ProgramImpl.h"
 
 namespace deliberation
 {
-
-DrawImpl::DrawImpl(DrawContext & drawContext,
-                   const Program & program):
-    drawContext(drawContext),
-    program(program.m_impl),
-    glVertexArray(0u)
+DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
+    : drawContext(drawContext), program(program.m_impl), glVertexArray(0u)
 {
     /*
         TODO
@@ -35,7 +31,8 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
     uniformFieldsDescs.reserve(this->program->interface.uniforms().size());
     for (const auto & uniform : this->program->interface.uniforms())
     {
-        uniformFieldsDescs.emplace_back(uniform.name(), uniform.type(), uniform.arraySize());
+        uniformFieldsDescs.emplace_back(
+            uniform.name(), uniform.type(), uniform.arraySize());
     }
 
     std::cout << this->program->interface.toString() << std::endl;
@@ -52,7 +49,9 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
         {
             auto & sampler = this->program->interface.samplers()[s];
             samplers.emplace_back(std::make_shared<SamplerImpl>(
-                (gl::GLenum)sampler.type(), TypeToGLType(sampler.valueType()), sampler.location()));
+                (gl::GLenum)sampler.type(),
+                TypeToGLType(sampler.valueType()),
+                sampler.location()));
         }
     }
 
@@ -61,7 +60,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext,
 
     // Allocate Uniform Buffer Bindings
     uniformBuffers.resize(this->program->interface.uniformBlocks().size());
-    
+
     // Allocate vertex attribute bindings
     attributeBindings.resize(this->program->interface.attributes().size());
     valueAttributes = Blob(0);
@@ -75,12 +74,13 @@ DrawImpl::~DrawImpl()
     }
 }
 
-void DrawImpl::setAttribute(const ProgramInterfaceVertexAttribute & attribute,
-                        const void * data)
+void DrawImpl::setAttribute(
+    const ProgramInterfaceVertexAttribute & attribute, const void * data)
 {
     auto & binding = attributeBindings[attribute.index()];
 
-    if (binding.which() == 0) // Attribute not yet assigned, allocate new space in value blob
+    if (binding.which() ==
+        0) // Attribute not yet assigned, allocate new space in value blob
     {
         const auto offset = valueAttributes.size();
         valueAttributes.resize(offset + attribute.type().size());
@@ -92,14 +92,14 @@ void DrawImpl::setAttribute(const ProgramInterfaceVertexAttribute & attribute,
         binding = valueBinding;
     }
 
-    Assert(binding.which() != 2, "Vertex attribute '" + attribute.name() + "' is already bound to buffer");
+    Assert(
+        binding.which() != 2,
+        "Vertex attribute '" + attribute.name() +
+            "' is already bound to buffer");
 
     auto & valueBinding = boost::get<VertexAttributeValueBinding>(binding);
 
     valueAttributes.write(valueBinding.offset, data, attribute.type().size());
     dirtyValueAttributes.emplace_back(attribute.index());
 }
-
-
 }
-

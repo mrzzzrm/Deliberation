@@ -9,15 +9,13 @@
 
 namespace deliberation
 {
-
 class Camera3D;
 class DrawContext;
 class Framebuffer;
 
-class DebugGroundPlaneRenderer:
-    public Renderer
+class DebugGroundPlaneRenderer : public Renderer
 {
-public:
+  public:
     DebugGroundPlaneRenderer(RenderManager & renderManager);
 
     void setSize(float size);
@@ -27,15 +25,13 @@ public:
 
     void registerRenderNodes() override;
 
-private:
+  private:
     friend class DebugGroundPlaneNode;
 
-private:
+  private:
     float m_size = 3.0f;
     float m_quadSize = 0.5f;
     float m_radius = 3.0f;
-    bool m_renderToGBuffer = false;
+    bool  m_renderToGBuffer = false;
 };
-
 }
-

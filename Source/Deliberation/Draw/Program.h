@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 class DrawImpl;
 class ProgramImpl;
 class DrawContext;
@@ -12,24 +11,22 @@ class ProgramInterface;
 
 class Program final
 {
-public:
+  public:
     Program();
 
     DrawContext & drawContext() const;
 
     const ProgramInterface & interface() const;
 
-private:
+  private:
     friend class DrawContext;
     friend class Draw;
     friend class DrawImpl;
 
-private:
+  private:
     Program(const std::shared_ptr<ProgramImpl> & impl);
 
-private:
+  private:
     std::shared_ptr<ProgramImpl> m_impl;
 };
-
 }
-

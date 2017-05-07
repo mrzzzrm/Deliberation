@@ -10,22 +10,21 @@
 
 namespace deliberation
 {
-
 class Camera3D final
 {
-public:
+  public:
     Camera3D();
 
     const glm::vec3 & position() const;
     const glm::quat & orientation() const;
-    float zNear() const;
-    float zFar() const;
-    float yFoV() const;
-    float aspectRatio() const;
-    const Pose3D & pose() const;
+    float             zNear() const;
+    float             zFar() const;
+    float             yFoV() const;
+    float             aspectRatio() const;
+    const Pose3D &    pose() const;
 
     void setPosition(const glm::vec3 & position);
-    void setOrientation(const glm::quat& orientation);
+    void setOrientation(const glm::quat & orientation);
     void setZNear(float zNear);
     void setZFar(float zFar);
     void setYFoV(float yFoV);
@@ -42,21 +41,19 @@ public:
 
     std::string toString() const;
 
-private:
+  private:
     glm::vec2 zPlaneSize(float z) const;
 
-private:
-    Pose3D              m_pose;
-    float               m_zNear;
-    float               m_zFar;
-    float               m_yFoV;
-    float               m_aspectRatio;
-    mutable bool        m_viewDirty;
-    mutable bool        m_projectionDirty;
-    mutable glm::mat4   m_view;
-    mutable glm::mat4   m_projection;
-    mutable glm::mat4   m_viewProjection;
+  private:
+    Pose3D            m_pose;
+    float             m_zNear;
+    float             m_zFar;
+    float             m_yFoV;
+    float             m_aspectRatio;
+    mutable bool      m_viewDirty;
+    mutable bool      m_projectionDirty;
+    mutable glm::mat4 m_view;
+    mutable glm::mat4 m_projection;
+    mutable glm::mat4 m_viewProjection;
 };
-
 }
-

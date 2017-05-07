@@ -12,29 +12,24 @@ using namespace deliberation;
 
 namespace
 {
-
-std::string dummyToString(const void*)
-{
-    return "";
-}
+std::string dummyToString(const void *) { return ""; }
 
 template<typename T>
 std::string toString(const void * ptr)
 {
     std::stringstream stream;
-    stream << *((const T*)ptr);
+    stream << *((const T *)ptr);
     return stream.str();
 }
 
 struct TypeData
 {
-    const char *        name;
-    size_t              size;
-    std::function<std::string(const void*)>
-                        toString;
-    u8                  numRows;
-    u8                  numColumns;
-    ElementalType &     elementalType;
+    const char *                             name;
+    size_t                                   size;
+    std::function<std::string(const void *)> toString;
+    u8                                       numRows;
+    u8                                       numColumns;
+    ElementalType &                          elementalType;
 };
 
 TypeData TYPE_DATA[] = {
@@ -50,64 +45,133 @@ TypeData TYPE_DATA[] = {
     {"Vec2", sizeof(glm::vec2), toString<glm::vec2>, 2, 1, ElementalType_Float},
     {"Vec3", sizeof(glm::vec3), toString<glm::vec3>, 3, 1, ElementalType_Float},
     {"Vec4", sizeof(glm::vec4), toString<glm::vec4>, 4, 1, ElementalType_Float},
-    {"I8Vec2", sizeof(glm::i8vec2), toString<glm::i8vec2>, 2, 1, ElementalType_I8},
-    {"I8Vec3", sizeof(glm::i8vec3), toString<glm::i8vec3>, 3, 1, ElementalType_I8},
-    {"I8Vec4", sizeof(glm::i8vec4), toString<glm::i8vec4>, 4, 1, ElementalType_I8},
-    {"I16Vec2", sizeof(glm::i16vec2), toString<glm::i16vec2>, 2, 1, ElementalType_I16},
-    {"I16Vec3", sizeof(glm::i16vec3), toString<glm::i16vec3>, 3, 1, ElementalType_I16},
-    {"I16Vec4", sizeof(glm::i16vec4), toString<glm::i16vec4>, 4, 1, ElementalType_I16},
-    {"IVec2", sizeof(glm::i32vec2), toString<glm::i32vec2>, 2, 1, ElementalType_I32},
-    {"IVec3", sizeof(glm::i32vec3), toString<glm::i32vec3>, 3, 1, ElementalType_I32},
-    {"IVec4", sizeof(glm::i32vec4), toString<glm::i32vec4>, 4, 1, ElementalType_I32},
-    {"U8Vec2", sizeof(glm::u8vec2), toString<glm::u8vec2>, 2, 1, ElementalType_U8},
-    {"U8Vec3", sizeof(glm::u8vec3), toString<glm::u8vec3>, 3, 1, ElementalType_U8},
-    {"U8Vec4", sizeof(glm::u8vec4), toString<glm::u8vec4>, 4, 1, ElementalType_U8},
-    {"U16Vec2", sizeof(glm::u16vec2), toString<glm::u16vec2>, 2, 1, ElementalType_U16},
-    {"U16Vec3", sizeof(glm::u16vec3), toString<glm::u16vec3>, 3, 1, ElementalType_U16},
-    {"u16Vec4", sizeof(glm::u16vec4), toString<glm::u16vec4>, 4, 1, ElementalType_U16},
-    {"UVec2", sizeof(glm::u32vec2), toString<glm::u32vec2>, 2, 1, ElementalType_U32},
-    {"UVec3", sizeof(glm::u32vec3), toString<glm::u32vec3>, 3, 1, ElementalType_U32},
-    {"UVec4", sizeof(glm::u32vec4), toString<glm::u32vec4>, 4, 1, ElementalType_U32},
+    {"I8Vec2",
+     sizeof(glm::i8vec2),
+     toString<glm::i8vec2>,
+     2,
+     1,
+     ElementalType_I8},
+    {"I8Vec3",
+     sizeof(glm::i8vec3),
+     toString<glm::i8vec3>,
+     3,
+     1,
+     ElementalType_I8},
+    {"I8Vec4",
+     sizeof(glm::i8vec4),
+     toString<glm::i8vec4>,
+     4,
+     1,
+     ElementalType_I8},
+    {"I16Vec2",
+     sizeof(glm::i16vec2),
+     toString<glm::i16vec2>,
+     2,
+     1,
+     ElementalType_I16},
+    {"I16Vec3",
+     sizeof(glm::i16vec3),
+     toString<glm::i16vec3>,
+     3,
+     1,
+     ElementalType_I16},
+    {"I16Vec4",
+     sizeof(glm::i16vec4),
+     toString<glm::i16vec4>,
+     4,
+     1,
+     ElementalType_I16},
+    {"IVec2",
+     sizeof(glm::i32vec2),
+     toString<glm::i32vec2>,
+     2,
+     1,
+     ElementalType_I32},
+    {"IVec3",
+     sizeof(glm::i32vec3),
+     toString<glm::i32vec3>,
+     3,
+     1,
+     ElementalType_I32},
+    {"IVec4",
+     sizeof(glm::i32vec4),
+     toString<glm::i32vec4>,
+     4,
+     1,
+     ElementalType_I32},
+    {"U8Vec2",
+     sizeof(glm::u8vec2),
+     toString<glm::u8vec2>,
+     2,
+     1,
+     ElementalType_U8},
+    {"U8Vec3",
+     sizeof(glm::u8vec3),
+     toString<glm::u8vec3>,
+     3,
+     1,
+     ElementalType_U8},
+    {"U8Vec4",
+     sizeof(glm::u8vec4),
+     toString<glm::u8vec4>,
+     4,
+     1,
+     ElementalType_U8},
+    {"U16Vec2",
+     sizeof(glm::u16vec2),
+     toString<glm::u16vec2>,
+     2,
+     1,
+     ElementalType_U16},
+    {"U16Vec3",
+     sizeof(glm::u16vec3),
+     toString<glm::u16vec3>,
+     3,
+     1,
+     ElementalType_U16},
+    {"u16Vec4",
+     sizeof(glm::u16vec4),
+     toString<glm::u16vec4>,
+     4,
+     1,
+     ElementalType_U16},
+    {"UVec2",
+     sizeof(glm::u32vec2),
+     toString<glm::u32vec2>,
+     2,
+     1,
+     ElementalType_U32},
+    {"UVec3",
+     sizeof(glm::u32vec3),
+     toString<glm::u32vec3>,
+     3,
+     1,
+     ElementalType_U32},
+    {"UVec4",
+     sizeof(glm::u32vec4),
+     toString<glm::u32vec4>,
+     4,
+     1,
+     ElementalType_U32},
     {"Mat2", sizeof(glm::mat2), toString<glm::mat2>, 2, 2, ElementalType_Float},
     {"Mat3", sizeof(glm::mat3), toString<glm::mat3>, 3, 3, ElementalType_Float},
     {"Mat4", sizeof(glm::mat4), toString<glm::mat4>, 4, 4, ElementalType_Float},
-    {"Bool", sizeof(bool), toString<bool>, 1, 1, ElementalType_Bool}
-};
-
+    {"Bool", sizeof(bool), toString<bool>, 1, 1, ElementalType_Bool}};
 }
 
 namespace deliberation
 {
+Type::Type(u8 id) : m_id(id) {}
 
-Type::Type(u8 id):
-    m_id(id)
-{
-}
+const char * Type::name() const { return TYPE_DATA[m_id].name; }
 
-const char * Type::name() const
-{
-    return TYPE_DATA[m_id].name;
-}
+size_t Type::size() const { return TYPE_DATA[m_id].size; }
 
-size_t Type::size() const
-{
-    return TYPE_DATA[m_id].size;
-}
+u32 Type::id() const { return m_id; }
 
-u32 Type::id() const
-{
-    return m_id;
-}
+u8 Type::numRows() const { return TYPE_DATA[m_id].numRows; }
 
-u8 Type::numRows() const
-{
-    return TYPE_DATA[m_id].numRows;
-}
-
-u8 Type::numColumns() const
-{
-    return TYPE_DATA[m_id].numColumns;
-}
+u8 Type::numColumns() const { return TYPE_DATA[m_id].numColumns; }
 
 ElementalType Type::elementalType() const
 {
@@ -119,15 +183,9 @@ std::string Type::toString(const void * ptr) const
     return TYPE_DATA[m_id].toString(ptr);
 }
 
-bool Type::operator==(const Type & other) const
-{
-    return m_id == other.m_id;
-}
+bool Type::operator==(const Type & other) const { return m_id == other.m_id; }
 
-bool Type::operator!=(const Type & other) const
-{
-    return m_id != other.m_id;
-}
+bool Type::operator!=(const Type & other) const { return m_id != other.m_id; }
 
 Type Type_None(TYPE_NONE);
 Type Type_I8(TYPE_U8);
@@ -169,5 +227,4 @@ Type Type_Mat2(TYPE_MAT2);
 Type Type_Mat3(TYPE_MAT3);
 Type Type_Mat4(TYPE_MAT4);
 Type Type_Bool(TYPE_BOOL);
-
 }

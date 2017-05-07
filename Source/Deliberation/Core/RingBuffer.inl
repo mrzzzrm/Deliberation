@@ -6,36 +6,35 @@
 
 namespace deliberation
 {
-
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::IteratorT(QualifiedRingBufferType & buffer, std::size_t index):
-    m_buffer(buffer),
-    m_index(index)
+RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::IteratorT(
+    QualifiedRingBufferType & buffer, std::size_t index)
+    : m_buffer(buffer), m_index(index)
 {
-
 }
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
 template<typename OtherIteratorT>
-RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::IteratorT(const OtherIteratorT & other):
-    m_buffer(other.m_buffer),
-    m_index(other.m_index)
+RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::IteratorT(
+    const OtherIteratorT & other)
+    : m_buffer(other.m_buffer), m_index(other.m_index)
 {
-
 }
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-QualifiedT & RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator*()
+QualifiedT & RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::
+             operator*()
 {
     return m_buffer.at(m_index);
 }
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> & RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++()
+typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> &
+    RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++()
 {
     m_index++;
     return *this;
@@ -43,7 +42,9 @@ typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> & RingBuf
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator++(int)
+typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>
+    RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::
+    operator++(int)
 {
     auto result = *this;
     m_index++;
@@ -52,27 +53,21 @@ typename RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT> RingBuffe
 
 template<typename T>
 template<typename QualifiedRingBufferType, typename QualifiedT>
-bool RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::operator!=(const IteratorT & other)
+bool RingBuffer<T>::IteratorT<QualifiedRingBufferType, QualifiedT>::
+     operator!=(const IteratorT & other)
 {
     return &m_buffer != &other.m_buffer || m_index != other.m_index;
 }
 
 template<typename T>
-RingBuffer<T>::RingBuffer():
-    m_vec(),
-    m_begin(0),
-    m_size(0)
+RingBuffer<T>::RingBuffer() : m_vec(), m_begin(0), m_size(0)
 {
-
 }
 
 template<typename T>
-RingBuffer<T>::RingBuffer(std::size_t capacity):
-    m_vec(capacity, T{}),
-    m_begin(0),
-    m_size(0)
+RingBuffer<T>::RingBuffer(std::size_t capacity)
+    : m_vec(capacity, T{}), m_begin(0), m_size(0)
 {
-
 }
 
 template<typename T>
@@ -162,10 +157,12 @@ void RingBuffer<T>::reserve(std::size_t capacity)
     std::vector<T> newVec(capacity);
 
     std::size_t beginA = m_begin;
-    std::size_t endA = m_begin + std::min(std::min(capacity, m_size), m_vec.size() - m_begin);
-    std::copy(std::make_move_iterator(m_vec.begin() + beginA),
-              std::make_move_iterator(m_vec.begin() + endA),
-              newVec.begin());
+    std::size_t endA =
+        m_begin + std::min(std::min(capacity, m_size), m_vec.size() - m_begin);
+    std::copy(
+        std::make_move_iterator(m_vec.begin() + beginA),
+        std::make_move_iterator(m_vec.begin() + endA),
+        newVec.begin());
 
     std::size_t sizeA = endA - beginA;
     std::size_t size = sizeA;
@@ -173,10 +170,11 @@ void RingBuffer<T>::reserve(std::size_t capacity)
     if (sizeA < capacity && sizeA < m_size)
     {
         std::size_t endB = std::min(capacity - sizeA, m_size - sizeA);
-        std::copy(std::make_move_iterator(m_vec.begin()),
-                  std::make_move_iterator(m_vec.begin() + endB),
-                  newVec.begin() + sizeA);
-         size += endB;
+        std::copy(
+            std::make_move_iterator(m_vec.begin()),
+            std::make_move_iterator(m_vec.begin() + endB),
+            newVec.begin() + sizeA);
+        size += endB;
     }
 
     m_vec = std::move(newVec);
@@ -213,7 +211,8 @@ std::string RingBuffer<T>::toString() const
 {
     std::stringstream stream;
 
-    stream << "[Begin: " << m_begin << "; Size: " << size() << "; Capacity: " << capacity() << "; Elements: {";
+    stream << "[Begin: " << m_begin << "; Size: " << size()
+           << "; Capacity: " << capacity() << "; Elements: {";
     for (auto & value : *this)
     {
         stream << value << ", ";
@@ -221,7 +220,4 @@ std::string RingBuffer<T>::toString() const
     stream << "}]";
     return stream.str();
 }
-
-
 }
-

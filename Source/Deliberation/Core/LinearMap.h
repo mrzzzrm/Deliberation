@@ -7,40 +7,37 @@
 
 #include <Deliberation/Core/Optional.h>
 
-
-
 namespace deliberation
 {
-
 template<typename Value>
 class LinearMap final
 {
-public:
+  public:
     struct Iterator
     {
-        LinearMap<Value> &                       map;
-        Optional<std::pair<std::size_t, Value&>> pair;
+        LinearMap<Value> &                        map;
+        Optional<std::pair<std::size_t, Value &>> pair;
 
         Iterator(LinearMap<Value> & map, std::size_t index);
         Iterator(const Iterator & other);
-        const std::pair<std::size_t, Value&> & operator*();
-        Iterator & operator++();
+        const std::pair<std::size_t, Value &> & operator*();
+        Iterator &                              operator++();
         bool operator!=(const Iterator & other) const;
     };
 
     struct CIterator
     {
-        const LinearMap<Value> &                       map;
-        Optional<std::pair<std::size_t, const Value&>> pair;
+        const LinearMap<Value> &                        map;
+        Optional<std::pair<std::size_t, const Value &>> pair;
 
         CIterator(const LinearMap<Value> & map, std::size_t index);
         CIterator(const CIterator & other);
-        const std::pair<std::size_t, const Value&> & operator*();
-        CIterator & operator++();
+        const std::pair<std::size_t, const Value &> & operator*();
+        CIterator &                                   operator++();
         bool operator!=(const CIterator & other) const;
     };
 
-public:
+  public:
     LinearMap();
 
     bool contains(std::size_t key) const;
@@ -49,10 +46,10 @@ public:
 
     std::size_t size() const;
 
-    Value & operator[](std::size_t key);
+    Value &       operator[](std::size_t key);
     const Value & operator[](std::size_t key) const;
 
-    Value & at(std::size_t key);
+    Value &       at(std::size_t key);
     const Value & at(std::size_t key) const;
 
     Iterator begin();
@@ -63,27 +60,25 @@ public:
 
     void clear();
 
-    void erase(std::size_t key);
+    void     erase(std::size_t key);
     Iterator erase(const Iterator & i);
 
-    template<typename ... Args>
+    template<typename... Args>
     std::pair<Iterator, bool> emplace(std::size_t key, Args &&... args);
 
-private:
+  private:
     friend struct Iterator;
     friend struct CIterator;
 
-private:
+  private:
     void ensureSize(std::size_t key);
 
-private:
+  private:
     /* Number of active keys */
-    std::size_t                  m_size;
+    std::size_t m_size;
 
-    std::vector<boost::optional<Value>>
-                                m_vec;
+    std::vector<boost::optional<Value>> m_vec;
 };
-
 }
 
 #include <Deliberation/Core/LinearMap.inl>

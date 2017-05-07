@@ -5,26 +5,23 @@
 #include <Deliberation/Core/ElementalTypes.h>
 #include <Deliberation/Core/IntTypes.h>
 
-
-
 namespace deliberation
 {
-
 class Type final
 {
-public:
+  public:
     template<typename T>
     static constexpr Type & resolve();
 
-public:
+  public:
     Type(u8 id);
     Type(const Type & type) = default;
 
-    const char * name() const;
-    size_t size() const;
-    u32 id() const;
-    u8 numRows() const;
-    u8 numColumns() const;
+    const char *  name() const;
+    size_t        size() const;
+    u32           id() const;
+    u8            numRows() const;
+    u8            numColumns() const;
     ElementalType elementalType() const;
 
     std::string toString(const void * ptr) const;
@@ -35,11 +32,12 @@ public:
     bool operator==(const Type & other) const;
     bool operator!=(const Type & other) const;
 
-private:
+  private:
     u8 m_id;
 };
 
-enum TYPE {
+enum TYPE
+{
     TYPE_NONE = 0,
     TYPE_I8 = 1,
     TYPE_I16 = 2,
@@ -122,7 +120,6 @@ extern Type Type_Mat2;
 extern Type Type_Mat3;
 extern Type Type_Mat4;
 extern Type Type_Bool;
-
 }
 
 #include <Deliberation/Core/Types.inl>

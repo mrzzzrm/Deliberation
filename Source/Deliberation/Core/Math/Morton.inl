@@ -2,17 +2,12 @@
 
 namespace deliberation
 {
-
 unsigned int Morton2D::NumKeysAtLevel(unsigned int depth)
 {
     return 1u << (depth * 2u);
 }
 
-Morton2D::Morton2D(uint32_t key):
-    m_key(key)
-{
-
-}
+Morton2D::Morton2D(uint32_t key) : m_key(key) {}
 
 Morton2D::Morton2D(const glm::uvec2 & cell)
 {
@@ -22,10 +17,7 @@ Morton2D::Morton2D(const glm::uvec2 & cell)
     m_key = (y << 1) | x;
 }
 
-uint32_t Morton2D::toIndex() const
-{
-    return m_key;
-}
+uint32_t Morton2D::toIndex() const { return m_key; }
 
 glm::uvec2 Morton2D::toVec() const
 {
@@ -51,11 +43,7 @@ unsigned int Morton3D::NumKeysAtLevel(unsigned int depth)
     return 1u << (depth * 3u);
 }
 
-Morton3D::Morton3D(uint32_t key):
-    m_key(key)
-{
-
-}
+Morton3D::Morton3D(uint32_t key) : m_key(key) {}
 
 Morton3D::Morton3D(const glm::uvec3 & cell)
 {
@@ -66,10 +54,7 @@ Morton3D::Morton3D(const glm::uvec3 & cell)
     m_key = (z << 2) | (y << 1) | x;
 }
 
-uint32_t Morton3D::toIndex() const
-{
-    return m_key;
-}
+uint32_t Morton3D::toIndex() const { return m_key; }
 
 glm::uvec3 Morton3D::toVec() const
 {
@@ -92,6 +77,4 @@ glm::uvec3 Morton3D::toVec() const
 
     return {x, y, z};
 }
-
 }
-

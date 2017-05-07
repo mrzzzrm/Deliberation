@@ -9,7 +9,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 void ContactDispatcher::registerContactType(int type)
 {
@@ -21,16 +20,13 @@ void ContactDispatcher::registerContactType(int typeA, int typeB)
 {
     Assert(typeA >= 0 && typeB >= 0, "");
 
-    class Creator:
-        public ContactCreator
+    class Creator : public ContactCreator
     {
-    public:
-        Creator(int typeL, int typeR):
-            ContactCreator(typeL, typeR)
-        {
-        }
+      public:
+        Creator(int typeL, int typeR) : ContactCreator(typeL, typeR) {}
 
-        virtual std::unique_ptr<Contact> create(RigidBody & bodyA, RigidBody & bodyB) const override
+        virtual std::unique_ptr<Contact>
+        create(RigidBody & bodyA, RigidBody & bodyB) const override
         {
             if (bodyA.shape()->type() != m_typeL)
             {
@@ -49,7 +45,9 @@ void ContactDispatcher::registerContactType(int typeA, int typeB)
         }
     };
 
-    m_doubleDispatch.insert(typeA, typeB, std::unique_ptr<ContactCreator>(new Creator(typeA, typeB)));
+    m_doubleDispatch.insert(
+        typeA,
+        typeB,
+        std::unique_ptr<ContactCreator>(new Creator(typeA, typeB)));
 }
-
 }

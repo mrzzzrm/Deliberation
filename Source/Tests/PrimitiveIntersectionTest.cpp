@@ -23,5 +23,4 @@ TEST_F(PrimitiveIntersectionTest, LineSphereIntersection)
         ASSERT_FALSE(LineSphereIntersection(a, b, {2.0f, 3.0f, 0.0f}, 1.3f));
         ASSERT_TRUE(LineSphereIntersection(a, b, a, 10.0f));
     }
-
 }

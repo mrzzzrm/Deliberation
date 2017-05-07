@@ -8,32 +8,20 @@
 
 namespace deliberation
 {
-
-DebugCameraNavigator3D::DebugCameraNavigator3D(Camera3D & camera,
-                                               const Input & inputAdapter,
-                                               float speed):
-    m_camera(camera),
-    m_inputAdapter(inputAdapter),
-    m_speed(speed),
-    m_mousePressed(false)
+DebugCameraNavigator3D::DebugCameraNavigator3D(
+    Camera3D & camera, const Input & inputAdapter, float speed)
+    : m_camera(camera)
+    , m_inputAdapter(inputAdapter)
+    , m_speed(speed)
+    , m_mousePressed(false)
 {
-
 }
 
-Camera3D & DebugCameraNavigator3D::camera() const
-{
-    return m_camera;
-}
+Camera3D & DebugCameraNavigator3D::camera() const { return m_camera; }
 
-float DebugCameraNavigator3D::speed() const
-{
-    return m_speed;
-}
+float DebugCameraNavigator3D::speed() const { return m_speed; }
 
-void DebugCameraNavigator3D::setSpeed(float speed)
-{
-    m_speed = speed;
-}
+void DebugCameraNavigator3D::setSpeed(float speed) { m_speed = speed; }
 
 void DebugCameraNavigator3D::update(float seconds)
 {
@@ -41,9 +29,12 @@ void DebugCameraNavigator3D::update(float seconds)
     auto up = glm::normalize(m_camera.orientation() * glm::vec3(0, 1, 0));
     auto r = glm::cross(fw, up);
 
-    float x = (m_inputAdapter.keyPressed(Key_A) ? -1 : 0) + (m_inputAdapter.keyPressed(Key_D) ? 1 : 0);
-    float y = (m_inputAdapter.keyPressed(Key_F) ? -1 : 0) + (m_inputAdapter.keyPressed(Key_R) ? 1 : 0);
-    float z = (m_inputAdapter.keyPressed(Key_W) ? -1 : 0) + (m_inputAdapter.keyPressed(Key_S) ? 1 : 0);
+    float x = (m_inputAdapter.keyPressed(Key_A) ? -1 : 0) +
+              (m_inputAdapter.keyPressed(Key_D) ? 1 : 0);
+    float y = (m_inputAdapter.keyPressed(Key_F) ? -1 : 0) +
+              (m_inputAdapter.keyPressed(Key_R) ? 1 : 0);
+    float z = (m_inputAdapter.keyPressed(Key_W) ? -1 : 0) +
+              (m_inputAdapter.keyPressed(Key_S) ? 1 : 0);
 
     auto step = m_camera.orientation() * glm::vec3(x, y, z) * m_speed * seconds;
 
@@ -77,6 +68,4 @@ void DebugCameraNavigator3D::onMouseMotion(MouseMotionEvent & event)
 
     event.consume();
 }
-
 }
-

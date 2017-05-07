@@ -6,19 +6,17 @@
 
 namespace deliberation
 {
-
 class DrawContext;
 class Texture;
 
 class DebugTexture2dRenderer final
 {
-public:
+  public:
     DebugTexture2dRenderer(DrawContext & drawContext, const Texture & texture);
 
     void render();
 
-private:
+  private:
     Draw m_draw;
 };
-
 }

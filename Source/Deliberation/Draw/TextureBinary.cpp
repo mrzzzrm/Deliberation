@@ -6,10 +6,8 @@
 
 namespace deliberation
 {
-
-TextureBinary TextureBinary::emptyTexture2D(unsigned int width,
-                                            unsigned int height,
-                                            PixelFormat format)
+TextureBinary TextureBinary::emptyTexture2D(
+    unsigned int width, unsigned int height, PixelFormat format)
 {
     TextureBinary binary;
 
@@ -22,23 +20,22 @@ TextureBinary TextureBinary::emptyTexture2D(unsigned int width,
     return binary;
 }
 
-TextureBinary::TextureBinary():
-    m_type(TextureType::None),
-    m_format(PixelFormat_None)
+TextureBinary::TextureBinary()
+    : m_type(TextureType::None), m_format(PixelFormat_None)
 {
 }
 
-TextureBinary::TextureBinary(const SurfaceBinary & binary):
-    m_type(TextureType::Texture2d),
-    m_width(binary.width()),
-    m_height(binary.height()),
-    m_format(binary.format())
+TextureBinary::TextureBinary(const SurfaceBinary & binary)
+    : m_type(TextureType::Texture2d)
+    , m_width(binary.width())
+    , m_height(binary.height())
+    , m_format(binary.format())
 {
     m_faces.push_back(binary);
 }
 
-TextureBinary::TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces):
-    m_type(TextureType::CubeMap)
+TextureBinary::TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces)
+    : m_type(TextureType::CubeMap)
 {
     m_width = cubeFaces[0].width();
     m_height = cubeFaces[0].height();
@@ -54,37 +51,22 @@ TextureBinary::TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces):
     }
 }
 
-unsigned int TextureBinary::width() const
-{
-    return m_width;
-}
+unsigned int TextureBinary::width() const { return m_width; }
 
-unsigned int TextureBinary::height() const
-{
-    return m_height;
-}
+unsigned int TextureBinary::height() const { return m_height; }
 
-unsigned int TextureBinary::numFaces() const
-{
-    return m_faces.size();
-}
+unsigned int TextureBinary::numFaces() const { return m_faces.size(); }
 
-TextureType TextureBinary::type() const
-{
-    return m_type;
-}
+TextureType TextureBinary::type() const { return m_type; }
 
-PixelFormat TextureBinary::format() const
-{
-    return m_format;
-}
+PixelFormat TextureBinary::format() const { return m_format; }
 
 const SurfaceBinary & TextureBinary::surface(unsigned int face) const
 {
-    Assert(face < m_faces.size(), "Surface '" + std::to_string(face) + "' out of range '" +
-                                  std::to_string(m_faces.size()) + "'");
+    Assert(
+        face < m_faces.size(),
+        "Surface '" + std::to_string(face) + "' out of range '" +
+            std::to_string(m_faces.size()) + "'");
     return m_faces[face];
 }
-
 }
-

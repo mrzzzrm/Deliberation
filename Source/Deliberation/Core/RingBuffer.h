@@ -3,50 +3,47 @@
 #include <string>
 #include <vector>
 
-
-
 namespace deliberation
 {
-
 template<typename T>
 class RingBuffer final
 {
-public:
+  public:
     template<typename QualifiedRingBufferType, typename QualifiedT>
     class IteratorT final
     {
-    public:
+      public:
         IteratorT(QualifiedRingBufferType & buffer, std::size_t index);
 
         template<typename OtherIteratorT>
         IteratorT(const OtherIteratorT & other);
 
         QualifiedT & operator*();
-        IteratorT & operator++();
-        IteratorT operator++(int);
-        bool operator!=(const IteratorT & other);
+        IteratorT &  operator++();
+        IteratorT    operator++(int);
+        bool         operator!=(const IteratorT & other);
 
-    private:
-        QualifiedRingBufferType &   m_buffer;
-        std::size_t                 m_index;
+      private:
+        QualifiedRingBufferType & m_buffer;
+        std::size_t               m_index;
     };
 
-    typedef IteratorT<RingBuffer, T>              Iterator;
-    typedef IteratorT<const RingBuffer, const T>  CIterator;
+    typedef IteratorT<RingBuffer, T>             Iterator;
+    typedef IteratorT<const RingBuffer, const T> CIterator;
 
-public:
+  public:
     RingBuffer();
     RingBuffer(std::size_t capacity);
 
     bool empty() const;
 
-    T & front();
+    T &       front();
     const T & front() const;
-    T & back();
+    T &       back();
     const T & back() const;
 
-    T & at(std::size_t index);
-    const T & at(std::size_t index) const;
+    T &         at(std::size_t index);
+    const T &   at(std::size_t index) const;
     std::size_t capacity() const;
     std::size_t size() const;
 
@@ -62,15 +59,15 @@ public:
 
     std::string toString() const;
 
-private:
-    template<typename _T, typename _K> friend class IteratorT;
+  private:
+    template<typename _T, typename _K>
+    friend class IteratorT;
 
-private:
-    std::vector<T>  m_vec;
-    std::size_t     m_begin;
-    std::size_t     m_size;
+  private:
+    std::vector<T> m_vec;
+    std::size_t    m_begin;
+    std::size_t    m_size;
 };
-
 }
 
 #include <Deliberation/Core/RingBuffer.inl>

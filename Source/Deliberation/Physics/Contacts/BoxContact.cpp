@@ -3,29 +3,28 @@
 #include <algorithm>
 #include <iostream>
 #include <limits>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <glm/gtc/epsilon.hpp>
 
 #include <Deliberation/Core/Assert.h>
-#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/PolygonClipping.h>
 #include <Deliberation/Core/Math/PrimitiveIntersection.h>
+#include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Physics/BoxShape.h>
 #include <Deliberation/Physics/RigidBody.h>
 
 namespace
 {
-
 using namespace deliberation;
 
 struct Face
 {
-    u8 normalIndex;
-    u8 xAxisIndex;
-    u8 yAxisIndex;
+    u8        normalIndex;
+    u8        xAxisIndex;
+    u8        yAxisIndex;
     glm::vec3 normalAxis;
     glm::vec3 xAxis;
     glm::vec3 yAxis;
@@ -69,31 +68,29 @@ Face computeFaceFromNormal(const Box & box, const glm::vec3 & normal)
         }
     }
 
-    face.normalAxis = (normal[face.normalIndex] > 0 ? 1.0f : -1.0f) * box.axis(face.normalIndex);
+    face.normalAxis = (normal[face.normalIndex] > 0 ? 1.0f : -1.0f) *
+                      box.axis(face.normalIndex);
     face.xAxis = box.axis(face.xAxisIndex);
     face.yAxis = box.axis(face.yAxisIndex);
 
-    face.center = box.p() + face.normalAxis * box.halfExtent()[face.normalIndex];
+    face.center =
+        box.p() + face.normalAxis * box.halfExtent()[face.normalIndex];
 
     return face;
 }
-
 }
 
 namespace deliberation
 {
-
-CollideBox3D::CollideBox3D(const Box & boxA,
-                           const Box & boxB,
-                           CollideBox3DDebugInfo * debugInfo):
-    numIntersections(0),
-    m_a(boxA),
-    m_b(boxB),
-    m_debugInfo(debugInfo),
-    m_minIntersectionDepth(std::numeric_limits<float>::max()),
-    m_intersectionIndex(-1)
+CollideBox3D::CollideBox3D(
+    const Box & boxA, const Box & boxB, CollideBox3DDebugInfo * debugInfo)
+    : numIntersections(0)
+    , m_a(boxA)
+    , m_b(boxB)
+    , m_debugInfo(debugInfo)
+    , m_minIntersectionDepth(std::numeric_limits<float>::max())
+    , m_intersectionIndex(-1)
 {
-
 }
 
 bool CollideBox3D::execute()
@@ -140,12 +137,14 @@ bool CollideBox3D::execute()
         if (m_intersectionIndex < 3)
         {
             m_refCenterToInCenter = m_b.box.p() - m_a.box.p();
-            checkFaceIntersection(m_a, m_b, m_a.box.axis(m_intersectionIndex), false);
+            checkFaceIntersection(
+                m_a, m_b, m_a.box.axis(m_intersectionIndex), false);
         }
         else
         {
             m_refCenterToInCenter = m_a.box.p() - m_b.box.p();
-            checkFaceIntersection(m_b, m_a, m_b.box.axis(m_intersectionIndex - 3), true);
+            checkFaceIntersection(
+                m_b, m_a, m_b.box.axis(m_intersectionIndex - 3), true);
         }
     }
     else
@@ -162,10 +161,11 @@ bool CollideBox3D::execute()
     return true;
 }
 
-void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
-                                         const BoxWrapper & in,
-                                         const glm::vec3 & direction,
-                                         bool flip)
+void CollideBox3D::checkFaceIntersection(
+    const BoxWrapper & ref,
+    const BoxWrapper & in,
+    const glm::vec3 &  direction,
+    bool               flip)
 {
     if (m_debugInfo)
     {
@@ -216,17 +216,18 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
         auto x = rBox.halfExtent()[rFace.xAxisIndex];
         auto y = rBox.halfExtent()[rFace.yAxisIndex];
 
-        ref2[0] = glm::vec2( x, y);
+        ref2[0] = glm::vec2(x, y);
         ref2[1] = glm::vec2(-x, y);
-        ref2[2] = glm::vec2(-x,-y);
-        ref2[3] = glm::vec2( x,-y);
+        ref2[2] = glm::vec2(-x, -y);
+        ref2[3] = glm::vec2(x, -y);
     }
 
     if (m_debugInfo)
     {
         for (uint v = 0; v < 4; v++)
         {
-            m_debugInfo->referenceFace[v] = rFaceRot * glm::vec3(ref2[v].x, ref2[v].y, 0) + rFace.center;
+            m_debugInfo->referenceFace[v] =
+                rFaceRot * glm::vec3(ref2[v].x, ref2[v].y, 0) + rFace.center;
         }
     }
 
@@ -234,7 +235,7 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
      * Clip projection
      */
     std::vector<glm::vec2> result;
-    glm::vec2 subject[4];
+    glm::vec2              subject[4];
 
     for (int i = 0; i < 4; i++)
     {
@@ -252,7 +253,9 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
 
         for (uint v = 0; v < m_debugInfo->numClipPoints; v++)
         {
-            m_debugInfo->clipPoints[v] = rFaceRot * glm::vec3(result[v].x, result[v].y, 0) + rFace.center;
+            m_debugInfo->clipPoints[v] =
+                rFaceRot * glm::vec3(result[v].x, result[v].y, 0) +
+                rFace.center;
         }
     }
 
@@ -272,10 +275,10 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
     numIntersections = 0;
     for (auto r = 0u; r < result.size(); r++)
     {
-        auto x = result[r].x;
-        auto y = result[r].y;
+        auto   x = result[r].x;
+        auto   y = result[r].y;
         auto & n = inNormalRef;
-        auto nom =  - (x - inCenterRef.x) * n.x - (y - inCenterRef.y) * n.y;
+        auto   nom = -(x - inCenterRef.x) * n.x - (y - inCenterRef.y) * n.y;
 
         auto z = (nom / (n.z)) + inCenterRef.z;
         if (z < 0)
@@ -283,7 +286,9 @@ void CollideBox3D::checkFaceIntersection(const BoxWrapper & ref,
             Intersection & intersection = intersections[numIntersections];
             numIntersections++;
 
-            intersection.position = rFaceRot * glm::vec3(result[r].x, result[r].y, 0) + rFace.center;
+            intersection.position =
+                rFaceRot * glm::vec3(result[r].x, result[r].y, 0) +
+                rFace.center;
             intersection.normal = flip ? -normal : normal;
             intersection.depth = -z;
         }
@@ -302,7 +307,7 @@ void CollideBox3D::checkEdgeIntersection(uint e0, uint e1)
     }
 
     auto normal = normalFromDirection(checkDirection);
-   // std::cout << "  Normal2: " << normal << std::endl;
+    // std::cout << "  Normal2: " << normal << std::endl;
 
     auto & boxA = m_a.box;
     auto & boxB = m_b.box;
@@ -313,12 +318,14 @@ void CollideBox3D::checkEdgeIntersection(uint e0, uint e1)
     glm::vec3 pointA = boxA.p();
     for (auto i = 0; i < 3; i++)
     {
-        pointA += (aNormal[i] > 0 ? 1.0f : -1.0f) * boxA.halfExtent()[i] * boxA.axis(i);
+        pointA += (aNormal[i] > 0 ? 1.0f : -1.0f) * boxA.halfExtent()[i] *
+                  boxA.axis(i);
     }
     glm::vec3 pointB = boxB.p();
     for (auto i = 0; i < 3; i++)
     {
-        pointB += (bNormal[i] > 0 ? 1.0f : -1.0f) * boxB.halfExtent()[i] * boxB.axis(i);
+        pointB += (bNormal[i] > 0 ? 1.0f : -1.0f) * boxB.halfExtent()[i] *
+                  boxB.axis(i);
     }
 
     auto dirA = boxA.axis(e0);
@@ -343,7 +350,8 @@ void CollideBox3D::checkEdgeIntersection(uint e0, uint e1)
     numIntersections++;
 }
 
-bool CollideBox3D::checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint baseIndex)
+bool CollideBox3D::checkFaceNormalDepth(
+    const Box & lhs, const Box & rhs, uint baseIndex)
 {
     for (uint a = 0; a < 3; a++)
     {
@@ -384,7 +392,8 @@ bool CollideBox3D::checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint b
     return false;
 }
 
-bool CollideBox3D::checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & normalB, uint index)
+bool CollideBox3D::checkEdgeDepth(
+    const glm::vec3 & normalA, const glm::vec3 & normalB, uint index)
 {
     /**
      * normalA || normalB
@@ -398,7 +407,6 @@ bool CollideBox3D::checkEdgeDepth(const glm::vec3 & normalA, const glm::vec3 & n
 
     auto direction = glm::normalize(glm::cross(normalA, normalB));
     m_edgeCrossProducts[index - 6] = direction;
-
 
     auto minA = std::numeric_limits<float>::max();
     auto maxA = std::numeric_limits<float>::lowest();
@@ -445,16 +453,11 @@ glm::vec3 CollideBox3D::normalFromDirection(const glm::vec3 & direction) const
     }
 }
 
-CollideBox3D::BoxWrapper::BoxWrapper(const Box & box):
-    box(box)
-{
-    
-}        
+CollideBox3D::BoxWrapper::BoxWrapper(const Box & box) : box(box) {}
 
-BoxContact::BoxContact(RigidBody & bodyA, RigidBody & bodyB):
-    Contact(bodyA, bodyB)
+BoxContact::BoxContact(RigidBody & bodyA, RigidBody & bodyB)
+    : Contact(bodyA, bodyB)
 {
-
 }
 
 void BoxContact::update()
@@ -462,10 +465,10 @@ void BoxContact::update()
     /**
      * Retrieve boxes
      */
-    auto & shapeA = (BoxShape&)*m_bodyA.shape();
-    auto & shapeB = (BoxShape&)*m_bodyB.shape();
-    auto boxA = shapeA.instanciate(m_bodyA.transform());
-    auto boxB = shapeB.instanciate(m_bodyB.transform());
+    auto & shapeA = (BoxShape &)*m_bodyA.shape();
+    auto & shapeB = (BoxShape &)*m_bodyB.shape();
+    auto   boxA = shapeA.instanciate(m_bodyA.transform());
+    auto   boxB = shapeB.instanciate(m_bodyB.transform());
 
     /**
      * Intersect
@@ -478,13 +481,12 @@ void BoxContact::update()
      */
     if (m_intersect)
     {
-        updatePoints({collideBox3D.numIntersections, collideBox3D.intersections});
+        updatePoints(
+            {collideBox3D.numIntersections, collideBox3D.intersections});
     }
     else
     {
         clearPoints();
     }
-
 }
-
 }

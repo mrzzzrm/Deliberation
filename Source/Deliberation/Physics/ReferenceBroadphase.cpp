@@ -10,29 +10,30 @@
 
 namespace deliberation
 {
-
-ReferenceBroadphase::ReferenceBroadphase(Narrowphase & narrowphase):
-    Broadphase(narrowphase)
+ReferenceBroadphase::ReferenceBroadphase(Narrowphase & narrowphase)
+    : Broadphase(narrowphase)
 {
-
 }
 
-void ReferenceBroadphase::setProxyBounds(BroadphaseProxy & proxy, const AABB & bounds)
+void ReferenceBroadphase::setProxyBounds(
+    BroadphaseProxy & proxy, const AABB & bounds)
 {
     proxy.setBounds(bounds);
 }
 
-std::vector<std::shared_ptr<BroadphaseProxy>> ReferenceBroadphase::lineCast(const Ray3D & ray) const
+std::vector<std::shared_ptr<BroadphaseProxy>>
+ReferenceBroadphase::lineCast(const Ray3D & ray) const
 {
     std::vector<std::shared_ptr<BroadphaseProxy>> result;
 
     for (auto & proxy : m_proxies)
     {
         auto & aabb = proxy->bounds();
-        auto position = aabb.center();
-        auto radius = aabb.diameter() / 2.0f;
+        auto   position = aabb.center();
+        auto   radius = aabb.diameter() / 2.0f;
 
-        if (LineSphereIntersection(ray.origin(), ray.direction(), position, radius))
+        if (LineSphereIntersection(
+                ray.origin(), ray.direction(), position, radius))
         {
             result.emplace_back(proxy);
         }
@@ -80,5 +81,4 @@ void ReferenceBroadphase::checkProximities()
         }
     }
 }
-
 }

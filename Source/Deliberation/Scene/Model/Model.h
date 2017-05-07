@@ -6,16 +6,14 @@
 
 namespace deliberation
 {
-
 class Model final
 {
-public:
+  public:
     AABB bounds;
 
     Buffer vertexBuffer;
 
-    bool hasIndices = false;
+    bool   hasIndices = false;
     Buffer indexBuffer;
 };
-
 }

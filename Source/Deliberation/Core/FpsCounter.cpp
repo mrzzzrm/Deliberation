@@ -5,7 +5,6 @@
 
 namespace deliberation
 {
-
 float FpsCounter::fps() const
 {
     const auto numFrames = m_backlog.size();
@@ -22,7 +21,7 @@ void FpsCounter::onFrame()
 {
     m_backlog.emplace_back(CurrentMillis());
 
-    while (m_backlog.size() > BACKLOG_CAPACITY) m_backlog.erase(m_backlog.begin());
+    while (m_backlog.size() > BACKLOG_CAPACITY)
+        m_backlog.erase(m_backlog.begin());
 }
-
 }

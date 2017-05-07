@@ -3,36 +3,32 @@
 #include <string>
 #include <vector>
 
-
-
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Program.h>
 
 namespace deliberation
 {
-
 class DrawContext;
 
 class ScreenSpaceEffect final
 {
-public:
+  public:
     ScreenSpaceEffect();
-    ScreenSpaceEffect(DrawContext & drawContext,
-                         const std::vector<std::string> & shaders,
-                         const std::string & name = std::string());
+    ScreenSpaceEffect(
+        DrawContext &                    drawContext,
+        const std::vector<std::string> & shaders,
+        const std::string &              name = std::string());
 
-    Draw & draw();
+    Draw &       draw();
     const Draw & draw() const;
 
     void render();
 
-private:
-    bool        m_initialised;
-    Draw        m_draw;
-    Program     m_program;
-    Buffer      m_vertexBuffer;
+  private:
+    bool    m_initialised;
+    Draw    m_draw;
+    Program m_program;
+    Buffer  m_vertexBuffer;
 };
-
 }
-

@@ -9,7 +9,6 @@
 
 namespace deliberation
 {
-
 bool RandomBool(float probability)
 {
     auto threshold = probability * float(RAND_MAX);
@@ -30,15 +29,13 @@ float RandomFloat(float from, float to)
 
 glm::vec2 RandomVec2(float from, float to)
 {
-    return glm::vec2(RandomFloat(from, to),
-                     RandomFloat(from, to));
+    return glm::vec2(RandomFloat(from, to), RandomFloat(from, to));
 }
 
 glm::vec3 RandomVec3(float from, float to)
 {
-    return glm::vec3(RandomFloat(from, to),
-                     RandomFloat(from, to),
-                     RandomFloat(from, to));
+    return glm::vec3(
+        RandomFloat(from, to), RandomFloat(from, to), RandomFloat(from, to));
 }
 
 glm::vec3 RandomUnitVec3()
@@ -46,7 +43,8 @@ glm::vec3 RandomUnitVec3()
     float angX = RandomFloat(-glm::pi<float>(), glm::pi<float>());
     float angY = glm::acos(RandomFloat(-1.0f, 1.0f));
 
-    glm::vec3 result = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0.0f, 0.0f, 1.0f);
+    glm::vec3 result =
+        glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0.0f, 0.0f, 1.0f);
 
     return glm::normalize(result);
 }
@@ -55,7 +53,8 @@ glm::vec2 RandomUnitVec2()
 {
     float angZ = RandomFloat(-glm::pi<float>(), glm::pi<float>());
 
-    glm::vec3 result = glm::quat(glm::vec3(0.0f, 0.0f, angZ)) * glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 result =
+        glm::quat(glm::vec3(0.0f, 0.0f, angZ)) * glm::vec3(0.0f, 1.0f, 0.0f);
 
     return glm::vec2(result.x, result.y);
 }
@@ -67,7 +66,7 @@ glm::vec3 RandomInSphere()
     do
     {
         p = RandomVec3(-1.0f, 1.0f);
-    } while(p.x * p.x + p.y * p.y + p.z * p.z > 1.0f); // Yes, seriously
+    } while (p.x * p.x + p.y * p.y + p.z * p.z > 1.0f); // Yes, seriously
 
     return p;
 }
@@ -79,7 +78,7 @@ glm::vec2 RandomOnCircle()
     do
     {
         p = RandomVec2(-1.0f, 1.0f);
-    } while(p.x * p.x + p.y * p.y > 1.0f); // Yes, seriously
+    } while (p.x * p.x + p.y * p.y > 1.0f); // Yes, seriously
 
     return p;
 }
@@ -91,7 +90,7 @@ glm::vec3 RandomInHemisphere(const glm::vec3 & normal)
     do
     {
         p = RandomInSphere();
-    } while(glm::dot(p, normal) < 0.0f); // Not kidding, no...
+    } while (glm::dot(p, normal) < 0.0f); // Not kidding, no...
 
     return p * glm::length(normal);
 }
@@ -103,11 +102,8 @@ glm::vec3 RandomOnHemisphere(const glm::vec3 & normal)
     do
     {
         p = RandomInHemisphere(normal);
-    } while(EpsilonEq(glm::dot(p, p), 0.0f)); // Not kidding, no...
+    } while (EpsilonEq(glm::dot(p, p), 0.0f)); // Not kidding, no...
 
     return glm::normalize(p) * glm::length(normal);
 }
-
 }
-
-

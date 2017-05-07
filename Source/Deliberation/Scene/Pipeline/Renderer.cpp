@@ -4,10 +4,8 @@
 
 namespace deliberation
 {
-
 DrawContext & Renderer::drawContext() const
 {
     return m_renderManager.drawContext();
 }
-
 }

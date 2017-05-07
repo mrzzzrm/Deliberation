@@ -4,11 +4,10 @@
 
 namespace deliberation
 {
-
-TextureLoaderCubeFilesImpl::TextureLoaderCubeFilesImpl(const std::array<std::string, 6> & paths):
-    m_paths(paths)
+TextureLoaderCubeFilesImpl::TextureLoaderCubeFilesImpl(
+    const std::array<std::string, 6> & paths)
+    : m_paths(paths)
 {
-
 }
 
 TextureBinary TextureLoaderCubeFilesImpl::load()
@@ -18,7 +17,8 @@ TextureBinary TextureLoaderCubeFilesImpl::load()
     for (auto p = 0u; p < m_paths.size(); p++)
     {
         auto & path = m_paths[p];
-        auto texture = TextureLoaderFileImpl(path, TextureLoaderOrigin::UpperLeft).load();
+        auto   texture =
+            TextureLoaderFileImpl(path, TextureLoaderOrigin::UpperLeft).load();
         auto surface = SurfaceBinary(texture.surface(0));
 
         surfaces[p] = std::move(surface);
@@ -26,6 +26,4 @@ TextureBinary TextureLoaderCubeFilesImpl::load()
 
     return TextureBinary(std::move(surfaces));
 }
-
 }
-

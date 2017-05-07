@@ -5,26 +5,23 @@
 
 namespace deliberation
 {
-
 template<typename T>
-Optional<T>::Optional():
-    m_engaged(false)
+Optional<T>::Optional() : m_engaged(false)
 {
 }
 
 template<typename T>
-template<typename ... Args>
-Optional<T>::Optional(Args && ... args):
-    m_engaged(false)
+template<typename... Args>
+Optional<T>::Optional(Args &&... args) : m_engaged(false)
 {
     reset(std::forward<Args>(args)...);
 }
 
 template<typename T>
-template<typename ... Args>
-void Optional<T>::reset(Args && ... args)
+template<typename... Args>
+void Optional<T>::reset(Args &&... args)
 {
-    new(m_data) T(std::forward<Args>(args)...);
+    new (m_data) T(std::forward<Args>(args)...);
     m_engaged = true;
 }
 
@@ -38,16 +35,15 @@ template<typename T>
 T & Optional<T>::get()
 {
     assert(m_engaged);
-    return *reinterpret_cast<T*>(m_data);
+    return *reinterpret_cast<T *>(m_data);
 }
 
 template<typename T>
 const T & Optional<T>::get() const
 {
     assert(m_engaged);
-    return *reinterpret_cast<const T*>(m_data);
+    return *reinterpret_cast<const T *>(m_data);
 }
-
 
 template<typename T>
 T * Optional<T>::ptr()
@@ -62,8 +58,8 @@ const T * Optional<T>::ptr() const
 }
 
 template<typename T>
-template<typename ... Args>
-void Optional<T>::reset(Args && ... args) const
+template<typename... Args>
+void Optional<T>::reset(Args &&... args) const
 {
     if (m_engaged)
     {
@@ -71,7 +67,7 @@ void Optional<T>::reset(Args && ... args) const
     }
 
     m_engaged = true;
-    new(m_data) T(std::forward<Args>(args)...);
+    new (m_data) T(std::forward<Args>(args)...);
 }
 
 template<typename T>
@@ -83,7 +79,7 @@ void Optional<T>::disengage()
     }
 
     m_engaged = false;
-    ((T*)m_data)->~T();
+    ((T *)m_data)->~T();
 }
 
 template<typename T>
@@ -156,6 +152,4 @@ bool Optional<T>::operator!=(const T & other) const
 {
     return !operator==(other);
 }
-
 }
-

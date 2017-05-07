@@ -1,11 +1,10 @@
 #include <Deliberation/Core/Blob.h>
 
-#include <string.h>
 #include <sstream>
+#include <string.h>
 
 namespace deliberation
 {
-
 Blob Blob::fromRawData(const void * src, size_t size)
 {
     auto blob = Blob(size);
@@ -13,59 +12,50 @@ Blob Blob::fromRawData(const void * src, size_t size)
     return blob;
 }
 
-Blob::Blob():
-    m_impl(nullptr)
+Blob::Blob() : m_impl(nullptr) {}
+
+Blob::Blob(std::size_t size)
+    : m_impl(std::make_unique<detail::VectorBlobImpl<char>>(size))
 {
 }
 
-Blob::Blob(std::size_t size):
-    m_impl(std::make_unique<detail::VectorBlobImpl<char>>(size))
-{
-
-}
-
-Blob::Blob(std::unique_ptr<detail::IBlobImpl> && impl):
-    m_impl(std::move(impl))
-{}
-
-Blob::Blob(const Blob & blob):
-    m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
+Blob::Blob(std::unique_ptr<detail::IBlobImpl> && impl) : m_impl(std::move(impl))
 {
 }
 
-Blob::Blob(Blob && blob):
-    m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
+Blob::Blob(const Blob & blob)
+    : m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
 {
-
 }
 
-std::size_t Blob::size() const
+Blob::Blob(Blob && blob) : m_impl(blob.m_impl ? blob.m_impl->clone() : nullptr)
 {
-    return m_impl ? m_impl->size() : 0u;
 }
+
+std::size_t Blob::size() const { return m_impl ? m_impl->size() : 0u; }
 
 void * Blob::ptr(size_t offset)
 {
     Assert(offset < size(), "");
 
-    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+    return m_impl ? ((char *)m_impl->ptr()) + offset : nullptr;
 }
 
 const void * Blob::ptr(size_t offset) const
 {
     Assert(offset < size(), "");
 
-    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+    return m_impl ? ((char *)m_impl->ptr()) + offset : nullptr;
 }
 
 void * Blob::ptrRaw(size_t offset)
 {
-    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+    return m_impl ? ((char *)m_impl->ptr()) + offset : nullptr;
 }
 
 const void * Blob::ptrRaw(size_t offset) const
 {
-    return m_impl ? ((char*)m_impl->ptr()) + offset : nullptr;
+    return m_impl ? ((char *)m_impl->ptr()) + offset : nullptr;
 }
 
 void Blob::write(std::size_t offset, const void * src, size_t length)
@@ -113,6 +103,4 @@ Blob & Blob::operator=(Blob && blob)
     m_impl = std::move(blob.m_impl);
     return *this;
 }
-
 }
-

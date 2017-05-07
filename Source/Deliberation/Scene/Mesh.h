@@ -2,17 +2,14 @@
 
 #include <vector>
 
-#include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Core/IntTypes.h>
-
-
+#include <Deliberation/Core/LayoutedBlob.h>
 
 namespace deliberation
 {
-
 class Mesh final
 {
-public:
+  public:
     struct Face
     {
         Face() = default;
@@ -26,30 +23,29 @@ public:
 
     using Faces = std::vector<Face>;
 
-public:
+  public:
     Mesh();
-    Mesh(LayoutedBlob && vertices,
-          std::vector<Face> && faces);
-    Mesh(LayoutedBlob && vertices,
-          LayoutedBlob && faceAttributes,
-          std::vector<Face> && faces);
+    Mesh(LayoutedBlob && vertices, std::vector<Face> && faces);
+    Mesh(
+        LayoutedBlob &&      vertices,
+        LayoutedBlob &&      faceAttributes,
+        std::vector<Face> && faces);
 
-    LayoutedBlob & vertices();
+    LayoutedBlob &       vertices();
     const LayoutedBlob & vertices() const;
 
-    LayoutedBlob & faceAttributes();
+    LayoutedBlob &       faceAttributes();
     const LayoutedBlob & faceAttributes() const;
 
-    std::vector<Face> & faces();
+    std::vector<Face> &       faces();
     const std::vector<Face> & faces() const;
 
-    LayoutedBlobElement faceVertex(size_t face, size_t vertex);
+    LayoutedBlobElement  faceVertex(size_t face, size_t vertex);
     CLayoutedBlobElement faceVertex(size_t face, size_t vertex) const;
 
-private:
-    LayoutedBlob        m_vertices;
-    LayoutedBlob        m_faceAttributes;
-    std::vector<Face>   m_faces;
+  private:
+    LayoutedBlob      m_vertices;
+    LayoutedBlob      m_faceAttributes;
+    std::vector<Face> m_faces;
 };
-
 }

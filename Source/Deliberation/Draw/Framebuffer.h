@@ -12,7 +12,6 @@
 
 namespace deliberation
 {
-
 class ClearImpl;
 class ClearExecution;
 class DrawContext;
@@ -22,23 +21,19 @@ class FramebufferImpl;
 struct RenderTargetDesc final
 {
     // For DepthTargets
-    RenderTargetDesc(const Surface & surface):
-        surface(surface)
-    {}
+    RenderTargetDesc(const Surface & surface) : surface(surface) {}
 
-    RenderTargetDesc(PixelFormat format):
-        format(format)
-    {}
+    RenderTargetDesc(PixelFormat format) : format(format) {}
 
-    RenderTargetDesc(const Surface & surface, const std::string & name):
-        surface(surface),
-        name(name)
-    {}
+    RenderTargetDesc(const Surface & surface, const std::string & name)
+        : surface(surface), name(name)
+    {
+    }
 
-    RenderTargetDesc(PixelFormat format, const std::string & name):
-        format(format),
-        name(name)
-    {}
+    RenderTargetDesc(PixelFormat format, const std::string & name)
+        : format(format), name(name)
+    {
+    }
 
     // Surface is valid if format != None. Could use variant<>, yeah...
     PixelFormat format = PixelFormat_None;
@@ -49,43 +44,42 @@ struct RenderTargetDesc final
 
 struct FramebufferDesc final
 {
-public:
+  public:
     FramebufferDesc(
-        u32 width,
-        u32 height,
-        const std::vector<RenderTargetDesc> & colorTargetDescs,
-        const boost::optional<RenderTargetDesc> & depthTargetDesc = {}
-    );
+        u32                                       width,
+        u32                                       height,
+        const std::vector<RenderTargetDesc> &     colorTargetDescs,
+        const boost::optional<RenderTargetDesc> & depthTargetDesc = {});
 
-    u32                                 width;
-    u32                                 height;
-    std::vector<RenderTargetDesc>       colorTargetDescs;
-    boost::optional<RenderTargetDesc>   depthTargetDesc;
+    u32                               width;
+    u32                               height;
+    std::vector<RenderTargetDesc>     colorTargetDescs;
+    boost::optional<RenderTargetDesc> depthTargetDesc;
 };
 
 class Framebuffer final
 {
-public:
+  public:
     Framebuffer() = default;
     Framebuffer(const std::shared_ptr<FramebufferImpl> & impl);
 
     unsigned int width() const;
     unsigned int height() const;
-    glm::uvec2 size() const { return {width(), height()}; }
+    glm::uvec2   size() const { return {width(), height()}; }
 
     bool isBackbuffer() const;
 
     boost::optional<Surface> colorTarget(const std::string & name);
-    Surface & colorTargetRef(const std::string & name);
+    Surface &                colorTargetRef(const std::string & name);
 
     boost::optional<Surface> depthTarget();
-    Surface & depthTargetRef();
+    Surface &                depthTargetRef();
 
     Clear & clear();
 
     Clear createClear();
 
-private:
+  private:
     friend class Clear;
     friend class Draw;
     friend class DrawContext;
@@ -93,9 +87,7 @@ private:
     friend class ClearImpl;
     friend class DrawImpl;
 
-private:
+  private:
     std::shared_ptr<FramebufferImpl> m_impl;
 };
-
 }
-

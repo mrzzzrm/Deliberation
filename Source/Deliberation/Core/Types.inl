@@ -4,20 +4,24 @@
 
 namespace deliberation
 {
-
 template<typename T>
 constexpr Type & Type::resolve()
 {
     return Type_None;
 }
 
-#define GEN_RESOLVE(t, T) template<> constexpr Type & Type::resolve<t>() { return T; }
+#define GEN_RESOLVE(t, T)                                                      \
+    template<>                                                                 \
+    constexpr Type & Type::resolve<t>()                                        \
+    {                                                                          \
+        return T;                                                              \
+    }
 
 GEN_RESOLVE(bool, Type_Bool)
-GEN_RESOLVE(u8,  Type_U8)
+GEN_RESOLVE(u8, Type_U8)
 GEN_RESOLVE(u16, Type_U16)
 GEN_RESOLVE(u32, Type_U32)
-GEN_RESOLVE(i8,  Type_I8)
+GEN_RESOLVE(i8, Type_I8)
 GEN_RESOLVE(i16, Type_I16)
 GEN_RESOLVE(i32, Type_I32)
 GEN_RESOLVE(float, Type_Float)
@@ -48,5 +52,4 @@ GEN_RESOLVE(glm::mat3, Type_Mat3)
 GEN_RESOLVE(glm::mat4, Type_Mat4)
 
 #undef GEN_RESOLVE
-
 }

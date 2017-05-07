@@ -2,8 +2,8 @@
 
 #include <Deliberation/Core/Math/Pose3D.h>
 
-#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/Uniform.h>
 
@@ -13,21 +13,21 @@
 
 namespace deliberation
 {
-
 class DebugCubemapRenderer final
 {
-public:
+  public:
     enum class MeshType
     {
         Cube,
         Sphere
     };
 
-public:
-    DebugCubemapRenderer(DrawContext & drawContext,
-                         const Camera3D & camera,
-                         const Texture & cubemap,
-                         MeshType meshType = MeshType::Cube);
+  public:
+    DebugCubemapRenderer(
+        DrawContext &    drawContext,
+        const Camera3D & camera,
+        const Texture &  cubemap,
+        MeshType         meshType = MeshType::Cube);
 
     const Pose3D & pose() const;
 
@@ -35,14 +35,13 @@ public:
 
     void render();
 
-private:
-    const Camera3D &    m_camera;
+  private:
+    const Camera3D & m_camera;
 
-    Pose3D              m_pose;
+    Pose3D m_pose;
 
-    Draw                m_draw;
-    Uniform             m_transformUniform;
-    Uniform             m_viewProjectionUniform;
+    Draw    m_draw;
+    Uniform m_transformUniform;
+    Uniform m_viewProjectionUniform;
 };
-
 }

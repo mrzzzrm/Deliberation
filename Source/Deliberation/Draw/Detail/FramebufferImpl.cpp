@@ -15,13 +15,12 @@
 
 namespace
 {
-
 using namespace deliberation;
 
 void RenderTargetFromDesc(
-    DrawContext & drawContext,
-    RenderTarget & renderTarget,
-    const FramebufferDesc & framebufferDesc,
+    DrawContext &            drawContext,
+    RenderTarget &           renderTarget,
+    const FramebufferDesc &  framebufferDesc,
     const RenderTargetDesc & renderTargetDesc)
 {
     renderTarget.name = renderTargetDesc.name;
@@ -39,15 +38,12 @@ void RenderTargetFromDesc(
         renderTarget.surface = renderTargetDesc.surface;
     }
 }
-
 }
 
 namespace deliberation
 {
-
-std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & drawContext,
-                                                             u32 width,
-                                                             u32 height)
+std::shared_ptr<FramebufferImpl>
+FramebufferImpl::backbuffer(DrawContext & drawContext, u32 width, u32 height)
 {
     auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->isBackbuffer = true;
@@ -57,8 +53,8 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::backbuffer(DrawContext & drawC
     return result;
 }
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawContext,
-                                                         const FramebufferDesc & framebufferDesc)
+std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
+    DrawContext & drawContext, const FramebufferDesc & framebufferDesc)
 {
     auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->isBackbuffer = false;
@@ -72,8 +68,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawConte
         RenderTarget colorTarget;
 
         RenderTargetFromDesc(
-            drawContext, colorTarget, framebufferDesc, renderTargetDesc
-        );
+            drawContext, colorTarget, framebufferDesc, renderTargetDesc);
 
         result->colorTargets.emplace_back(colorTarget);
     }
@@ -83,8 +78,10 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawConte
         RenderTarget depthTarget;
 
         RenderTargetFromDesc(
-            drawContext, depthTarget, framebufferDesc, *framebufferDesc.depthTargetDesc
-        );
+            drawContext,
+            depthTarget,
+            framebufferDesc,
+            *framebufferDesc.depthTargetDesc);
 
         result->depthTarget = depthTarget;
     }
@@ -101,22 +98,23 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawConte
     {
         const auto & target = result->colorTargets[a];
 
-        glStateManager.framebufferTexture2D(gl::GL_DRAW_FRAMEBUFFER,
-                                            (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + a),
-                                            target.surface.m_impl->glTarget,
-                                            target.surface.m_impl->textureImpl->glName,
-                                            0);
+        glStateManager.framebufferTexture2D(
+            gl::GL_DRAW_FRAMEBUFFER,
+            (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + a),
+            target.surface.m_impl->glTarget,
+            target.surface.m_impl->textureImpl->glName,
+            0);
     }
 
     if (result->depthTarget)
     {
-        glStateManager.framebufferTexture2D(gl::GL_DRAW_FRAMEBUFFER,
-                                            gl::GL_DEPTH_ATTACHMENT,
-                                            gl::GL_TEXTURE_2D,
-                                            result->depthTarget->surface.m_impl->textureImpl->glName,
-                                            0);
+        glStateManager.framebufferTexture2D(
+            gl::GL_DRAW_FRAMEBUFFER,
+            gl::GL_DEPTH_ATTACHMENT,
+            gl::GL_TEXTURE_2D,
+            result->depthTarget->surface.m_impl->textureImpl->glName,
+            0);
     }
-
 
     // Framebuffer should be complete now
     auto status = gl::glCheckFramebufferStatus(gl::GL_DRAW_FRAMEBUFFER);
@@ -134,10 +132,9 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(DrawContext & drawConte
     return result;
 }
 
-FramebufferImpl::FramebufferImpl(DrawContext & drawContext):
-    drawContext(drawContext)
+FramebufferImpl::FramebufferImpl(DrawContext & drawContext)
+    : drawContext(drawContext)
 {
-
 }
 
 FramebufferImpl::~FramebufferImpl()
@@ -162,11 +159,15 @@ void FramebufferImpl::bind(const std::vector<gl::GLenum> & drawBuffers)
     }
 }
 
-size_t FramebufferImpl::colorTargetIndex(const std::string &name, bool * found) const
+size_t
+FramebufferImpl::colorTargetIndex(const std::string & name, bool * found) const
 {
-    auto iter = std::find_if(colorTargets.begin(), colorTargets.end(),
-                             [&name] (const RenderTarget & colorTarget) {
-                                 return colorTarget.name == name; });
+    auto iter = std::find_if(
+        colorTargets.begin(),
+        colorTargets.end(),
+        [&name](const RenderTarget & colorTarget) {
+            return colorTarget.name == name;
+        });
 
     if (found)
     {
@@ -174,11 +175,11 @@ size_t FramebufferImpl::colorTargetIndex(const std::string &name, bool * found) 
     }
     else
     {
-        Assert(iter != colorTargets.end(), "No such color target '" + name + "' in Framebuffer");
+        Assert(
+            iter != colorTargets.end(),
+            "No such color target '" + name + "' in Framebuffer");
     }
 
     return (size_t)(iter - colorTargets.begin());
 }
-
 }
-

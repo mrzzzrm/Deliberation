@@ -5,13 +5,11 @@
 
 namespace deliberation
 {
-
-CollisionObject::CollisionObject(const std::shared_ptr<CollisionShape> & shape,
-                                 const Transform3D & transform):
-    m_shape(shape),
-    m_transform(transform)
+CollisionObject::CollisionObject(
+    const std::shared_ptr<CollisionShape> & shape,
+    const Transform3D &                     transform)
+    : m_shape(shape), m_transform(transform)
 {
-
 }
 
 CollisionObject::~CollisionObject() = default;
@@ -21,20 +19,11 @@ const std::shared_ptr<CollisionShape> & CollisionObject::shape() const
     return m_shape;
 }
 
-Transform3D & CollisionObject::transform()
-{
-    return m_transform;
-}
+Transform3D & CollisionObject::transform() { return m_transform; }
 
-const Transform3D & CollisionObject::transform() const
-{
-    return m_transform;
-}
+const Transform3D & CollisionObject::transform() const { return m_transform; }
 
-AABB CollisionObject::bounds() const
-{
-    return m_shape->bounds(m_transform);
-}
+AABB CollisionObject::bounds() const { return m_shape->bounds(m_transform); }
 
 const std::shared_ptr<BroadphaseProxy> & CollisionObject::proxy() const
 {
@@ -55,5 +44,4 @@ void CollisionObject::setProxy(const std::shared_ptr<BroadphaseProxy> & proxy)
 {
     m_proxy = proxy;
 }
-
 }

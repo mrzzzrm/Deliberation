@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 class Ray3D;
 class RigidBody;
 
@@ -18,9 +17,8 @@ struct RayCastIntersection
 
 class NarrowphasePrimitiveTest
 {
-public:
-    virtual std::unique_ptr<RayCastIntersection> lineTest(const Ray3D &ray,
-                                                          std::shared_ptr<RigidBody> body) const = 0;
+  public:
+    virtual std::unique_ptr<RayCastIntersection>
+    lineTest(const Ray3D & ray, std::shared_ptr<RigidBody> body) const = 0;
 };
-
 }

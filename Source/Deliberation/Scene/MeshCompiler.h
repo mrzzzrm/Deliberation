@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 class Mesh;
 
 enum class MeshCompilerPrimitive
@@ -15,23 +14,28 @@ enum class MeshCompilerPrimitive
 
 class MeshCompiler final
 {
-public:
+  public:
     struct Compilation
     {
-        Compilation(const DataLayout & vertexLayout, size_t numVertices, size_t numIndices);
+        Compilation(
+            const DataLayout & vertexLayout,
+            size_t             numVertices,
+            size_t             numIndices);
 
         LayoutedBlob vertices;
         LayoutedBlob indices;
     };
 
-public:
+  public:
     MeshCompiler();
 
-    Compilation compile(const Mesh & mesh, MeshCompilerPrimitive primitive = MeshCompilerPrimitive::Triangles) const;
+    Compilation compile(
+        const Mesh &          mesh,
+        MeshCompilerPrimitive primitive =
+            MeshCompilerPrimitive::Triangles) const;
 
-private:
+  private:
     Compilation compileTriangles(const Mesh & mesh) const;
     Compilation compileLines(const Mesh & mesh) const;
 };
-
 }

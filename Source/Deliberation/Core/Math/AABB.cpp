@@ -10,7 +10,6 @@
 
 namespace deliberation
 {
-
 AABB AABB::containingPoints(const std::vector<glm::vec3> & points)
 {
     assert(!points.empty());
@@ -52,97 +51,49 @@ AABB AABB::containingSpheres(const std::vector<Sphere> & spheres)
 
 AABB AABB::containingSphere(const Sphere & sphere)
 {
-    return AABB({sphere.position() - glm::vec3(sphere.radius())},
-                {sphere.position() + glm::vec3(sphere.radius())});
+    return AABB(
+        {sphere.position() - glm::vec3(sphere.radius())},
+        {sphere.position() + glm::vec3(sphere.radius())});
 }
 
 AABB::AABB() = default;
 
-AABB::AABB(const glm::vec3 & llf, const glm::vec3 & urb):
-    m_llf(llf),
-    m_urb(urb)
+AABB::AABB(const glm::vec3 & llf, const glm::vec3 & urb)
+    : m_llf(llf), m_urb(urb)
 {
 }
 
-const glm::vec3 & AABB::llf() const
-{
-    return m_llf;
-}
+const glm::vec3 & AABB::llf() const { return m_llf; }
 
-const glm::vec3 & AABB::urb() const
-{
-    return m_urb;
-}
+const glm::vec3 & AABB::urb() const { return m_urb; }
 
-glm::vec3 AABB::llb() const
-{
-    return { m_llf.x, m_llf.y, m_urb.z };
-}
+glm::vec3 AABB::llb() const { return {m_llf.x, m_llf.y, m_urb.z}; }
 
-glm::vec3 AABB::ulf() const
-{
-    return { m_llf.x, m_urb.y, m_llf.z };
-}
+glm::vec3 AABB::ulf() const { return {m_llf.x, m_urb.y, m_llf.z}; }
 
-glm::vec3 AABB::ulb() const
-{
-    return { m_llf.x, m_urb.y, m_urb.z };
-}
+glm::vec3 AABB::ulb() const { return {m_llf.x, m_urb.y, m_urb.z}; }
 
-glm::vec3 AABB::lrb() const
-{
-    return { m_urb.x, m_llf.y, m_urb.z };
-}
+glm::vec3 AABB::lrb() const { return {m_urb.x, m_llf.y, m_urb.z}; }
 
-glm::vec3 AABB::urf() const
-{
-    return { m_urb.x, m_urb.y, m_llf.z };
-}
+glm::vec3 AABB::urf() const { return {m_urb.x, m_urb.y, m_llf.z}; }
 
-glm::vec3 AABB::lrf() const
-{
-    return { m_urb.x, m_llf.y, m_llf.z };
-}
+glm::vec3 AABB::lrf() const { return {m_urb.x, m_llf.y, m_llf.z}; }
 
-float AABB::left() const
-{
-    return m_llf.x;
-}
+float AABB::left() const { return m_llf.x; }
 
-float AABB::right() const
-{
-    return m_urb.x;
-}
+float AABB::right() const { return m_urb.x; }
 
-float AABB::bottom() const
-{
-    return m_llf.y;
-}
+float AABB::bottom() const { return m_llf.y; }
 
-float AABB::top() const
-{
-    return m_urb.y;
-}
+float AABB::top() const { return m_urb.y; }
 
-float AABB::front() const
-{
-    return m_llf.z;
-}
+float AABB::front() const { return m_llf.z; }
 
-float AABB::back() const
-{
-    return m_urb.z;
-}
+float AABB::back() const { return m_urb.z; }
 
-void AABB::setLLF(const glm::vec3 & llf)
-{
-    m_llf = llf;
-}
+void AABB::setLLF(const glm::vec3 & llf) { m_llf = llf; }
 
-void AABB::setURB(const glm::vec3 & urb)
-{
-    m_urb = urb;
-}
+void AABB::setURB(const glm::vec3 & urb) { m_urb = urb; }
 
 void AABB::setLeft(float left)
 {
@@ -183,31 +134,15 @@ void AABB::setBack(float back)
 unsigned int AABB::longestAxis() const
 {
     auto size = this->size();
-    return size.x > size.y
-                ? size.x > size.z
-                    ? 0
-                    : size.y > size.z
-                        ? 1
-                        : 2
-                : size.y > size.z
-                    ? 1
-                    : 2;
+    return size.x > size.y ? size.x > size.z ? 0 : size.y > size.z ? 1 : 2
+                           : size.y > size.z ? 1 : 2;
 }
 
-glm::vec3 AABB::center() const
-{
-    return (m_urb + m_llf) / 2.0f;
-}
+glm::vec3 AABB::center() const { return (m_urb + m_llf) / 2.0f; }
 
-glm::vec3 AABB::size() const
-{
-    return m_urb - m_llf;
-}
+glm::vec3 AABB::size() const { return m_urb - m_llf; }
 
-float AABB::diameter() const
-{
-    return glm::length(m_urb - m_llf);
-}
+float AABB::diameter() const { return glm::length(m_urb - m_llf); }
 
 void AABB::enlargeToContain(const glm::vec3 & v)
 {
@@ -273,32 +208,47 @@ void AABB::translate(const glm::vec3 & delta)
 
 bool AABB::intersects(const AABB & other) const
 {
-    if(m_llf.x < other.llf().x) {
-        if(other.llf().x > m_urb.x) {
+    if (m_llf.x < other.llf().x)
+    {
+        if (other.llf().x > m_urb.x)
+        {
             return false;
         }
-    } else {
-        if(m_llf.x > other.urb().x) {
+    }
+    else
+    {
+        if (m_llf.x > other.urb().x)
+        {
             return false;
         }
     }
 
-    if(m_llf.y < other.llf().y) {
-        if(other.llf().y > m_urb.y) {
+    if (m_llf.y < other.llf().y)
+    {
+        if (other.llf().y > m_urb.y)
+        {
             return false;
         }
-    } else {
-        if(m_llf.y > other.urb().y) {
+    }
+    else
+    {
+        if (m_llf.y > other.urb().y)
+        {
             return false;
         }
     }
 
-    if(m_llf.z < other.llf().z) {
-        if(other.llf().z > m_urb.z) {
+    if (m_llf.z < other.llf().z)
+    {
+        if (other.llf().z > m_urb.z)
+        {
             return false;
         }
-    } else {
-        if(m_llf.z > other.urb().z) {
+    }
+    else
+    {
+        if (m_llf.z > other.urb().z)
+        {
             return false;
         }
     }
@@ -308,16 +258,8 @@ bool AABB::intersects(const AABB & other) const
 
 bool AABB::contains(const AABB & other) const
 {
-    return
-        m_llf.x <= other.m_llf.x &&
-        m_llf.y <= other.m_llf.y &&
-        m_llf.z <= other.m_llf.z &&
-        m_urb.x >= other.m_urb.x &&
-        m_urb.y >= other.m_urb.y &&
-        m_urb.z >= other.m_urb.z;
+    return m_llf.x <= other.m_llf.x && m_llf.y <= other.m_llf.y &&
+           m_llf.z <= other.m_llf.z && m_urb.x >= other.m_urb.x &&
+           m_urb.y >= other.m_urb.y && m_urb.z >= other.m_urb.z;
 }
-
-
-
 }
-

@@ -7,27 +7,24 @@
 
 namespace deliberation
 {
-
-class ImGuiRenderer:
-    public SingleNodeRenderer
+class ImGuiRenderer : public SingleNodeRenderer
 {
-public:
+  public:
     ImGuiRenderer(RenderManager & renderManager);
 
     void render() override;
 
-protected:
+  protected:
     void onSetupRender() override;
 
-private:
-    Draw        m_draw;
-    Buffer      m_vertexBuffer;
-    Buffer      m_indexBuffer;
-    Uniform     m_projectionUniform;
+  private:
+    Draw    m_draw;
+    Buffer  m_vertexBuffer;
+    Buffer  m_indexBuffer;
+    Uniform m_projectionUniform;
 
-    unsigned char *     m_fontAtlasPixels;
-    int                 m_fontAtlasWidth;
-    int                 m_fontAtlasHeight;
+    unsigned char * m_fontAtlasPixels;
+    int             m_fontAtlasWidth;
+    int             m_fontAtlasHeight;
 };
-
 }

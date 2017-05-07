@@ -8,18 +8,17 @@
 
 namespace deliberation
 {
-
 class DrawContext;
 
 class QueryImpl final
 {
-public:
+  public:
     QueryImpl(DrawContext & drawContext, QueryType type);
     ~QueryImpl();
 
     QueryType type() const;
 
-    int64_t resultI() const;
+    int64_t  resultI() const;
     uint64_t resultU() const;
 
     bool isActive() const;
@@ -28,20 +27,18 @@ public:
     void begin();
     void end();
 
-private:
-    DrawContext &       m_drawContext;
-    QueryType           m_type;
-    gl::GLuint          m_glName;
-    gl::GLenum          m_glTarget;
-    bool                m_active;
-    mutable bool        m_resultsAvailable;
+  private:
+    DrawContext & m_drawContext;
+    QueryType     m_type;
+    gl::GLuint    m_glName;
+    gl::GLenum    m_glTarget;
+    bool          m_active;
+    mutable bool  m_resultsAvailable;
 
     mutable union
     {
         uint64_t u;
-        int64_t i;
+        int64_t  i;
     } m_result;
 };
-
 }
-

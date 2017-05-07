@@ -9,17 +9,14 @@
 
 namespace deliberation
 {
-
 class UniformImpl;
 class DrawImpl;
 
-
 class Uniform
 {
-public:
+  public:
     Uniform() = default;
-    Uniform(const std::shared_ptr<DrawImpl> & drawImpl,
-            size_t index);
+    Uniform(const std::shared_ptr<DrawImpl> & drawImpl, size_t index);
 
     template<typename T>
     void set(const T & value);
@@ -31,12 +28,11 @@ public:
 
     void set(const void * data, size_t size);
 
-private:
-    std::shared_ptr<DrawImpl>   m_drawImpl;
-    const DataLayoutField *     m_field = nullptr;  // Ref into m_drawImpl
-    size_t                      m_index = 0;
+  private:
+    std::shared_ptr<DrawImpl> m_drawImpl;
+    const DataLayoutField *   m_field = nullptr; // Ref into m_drawImpl
+    size_t                    m_index = 0;
 };
-
 }
 
 #include <Deliberation/Draw/Uniform.inl>

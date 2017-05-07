@@ -6,11 +6,7 @@
 
 namespace deliberation
 {
-
-SurfaceDownload::SurfaceDownload()
-{
-
-}
+SurfaceDownload::SurfaceDownload() {}
 
 bool SurfaceDownload::isDone() const
 {
@@ -30,12 +26,9 @@ const SurfaceBinary & SurfaceDownload::result() const
     return m_impl->result();
 }
 
-
-SurfaceDownload::SurfaceDownload(const std::shared_ptr<SurfaceDownloadImpl> & impl):
-    m_impl(impl)
+SurfaceDownload::SurfaceDownload(
+    const std::shared_ptr<SurfaceDownloadImpl> & impl)
+    : m_impl(impl)
 {
-
 }
-
 }
-

@@ -2,7 +2,7 @@
 
 namespace deliberation
 {
-
-struct Monostate {};
-
+struct Monostate
+{
+};
 }

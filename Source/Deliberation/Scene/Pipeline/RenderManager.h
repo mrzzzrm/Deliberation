@@ -8,38 +8,41 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/ECS/System.h>
 
-#include <Deliberation/Scene/Pipeline/RenderPhase.h>
 #include <Deliberation/Scene/Camera3D.h>
+#include <Deliberation/Scene/Pipeline/RenderPhase.h>
 
 namespace deliberation
 {
-
 class DrawContext;
 class Renderer;
 class RenderNode;
 
 class RenderManager
 {
-public:
+  public:
     RenderManager(DrawContext & drawContext);
     virtual ~RenderManager() = default;
 
     DrawContext & drawContext() { return m_drawContext; }
-    Camera3D & mainCamera() { return m_mainCamera; }
-    const std::vector<std::shared_ptr<Renderer>> & renderers() { return m_renderers; }
+    Camera3D &    mainCamera() { return m_mainCamera; }
+    const std::vector<std::shared_ptr<Renderer>> & renderers()
+    {
+        return m_renderers;
+    }
     Framebuffer & gbuffer() { return m_gbuffer; }
     Framebuffer & hdrBuffer() { return m_hdrBuffer; }
     Framebuffer & ssaoBuffer() { return m_ssaoBuffer; }
 
-    template<typename T, typename ... Args>
+    template<typename T, typename... Args>
     std::shared_ptr<T> addRenderer(Args &&... args);
 
     // Callbacks for Renderers
-    void registerRenderNode(const std::shared_ptr<RenderNode> & node, const RenderPhase & phase);
+    void registerRenderNode(
+        const std::shared_ptr<RenderNode> & node, const RenderPhase & phase);
 
     void render();
 
-private:
+  private:
     DrawContext &                                       m_drawContext;
     Camera3D                                            m_mainCamera;
     std::vector<std::shared_ptr<Renderer>>              m_renderers;
@@ -50,7 +53,6 @@ private:
     Framebuffer                                         m_ssaoBuffer;
     Clear                                               m_backbufferClear;
 };
-
 }
 
 #include <Deliberation/Scene/Pipeline/RenderManager.inl>

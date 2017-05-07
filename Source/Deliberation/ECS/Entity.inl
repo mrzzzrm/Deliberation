@@ -8,7 +8,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 bool Entity::hasComponent() const
 {
@@ -21,7 +20,7 @@ T & Entity::component()
 {
     static_assert(std::is_base_of<ComponentBase, T>::value, "");
 
-    return dynamic_cast<T&>(component(T::indexStatic()));
+    return dynamic_cast<T &>(component(T::indexStatic()));
 }
 
 template<typename T>
@@ -29,15 +28,15 @@ const T & Entity::component() const
 {
     static_assert(std::is_base_of<ComponentBase, T>::value, "");
 
-    return dynamic_cast<T&>(component(T::indexStatic())).value();
+    return dynamic_cast<T &>(component(T::indexStatic())).value();
 }
 
-template<typename T, typename ... Args>
+template<typename T, typename... Args>
 T & Entity::addComponent(Args &&... args)
 {
     static_assert(std::is_base_of<ComponentBase, T>::value, "");
 
-    auto * ptr = (T*)nullptr;
+    auto * ptr = (T *)nullptr;
 
     auto component = std::make_shared<T>(std::forward<Args>(args)...);
     ptr = component.get();
@@ -53,6 +52,4 @@ void Entity::scheduleComponentRemoval()
 
     scheduleComponentRemoval(T::indexStatic());
 }
-
 }
-

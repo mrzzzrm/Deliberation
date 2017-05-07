@@ -1,33 +1,28 @@
 namespace deliberation
 {
-
 namespace detail
 {
+    template<typename... Args>
+    struct SetComponentBits;
 
-template<typename ... Args>
-struct SetComponentBits;
-
-template<typename Head, typename ... Args>
-struct SetComponentBits<Head, Args...>
-{
-    static void unpack(ComponentBitset & bits)
+    template<typename Head, typename... Args>
+    struct SetComponentBits<Head, Args...>
     {
-        bits.set(Head::indexStatic());
-        SetComponentBits<Args...>::unpack(bits);
-    }
-};
+        static void unpack(ComponentBitset & bits)
+        {
+            bits.set(Head::indexStatic());
+            SetComponentBits<Args...>::unpack(bits);
+        }
+    };
 
-template<>
-struct SetComponentBits<>
-{
-    static void unpack(ComponentBitset & bits)
+    template<>
+    struct SetComponentBits<>
     {
-    }
-};
-
+        static void unpack(ComponentBitset & bits) {}
+    };
 }
 
-template<typename ... Args>
+template<typename... Args>
 ComponentFilter ComponentFilter::requires()
 {
     ComponentFilter result;
@@ -35,7 +30,4 @@ ComponentFilter ComponentFilter::requires()
 
     return result;
 }
-
 }
-
-

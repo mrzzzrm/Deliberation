@@ -8,9 +8,8 @@
 
 namespace deliberation
 {
-
-void PolygonClipping2D(const Span<glm::vec2> & subject,
-                                        const Span<glm::vec2> & clipping,
-                                        std::vector<glm::vec2> & result);
-
+void PolygonClipping2D(
+    const Span<glm::vec2> &  subject,
+    const Span<glm::vec2> &  clipping,
+    std::vector<glm::vec2> & result);
 }

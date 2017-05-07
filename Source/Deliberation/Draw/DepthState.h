@@ -6,18 +6,17 @@
 
 namespace deliberation
 {
-
-enum class DepthTest: unsigned int
+enum class DepthTest : unsigned int
 {
-    Less            = (unsigned int)gl::GL_LESS,
-    Enabled         = (unsigned int)Less,
-    Always          = (unsigned int)gl::GL_ALWAYS,
-    Disabled        = (unsigned int)Always,
-    Equal           = (unsigned int)gl::GL_EQUAL,
-    LessOrEqual     = (unsigned int)gl::GL_LEQUAL,
-    Greater         = (unsigned int)gl::GL_GREATER,
-    NotEqual        = (unsigned int)gl::GL_NOTEQUAL,
-    GreaterOrEqual  = (unsigned int)gl::GL_GEQUAL
+    Less = (unsigned int)gl::GL_LESS,
+    Enabled = (unsigned int)Less,
+    Always = (unsigned int)gl::GL_ALWAYS,
+    Disabled = (unsigned int)Always,
+    Equal = (unsigned int)gl::GL_EQUAL,
+    LessOrEqual = (unsigned int)gl::GL_LEQUAL,
+    Greater = (unsigned int)gl::GL_GREATER,
+    NotEqual = (unsigned int)gl::GL_NOTEQUAL,
+    GreaterOrEqual = (unsigned int)gl::GL_GEQUAL
 };
 
 enum class DepthWrite
@@ -28,17 +27,17 @@ enum class DepthWrite
 
 class DepthState final
 {
-public:
+  public:
     static DepthState enabled();
     static DepthState disabledRW();
     static DepthState disabledR();
     static DepthState disabledW(DepthTest depthTest = DepthTest::Enabled);
 
-public:
+  public:
     DepthState() = default;
     DepthState(DepthTest depthTest, DepthWrite depthWrite);
 
-    DepthTest depthTest() const;
+    DepthTest  depthTest() const;
     DepthWrite depthWrite() const;
 
     void setDepthTest(DepthTest depthTest);
@@ -46,10 +45,8 @@ public:
 
     std::string toString() const;
 
-private:
-    DepthTest   m_depthTest = DepthTest::Enabled;
-    DepthWrite  m_depthWrite = DepthWrite::Enabled;
+  private:
+    DepthTest  m_depthTest = DepthTest::Enabled;
+    DepthWrite m_depthWrite = DepthWrite::Enabled;
 };
-
 }
-

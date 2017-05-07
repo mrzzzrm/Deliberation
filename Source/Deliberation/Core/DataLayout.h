@@ -4,37 +4,36 @@
 #include <string>
 #include <vector>
 
-#include <Deliberation/Core/Detail/NamedDataMemberOf.h>
 #include <Deliberation/Core/DataLayoutField.h>
-
-
+#include <Deliberation/Core/Detail/NamedDataMemberOf.h>
 
 namespace deliberation
 {
-
 class DataLayout final
 {
-public:
+  public:
     template<typename T>
-    static DataLayout fromStructOrClass(const std::vector<detail::NamedDataMemberOf<T>> & members);
+    static DataLayout fromStructOrClass(
+        const std::vector<detail::NamedDataMemberOf<T>> & members);
 
     static DataLayout concatenate(const std::vector<DataLayout> & layouts);
 
-public:
+  public:
     DataLayout();
-    DataLayout(const std::string & name, const Type & type, size_t arraySize = 1);
+    DataLayout(
+        const std::string & name, const Type & type, size_t arraySize = 1);
     DataLayout(const std::vector<DataLayoutField::Desc> & descs);
     DataLayout(std::vector<DataLayoutField> && fields, size_t stride);
 
     const std::vector<DataLayoutField> & fields() const;
-    size_t stride() const;
+    size_t                               stride() const;
 
     bool hasField(const std::string & name) const;
 
     const DataLayoutField & field(size_t index) const;
     const DataLayoutField & field(const std::string & name) const;
 
-    void addField(const DataLayoutField & field);
+    void            addField(const DataLayoutField & field);
     DataLayoutField addField(const DataLayoutField::Desc & desc);
 
     bool equals(const DataLayout & rhs) const;
@@ -43,11 +42,10 @@ public:
 
     std::string toString() const;
 
-private:
+  private:
     std::vector<DataLayoutField> m_fields;
     size_t                       m_stride = 0u;
 };
-
 }
 
 #include <Deliberation/Core/DataLayout.inl>

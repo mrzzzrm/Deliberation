@@ -9,18 +9,17 @@
 
 namespace deliberation
 {
-
 class World;
 
-template<typename T, typename ComponentSubscriptionsType = ComponentSubscriptions<T>>
-class Component:
-    public std::enable_shared_from_this<T>,
-    public ComponentBase
+template<
+    typename T,
+    typename ComponentSubscriptionsType = ComponentSubscriptions<T>>
+class Component : public std::enable_shared_from_this<T>, public ComponentBase
 {
-public:
+  public:
     static std::size_t indexStatic();
 
-public:
+  public:
     Component();
 
     virtual std::size_t index() const override;
@@ -29,13 +28,12 @@ public:
     template<typename Event>
     void emit(const Event & event);
 
-    void dispatchEvent(TypeID::value_t eventType, const void * event) final override;
+    void
+    dispatchEvent(TypeID::value_t eventType, const void * event) final override;
 
-private:
+  private:
     friend class World;
 };
-
 }
 
 #include <Deliberation/ECS/Component.inl>
-

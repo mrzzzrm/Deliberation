@@ -4,12 +4,11 @@
 
 namespace deliberation
 {
-
 class GLStateManager;
 
 class GLSamplerState final
 {
-public:
+  public:
     GLSamplerState();
     ~GLSamplerState();
 
@@ -19,10 +18,8 @@ public:
     void setMinFilter(gl::GLenum filter);
     void setMagFilter(gl::GLenum filter);
 
-private:
-    gl::GLuint       m_name;
-    gl::GLenum       m_wrap[3];
+  private:
+    gl::GLuint m_name;
+    gl::GLenum m_wrap[3];
 };
-
 }
-

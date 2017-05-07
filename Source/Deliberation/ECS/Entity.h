@@ -6,30 +6,27 @@
 #include <string>
 #include <vector>
 
-
-
 #include <Deliberation/Core/TypeID.h>
 
 #include <Deliberation/ECS/Defines.h>
 
 namespace deliberation
 {
-
 class ComponentBase;
 class EntityData;
 class World;
 
 class Entity final
 {
-public:
+  public:
     Entity();
 
-    World & world() const;
-    EntityId id() const;
-    const std::string & name() const;
-    EntityId parent() const;
+    World &                       world() const;
+    EntityId                      id() const;
+    const std::string &           name() const;
+    EntityId                      parent() const;
     const std::vector<EntityId> & children() const;
-    const ComponentBitset & componentBits() const;
+    const ComponentBitset &       componentBits() const;
 
     bool isValid() const;
 
@@ -42,7 +39,7 @@ public:
     template<typename T>
     const T & component() const;
 
-    template<typename T, typename ... Args>
+    template<typename T, typename... Args>
     T & addComponent(Args &&... args);
 
     template<typename T>
@@ -58,27 +55,26 @@ public:
     bool operator==(const Entity & rhs) const;
     bool operator!=(const Entity & rhs) const;
 
-private:
+  private:
     friend class World;
     friend class SystemBase;
 
-private:
+  private:
     Entity(World & world, EntityId id);
 
     EntityData & data() const;
 
-    bool hasComponent(TypeID::value_t c) const;
-    ComponentBase & component(TypeID::value_t c);
+    bool                  hasComponent(TypeID::value_t c) const;
+    ComponentBase &       component(TypeID::value_t c);
     const ComponentBase & component(TypeID::value_t c) const;
-    void addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component);
+    void
+         addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component);
     void scheduleComponentRemoval(TypeID::value_t c);
 
-private:
-    World *     m_world;
+  private:
+    World *  m_world;
     EntityId m_id;
 };
-
 }
 
 #include <Deliberation/ECS/Entity.inl>
-

@@ -5,7 +5,6 @@
 
 namespace deliberation
 {
-
 void MainLoop::run(const std::function<bool(float)> & fn)
 {
     float lastFrameSeconds = 0.0f;
@@ -22,9 +21,9 @@ void MainLoop::run(const std::function<bool(float)> & fn)
         auto after = std::chrono::steady_clock::now();
 
         auto dur = after - before;
-        lastFrameSeconds = std::chrono::duration_cast<std::chrono::duration<float>>(dur).count();
+        lastFrameSeconds =
+            std::chrono::duration_cast<std::chrono::duration<float>>(dur)
+                .count();
     }
 }
-
 }
-

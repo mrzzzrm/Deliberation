@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 
 #include <Deliberation/ECS/Components.h>
 #include <Deliberation/ECS/System.h>
@@ -9,19 +9,18 @@
 
 namespace deliberation
 {
-
-class PhysicsWorldSystem:
-    public System<PhysicsWorldSystem>
+class PhysicsWorldSystem : public System<PhysicsWorldSystem>
 {
-public:
-    PhysicsWorldSystem(World & world, PhysicsWorld & physicsWorld):
-        Base(world, ComponentFilter::requires<RigidBodyComponent>()),
-        m_physicsWorld(physicsWorld)
-    {}
+  public:
+    PhysicsWorldSystem(World & world, PhysicsWorld & physicsWorld)
+        : Base(world, ComponentFilter::requires<RigidBodyComponent>())
+        , m_physicsWorld(physicsWorld)
+    {
+    }
 
     PhysicsWorld & physicsWorld() const { return m_physicsWorld; }
 
-protected:
+  protected:
     void onEntityAdded(Entity & entity) override
     {
         auto rigidBody = entity.component<RigidBodyComponent>().value();
@@ -32,11 +31,11 @@ protected:
 
     void onEntityRemoved(Entity & entity) override
     {
-        m_physicsWorld.removeRigidBody(entity.component<RigidBodyComponent>().value());
+        m_physicsWorld.removeRigidBody(
+            entity.component<RigidBodyComponent>().value());
     }
 
-private:
+  private:
     PhysicsWorld & m_physicsWorld;
 };
-
 }

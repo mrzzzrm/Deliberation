@@ -11,10 +11,9 @@
 
 namespace deliberation
 {
-
-RenderSystem::RenderSystem(World & world):
-    Base(world),
-    m_renderManager(world.systemRef<ApplicationSystem>().drawContext())
+RenderSystem::RenderSystem(World & world)
+    : Base(world)
+    , m_renderManager(world.systemRef<ApplicationSystem>().drawContext())
 {
 }
 
@@ -35,5 +34,4 @@ void RenderSystem::onUpdate(float seconds)
         ImGui::End();
     }
 }
-
 }

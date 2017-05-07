@@ -6,14 +6,13 @@
 
 namespace deliberation
 {
-
 glm::vec3 CalculateTrajectory(
     const glm::vec3 & originPosition,
     const glm::vec3 & originVelocity,
-    float bulletSpeed,
+    float             bulletSpeed,
     const glm::vec3 & targetPosition,
     const glm::vec3 & targetVelocity,
-    bool & success)
+    bool &            success)
 {
     const auto v = originVelocity - targetVelocity;
     const auto p = targetPosition - originPosition;
@@ -56,5 +55,4 @@ glm::vec3 CalculateTrajectory(
     success = true;
     return r - v;
 }
-
 }

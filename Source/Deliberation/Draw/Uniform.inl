@@ -8,7 +8,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 void Uniform::set(const T & value)
 {
@@ -23,11 +22,10 @@ void Uniform::set(const std::vector<T> & vec)
 {
     Assert((bool)m_drawImpl, "Hollow Uniform can't be set");
     Assert(Type::resolve<T>() == m_field->type(), "Uniform type mismatch");
-    Assert(vec.size() <= m_field->arraySize(), "Bounds exceeded or Uniform not an array");
+    Assert(
+        vec.size() <= m_field->arraySize(),
+        "Bounds exceeded or Uniform not an array");
 
     set(vec.data(), vec.size());
 }
-
 }
-
-

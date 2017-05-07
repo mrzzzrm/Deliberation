@@ -8,13 +8,12 @@
 
 namespace deliberation
 {
-
 class SamplerImpl;
 class Texture;
 
 class Sampler final
 {
-public:
+  public:
     Sampler() = default;
 
     void setTexture(const Texture & texture);
@@ -27,15 +26,13 @@ public:
     void setMinFilter(TextureFilter minFilter);
     void setMagFilter(TextureFilter magFilter);
 
-private:
+  private:
     friend class Draw;
 
-private:
+  private:
     Sampler(const std::shared_ptr<SamplerImpl> & impl);
 
-private:
+  private:
     std::shared_ptr<SamplerImpl> m_impl;
 };
-
 }
-

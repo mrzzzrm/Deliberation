@@ -7,32 +7,29 @@
 
 namespace deliberation
 {
-
-class SsaoRenderer:
-    public SingleNodeRenderer
+class SsaoRenderer : public SingleNodeRenderer
 {
-public:
+  public:
     SsaoRenderer(RenderManager & renderManager);
 
     void render() override;
 
-protected:
+  protected:
     void renderDebugGui() override;
 
-private:
+  private:
     void init();
 
-private:
-    ScreenSpaceEffect   m_effect;
-    ScreenSpaceEffect   m_blurEffect;
-    Framebuffer         m_intermediateFb;
-    LayoutedBlob        m_samples;
-    Uniform             m_projectionUniform;
-    bool                m_dirty = true;
+  private:
+    ScreenSpaceEffect m_effect;
+    ScreenSpaceEffect m_blurEffect;
+    Framebuffer       m_intermediateFb;
+    LayoutedBlob      m_samples;
+    Uniform           m_projectionUniform;
+    bool              m_dirty = true;
 
-    float               m_sampleRadius = 0.3f;
-    int                 m_numSamples = 5;
-    int                 m_maxNumSamples = 5;
+    float m_sampleRadius = 0.3f;
+    int   m_numSamples = 5;
+    int   m_maxNumSamples = 5;
 };
-
 }

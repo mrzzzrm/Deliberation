@@ -4,11 +4,8 @@
 
 #include <Deliberation/Core/Span.h>
 
-
-
 namespace deliberation
 {
-
 constexpr uint MAX_NUM_CONTACT_POINTS = 4;
 
 class Contact;
@@ -21,8 +18,7 @@ struct Intersection
     float     depth = 0.0f;
 };
 
-struct ContactPoint:
-    public Intersection
+struct ContactPoint : public Intersection
 {
     glm::vec3 relativePositionA;
     glm::vec3 relativePositionB;
@@ -38,7 +34,7 @@ struct ContactPoint:
 
 class Contact
 {
-public:
+  public:
     Contact(RigidBody & bodyA, RigidBody & bodyB);
     virtual ~Contact();
 
@@ -50,7 +46,7 @@ public:
     float restitution() const;
     float friction() const;
 
-    uint numPoints() const;
+    uint           numPoints() const;
     ContactPoint & point(uint index);
 
     void updatePoints(const Span<Intersection> & intersections);
@@ -58,20 +54,20 @@ public:
 
     virtual void update() = 0;
 
-private:
-    bool intersectionMatchesPoint(const Intersection & intersection, const ContactPoint & point) const;
+  private:
+    bool intersectionMatchesPoint(
+        const Intersection & intersection, const ContactPoint & point) const;
 
-protected:
-    RigidBody &  m_bodyA;
-    RigidBody &  m_bodyB;
+  protected:
+    RigidBody & m_bodyA;
+    RigidBody & m_bodyB;
 
-    bool         m_intersect;
+    bool m_intersect;
 
-    float        m_resitution;
-    float        m_friction;
+    float m_resitution;
+    float m_friction;
 
     uint         m_numPoints;
     ContactPoint m_points[MAX_NUM_CONTACT_POINTS];
 };
-
 }

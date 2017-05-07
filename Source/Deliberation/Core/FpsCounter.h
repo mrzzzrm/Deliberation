@@ -8,18 +8,16 @@
 
 namespace deliberation
 {
-
 class FpsCounter
 {
-public:
+  public:
     static constexpr size_t BACKLOG_CAPACITY = 15;
 
-public:
+  public:
     float fps() const;
-    void onFrame();
+    void  onFrame();
 
-private:
+  private:
     std::vector<TimestampMillis> m_backlog;
 };
-
 }

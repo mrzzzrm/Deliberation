@@ -4,17 +4,16 @@
 
 namespace deliberation
 {
-
 enum Key
 {
     /* Printable keys */
 
     Key_SPACE = 0,
-    Key_APOSTROPHE,          /* ' */
-    Key_COMMA,               /* , */
-    Key_MINUS,               /* - */
-    Key_PERIOD,              /* . */
-    Key_SLASH,               /* / */
+    Key_APOSTROPHE, /* ' */
+    Key_COMMA,      /* , */
+    Key_MINUS,      /* - */
+    Key_PERIOD,     /* . */
+    Key_SLASH,      /* / */
     Key_0,
     Key_1,
     Key_2,
@@ -25,8 +24,8 @@ enum Key
     Key_7,
     Key_8,
     Key_9,
-    Key_SEMICOLON,           /* ; */
-    Key_EQUAL,               /* = */
+    Key_SEMICOLON, /* ; */
+    Key_EQUAL,     /* = */
     Key_A,
     Key_B,
     Key_C,
@@ -53,12 +52,12 @@ enum Key
     Key_X,
     Key_Y,
     Key_Z,
-    Key_LEFT_BRACKET,        /* [ */
-    Key_BACKSLASH,           /* \ */
-    Key_RIGHT_BRACKET,       /* ] */
-    Key_GRAVE_ACCENT,        /* ` */
-    Key_WORLD_1,            /* non-US #1 */
-    Key_WORLD_2,            /* non-US #2 */
+    Key_LEFT_BRACKET,  /* [ */
+    Key_BACKSLASH,     /* \ */
+    Key_RIGHT_BRACKET, /* ] */
+    Key_GRAVE_ACCENT,  /* ` */
+    Key_WORLD_1,       /* non-US #1 */
+    Key_WORLD_2,       /* non-US #2 */
     /* Function keys */
     Key_ESCAPE,
     Key_ENTER,
@@ -133,5 +132,4 @@ enum Key
 
     Key_UNKNOWN
 };
-
 }

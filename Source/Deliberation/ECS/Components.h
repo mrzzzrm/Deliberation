@@ -8,7 +8,5 @@
 
 namespace deliberation
 {
-
 using RigidBodyComponent = ComponentWrapper<std::shared_ptr<RigidBody>>;
-
 }

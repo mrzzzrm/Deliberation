@@ -15,12 +15,10 @@
 
 namespace deliberation
 {
-
-TextureLoaderFileImpl::TextureLoaderFileImpl(const std::string & path, TextureLoaderOrigin origin):
-    m_path(path),
-    m_origin(origin)
+TextureLoaderFileImpl::TextureLoaderFileImpl(
+    const std::string & path, TextureLoaderOrigin origin)
+    : m_path(path), m_origin(origin)
 {
-
 }
 
 TextureBinary TextureLoaderFileImpl::load()
@@ -31,12 +29,11 @@ TextureBinary TextureLoaderFileImpl::load()
         std::cerr << "Failed to load Texture '" << m_path << "'" << std::endl;
         return TextureBinary();
     }
-    TextureBinary binary = TextureLoaderSDLSurfaceImpl(rawSurface, m_origin).load();
+    TextureBinary binary =
+        TextureLoaderSDLSurfaceImpl(rawSurface, m_origin).load();
 
     SDL_FreeSurface(rawSurface);
 
     return binary;
 }
-
 }
-

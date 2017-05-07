@@ -1,5 +1,5 @@
-#include <iostream>
 #include <chrono>
+#include <iostream>
 
 #include <boost/variant.hpp>
 
@@ -7,15 +7,15 @@
 
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/DataLayoutField.h>
-#include <Deliberation/Core/Types.h>
+#include <Deliberation/Core/IntTypes.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 #include <Deliberation/Core/LinearMap.h>
 #include <Deliberation/Core/LinearOctree.h>
+#include <Deliberation/Core/Math/Trajectory.h>
 #include <Deliberation/Core/RingBuffer.h>
 #include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
-#include <Deliberation/Core/IntTypes.h>
-#include <Deliberation/Core/Math/Trajectory.h>
+#include <Deliberation/Core/Types.h>
 
 using namespace deliberation;
 
@@ -24,7 +24,7 @@ void LinearMapSandbox()
     std::cout << "----------- LinearMapSandbox ----------" << std::endl;
 
     LinearMap<float> map;
-    const auto & cmap = map;
+    const auto &     cmap = map;
 
     map[2] = 15.0f;
     map[5] = 25.0f;
@@ -77,7 +77,8 @@ void LinearOctreeSandbox()
 
 void RingBufferSandbox()
 {
-    std::cout << "----------- RingBufferSandbox - push() ----------" << std::endl;
+    std::cout << "----------- RingBufferSandbox - push() ----------"
+              << std::endl;
     RingBuffer<int> buf(3);
 
     std::cout << buf.toString() << std::endl;
@@ -105,7 +106,8 @@ void RingBufferSandbox()
 
     std::cout << buf.toString() << std::endl;
 
-    std::cout << "----------- RingBufferSandbox - reserve() ----------" << std::endl;
+    std::cout << "----------- RingBufferSandbox - reserve() ----------"
+              << std::endl;
 
     buf.reserve(5);
     std::cout << buf.toString() << std::endl;
@@ -123,10 +125,18 @@ void RingBufferSandbox()
 
 void TypeIDSandbox()
 {
-    struct A {};
-    struct B {};
-    class C {};
-    class D {};
+    struct A
+    {
+    };
+    struct B
+    {
+    };
+    class C
+    {
+    };
+    class D
+    {
+    };
 
     std::cout << "----------- TypeIDSandbox ----------" << std::endl;
 
@@ -198,7 +208,6 @@ void BlobSandbox()
     blob.access<i16>(6) = 0xABCD;
 
     std::cout << blob.toString() << std::endl;
-
 }
 
 void LayoutedBlobSandbox()
@@ -208,8 +217,7 @@ void LayoutedBlobSandbox()
     std::cout << Type_I32.name() << ": " << Type_I32.id() << std::endl;
     std::cout << Type_Vec3.name() << ": " << Type_Vec3.id() << std::endl;
 
-    DataLayout layout({{"Age", Type_I32},
-                       {"Direction", Type_Vec3}});
+    DataLayout layout({{"Age", Type_I32}, {"Direction", Type_Vec3}});
 
     LayoutedBlob blob = LayoutedBlob(layout, 3);
 
@@ -229,7 +237,8 @@ void LayoutedBlobSandbox()
 
     for (int i = 0; i < blob.count(); i++)
     {
-        std::cout << "  " << i << ": " << ages[i] << " " << directions[i] << std::endl;
+        std::cout << "  " << i << ": " << ages[i] << " " << directions[i]
+                  << std::endl;
     }
 
     LayoutedBlob blob2(layout, 2);
@@ -243,7 +252,8 @@ void LayoutedBlobSandbox()
     std::cout << "Copied: " << std::endl;
     for (int i = 0; i < blob2.count(); i++)
     {
-        std::cout << "  " << i << ": " << ages2[i] << " " << directions2[i] << std::endl;
+        std::cout << "  " << i << ": " << ages2[i] << " " << directions2[i]
+                  << std::endl;
     }
 
     LayoutedBlob flexBlob(layout, 1);
@@ -257,7 +267,8 @@ void LayoutedBlobSandbox()
     std::cout << "Extended: " << std::endl;
     for (int i = 0; i < flexBlob.count(); i++)
     {
-        std::cout << "  " << i << ": " << ages3[i] << " " << directions3[i] << std::endl;
+        std::cout << "  " << i << ": " << ages3[i] << " " << directions3[i]
+                  << std::endl;
     }
 }
 
@@ -267,34 +278,45 @@ void TrajectorySandbox()
 
     auto success = false;
 
-    auto trajectory0 = CalculateTrajectory({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, 30,
-                                           {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, success);
+    auto trajectory0 = CalculateTrajectory(
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f},
+        30,
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f},
+        success);
     std::cout << "Trajectory0: " << success << ": " << trajectory0 << std::endl;
 
-
-    auto trajectory1 = CalculateTrajectory({0.0f, 0.0f, 0.0f}, {0.0f, 0.5f, 0.0f}, 30,
-                                           {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, success);
+    auto trajectory1 = CalculateTrajectory(
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 0.5f, 0.0f},
+        30,
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f},
+        success);
     std::cout << "Trajectory1: " << success << ": " << trajectory1 << std::endl;
 
-    auto trajectory2 = CalculateTrajectory({0.0f, 0.0f, 0.0f}, {0.0f, 5.0f, 0.0f}, 30,
-                                           {100.0f, 0.0f, 0.0f}, {10.0f, 0.0f, 0.0f}, success);
+    auto trajectory2 = CalculateTrajectory(
+        {0.0f, 0.0f, 0.0f},
+        {0.0f, 5.0f, 0.0f},
+        30,
+        {100.0f, 0.0f, 0.0f},
+        {10.0f, 0.0f, 0.0f},
+        success);
     std::cout << "Trajectory2: " << success << ": " << trajectory2 << std::endl;
-
-
 }
 
 int main(int argc, char * argv[])
 {
-//    TrajectorySandbox();
-//    LinearMapSandbox();
-//    LinearOctreeSandbox();
-//    RingBufferSandbox();
-//    TypeIDSandbox();
-//    SparseVectorSandbox();
-//    DataLayoutSandbox();
-//    BlobSandbox();
-//    LayoutedBlobSandbox();
+    //    TrajectorySandbox();
+    //    LinearMapSandbox();
+    //    LinearOctreeSandbox();
+    //    RingBufferSandbox();
+    //    TypeIDSandbox();
+    //    SparseVectorSandbox();
+    //    DataLayoutSandbox();
+    //    BlobSandbox();
+    //    LayoutedBlobSandbox();
 
     return 0;
 }
-

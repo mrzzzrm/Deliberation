@@ -10,19 +10,18 @@
 
 namespace deliberation
 {
-
 class BufferImpl;
 class DrawContext;
 class LayoutedBlob;
 
 class Buffer final
 {
-public:
+  public:
     Buffer() = default;
     Buffer(const std::shared_ptr<BufferImpl> & impl);
 
-    size_t count() const;
-    size_t size() const;
+    size_t             count() const;
+    size_t             size() const;
     const DataLayout & layout() const;
 
     void upload(const Blob & data);
@@ -31,22 +30,19 @@ public:
 
     void reinit(size_t count);
 
-    void mapped(BufferMapping flags,
-                const std::function<void(LayoutedBlob & mapping)> & fn);
+    void mapped(
+        BufferMapping                                       flags,
+        const std::function<void(LayoutedBlob & mapping)> & fn);
 
     std::string toString() const;
 
-private:
+  private:
     friend class BufferUploadExecution;
     friend class DrawContext;
     friend class Draw;
     friend class GLVertexAttributeBinder;
 
-private:
+  private:
     std::shared_ptr<BufferImpl> m_impl;
 };
-
 }
-
-
-

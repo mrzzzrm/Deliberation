@@ -2,25 +2,16 @@
 
 namespace deliberation
 {
-
-SystemBase::SystemBase(World & world, const ComponentFilter & filter):
-    m_world(world),
-    m_filter(filter)
+SystemBase::SystemBase(World & world, const ComponentFilter & filter)
+    : m_world(world), m_filter(filter)
 {
-
 }
 
 SystemBase::~SystemBase() = default;
 
-World & SystemBase::world()
-{
-    return m_world;
-}
+World & SystemBase::world() { return m_world; }
 
-const ComponentFilter & SystemBase::filter() const
-{
-    return m_filter;
-}
+const ComponentFilter & SystemBase::filter() const { return m_filter; }
 
 bool SystemBase::accepts(const Entity & entity)
 {
@@ -53,10 +44,7 @@ void SystemBase::removeEntity(Entity & entity)
     onEntityRemoved(entity);
 }
 
-void SystemBase::frameBegin()
-{
-    onFrameBegin();
-}
+void SystemBase::frameBegin() { onFrameBegin(); }
 
 void SystemBase::beforeUpdate()
 {
@@ -102,29 +90,19 @@ void SystemBase::onEntityRemoved(Entity & entity)
     // dummy
 }
 
-void SystemBase::onEntityUpdate(Entity &entity, float seconds)
+void SystemBase::onEntityUpdate(Entity & entity, float seconds)
 {
     // dummy
 }
 
-void SystemBase::onEntityPrePhysicsUpdate(Entity &entity, float physicsTimestep)
+void SystemBase::onEntityPrePhysicsUpdate(
+    Entity & entity, float physicsTimestep)
 {
-
 }
 
-void SystemBase::onFrameBegin()
-{
+void SystemBase::onFrameBegin() {}
 
-}
+void SystemBase::onPrePhysicsUpdate(float seconds) {}
 
-void SystemBase::onPrePhysicsUpdate(float seconds)
-{
-
-}
-
-void SystemBase::onUpdate(float seconds)
-{
-
-}
-
+void SystemBase::onUpdate(float seconds) {}
 }

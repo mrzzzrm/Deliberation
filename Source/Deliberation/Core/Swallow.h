@@ -4,8 +4,8 @@
 
 namespace deliberation
 {
-
-template<typename ... T>
-void Swallow(T &&...) {}
-
+template<typename... T>
+void Swallow(T &&...)
+{
+}
 }

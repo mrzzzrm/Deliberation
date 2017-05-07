@@ -9,71 +9,34 @@
 
 namespace deliberation
 {
+DrawState::DrawState() : m_provokingVertex(gl::GL_FIRST_VERTEX_CONVENTION) {}
 
-DrawState::DrawState():
-    m_provokingVertex(gl::GL_FIRST_VERTEX_CONVENTION)
-{
-}
+gl::GLenum DrawState::provokingVertex() const { return m_provokingVertex; }
 
-gl::GLenum DrawState::provokingVertex() const
-{
-    return m_provokingVertex;
-}
+BlendState & DrawState::blendState() { return m_blendState; }
 
-BlendState & DrawState::blendState()
-{
-    return m_blendState;
-}
+const BlendState & DrawState::blendState() const { return m_blendState; }
 
-const BlendState & DrawState::blendState() const
-{
-    return m_blendState;
-}
+CullState & DrawState::cullState() { return m_cullState; }
 
-CullState & DrawState::cullState()
-{
-    return m_cullState;
-}
+const CullState & DrawState::cullState() const { return m_cullState; }
 
-const CullState & DrawState::cullState() const
-{
-    return m_cullState;
-}
-
-RasterizerState & DrawState::rasterizerState()
-{
-    return m_rasterizerState;
-}
+RasterizerState & DrawState::rasterizerState() { return m_rasterizerState; }
 
 const RasterizerState & DrawState::rasterizerState() const
 {
     return m_rasterizerState;
 }
 
-DepthState & DrawState::depthState()
-{
-    return m_depthState;
-}
+DepthState & DrawState::depthState() { return m_depthState; }
 
-const DepthState & DrawState::depthState() const
-{
-    return m_depthState;
-}
+const DepthState & DrawState::depthState() const { return m_depthState; }
 
-StencilState & DrawState::stencilState()
-{
-    return m_stencilState;
-}
+StencilState & DrawState::stencilState() { return m_stencilState; }
 
-const StencilState & DrawState::stencilState() const
-{
-    return m_stencilState;
-}
+const StencilState & DrawState::stencilState() const { return m_stencilState; }
 
-bool DrawState::hasViewport() const
-{
-    return m_viewport.engaged();
-}
+bool DrawState::hasViewport() const { return m_viewport.engaged(); }
 
 const Viewport & DrawState::viewport() const
 {
@@ -120,15 +83,12 @@ std::string DrawState::toString() const
 {
     std::stringstream stream;
 
-    stream <<
-        "BlendState: " << m_blendState.toString() << std::endl <<
-        "CullState: " << m_cullState.toString() << std::endl <<
-        "RasterizerState: " << m_rasterizerState.toString() << std::endl <<
-        "DepthState: " << m_depthState.toString() << std::endl <<
-        "StencilState: " << m_stencilState.toString() << std::endl;
+    stream << "BlendState: " << m_blendState.toString() << std::endl
+           << "CullState: " << m_cullState.toString() << std::endl
+           << "RasterizerState: " << m_rasterizerState.toString() << std::endl
+           << "DepthState: " << m_depthState.toString() << std::endl
+           << "StencilState: " << m_stencilState.toString() << std::endl;
 
     return stream.str();
 }
-
 }
-

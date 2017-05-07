@@ -2,8 +2,8 @@
 
 #include <imgui.h>
 
-#include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Buffer.h>
+#include <Deliberation/Draw/Draw.h>
 
 #include <Deliberation/ECS/System.h>
 
@@ -14,22 +14,20 @@
 
 namespace deliberation
 {
-
 class DrawContext;
 class Input;
 
-class ImGuiSystem:
-    public std::enable_shared_from_this<ImGuiSystem>,
-    public System<ImGuiSystem>,
-    public InputLayer
+class ImGuiSystem : public std::enable_shared_from_this<ImGuiSystem>,
+                    public System<ImGuiSystem>,
+                    public InputLayer
 {
-public:
+  public:
     ImGuiSystem(World & world);
 
     void onCreated() override { m_input.addLayer(shared_from_this()); }
     void onRemoved() override { m_input.removeLayer(shared_from_this()); }
 
-protected:
+  protected:
     void onFrameBegin() override;
 
     void onMouseButtonPressed(MouseButtonEvent & event) override;
@@ -37,11 +35,10 @@ protected:
     void onMouseWheel(MouseWheelEvent & event) override;
     void onMouseMotion(MouseMotionEvent & event) override;
 
-private:
-    Input &     m_input;
+  private:
+    Input & m_input;
 
-    bool        m_wantsCaptureMouse = false;
-    float       m_mouseWheel = 0;
+    bool  m_wantsCaptureMouse = false;
+    float m_mouseWheel = 0;
 };
-
 }

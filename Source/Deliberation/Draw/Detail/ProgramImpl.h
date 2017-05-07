@@ -9,18 +9,16 @@
 
 namespace deliberation
 {
-
 class DrawContext;
 
 class ProgramImpl final
 {
-public:
-    ProgramImpl(DrawContext & drawContext, const std::vector<std::string> & paths);
+  public:
+    ProgramImpl(
+        DrawContext & drawContext, const std::vector<std::string> & paths);
 
-    DrawContext &       drawContext;
-    gl::GLuint          glProgramName;
-    ProgramInterface    interface;
+    DrawContext &    drawContext;
+    gl::GLuint       glProgramName;
+    ProgramInterface interface;
 };
-
 }
-

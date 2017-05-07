@@ -11,56 +11,54 @@
 
 namespace deliberation
 {
-
 class DebugGeometryManager final
 {
-public:
+  public:
     static constexpr float ARROW_CONE_HEIGHT = 0.2f;
 
-public:
+  public:
     struct BuildIns
     {
         /**
          * Programs
          */
-        Program     shadedProgram;
-        Program     unicolorProgram;
-        Program     vertexColorProgram;
+        Program shadedProgram;
+        Program unicolorProgram;
+        Program vertexColorProgram;
 
         /**
          * Layouts
          */
-        DataLayout  shadedDataLayout;
-        DataLayout  unicolorDataLayout;
-        DataLayout  vertexColorDataLayout;
+        DataLayout shadedDataLayout;
+        DataLayout unicolorDataLayout;
+        DataLayout vertexColorDataLayout;
 
         /**
          * Build in meshes
          */
-        Buffer      boxTrianglesVertexBuffer;
-        Buffer      boxTrianglesIndexBuffer;
+        Buffer boxTrianglesVertexBuffer;
+        Buffer boxTrianglesIndexBuffer;
 
-        Buffer      boxLinesVertexBuffer;
-        Buffer      boxLinesIndexBuffer;
+        Buffer boxLinesVertexBuffer;
+        Buffer boxLinesIndexBuffer;
 
-        Buffer      coneVertexBuffer;
-        Buffer      coneIndexBuffer;
+        Buffer coneVertexBuffer;
+        Buffer coneIndexBuffer;
 
-        Buffer      sphereVertexBuffer;
-        Buffer      sphereIndexBuffer;
+        Buffer sphereVertexBuffer;
+        Buffer sphereIndexBuffer;
 
-        Buffer      pointVertexBuffer;
+        Buffer pointVertexBuffer;
     };
-    
-public:
+
+  public:
     DebugGeometryManager(DrawContext & drawContext);
 
-    DrawContext & drawContext() const;
+    DrawContext &    drawContext() const;
     const BuildIns & buildIns() const;
 
-private:
-    DrawContext &   m_drawContext;
-    BuildIns    m_buildIns;
+  private:
+    DrawContext & m_drawContext;
+    BuildIns      m_buildIns;
 };
-
 }

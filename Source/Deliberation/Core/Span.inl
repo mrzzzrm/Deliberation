@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 template<size_t N>
 Span<T>::Span(T (&values)[N])
@@ -23,11 +22,8 @@ Span<T>::Span(std::vector<T> & vec)
 }
 
 template<typename T>
-Span<T>::Span(size_t size, T * ptr):
-    m_size(size),
-    m_ptr(ptr)
+Span<T>::Span(size_t size, T * ptr) : m_size(size), m_ptr(ptr)
 {
-
 }
 
 template<typename T>
@@ -68,5 +64,4 @@ std::vector<T> Span<T>::toVector() const
 
     return result;
 }
-
 }

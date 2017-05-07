@@ -12,13 +12,9 @@
 
 namespace deliberation
 {
-
 Texture::Texture() = default;
 
-Texture::Texture(const std::shared_ptr<TextureImpl> & impl):
-    m_impl(impl)
-{
-}
+Texture::Texture(const std::shared_ptr<TextureImpl> & impl) : m_impl(impl) {}
 
 Texture::Texture(const Surface & surface)
 {
@@ -70,8 +66,11 @@ void Texture::upload(const TextureBinary & binary)
     Assert(m_impl.get(), "Texture is hollow");
 
     Assert(binary.width() == width(), "Incompatible Texture/Binary resolution");
-    Assert(binary.height() == height(), "Incompatible Texture/Binary resolution");
-    Assert(binary.numFaces() == m_impl->surfaces.size(), "Incompatible Texture/Binary types");
+    Assert(
+        binary.height() == height(), "Incompatible Texture/Binary resolution");
+    Assert(
+        binary.numFaces() == m_impl->surfaces.size(),
+        "Incompatible Texture/Binary types");
     Assert(binary.format() == format(), "Incompatible Texture/Binary types");
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
@@ -80,6 +79,4 @@ void Texture::upload(const TextureBinary & binary)
 
     m_impl->texImage2DAllFaces(&binary);
 }
-
 }
-

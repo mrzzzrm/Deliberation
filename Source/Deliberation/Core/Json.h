@@ -7,28 +7,24 @@
 
 namespace nlohmann
 {
-
-template <typename T, glm::precision P>
+template<typename T, glm::precision P>
 struct adl_serializer<glm::tvec3<T, P>>
 {
-    static void to_json(json& j, const glm::tvec3<T, P> & v);
-    static void from_json(const json& j, glm::tvec3<T, P> & v);
+    static void to_json(json & j, const glm::tvec3<T, P> & v);
+    static void from_json(const json & j, glm::tvec3<T, P> & v);
 };
 
-template <typename T, glm::precision P>
+template<typename T, glm::precision P>
 struct adl_serializer<glm::tquat<T, P>>
 {
-    static void to_json(json& j, const glm::tquat<T, P> & v);
-    static void from_json(const json& j, glm::tquat<T, P> & v);
+    static void to_json(json & j, const glm::tquat<T, P> & v);
+    static void from_json(const json & j, glm::tquat<T, P> & v);
 };
-
 }
 
 namespace deliberation
 {
-
 using Json = nlohmann::json;
-
 }
 
 #include <Deliberation/Core/Json.inl>

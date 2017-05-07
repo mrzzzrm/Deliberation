@@ -4,18 +4,12 @@
 
 namespace deliberation
 {
-
-SphereShape::SphereShape(float radius):
-    CollisionShape(CollisionShape_Sphere),
-    m_radius(radius)
+SphereShape::SphereShape(float radius)
+    : CollisionShape(CollisionShape_Sphere), m_radius(radius)
 {
-
 }
 
-float SphereShape::radius() const
-{
-    return m_radius;
-}
+float SphereShape::radius() const { return m_radius; }
 
 AABB SphereShape::bounds(const Transform3D & transform) const
 {
@@ -35,6 +29,4 @@ glm::mat3 SphereShape::localInertia() const
 
     return result;
 }
-
 }
-

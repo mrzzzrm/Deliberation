@@ -3,15 +3,14 @@
 #include <iostream>
 
 #include <Deliberation/Physics/BroadphaseProxy.h>
-#include <Deliberation/Physics/Contacts/Contact.h>
 #include <Deliberation/Physics/CollisionObject.h>
+#include <Deliberation/Physics/Contacts/Contact.h>
 #include <Deliberation/Physics/RigidBody.h>
 
 #define VERBOSE 0
 
 namespace deliberation
 {
-
 Narrowphase::Narrowphase() = default;
 
 Narrowphase::~Narrowphase() = default;
@@ -33,8 +32,8 @@ const SparseVector<std::unique_ptr<Contact>> & Narrowphase::contacts() const
 
 bool Narrowphase::hasContact(void * userDataA, void * userDataB) const
 {
-    auto & bodyA = *(RigidBody*)userDataA;
-    auto & bodyB = *(RigidBody*)userDataB;
+    auto & bodyA = *(RigidBody *)userDataA;
+    auto & bodyB = *(RigidBody *)userDataB;
 
     auto indexA = bodyA.index();
     auto indexB = bodyB.index();
@@ -44,11 +43,12 @@ bool Narrowphase::hasContact(void * userDataA, void * userDataB) const
 
 void Narrowphase::addContact(void * userDataA, void * userDataB)
 {
-    auto & bodyA = *(RigidBody*)userDataA;
-    auto & bodyB = *(RigidBody*)userDataB;
+    auto & bodyA = *(RigidBody *)userDataA;
+    auto & bodyB = *(RigidBody *)userDataB;
 
 #if VERBOSE
-    std::cout << "Narrowphase::addContact(): " << userDataA << " and " << userDataB << std::endl;
+    std::cout << "Narrowphase::addContact(): " << userDataA << " and "
+              << userDataB << std::endl;
 #endif
 
     auto shapeTypeA = bodyA.shape()->type();
@@ -66,8 +66,8 @@ void Narrowphase::addContact(void * userDataA, void * userDataB)
 
 void Narrowphase::removeContact(void * userDataA, void * userDataB)
 {
-    auto & bodyA = *(RigidBody*)userDataA;
-    auto & bodyB = *(RigidBody*)userDataB;
+    auto & bodyA = *(RigidBody *)userDataA;
+    auto & bodyB = *(RigidBody *)userDataB;
 
     auto indexA = bodyA.index();
     auto indexB = bodyB.index();
@@ -78,11 +78,12 @@ void Narrowphase::removeContact(void * userDataA, void * userDataB)
     m_contacts.erase(index);
 }
 
-void Narrowphase::lineTest(const Ray3D &ray,
-                           const std::shared_ptr<BroadphaseProxy> &proxy,
-                           const std::function<bool(const RayCastIntersection &)> &handler)
+void Narrowphase::lineTest(
+    const Ray3D &                                            ray,
+    const std::shared_ptr<BroadphaseProxy> &                 proxy,
+    const std::function<bool(const RayCastIntersection &)> & handler)
 {
-    auto & body = *(RigidBody*)proxy->userData();
+    auto & body = *(RigidBody *)proxy->userData();
 
     auto it = m_primitiveTestByShapeType.find(body.shape()->type());
 
@@ -92,7 +93,7 @@ void Narrowphase::lineTest(const Ray3D &ray,
     }
 
     auto & primitiveTest = it->second;
-    auto intersection = primitiveTest->lineTest(ray, body.shared_from_this());
+    auto   intersection = primitiveTest->lineTest(ray, body.shared_from_this());
 
     if (intersection)
     {
@@ -100,9 +101,12 @@ void Narrowphase::lineTest(const Ray3D &ray,
     }
 }
 
-void Narrowphase::registerPrimitiveTest(int shapeType, std::unique_ptr<NarrowphasePrimitiveTest> && primitiveTest)
+void Narrowphase::registerPrimitiveTest(
+    int shapeType, std::unique_ptr<NarrowphasePrimitiveTest> && primitiveTest)
 {
-    Assert(m_primitiveTestByShapeType.count(shapeType) == 0, "Shape type already registered");
+    Assert(
+        m_primitiveTestByShapeType.count(shapeType) == 0,
+        "Shape type already registered");
     m_primitiveTestByShapeType[shapeType] = std::move(primitiveTest);
 }
 
@@ -113,5 +117,4 @@ void Narrowphase::updateContacts()
         contact->update();
     }
 }
-
 }

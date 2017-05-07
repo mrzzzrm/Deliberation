@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 enum ELEMENTAL_TYPE
 {
     ELEMENTAL_TYPE_NONE,
@@ -20,21 +19,21 @@ enum ELEMENTAL_TYPE
 
 class ElementalType final
 {
-public:
+  public:
     ElementalType(u8 id);
 
     u8 id() const;
 
     const char * name() const;
-    u8 size() const;
-    bool isFloat() const;
-    bool isInteger() const;
-    bool isSignedInteger() const;
+    u8           size() const;
+    bool         isFloat() const;
+    bool         isInteger() const;
+    bool         isSignedInteger() const;
 
     bool operator==(const ElementalType & other) const;
     bool operator!=(const ElementalType & other) const;
 
-private:
+  private:
     u8 m_id;
 };
 
@@ -47,5 +46,4 @@ extern ElementalType ElementalType_I8;
 extern ElementalType ElementalType_I16;
 extern ElementalType ElementalType_I32;
 extern ElementalType ElementalType_Float;
-
 }

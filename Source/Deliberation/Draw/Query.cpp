@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 Query::Query() = default;
 
 Query::~Query() = default;
@@ -60,11 +59,5 @@ void Query::end()
     return m_impl->end();
 }
 
-Query::Query(const std::shared_ptr<QueryImpl> & impl):
-    m_impl(impl)
-{
-
+Query::Query(const std::shared_ptr<QueryImpl> & impl) : m_impl(impl) {}
 }
-
-}
-

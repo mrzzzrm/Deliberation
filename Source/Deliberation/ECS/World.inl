@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 std::shared_ptr<T> World::system()
 {
@@ -26,7 +25,7 @@ T & World::systemRef()
     return *systemPtr;
 }
 
-template<typename T, typename ... Args>
+template<typename T, typename... Args>
 std::shared_ptr<T> World::addSystem(Args &&... args)
 {
     Assert((std::is_base_of<SystemBase, T>::value), "");
@@ -38,6 +37,4 @@ std::shared_ptr<T> World::addSystem(Args &&... args)
 
     return system;
 }
-
 }
-

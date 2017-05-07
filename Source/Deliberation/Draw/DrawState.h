@@ -2,10 +2,8 @@
 
 #include <string>
 
-
-
-#include <Deliberation/Core/Viewport.h>
 #include <Deliberation/Core/Optional.h>
+#include <Deliberation/Core/Viewport.h>
 
 #include <Deliberation/Draw/BlendState.h>
 #include <Deliberation/Draw/CullState.h>
@@ -15,30 +13,29 @@
 
 namespace deliberation
 {
-
 class DrawState final
 {
-public:
+  public:
     DrawState();
 
     gl::GLenum provokingVertex() const;
 
-    BlendState & blendState();
+    BlendState &       blendState();
     const BlendState & blendState() const;
 
-    CullState & cullState();
+    CullState &       cullState();
     const CullState & cullState() const;
 
-    RasterizerState & rasterizerState();
+    RasterizerState &       rasterizerState();
     const RasterizerState & rasterizerState() const;
 
-    DepthState & depthState();
+    DepthState &       depthState();
     const DepthState & depthState() const;
 
-    StencilState & stencilState();
+    StencilState &       stencilState();
     const StencilState & stencilState() const;
 
-    bool hasViewport() const;
+    bool             hasViewport() const;
     const Viewport & viewport() const;
 
     void setProvokingVertex(gl::GLenum provokingVertex);
@@ -53,17 +50,15 @@ public:
 
     std::string toString() const;
 
-private:
+  private:
     gl::GLenum m_provokingVertex;
 
-    BlendState m_blendState;
-    CullState m_cullState;
-    DepthState m_depthState;
+    BlendState      m_blendState;
+    CullState       m_cullState;
+    DepthState      m_depthState;
     RasterizerState m_rasterizerState;
-    StencilState m_stencilState;
+    StencilState    m_stencilState;
 
     Optional<Viewport> m_viewport;
 };
-
 }
-

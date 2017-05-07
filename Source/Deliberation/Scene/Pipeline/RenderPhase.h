@@ -2,7 +2,6 @@
 
 namespace deliberation
 {
-
 enum class RenderPhase
 {
     Forward,
@@ -18,5 +17,4 @@ enum class RenderPhase
 
     Count
 };
-
 }

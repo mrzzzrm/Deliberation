@@ -2,7 +2,6 @@
 
 namespace deliberation
 {
-
 ComponentFilter ComponentFilter::all()
 {
     ComponentFilter filter;
@@ -17,14 +16,10 @@ ComponentFilter ComponentFilter::none()
     return filter;
 }
 
-ComponentFilter::ComponentFilter()
-{
-}
+ComponentFilter::ComponentFilter() {}
 
 bool ComponentFilter::accepts(const ComponentBitset & componentBits) const
 {
     return (componentBits & m_components) == m_components;
 }
-
 }
-

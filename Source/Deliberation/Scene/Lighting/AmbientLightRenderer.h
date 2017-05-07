@@ -8,11 +8,9 @@
 
 namespace deliberation
 {
-
-class AmbientLightRenderer:
-    public Renderer
+class AmbientLightRenderer : public Renderer
 {
-public:
+  public:
     AmbientLightRenderer(RenderManager & renderManager);
 
     const glm::vec3 & color() const { return m_color; }
@@ -21,11 +19,10 @@ public:
 
     void registerRenderNodes() override;
 
-private:
+  private:
     friend class AmbientLightNode;
 
-private:
+  private:
     glm::vec3 m_color;
 };
-
 }

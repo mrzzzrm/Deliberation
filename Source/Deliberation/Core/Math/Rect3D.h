@@ -6,18 +6,18 @@
 
 namespace deliberation
 {
-
 class Rect3D final
 {
-public:
-    Rect3D(const glm::vec3 & origin,
-           const glm::vec3 & right,
-           const glm::vec3 & up);
+  public:
+    Rect3D(
+        const glm::vec3 & origin,
+        const glm::vec3 & right,
+        const glm::vec3 & up);
 
     const glm::vec3 & origin() const;
     const glm::vec3 & right() const;
     const glm::vec3 & up() const;
-    glm::vec2 size() const;
+    glm::vec2         size() const;
 
     void setOrigin(const glm::vec3 & origin);
     void setRight(const glm::vec3 & right);
@@ -25,11 +25,9 @@ public:
 
     Plane plane() const;
 
-private:
+  private:
     glm::vec3 m_origin;
     glm::vec3 m_right;
     glm::vec3 m_up;
 };
-
 }
-

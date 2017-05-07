@@ -3,16 +3,13 @@
 #include <memory>
 #include <unordered_map>
 
-
-
 #include <Deliberation/Core/SparseVector.h>
 
 namespace deliberation
 {
-
 class EventManager final
 {
-public:
+  public:
     EventManager();
 
     template<typename EventType, typename ReceiverType>
@@ -24,19 +21,18 @@ public:
     template<typename EventType>
     void emit(const EventType & event);
 
-private:
+  private:
     class ICallback
     {
-    public:
+      public:
         virtual ~ICallback();
         virtual void receive(const void * event) = 0;
     };
 
-private:
-    std::unordered_map<std::size_t,
-        SparseVector<std::unique_ptr<ICallback>>> m_receivers;
+  private:
+    std::unordered_map<std::size_t, SparseVector<std::unique_ptr<ICallback>>>
+        m_receivers;
 };
-
 }
 
 #include <Deliberation/ECS/EventManager.inl>

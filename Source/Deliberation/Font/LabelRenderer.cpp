@@ -17,35 +17,29 @@
 
 namespace deliberation
 {
+LabelRenderer::LabelRenderer() : m_drawContext(nullptr) {}
 
-LabelRenderer::LabelRenderer():
-    m_drawContext(nullptr)
+LabelRenderer::LabelRenderer(DrawContext & drawContext)
+    : m_drawContext(&drawContext)
 {
+    m_program = m_drawContext->createProgram(
+        {deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),
+         deliberation::DeliberationDataPath("Data/Font/LabelRenderer.frag")});
 
-}
-
-LabelRenderer::LabelRenderer(DrawContext & drawContext):
-    m_drawContext(&drawContext)
-{
-    m_program = m_drawContext->createProgram({deliberation::DeliberationDataPath("Data/Font/LabelRenderer.vert"),
-                                          deliberation::DeliberationDataPath("Data/Font/LabelRenderer.frag")});
-
-    std::vector<glm::vec2> vertices({
-        {-0.5f, -0.5f},
-        {-0.5f,  0.5f},
-        { 0.5f, -0.5f},
-        { 0.5f,  0.5f}
-    });
+    std::vector<glm::vec2> vertices(
+        {{-0.5f, -0.5f}, {-0.5f, 0.5f}, {0.5f, -0.5f}, {0.5f, 0.5f}});
 
     DataLayout layout = DataLayout({"Position", Type_Vec2});
     m_vertexBuffer = m_drawContext->createBuffer(layout);
     m_vertexBuffer.upload(vertices);
 
-    m_draw = m_drawContext->createDraw(m_program, DrawPrimitive::TriangleStrip, "LabelRenderer");
+    m_draw = m_drawContext->createDraw(
+        m_program, DrawPrimitive::TriangleStrip, "LabelRenderer");
     m_draw.addVertexBuffer(m_vertexBuffer);
     m_draw.state().setDepthState(DepthState::disabledR());
     m_draw.state().setCullState(CullState::disabled());
-    m_draw.state().setBlendState({BlendEquation::Add, BlendFactor::SourceAlpha, BlendFactor::One});
+    m_draw.state().setBlendState(
+        {BlendEquation::Add, BlendFactor::SourceAlpha, BlendFactor::One});
 
     m_sampler = m_draw.sampler("Texture");
     m_sampler.setWrap(TextureWrap::ClampToEdge);
@@ -66,6 +60,4 @@ void LabelRenderer::render(const Label & label, const Viewport & viewport)
 
     m_draw.render();
 }
-
 }
-

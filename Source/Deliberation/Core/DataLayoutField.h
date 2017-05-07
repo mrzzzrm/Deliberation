@@ -5,14 +5,11 @@
 
 #include <Deliberation/Core/Types.h>
 
-
-
 namespace deliberation
 {
-
 class DataLayoutField final
 {
-public:
+  public:
     struct Desc
     {
         Desc() = default;
@@ -27,21 +24,24 @@ public:
         size_t      arraySize = 0;
     };
 
-public:
+  public:
     DataLayoutField() = default;
-    DataLayoutField(const std::string & name, Type type, size_t offset, size_t arraySize = 1);
+    DataLayoutField(
+        const std::string & name,
+        Type                type,
+        size_t              offset,
+        size_t              arraySize = 1);
 
     const std::string & name() const;
-    Type type() const;
-    size_t offset() const;
-    size_t arraySize() const { return m_desc.arraySize; }
-    const Desc & desc() const;
+    Type                type() const;
+    size_t              offset() const;
+    size_t              arraySize() const { return m_desc.arraySize; }
+    const Desc &        desc() const;
 
     std::string toString() const;
 
-private:
-    Desc    m_desc;
-    size_t  m_offset;
+  private:
+    Desc   m_desc;
+    size_t m_offset;
 };
-
 }

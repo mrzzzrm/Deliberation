@@ -2,8 +2,8 @@
 
 #include <imgui.h>
 
-#include <Deliberation/Core/Math/Random.h>
 #include <Deliberation/Core/Math/MathUtils.h>
+#include <Deliberation/Core/Math/Random.h>
 
 #include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Scene/Texture/TextureLoader.h>
@@ -14,11 +14,9 @@
 
 namespace deliberation
 {
-
-SsaoRenderer::SsaoRenderer(RenderManager & renderManager):
-    SingleNodeRenderer(renderManager, RenderPhase::PostGBuffer, "SSAO")
+SsaoRenderer::SsaoRenderer(RenderManager & renderManager)
+    : SingleNodeRenderer(renderManager, RenderPhase::PostGBuffer, "SSAO")
 {
-
 }
 
 void SsaoRenderer::render()
@@ -35,7 +33,8 @@ void SsaoRenderer::render()
 
 void SsaoRenderer::renderDebugGui()
 {
-    ImGui::SliderFloat("Sample Radius", &m_sampleRadius, 0.005f, 10.0f, "%.3f", 1.5f);
+    ImGui::SliderFloat(
+        "Sample Radius", &m_sampleRadius, 0.005f, 10.0f, "%.3f", 1.5f);
     ImGui::SliderInt("Samples", &m_numSamples, 3, m_maxNumSamples);
 }
 
@@ -43,21 +42,25 @@ void SsaoRenderer::init()
 {
     auto & drawContext = m_renderManager.drawContext();
 
+    m_intermediateFb = drawContext.createFramebuffer(
+        {drawContext.backbuffer().width(),
+         drawContext.backbuffer().height(),
+         {{PixelFormat_R_32_F, "UnblurredSsao"}}});
 
-    m_intermediateFb = drawContext.createFramebuffer({drawContext.backbuffer().width(), drawContext.backbuffer().height(),
-                                                      {{PixelFormat_R_32_F, "UnblurredSsao"}}});
-
-    m_effect = ScreenSpaceEffect(m_renderManager.drawContext(),
-                                 {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
-                                  DeliberationDataPath("Data/Shaders/Ssao.frag")},
-                                 "SSAO");
+    m_effect = ScreenSpaceEffect(
+        m_renderManager.drawContext(),
+        {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
+         DeliberationDataPath("Data/Shaders/Ssao.frag")},
+        "SSAO");
 
     auto positionSampler = m_effect.draw().sampler("Position");
-    positionSampler.setTexture(m_renderManager.gbuffer().colorTargetRef("Position"));
+    positionSampler.setTexture(
+        m_renderManager.gbuffer().colorTargetRef("Position"));
     positionSampler.setWrap(TextureWrap::ClampToEdge);
 
     auto normalSampler = m_effect.draw().sampler("Normal");
-    normalSampler.setTexture(m_renderManager.gbuffer().colorTargetRef("Normal"));
+    normalSampler.setTexture(
+        m_renderManager.gbuffer().colorTargetRef("Normal"));
     normalSampler.setWrap(TextureWrap::ClampToEdge);
 
     m_effect.draw().setFramebuffer(m_intermediateFb);
@@ -87,17 +90,17 @@ void SsaoRenderer::init()
     auto numNoiseTexels = noiseWidth * noiseHeight;
 
     LayoutedBlob noiseData({"Noise", Type_Vec3}, numNoiseTexels);
-    auto noise = noiseData.iterator<glm::vec3>("Noise");
+    auto         noise = noiseData.iterator<glm::vec3>("Noise");
 
     for (size_t i = 0; i < numNoiseTexels; i++)
     {
-        noise.put({RandomFloat(-1.0f, 1.0f),
-                   RandomFloat(-1.0f, 1.0f),
-                   0.0f});
+        noise.put({RandomFloat(-1.0f, 1.0f), RandomFloat(-1.0f, 1.0f), 0.0f});
     }
 
     auto noiseTexture = drawContext.createTexture(
-        TextureLoader(noiseData.rawData(), noiseWidth, noiseHeight, PixelFormat_RGB_32_F).load());
+        TextureLoader(
+            noiseData.rawData(), noiseWidth, noiseHeight, PixelFormat_RGB_32_F)
+            .load());
 
     auto noiseSampler = m_effect.draw().sampler("Noise");
     noiseSampler.setTexture(noiseTexture);
@@ -105,9 +108,13 @@ void SsaoRenderer::init()
     noiseSampler.setWrapT(TextureWrap::Repeat);
 
     // NoiseScale
-    const auto noiseScaleX = (float)drawContext.backbuffer().width() / (float)noiseWidth;
-    const auto noiseScaleY = (float)drawContext.backbuffer().height() / (float)noiseHeight;
-    m_effect.draw().uniform("NoiseScale").set(glm::vec2(noiseScaleX, noiseScaleY));
+    const auto noiseScaleX =
+        (float)drawContext.backbuffer().width() / (float)noiseWidth;
+    const auto noiseScaleY =
+        (float)drawContext.backbuffer().height() / (float)noiseHeight;
+    m_effect.draw()
+        .uniform("NoiseScale")
+        .set(glm::vec2(noiseScaleX, noiseScaleY));
 
     // Etc uniforms
     m_effect.draw().uniform("Bias").set(0.02f);
@@ -115,8 +122,11 @@ void SsaoRenderer::init()
     m_projectionUniform = m_effect.draw().uniform("Projection");
 
     // Blur
-    m_blurEffect = ScreenSpaceEffect(drawContext, {DeliberationDataPath("Data/Shaders/Blur4x4.frag"),
-                                                   DeliberationDataPath("Data/Shaders/UV_Position2.vert")}, "SSAO Blur");
+    m_blurEffect = ScreenSpaceEffect(
+        drawContext,
+        {DeliberationDataPath("Data/Shaders/Blur4x4.frag"),
+         DeliberationDataPath("Data/Shaders/UV_Position2.vert")},
+        "SSAO Blur");
 
     auto inputSampler = m_blurEffect.draw().sampler("Input");
     inputSampler.setTexture(m_intermediateFb.colorTargetRef("UnblurredSsao"));
@@ -124,9 +134,9 @@ void SsaoRenderer::init()
 
     FramebufferBinding blurBinding({{"Blurred", "Ssao"}});
 
-    m_blurEffect.draw().setFramebuffer(m_renderManager.ssaoBuffer(), blurBinding);
+    m_blurEffect.draw().setFramebuffer(
+        m_renderManager.ssaoBuffer(), blurBinding);
 
     m_dirty = false;
 }
-
 }

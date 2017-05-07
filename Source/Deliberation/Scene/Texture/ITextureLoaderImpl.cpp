@@ -2,8 +2,5 @@
 
 namespace deliberation
 {
-
 ITextureLoaderImpl::~ITextureLoaderImpl() = default;
-
 }
-

@@ -12,29 +12,30 @@
 
 namespace deliberation
 {
-
-void ContactPoint::initialize(const Contact & contact, const Intersection & intersection)
+void ContactPoint::initialize(
+    const Contact & contact, const Intersection & intersection)
 {
     update(contact, intersection);
 
     normalImpulseAccumulator = 0.0f;
 }
 
-void ContactPoint::update(const Contact & contact, const Intersection & intersection)
+void ContactPoint::update(
+    const Contact & contact, const Intersection & intersection)
 {
-    *(Intersection*)this = intersection;
+    *(Intersection *)this = intersection;
 
     auto & bodyA = contact.bodyA();
     auto & bodyB = contact.bodyB();
 
     auto & n = normal;
 
-    auto mA = bodyA.inverseMass();
+    auto   mA = bodyA.inverseMass();
     auto & vA = bodyA.linearVelocity();
     auto & wA = bodyA.angularVelocity();
     auto & iA = bodyA.worldInverseInertia();
 
-    auto mB = bodyB.inverseMass();
+    auto   mB = bodyB.inverseMass();
     auto & vB = bodyB.linearVelocity();
     auto & wB = bodyB.angularVelocity();
     auto & iB = bodyB.worldInverseInertia();
@@ -56,15 +57,18 @@ void ContactPoint::update(const Contact & contact, const Intersection & intersec
         velocityBias = 0;
     }
 
-    normalMass = glm::dot(glm::cross(iA * glm::cross(relativePositionA, n), relativePositionA) +
-                          glm::cross(iB * glm::cross(relativePositionB, n), relativePositionB), n) + mA + mB;
+    normalMass =
+        glm::dot(
+            glm::cross(
+                iA * glm::cross(relativePositionA, n), relativePositionA) +
+                glm::cross(
+                    iB * glm::cross(relativePositionB, n), relativePositionB),
+            n) +
+        mA + mB;
 }
 
-Contact::Contact(RigidBody & bodyA, RigidBody & bodyB):
-    m_bodyA(bodyA),
-    m_bodyB(bodyB),
-    m_intersect(false),
-    m_numPoints(0)
+Contact::Contact(RigidBody & bodyA, RigidBody & bodyB)
+    : m_bodyA(bodyA), m_bodyB(bodyB), m_intersect(false), m_numPoints(0)
 {
     m_resitution = std::max(m_bodyA.restitution(), m_bodyB.restitution());
     m_friction = (m_bodyA.friction() + m_bodyB.friction()) / 2.0f;
@@ -72,35 +76,17 @@ Contact::Contact(RigidBody & bodyA, RigidBody & bodyB):
 
 Contact::~Contact() = default;
 
-RigidBody & Contact::bodyA() const
-{
-    return m_bodyA;
-}
+RigidBody & Contact::bodyA() const { return m_bodyA; }
 
-RigidBody & Contact::bodyB() const
-{
-    return m_bodyB;
-}
+RigidBody & Contact::bodyB() const { return m_bodyB; }
 
-bool Contact::intersect() const
-{
-    return m_intersect;
-}
+bool Contact::intersect() const { return m_intersect; }
 
-float Contact::restitution() const
-{
-    return m_resitution;
-}
+float Contact::restitution() const { return m_resitution; }
 
-float Contact::friction() const
-{
-    return m_friction;
-}
+float Contact::friction() const { return m_friction; }
 
-uint Contact::numPoints() const
-{
-    return m_numPoints;
-}
+uint Contact::numPoints() const { return m_numPoints; }
 
 ContactPoint & Contact::point(uint index)
 {
@@ -110,14 +96,17 @@ ContactPoint & Contact::point(uint index)
 
 void Contact::updatePoints(const Span<Intersection> & intersections)
 {
-    std::sort(intersections.begin(), intersections.end(), [](const Intersection & a, const Intersection & b) {
-        return a.depth > b.depth;
-    });
+    std::sort(
+        intersections.begin(),
+        intersections.end(),
+        [](const Intersection & a, const Intersection & b) {
+            return a.depth > b.depth;
+        });
 
-    auto numConsideredIntersections = std::min<uint>(intersections.size(), MAX_NUM_CONTACT_POINTS);
+    auto numConsideredIntersections =
+        std::min<uint>(intersections.size(), MAX_NUM_CONTACT_POINTS);
 
     ContactPoint newPoints[MAX_NUM_CONTACT_POINTS];
-
 
     for (auto i = 0; i < numConsideredIntersections; i++)
     {
@@ -140,20 +129,16 @@ void Contact::updatePoints(const Span<Intersection> & intersections)
         }
     }
 
-    memcpy(m_points, newPoints, numConsideredIntersections * sizeof(ContactPoint));
+    memcpy(
+        m_points, newPoints, numConsideredIntersections * sizeof(ContactPoint));
     m_numPoints = numConsideredIntersections;
 }
 
-bool Contact::intersectionMatchesPoint(const Intersection & intersection, const ContactPoint & point) const
+bool Contact::intersectionMatchesPoint(
+    const Intersection & intersection, const ContactPoint & point) const
 {
     return glm::length(intersection.position - point.position) < 0.3f;
 }
 
-void Contact::clearPoints()
-{
-    m_numPoints = 0;
-}
-
-
-
+void Contact::clearPoints() { m_numPoints = 0; }
 }

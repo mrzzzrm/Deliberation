@@ -1,6 +1,6 @@
 #include <functional>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 #include <boost/optional.hpp>
 
@@ -8,12 +8,11 @@
 
 namespace deliberation
 {
-
 template<typename T>
 template<typename QVecT, typename QValT>
-SparseVector<T>::IteratorT<QVecT, QValT>::IteratorT(QVecT & vec, std::size_t index):
-    m_vec(vec),
-    m_index(index)
+SparseVector<T>::IteratorT<QVecT, QValT>::IteratorT(
+    QVecT & vec, std::size_t index)
+    : m_vec(vec), m_index(index)
 {
     while (m_index < m_vec.m_vec.size() && !m_vec.contains(m_index))
     {
@@ -24,11 +23,10 @@ SparseVector<T>::IteratorT<QVecT, QValT>::IteratorT(QVecT & vec, std::size_t ind
 template<typename T>
 template<typename QVecT, typename QValT>
 template<typename OtherIteratorT>
-SparseVector<T>::IteratorT<QVecT, QValT>::IteratorT(const OtherIteratorT & other):
-    m_vec(other.m_vec),
-    m_index(other.m_index)
+SparseVector<T>::IteratorT<QVecT, QValT>::IteratorT(
+    const OtherIteratorT & other)
+    : m_vec(other.m_vec), m_index(other.m_index)
 {
-
 }
 
 template<typename T>
@@ -40,20 +38,21 @@ QValT & SparseVector<T>::IteratorT<QVecT, QValT>::operator*()
 
 template<typename T>
 template<typename QVecT, typename QValT>
-typename SparseVector<T>::template IteratorT<QVecT, QValT> & SparseVector<T>::IteratorT<QVecT, QValT>::operator++()
+typename SparseVector<T>::template IteratorT<QVecT, QValT> &
+    SparseVector<T>::IteratorT<QVecT, QValT>::operator++()
 {
     do
     {
         m_index++;
-    }
-    while (m_index < m_vec.m_vec.size() && !m_vec.contains(m_index));
+    } while (m_index < m_vec.m_vec.size() && !m_vec.contains(m_index));
 
     return *this;
 }
 
 template<typename T>
 template<typename QVecT, typename QValT>
-bool SparseVector<T>::IteratorT<QVecT, QValT>::operator!=(const IteratorT<QVecT, QValT> & other) const
+bool SparseVector<T>::IteratorT<QVecT, QValT>::
+     operator!=(const IteratorT<QVecT, QValT> & other) const
 {
     return &m_vec != &other.m_vec || m_index != other.m_index;
 }
@@ -71,12 +70,14 @@ size_t SparseVector<T>::capacity() const
 }
 
 template<typename T>
-size_t SparseVector<T>::count() const {
+size_t SparseVector<T>::count() const
+{
     return m_count;
 }
 
 template<typename T>
-bool SparseVector<T>::empty() const {
+bool SparseVector<T>::empty() const
+{
     return count() == 0;
 }
 
@@ -130,7 +131,9 @@ std::size_t SparseVector<T>::insert(T && value)
 
             Assert(result < m_vec.size(), "");
 
-            if (m_vec[result]) continue; // Using an index without notifying the pool is possible
+            if (m_vec[result])
+                continue; // Using an index without notifying the pool is
+                          // possible
 
             m_vec[result] = std::move(value);
 
@@ -158,8 +161,10 @@ void SparseVector<T>::insert_at(size_t index, T && value)
 
     ensureSize(index);
 
-    if (index >= m_vec.size()) m_vec.emplace_back(boost::in_place_init, std::move(value));
-    else m_vec[index].emplace(std::move(value));
+    if (index >= m_vec.size())
+        m_vec.emplace_back(boost::in_place_init, std::move(value));
+    else
+        m_vec[index].emplace(std::move(value));
 
     incCount();
 }
@@ -171,7 +176,7 @@ void SparseVector<T>::insert_at(size_t index, const T & value)
 }
 
 template<typename T>
-template<typename ... Args>
+template<typename... Args>
 std::size_t SparseVector<T>::emplace(Args &&... args)
 {
     std::size_t result;
@@ -190,7 +195,9 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
             m_pool.pop();
 
             Assert(result < m_vec.size(), "");
-            if (m_vec[result]) continue; // Using an index without notifying the pool is possible
+            if (m_vec[result])
+                continue; // Using an index without notifying the pool is
+                          // possible
 
             m_vec[result] = T{std::forward<Args>(args)...};
             break;
@@ -203,7 +210,7 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
 }
 
 template<typename T>
-template<typename ... Args>
+template<typename... Args>
 void SparseVector<T>::emplace_at(size_t index, Args &&... args)
 {
     Assert(!contains(index), "Slot already taken");
@@ -212,8 +219,10 @@ void SparseVector<T>::emplace_at(size_t index, Args &&... args)
 
     ensureSize(index);
 
-    if (index >= m_vec.size()) m_vec.emplace_back(T(std::forward<Args>(args)...));
-    else m_vec[index].emplace(std::forward<Args>(args)...);
+    if (index >= m_vec.size())
+        m_vec.emplace_back(T(std::forward<Args>(args)...));
+    else
+        m_vec[index].emplace(std::forward<Args>(args)...);
 
     incCount();
 }
@@ -310,7 +319,8 @@ void SparseVector<T>::ensureSize(size_t size)
 {
     if (size <= m_vec.size()) return;
 
-    for (size_t i = m_vec.size(); i < size; i++) m_pool.push(i);
+    for (size_t i = m_vec.size(); i < size; i++)
+        m_pool.push(i);
 
     m_vec.resize(size);
 }
@@ -327,6 +337,4 @@ void SparseVector<T>::decCount()
     Assert(m_count > 0, "");
     m_count--;
 }
-
 }
-

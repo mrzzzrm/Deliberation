@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 Program::Program() = default;
 
 DrawContext & Program::drawContext() const
@@ -23,11 +22,5 @@ const ProgramInterface & Program::interface() const
     return m_impl->interface;
 }
 
-Program::Program(const std::shared_ptr<ProgramImpl> & impl):
-    m_impl(impl)
-{
+Program::Program(const std::shared_ptr<ProgramImpl> & impl) : m_impl(impl) {}
 }
-
-}
-
-

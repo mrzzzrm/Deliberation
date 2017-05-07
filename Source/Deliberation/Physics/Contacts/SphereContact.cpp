@@ -7,13 +7,11 @@
 
 namespace deliberation
 {
-
-SphereContact::SphereContact(RigidBody & bodyA, RigidBody & bodyB):
-    Contact(bodyA, bodyB),
-    m_shapeA(*(SphereShape*)bodyA.shape().get()),
-    m_shapeB(*(SphereShape*)bodyB.shape().get())
+SphereContact::SphereContact(RigidBody & bodyA, RigidBody & bodyB)
+    : Contact(bodyA, bodyB)
+    , m_shapeA(*(SphereShape *)bodyA.shape().get())
+    , m_shapeB(*(SphereShape *)bodyB.shape().get())
 {
-
 }
 
 void SphereContact::update()
@@ -35,7 +33,8 @@ void SphereContact::update()
 
         intersection.normal = glm::normalize(pB - pA);
         intersection.position = 0.5f * (pA + pB);
-        intersection.depth = glm::dot(pB - pA, intersection.normal) - m_shapeA.radius() - m_shapeB.radius();
+        intersection.depth = glm::dot(pB - pA, intersection.normal) -
+                             m_shapeA.radius() - m_shapeB.radius();
 
         updatePoints({1, &intersection});
     }
@@ -44,5 +43,4 @@ void SphereContact::update()
         clearPoints();
     }
 }
-
 }

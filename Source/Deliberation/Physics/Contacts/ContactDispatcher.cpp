@@ -11,33 +11,34 @@
 
 namespace deliberation
 {
-
-ContactCreator::ContactCreator(int typeL, int typeR):
-    m_typeL(typeL),
-    m_typeR(typeR)
+ContactCreator::ContactCreator(int typeL, int typeR)
+    : m_typeL(typeL), m_typeR(typeR)
 {
-
 }
 
 ContactCreator::~ContactCreator() = default;
 
 ContactDispatcher::ContactDispatcher()
 {
-    registerContactType<SphereContact>((int)CollisionShape_Sphere, (int)CollisionShape_Sphere);
-    registerContactType<BoxContact>((int)CollisionShape_Box, (int)CollisionShape_Box);
+    registerContactType<SphereContact>(
+        (int)CollisionShape_Sphere, (int)CollisionShape_Sphere);
+    registerContactType<BoxContact>(
+        (int)CollisionShape_Box, (int)CollisionShape_Box);
 }
 
-std::unique_ptr<Contact> ContactDispatcher::createContact(RigidBody & bodyA, RigidBody & bodyB) const
+std::unique_ptr<Contact>
+ContactDispatcher::createContact(RigidBody & bodyA, RigidBody & bodyB) const
 {
     auto typeA = bodyA.shape()->type();
     auto typeB = bodyB.shape()->type();
 
-    Assert(m_doubleDispatch.contains(typeA, typeB), "No Algorithm registered for CollisionShapeTypes " + std::to_string(typeA) + "/" +
-                                                    std::to_string(typeB));
+    Assert(
+        m_doubleDispatch.contains(typeA, typeB),
+        "No Algorithm registered for CollisionShapeTypes " +
+            std::to_string(typeA) + "/" + std::to_string(typeB));
 
     auto & creator = m_doubleDispatch.dispatch(typeA, typeB);
 
     return creator->create(bodyA, bodyB);
 }
-
 }

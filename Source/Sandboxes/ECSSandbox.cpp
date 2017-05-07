@@ -12,51 +12,37 @@
 
 using namespace deliberation;
 
-struct PositionComponent:
-    public Component<PositionComponent>
+struct PositionComponent : public Component<PositionComponent>
 {
-    PositionComponent(const glm::vec3 & position):
-        position(position)
-    {
-    }
+    PositionComponent(const glm::vec3 & position) : position(position) {}
 
     glm::vec3 position;
 };
 
-struct ColliderComponent:
-    public Component<ColliderComponent>
+struct ColliderComponent : public Component<ColliderComponent>
 {
-//    virtual void onCreate() override
-//    {
-//        auto & position = entity().getComponent<PositionComponent>();
-//        std::cout << "Collider with position at " << position << std::endl;
-//    }
+    //    virtual void onCreate() override
+    //    {
+    //        auto & position = entity().getComponent<PositionComponent>();
+    //        std::cout << "Collider with position at " << position <<
+    //        std::endl;
+    //    }
 };
-
 
 struct GunFired
 {
-    GunFired(Entity gun, Entity bullet):
-        gun(gun),
-        bullet(bullet)
-    {}
+    GunFired(Entity gun, Entity bullet) : gun(gun), bullet(bullet) {}
 
     Entity gun;
     Entity bullet;
 };
 
-struct GunComponent:
-    Component<GunComponent, ComponentSubscriptions<GunComponent, GunFired>>
+struct GunComponent
+    : Component<GunComponent, ComponentSubscriptions<GunComponent, GunFired>>
 {
-    GunComponent(float freq):
-        freq(freq)
-    {
-    }
+    GunComponent(float freq) : freq(freq) {}
 
-    void fire()
-    {
-        emit(GunFired(Entity(), Entity()));
-    }
+    void fire() { emit(GunFired(Entity(), Entity())); }
 
     void receive(const GunFired & event)
     {
@@ -66,11 +52,10 @@ struct GunComponent:
     float freq;
 };
 
-struct GunSystem:
-    public System<GunSystem>
+struct GunSystem : public System<GunSystem>
 {
-    GunSystem(World & world):
-        Base(world, ComponentFilter::requires<GunComponent>())
+    GunSystem(World & world)
+        : Base(world, ComponentFilter::requires<GunComponent>())
     {
     }
 
@@ -78,7 +63,8 @@ struct GunSystem:
     {
         auto & gun = entity.component<GunComponent>();
 
-        std::cout << "Updating '" << entity.name() << "' with frequency " << gun.freq << std::endl;
+        std::cout << "Updating '" << entity.name() << "' with frequency "
+                  << gun.freq << std::endl;
 
         for (auto i = 0; i < 5; i++)
         {
@@ -91,20 +77,23 @@ struct GunSystem:
 
     virtual void onEntityAdded(Entity & entity) override
     {
-        std::cout << "GunSystem: Gun " << entity.name() << " added" << std::endl;
+        std::cout << "GunSystem: Gun " << entity.name() << " added"
+                  << std::endl;
     }
 
     virtual void onEntityRemoved(Entity & entity) override
     {
-        std::cout << "GunSystem: Gun " << entity.name() << " removed" << std::endl;
+        std::cout << "GunSystem: Gun " << entity.name() << " removed"
+                  << std::endl;
     }
 };
 
-struct PhysicsSystem:
-    public System<PhysicsSystem>
+struct PhysicsSystem : public System<PhysicsSystem>
 {
-    PhysicsSystem(World & world):
-        Base(world, ComponentFilter::requires<PositionComponent, ColliderComponent>())
+    PhysicsSystem(World & world)
+        : Base(
+              world,
+              ComponentFilter::requires<PositionComponent, ColliderComponent>())
     {
     }
 
@@ -114,19 +103,18 @@ struct PhysicsSystem:
     }
 };
 
-struct AnotherSystem:
-    public System<AnotherSystem>
+struct AnotherSystem : public System<AnotherSystem>
 {
-    AnotherSystem(World & world):
-        Base(world, ComponentFilter::none())
+    AnotherSystem(World & world) : Base(world, ComponentFilter::none())
     {
         world.eventManager().subscribe<GunFired>(*this);
     }
 
     void receive(const GunFired & gunFired)
     {
-        std::cout << "AnotherSystem received GunFired (Bullet=" << gunFired.bullet.name()
-                  << "; id=" << gunFired.bullet.id() << ")" << std::endl;
+        std::cout << "AnotherSystem received GunFired (Bullet="
+                  << gunFired.bullet.name() << "; id=" << gunFired.bullet.id()
+                  << ")" << std::endl;
     }
 };
 
@@ -155,7 +143,6 @@ int main(int argc, char * argv[])
     auto checkpoint = world.createEntity("Checkpoint");
     checkpoint.addComponent<PositionComponent>(glm::vec3(4.0, 2.0f, 0.0f));
 
-
     std::cout << "------------------ Update1 ------------------" << std::endl;
     world.update(1.0f);
 
@@ -167,4 +154,3 @@ int main(int argc, char * argv[])
     std::cout << "------------------ End ------------------" << std::endl;
     return 0;
 }
-

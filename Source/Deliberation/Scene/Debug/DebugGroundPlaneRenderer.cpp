@@ -11,19 +11,19 @@
 
 namespace deliberation
 {
-
-class DebugGroundPlaneNode:
-    public RenderNode
+class DebugGroundPlaneNode : public RenderNode
 {
-public:
-    DebugGroundPlaneNode(DebugGroundPlaneRenderer & renderer, const std::vector<std::string> & shaders):
-        RenderNode(renderer.renderManager()),
-        m_renderer(renderer)
+  public:
+    DebugGroundPlaneNode(
+        DebugGroundPlaneRenderer &       renderer,
+        const std::vector<std::string> & shaders)
+        : RenderNode(renderer.renderManager()), m_renderer(renderer)
     {
         auto & drawContext = renderer.renderManager().drawContext();
 
         m_program = drawContext.createProgram(shaders);
-        m_draw = drawContext.createDraw(m_program, DrawPrimitive::TriangleStrip);
+        m_draw =
+            drawContext.createDraw(m_program, DrawPrimitive::TriangleStrip);
 
         m_view = m_draw.uniform("View");
         m_projection = m_draw.uniform("Projection");
@@ -37,9 +37,9 @@ public:
         auto positions = vertices.field<glm::vec3>("Position");
 
         positions[0] = {-1.0f, 0.0f, 1.0f};
-        positions[1] = {-1.0f, 0.0f,-1.0f};
-        positions[2] = { 1.0f, 0.0f, 1.0f};
-        positions[3] = { 1.0f, 0.0f,-1.0f};
+        positions[1] = {-1.0f, 0.0f, -1.0f};
+        positions[2] = {1.0f, 0.0f, 1.0f};
+        positions[3] = {1.0f, 0.0f, -1.0f};
 
         m_draw.state().setCullState(CullState::disabled());
         m_draw.addVertices(vertices);
@@ -57,70 +57,74 @@ public:
         m_draw.render();
     }
 
-protected:
-    DebugGroundPlaneRenderer &  m_renderer;
-    Program                     m_program;
-    Draw                        m_draw;
-    Uniform                     m_view;
-    Uniform                     m_projection;
-    Uniform                     m_size;
-    Uniform                     m_quadSize;
-    Uniform                     m_radius;
+  protected:
+    DebugGroundPlaneRenderer & m_renderer;
+    Program                    m_program;
+    Draw                       m_draw;
+    Uniform                    m_view;
+    Uniform                    m_projection;
+    Uniform                    m_size;
+    Uniform                    m_quadSize;
+    Uniform                    m_radius;
 };
 
-class DebugGroundPlaneForwardNode:
-    public DebugGroundPlaneNode
+class DebugGroundPlaneForwardNode : public DebugGroundPlaneNode
 {
-public:
-    DebugGroundPlaneForwardNode(DebugGroundPlaneRenderer & renderer):
-        DebugGroundPlaneNode(renderer, {DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
-                                        DeliberationDataPath("Data/Shaders/DebugGroundPlaneRendererForward.frag")})
-    {}
+  public:
+    DebugGroundPlaneForwardNode(DebugGroundPlaneRenderer & renderer)
+        : DebugGroundPlaneNode(
+              renderer,
+              {DeliberationDataPath(
+                   "Data/Shaders/DebugGroundPlaneRenderer.vert"),
+               DeliberationDataPath(
+                   "Data/Shaders/DebugGroundPlaneRendererForward.frag")})
+    {
+    }
 };
 
-class DebugGroundPlaneGBufferNode:
-    public DebugGroundPlaneNode
+class DebugGroundPlaneGBufferNode : public DebugGroundPlaneNode
 {
-public:
-    DebugGroundPlaneGBufferNode(DebugGroundPlaneRenderer & renderer):
-        DebugGroundPlaneNode(renderer, {DeliberationDataPath("Data/Shaders/DebugGroundPlaneRenderer.vert"),
-                                        DeliberationDataPath("Data/Shaders/DebugGroundPlaneRendererGBuffer.frag")})
+  public:
+    DebugGroundPlaneGBufferNode(DebugGroundPlaneRenderer & renderer)
+        : DebugGroundPlaneNode(
+              renderer,
+              {DeliberationDataPath(
+                   "Data/Shaders/DebugGroundPlaneRenderer.vert"),
+               DeliberationDataPath(
+                   "Data/Shaders/DebugGroundPlaneRendererGBuffer.frag")})
     {
         m_draw.setFramebuffer(m_renderManager.gbuffer());
     }
 };
 
-DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(RenderManager & renderManager):
-    Renderer(renderManager)
+DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(
+    RenderManager & renderManager)
+    : Renderer(renderManager)
 {
 }
 
-void DebugGroundPlaneRenderer::setSize(float size)
-{
-    m_size = size;
-}
+void DebugGroundPlaneRenderer::setSize(float size) { m_size = size; }
 
 void DebugGroundPlaneRenderer::setQuadSize(float quadSize)
 {
     m_quadSize = quadSize;
 }
 
-void DebugGroundPlaneRenderer::setRadius(float radius)
-{
-    m_radius = radius;
-}
+void DebugGroundPlaneRenderer::setRadius(float radius) { m_radius = radius; }
 
 void DebugGroundPlaneRenderer::registerRenderNodes()
 {
     if (m_renderToGBuffer)
     {
-        m_renderManager.registerRenderNode(std::make_shared<DebugGroundPlaneGBufferNode>(*this), RenderPhase::GBuffer);
+        m_renderManager.registerRenderNode(
+            std::make_shared<DebugGroundPlaneGBufferNode>(*this),
+            RenderPhase::GBuffer);
     }
     else
     {
-        m_renderManager.registerRenderNode(std::make_shared<DebugGroundPlaneForwardNode>(*this), RenderPhase::Forward);
+        m_renderManager.registerRenderNode(
+            std::make_shared<DebugGroundPlaneForwardNode>(*this),
+            RenderPhase::Forward);
     }
 }
-
 }
-

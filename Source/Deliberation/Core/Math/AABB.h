@@ -4,22 +4,19 @@
 
 #include <glm/glm.hpp>
 
-
-
 namespace deliberation
 {
-
 class Sphere;
 
 class AABB final
 {
-public:
+  public:
     static AABB containingPoints(const std::vector<glm::vec3> & points);
     static AABB containingAABBs(const std::vector<AABB> & aabbs);
     static AABB containingSpheres(const std::vector<Sphere> & spheres);
     static AABB containingSphere(const Sphere & sphere);
 
-public:
+  public:
     AABB();
     AABB(const glm::vec3 & llf, const glm::vec3 & urb);
 
@@ -54,7 +51,7 @@ public:
 
     glm::vec3 center() const;
     glm::vec3 size() const;
-    float diameter() const;
+    float     diameter() const;
 
     void enlargeToContain(const glm::vec3 & v);
     void enlargeToContain(const AABB & other);
@@ -71,10 +68,8 @@ public:
     bool intersects(const AABB & other) const;
     bool contains(const AABB & other) const;
 
-private:
+  private:
     glm::vec3 m_llf;
     glm::vec3 m_urb;
 };
-
 }
-

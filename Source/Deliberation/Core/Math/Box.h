@@ -4,18 +4,18 @@
 
 #include <Deliberation/Core/Math/AABB.h>
 
-
-
 namespace deliberation
 {
-
 class Transform3D;
 
 class Box final
 {
-public:
+  public:
     Box();
-    Box(const glm::vec3 & p, const glm::vec3 & x, const glm::vec3 & y, const glm::vec3 & z);
+    Box(const glm::vec3 & p,
+        const glm::vec3 & x,
+        const glm::vec3 & y,
+        const glm::vec3 & z);
     Box(const glm::vec3 & halfExtent, const Transform3D & transform);
 
     const glm::vec3 & p() const;
@@ -32,10 +32,9 @@ public:
 
     glm::vec3 point(size_t index) const;
 
-private:
+  private:
     glm::vec3 m_p;
     glm::vec3 m_halfExtent;
     glm::mat3 m_axes;
 };
-
 }

@@ -6,20 +6,12 @@
 
 namespace deliberation
 {
-
-BufferImpl::BufferImpl(DrawContext & drawContext, const DataLayout & layout):
-    drawContext(drawContext),
-    count(0u),
-    layout(layout)
+BufferImpl::BufferImpl(DrawContext & drawContext, const DataLayout & layout)
+    : drawContext(drawContext), count(0u), layout(layout)
 {
     gl::glGenBuffers(1, &glName);
     Assert(glName != 0u, "Failed to create GL BufferObject");
 }
 
-BufferImpl::~BufferImpl()
-{
-    drawContext.m_glStateManager.deleteBuffer(glName);
+BufferImpl::~BufferImpl() { drawContext.m_glStateManager.deleteBuffer(glName); }
 }
-
-}
-

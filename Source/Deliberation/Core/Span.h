@@ -3,15 +3,12 @@
 #include <stdlib.h>
 #include <vector>
 
-
-
 namespace deliberation
 {
-
 template<typename T>
 class Span
 {
-public:
+  public:
     template<size_t N>
     Span(T (&values)[N]);
 
@@ -28,11 +25,10 @@ public:
 
     T & operator[](size_t index) const;
 
-private:
-    T *     m_ptr;
-    size_t  m_size;
+  private:
+    T *    m_ptr;
+    size_t m_size;
 };
-
 }
 
 #include <Deliberation/Core/Span.inl>

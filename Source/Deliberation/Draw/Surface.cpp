@@ -4,18 +4,13 @@
 
 #include <Deliberation/Draw/DrawContext.h>
 
-#include "Detail/TextureImpl.h"
-#include "Detail/SurfaceImpl.h"
 #include "Detail/SurfaceDownloadImpl.h"
+#include "Detail/SurfaceImpl.h"
+#include "Detail/TextureImpl.h"
 
 namespace deliberation
 {
-
-Surface::Surface(
-    const std::shared_ptr<SurfaceImpl> & impl
-):
-    m_impl(impl)
-{}
+Surface::Surface(const std::shared_ptr<SurfaceImpl> & impl) : m_impl(impl) {}
 
 DrawContext & Surface::drawContext() const
 {
@@ -45,10 +40,7 @@ unsigned int Surface::height() const
     return m_impl->textureImpl->height; // No mipmaps yet
 }
 
-PixelFormat Surface::format() const
-{
-    return m_impl->textureImpl->format;
-}
+PixelFormat Surface::format() const { return m_impl->textureImpl->format; }
 
 SurfaceDownload Surface::download() const
 {
@@ -56,6 +48,4 @@ SurfaceDownload Surface::download() const
 
     return SurfaceDownload(std::make_shared<SurfaceDownloadImpl>(*this));
 }
-
 }
-

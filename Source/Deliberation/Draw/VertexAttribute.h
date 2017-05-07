@@ -6,32 +6,32 @@
 
 namespace deliberation
 {
-
 class DrawImpl;
 
 namespace detail
 {
-void SetVertexAttribute(DrawImpl & drawImpl,
-                        const ProgramInterfaceVertexAttribute & attribute,
-                        const void * data);
+    void SetVertexAttribute(
+        DrawImpl &                              drawImpl,
+        const ProgramInterfaceVertexAttribute & attribute,
+        const void *                            data);
 }
 
 class VertexAttribute final
 {
-public:
-    VertexAttribute(const std::shared_ptr<DrawImpl> & drawImpl,
-                    const ProgramInterfaceVertexAttribute & attribute);
+  public:
+    VertexAttribute(
+        const std::shared_ptr<DrawImpl> &       drawImpl,
+        const ProgramInterfaceVertexAttribute & attribute);
 
     template<typename T>
     void set(const T & value);
 
     void set(const void * data);
 
-private:
+  private:
     std::shared_ptr<DrawImpl>               m_drawImpl;
     const ProgramInterfaceVertexAttribute & m_attribute;
 };
-
 }
 
 #include <Deliberation/Draw/VertexAttribute.inl>

@@ -8,35 +8,31 @@
 
 namespace deliberation
 {
-
 // TODO: Separate blend factors
 // TODO: Constant Color/Alpha
 // TODO: Blend state for individual draw buffers
 
-
 class BlendState final
 {
-public:
+  public:
     static BlendState disabled();
 
-public:
+  public:
     BlendState();
-    BlendState(BlendEquation equation, BlendFactor sfactor, BlendFactor dfactor);
+    BlendState(
+        BlendEquation equation, BlendFactor sfactor, BlendFactor dfactor);
 
-    bool enabled() const;
+    bool          enabled() const;
     BlendEquation equation() const;
-    BlendFactor sfactor() const;
-    BlendFactor dfactor() const;
+    BlendFactor   sfactor() const;
+    BlendFactor   dfactor() const;
 
     std::string toString() const;
 
-private:
-    bool            m_enabled;
-    BlendEquation   m_equation;
-    BlendFactor     m_sfactor;
-    BlendFactor     m_dfactor;
+  private:
+    bool          m_enabled;
+    BlendEquation m_equation;
+    BlendFactor   m_sfactor;
+    BlendFactor   m_dfactor;
 };
-
 }
-
-

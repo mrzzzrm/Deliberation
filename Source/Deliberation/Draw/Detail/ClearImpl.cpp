@@ -5,13 +5,10 @@
 
 namespace deliberation
 {
-
 ClearImpl::ClearImpl(
-    DrawContext & drawContext,
-    const std::shared_ptr<FramebufferImpl> & framebufferImpl
-):
-    drawContext(drawContext),
-    framebuffer(framebufferImpl)
+    DrawContext &                            drawContext,
+    const std::shared_ptr<FramebufferImpl> & framebufferImpl)
+    : drawContext(drawContext), framebuffer(framebufferImpl)
 {
     if (framebufferImpl->isBackbuffer)
     {
@@ -29,10 +26,9 @@ ClearImpl::ClearImpl(
         for (size_t b = 0; b < colors.size(); b++)
         {
             colors[b] = glm::vec4(0.0f);
-            drawBuffers.emplace_back((gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + b));
+            drawBuffers.emplace_back(
+                (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + b));
         }
     }
 }
-
 }
-

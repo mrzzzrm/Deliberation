@@ -13,21 +13,18 @@
 
 namespace deliberation
 {
-
 class RasterizerState final
 {
-public:
+  public:
     RasterizerState();
     RasterizerState(DrawPrimitive primitive);
-    RasterizerState(DrawPrimitive primitive,
-                    float pointSize,
-                    float lineWidth);
+    RasterizerState(DrawPrimitive primitive, float pointSize, float lineWidth);
 
-    DrawPrimitive primitive() const;
-    float pointSize() const;
-    float lineWidth() const;
+    DrawPrimitive      primitive() const;
+    float              pointSize() const;
+    float              lineWidth() const;
     const glm::uvec4 & scissorRect() const;
-    bool scissorRectEnabled() const;
+    bool               scissorRectEnabled() const;
 
     void setPrimitive(DrawPrimitive primitive);
     void setPointSize(float pointSize);
@@ -38,13 +35,11 @@ public:
 
     std::string toString() const;
 
-private:
-    DrawPrimitive   m_primitive;
-    float           m_pointSize;
-    float           m_lineWidth;
-    glm::uvec4      m_scissorRect;
-    bool            m_scissorRectEnabled = false;
+  private:
+    DrawPrimitive m_primitive;
+    float         m_pointSize;
+    float         m_lineWidth;
+    glm::uvec4    m_scissorRect;
+    bool          m_scissorRectEnabled = false;
 };
-
 }
-

@@ -4,11 +4,8 @@
 
 #include <Deliberation/Core/Math/AABB.h>
 
-
-
 namespace deliberation
 {
-
 class Transform3D;
 
 enum CollisionShapeType
@@ -20,20 +17,18 @@ enum CollisionShapeType
 
 class CollisionShape
 {
-public:
+  public:
     CollisionShape(int type);
     virtual ~CollisionShape();
 
     int type() const;
 
-    virtual AABB bounds(const Transform3D & transform) const = 0;
+    virtual AABB      bounds(const Transform3D & transform) const = 0;
     virtual glm::mat3 localInertia() const;
-    virtual float mass() const;
+    virtual float     mass() const;
     virtual glm::vec3 centerOfMass() const;
 
-private:
+  private:
     int m_type;
 };
-
 }
-

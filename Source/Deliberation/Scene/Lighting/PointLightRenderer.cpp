@@ -8,15 +8,12 @@
 
 namespace deliberation
 {
-
-PointLightRenderer::PointLightRenderer(RenderManager & renderManager):
-    SingleNodeRenderer(renderManager, RenderPhase::Lighting)
+PointLightRenderer::PointLightRenderer(RenderManager & renderManager)
+    : SingleNodeRenderer(renderManager, RenderPhase::Lighting)
 {
-    m_lightLayout = DataLayout({
-        {"LightPosition", Type_Vec3},
-        {"Intensity", Type_Vec3},
-        {"Active", Type_I32}
-    });
+    m_lightLayout = DataLayout({{"LightPosition", Type_Vec3},
+                                {"Intensity", Type_Vec3},
+                                {"Active", Type_I32}});
 
     m_lightPositionField = m_lightLayout.field("LightPosition");
     m_intensityField = m_lightLayout.field("Intensity");
@@ -38,7 +35,8 @@ size_t PointLightRenderer::addPointLight(const PointLight & pointLight)
         const auto indexBegin = m_lights.size();
 
         m_lights.resize(m_lights.size() + numNewLights);
-        for (size_t i = 0; i < numNewLights; i++) m_pool.emplace(indexBegin + i);
+        for (size_t i = 0; i < numNewLights; i++)
+            m_pool.emplace(indexBegin + i);
     }
 
     size_t index = m_pool.top();
@@ -68,18 +66,20 @@ void PointLightRenderer::render()
         m_lightBuffer.reinit(m_lights.size());
     }
 
-    m_lightBuffer.mapped(BufferMapping::WriteOnly, [&](LayoutedBlob & lightData) {
-        auto positions = lightData.iterator<glm::vec3>(m_lightPositionField);
-        auto intensities = lightData.iterator<glm::vec3>(m_intensityField);
-        auto active = lightData.iterator<i32>(m_activeField);
+    m_lightBuffer.mapped(
+        BufferMapping::WriteOnly, [&](LayoutedBlob & lightData) {
+            auto positions =
+                lightData.iterator<glm::vec3>(m_lightPositionField);
+            auto intensities = lightData.iterator<glm::vec3>(m_intensityField);
+            auto active = lightData.iterator<i32>(m_activeField);
 
-        for (size_t l = 0; l < m_lights.size(); l++)
-        {
-            positions.put(m_lights[l].position);
-            intensities.put(m_lights[l].intensity);
-            active.put(m_lights[l].active);
-        }
-    });
+            for (size_t l = 0; l < m_lights.size(); l++)
+            {
+                positions.put(m_lights[l].position);
+                intensities.put(m_lights[l].intensity);
+                active.put(m_lights[l].active);
+            }
+        });
 
     m_viewProjectionUniform.set(renderManager().mainCamera().viewProjection());
     m_viewUniform.set(renderManager().mainCamera().view());
@@ -91,10 +91,9 @@ void PointLightRenderer::onSetupRender()
 {
     const auto mesh = UVSphere(10, 10).generateMesh2();
 
-    auto program = drawContext().createProgram({
-        DeliberationDataPath("Data/Shaders/PointLight.vert"),
-        DeliberationDataPath("Data/Shaders/PointLight.frag")
-    });
+    auto program = drawContext().createProgram(
+        {DeliberationDataPath("Data/Shaders/PointLight.vert"),
+         DeliberationDataPath("Data/Shaders/PointLight.frag")});
 
     m_lightBuffer = drawContext().createBuffer(m_lightLayout);
     m_draw = drawContext().createDraw(program);
@@ -105,17 +104,20 @@ void PointLightRenderer::onSetupRender()
     m_draw.addInstanceBuffer(m_lightBuffer);
 
     m_draw.state().setDepthState(DepthState::disabledRW());
-    m_draw.state().setBlendState({BlendEquation::Add, BlendFactor::One, BlendFactor::One});
+    m_draw.state().setBlendState(
+        {BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     m_draw.state().setCullState({CullFace::Front});
 
     m_draw.setFramebuffer(renderManager().hdrBuffer());
 
-    m_draw.sampler("Diffuse").setTexture(renderManager().gbuffer().colorTargetRef("Diffuse"));
-    m_draw.sampler("Position").setTexture(renderManager().gbuffer().colorTargetRef("Position"));
-    m_draw.sampler("Normal").setTexture(renderManager().gbuffer().colorTargetRef("Normal"));
+    m_draw.sampler("Diffuse").setTexture(
+        renderManager().gbuffer().colorTargetRef("Diffuse"));
+    m_draw.sampler("Position")
+        .setTexture(renderManager().gbuffer().colorTargetRef("Position"));
+    m_draw.sampler("Normal").setTexture(
+        renderManager().gbuffer().colorTargetRef("Normal"));
 
     m_viewProjectionUniform = m_draw.uniform("ViewProjection");
     m_viewUniform = m_draw.uniform("View");
 }
-
 }

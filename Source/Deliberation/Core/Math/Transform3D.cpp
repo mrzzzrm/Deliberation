@@ -12,7 +12,6 @@
 
 namespace deliberation
 {
-
 Transform3D Transform3D::atPosition(const glm::vec3 & position)
 {
     Transform3D result;
@@ -40,33 +39,18 @@ const Transform3D & Transform3D::identity()
     return i;
 }
 
-
-Transform3D::Transform3D():
-    m_scale(1.0f),
-    m_matrixDirty(true),
-    m_basisDirty(true)
+Transform3D::Transform3D()
+    : m_scale(1.0f), m_matrixDirty(true), m_basisDirty(true)
 {
 }
 
-const glm::vec3 & Transform3D::position() const
-{
-    return m_position;
-}
+const glm::vec3 & Transform3D::position() const { return m_position; }
 
-const glm::quat & Transform3D::orientation() const
-{
-    return m_orientation;
-}
+const glm::quat & Transform3D::orientation() const { return m_orientation; }
 
-const glm::vec3 & Transform3D::center() const
-{
-    return m_center;
-}
+const glm::vec3 & Transform3D::center() const { return m_center; }
 
-float Transform3D::scale() const
-{
-    return m_scale;
-}
+float Transform3D::scale() const { return m_scale; }
 
 void Transform3D::setPosition(const glm::vec3 & position)
 {
@@ -149,7 +133,7 @@ const glm::mat3 & Transform3D::basis() const
     {
         m_basis = glm::mat3_cast(m_orientation);
     }
-    
+
     return m_basis;
 }
 
@@ -158,10 +142,8 @@ const glm::mat4 & Transform3D::matrix() const
     if (m_matrixDirty)
     {
         // Yes, this could be done way more efficient...
-        m_matrix = glm::translate(m_position) *
-                   glm::mat4_cast(m_orientation) *
-                   glm::scale(glm::vec3(m_scale)) *
-                   glm::translate(-m_center);
+        m_matrix = glm::translate(m_position) * glm::mat4_cast(m_orientation) *
+                   glm::scale(glm::vec3(m_scale)) * glm::translate(-m_center);
         m_matrixDirty = false;
     }
 
@@ -175,7 +157,8 @@ glm::vec3 Transform3D::pointLocalToWorld(const glm::vec3 & point) const
 
 glm::vec3 Transform3D::pointWorldToLocal(const glm::vec3 & point) const
 {
-    return ((glm::inverse(m_orientation) * (point - m_position)) / m_scale) + m_center;
+    return ((glm::inverse(m_orientation) * (point - m_position)) / m_scale) +
+           m_center;
 }
 
 glm::vec3 Transform3D::directionWorldToLocal(const glm::vec3 & dir) const
@@ -217,28 +200,21 @@ Transform3D Transform3D::interpolated(const Transform3D & other, float v) const
 std::string Transform3D::toString() const
 {
     std::stringstream stream;
-    stream << "[Position: " << m_position <<
-              "; Orientation: " << m_orientation <<
-              "; Center: " << m_center <<
-              "; Scale: " << m_scale << "]";
+    stream << "[Position: " << m_position << "; Orientation: " << m_orientation
+           << "; Center: " << m_center << "; Scale: " << m_scale << "]";
 
     return stream.str();
 }
 
-bool Transform3D::operator==(const Transform3D &other) const
+bool Transform3D::operator==(const Transform3D & other) const
 {
     return m_position == other.m_position &&
-           m_orientation == other.m_orientation &&
-           m_center == other.m_center &&
+           m_orientation == other.m_orientation && m_center == other.m_center &&
            m_scale == other.m_scale;
 }
 
-bool Transform3D::operator!=(const Transform3D &other) const
+bool Transform3D::operator!=(const Transform3D & other) const
 {
     return !(*this == other);
 }
-
 }
-
-
-

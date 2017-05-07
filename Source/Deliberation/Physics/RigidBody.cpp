@@ -2,25 +2,25 @@
 
 #include <sstream>
 
-#include <glm/gtx/transform.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/Math/FloatUtils.h>
-#include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/Math/GLMUtils.h>
+#include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/StreamUtils.h>
 
 namespace deliberation
 {
-
-RigidBody::RigidBody(const std::shared_ptr<CollisionShape> & shape,
-                     const Transform3D & transform,
-                     const glm::vec3 & linearVelocity,
-                     const glm::vec3 & angularVelocity):
-    CollisionObject(shape, transform),
-    m_linearVelocity(linearVelocity),
-    m_angularVelocity(angularVelocity)
+RigidBody::RigidBody(
+    const std::shared_ptr<CollisionShape> & shape,
+    const Transform3D &                     transform,
+    const glm::vec3 &                       linearVelocity,
+    const glm::vec3 &                       angularVelocity)
+    : CollisionObject(shape, transform)
+    , m_linearVelocity(linearVelocity)
+    , m_angularVelocity(angularVelocity)
 {
 }
 
@@ -31,15 +31,9 @@ float RigidBody::inverseMass() const
     return EpsilonGt(shape()->mass(), 0.0f) ? 1.0f / shape()->mass() : 0.0f;
 }
 
-float RigidBody::restitution() const
-{
-    return m_restitution;
-}
+float RigidBody::restitution() const { return m_restitution; }
 
-float RigidBody::friction() const
-{
-    return m_friction;
-}
+float RigidBody::friction() const { return m_friction; }
 
 const glm::mat3 & RigidBody::worldInverseInertia() const
 {
@@ -47,8 +41,9 @@ const glm::mat3 & RigidBody::worldInverseInertia() const
 
     if (m_static) return staticBodyInertia;
 
-    m_worldInverseInertia = transform().basis() * glm::inverse(shape()->localInertia()) *
-        glm::transpose(transform().basis());
+    m_worldInverseInertia = transform().basis() *
+                            glm::inverse(shape()->localInertia()) *
+                            glm::transpose(transform().basis());
 
     return m_worldInverseInertia;
 }
@@ -75,25 +70,13 @@ const glm::vec3 & RigidBody::angularVelocity() const
     return m_angularVelocity;
 }
 
-const glm::vec3 & RigidBody::force() const
-{
-    return m_force;
-}
+const glm::vec3 & RigidBody::force() const { return m_force; }
 
-size_t RigidBody::index() const
-{
-    return m_index;
-}
+size_t RigidBody::index() const { return m_index; }
 
-Entity & RigidBody::entity() const
-{
-    return m_entity;
-}
+Entity & RigidBody::entity() const { return m_entity; }
 
-bool RigidBody::isStatic() const
-{
-    return m_static;
-}
+bool RigidBody::isStatic() const { return m_static; }
 
 glm::vec3 RigidBody::localVelocity(const glm::vec3 & r) const
 {
@@ -110,10 +93,7 @@ void RigidBody::setRestitution(float restitution)
     m_restitution = restitution;
 }
 
-void RigidBody::setFriction(float friction)
-{
-    m_friction = friction;
-}
+void RigidBody::setFriction(float friction) { m_friction = friction; }
 
 void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
 {
@@ -143,20 +123,11 @@ void RigidBody::setForce(const glm::vec3 & force)
     m_force = force;
 }
 
-void RigidBody::setStatic(bool isStatic)
-{
-    m_static = isStatic;
-}
+void RigidBody::setStatic(bool isStatic) { m_static = isStatic; }
 
-void RigidBody::setIndex(size_t index)
-{
-    m_index = index;
-}
+void RigidBody::setIndex(size_t index) { m_index = index; }
 
-void RigidBody::setEntity(Entity entity)
-{
-    m_entity = entity;
-}
+void RigidBody::setEntity(Entity entity) { m_entity = entity; }
 
 void RigidBody::applyForce(const glm::vec3 & force)
 {
@@ -171,7 +142,8 @@ void RigidBody::applyForce(const glm::vec3 & force)
 void RigidBody::applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse)
 {
     setLinearVelocity(m_linearVelocity + inverseMass() * impulse);
-    setAngularVelocity(m_angularVelocity + worldInverseInertia() * glm::cross(point, impulse));
+    setAngularVelocity(
+        m_angularVelocity + worldInverseInertia() * glm::cross(point, impulse));
 }
 
 void RigidBody::predictTransform(float seconds, Transform3D & prediction)
@@ -196,7 +168,6 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction)
     {
         prediction.setOrientation(transform().orientation());
     }
-
 }
 
 void RigidBody::integrateVelocities(float seconds)
@@ -207,7 +178,8 @@ void RigidBody::integrateVelocities(float seconds)
     }
 
     setLinearVelocity(m_linearVelocity + inverseMass() * m_force * seconds);
-    setAngularVelocity(m_angularVelocity + worldInverseInertia() * m_torque * seconds);
+    setAngularVelocity(
+        m_angularVelocity + worldInverseInertia() * m_torque * seconds);
 }
 
 void RigidBody::adjustCenterOfMass()
@@ -223,9 +195,8 @@ void RigidBody::adjustCenterOfMass()
 std::string RigidBody::toString() const
 {
     std::stringstream stream;
-    stream << "{" << transform().position() << ", " << transform().orientation() << "}";
+    stream << "{" << transform().position() << ", " << transform().orientation()
+           << "}";
     return stream.str();
 }
-
 }
-

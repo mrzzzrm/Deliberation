@@ -11,12 +11,7 @@
 
 namespace deliberation
 {
-
-Clear::Clear(const std::shared_ptr<ClearImpl> & impl):
-    m_impl(impl)
-{
-
-}
+Clear::Clear(const std::shared_ptr<ClearImpl> & impl) : m_impl(impl) {}
 
 const Framebuffer & Clear::framebuffer() const
 {
@@ -84,7 +79,8 @@ void Clear::setStencil(u32 stencil)
 void Clear::disableStencil()
 {
     Assert(m_impl.get(), "Clear is hollow");
-    m_impl->stencil = boost::optional<gl::GLint>();;
+    m_impl->stencil = boost::optional<gl::GLint>();
+    ;
 }
 
 void Clear::render()
@@ -95,8 +91,10 @@ void Clear::render()
 
     framebufferImpl.bind(m_impl->drawBuffers);
 
-    glStateManager.setViewport(0, 0, framebufferImpl.width, framebufferImpl.height);
-    glStateManager.setScissor(0, 0, framebufferImpl.width, framebufferImpl.height);
+    glStateManager.setViewport(
+        0, 0, framebufferImpl.width, framebufferImpl.height);
+    glStateManager.setScissor(
+        0, 0, framebufferImpl.width, framebufferImpl.height);
 
     glStateManager.setDepthMask(true);
     glStateManager.setStencilMask(~0);
@@ -132,7 +130,8 @@ void Clear::render()
     }
     else
     {
-        Assert(m_impl->colors.size() == framebufferImpl.colorTargets.size(), "");
+        Assert(
+            m_impl->colors.size() == framebufferImpl.colorTargets.size(), "");
 
         glStateManager.setDrawBuffers(m_impl->drawBuffers);
 
@@ -149,17 +148,19 @@ void Clear::render()
 
         if (impl.depth)
         {
-            Assert((bool)framebufferImpl.depthTarget, "Can't clear depth: No depth target in Framebuffer");
+            Assert(
+                (bool)framebufferImpl.depthTarget,
+                "Can't clear depth: No depth target in Framebuffer");
             gl::glClearBufferfv(gl::GL_DEPTH, 0, &*impl.depth);
         }
 
         if (impl.stencil)
         {
-            Assert((bool)framebufferImpl.depthTarget, "Can't clear stencil: No depth target in Framebuffer");
-            gl::glClearBufferiv(gl::GL_STENCIL, 0, (gl::GLint*)&*impl.stencil);
+            Assert(
+                (bool)framebufferImpl.depthTarget,
+                "Can't clear stencil: No depth target in Framebuffer");
+            gl::glClearBufferiv(gl::GL_STENCIL, 0, (gl::GLint *)&*impl.stencil);
         }
     }
 }
-
 }
-

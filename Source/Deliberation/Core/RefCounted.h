@@ -4,12 +4,12 @@
 //
 //#include <Deliberation/Deliberation.h>
 //
-//namespace deliberation
+// namespace deliberation
 //{
 //
-//class RefCounted
+// class RefCounted
 //{
-//public:
+// public:
 //    virtual ~RefCounted() = default;
 //
 //    u32 refCount() const { return m_refCount; }
@@ -24,7 +24,7 @@
 //        m_refCount--;
 //    }
 //
-//private:
+// private:
 //    u32 m_refCount;
 //};
 //

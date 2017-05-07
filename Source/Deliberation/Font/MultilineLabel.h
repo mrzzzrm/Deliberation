@@ -11,17 +11,14 @@
 
 #include <Deliberation/Font/Label.h>
 
-
-
 namespace deliberation
 {
-
 class LabelRenderer;
 class Font;
 
 class MultilineLabel final
 {
-public:
+  public:
     MultilineLabel(const Font & font);
 
     void setPosition(const glm::vec2 & position);
@@ -32,15 +29,12 @@ public:
 
     void render(LabelRenderer & renderer, const Viewport & viewport);
 
-private:
-    const Font &        m_font;
-    glm::vec2           m_position;
-    glm::vec2           m_center;
-    glm::vec3           m_color;
-    std::map<size_t, std::shared_ptr<Label>>
-                        m_labelByLine;
-    unsigned int        m_fontSize = 18;
+  private:
+    const Font &                             m_font;
+    glm::vec2                                m_position;
+    glm::vec2                                m_center;
+    glm::vec3                                m_color;
+    std::map<size_t, std::shared_ptr<Label>> m_labelByLine;
+    unsigned int                             m_fontSize = 18;
 };
-
 }
-

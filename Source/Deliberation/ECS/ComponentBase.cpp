@@ -2,8 +2,5 @@
 
 namespace deliberation
 {
-
 ComponentBase::~ComponentBase() = default;
-
 }
-

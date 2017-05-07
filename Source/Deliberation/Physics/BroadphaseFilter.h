@@ -4,25 +4,22 @@
 
 namespace deliberation
 {
-
 class BroadphaseProxy;
 
 class BroadphaseFilter
 {
-public:
+  public:
     virtual ~BroadphaseFilter();
 
     virtual bool accepts(const BroadphaseProxy & proxy) const;
 };
 
-class BroadphaseBlacklistFilter:
-    public BroadphaseBlacklistFilter
+class BroadphaseBlacklistFilter : public BroadphaseBlacklistFilter
 {
-public:
+  public:
     BroadphaseBlacklistFilter(const std::shared_ptr<RigidBody> & body);
 
-private:
+  private:
     std::shared_ptr<RigidBody> m_body;
 };
-
 }

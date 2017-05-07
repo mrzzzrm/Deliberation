@@ -7,17 +7,16 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 
-#include <Deliberation/Draw/VertexAttribute.h>
-#include <Deliberation/Draw/Uniform.h>
-#include <Deliberation/Draw/Texture.h>
-#include <Deliberation/Draw/Sampler.h>
 #include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/Sampler.h>
+#include <Deliberation/Draw/Texture.h>
+#include <Deliberation/Draw/Uniform.h>
+#include <Deliberation/Draw/VertexAttribute.h>
 
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-
 using FragmentOutputMapping = std::pair<std::string, std::string>;
 using FramebufferBinding = std::vector<FragmentOutputMapping>;
 
@@ -28,17 +27,17 @@ class DrawState;
 
 class Draw final
 {
-public:
+  public:
     Draw();
 
     const std::string & name() const;
 
     Program program() const;
 
-    DrawState & state();
+    DrawState &       state();
     const DrawState & state() const;
 
-    Framebuffer & framebuffer();
+    Framebuffer &       framebuffer();
     const Framebuffer & framebuffer() const;
 
     Uniform uniform(const std::string & name);
@@ -55,7 +54,8 @@ public:
     void addVertexBuffer(const Buffer & buffer);
     void addVertexBufferRange(const Buffer & buffer, u32 first, u32 count);
     void addInstanceBuffer(const Buffer & buffer, u32 divisor = 1u);
-    void addInstanceBufferRange(const Buffer & buffer, u32 first, u32 count, u32 divisor = 1u);
+    void addInstanceBufferRange(
+        const Buffer & buffer, u32 first, u32 count, u32 divisor = 1u);
 
     template<typename T>
     void setAttribute(const std::string & name, const T & value);
@@ -65,31 +65,36 @@ public:
 
     VertexAttribute attribute(const std::string & name);
 
-    void setFramebuffer(const Framebuffer & framebuffer, const FramebufferBinding & binding = {});
+    void setFramebuffer(
+        const Framebuffer &        framebuffer,
+        const FramebufferBinding & binding = {});
 
-    void setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin = 0);
+    void setUniformBuffer(
+        const std::string & name,
+        const Buffer &      buffer,
+        unsigned int        begin = 0);
 
     void render() const;
 
     std::string toString() const;
 
-private:
+  private:
     friend class DrawContext;
     friend class DrawVerification;
 
-private:
+  private:
     Draw(const std::shared_ptr<DrawImpl> & impl);
 
     void build() const;
 
-    void setAttribute(const ProgramInterfaceVertexAttribute & attribute,
-                      const void * data);
-    void addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor);
+    void setAttribute(
+        const ProgramInterfaceVertexAttribute & attribute, const void * data);
+    void addVertexBuffer(
+        const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor);
 
-private:
+  private:
     std::shared_ptr<DrawImpl> m_impl;
 };
-
 }
 
 #include <Deliberation/Draw/Draw.inl>

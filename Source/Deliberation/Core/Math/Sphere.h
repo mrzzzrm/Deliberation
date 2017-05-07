@@ -2,23 +2,20 @@
 
 #include <glm/glm.hpp>
 
-
-
 namespace deliberation
 {
-
 class AABB;
 
 class Sphere final
 {
-public:
+  public:
     static Sphere containingAABB(const AABB & aabb);
 
-public:
+  public:
     Sphere();
     Sphere(const glm::vec3 & position, float radius);
 
-    float radius() const;
+    float             radius() const;
     const glm::vec3 & position() const;
 
     void setRadius(float radius);
@@ -26,10 +23,8 @@ public:
 
     bool intersects(const Sphere & other) const;
 
-protected:
-    glm::vec3   m_position;
-    float       m_radius;
+  protected:
+    glm::vec3 m_position;
+    float     m_radius;
 };
-
 }
-

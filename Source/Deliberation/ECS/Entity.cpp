@@ -7,13 +7,7 @@
 
 namespace deliberation
 {
-
-Entity::Entity():
-    m_world(nullptr),
-    m_id(ECS_INVALID_ENTITY_ID)
-{
-
-}
+Entity::Entity() : m_world(nullptr), m_id(ECS_INVALID_ENTITY_ID) {}
 
 World & Entity::world() const
 {
@@ -21,20 +15,11 @@ World & Entity::world() const
     return *m_world;
 }
 
-EntityId Entity::id() const
-{
-    return m_id;
-}
+EntityId Entity::id() const { return m_id; }
 
-const std::string & Entity::name() const
-{
-    return data().name;
-}
+const std::string & Entity::name() const { return data().name; }
 
-EntityId Entity::parent() const
-{
-    return data().parent;
-}
+EntityId Entity::parent() const { return data().parent; }
 
 const std::vector<EntityId> & Entity::children() const
 {
@@ -46,10 +31,7 @@ const ComponentBitset & Entity::componentBits() const
     return data().componentBits;
 }
 
-bool Entity::isValid() const
-{
-    return m_world && m_world->isValid(m_id);
-}
+bool Entity::isValid() const { return m_world && m_world->isValid(m_id); }
 
 void Entity::scheduleRemoval()
 {
@@ -58,12 +40,7 @@ void Entity::scheduleRemoval()
     m_world->scheduleEntityRemoval(m_id);
 }
 
-Entity::Entity(World & world, EntityId id):
-    m_world(&world),
-    m_id(id)
-{
-
-}
+Entity::Entity(World & world, EntityId id) : m_world(&world), m_id(id) {}
 
 EntityData & Entity::data() const
 {
@@ -99,7 +76,8 @@ const ComponentBase & Entity::component(TypeID::value_t c) const
     return *component;
 }
 
-void Entity::addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component)
+void Entity::addComponent(
+    TypeID::value_t c, std::shared_ptr<ComponentBase> component)
 {
     Assert(m_world, "Entity is hollow");
 
@@ -144,7 +122,8 @@ bool Entity::operator<(const Entity & rhs) const
 {
     if (m_world == nullptr || rhs.m_world == nullptr) return false;
 
-    Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
+    Assert(
+        m_world == rhs.m_world, "Don't compare Entities from different Worlds");
     return m_id < rhs.m_id;
 }
 
@@ -152,14 +131,10 @@ bool Entity::operator==(const Entity & rhs) const
 {
     if (m_world == nullptr || rhs.m_world == nullptr) return false;
 
-    Assert(m_world == rhs.m_world, "Don't compare Entities from different Worlds");
+    Assert(
+        m_world == rhs.m_world, "Don't compare Entities from different Worlds");
     return m_id == rhs.m_id;
 }
 
-bool Entity::operator!=(const Entity & rhs) const
-{
-    return !operator==(rhs);
+bool Entity::operator!=(const Entity & rhs) const { return !operator==(rhs); }
 }
-
-}
-

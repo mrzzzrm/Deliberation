@@ -2,19 +2,19 @@
 
 namespace deliberation
 {
-
 class RenderManager;
 
 class RenderNode
 {
-public:
-    RenderNode(RenderManager & renderManager): m_renderManager(renderManager) {}
+  public:
+    RenderNode(RenderManager & renderManager) : m_renderManager(renderManager)
+    {
+    }
     virtual ~RenderNode() = default;
 
     virtual void render() = 0;
 
-protected:
+  protected:
     RenderManager & m_renderManager;
 };
-
 }

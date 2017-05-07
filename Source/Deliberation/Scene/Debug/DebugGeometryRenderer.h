@@ -4,8 +4,8 @@
 #include <vector>
 
 #include <Deliberation/Core/Math/Box.h>
-#include <Deliberation/Core/Math/Transform3D.h>
 #include <Deliberation/Core/Math/Pose3D.h>
+#include <Deliberation/Core/Math/Transform3D.h>
 #include <Deliberation/Core/Optional.h>
 #include <Deliberation/Core/SparseVector.h>
 
@@ -13,14 +13,13 @@
 #include <Deliberation/Draw/Draw.h>
 #include <Deliberation/Draw/Uniform.h>
 
-#include <Deliberation/Scene/Vertices.h>
 #include <Deliberation/Scene/Debug/DebugGeometryManager.h>
+#include <Deliberation/Scene/Vertices.h>
 
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-
 class DrawContext;
 class Camera3D;
 class DebugGeometryRenderer;
@@ -29,21 +28,21 @@ class Transform3D;
 
 class DebugGeometryInstance
 {
-public:
+  public:
     DebugGeometryInstance(DebugGeometryRenderer & renderer);
 
-    size_t index() const;
-    DebugGeometryRenderer & renderer() const;
-    DebugGeometryManager & manager() const;
+    size_t                                 index() const;
+    DebugGeometryRenderer &                renderer() const;
+    DebugGeometryManager &                 manager() const;
     const DebugGeometryManager::BuildIns & buildIns() const;
-    bool visible() const;
-    const Transform3D & transform() const;
+    bool                                   visible() const;
+    const Transform3D &                    transform() const;
 
     void setIndex(size_t index);
     void setVisible(bool visible);
     void setTransform(const Transform3D & transform);
 
-protected:
+  protected:
     size_t                  m_index = 0;
     DebugGeometryRenderer & m_renderer;
     bool                    m_visible = true;
@@ -51,13 +50,12 @@ protected:
     mutable bool            m_transformDirty = true;
 };
 
-class DebugBoxInstance final:
-    public DebugGeometryInstance
+class DebugBoxInstance final : public DebugGeometryInstance
 {
-public:
+  public:
     DebugBoxInstance(DebugGeometryRenderer & renderer);
 
-    bool wireframe() const;
+    bool              wireframe() const;
     const glm::vec3 & halfExtent() const;
     const glm::vec3 & color() const;
 
@@ -69,7 +67,7 @@ public:
 
     Box toBox() const;
 
-private:
+  private:
     mutable Draw    m_draw;
     glm::vec3       m_halfExtent;
     glm::vec3       m_color;
@@ -79,10 +77,9 @@ private:
     mutable Uniform m_transformUniform;
 };
 
-class DebugPointInstance final:
-    public DebugGeometryInstance
+class DebugPointInstance final : public DebugGeometryInstance
 {
-public:
+  public:
     DebugPointInstance(DebugGeometryRenderer & renderer);
 
     const glm::vec3 & color() const;
@@ -91,17 +88,16 @@ public:
 
     void render() const;
 
-private:
+  private:
     Draw            m_draw;
     mutable Uniform m_transformUniform;
     glm::vec3       m_color;
     Uniform         m_colorUniform;
 };
 
-class DebugArrowInstance final:
-    public DebugGeometryInstance
+class DebugArrowInstance final : public DebugGeometryInstance
 {
-public:
+  public:
     DebugArrowInstance(DebugGeometryRenderer & renderer);
 
     const glm::vec3 & origin() const;
@@ -116,25 +112,24 @@ public:
 
     void render() const;
 
-private:
-    Draw            m_lineDraw;
-    Buffer          m_lineVertexBuffer;
-    LayoutedBlob    m_lineVertices;
-    Uniform         m_lineColorUniform;
+  private:
+    Draw         m_lineDraw;
+    Buffer       m_lineVertexBuffer;
+    LayoutedBlob m_lineVertices;
+    Uniform      m_lineColorUniform;
 
-    Draw            m_coneDraw;
-    Uniform         m_coneColorUniform;
-    Uniform         m_coneTransformUniform;
+    Draw    m_coneDraw;
+    Uniform m_coneColorUniform;
+    Uniform m_coneTransformUniform;
 
-    glm::vec3       m_origin;
-    glm::vec3       m_delta;
-    glm::vec3       m_color;
+    glm::vec3 m_origin;
+    glm::vec3 m_delta;
+    glm::vec3 m_color;
 };
 
-class DebugWireframeInstance final:
-    public DebugGeometryInstance
+class DebugWireframeInstance final : public DebugGeometryInstance
 {
-public:
+  public:
     DebugWireframeInstance(DebugGeometryRenderer & renderer);
 
     const glm::vec3 & color() const;
@@ -145,7 +140,7 @@ public:
 
     void render() const;
 
-private:
+  private:
     Draw            m_draw;
     Buffer          m_vertexBuffer;
     mutable Uniform m_transformUniform;
@@ -154,21 +149,20 @@ private:
     glm::vec3       m_color;
 };
 
-class DebugSphereInstance final:
-    public DebugGeometryInstance
+class DebugSphereInstance final : public DebugGeometryInstance
 {
-public:
+  public:
     DebugSphereInstance(DebugGeometryRenderer & renderer);
 
     const glm::vec3 & color() const;
-    float radius() const;
+    float             radius() const;
 
     void setColor(const glm::vec3 & color);
     void setRadius(float radius);
 
     void render() const;
 
-private:
+  private:
     Draw            m_draw;
     Uniform         m_colorUniform;
     mutable Uniform m_transformUniform;
@@ -177,10 +171,9 @@ private:
     bool            m_dirty = true;
 };
 
-class DebugPoseInstance final:
-    public DebugGeometryInstance
+class DebugPoseInstance final : public DebugGeometryInstance
 {
-public:
+  public:
     DebugPoseInstance(DebugGeometryRenderer & renderer);
 
     const Pose3D & pose() const;
@@ -189,40 +182,52 @@ public:
 
     void render() const;
 
-private:
-    Draw                                 m_draw;
-    Pose3D                               m_pose;
-    mutable std::array<
-        boost::optional<DebugArrowInstance>, 3> m_arrows;
+  private:
+    Draw                                                       m_draw;
+    Pose3D                                                     m_pose;
+    mutable std::array<boost::optional<DebugArrowInstance>, 3> m_arrows;
 };
 
 class DebugGeometryRenderer final
 {
-public:
+  public:
     static constexpr size_t NO_INDEX = std::numeric_limits<size_t>::max();
 
-public:
+  public:
     DebugGeometryRenderer(DebugGeometryManager & manager);
 
-    bool visible() const;
+    bool                   visible() const;
     DebugGeometryManager & manager() const;
-    const Buffer & globalsBuffer() const;
+    const Buffer &         globalsBuffer() const;
 
     void setVisible(bool visible);
 
-    DebugBoxInstance & addBox(const glm::vec3 & halfExtent, const glm::vec3 & color, bool wireframe = false, size_t index = NO_INDEX);
-    DebugPointInstance & addPoint(const glm::vec3 & position, const glm::vec3 & color, size_t index = NO_INDEX);
-    DebugArrowInstance & addArrow(const glm::vec3 & origin, const glm::vec3 & delta, const glm::vec3 & color, size_t index = NO_INDEX);
-    DebugWireframeInstance & addWireframe(const glm::vec3 & color, size_t index = NO_INDEX);
-    DebugSphereInstance & addSphere(const glm::vec3 & color, float radius, size_t index = NO_INDEX);
+    DebugBoxInstance & addBox(
+        const glm::vec3 & halfExtent,
+        const glm::vec3 & color,
+        bool              wireframe = false,
+        size_t            index = NO_INDEX);
+    DebugPointInstance & addPoint(
+        const glm::vec3 & position,
+        const glm::vec3 & color,
+        size_t            index = NO_INDEX);
+    DebugArrowInstance & addArrow(
+        const glm::vec3 & origin,
+        const glm::vec3 & delta,
+        const glm::vec3 & color,
+        size_t            index = NO_INDEX);
+    DebugWireframeInstance &
+    addWireframe(const glm::vec3 & color, size_t index = NO_INDEX);
+    DebugSphereInstance &
+                        addSphere(const glm::vec3 & color, float radius, size_t index = NO_INDEX);
     DebugPoseInstance & addPose(const Pose3D & pose, size_t index = NO_INDEX);
 
-    DebugBoxInstance & box(size_t index);
-    DebugPointInstance & point(size_t index);
-    DebugArrowInstance & arrow(size_t index);
+    DebugBoxInstance &       box(size_t index);
+    DebugPointInstance &     point(size_t index);
+    DebugArrowInstance &     arrow(size_t index);
     DebugWireframeInstance & wireframe(size_t index);
-    DebugSphereInstance & sphere(size_t index);
-    DebugPoseInstance & pose(size_t index);
+    DebugSphereInstance &    sphere(size_t index);
+    DebugPoseInstance &      pose(size_t index);
 
     void removeBox(size_t index);
     void removePoint(size_t index);
@@ -233,20 +238,19 @@ public:
 
     void render(const Camera3D & camera);
 
-private:
-    DebugGeometryManager &                                  m_manager;
+  private:
+    DebugGeometryManager & m_manager;
 
-    Buffer                                                  m_globalsBuffer;
-    LayoutedBlob                                            m_globals;
+    Buffer       m_globalsBuffer;
+    LayoutedBlob m_globals;
 
-    bool                                                    m_visible = true;
+    bool m_visible = true;
 
-    SparseVector<std::unique_ptr<DebugBoxInstance>>         m_boxes;
-    SparseVector<std::unique_ptr<DebugArrowInstance>>       m_arrows;
-    SparseVector<std::unique_ptr<DebugPointInstance>>       m_points;
-    SparseVector<std::unique_ptr<DebugWireframeInstance>>   m_wireframes;
-    SparseVector<std::unique_ptr<DebugSphereInstance>>      m_spheres;
-    SparseVector<std::unique_ptr<DebugPoseInstance>>        m_poses;
+    SparseVector<std::unique_ptr<DebugBoxInstance>>       m_boxes;
+    SparseVector<std::unique_ptr<DebugArrowInstance>>     m_arrows;
+    SparseVector<std::unique_ptr<DebugPointInstance>>     m_points;
+    SparseVector<std::unique_ptr<DebugWireframeInstance>> m_wireframes;
+    SparseVector<std::unique_ptr<DebugSphereInstance>>    m_spheres;
+    SparseVector<std::unique_ptr<DebugPoseInstance>>      m_poses;
 };
-
 }

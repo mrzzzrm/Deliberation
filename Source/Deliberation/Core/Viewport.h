@@ -2,19 +2,17 @@
 
 #include <string>
 
-
-
 namespace deliberation
 {
-
 class Viewport final
 {
-public:
+  public:
     Viewport();
-    Viewport(unsigned int x,
-             unsigned int y,
-             unsigned int width,
-             unsigned int height);
+    Viewport(
+        unsigned int x,
+        unsigned int y,
+        unsigned int width,
+        unsigned int height);
 
     unsigned int x() const;
     unsigned int y() const;
@@ -31,12 +29,10 @@ public:
 
     std::string toString() const;
 
-private:
+  private:
     unsigned int m_x;
     unsigned int m_y;
     unsigned int m_width;
     unsigned int m_height;
 };
-
 }
-

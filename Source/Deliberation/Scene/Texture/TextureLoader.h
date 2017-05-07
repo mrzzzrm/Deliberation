@@ -1,8 +1,8 @@
 #pragma once
 
 #include <array>
-#include <string>
 #include <memory>
+#include <string>
 
 #include <glm/glm.hpp>
 
@@ -13,12 +13,11 @@
 
 namespace deliberation
 {
-
 class ITextureLoaderImpl;
 
 class TextureLoader final
 {
-public:
+  public:
     // Single face
     TextureLoader(SDL_Surface * surface);
     TextureLoader(const std::string & path);
@@ -35,8 +34,7 @@ public:
 
     TextureBinary load();
 
-private:
+  private:
     std::unique_ptr<ITextureLoaderImpl> m_impl;
 };
-
 }

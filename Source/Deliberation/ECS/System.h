@@ -1,23 +1,19 @@
 #pragma once
 
-
-
 #include <Deliberation/ECS/SystemBase.h>
 
 namespace deliberation
 {
-
 template<typename T>
-class System:
-    public SystemBase
+class System : public SystemBase
 {
-public:
+  public:
     typedef System<T> Base;
 
-public:
+  public:
     static std::size_t indexStatic();
 
-public:
+  public:
     System(World & world, const ComponentFilter & filter = ComponentFilter());
 
     virtual std::size_t index() const override;
@@ -26,8 +22,6 @@ public:
     template<typename EventType>
     void subscribe();
 };
-
 }
 
 #include <Deliberation/ECS/System.inl>
-

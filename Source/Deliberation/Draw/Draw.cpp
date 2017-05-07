@@ -4,35 +4,30 @@
 #include <iostream>
 #include <sstream>
 
+#include <glbinding/Meta.h>
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
-#include <glbinding/Meta.h>
 
 #include <Deliberation/Core/Assert.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/DrawContext.h>
-#include <Deliberation/Draw/Framebuffer.h>
-#include <Deliberation/Draw/Program.h>
-#include <Deliberation/Draw/ProgramInterface.h>
-#include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/Detail/BufferImpl.h>
 #include <Deliberation/Draw/Detail/DrawImpl.h>
 #include <Deliberation/Draw/Detail/FramebufferImpl.h>
 #include <Deliberation/Draw/Detail/ProgramImpl.h>
 #include <Deliberation/Draw/Detail/TextureImpl.h>
 #include <Deliberation/Draw/Detail/UniformBufferBinding.h>
+#include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
+#include <Deliberation/Draw/DrawContext.h>
+#include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/GL/GLBindVertexAttribute.h>
 #include <Deliberation/Draw/GL/GLType.h>
+#include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/ProgramInterface.h>
 
 namespace deliberation
 {
-
-Draw::Draw():
-    m_impl(nullptr)
-{
-
-}
+Draw::Draw() : m_impl(nullptr) {}
 
 const std::string & Draw::name() const
 {
@@ -93,7 +88,6 @@ Sampler Draw::sampler(const std::string & name)
 
     auto location = m_impl->program->interface.samplerRef(name).location();
 
-
     for (auto & sampler : m_impl->samplers)
     {
         if (sampler->location == location) return Sampler(sampler);
@@ -107,7 +101,7 @@ Buffer Draw::setIndices(const LayoutedBlob & data)
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto & drawContext = m_impl->drawContext;
-    auto buffer = drawContext.createBuffer(data.layout());
+    auto   buffer = drawContext.createBuffer(data.layout());
     buffer.upload(data);
     setIndexBuffer(buffer);
 
@@ -119,7 +113,7 @@ Buffer Draw::addVertices(const LayoutedBlob & data)
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto & drawContext = m_impl->drawContext;
-    auto buffer = drawContext.createBuffer(data.layout());
+    auto   buffer = drawContext.createBuffer(data.layout());
     buffer.upload(data);
     addVertexBuffer(buffer);
 
@@ -131,7 +125,7 @@ Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto & drawContext = m_impl->drawContext;
-    auto buffer = drawContext.createBuffer(data.layout());
+    auto   buffer = drawContext.createBuffer(data.layout());
     buffer.upload(data);
     addInstanceBuffer(buffer, divisor);
 
@@ -175,7 +169,8 @@ void Draw::addInstanceBuffer(const Buffer & buffer, u32 divisor)
     addVertexBuffer(buffer, false, 0, 0, divisor);
 }
 
-void Draw::addInstanceBufferRange(const Buffer & buffer, u32 first, u32 count, u32 divisor)
+void Draw::addInstanceBufferRange(
+    const Buffer & buffer, u32 first, u32 count, u32 divisor)
 {
     addVertexBuffer(buffer, true, first, count, divisor);
 }
@@ -189,7 +184,8 @@ VertexAttribute Draw::attribute(const std::string & name)
     return VertexAttribute(m_impl, attribute);
 }
 
-void Draw::setFramebuffer(const Framebuffer & framebuffer, const FramebufferBinding & binding)
+void Draw::setFramebuffer(
+    const Framebuffer & framebuffer, const FramebufferBinding & binding)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -197,13 +193,17 @@ void Draw::setFramebuffer(const Framebuffer & framebuffer, const FramebufferBind
 
     if (framebuffer.isBackbuffer())
     {
-        Assert(fragmentOutputs.size() == 1, "Writing to multiple targets in backbuffer draw");
+        Assert(
+            fragmentOutputs.size() == 1,
+            "Writing to multiple targets in backbuffer draw");
     }
     else
     {
         auto & colorTargets = framebuffer.m_impl->colorTargets;
 
-        Assert(fragmentOutputs.size() == colorTargets.size(), "Framebuffer/FragmentOutputs mismatch");
+        Assert(
+            fragmentOutputs.size() == colorTargets.size(),
+            "Framebuffer/FragmentOutputs mismatch");
 
         std::vector<gl::GLenum> bufs(fragmentOutputs.size(), gl::GL_NONE);
         for (size_t o = 0; o < fragmentOutputs.size(); o++)
@@ -213,35 +213,51 @@ void Draw::setFramebuffer(const Framebuffer & framebuffer, const FramebufferBind
             std::string mappedTargetName;
 
             // Does the output have a mapping?
-            auto iter = std::find_if(binding.begin(), binding.end(), [&] (const FragmentOutputMapping & fragmentOutputMapping) {
-                return "o_" + fragmentOutputMapping.first == fragmentOutput.name();
-            });
+            auto iter = std::find_if(
+                binding.begin(),
+                binding.end(),
+                [&](const FragmentOutputMapping & fragmentOutputMapping) {
+                    return "o_" + fragmentOutputMapping.first ==
+                           fragmentOutput.name();
+                });
 
             if (iter != binding.end()) mappedTargetName = "o_" + iter->second;
 
-            std::cout << "Mapped target of " << fragmentOutput.name() + ": " << mappedTargetName << std::endl;
+            std::cout << "Mapped target of " << fragmentOutput.name() + ": "
+                      << mappedTargetName << std::endl;
 
             for (size_t t = 0; t < colorTargets.size(); t++)
             {
-                auto & colorTarget = colorTargets[t];
+                auto &     colorTarget = colorTargets[t];
                 const auto colorTargetName = "o_" + colorTarget.name;
 
-                // If no mapping exist, mappedTargetName will be empty and never match
-                if (colorTargetName == mappedTargetName || "o_" + colorTarget.name == fragmentOutput.name())
+                // If no mapping exist, mappedTargetName will be empty and never
+                // match
+                if (colorTargetName == mappedTargetName ||
+                    "o_" + colorTarget.name == fragmentOutput.name())
                 {
-                    Assert (colorTarget.surface.format().fragmentOutputType() == fragmentOutput.type(),
-                            "Fragment output " + fragmentOutput.name() + "(" + fragmentOutput.type().name() +
-                                ") and RenderTarget (" + colorTarget.surface.format().toString() + " = " +
-                                colorTarget.surface.format().fragmentOutputType().name() +
-                                ") are incompatible");
+                    Assert(
+                        colorTarget.surface.format().fragmentOutputType() ==
+                            fragmentOutput.type(),
+                        "Fragment output " + fragmentOutput.name() + "(" +
+                            fragmentOutput.type().name() +
+                            ") and RenderTarget (" +
+                            colorTarget.surface.format().toString() + " = " +
+                            colorTarget.surface.format()
+                                .fragmentOutputType()
+                                .name() +
+                            ") are incompatible");
 
-                    bufs[fragmentOutput.location()] = (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + t);
+                    bufs[fragmentOutput.location()] =
+                        (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + t);
                     break;
                 }
             }
 
-            Assert(bufs[fragmentOutput.location()] != gl::GL_NONE, "No matching target in Framebuffer for fragment output '"
-                 + fragmentOutput.name() + "'");
+            Assert(
+                bufs[fragmentOutput.location()] != gl::GL_NONE,
+                "No matching target in Framebuffer for fragment output '" +
+                    fragmentOutput.name() + "'");
         }
         m_impl->drawBuffers = std::move(bufs);
     }
@@ -249,7 +265,8 @@ void Draw::setFramebuffer(const Framebuffer & framebuffer, const FramebufferBind
     m_impl->framebuffer = framebuffer;
 }
 
-void Draw::setUniformBuffer(const std::string & name, const Buffer & buffer, unsigned int begin)
+void Draw::setUniformBuffer(
+    const std::string & name, const Buffer & buffer, unsigned int begin)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -271,7 +288,9 @@ void Draw::render() const
     if (m_impl->indexBufferBindingDirty && m_impl->indexBufferBinding.buffer)
     {
         glStateManager.bindVertexArray(m_impl->glVertexArray);
-        glStateManager.bindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, m_impl->indexBufferBinding.buffer->glName);
+        glStateManager.bindBuffer(
+            gl::GL_ELEMENT_ARRAY_BUFFER,
+            m_impl->indexBufferBinding.buffer->glName);
         m_impl->indexBufferBindingDirty = false;
     }
 
@@ -284,26 +303,26 @@ void Draw::render() const
         {
             Assert(a < attributes.size(), "");
 
-            const auto & valueBinding =
-                boost::get<VertexAttributeValueBinding>(m_impl->attributeBindings[a]);
+            const auto & valueBinding = boost::get<VertexAttributeValueBinding>(
+                m_impl->attributeBindings[a]);
 
             GLBindVertexAttribute(
                 m_impl->glVertexArray,
                 attributes[a],
-                m_impl->valueAttributes.ptr(valueBinding.offset)
-            );
+                m_impl->valueAttributes.ptr(valueBinding.offset));
         }
 
         m_impl->dirtyValueAttributes.clear();
     }
-    
+
     glStateManager.enableTextureCubeMapSeamless(true);
 
     // Apply Depth State
     {
         auto & state = m_impl->state.depthState();
 
-        if (state.depthWrite() == DepthWrite::Disabled && state.depthTest() == DepthTest::Disabled)
+        if (state.depthWrite() == DepthWrite::Disabled &&
+            state.depthTest() == DepthTest::Disabled)
         {
             glStateManager.enableDepthTest(false);
         }
@@ -311,10 +330,11 @@ void Draw::render() const
         {
             glStateManager.enableDepthTest(true);
             glStateManager.setDepthFunc((gl::GLenum)state.depthTest());
-            glStateManager.setDepthMask(state.depthWrite() == DepthWrite::Enabled);
-        }        
+            glStateManager.setDepthMask(
+                state.depthWrite() == DepthWrite::Enabled);
+        }
     }
-    
+
     // Apply Blend State
     {
         auto & state = m_impl->state.blendState();
@@ -324,10 +344,11 @@ void Draw::render() const
         if (state.enabled())
         {
             glStateManager.setBlendEquation((gl::GLenum)state.equation());
-            glStateManager.setBlendFunc((gl::GLenum)state.sfactor(), (gl::GLenum)state.dfactor());
+            glStateManager.setBlendFunc(
+                (gl::GLenum)state.sfactor(), (gl::GLenum)state.dfactor());
         }
     }
-    
+
     // Apply cull state
     {
         auto & state = m_impl->state.cullState();
@@ -339,7 +360,7 @@ void Draw::render() const
             glStateManager.setCullFace((gl::GLenum)state.cullFace());
         }
     }
-    
+
     // Apply rasterizer state
     {
         auto & state = m_impl->state.rasterizerState();
@@ -351,10 +372,11 @@ void Draw::render() const
         if (state.scissorRectEnabled())
         {
             const auto & scissorRect = state.scissorRect();
-            glStateManager.setScissor(scissorRect.x, scissorRect.y, scissorRect.z, scissorRect.w);
+            glStateManager.setScissor(
+                scissorRect.x, scissorRect.y, scissorRect.z, scissorRect.w);
         }
     }
-    
+
     // Apply stencil state
     {
         auto & state = m_impl->state.stencilState();
@@ -368,18 +390,29 @@ void Draw::render() const
 
             if (state.differentFaceFuncs())
             {
-                glStateManager.setStencilFuncSeparate(gl::GL_FRONT, (gl::GLenum)front.func, front.ref, front.readMask);
-                glStateManager.setStencilFuncSeparate(gl::GL_BACK, (gl::GLenum)back.func, back.ref, back.readMask);
+                glStateManager.setStencilFuncSeparate(
+                    gl::GL_FRONT,
+                    (gl::GLenum)front.func,
+                    front.ref,
+                    front.readMask);
+                glStateManager.setStencilFuncSeparate(
+                    gl::GL_BACK,
+                    (gl::GLenum)back.func,
+                    back.ref,
+                    back.readMask);
             }
             else
             {
-                glStateManager.setStencilFunc((gl::GLenum)state.func(), state.ref(), state.readMask());
+                glStateManager.setStencilFunc(
+                    (gl::GLenum)state.func(), state.ref(), state.readMask());
             }
 
             if (state.differentFaceMasks())
             {
-                glStateManager.setStencilMaskSeparate(gl::GL_FRONT, front.writeMask);
-                glStateManager.setStencilMaskSeparate(gl::GL_BACK, back.writeMask);
+                glStateManager.setStencilMaskSeparate(
+                    gl::GL_FRONT, front.writeMask);
+                glStateManager.setStencilMaskSeparate(
+                    gl::GL_BACK, back.writeMask);
             }
             else
             {
@@ -388,38 +421,55 @@ void Draw::render() const
 
             if (state.differentFaceOps())
             {
-                glStateManager.setStencilOpSeparate(gl::GL_FRONT, (gl::GLenum)front.sfail, (gl::GLenum)front.dpfail, (gl::GLenum)front.dppass);
-                glStateManager.setStencilOpSeparate(gl::GL_BACK, (gl::GLenum)back.sfail, (gl::GLenum)back.dpfail, (gl::GLenum)back.dppass);
+                glStateManager.setStencilOpSeparate(
+                    gl::GL_FRONT,
+                    (gl::GLenum)front.sfail,
+                    (gl::GLenum)front.dpfail,
+                    (gl::GLenum)front.dppass);
+                glStateManager.setStencilOpSeparate(
+                    gl::GL_BACK,
+                    (gl::GLenum)back.sfail,
+                    (gl::GLenum)back.dpfail,
+                    (gl::GLenum)back.dppass);
             }
             else
             {
-                glStateManager.setStencilOp((gl::GLenum)state.sfail(), (gl::GLenum)state.dpfail(), (gl::GLenum)state.dppass());
+                glStateManager.setStencilOp(
+                    (gl::GLenum)state.sfail(),
+                    (gl::GLenum)state.dpfail(),
+                    (gl::GLenum)state.dppass());
             }
         }
     }
-    
+
     // Apply viewport
     {
         auto & state = m_impl->state;
         auto & framebuffer = m_impl->framebuffer;
-        //gl::glProvokingVertex(m_provokingVertex);
+        // gl::glProvokingVertex(m_provokingVertex);
 
         if (state.hasViewport())
         {
-            glStateManager.setViewport(state.viewport().x(), state.viewport().y(),
-                                         state.viewport().width(), state.viewport().height());
+            glStateManager.setViewport(
+                state.viewport().x(),
+                state.viewport().y(),
+                state.viewport().width(),
+                state.viewport().height());
         }
         else
         {
             if (framebuffer.isBackbuffer())
             {
-                glStateManager.setViewport(0, 0, m_impl->drawContext.backbuffer().width(),
-                                             m_impl->drawContext.backbuffer().height());
+                glStateManager.setViewport(
+                    0,
+                    0,
+                    m_impl->drawContext.backbuffer().width(),
+                    m_impl->drawContext.backbuffer().height());
             }
             else
             {
-                glStateManager.setViewport(0, 0, framebuffer.width(),
-                                             framebuffer.height());
+                glStateManager.setViewport(
+                    0, 0, framebuffer.width(), framebuffer.height());
             }
         }
     }
@@ -430,7 +480,7 @@ void Draw::render() const
     for (auto b = 0u; b < m_impl->samplers.size(); b++)
     {
         auto & sampler = m_impl->samplers[b];
-        auto texture = sampler->textureImpl;
+        auto   texture = sampler->textureImpl;
 
         Assert((bool)texture, "Sampler has no Texture bound to it");
 
@@ -447,67 +497,76 @@ void Draw::render() const
         for (size_t u = 0; u < m_impl->uniforms.size(); u++)
         {
             const auto & uniformBinding = m_impl->uniforms[u];
-            const auto & uniformInterface = m_impl->program->interface.uniforms()[u];
+            const auto & uniformInterface =
+                m_impl->program->interface.uniforms()[u];
 
-            Assert(uniformBinding.assigned, "Uniform " + uniformInterface.name() + " not set");
+            Assert(
+                uniformBinding.assigned,
+                "Uniform " + uniformInterface.name() + " not set");
             Assert(uniformBinding.count > 0, "");
 
-            auto count = uniformBinding.count;
-            auto * data = m_impl->uniformData.rawData().ptr(m_impl->uniformLayout.field(u).offset());
+            auto   count = uniformBinding.count;
+            auto * data = m_impl->uniformData.rawData().ptr(
+                m_impl->uniformLayout.field(u).offset());
             auto location = m_impl->program->interface.uniforms()[u].location();
 
             switch (TypeToGLType(uniformInterface.type()))
             {
-                case gl::GL_BOOL:
-                {
-                    gl::GLint boolInt = *(const gl::GLboolean*)data ? 1 : 0;
-                    gl::glUniform1iv(location, count, &boolInt);
-                    break;
-                }
-                case gl::GL_INT:
-                    gl::glUniform1iv(location, count, ((const gl::GLint*)data));
-                    break;
-                case gl::GL_UNSIGNED_INT:
-                    gl::glUniform1uiv(location, count, ((const gl::GLuint*)data));
-                    break;
-                case gl::GL_INT_VEC2:
-                {
-                    auto idata = (const gl::GLint*)data;
-                    gl::glUniform2iv(location, count, idata);
-                    break;
-                }
-                case gl::GL_FLOAT:
-                    gl::glUniform1fv(location, count, ((const gl::GLfloat*)data));
-                    break;
-                case gl::GL_FLOAT_VEC2:
-                {
-                    auto fdata = (const gl::GLfloat*)data;
-                    gl::glUniform2fv(location, count, fdata);
-                    break;
-                }
-                case gl::GL_FLOAT_VEC3:
-                {
-                    auto fdata = (const gl::GLfloat*)data;
-                    gl::glUniform3fv(location, count, fdata);
-                    break;
-                }
-                case gl::GL_FLOAT_VEC4:
-                {
-                    auto fdata = (const gl::GLfloat*)data;
-                    gl::glUniform4fv(location, count, fdata);
-                    break;
-                }
-                case gl::GL_FLOAT_MAT2:
-                    gl::glUniformMatrix2fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
-                    break;
-                case gl::GL_FLOAT_MAT3:
-                    gl::glUniformMatrix3fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
-                    break;
-                case gl::GL_FLOAT_MAT4:
-                    gl::glUniformMatrix4fv(location, count, gl::GL_FALSE, (const gl::GLfloat*)data);
-                    break;
-                default:
-                Fail(std::string("Not implemented for type ") + uniformInterface.type().name());
+            case gl::GL_BOOL:
+            {
+                gl::GLint boolInt = *(const gl::GLboolean *)data ? 1 : 0;
+                gl::glUniform1iv(location, count, &boolInt);
+                break;
+            }
+            case gl::GL_INT:
+                gl::glUniform1iv(location, count, ((const gl::GLint *)data));
+                break;
+            case gl::GL_UNSIGNED_INT:
+                gl::glUniform1uiv(location, count, ((const gl::GLuint *)data));
+                break;
+            case gl::GL_INT_VEC2:
+            {
+                auto idata = (const gl::GLint *)data;
+                gl::glUniform2iv(location, count, idata);
+                break;
+            }
+            case gl::GL_FLOAT:
+                gl::glUniform1fv(location, count, ((const gl::GLfloat *)data));
+                break;
+            case gl::GL_FLOAT_VEC2:
+            {
+                auto fdata = (const gl::GLfloat *)data;
+                gl::glUniform2fv(location, count, fdata);
+                break;
+            }
+            case gl::GL_FLOAT_VEC3:
+            {
+                auto fdata = (const gl::GLfloat *)data;
+                gl::glUniform3fv(location, count, fdata);
+                break;
+            }
+            case gl::GL_FLOAT_VEC4:
+            {
+                auto fdata = (const gl::GLfloat *)data;
+                gl::glUniform4fv(location, count, fdata);
+                break;
+            }
+            case gl::GL_FLOAT_MAT2:
+                gl::glUniformMatrix2fv(
+                    location, count, gl::GL_FALSE, (const gl::GLfloat *)data);
+                break;
+            case gl::GL_FLOAT_MAT3:
+                gl::glUniformMatrix3fv(
+                    location, count, gl::GL_FALSE, (const gl::GLfloat *)data);
+                break;
+            case gl::GL_FLOAT_MAT4:
+                gl::glUniformMatrix4fv(
+                    location, count, gl::GL_FALSE, (const gl::GLfloat *)data);
+                break;
+            default:
+                Fail(
+                    std::string("Not implemented for type ") +
+                    uniformInterface.type().name());
             }
         }
     }
@@ -518,15 +577,24 @@ void Draw::render() const
         {
             auto & binding = m_impl->uniformBuffers[b];
 
-            Assert(binding.engaged(), "UniformBuffer " + m_impl->program->interface.uniformBlocks()[b].name() + " not bound");
+            Assert(
+                binding.engaged(),
+                "UniformBuffer " +
+                    m_impl->program->interface.uniformBlocks()[b].name() +
+                    " not bound");
 
             auto & buffer = *binding.get().buffer;
-            auto size = buffer.count * buffer.layout.stride();
+            auto   size = buffer.count * buffer.layout.stride();
 
             Assert(size > binding.get().begin, "begin beyond buffer bounds");
 
             gl::glUniformBlockBinding(m_impl->program->glProgramName, b, b);
-            gl::glBindBufferRange(gl::GL_UNIFORM_BUFFER, b, buffer.glName, binding.get().begin, buffer.layout.stride());
+            gl::glBindBufferRange(
+                gl::GL_UNIFORM_BUFFER,
+                b,
+                buffer.glName,
+                binding.get().begin,
+                buffer.layout.stride());
         }
     }
 
@@ -540,20 +608,28 @@ void Draw::render() const
     {
         if (attributeBinding.which() == 1) continue; // Value binding
 
-        const auto & bufferBinding = boost::get<VertexAttributeBufferBinding>(attributeBinding);
+        const auto & bufferBinding =
+            boost::get<VertexAttributeBufferBinding>(attributeBinding);
 
         if (bufferBinding.ranged)
         {
-            Assert(bufferBinding.count + bufferBinding.first < bufferBinding.buffer->count, "Buffer too small");
+            Assert(
+                bufferBinding.count + bufferBinding.first <
+                    bufferBinding.buffer->count,
+                "Buffer too small");
 
             if (bufferBinding.divisor > 0)
             {
-                Assert(instanceCount == 0 || bufferBinding.count == instanceCount, "Instance count mismatch");
+                Assert(
+                    instanceCount == 0 || bufferBinding.count == instanceCount,
+                    "Instance count mismatch");
                 instanceCount = bufferBinding.count;
             }
             else if (!m_impl->indexBufferBinding.buffer)
             {
-                Assert(vertexCount == 0 || bufferBinding.count == vertexCount, "Vertex count mismatch");
+                Assert(
+                    vertexCount == 0 || bufferBinding.count == vertexCount,
+                    "Vertex count mismatch");
                 vertexCount = bufferBinding.count;
             }
         }
@@ -561,14 +637,20 @@ void Draw::render() const
         {
             if (bufferBinding.divisor > 0)
             {
-                Assert(instanceCount == 0 || bufferBinding.buffer->count == instanceCount, "Instance count mismatch");
+                Assert(
+                    instanceCount == 0 ||
+                        bufferBinding.buffer->count == instanceCount,
+                    "Instance count mismatch");
                 instanceCount = bufferBinding.buffer->count;
             }
             else
             {
                 if (!useIndices)
                 {
-                    Assert(vertexCount == 0 || bufferBinding.buffer->count == vertexCount, "Vertex count mismatch");
+                    Assert(
+                        vertexCount == 0 ||
+                            bufferBinding.buffer->count == vertexCount,
+                        "Vertex count mismatch");
                     vertexCount = bufferBinding.buffer->count;
                 }
             }
@@ -579,7 +661,8 @@ void Draw::render() const
 
     if (useIndices)
     {
-        const auto type = m_impl->indexBufferBinding.buffer->layout.fields()[0].type();
+        const auto type =
+            m_impl->indexBufferBinding.buffer->layout.fields()[0].type();
 
         u32 elementCount = 0;
         u32 offset = 0;
@@ -597,35 +680,38 @@ void Draw::render() const
 
         if (instanceCount != 0)
         {
-            gl::glDrawElementsInstanced((gl::GLenum)m_impl->state.rasterizerState().primitive(),
-                                        elementCount,
-                                        TypeToGLType(type),
-                                        (void*)(intptr_t)offset,
-                                        instanceCount);
-
+            gl::glDrawElementsInstanced(
+                (gl::GLenum)m_impl->state.rasterizerState().primitive(),
+                elementCount,
+                TypeToGLType(type),
+                (void *)(intptr_t)offset,
+                instanceCount);
         }
         else
         {
-            gl::glDrawElements((gl::GLenum)m_impl->state.rasterizerState().primitive(),
-                               elementCount,
-                               TypeToGLType(type),
-                               (void*)(intptr_t)offset);
+            gl::glDrawElements(
+                (gl::GLenum)m_impl->state.rasterizerState().primitive(),
+                elementCount,
+                TypeToGLType(type),
+                (void *)(intptr_t)offset);
         }
     }
     else
     {
         if (instanceCount != 0)
         {
-            gl::glDrawArraysInstanced((gl::GLenum)m_impl->state.rasterizerState().primitive(),
-                                      0u,
-                                      vertexCount,
-                                      instanceCount);
+            gl::glDrawArraysInstanced(
+                (gl::GLenum)m_impl->state.rasterizerState().primitive(),
+                0u,
+                vertexCount,
+                instanceCount);
         }
         else
         {
-            gl::glDrawArrays((gl::GLenum)m_impl->state.rasterizerState().primitive(),
-                             0u,
-                             vertexCount);
+            gl::glDrawArrays(
+                (gl::GLenum)m_impl->state.rasterizerState().primitive(),
+                0u,
+                vertexCount);
         }
     }
 }
@@ -646,11 +732,7 @@ std::string Draw::toString() const
     return stream.str();
 }
 
-Draw::Draw(const std::shared_ptr<DrawImpl> & impl):
-    m_impl(impl)
-{
-
-}
+Draw::Draw(const std::shared_ptr<DrawImpl> & impl) : m_impl(impl) {}
 
 void Draw::build() const
 {
@@ -667,25 +749,33 @@ void Draw::build() const
         const auto & attribute = m_impl->program->interface.attributes()[a];
         const auto & attributeBinding = m_impl->attributeBindings[a];
 
-        Assert (attributeBinding.which() != 0, "Attribute '" + attribute.name() + "' is not supplied");
+        Assert(
+            attributeBinding.which() != 0,
+            "Attribute '" + attribute.name() + "' is not supplied");
 
         if (attributeBinding.which() == 1) continue; // value attribute
 
-        const auto & bufferBinding = boost::get<VertexAttributeBufferBinding>(attributeBinding);
+        const auto & bufferBinding =
+            boost::get<VertexAttributeBufferBinding>(attributeBinding);
 
-        const auto baseOffset = bufferBinding.ranged ? bufferBinding.first * bufferBinding.buffer->layout.stride() : 0;
+        const auto baseOffset =
+            bufferBinding.ranged
+                ? bufferBinding.first * bufferBinding.buffer->layout.stride()
+                : 0;
 
-        GLBindVertexAttribute(m_impl->drawContext.m_glStateManager,
-                              m_impl->glVertexArray,
-                              attribute,
-                              *bufferBinding.buffer,
-                              bufferBinding.fieldIndex,
-                              bufferBinding.divisor,
-                              baseOffset);
+        GLBindVertexAttribute(
+            m_impl->drawContext.m_glStateManager,
+            m_impl->glVertexArray,
+            attribute,
+            *bufferBinding.buffer,
+            bufferBinding.fieldIndex,
+            bufferBinding.divisor,
+            baseOffset);
     }
 }
 
-void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor)
+void Draw::addVertexBuffer(
+    const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
@@ -700,11 +790,14 @@ void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 co
         if (!attribute) continue;
 
         auto & binding = m_impl->attributeBindings[attribute->index()];
-        Assert(binding.which() == 0, "Vertex attribute '" + field.name() + "' is already supplied.");
+        Assert(
+            binding.which() == 0,
+            "Vertex attribute '" + field.name() + "' is already supplied.");
 
         binding = VertexAttributeBufferBinding{};
 
-        auto & bufferBinding = boost::get<VertexAttributeBufferBinding>(binding);
+        auto & bufferBinding =
+            boost::get<VertexAttributeBufferBinding>(binding);
 
         bufferBinding.buffer = buffer.m_impl;
         bufferBinding.fieldIndex = (u32)f;
@@ -715,13 +808,10 @@ void Draw::addVertexBuffer(const Buffer & buffer, bool ranged, u32 first, u32 co
     }
 }
 
-
-void Draw::setAttribute(const ProgramInterfaceVertexAttribute & attribute,
-                        const void * data)
+void Draw::setAttribute(
+    const ProgramInterfaceVertexAttribute & attribute, const void * data)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
     m_impl->setAttribute(attribute, data);
 }
-
 }
-

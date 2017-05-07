@@ -10,12 +10,7 @@
 
 namespace deliberation
 {
-
-World::World():
-    m_entityIDCounter(1)
-{
-
-}
+World::World() : m_entityIDCounter(1) {}
 
 World::~World()
 {
@@ -32,15 +27,9 @@ World::~World()
     }
 }
 
-EventManager & World::eventManager()
-{
-    return m_eventManager;
-}
+EventManager & World::eventManager() { return m_eventManager; }
 
-const WorldProfiler & World::profiler() const
-{
-    return m_profiler;
-}
+const WorldProfiler & World::profiler() const { return m_profiler; }
 
 EntityData & World::entityData(EntityId id)
 {
@@ -49,20 +38,14 @@ EntityData & World::entityData(EntityId id)
     return m_entities[entityIndex(id)];
 }
 
-Entity World::entity(EntityId id)
-{
-    return Entity(*this, id);
-}
+Entity World::entity(EntityId id) { return Entity(*this, id); }
 
 Entity World::entityByIndex(size_t index)
 {
     return Entity(*this, m_entities[index].id);
 }
 
-Entity World::entityById(EntityId id)
-{
-    return Entity(*this, id);
-}
+Entity World::entityById(EntityId id) { return Entity(*this, id); }
 
 Entity World::createEntity(const std::string & name, EntityId parent)
 {
@@ -71,7 +54,9 @@ Entity World::createEntity(const std::string & name, EntityId parent)
     m_entityIndexByID[id] = index;
 
 #if VERBOSE
-    std::cout << "World::createEntity(): Allocated index=" << index << " for Entity '" << name << "'; parent=" << (int)parent << std::endl;
+    std::cout << "World::createEntity(): Allocated index=" << index
+              << " for Entity '" << name << "'; parent=" << (int)parent
+              << std::endl;
 #endif
 
     auto & entity = entityData(id);
@@ -93,7 +78,7 @@ void World::frameBegin()
      */
     for (const auto & entityId : m_entityRemovals)
     {
-        auto entity = this->entityData(entityId);
+        auto   entity = this->entityData(entityId);
         auto * componentSetup = entity.componentSetup;
 
         for (const auto & componentTypeId : componentSetup->componentTypeIds)
@@ -130,12 +115,10 @@ void World::frameBegin()
 
         m_profiler.addScope({system, "FrameBegin", micros});
     }
-
 }
 
 void World::update(float seconds)
 {
-
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
@@ -173,10 +156,7 @@ void World::prePhysicsUpdate(float seconds)
     }
 }
 
-void World::frameComplete()
-{
-    m_profiler.frameComplete();
-}
+void World::frameComplete() { m_profiler.frameComplete(); }
 
 std::string World::toString() const
 {
@@ -192,7 +172,8 @@ std::string World::toString() const
         stream << "Entity " << entity.id << "/" << entity.name;
         if (isValid(entity.parent))
         {
-            stream << "; parent = " << entity.parent << "/" << m_entities[entity.parent].name;
+            stream << "; parent = " << entity.parent << "/"
+                   << m_entities[entity.parent].name;
         }
         stream << std::endl;
 
@@ -202,7 +183,8 @@ std::string World::toString() const
 
             if (components.contains(entity.id))
             {
-                stream << "  Component " << components.at(entity.id)->name() << std::endl;
+                stream << "  Component " << components.at(entity.id)->name()
+                       << std::endl;
             }
         }
     }
@@ -210,11 +192,14 @@ std::string World::toString() const
     return stream.str();
 }
 
-void World::emit(size_t entityIndex, TypeID::value_t eventType, const void * event)
+void World::emit(
+    size_t entityIndex, TypeID::value_t eventType, const void * event)
 {
-    const auto * const entityComponentSetup = m_entities[entityIndex].componentSetup;
+    const auto * const entityComponentSetup =
+        m_entities[entityIndex].componentSetup;
 
-    const auto iter = entityComponentSetup->componentIndicesByEventType.find(eventType);
+    const auto iter =
+        entityComponentSetup->componentIndicesByEventType.find(eventType);
     if (iter == entityComponentSetup->componentIndicesByEventType.end()) return;
 
     for (const auto & index : iter->second)
@@ -233,8 +218,10 @@ void World::scheduleEntityRemoval(EntityId id)
     Assert(isValid(id), "");
 
     auto & entity = entityData(id);
-    Assert(entity.phase == EntityPhase::Active || entity.phase == EntityPhase::ScheduledForRemoval,
-           "Can't schedule non-active entity for removal");
+    Assert(
+        entity.phase == EntityPhase::Active ||
+            entity.phase == EntityPhase::ScheduledForRemoval,
+        "Can't schedule non-active entity for removal");
 
     if (entity.phase == EntityPhase::Active)
     {
@@ -247,24 +234,28 @@ void World::removeEntity(EntityId entityId)
 {
     Assert(isValid(entityId), "");
 
-    auto i = entityIndex(entityId);
+    auto   i = entityIndex(entityId);
     auto & entity = m_entities[i];
     auto * componentSetup = entity.componentSetup;
 
 #if VERBOSE
-    std::cout << "World::remove(): id=" << id << "; name=" << entity.name << std::endl;
+    std::cout << "World::remove(): id=" << id << "; name=" << entity.name
+              << std::endl;
     std::cout << "  num children=" << entity.children.size() << std::endl;
 #endif
 
-    for (auto child : entity.children) removeEntity(child);
+    for (auto child : entity.children)
+        removeEntity(child);
 
-    for (auto componentIndex : componentSetup->componentTypeIds) removeComponent({entityId, componentIndex});
+    for (auto componentIndex : componentSetup->componentTypeIds)
+        removeComponent({entityId, componentIndex});
 
     m_entities.erase(i);
     m_entityIndexByID.erase(entityId);
 }
 
-std::shared_ptr<ComponentBase> World::component(EntityId id, TypeID::value_t index)
+std::shared_ptr<ComponentBase>
+World::component(EntityId id, TypeID::value_t index)
 {
     Assert(isValid(id), "");
 
@@ -276,7 +267,8 @@ std::shared_ptr<ComponentBase> World::component(EntityId id, TypeID::value_t ind
     return m_components.at(index).at(i);
 }
 
-std::shared_ptr<const ComponentBase> World::component(EntityId id, TypeID::value_t index) const
+std::shared_ptr<const ComponentBase>
+World::component(EntityId id, TypeID::value_t index) const
 {
     Assert(isValid(id), "");
 
@@ -295,11 +287,14 @@ std::shared_ptr<const ComponentBase> World::component(EntityId id, TypeID::value
     return m_components.at(index).at(i);
 }
 
-void World::addComponent(EntityId id, TypeID::value_t index, std::shared_ptr<ComponentBase> component)
+void World::addComponent(
+    EntityId                       id,
+    TypeID::value_t                index,
+    std::shared_ptr<ComponentBase> component)
 {
     Assert(isValid(id), "");
 
-    auto i = entityIndex(id);
+    auto   i = entityIndex(id);
     auto & entity = m_entities[i];
     auto * prevComponentSetup = entity.componentSetup;
 
@@ -321,12 +316,14 @@ void World::addComponent(EntityId id, TypeID::value_t index, std::shared_ptr<Com
     for (auto systemIndex : entity.componentSetup->systemIndices)
     {
 #if VERBOSE
-    std::cout << "  Checking system " << systemIndex << " (" << prevComponentSetup->systemBits.test(systemIndex) << ")" << std::endl;
+        std::cout << "  Checking system " << systemIndex << " ("
+                  << prevComponentSetup->systemBits.test(systemIndex) << ")"
+                  << std::endl;
 #endif
         if (!prevComponentSetup->systemBits.test(systemIndex))
         {
 #if VERBOSE
-    std::cout << "  Adding entity to system" << std::endl;
+            std::cout << "  Adding entity to system" << std::endl;
 #endif
             auto & system = *m_systems[systemIndex];
             Entity entity(*this, id);
@@ -348,7 +345,7 @@ void World::scheduleComponentRemoval(EntityId id, ComponentTypeId index)
 
 void World::removeComponent(const ComponentRemoval & componentRemoval)
 {
-    auto i = entityIndex(componentRemoval.entityId);
+    auto   i = entityIndex(componentRemoval.entityId);
     auto & entity = m_entities[i];
     auto * prevComponentSetup = entity.componentSetup;
 
@@ -376,7 +373,8 @@ std::size_t World::entityIndex(EntityId id) const
     return i->second;
 }
 
-EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBits)
+EntityComponentSetup *
+World::componentSetup(const ComponentBitset & componentBits)
 {
     auto i = m_entityComponentSetups.find(componentBits);
     if (i != m_entityComponentSetups.end())
@@ -385,12 +383,11 @@ EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBi
     }
 
 #if VERBOSE
-    std::cout << "World: New component setup for bits " << componentBits.to_string() << std::endl;
+    std::cout << "World: New component setup for bits "
+              << componentBits.to_string() << std::endl;
 #endif
 
     auto & setup = m_entityComponentSetups[componentBits];
-
-
 
     for (auto b = 0; b < ECS_MAX_NUM_COMPONENTS; b++)
     {
@@ -405,10 +402,12 @@ EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBi
 
     for (const auto & componentIndex : setup.componentTypeIds)
     {
-        const auto & componentSubscriptions = ComponentSubscriptionsBase::subscriptionsByComponentType[componentIndex];
+        const auto & componentSubscriptions = ComponentSubscriptionsBase::
+            subscriptionsByComponentType[componentIndex];
         for (const auto & componentSubscription : componentSubscriptions)
         {
-            setup.componentIndicesByEventType[componentSubscription].emplace_back(componentIndex);
+            setup.componentIndicesByEventType[componentSubscription]
+                .emplace_back(componentIndex);
         }
     }
 
@@ -432,6 +431,4 @@ EntityComponentSetup * World::componentSetup(const ComponentBitset & componentBi
 
     return &setup;
 }
-
 }
-

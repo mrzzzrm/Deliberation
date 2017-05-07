@@ -4,12 +4,10 @@
 
 #include <Deliberation/Core/BlobValue.h>
 
-
 #include "DataLayoutField.h"
 
 namespace deliberation
 {
-
 class Blob;
 class DataLayout;
 class LayoutedBlob;
@@ -18,59 +16,58 @@ class LayoutedBlobElement;
 template<typename BlobType>
 class LayoutedBlobElementBase
 {
-public:
+  public:
     using Base = LayoutedBlobElementBase<BlobType>;
 
-public:
-    BlobType & blob() const;
+  public:
+    BlobType &         blob() const;
     const DataLayout & layout() const;
-    size_t index() const;
+    size_t             index() const;
 
     CBlobValue value(const DataLayoutField & field) const;
     CBlobValue value(const std::string & name) const;
 
     std::string toString() const;
 
-protected:
-    LayoutedBlobElementBase(BlobType & blob, const DataLayout & layout, size_t index);
+  protected:
+    LayoutedBlobElementBase(
+        BlobType & blob, const DataLayout & layout, size_t index);
 
-protected:
-    BlobType &          m_blob;
-    const DataLayout &  m_layout;
-    size_t              m_index = 0;
+  protected:
+    BlobType &         m_blob;
+    const DataLayout & m_layout;
+    size_t             m_index = 0;
 };
 
-class CLayoutedBlobElement final:
-    public LayoutedBlobElementBase<const Blob>
+class CLayoutedBlobElement final : public LayoutedBlobElementBase<const Blob>
 {
-public:
+  public:
     CLayoutedBlobElement(const LayoutedBlobElement & rhs);
 
-private:
+  private:
     friend class LayoutedBlobElement;
     friend class LayoutedBlob;
 
-private:
-    CLayoutedBlobElement(const Blob & blob, const DataLayout & layout, size_t index);
+  private:
+    CLayoutedBlobElement(
+        const Blob & blob, const DataLayout & layout, size_t index);
 };
 
-class LayoutedBlobElement final:
-    public LayoutedBlobElementBase<Blob>
+class LayoutedBlobElement final : public LayoutedBlobElementBase<Blob>
 {
-public:
+  public:
     BlobValue value(const DataLayoutField & field);
     BlobValue value(const std::string & name);
 
     LayoutedBlobElement & operator=(const LayoutedBlobElement & rhs);
     LayoutedBlobElement & operator=(const CLayoutedBlobElement & rhs);
 
-private:
+  private:
     friend class LayoutedBlob;
 
-private:
+  private:
     LayoutedBlobElement(Blob & blob, const DataLayout & layout, size_t index);
 };
-
 }
 
 #include <Deliberation/Core/LayoutedBlobElement.inl>

@@ -7,22 +7,21 @@
 
 namespace deliberation
 {
-
 class Transform3D final
 {
-public:
-    static Transform3D atPosition(const glm::vec3 & position);
-    static Transform3D atOrientation(const glm::quat & orientation);
-    static Transform3D withScale(float sclae);
+  public:
+    static Transform3D         atPosition(const glm::vec3 & position);
+    static Transform3D         atOrientation(const glm::quat & orientation);
+    static Transform3D         withScale(float sclae);
     static const Transform3D & identity();
 
-public:
+  public:
     Transform3D();
 
     const glm::vec3 & position() const;
     const glm::quat & orientation() const;
     const glm::vec3 & center() const;
-    float scale() const;
+    float             scale() const;
 
     void setPosition(const glm::vec3 & position);
     void setOrientation(const glm::quat & orientation);
@@ -54,18 +53,16 @@ public:
     bool operator==(const Transform3D & other) const;
     bool operator!=(const Transform3D & other) const;
 
-protected:
-    glm::vec3           m_position;
-    glm::quat           m_orientation;
-    glm::vec3           m_center;
-    float               m_scale;
+  protected:
+    glm::vec3 m_position;
+    glm::quat m_orientation;
+    glm::vec3 m_center;
+    float     m_scale;
 
-    mutable glm::mat3   m_basis;
-    mutable bool        m_basisDirty;
+    mutable glm::mat3 m_basis;
+    mutable bool      m_basisDirty;
 
-    mutable bool        m_matrixDirty;
-    mutable glm::mat4   m_matrix;
+    mutable bool      m_matrixDirty;
+    mutable glm::mat4 m_matrix;
 };
-
 }
-

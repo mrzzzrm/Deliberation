@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 bool DoubleDispatch<T>::contains(size_t a, size_t b) const
 {
@@ -95,5 +94,4 @@ void DoubleDispatch<T>::ensureCapacity(size_t l, size_t r)
         m_data[l].resize(r + 1);
     }
 }
-
 }

@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 CullState CullState::disabled()
 {
     CullState cullState;
@@ -15,43 +14,22 @@ CullState CullState::disabled()
     return cullState;
 }
 
-CullState::CullState(CullFace cullFace, FrontFace frontFace):
-    m_enabled(true),
-    m_cullFace(cullFace),
-    m_frontFace(frontFace)
+CullState::CullState(CullFace cullFace, FrontFace frontFace)
+    : m_enabled(true), m_cullFace(cullFace), m_frontFace(frontFace)
 {
-
 }
 
-bool CullState::enabled() const
-{
-    return m_enabled;
-}
+bool CullState::enabled() const { return m_enabled; }
 
-CullFace CullState::cullFace() const
-{
-    return m_cullFace;
-}
+CullFace CullState::cullFace() const { return m_cullFace; }
 
-FrontFace CullState::frontFace() const
-{
-    return m_frontFace;
-}
+FrontFace CullState::frontFace() const { return m_frontFace; }
 
-void CullState::setEnabled(bool enabled)
-{
-    m_enabled = enabled;
-}
+void CullState::setEnabled(bool enabled) { m_enabled = enabled; }
 
-void CullState::setCullFace(CullFace cullFace)
-{
-    m_cullFace = cullFace;
-}
+void CullState::setCullFace(CullFace cullFace) { m_cullFace = cullFace; }
 
-void CullState::setFrontFace(FrontFace frontFace)
-{
-    m_frontFace = frontFace;
-}
+void CullState::setFrontFace(FrontFace frontFace) { m_frontFace = frontFace; }
 
 std::string CullState::toString() const
 {
@@ -66,6 +44,4 @@ std::string CullState::toString() const
 
     return stream.str();
 }
-
 }
-

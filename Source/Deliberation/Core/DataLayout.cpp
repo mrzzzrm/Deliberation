@@ -8,7 +8,6 @@
 
 namespace deliberation
 {
-
 DataLayout DataLayout::concatenate(const std::vector<DataLayout> & layouts)
 {
     std::vector<DataLayoutField::Desc> allDescs;
@@ -20,12 +19,11 @@ DataLayout DataLayout::concatenate(const std::vector<DataLayout> & layouts)
     return DataLayout(allDescs);
 }
 
-DataLayout::DataLayout()
-{
-}
+DataLayout::DataLayout() {}
 
-DataLayout::DataLayout(const std::string & name, const Type & type, size_t arraySize):
-    DataLayout({{name, type, arraySize}})
+DataLayout::DataLayout(
+    const std::string & name, const Type & type, size_t arraySize)
+    : DataLayout({{name, type, arraySize}})
 {
 }
 
@@ -39,9 +37,8 @@ DataLayout::DataLayout(const std::vector<DataLayoutField::Desc> & descs)
     }
 }
 
-DataLayout::DataLayout(std::vector<DataLayoutField> && fields, size_t stride):
-    m_fields(std::move(fields)),
-    m_stride(stride)
+DataLayout::DataLayout(std::vector<DataLayoutField> && fields, size_t stride)
+    : m_fields(std::move(fields)), m_stride(stride)
 {
 }
 
@@ -50,16 +47,16 @@ const std::vector<DataLayoutField> & DataLayout::fields() const
     return m_fields;
 }
 
-size_t DataLayout::stride() const
-{
-    return m_stride;
-}
+size_t DataLayout::stride() const { return m_stride; }
 
 bool DataLayout::hasField(const std::string & name) const
 {
-    auto i = std::find_if(m_fields.begin(), m_fields.end(), [this, name](const DataLayoutField & field) {
-        return field.name() == name;
-    });
+    auto i = std::find_if(
+        m_fields.begin(),
+        m_fields.end(),
+        [this, name](const DataLayoutField & field) {
+            return field.name() == name;
+        });
     return i != m_fields.end();
 }
 
@@ -84,7 +81,9 @@ const DataLayoutField & DataLayout::field(const std::string & name) const
 
 void DataLayout::addField(const DataLayoutField & field)
 {
-    Assert(field.offset() >= m_stride, "Fields not added in offset-order, or fields are interleaving");
+    Assert(
+        field.offset() >= m_stride,
+        "Fields not added in offset-order, or fields are interleaving");
 
     m_fields.push_back(field);
     m_stride = field.offset() + field.type().size() * field.arraySize();
@@ -92,7 +91,8 @@ void DataLayout::addField(const DataLayoutField & field)
 
 DataLayoutField DataLayout::addField(const DataLayoutField::Desc & desc)
 {
-    m_fields.push_back(DataLayoutField(desc.name, desc.type, m_stride, desc.arraySize));
+    m_fields.push_back(
+        DataLayoutField(desc.name, desc.type, m_stride, desc.arraySize));
     m_stride += desc.type.size() * desc.arraySize;
 
     return m_fields.back();
@@ -111,7 +111,8 @@ bool DataLayout::equals(const DataLayout & rhs) const
 
     for (size_t f = 0; f < m_fields.size(); f++)
     {
-        if (m_fields[f].type() != rhs.m_fields[f].type() || m_fields[f].arraySize() != rhs.m_fields[f].arraySize())
+        if (m_fields[f].type() != rhs.m_fields[f].type() ||
+            m_fields[f].arraySize() != rhs.m_fields[f].arraySize())
         {
             return false;
         }
@@ -124,7 +125,8 @@ std::vector<DataLayoutField::Desc> DataLayout::descs() const
 {
     std::vector<DataLayoutField::Desc> result;
     result.reserve(m_fields.size());
-    for (auto & field : m_fields) {
+    for (auto & field : m_fields)
+    {
         result.push_back(field.desc());
     }
     return result;
@@ -145,6 +147,4 @@ std::string DataLayout::toString() const
 
     return stream.str();
 }
-
 }
-

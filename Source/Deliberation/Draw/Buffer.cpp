@@ -11,7 +11,6 @@
 
 namespace deliberation
 {
-
 const DataLayout & Buffer::layout() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
@@ -35,15 +34,13 @@ size_t Buffer::size() const
 
 std::string Buffer::toString() const
 {
-    return
-        "Layout: " + layout().toString() + "\n"
-        "Count: " + std::to_string(count());
+    return "Layout: " + layout().toString() +
+           "\n"
+           "Count: " +
+           std::to_string(count());
 }
 
-Buffer::Buffer(const std::shared_ptr<BufferImpl> & impl):
-    m_impl(impl)
-{
-}
+Buffer::Buffer(const std::shared_ptr<BufferImpl> & impl) : m_impl(impl) {}
 
 void Buffer::upload(const Blob & data)
 {
@@ -82,15 +79,17 @@ void Buffer::reinit(size_t count)
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
-    gl::glBufferData(gl::GL_COPY_WRITE_BUFFER,
-                     count * m_impl->layout.stride(),
-                     NULL,
-                     gl::GL_STREAM_DRAW);
+    gl::glBufferData(
+        gl::GL_COPY_WRITE_BUFFER,
+        count * m_impl->layout.stride(),
+        NULL,
+        gl::GL_STREAM_DRAW);
 
     m_impl->count = count;
 }
 
-void Buffer::mapped(BufferMapping flags, const std::function<void(LayoutedBlob & mapping)> & fn)
+void Buffer::mapped(
+    BufferMapping flags, const std::function<void(LayoutedBlob & mapping)> & fn)
 {
     Assert(m_impl.get(), "Can't perform action on hollow object");
     Assert(m_impl->glName != 0, "Buffer not backed by GL object");
@@ -100,11 +99,11 @@ void Buffer::mapped(BufferMapping flags, const std::function<void(LayoutedBlob &
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
 
     gl::GLenum access;
-    switch(flags)
+    switch (flags)
     {
-        case BufferMapping::ReadOnly: access = gl::GL_READ_ONLY; break;
-        case BufferMapping::WriteOnly: access = gl::GL_WRITE_ONLY; break;
-        case BufferMapping::ReadWrite: access = gl::GL_READ_WRITE; break;
+    case BufferMapping::ReadOnly: access = gl::GL_READ_ONLY; break;
+    case BufferMapping::WriteOnly: access = gl::GL_WRITE_ONLY; break;
+    case BufferMapping::ReadWrite: access = gl::GL_READ_WRITE; break;
     }
 
     do
@@ -114,10 +113,9 @@ void Buffer::mapped(BufferMapping flags, const std::function<void(LayoutedBlob &
 
         auto viewBlob = std::make_unique<detail::ViewBlobImpl>(mapped, size());
 
-        auto mappedBlob = LayoutedBlob(m_impl->layout, Blob(std::move(viewBlob)));
+        auto mappedBlob =
+            LayoutedBlob(m_impl->layout, Blob(std::move(viewBlob)));
         fn(mappedBlob);
     } while (gl::glUnmapBuffer(gl::GL_COPY_WRITE_BUFFER) == gl::GL_FALSE);
 }
-
 }
-

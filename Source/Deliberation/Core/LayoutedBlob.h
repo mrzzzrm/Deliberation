@@ -8,29 +8,29 @@
 #include <Deliberation/Core/LayoutedBlobElement.h>
 #include <Deliberation/Core/TypedBlobValueAccessor.h>
 
-
-
 namespace deliberation
 {
-
 class DataLayout;
 
 class LayoutedBlob final
 {
-public:
-    template<typename T> using Field = TypedBlobValueAccessor<T>;
-    template<typename T> using CField = CTypedBlobValueAccessor<T>;
-    template<typename T> using Iterator = TypedBlobIterator<T>;
+  public:
+    template<typename T>
+    using Field = TypedBlobValueAccessor<T>;
+    template<typename T>
+    using CField = CTypedBlobValueAccessor<T>;
+    template<typename T>
+    using Iterator = TypedBlobIterator<T>;
 
-public:
+  public:
     LayoutedBlob();
     LayoutedBlob(const DataLayout & layout, size_t count = 0);
     LayoutedBlob(const DataLayout & layout, Blob && blob);
 
     const DataLayout & layout() const;
-    bool empty() const;
-    size_t count() const;
-    const Blob & rawData() const;
+    bool               empty() const;
+    size_t             count() const;
+    const Blob &       rawData() const;
 
     void write(std::size_t offset, const void * src, size_t length);
 
@@ -45,11 +45,11 @@ public:
 
     template<typename T>
     CTypedBlobValueAccessor<T> field(const DataLayoutField & field) const;
-   
-    BlobValueAccessor field(const std::string & name);
+
+    BlobValueAccessor  field(const std::string & name);
     CBlobValueAccessor field(const std::string & name) const;
 
-    BlobValueAccessor field(const DataLayoutField & field);
+    BlobValueAccessor  field(const DataLayoutField & field);
     CBlobValueAccessor field(const DataLayoutField & field) const;
 
     template<typename T>
@@ -71,22 +71,22 @@ public:
     void resize(size_t count);
     void reserve(size_t count);
 
-    LayoutedBlobElement operator[](size_t index);
+    LayoutedBlobElement  operator[](size_t index);
     CLayoutedBlobElement operator[](size_t index) const;
 
     std::string toString() const;
 
-private:
-    template<typename T> friend class LayoutedBlobElementBase;
+  private:
+    template<typename T>
+    friend class LayoutedBlobElementBase;
     friend class CLayoutedBlobElement;
     friend class LayoutedBlobElement;
 
-private:
+  private:
     DataLayout m_layout;
     size_t     m_count = 0;
     Blob       m_data;
 };
-
 }
 
 #include <Deliberation/Core/LayoutedBlob.inl>

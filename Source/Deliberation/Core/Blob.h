@@ -10,13 +10,13 @@ namespace deliberation
 {
 class Blob final
 {
-public:
+  public:
     template<typename T>
     static Blob fromValue(const T & value);
 
     static Blob fromRawData(const void * src, size_t size);
 
-public:
+  public:
     Blob();
 
     Blob(std::size_t size);
@@ -38,10 +38,10 @@ public:
 
     Blob(Blob && blob);
 
-    std::size_t size() const;
-    void * ptr(size_t offset = 0);
+    std::size_t  size() const;
+    void *       ptr(size_t offset = 0);
     const void * ptr(size_t offset = 0) const;
-    void * ptrRaw(size_t offset = 0);
+    void *       ptrRaw(size_t offset = 0);
     const void * ptrRaw(size_t offset = 0) const;
 
     template<typename T>
@@ -66,10 +66,9 @@ public:
     Blob & operator=(const Blob & blob);
     Blob & operator=(Blob && blob);
 
-private:
+  private:
     std::unique_ptr<detail::IBlobImpl> m_impl;
 };
-
 }
 
 #include <Deliberation/Core/Blob.inl>

@@ -5,23 +5,26 @@
 
 namespace deliberation
 {
-
-DebugCubemapRenderer::DebugCubemapRenderer(DrawContext & drawContext,
-                                           const Camera3D & camera,
-                                           const Texture & cubemap,
-                                           MeshType meshType):
-    m_camera(camera) {
-    const auto program = drawContext.createProgram({
-                                                   deliberation::DeliberationDataPath("Data/Shaders/DebugCubemapRenderer.vert"),
-                                                   deliberation::DeliberationDataPath("Data/Shaders/DebugCubemapRenderer.frag")
-                                               });
+DebugCubemapRenderer::DebugCubemapRenderer(
+    DrawContext &    drawContext,
+    const Camera3D & camera,
+    const Texture &  cubemap,
+    MeshType         meshType)
+    : m_camera(camera)
+{
+    const auto program = drawContext.createProgram(
+        {deliberation::DeliberationDataPath(
+             "Data/Shaders/DebugCubemapRenderer.vert"),
+         deliberation::DeliberationDataPath(
+             "Data/Shaders/DebugCubemapRenderer.frag")});
 
     m_draw = drawContext.createDraw(program);
 
     if (meshType == MeshType::Cube)
     {
         LayoutedBlob vertices({"Position", Type_Vec3}, 8);
-        vertices.field<glm::vec3>("Position").assign(CuboidMesh::positions({2, 2, 2}));
+        vertices.field<glm::vec3>("Position")
+            .assign(CuboidMesh::positions({2, 2, 2}));
 
         LayoutedBlob indices({"Index", Type_U32}, 36);
         indices.field<u32>("Index").assign(CuboidMesh::indices());
@@ -43,15 +46,9 @@ DebugCubemapRenderer::DebugCubemapRenderer(DrawContext & drawContext,
     m_transformUniform = m_draw.uniform("Transform");
 }
 
-const Pose3D & DebugCubemapRenderer::pose() const
-{
-    return m_pose;
-}
+const Pose3D & DebugCubemapRenderer::pose() const { return m_pose; }
 
-void DebugCubemapRenderer::setPose(const Pose3D & pose)
-{
-    m_pose = pose;
-}
+void DebugCubemapRenderer::setPose(const Pose3D & pose) { m_pose = pose; }
 
 void DebugCubemapRenderer::render()
 {
@@ -59,5 +56,4 @@ void DebugCubemapRenderer::render()
     m_transformUniform.set(m_pose.matrix());
     m_draw.render();
 }
-
 }

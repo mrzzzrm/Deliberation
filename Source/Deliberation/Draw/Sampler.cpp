@@ -11,17 +11,20 @@
 
 namespace deliberation
 {
-
 void Sampler::setTexture(const Texture & texture)
 {
     Assert((bool)texture.m_impl, "Texture is hollow");
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    Assert((gl::GLenum)texture.type() == m_impl->textureType(), "Texture type mismatch");
+    Assert(
+        (gl::GLenum)texture.type() == m_impl->textureType(),
+        "Texture type mismatch");
 
-    Assert(m_impl->valueType == texture.format().glSamplerValueType(), "Sampler (" +
-        glbinding::Meta::getString(m_impl->type) +
-        ") isn't compatible with texture of format " + texture.format().toString() + "/" +
-        glbinding::Meta::getString(texture.format().glSamplerValueType()));
+    Assert(
+        m_impl->valueType == texture.format().glSamplerValueType(),
+        "Sampler (" + glbinding::Meta::getString(m_impl->type) +
+            ") isn't compatible with texture of format " +
+            texture.format().toString() + "/" +
+            glbinding::Meta::getString(texture.format().glSamplerValueType()));
 
     m_impl->textureImpl = texture.m_impl;
 }
@@ -65,17 +68,13 @@ void Sampler::setMinFilter(TextureFilter minFilter)
 void Sampler::setMagFilter(TextureFilter magFilter)
 {
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    Assert(magFilter == TextureFilter::Nearest || magFilter == TextureFilter::Linear,
-           "Invalid mag filter");
+    Assert(
+        magFilter == TextureFilter::Nearest ||
+            magFilter == TextureFilter::Linear,
+        "Invalid mag filter");
 
     m_impl->glSampler.setMagFilter((gl::GLenum)magFilter);
 }
 
-Sampler::Sampler(const std::shared_ptr<SamplerImpl> & impl):
-    m_impl(impl)
-{
-
+Sampler::Sampler(const std::shared_ptr<SamplerImpl> & impl) : m_impl(impl) {}
 }
-
-}
-

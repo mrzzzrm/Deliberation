@@ -5,13 +5,9 @@
 
 namespace deliberation
 {
-
-ConeMesh::ConeMesh(float radius, float height, uint numSegments):
-    m_radius(radius),
-    m_height(height),
-    m_numSegments(numSegments)
+ConeMesh::ConeMesh(float radius, float height, uint numSegments)
+    : m_radius(radius), m_height(height), m_numSegments(numSegments)
 {
-
 }
 
 Mesh ConeMesh::generate() const
@@ -23,8 +19,8 @@ Mesh ConeMesh::generate() const
     auto numVertices = m_numSegments * 4;
 
     LayoutedBlob vertices(vertexLayout, numVertices);
-    auto positions = vertices.field<glm::vec3>("Position");
-    auto normals = vertices.field<glm::vec3>("Normal");
+    auto         positions = vertices.field<glm::vec3>("Position");
+    auto         normals = vertices.field<glm::vec3>("Normal");
 
     Mesh::Faces faces;
 
@@ -81,5 +77,4 @@ Mesh ConeMesh::generate() const
 
     return Mesh(std::move(vertices), std::move(faces));
 }
-
 }

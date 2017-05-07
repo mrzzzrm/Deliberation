@@ -4,23 +4,23 @@
 
 namespace deliberation
 {
-
-DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & drawContext, const Texture & texture)
+DebugTexture2dRenderer::DebugTexture2dRenderer(
+    DrawContext & drawContext, const Texture & texture)
 {
-    const auto program = drawContext.createProgram({
-       deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.vert"),
-       deliberation::DeliberationDataPath("Data/Shaders/DebugTexture2dRenderer.frag")
-    });
+    const auto program = drawContext.createProgram(
+        {deliberation::DeliberationDataPath(
+             "Data/Shaders/DebugTexture2dRenderer.vert"),
+         deliberation::DeliberationDataPath(
+             "Data/Shaders/DebugTexture2dRenderer.frag")});
 
     m_draw = drawContext.createDraw(program);
 
     LayoutedBlob vertices({"Position", Type_Vec2}, 4);
-    vertices.field<glm::vec2>("Position").assign({
-        glm::vec2(-1.0f, -1.0f),
-        glm::vec2( 1.0f, -1.0f),
-        glm::vec2( 1.0f,  1.0f),
-        glm::vec2(-1.0f,  1.0f)
-    });
+    vertices.field<glm::vec2>("Position")
+        .assign({glm::vec2(-1.0f, -1.0f),
+                 glm::vec2(1.0f, -1.0f),
+                 glm::vec2(1.0f, 1.0f),
+                 glm::vec2(-1.0f, 1.0f)});
 
     LayoutedBlob indices({"Index", Type_U32}, 6);
     indices.field<u32>("Index").assign({0, 1, 3, 1, 2, 3});
@@ -31,9 +31,5 @@ DebugTexture2dRenderer::DebugTexture2dRenderer(DrawContext & drawContext, const 
     m_draw.sampler("Texture").setTexture(texture);
 }
 
-void DebugTexture2dRenderer::render()
-{
-    m_draw.render();
-}
-
+void DebugTexture2dRenderer::render() { m_draw.render(); }
 }

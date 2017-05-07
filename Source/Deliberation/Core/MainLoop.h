@@ -4,12 +4,9 @@
 
 namespace deliberation
 {
-
 class MainLoop
 {
-public:
+  public:
     void run(const std::function<bool(float)> & fn);
 };
-
 }
-

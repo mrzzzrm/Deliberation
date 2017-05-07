@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <iostream>
 
-#include <glbinding/gl/enum.h>
 #include <glbinding/gl/boolean.h>
+#include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
@@ -13,35 +13,34 @@ using namespace gl;
 
 namespace deliberation
 {
-
-GLStateManager::GLStateManager():
-    m_glTextureCubeMapSeamless(false),
-    m_glDepthTest(false),
-    m_glDepthFunc(gl::GL_LESS),
-    m_glDepthMask(false),
-    m_glBlend(false),
-    m_glBlendEquation(GL_INVALID_ENUM),
-    m_glBlendFuncSFactor(GL_INVALID_ENUM),
-    m_glBlendFuncDFactor(GL_INVALID_ENUM),
-    m_glCullFace(false),
-    m_glCullFaceMode(GL_INVALID_ENUM),
-    m_glPointSize(1.0f),
-    m_glLineWidth(1.0f),
-    m_glStencilTest(false),
-    m_glClearColorRed(0.0f),
-    m_glClearColorGreen(0.0f),
-    m_glClearColorBlue(0.0f),
-    m_glClearColorAlpha(0.0f),
-    m_glClearDepth(1.0f),
-    m_glClearStencil(0.0f),
-    m_glViewportX(0),
-    m_glViewportY(0),
-    m_glViewportWidth(640),
-    m_glViewportHeight(480),
-    m_program(0),
-    m_activeTextureUnit(0),
-    m_scissorTestEnabled(false),
-    m_scissorRect(0, 0, -1, -1)
+GLStateManager::GLStateManager()
+    : m_glTextureCubeMapSeamless(false)
+    , m_glDepthTest(false)
+    , m_glDepthFunc(gl::GL_LESS)
+    , m_glDepthMask(false)
+    , m_glBlend(false)
+    , m_glBlendEquation(GL_INVALID_ENUM)
+    , m_glBlendFuncSFactor(GL_INVALID_ENUM)
+    , m_glBlendFuncDFactor(GL_INVALID_ENUM)
+    , m_glCullFace(false)
+    , m_glCullFaceMode(GL_INVALID_ENUM)
+    , m_glPointSize(1.0f)
+    , m_glLineWidth(1.0f)
+    , m_glStencilTest(false)
+    , m_glClearColorRed(0.0f)
+    , m_glClearColorGreen(0.0f)
+    , m_glClearColorBlue(0.0f)
+    , m_glClearColorAlpha(0.0f)
+    , m_glClearDepth(1.0f)
+    , m_glClearStencil(0.0f)
+    , m_glViewportX(0)
+    , m_glViewportY(0)
+    , m_glViewportWidth(640)
+    , m_glViewportHeight(480)
+    , m_program(0)
+    , m_activeTextureUnit(0)
+    , m_scissorTestEnabled(false)
+    , m_scissorRect(0, 0, -1, -1)
 {
     m_glStencilFunc[0] = GL_ALWAYS;
     m_glStencilFunc[1] = GL_ALWAYS;
@@ -66,10 +65,13 @@ GLStateManager::GLStateManager():
     glPointSize(1.0f);
     glLineWidth(1.0f);
     glDisable(GL_STENCIL_TEST);
-    glStencilFunc(m_glStencilFunc[0], m_glStencilRef[0], m_glStencilReadMask[0]);
+    glStencilFunc(
+        m_glStencilFunc[0], m_glStencilRef[0], m_glStencilReadMask[0]);
     glStencilMask(m_glStencilWriteMask[0]);
-    glStencilOp(m_glStencilSFail[0], m_glStencilDPFail[0], m_glStencilDPPass[0]);
-    glViewport(m_glViewportX, m_glViewportY, m_glViewportWidth, m_glViewportHeight);
+    glStencilOp(
+        m_glStencilSFail[0], m_glStencilDPFail[0], m_glStencilDPPass[0]);
+    glViewport(
+        m_glViewportX, m_glViewportY, m_glViewportWidth, m_glViewportHeight);
 
     for (auto & boundBuffer : m_boundBuffers)
     {
@@ -81,14 +83,16 @@ GLStateManager::GLStateManager():
         boundFramebuffer = 0;
     }
 
-    for (auto & boundTexture : m_boundTextures) boundTexture = 0u;
+    for (auto & boundTexture : m_boundTextures)
+        boundTexture = 0u;
 
     m_drawBuffers.emplace_back(gl::GL_BACK);
 }
 
 void GLStateManager::enableTextureCubeMapSeamless(bool enabled)
 {
-    applyEnableDisableState(GL_TEXTURE_CUBE_MAP_SEAMLESS, m_glTextureCubeMapSeamless, enabled);
+    applyEnableDisableState(
+        GL_TEXTURE_CUBE_MAP_SEAMLESS, m_glTextureCubeMapSeamless, enabled);
 }
 
 void GLStateManager::setDepthFunc(gl::GLenum func)
@@ -195,12 +199,9 @@ void GLStateManager::enableStencilTest(bool enabled)
 
 void GLStateManager::setStencilFunc(gl::GLenum func, int ref, unsigned int mask)
 {
-    if
-    (
-        m_glStencilFunc[0] == func && m_glStencilFunc[1] == func &&
+    if (m_glStencilFunc[0] == func && m_glStencilFunc[1] == func &&
         m_glStencilRef[0] == ref && m_glStencilRef[1] == ref &&
-        m_glStencilReadMask[0] == mask && m_glStencilReadMask[1] == mask
-    )
+        m_glStencilReadMask[0] == mask && m_glStencilReadMask[1] == mask)
     {
         return;
     }
@@ -212,7 +213,8 @@ void GLStateManager::setStencilFunc(gl::GLenum func, int ref, unsigned int mask)
     m_glStencilReadMask[0] = mask;
     m_glStencilReadMask[1] = mask;
 
-    glStencilFunc(m_glStencilFunc[0], m_glStencilRef[0], m_glStencilReadMask[0]);
+    glStencilFunc(
+        m_glStencilFunc[0], m_glStencilRef[0], m_glStencilReadMask[0]);
 }
 
 void GLStateManager::setStencilMask(unsigned int mask)
@@ -228,14 +230,12 @@ void GLStateManager::setStencilMask(unsigned int mask)
     glStencilMask(m_glStencilWriteMask[0]);
 }
 
-void GLStateManager::setStencilOp(gl::GLenum sfail, gl::GLenum dpfail, gl::GLenum dppass)
+void GLStateManager::setStencilOp(
+    gl::GLenum sfail, gl::GLenum dpfail, gl::GLenum dppass)
 {
-    if
-    (
-        m_glStencilSFail[0] == sfail && m_glStencilSFail[1] == sfail &&
+    if (m_glStencilSFail[0] == sfail && m_glStencilSFail[1] == sfail &&
         m_glStencilDPFail[0] == dpfail && m_glStencilDPFail[1] == dpfail &&
-        m_glStencilDPPass[0] == dppass && m_glStencilDPPass[1] == dppass
-    )
+        m_glStencilDPPass[0] == dppass && m_glStencilDPPass[1] == dppass)
     {
         return;
     }
@@ -247,19 +247,17 @@ void GLStateManager::setStencilOp(gl::GLenum sfail, gl::GLenum dpfail, gl::GLenu
     m_glStencilDPPass[0] = dppass;
     m_glStencilDPPass[1] = dppass;
 
-    glStencilOp(m_glStencilSFail[0], m_glStencilDPFail[0], m_glStencilDPPass[0]);
+    glStencilOp(
+        m_glStencilSFail[0], m_glStencilDPFail[0], m_glStencilDPPass[0]);
 }
 
-void GLStateManager::setStencilFuncSeparate(gl::GLenum face, gl::GLenum func, int ref, unsigned int mask)
+void GLStateManager::setStencilFuncSeparate(
+    gl::GLenum face, gl::GLenum func, int ref, unsigned int mask)
 {
     auto index = face == GL_FRONT ? 0 : 1;
 
-    if
-    (
-        m_glStencilFunc[index] == func &&
-        m_glStencilRef[index] == ref &&
-        m_glStencilReadMask[index] == mask
-    )
+    if (m_glStencilFunc[index] == func && m_glStencilRef[index] == ref &&
+        m_glStencilReadMask[index] == mask)
     {
         return;
     }
@@ -268,7 +266,11 @@ void GLStateManager::setStencilFuncSeparate(gl::GLenum face, gl::GLenum func, in
     m_glStencilRef[index] = ref;
     m_glStencilReadMask[index] = mask;
 
-    glStencilFuncSeparate(face, m_glStencilFunc[index], m_glStencilRef[index], m_glStencilReadMask[index]);
+    glStencilFuncSeparate(
+        face,
+        m_glStencilFunc[index],
+        m_glStencilRef[index],
+        m_glStencilReadMask[index]);
 }
 
 void GLStateManager::setStencilMaskSeparate(gl::GLenum face, unsigned int mask)
@@ -285,19 +287,14 @@ void GLStateManager::setStencilMaskSeparate(gl::GLenum face, unsigned int mask)
     glStencilMaskSeparate(face, m_glStencilWriteMask[index]);
 }
 
-void GLStateManager::setStencilOpSeparate(gl::GLenum face,
-                                          gl::GLenum sfail,
-                                          gl::GLenum dpfail,
-                                          gl::GLenum dppass)
+void GLStateManager::setStencilOpSeparate(
+    gl::GLenum face, gl::GLenum sfail, gl::GLenum dpfail, gl::GLenum dppass)
 {
     auto index = face == GL_FRONT ? 0 : 1;
 
-    if
-    (
-        m_glStencilSFail[index] == sfail &&
+    if (m_glStencilSFail[index] == sfail &&
         m_glStencilDPFail[index] == dpfail &&
-        m_glStencilDPPass[index] == dppass
-    )
+        m_glStencilDPPass[index] == dppass)
     {
         return;
     }
@@ -306,10 +303,15 @@ void GLStateManager::setStencilOpSeparate(gl::GLenum face,
     m_glStencilDPFail[index] = dpfail;
     m_glStencilDPPass[index] = dppass;
 
-    glStencilOpSeparate(face, m_glStencilSFail[index], m_glStencilDPFail[index], m_glStencilDPPass[index]);
+    glStencilOpSeparate(
+        face,
+        m_glStencilSFail[index],
+        m_glStencilDPFail[index],
+        m_glStencilDPPass[index]);
 }
 
-void GLStateManager::applyEnableDisableState(GLenum state, bool & current, bool target)
+void GLStateManager::applyEnableDisableState(
+    GLenum state, bool & current, bool target)
 {
     if (current == target)
     {
@@ -334,17 +336,18 @@ void GLStateManager::bindBuffer(GLenum target, GLuint buffer)
 
     switch (target)
     {
-    case GL_ARRAY_BUFFER:               targetIndex = ArrayBufferTarget; break;
-    case GL_COPY_READ_BUFFER:           targetIndex = CopyReadBufferTarget; break;
-    case GL_COPY_WRITE_BUFFER:          targetIndex = CopyWriteBufferTarget; break;
-    case GL_ELEMENT_ARRAY_BUFFER:       targetIndex = ElementArrayBufferTarget; break;
-    case GL_PIXEL_PACK_BUFFER:          targetIndex = PixelPackBufferTarget; break;
-    case GL_PIXEL_UNPACK_BUFFER:        targetIndex = PixelUnpackBufferTarget; break;
-    case GL_TEXTURE_BUFFER:             targetIndex = TextureBufferTarget; break;
-    case GL_TRANSFORM_FEEDBACK_BUFFER:  targetIndex = TransformFeedbackBufferTarget; break;
-    case GL_UNIFORM_BUFFER:             targetIndex = UniformBufferTarget; break;
-    default:
-        Fail("");
+    case GL_ARRAY_BUFFER: targetIndex = ArrayBufferTarget; break;
+    case GL_COPY_READ_BUFFER: targetIndex = CopyReadBufferTarget; break;
+    case GL_COPY_WRITE_BUFFER: targetIndex = CopyWriteBufferTarget; break;
+    case GL_ELEMENT_ARRAY_BUFFER: targetIndex = ElementArrayBufferTarget; break;
+    case GL_PIXEL_PACK_BUFFER: targetIndex = PixelPackBufferTarget; break;
+    case GL_PIXEL_UNPACK_BUFFER: targetIndex = PixelUnpackBufferTarget; break;
+    case GL_TEXTURE_BUFFER: targetIndex = TextureBufferTarget; break;
+    case GL_TRANSFORM_FEEDBACK_BUFFER:
+        targetIndex = TransformFeedbackBufferTarget;
+        break;
+    case GL_UNIFORM_BUFFER: targetIndex = UniformBufferTarget; break;
+    default: Fail("");
     }
 
     if (m_boundBuffers[targetIndex] == buffer)
@@ -370,9 +373,11 @@ void GLStateManager::deleteBuffer(gl::GLuint buffer)
     glDeleteBuffers(1, &buffer);
 }
 
-void GLStateManager::setViewport(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height)
+void GLStateManager::setViewport(
+    gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height)
 {
-    if (x == m_glViewportX && y == m_glViewportY && width == m_glViewportWidth && height == m_glViewportHeight)
+    if (x == m_glViewportX && y == m_glViewportY &&
+        width == m_glViewportWidth && height == m_glViewportHeight)
     {
         return;
     }
@@ -385,9 +390,11 @@ void GLStateManager::setViewport(gl::GLint x, gl::GLint y, gl::GLsizei width, gl
     m_glViewportHeight = height;
 }
 
-void GLStateManager::setClearColor(gl::GLclampf red, gl::GLclampf green, gl::GLclampf blue, gl::GLclampf alpha)
+void GLStateManager::setClearColor(
+    gl::GLclampf red, gl::GLclampf green, gl::GLclampf blue, gl::GLclampf alpha)
 {
-    if (red != m_glClearColorRed || green != m_glClearColorGreen || blue != m_glClearColorBlue || alpha != m_glClearColorAlpha)
+    if (red != m_glClearColorRed || green != m_glClearColorGreen ||
+        blue != m_glClearColorBlue || alpha != m_glClearColorAlpha)
     {
         glClearColor(red, green, blue, alpha);
 
@@ -423,7 +430,8 @@ void GLStateManager::genFramebuffers(gl::GLsizei n, gl::GLuint * ids)
     glGenFramebuffers(n, ids);
 }
 
-void GLStateManager::deleteFramebuffers(gl::GLsizei n, gl::GLuint * framebuffers)
+void GLStateManager::deleteFramebuffers(
+    gl::GLsizei n, gl::GLuint * framebuffers)
 {
     /*
         TODO
@@ -465,7 +473,12 @@ void GLStateManager::bindFramebuffer(gl::GLenum target, gl::GLuint framebuffer)
     }
 }
 
-void GLStateManager::framebufferTexture2D(gl::GLenum target, gl::GLenum attachment, gl::GLenum textarget, gl::GLuint texture, gl::GLint level)
+void GLStateManager::framebufferTexture2D(
+    gl::GLenum target,
+    gl::GLenum attachment,
+    gl::GLenum textarget,
+    gl::GLuint texture,
+    gl::GLint  level)
 {
     glFramebufferTexture2D(target, attachment, textarget, texture, level);
 }
@@ -485,7 +498,8 @@ void GLStateManager::deleteQueries(gl::GLsizei n, gl::GLuint * ids)
         {
             if (name == target)
             {
-                std::cout << "GLStateManager: Warning! Deleting active Query" << std::endl;
+                std::cout << "GLStateManager: Warning! Deleting active Query"
+                          << std::endl;
                 target = 0;
             }
         }
@@ -500,7 +514,8 @@ void GLStateManager::beginQuery(gl::GLenum target, gl::GLuint id)
 
     if (m_activeQueries[t] != 0)
     {
-        std::cout << "GLStateManager: Warning! Overwriting active query" << std::endl;
+        std::cout << "GLStateManager: Warning! Overwriting active query"
+                  << std::endl;
     }
 
     glBeginQuery(target, id);
@@ -513,7 +528,8 @@ void GLStateManager::endQuery(gl::GLenum target)
 
     if (m_activeQueries[t] == 0)
     {
-        std::cout << "GLStateManager: Warning! No query is active on target" << std::endl;
+        std::cout << "GLStateManager: Warning! No query is active on target"
+                  << std::endl;
         return;
     }
 
@@ -535,7 +551,9 @@ void GLStateManager::setActiveTexture(gl::GLuint textureUnit)
 {
     if (textureUnit == m_activeTextureUnit) return;
 
-    Assert(textureUnit < (gl::GLuint)gl::GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, "Invalid texture unit");
+    Assert(
+        textureUnit < (gl::GLuint)gl::GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+        "Invalid texture unit");
 
     m_activeTextureUnit = textureUnit;
 
@@ -548,18 +566,22 @@ void GLStateManager::bindTexture(gl::GLenum target, gl::GLuint texture)
 
     switch (target)
     {
-        case gl::GL_TEXTURE_1D: targetIndex = Texture1d; break;
-        case gl::GL_TEXTURE_2D: targetIndex = Texture2d; break;
-        case gl::GL_TEXTURE_3D: targetIndex = Texture3d; break;
-        case gl::GL_TEXTURE_1D_ARRAY: targetIndex = Texture1dArray; break;
-        case gl::GL_TEXTURE_2D_ARRAY: targetIndex = Texture1dArray; break;
-        case gl::GL_TEXTURE_RECTANGLE: targetIndex = TextureRectangle; break;
-        case gl::GL_TEXTURE_CUBE_MAP: targetIndex = TextureCubeMap; break;
-        case gl::GL_TEXTURE_BUFFER: targetIndex = TextureBuffer; break;
-        case gl::GL_TEXTURE_2D_MULTISAMPLE: targetIndex = Texture2dMultisample; break;
-        case gl::GL_TEXTURE_2D_MULTISAMPLE_ARRAY: targetIndex = Texture2dMultisampleArray; break;
+    case gl::GL_TEXTURE_1D: targetIndex = Texture1d; break;
+    case gl::GL_TEXTURE_2D: targetIndex = Texture2d; break;
+    case gl::GL_TEXTURE_3D: targetIndex = Texture3d; break;
+    case gl::GL_TEXTURE_1D_ARRAY: targetIndex = Texture1dArray; break;
+    case gl::GL_TEXTURE_2D_ARRAY: targetIndex = Texture1dArray; break;
+    case gl::GL_TEXTURE_RECTANGLE: targetIndex = TextureRectangle; break;
+    case gl::GL_TEXTURE_CUBE_MAP: targetIndex = TextureCubeMap; break;
+    case gl::GL_TEXTURE_BUFFER: targetIndex = TextureBuffer; break;
+    case gl::GL_TEXTURE_2D_MULTISAMPLE:
+        targetIndex = Texture2dMultisample;
+        break;
+    case gl::GL_TEXTURE_2D_MULTISAMPLE_ARRAY:
+        targetIndex = Texture2dMultisampleArray;
+        break;
 
-        default: Fail("");
+    default: Fail("");
     }
 
     if (m_boundTextures[targetIndex] == texture) return;
@@ -573,7 +595,8 @@ void GLStateManager::enableScissorTest(bool enabled)
     applyEnableDisableState(gl::GL_SCISSOR_TEST, m_scissorTestEnabled, enabled);
 }
 
-void GLStateManager::setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height)
+void GLStateManager::setScissor(
+    gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height)
 {
     const auto rect = std::tie(x, y, width, height);
 
@@ -613,11 +636,13 @@ void GLStateManager::bindVertexArray(gl::GLuint vertexArray)
 
 void GLStateManager::deleteVertexArray(gl::GLuint vertexArray)
 {
-    if (m_vertexArray == vertexArray) m_vertexArray = boost::optional<gl::GLuint>();
+    if (m_vertexArray == vertexArray)
+        m_vertexArray = boost::optional<gl::GLuint>();
     glDeleteVertexArrays(1, &vertexArray);
 }
 
-GLStateManager::QueryTarget GLStateManager::glEnumToQueryTarget(gl::GLenum e) const
+GLStateManager::QueryTarget
+GLStateManager::glEnumToQueryTarget(gl::GLenum e) const
 {
     switch (e)
     {
@@ -625,11 +650,9 @@ GLStateManager::QueryTarget GLStateManager::glEnumToQueryTarget(gl::GLenum e) co
     case GL_SAMPLES_PASSED: return QueryTimeElapsedTarget;
     case GL_ANY_SAMPLES_PASSED: return QueryTimeElapsedTarget;
     case GL_PRIMITIVES_GENERATED: return QueryTimeElapsedTarget;
-    case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: return QueryTimeElapsedTarget;
-    default:
-        Fail("Not a QueryTarget");
+    case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
+        return QueryTimeElapsedTarget;
+    default: Fail("Not a QueryTarget");
     }
 }
-
 }
-

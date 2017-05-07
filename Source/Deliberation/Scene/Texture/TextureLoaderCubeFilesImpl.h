@@ -7,18 +7,14 @@
 
 namespace deliberation
 {
-
-class TextureLoaderCubeFilesImpl:
-    public ITextureLoaderImpl
+class TextureLoaderCubeFilesImpl : public ITextureLoaderImpl
 {
-public:
+  public:
     TextureLoaderCubeFilesImpl(const std::array<std::string, 6> & paths);
 
     virtual TextureBinary load() override;
 
-private:
+  private:
     std::array<std::string, 6> m_paths;
 };
-
 }
-

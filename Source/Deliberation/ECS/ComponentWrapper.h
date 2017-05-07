@@ -6,22 +6,21 @@
 
 namespace deliberation
 {
-
 template<typename T>
-class ComponentWrapper final:
-    public Component<ComponentWrapper<T>, ComponentSubscriptions<ComponentWrapper<T>>>
+class ComponentWrapper final : public Component<
+                                   ComponentWrapper<T>,
+                                   ComponentSubscriptions<ComponentWrapper<T>>>
 {
-public:
-    template<typename ... Args>
+  public:
+    template<typename... Args>
     ComponentWrapper(Args &&... args);
 
-    T & value();
+    T &       value();
     const T & value() const;
 
-private:
+  private:
     T m_value;
 };
-
 }
 
 #include <Deliberation/ECS/ComponentWrapper.inl>

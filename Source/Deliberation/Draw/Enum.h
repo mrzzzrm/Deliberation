@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 // clang-format off
 enum class TextureType: unsigned int
 {
@@ -127,5 +126,4 @@ enum class StencilOp: unsigned int
     Invert          = (unsigned int)gl::GL_INVERT
 };
 // clang-format on
-
 }

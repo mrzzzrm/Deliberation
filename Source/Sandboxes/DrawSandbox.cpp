@@ -5,28 +5,22 @@
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Draw/Buffer.h>
-#include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/DrawContext.h>
+#include <Deliberation/Draw/Framebuffer.h>
+#include <Deliberation/Draw/PixelFormat.h>
+#include <Deliberation/Draw/Program.h>
+#include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Scene/Texture/TextureLoader.h>
-#include <Deliberation/Draw/Surface.h>
-#include <Deliberation/Draw/Program.h>
-#include <Deliberation/Draw/PixelFormat.h>
 
 #include <Deliberation/Platform/Application.h>
 
-
 using namespace deliberation;
 
-class DrawSandbox:
-    public Application
+class DrawSandbox : public Application
 {
-public:
-    DrawSandbox():
-        Application("DrawSandbox")
-    {
-
-    }
+  public:
+    DrawSandbox() : Application("DrawSandbox") {}
 
     void onStartup() override
     {
@@ -34,10 +28,10 @@ public:
 
         m_clear = drawContext().createClear();
 
-        const auto program = drawContext().createProgram({
-            DeliberationDataPath("Data/Shaders/Rgb_Position2_InstancePosition2.vert"),
-            DeliberationDataPath("Data/Shaders/Rgb.frag")
-                                                     });
+        const auto program = drawContext().createProgram(
+            {DeliberationDataPath(
+                 "Data/Shaders/Rgb_Position2_InstancePosition2.vert"),
+             DeliberationDataPath("Data/Shaders/Rgb.frag")});
 
         m_draw = drawContext().createDraw(program);
 
@@ -45,11 +39,10 @@ public:
 
         auto vertices = LayoutedBlob(vertexLayout, 3);
 
-        vertices.field<glm::vec2>("Position").assign({
-            glm::vec2(-1.0f, -1.0f),
-            glm::vec2(1.0f, -1.0f),
-            glm::vec2(1.0f, 1.0f)
-        });
+        vertices.field<glm::vec2>("Position")
+            .assign({glm::vec2(-1.0f, -1.0f),
+                     glm::vec2(1.0f, -1.0f),
+                     glm::vec2(1.0f, 1.0f)});
 
         m_draw.addVertices(vertices);
 
@@ -71,15 +64,11 @@ public:
         m_draw.render();
     }
 
-private:
-    Clear       m_clear;
-    Draw        m_draw;
-    glm::vec2   m_position;
-    float       m_secondsAccumulator = 0.0f;
+  private:
+    Clear     m_clear;
+    Draw      m_draw;
+    glm::vec2 m_position;
+    float     m_secondsAccumulator = 0.0f;
 };
 
-int main(int argc, char * argv[])
-{
-    return DrawSandbox().run(argc, argv);
-}
-
+int main(int argc, char * argv[]) { return DrawSandbox().run(argc, argv); }

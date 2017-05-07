@@ -11,28 +11,22 @@
 
 namespace deliberation
 {
-
 class DrawImpl;
 class GLStateManager;
 class TextureImpl;
 
 class SamplerImpl
 {
-public:
-    SamplerImpl(gl::GLenum uniformType,
-                gl::GLenum valueType,
-                gl::GLuint location);
+  public:
+    SamplerImpl(
+        gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location);
 
     gl::GLenum textureType() const;
 
-    GLSamplerState                  glSampler;
-    gl::GLenum                      type;
-    gl::GLenum                      valueType;
-    gl::GLuint                      location;
-    std::shared_ptr<TextureImpl>    textureImpl;
+    GLSamplerState               glSampler;
+    gl::GLenum                   type;
+    gl::GLenum                   valueType;
+    gl::GLuint                   location;
+    std::shared_ptr<TextureImpl> textureImpl;
 };
-
-
 }
-
-

@@ -8,11 +8,8 @@
 
 #include <SDL_ttf.h>
 
-
-
 namespace deliberation
 {
-
 namespace detail
 {
     class TTF_Font_Wrapper;
@@ -23,21 +20,23 @@ class Texture;
 
 class Font final
 {
-public:
+  public:
     Font();
     Font(DrawContext & drawContext, const std::string & path);
     ~Font();
 
     DrawContext & drawContext() const;
 
-    Texture render(const std::string & text, unsigned int size, const glm::vec4 & color) const;
+    Texture render(
+        const std::string & text,
+        unsigned int        size,
+        const glm::vec4 &   color) const;
 
-private:
+  private:
     DrawContext * m_drawContext;
-    std::string m_path;
-    mutable std::unordered_map<unsigned int,
-                               std::shared_ptr<detail::TTF_Font_Wrapper>> m_fontBySize;
+    std::string   m_path;
+    mutable std::
+        unordered_map<unsigned int, std::shared_ptr<detail::TTF_Font_Wrapper>>
+            m_fontBySize;
 };
-
 }
-

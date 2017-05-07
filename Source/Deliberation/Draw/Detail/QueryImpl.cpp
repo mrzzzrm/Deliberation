@@ -10,14 +10,13 @@
 
 namespace deliberation
 {
-
-QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type):
-    m_drawContext(drawContext),
-    m_type(type),
-    m_glName(0),
-    m_glTarget(gl::GL_NONE),
-    m_active(false),
-    m_resultsAvailable(false)
+QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type)
+    : m_drawContext(drawContext)
+    , m_type(type)
+    , m_glName(0)
+    , m_glTarget(gl::GL_NONE)
+    , m_active(false)
+    , m_resultsAvailable(false)
 {
     m_drawContext.m_glStateManager.genQueries(1, &m_glName);
     Assert(m_glName != 0, "Failed to create Query");
@@ -31,10 +30,7 @@ QueryImpl::~QueryImpl()
     }
 }
 
-QueryType QueryImpl::type() const
-{
-    return m_type;
-}
+QueryType QueryImpl::type() const { return m_type; }
 
 int64_t QueryImpl::resultI() const
 {
@@ -74,10 +70,7 @@ uint64_t QueryImpl::resultU() const
     return m_result.u;
 }
 
-bool QueryImpl::isActive() const
-{
-    return m_active;
-}
+bool QueryImpl::isActive() const { return m_active; }
 
 bool QueryImpl::isResultAvailable() const
 {
@@ -116,6 +109,4 @@ void QueryImpl::end()
 
     m_active = false;
 }
-
 }
-

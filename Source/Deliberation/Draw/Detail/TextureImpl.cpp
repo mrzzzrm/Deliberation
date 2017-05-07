@@ -10,52 +10,44 @@
 
 namespace
 {
-
 gl::GLenum faceTarget(gl::GLenum type, unsigned int face)
 {
-    switch(type)
+    switch (type)
     {
-    case gl::GL_TEXTURE_2D:
-        Assert(face == 0u, "");
-        return gl::GL_TEXTURE_2D;
+    case gl::GL_TEXTURE_2D: Assert(face == 0u, ""); return gl::GL_TEXTURE_2D;
     case gl::GL_TEXTURE_CUBE_MAP:
     {
         Assert(face <= 6u, "");
 
-        static gl::GLenum targets[] =
-            {
-                gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-                gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-                gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-                gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-                gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-                gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            };
+        static gl::GLenum targets[] = {
+            gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+            gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+            gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+            gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+            gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+            gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+        };
 
         return targets[face];
     }
-    default:
-        Fail("");
+    default: Fail("");
     }
 }
-
 }
 
 namespace deliberation
 {
-
 TextureImpl::TextureImpl(
     DrawContext & drawContext,
-    u32 width,
-    u32 height,
-    u32 numFaces,
-    PixelFormat format
-):
-    drawContext(drawContext),
-    width(width),
-    height(height),
-    numFaces(numFaces),
-    format(format)
+    u32           width,
+    u32           height,
+    u32           numFaces,
+    PixelFormat   format)
+    : drawContext(drawContext)
+    , width(width)
+    , height(height)
+    , numFaces(numFaces)
+    , format(format)
 {
     baseLevel = 0;
     maxLevel = 0;
@@ -82,19 +74,22 @@ TextureImpl::TextureImpl(
 
     gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
     gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
-    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
-    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
+    gl::glTexParameteri(
+        (gl::GLenum)type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
+    gl::glTexParameteri(
+        (gl::GLenum)type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
 
     // Create faces
     texImage2DAllFaces(nullptr);
 }
 
-void TextureImpl::setupSurfaces(const std::shared_ptr<TextureImpl> &textureImpl)
+void TextureImpl::setupSurfaces(
+    const std::shared_ptr<TextureImpl> & textureImpl)
 {
     for (auto f = 0u; f < numFaces; f++)
     {
-        surfaces.emplace_back(
-            std::make_shared<SurfaceImpl>(textureImpl, f, faceTarget((gl::GLenum)type, f)));
+        surfaces.emplace_back(std::make_shared<SurfaceImpl>(
+            textureImpl, f, faceTarget((gl::GLenum)type, f)));
     }
 }
 
@@ -104,18 +99,16 @@ void TextureImpl::texImage2DAllFaces(const TextureBinary * binary) const
     {
         auto * binarySurface = binary ? &binary->surface(f) : nullptr;
 
-        gl::glTexImage2D(faceTarget((gl::GLenum)type, f),
-                         0,
-                         (gl::GLint)format.glInternalFormat(),
-                         binarySurface ? binarySurface->width() : width,
-                         binarySurface ? binarySurface->height() : height,
-                         0,
-                         format.glFormat(),
-                         format.glType(),
-                         binarySurface ? binarySurface->data() : nullptr);
+        gl::glTexImage2D(
+            faceTarget((gl::GLenum)type, f),
+            0,
+            (gl::GLint)format.glInternalFormat(),
+            binarySurface ? binarySurface->width() : width,
+            binarySurface ? binarySurface->height() : height,
+            0,
+            format.glFormat(),
+            format.glType(),
+            binarySurface ? binarySurface->data() : nullptr);
     }
 }
-
 }
-
-

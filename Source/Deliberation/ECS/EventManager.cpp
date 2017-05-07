@@ -2,13 +2,7 @@
 
 namespace deliberation
 {
-
-EventManager::EventManager()
-{
-
-}
+EventManager::EventManager() {}
 
 EventManager::ICallback::~ICallback() = default;
-
 }
-

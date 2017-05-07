@@ -8,7 +8,6 @@
 
 namespace deliberation
 {
-
 template<typename T, typename ComponentSubscriptionsType>
 Component<T, ComponentSubscriptionsType>::Component()
 {
@@ -40,15 +39,14 @@ template<typename T, typename ComponentSubscriptionsType>
 template<typename Event>
 void Component<T, ComponentSubscriptionsType>::emit(const Event & event)
 {
-    Assert(m_world, "")
-    m_world->emit(m_entityIndex, TypeID::value<ComponentEventFamily, Event>(), &event);
+    Assert(m_world, "") m_world->emit(
+        m_entityIndex, TypeID::value<ComponentEventFamily, Event>(), &event);
 }
 
 template<typename T, typename ComponentSubscriptionsType>
-void Component<T, ComponentSubscriptionsType>::dispatchEvent(TypeID::value_t eventType, const void * event)
+void Component<T, ComponentSubscriptionsType>::dispatchEvent(
+    TypeID::value_t eventType, const void * event)
 {
     ComponentSubscriptionsType::instance().dispatch(*this, eventType, event);
 }
-
 }
-

@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 class FramebufferImpl;
 class DrawContext;
 class SurfaceDownloadImpl;
@@ -16,7 +15,7 @@ class TextureImpl;
 
 class Surface final
 {
-public:
+  public:
     Surface() = default;
     Surface(const std::shared_ptr<SurfaceImpl> & impl);
 
@@ -31,7 +30,7 @@ public:
 
     SurfaceDownload download() const;
 
-private:
+  private:
     friend class Framebuffer;
     friend class FramebufferImpl;
     friend class SurfaceDownloadImpl;
@@ -39,9 +38,7 @@ private:
     friend class TextureImpl;
     friend class Texture;
 
-private:
+  private:
     std::shared_ptr<SurfaceImpl> m_impl;
 };
-
 }
-

@@ -6,30 +6,22 @@
 
 namespace deliberation
 {
-
-SamplerImpl::SamplerImpl(gl::GLenum uniformType,
-                         gl::GLenum valueType,
-                         gl::GLuint location):
-    glSampler(),
-    type(uniformType),
-    valueType(valueType),
-    location(location)
+SamplerImpl::SamplerImpl(
+    gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location)
+    : glSampler(), type(uniformType), valueType(valueType), location(location)
 {
 }
 
 gl::GLenum SamplerImpl::textureType() const
 {
-    switch(type)
+    switch (type)
     {
-    case gl::GL_SAMPLER_2D:                 return gl::GL_TEXTURE_2D; break;
-    case gl::GL_INT_SAMPLER_2D:             return gl::GL_TEXTURE_2D; break;
-    case gl::GL_UNSIGNED_INT_SAMPLER_2D:    return gl::GL_TEXTURE_2D; break;
-    case gl::GL_SAMPLER_CUBE:               return gl::GL_TEXTURE_CUBE_MAP; break;
+    case gl::GL_SAMPLER_2D: return gl::GL_TEXTURE_2D; break;
+    case gl::GL_INT_SAMPLER_2D: return gl::GL_TEXTURE_2D; break;
+    case gl::GL_UNSIGNED_INT_SAMPLER_2D: return gl::GL_TEXTURE_2D; break;
+    case gl::GL_SAMPLER_CUBE: return gl::GL_TEXTURE_CUBE_MAP; break;
 
-    default:
-        Fail("Unsupported sampler type");
+    default: Fail("Unsupported sampler type");
     }
 }
-
 }
-

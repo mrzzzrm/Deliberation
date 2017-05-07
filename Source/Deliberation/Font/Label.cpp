@@ -5,53 +5,38 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Deliberation/Core/Assert.h>
-#include <Deliberation/Core/Viewport.h>
 #include <Deliberation/Core/StreamUtils.h>
+#include <Deliberation/Core/Viewport.h>
 
 #include <Deliberation/Font/Font.h>
 
 namespace deliberation
 {
-
-Label::Label():
-    m_font(nullptr),
-    m_fontSize(16u),
-    m_textureDirty(false),
-    m_transformCachedViewport(0u, 0u, 0u, 0u),
-    m_transformDirty(true)
+Label::Label()
+    : m_font(nullptr)
+    , m_fontSize(16u)
+    , m_textureDirty(false)
+    , m_transformCachedViewport(0u, 0u, 0u, 0u)
+    , m_transformDirty(true)
 {
-
 }
 
-Label::Label(const Font & font):
-    m_font(&font),
-    m_fontSize(16u),
-    m_textureDirty(false),
-    m_transformCachedViewport(0u, 0u, 0u, 0u),
-    m_transformDirty(true)
+Label::Label(const Font & font)
+    : m_font(&font)
+    , m_fontSize(16u)
+    , m_textureDirty(false)
+    , m_transformCachedViewport(0u, 0u, 0u, 0u)
+    , m_transformDirty(true)
 {
-
 }
 
-const glm::vec2 & Label::position() const
-{
-    return m_position;
-}
+const glm::vec2 & Label::position() const { return m_position; }
 
-const glm::vec2 & Label::center() const
-{
-    return m_center;
-}
+const glm::vec2 & Label::center() const { return m_center; }
 
-const glm::vec3 & Label::color() const
-{
-    return m_color;
-}
+const glm::vec3 & Label::color() const { return m_color; }
 
-const std::string & Label::text() const
-{
-    return m_text;
-}
+const std::string & Label::text() const { return m_text; }
 
 const Texture & Label::texture() const
 {
@@ -63,10 +48,7 @@ const Texture & Label::texture() const
     return m_texture;
 }
 
-unsigned int Label::fontSize() const
-{
-    return m_fontSize;
-}
+unsigned int Label::fontSize() const { return m_fontSize; }
 
 const glm::mat4 & Label::transform(const Viewport & viewport) const
 {
@@ -100,10 +82,7 @@ void Label::setCenter(const glm::vec2 & center)
     m_transformDirty = true;
 }
 
-void Label::setColor(const glm::vec3 & color)
-{
-    m_color = color;
-}
+void Label::setColor(const glm::vec3 & color) { m_color = color; }
 
 void Label::setText(const std::string & text)
 {
@@ -135,7 +114,8 @@ void Label::renderText() const
 
     if (!m_textureDirty) return;
 
-    m_texture = m_font->render(m_text, m_fontSize, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    m_texture =
+        m_font->render(m_text, m_fontSize, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
     m_textureDirty = false;
 }
@@ -146,17 +126,19 @@ void Label::updateTransform(const Viewport & viewport) const
 
     auto align = glm::translate(glm::mat4(1.0f), glm::vec3(-m_center, 0.0f));
 
-    auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(float(texture().width()) / viewport.width(),
-                                                       float(texture().height()) / viewport.height(),
-                                                       1.0f));
+    auto scale = glm::scale(
+        glm::mat4(1.0f),
+        glm::vec3(
+            float(texture().width()) / viewport.width(),
+            float(texture().height()) / viewport.height(),
+            1.0f));
 
-    auto translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_position, 0.0f));
+    auto translate =
+        glm::translate(glm::mat4(1.0f), glm::vec3(m_position, 0.0f));
 
     m_transform = translate * scale * align;
 
     m_transformDirty = false;
     m_transformCachedViewport = viewport;
 }
-
 }
-

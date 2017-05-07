@@ -2,59 +2,37 @@
 
 #include <sstream>
 
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/StreamUtils.h>
 
 namespace deliberation
 {
-
-Camera3D::Camera3D():
-    m_zNear(0.1f),
-    m_zFar(9999.0f),
-    m_yFoV(glm::radians(70.0f)),
-    m_aspectRatio(1.0f),
-    m_viewDirty(true),
-    m_projectionDirty(true)
+Camera3D::Camera3D()
+    : m_zNear(0.1f)
+    , m_zFar(9999.0f)
+    , m_yFoV(glm::radians(70.0f))
+    , m_aspectRatio(1.0f)
+    , m_viewDirty(true)
+    , m_projectionDirty(true)
 {
 }
 
-const glm::vec3 & Camera3D::position() const
-{
-    return m_pose.position();
-}
+const glm::vec3 & Camera3D::position() const { return m_pose.position(); }
 
-const glm::quat & Camera3D::orientation() const
-{
-    return m_pose.orientation();
-}
+const glm::quat & Camera3D::orientation() const { return m_pose.orientation(); }
 
-float Camera3D::zNear() const
-{
-    return m_zNear;
-}
+float Camera3D::zNear() const { return m_zNear; }
 
-float Camera3D::zFar() const
-{
-    return m_zFar;
-}
+float Camera3D::zFar() const { return m_zFar; }
 
-float Camera3D::yFoV() const
-{
-    return m_yFoV;
-}
+float Camera3D::yFoV() const { return m_yFoV; }
 
-float Camera3D::aspectRatio() const
-{
-    return m_aspectRatio;
-}
+float Camera3D::aspectRatio() const { return m_aspectRatio; }
 
-const Pose3D & Camera3D::pose() const
-{
-    return m_pose;
-}
+const Pose3D & Camera3D::pose() const { return m_pose; }
 
 void Camera3D::setPosition(const glm::vec3 & position)
 {
@@ -104,9 +82,11 @@ const glm::mat4 & Camera3D::view() const
 {
     if (m_viewDirty)
     {
-        m_view = glm::lookAt(m_pose.position(),
-                             m_pose.position() + m_pose.orientation() * glm::vec3(0.0f, 0.0f, -1.0f),
-                             m_pose.orientation() * glm::vec3(0.0f, 1.0f, 0.0f));
+        m_view = glm::lookAt(
+            m_pose.position(),
+            m_pose.position() +
+                m_pose.orientation() * glm::vec3(0.0f, 0.0f, -1.0f),
+            m_pose.orientation() * glm::vec3(0.0f, 1.0f, 0.0f));
         m_viewDirty = false;
     }
 
@@ -117,8 +97,8 @@ const glm::mat4 & Camera3D::projection() const
 {
     if (m_projectionDirty)
     {
-	    m_projection = glm::perspective(m_yFoV, m_aspectRatio, m_zNear, m_zFar);
-	    m_projectionDirty = true;
+        m_projection = glm::perspective(m_yFoV, m_aspectRatio, m_zNear, m_zFar);
+        m_projectionDirty = true;
     }
 
     return m_projection;
@@ -143,7 +123,7 @@ Rect3D Camera3D::nearPlane() const
 
     const auto size = zPlaneSize(m_zNear);
 
-    auto origin = glm::vec3(-size.x/2.0f, -size.y/2.0f, -m_zNear);
+    auto origin = glm::vec3(-size.x / 2.0f, -size.y / 2.0f, -m_zNear);
     origin = m_pose.position() + m_pose.orientation() * origin;
 
     auto right = m_pose.orientation() * glm::vec3(size.x, 0.0f, 0.0f);
@@ -161,7 +141,7 @@ Rect3D Camera3D::farPlane() const
 
     const auto size = zPlaneSize(m_zFar);
 
-    auto origin = glm::vec3(-size.x/2.0f, -size.y/2.0f, -m_zFar);
+    auto origin = glm::vec3(-size.x / 2.0f, -size.y / 2.0f, -m_zFar);
     origin = m_pose.position() + m_pose.orientation() * origin;
 
     auto right = m_pose.orientation() * glm::vec3(size.x, 0.0f, 0.0f);
@@ -170,9 +150,11 @@ Rect3D Camera3D::farPlane() const
     return {origin, right, up};
 }
 
-glm::vec2 Camera3D::projectToNearPlane(const glm::vec3 & point, bool & success) const
+glm::vec2
+Camera3D::projectToNearPlane(const glm::vec3 & point, bool & success) const
 {
-    const auto nearPlaneForward =  m_pose.orientation() * glm::vec3(0.0f, 0.0f, -1.0f);
+    const auto nearPlaneForward =
+        m_pose.orientation() * glm::vec3(0.0f, 0.0f, -1.0f);
     const auto relativePosition = point - m_pose.position();
 
     if (glm::dot(relativePosition, nearPlaneForward) < 0)
@@ -181,13 +163,16 @@ glm::vec2 Camera3D::projectToNearPlane(const glm::vec3 & point, bool & success) 
         return {};
     }
 
-    const auto localRelativePosition = glm::transpose(m_pose.basis()) * relativePosition;
+    const auto localRelativePosition =
+        glm::transpose(m_pose.basis()) * relativePosition;
 
     const auto factor = m_zNear / -localRelativePosition.z;
 
     const auto nearPlanePositionWS = (localRelativePosition * factor);
-    const auto nearPlanePosition2dWS = glm::vec2(nearPlanePositionWS.x, nearPlanePositionWS.y);
-    const auto nearPlanePosition = 2.0f * nearPlanePosition2dWS / zPlaneSize(m_zNear);
+    const auto nearPlanePosition2dWS =
+        glm::vec2(nearPlanePositionWS.x, nearPlanePositionWS.y);
+    const auto nearPlanePosition =
+        2.0f * nearPlanePosition2dWS / zPlaneSize(m_zNear);
 
     success = true;
 
@@ -206,7 +191,6 @@ std::string Camera3D::toString() const
     stream << "Aspect Ratio: " << m_aspectRatio << "}";
 
     return stream.str();
-
 }
 
 glm::vec2 Camera3D::zPlaneSize(float z) const
@@ -217,6 +201,4 @@ glm::vec2 Camera3D::zPlaneSize(float z) const
 
     return {width, height};
 }
-
 }
-

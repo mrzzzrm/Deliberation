@@ -3,7 +3,6 @@
 
 namespace deliberation
 {
-
 template<typename T>
 std::size_t System<T>::indexStatic()
 {
@@ -13,12 +12,10 @@ std::size_t System<T>::indexStatic()
     return i;
 }
 
-
 template<typename T>
-System<T>::System(World & world, const ComponentFilter & filter):
-    SystemBase(world, filter)
+System<T>::System(World & world, const ComponentFilter & filter)
+    : SystemBase(world, filter)
 {
-
 }
 
 template<typename T>
@@ -32,6 +29,4 @@ std::string System<T>::name() const
 {
     return typeid(T).name();
 }
-
 }
-

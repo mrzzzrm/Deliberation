@@ -8,7 +8,6 @@
 
 namespace deliberation
 {
-
 enum PixelFormatEnum
 {
     PixelFormat_None = 0,
@@ -148,11 +147,11 @@ namespace detail
 
 class PixelFormat final
 {
-public:
+  public:
     template<typename T>
     static constexpr PixelFormatEnum resolve();
 
-public:
+  public:
     PixelFormat();
     PixelFormat(PixelFormatEnum format);
 
@@ -180,10 +179,9 @@ public:
     gl::GLenum glSamplerValueType() const;
     gl::GLenum glInternalFormat() const;
 
-private:
-    const detail::PixelFormatDesc *   m_desc;
+  private:
+    const detail::PixelFormatDesc * m_desc;
 };
-
 }
 
 #include <Deliberation/Draw/PixelFormat.inl>

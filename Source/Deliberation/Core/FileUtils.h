@@ -4,8 +4,5 @@
 
 namespace deliberation
 {
-
 std::string FileToString(const std::string & path);
-
 }
-

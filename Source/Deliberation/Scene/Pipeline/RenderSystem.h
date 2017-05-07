@@ -6,20 +6,17 @@
 
 namespace deliberation
 {
-
-class RenderSystem:
-    public System<RenderSystem>
+class RenderSystem : public System<RenderSystem>
 {
-public:
+  public:
     RenderSystem(World & world);
 
     RenderManager & renderManager() { return m_renderManager; }
 
-protected:
+  protected:
     void onUpdate(float seconds) override;
 
-private:
+  private:
     RenderManager m_renderManager;
 };
-
 }

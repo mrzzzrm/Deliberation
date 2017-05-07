@@ -7,11 +7,9 @@
 #include <unordered_map>
 #include <vector>
 
-
-
 #include <Deliberation/Core/LinearMap.h>
-#include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/Optional.h>
+#include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
 
 #include <Deliberation/ECS/AbstractWorld.h>
@@ -26,28 +24,27 @@
 
 namespace deliberation
 {
-
-class World final:
-    public AbstractWorld
+class World final : public AbstractWorld
 {
-public:
+  public:
     World();
     ~World();
 
-    EventManager & eventManager();
+    EventManager &        eventManager();
     const WorldProfiler & profiler() const;
 
     EntityData & entityData(EntityId id);
-    Entity entity(EntityId id);
-    Entity entityByIndex(size_t index);
-    Entity entityById(EntityId id);
+    Entity       entity(EntityId id);
+    Entity       entityByIndex(size_t index);
+    Entity       entityById(EntityId id);
 
     const SparseVector<EntityData> & entities() const { return m_entities; }
 
-    Entity createEntity(const std::string & name = "Entity",
-                        EntityId parent = ECS_INVALID_ENTITY_ID);
+    Entity createEntity(
+        const std::string & name = "Entity",
+        EntityId            parent = ECS_INVALID_ENTITY_ID);
 
-    template<typename T, typename ... Args>
+    template<typename T, typename... Args>
     std::shared_ptr<T> addSystem(Args &&... args);
 
     void frameBegin();
@@ -67,60 +64,62 @@ public:
     /**
      * From AbstractWorld
      */
-    void emit(size_t entityIndex, TypeID::value_t eventType, const void * event) final override;
+    void emit(size_t entityIndex, TypeID::value_t eventType, const void * event)
+        final override;
 
-
-private:
+  private:
     friend class Entity;
 
-private:
+  private:
     struct ComponentRemoval
     {
-        ComponentRemoval(EntityId entityId, ComponentTypeId componentTypeId):
-            entityId(entityId),
-            componentTypeId(componentTypeId)
-        {}
+        ComponentRemoval(EntityId entityId, ComponentTypeId componentTypeId)
+            : entityId(entityId), componentTypeId(componentTypeId)
+        {
+        }
 
         EntityId        entityId;
         ComponentTypeId componentTypeId;
     };
 
-private:
+  private:
     bool isValid(EntityId id) const;
     void scheduleEntityRemoval(EntityId id);
-    std::shared_ptr<ComponentBase> component(EntityId id, TypeID::value_t index);
-    std::shared_ptr<const ComponentBase> component(EntityId id, TypeID::value_t index) const;
-    void addComponent(EntityId id, TypeID::value_t index, std::shared_ptr<ComponentBase> component);
+    std::shared_ptr<ComponentBase>
+    component(EntityId id, TypeID::value_t index);
+    std::shared_ptr<const ComponentBase>
+         component(EntityId id, TypeID::value_t index) const;
+    void addComponent(
+        EntityId                       id,
+        TypeID::value_t                index,
+        std::shared_ptr<ComponentBase> component);
     void scheduleComponentRemoval(EntityId id, TypeID::value_t index);
     void removeComponent(const ComponentRemoval & componentRemoval);
     void removeEntity(EntityId entityId);
 
     std::size_t entityIndex(EntityId id) const;
-    EntityComponentSetup * componentSetup(const ComponentBitset & componentBits);
+    EntityComponentSetup *
+    componentSetup(const ComponentBitset & componentBits);
 
-private:
-    SparseVector<EntityData>                    m_entities;
-    std::unordered_map<EntityId,
-        std::size_t>                            m_entityIndexByID;
-    EntityId                                    m_entityIDCounter;
+  private:
+    SparseVector<EntityData>                  m_entities;
+    std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
+    EntityId                                  m_entityIDCounter;
 
-    std::unordered_map<ComponentBitset,
-        EntityComponentSetup>                   m_entityComponentSetups;
+    std::unordered_map<ComponentBitset, EntityComponentSetup>
+        m_entityComponentSetups;
 
-    LinearMap<LinearMap<
-        std::shared_ptr<ComponentBase>>>        m_components;
+    LinearMap<LinearMap<std::shared_ptr<ComponentBase>>> m_components;
 
-    std::vector<EntityId>                       m_entityRemovals;
-    std::vector<ComponentRemoval>               m_componentRemovals;
+    std::vector<EntityId>         m_entityRemovals;
+    std::vector<ComponentRemoval> m_componentRemovals;
 
-    LinearMap<std::shared_ptr<SystemBase>>      m_systems;
+    LinearMap<std::shared_ptr<SystemBase>> m_systems;
 
-    EventManager                                m_eventManager;
+    EventManager m_eventManager;
 
-    WorldProfiler                               m_profiler;
+    WorldProfiler m_profiler;
 };
-
 }
 
 #include <Deliberation/ECS/World.inl>
-

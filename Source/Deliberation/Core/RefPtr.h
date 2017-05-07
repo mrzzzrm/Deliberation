@@ -6,13 +6,13 @@
 //
 //#include <Deliberation/Deliberation.h>
 //
-//namespace deliberation
+// namespace deliberation
 //{
 //
-//template<typename T>
-//class RefPtr final
+// template<typename T>
+// class RefPtr final
 //{
-//public:
+// public:
 //    RefPtr() = default;
 //    RefPtr(const RefPtr & rhs);
 //    ~RefPtr();
@@ -26,7 +26,7 @@
 //    T & operator*();
 //    const T & operator*() const;
 //
-//private:
+// private:
 //    std::shared_ptr<T> m_value;
 //};
 //

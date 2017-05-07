@@ -6,47 +6,29 @@
 
 namespace deliberation
 {
+LayoutedBlob::LayoutedBlob() {}
 
-LayoutedBlob::LayoutedBlob()
+LayoutedBlob::LayoutedBlob(const DataLayout & layout, size_t count)
+    : m_layout(layout), m_count(count), m_data(count * m_layout.stride())
 {
-
 }
 
-LayoutedBlob::LayoutedBlob(const DataLayout & layout, size_t count):
-    m_layout(layout),
-    m_count(count),
-    m_data(count * m_layout.stride())
+LayoutedBlob::LayoutedBlob(const DataLayout & layout, Blob && blob)
+    : m_layout(layout), m_data(std::move(blob))
 {
-
-}
-
-LayoutedBlob::LayoutedBlob(const DataLayout & layout, Blob && blob):
-    m_layout(layout),
-    m_data(std::move(blob))
-{
-    Assert(blob.size() % layout.stride() == 0, "Layout can't be matched to Blob size");
+    Assert(
+        blob.size() % layout.stride() == 0,
+        "Layout can't be matched to Blob size");
     m_count = blob.size() / layout.stride();
 }
 
-const DataLayout & LayoutedBlob::layout() const
-{
-    return m_layout;
-}
+const DataLayout & LayoutedBlob::layout() const { return m_layout; }
 
-bool LayoutedBlob::empty() const
-{
-    return m_count == 0;
-}
+bool LayoutedBlob::empty() const { return m_count == 0; }
 
-size_t LayoutedBlob::count() const
-{
-    return m_count;
-}
+size_t LayoutedBlob::count() const { return m_count; }
 
-const Blob & LayoutedBlob::rawData() const
-{
-    return m_data;
-}
+const Blob & LayoutedBlob::rawData() const { return m_data; }
 
 void LayoutedBlob::write(std::size_t offset, const void * src, size_t length)
 {
@@ -122,5 +104,4 @@ std::string LayoutedBlob::toString() const
 
     return stream.str();
 }
-
 }

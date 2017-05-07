@@ -1,7 +1,7 @@
 #include <Deliberation/Scene/EdgeToFaceSmoothing.h>
 
-#include <unordered_map>
 #include <iostream>
+#include <unordered_map>
 
 #include <Deliberation/Core/HashUtils.h>
 
@@ -9,16 +9,15 @@
 
 namespace
 {
-
 using namespace deliberation;
 
 static const u32 MAX_NUM_EDGES_PER_VERTEX = 8;
 
 struct Vertex
 {
-    u32       original;
-    u32       edges[MAX_NUM_EDGES_PER_VERTEX];
-    u32       descendants[MAX_NUM_EDGES_PER_VERTEX];
+    u32 original;
+    u32 edges[MAX_NUM_EDGES_PER_VERTEX];
+    u32 descendants[MAX_NUM_EDGES_PER_VERTEX];
 
     Vertex()
     {
@@ -48,16 +47,13 @@ struct Face
 {
     std::vector<u32> vertices;
 };
-
 }
 
 namespace deliberation
 {
-
-EdgeToFaceSmoothing::EdgeToFaceSmoothing(const Mesh & sourceMesh):
-    m_sourceMesh(sourceMesh)
+EdgeToFaceSmoothing::EdgeToFaceSmoothing(const Mesh & sourceMesh)
+    : m_sourceMesh(sourceMesh)
 {
-
 }
 
 Mesh EdgeToFaceSmoothing::run()
@@ -84,10 +80,10 @@ Mesh EdgeToFaceSmoothing::run()
     std::cout << "Edges: " << edges.size() << std::endl;
     for (auto & pair : edges)
     {
-        std::cout << " " << pair.second.vertices[0] << " " << pair.second.vertices[1] << std::endl;
+        std::cout << " " << pair.second.vertices[0] << " "
+                  << pair.second.vertices[1] << std::endl;
     }
 
     return Mesh();
 }
-
 }

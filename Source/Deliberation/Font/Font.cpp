@@ -7,44 +7,35 @@
 
 namespace deliberation
 {
-
 namespace detail
 {
-
-class TTF_Font_Wrapper
-{
-public:
-    TTF_Font_Wrapper(const std::string & path, unsigned int size):
-        font(nullptr)
+    class TTF_Font_Wrapper
     {
-        font = TTF_OpenFont(path.c_str(), size);
-        Assert(font, "Failed to open font '" + path + "'");
-    }
-
-    ~TTF_Font_Wrapper()
-    {
-        if (font)
+      public:
+        TTF_Font_Wrapper(const std::string & path, unsigned int size)
+            : font(nullptr)
         {
-            TTF_CloseFont(font);
+            font = TTF_OpenFont(path.c_str(), size);
+            Assert(font, "Failed to open font '" + path + "'");
         }
-    }
 
-    TTF_Font * font;
-};
+        ~TTF_Font_Wrapper()
+        {
+            if (font)
+            {
+                TTF_CloseFont(font);
+            }
+        }
 
+        TTF_Font * font;
+    };
 }
 
-Font::Font():
-    m_drawContext(nullptr)
+Font::Font() : m_drawContext(nullptr) {}
+
+Font::Font(DrawContext & drawContext, const std::string & path)
+    : m_drawContext(&drawContext), m_path(path)
 {
-
-}
-
-Font::Font(DrawContext & drawContext, const std::string & path):
-    m_drawContext(&drawContext),
-    m_path(path)
-{
-
 }
 
 Font::~Font() = default;
@@ -55,16 +46,18 @@ DrawContext & Font::drawContext() const
     return *m_drawContext;
 }
 
-Texture Font::render(const std::string & text,
-                     unsigned int size,
-                     const glm::vec4 & color) const
+Texture Font::render(
+    const std::string & text, unsigned int size, const glm::vec4 & color) const
 {
     Assert(m_drawContext, "");
 
     auto i = m_fontBySize.find(size);
     if (i == m_fontBySize.end())
     {
-        auto result = m_fontBySize.emplace(size, std::unique_ptr<detail::TTF_Font_Wrapper>(new detail::TTF_Font_Wrapper(m_path, size)));
+        auto result = m_fontBySize.emplace(
+            size,
+            std::unique_ptr<detail::TTF_Font_Wrapper>(
+                new detail::TTF_Font_Wrapper(m_path, size)));
         Assert(result.second, "");
 
         i = result.first;
@@ -86,6 +79,4 @@ Texture Font::render(const std::string & text,
 
     return texture;
 }
-
 }
-

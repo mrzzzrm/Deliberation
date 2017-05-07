@@ -6,19 +6,15 @@
 
 namespace deliberation
 {
-
-class TextureLoaderDataImpl:
-    public ITextureLoaderImpl
+class TextureLoaderDataImpl : public ITextureLoaderImpl
 {
-public:
+  public:
     TextureLoaderDataImpl(void * data, size_t length);
 
     virtual TextureBinary load() override;
 
-private:
+  private:
     void * m_data;
     size_t m_length;
 };
-
 }
-

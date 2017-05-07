@@ -3,7 +3,6 @@
 
 namespace deliberation
 {
-
 template<typename StreamType, typename T, glm::precision precision>
 StreamType & operator<<(StreamType && os, const glm::tvec2<T, precision> & v)
 {
@@ -14,22 +13,23 @@ StreamType & operator<<(StreamType && os, const glm::tvec2<T, precision> & v)
 template<typename StreamType, typename T, glm::precision precision>
 StreamType & operator<<(StreamType && os, const glm::tvec3<T, precision> & v)
 {
-    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << "," << std::to_string(v.z) << "}";
+    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << ","
+       << std::to_string(v.z) << "}";
     return os;
 }
 
 template<typename StreamType, typename T, glm::precision precision>
 StreamType & operator<<(StreamType && os, const glm::tvec4<T, precision> & v)
 {
-    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << "," <<
-        std::to_string(v.z) << "," << std::to_string(v.w) << "}";
+    os << "{" << std::to_string(v.x) << "," << std::to_string(v.y) << ","
+       << std::to_string(v.z) << "," << std::to_string(v.w) << "}";
     return os;
 }
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const glm::quat & q)
 {
-    os << "{"  << q.w << "," << q.x << "," << q.y << "," << q.z << "}";
+    os << "{" << q.w << "," << q.x << "," << q.y << "," << q.z << "}";
     return os;
 }
 
@@ -121,32 +121,32 @@ StreamType & operator<<(StreamType && os, const Sphere & s)
     return os;
 }
 
-//template<typename T>
-//std::string operator+(const std::string & s, const T & value)
+// template<typename T>
+// std::string operator+(const std::string & s, const T & value)
 //{
 //    std::stringstream stream;
 //    stream << s << value;
 //    return stream.str();
 //}
 //
-//template<typename T>
-//std::string operator+(const T & value, const std::string & s)
+// template<typename T>
+// std::string operator+(const T & value, const std::string & s)
 //{
 //    std::stringstream stream;
 //    stream << value << s;
 //    return stream.str();
 //}
 //
-//template<typename T>
-//std::string operator+(const char * s, const T & value)
+// template<typename T>
+// std::string operator+(const char * s, const T & value)
 //{
 //    std::stringstream stream;
 //    stream << s << value;
 //    return stream.str();
 //}
 //
-//template<typename T>
-//std::string operator+(const T & value, const char * s)
+// template<typename T>
+// std::string operator+(const T & value, const char * s)
 //{
 //    std::stringstream stream;
 //    stream << value << s;
@@ -176,7 +176,4 @@ std::string ToString(const glm::tvec4<T, precision> & v)
     stream << v;
     return stream.str();
 }
-
-
 }
-

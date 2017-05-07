@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 bool StringStartsWith(const std::string & str, const std::string & testStr)
 {
     if (testStr.size() > str.size())
@@ -65,7 +64,9 @@ std::string StringRErased(const std::string & str, std::size_t num)
 
 std::string & StringRErase(std::string & str, const std::string & testStr)
 {
-    Assert(StringEndsWith(str, testStr), "'" + str + "' doesn't end with '" + testStr + "'");
+    Assert(
+        StringEndsWith(str, testStr),
+        "'" + str + "' doesn't end with '" + testStr + "'");
     StringRErase(str, testStr.size());
     return str;
 }
@@ -76,12 +77,17 @@ std::string StringRErased(const std::string & str, const std::string & testStr)
     return StringRErase(cpy, testStr);
 }
 
-std::string StringJoin(const std::vector<std::string> & strs, const std::string & sep)
+std::string
+StringJoin(const std::vector<std::string> & strs, const std::string & sep)
 {
     if (strs.empty()) return {};
 
     const auto len =
-        std::accumulate(strs.begin(), strs.end(), 0u, [] (size_t sum, const std::string & s) { return sum + s.size(); }) +
+        std::accumulate(
+            strs.begin(),
+            strs.end(),
+            0u,
+            [](size_t sum, const std::string & s) { return sum + s.size(); }) +
         sep.size() * (strs.size() - 1);
 
     std::string result;
@@ -96,6 +102,4 @@ std::string StringJoin(const std::vector<std::string> & strs, const std::string 
 
     return result;
 }
-
 }
-

@@ -1,6 +1,5 @@
 namespace deliberation
 {
-
 template<typename T>
 TypedBlobValueAccessor<T> LayoutedBlob::field(const std::string & name)
 {
@@ -20,7 +19,8 @@ TypedBlobValueAccessor<T> LayoutedBlob::field(const DataLayoutField & field)
 }
 
 template<typename T>
-CTypedBlobValueAccessor<T> LayoutedBlob::field(const DataLayoutField & field) const
+CTypedBlobValueAccessor<T>
+LayoutedBlob::field(const DataLayoutField & field) const
 {
     return CTypedBlobValueAccessor<T>(m_data, m_layout, field);
 }
@@ -44,15 +44,16 @@ CTypedBlobIterator<T> LayoutedBlob::citerator(const std::string & name) const
 }
 
 template<typename T>
-CTypedBlobIterator<T> LayoutedBlob::citerator(const DataLayoutField & field) const
+CTypedBlobIterator<T>
+LayoutedBlob::citerator(const DataLayoutField & field) const
 {
     return this->field<T>(field).citerator();
 }
 
 template<typename T>
-void LayoutedBlob::assign(const std::string & name, const std::vector<T> & values)
+void LayoutedBlob::assign(
+    const std::string & name, const std::vector<T> & values)
 {
     field<T>(name).assign(values);
 }
-
 }

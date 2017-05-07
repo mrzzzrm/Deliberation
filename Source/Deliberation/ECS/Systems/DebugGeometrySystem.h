@@ -8,18 +8,18 @@
 
 #include <Deliberation/Deliberation.h>
 
-class DebugGeometrySystem:
-    public System<DebugGeometrySystem>
+class DebugGeometrySystem : public System<DebugGeometrySystem>
 {
-public:
-    DebugGeometrySystem(World & world):
-        Base(world),
-        m_manager(world.systemRef<ApplicationSystem>().drawContext())
-    {}
+  public:
+    DebugGeometrySystem(World & world)
+        : Base(world)
+        , m_manager(world.systemRef<ApplicationSystem>().drawContext())
+    {
+    }
 
-    DebugGeometryManager & manager() { return m_manager; }
+    DebugGeometryManager &       manager() { return m_manager; }
     const DebugGeometryManager & manager() const { return m_manager; }
 
-private:
+  private:
     DebugGeometryManager m_manager;
 };

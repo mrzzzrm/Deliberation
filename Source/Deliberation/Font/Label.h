@@ -6,26 +6,23 @@
 
 #include <Deliberation/Draw/Texture.h>
 
-
-
 namespace deliberation
 {
-
 class Font;
 
 class Label final
 {
-public:
+  public:
     Label();
     Label(const Font & font);
 
-    const glm::vec2 & position() const;
-    const glm::vec2 & center() const;
-    const glm::vec3 & color() const;
+    const glm::vec2 &   position() const;
+    const glm::vec2 &   center() const;
+    const glm::vec3 &   color() const;
     const std::string & text() const;
-    unsigned int fontSize() const;
-    const Texture & texture() const;
-    const glm::mat4 & transform(const Viewport & viewport) const;
+    unsigned int        fontSize() const;
+    const Texture &     texture() const;
+    const glm::mat4 &   transform(const Viewport & viewport) const;
 
     void setPosition(const glm::vec2 & position);
     void setCenter(const glm::vec2 & center);
@@ -35,22 +32,20 @@ public:
 
     void renderText() const;
 
-private:
+  private:
     void updateTransform(const Viewport & viewport) const;
 
-private:
-    const Font *        m_font;
-    glm::vec2           m_position;
-    glm::vec2           m_center;
-    glm::vec3           m_color;
-    std::string         m_text;
-    mutable Texture     m_texture;
-    mutable bool        m_textureDirty;
-    unsigned int        m_fontSize;
-    mutable glm::mat4   m_transform;
-    mutable Viewport    m_transformCachedViewport;
-    mutable bool        m_transformDirty;
+  private:
+    const Font *      m_font;
+    glm::vec2         m_position;
+    glm::vec2         m_center;
+    glm::vec3         m_color;
+    std::string       m_text;
+    mutable Texture   m_texture;
+    mutable bool      m_textureDirty;
+    unsigned int      m_fontSize;
+    mutable glm::mat4 m_transform;
+    mutable Viewport  m_transformCachedViewport;
+    mutable bool      m_transformDirty;
 };
-
 }
-

@@ -11,19 +11,11 @@
 
 namespace deliberation
 {
+UVSphere::UVSphere() : m_numParallels(0), m_numMeridians(0) {}
 
-UVSphere::UVSphere():
-    m_numParallels(0),
-    m_numMeridians(0)
+UVSphere::UVSphere(unsigned int numParallels, unsigned int numMeridians)
+    : m_numParallels(numParallels), m_numMeridians(numMeridians)
 {
-
-}
-
-UVSphere::UVSphere(unsigned int numParallels, unsigned int numMeridians):
-    m_numParallels(numParallels),
-    m_numMeridians(numMeridians)
-{
-
 }
 
 Mesh UVSphere::generateMesh() const
@@ -32,7 +24,7 @@ Mesh UVSphere::generateMesh() const
 
     DataLayout vertexLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 
-    auto numVertices = m_numParallels * m_numMeridians + 2;
+    auto         numVertices = m_numParallels * m_numMeridians + 2;
     LayoutedBlob vertices(vertexLayout, numVertices);
 
     auto positions = vertices.field<glm::vec3>("Position");
@@ -44,15 +36,15 @@ Mesh UVSphere::generateMesh() const
 
     for (std::size_t p = 0; p < m_numParallels; p++)
     {
-		float polar = glm::pi<float>() * float(p + 1) / m_numParallels;
-		float sp = std::sin(polar);
-		float cp = std::cos(polar);
+        float polar = glm::pi<float>() * float(p + 1) / m_numParallels;
+        float sp = std::sin(polar);
+        float cp = std::cos(polar);
 
         for (std::size_t m = 0; m < m_numMeridians; m++)
         {
-			float azimuth = 2.0f * glm::pi<float>() * float(m) / m_numMeridians;
-			float sa = std::sin(azimuth);
-			float ca = std::cos(azimuth);
+            float azimuth = 2.0f * glm::pi<float>() * float(m) / m_numMeridians;
+            float sa = std::sin(azimuth);
+            float ca = std::cos(azimuth);
 
             positions[p * m_numMeridians + m] = {sp * ca, cp, sp * sa};
         }
@@ -88,14 +80,15 @@ Mesh UVSphere::generateMesh() const
         }
     }
 
-	for (std::size_t m = 0; m < m_numMeridians; m++)
-	{
-		auto a = m + m_numMeridians * (m_numParallels - 2) + 1;
-		auto b = (m + 1) % m_numMeridians + m_numMeridians * (m_numParallels - 2) + 1;
+    for (std::size_t m = 0; m < m_numMeridians; m++)
+    {
+        auto a = m + m_numMeridians * (m_numParallels - 2) + 1;
+        auto b = (m + 1) % m_numMeridians +
+                 m_numMeridians * (m_numParallels - 2) + 1;
         Mesh::Face face;
         face.indices = {(u32)(vertices.count() - 1), (u32)(a), (u32)(b)};
         faces.push_back(face);
-	}
+    }
 
     return Mesh(std::move(vertices), std::move(faces));
 }
@@ -106,7 +99,7 @@ MeshData UVSphere::generateMesh2() const
 
     DataLayout vertexLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 
-    auto numVertices = m_numParallels * m_numMeridians + 2;
+    auto         numVertices = m_numParallels * m_numMeridians + 2;
     LayoutedBlob vertices(vertexLayout, numVertices);
 
     auto positions = vertices.field<glm::vec3>("Position");
@@ -146,12 +139,12 @@ MeshData UVSphere::generateMesh2() const
      * Generate indices
      */
     auto numIndices = m_numMeridians * 3 +
-        (m_numParallels - 2) * m_numMeridians * 6 +
-        m_numMeridians * 3;
-    DataLayout indexLayout("Index", Type_U32);
+                      (m_numParallels - 2) * m_numMeridians * 6 +
+                      m_numMeridians * 3;
+    DataLayout   indexLayout("Index", Type_U32);
     LayoutedBlob indexBlob(indexLayout, numIndices);
-    auto indices = indexBlob.field<u32>("Index");
-    u32 i = 0;
+    auto         indices = indexBlob.field<u32>("Index");
+    u32          i = 0;
 
     for (auto m = 0; m < m_numMeridians; m++)
     {
@@ -180,7 +173,8 @@ MeshData UVSphere::generateMesh2() const
     for (std::size_t m = 0; m < m_numMeridians; m++)
     {
         auto a = m + m_numMeridians * (m_numParallels - 2) + 1;
-        auto b = (m + 1) % m_numMeridians + m_numMeridians * (m_numParallels - 2) + 1;
+        auto b = (m + 1) % m_numMeridians +
+                 m_numMeridians * (m_numParallels - 2) + 1;
 
         indices[i++] = (u32)(vertices.count() - 1);
         indices[i++] = (u32)(a);
@@ -189,6 +183,4 @@ MeshData UVSphere::generateMesh2() const
 
     return MeshData(std::move(vertices), std::move(indexBlob));
 }
-
 }
-

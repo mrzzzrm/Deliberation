@@ -1,12 +1,10 @@
 namespace deliberation
 {
-
 template<typename T>
-TextureLoaderUnicolorImpl<T>::TextureLoaderUnicolorImpl(const glm::uvec2 & size, const T & value):
-    m_size(size),
-    m_value(value)
+TextureLoaderUnicolorImpl<T>::TextureLoaderUnicolorImpl(
+    const glm::uvec2 & size, const T & value)
+    : m_size(size), m_value(value)
 {
-
 }
 
 template<typename T>
@@ -15,11 +13,13 @@ TextureBinary TextureLoaderUnicolorImpl<T>::load()
     auto data = createPixelData();
     auto format = PixelFormat::resolve<T>();
 
-    return TextureBinary(SurfaceBinary(std::move(data), m_size.x, m_size.y, format));
+    return TextureBinary(
+        SurfaceBinary(std::move(data), m_size.x, m_size.y, format));
 }
 
 template<typename T>
-Blob TextureLoaderUnicolorImpl<T>::createPixelData() const {
+Blob TextureLoaderUnicolorImpl<T>::createPixelData() const
+{
     const auto numPixels = m_size.x * m_size.y;
 
     std::vector<T> pixels(numPixels);
@@ -34,5 +34,4 @@ Blob TextureLoaderUnicolorImpl<T>::createPixelData() const {
 
     return Blob(pixels);
 }
-
 }

@@ -4,7 +4,6 @@
 
 namespace deliberation
 {
-
 Color::Color()
 {
     m_values[0] = 0x7F;
@@ -48,6 +47,4 @@ const uint8_t & Color::operator[](std::size_t index) const
     Assert(index < 4, "");
     return m_values[index];
 }
-
 }
-

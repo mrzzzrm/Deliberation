@@ -11,42 +11,38 @@
 
 namespace deliberation
 {
-
 class DrawContext;
 class TextureBinary;
 
 class TextureImpl final
 {
-public:
+  public:
     TextureImpl(
         DrawContext & drawContext,
-        u32 width,
-        u32 height,
-        u32 numFaces,
-        PixelFormat format
-    );
+        u32           width,
+        u32           height,
+        u32           numFaces,
+        PixelFormat   format);
 
     void setupSurfaces(const std::shared_ptr<TextureImpl> & textureImpl);
     void texImage2DAllFaces(const TextureBinary * binary) const;
 
-    DrawContext &           drawContext;
+    DrawContext & drawContext;
 
-    gl::GLuint              glName;
+    gl::GLuint glName;
 
-    u32                     width;
-    u32                     height;
+    u32 width;
+    u32 height;
 
-    u32                     numFaces;
-    TextureType             type;
-    PixelFormat             format;
+    u32         numFaces;
+    TextureType type;
+    PixelFormat format;
 
-    gl::GLuint              baseLevel;
-    gl::GLuint              maxLevel;
-    gl::GLenum              minFilter;
-    gl::GLenum              maxFilter;
+    gl::GLuint baseLevel;
+    gl::GLuint maxLevel;
+    gl::GLenum minFilter;
+    gl::GLenum maxFilter;
 
-    std::vector<Surface>    surfaces;
+    std::vector<Surface> surfaces;
 };
-
 }
-

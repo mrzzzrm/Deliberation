@@ -4,10 +4,9 @@
 
 namespace deliberation
 {
-
 template<typename Value>
-LinearMap<Value>::Iterator::Iterator(LinearMap<Value> & map, std::size_t index):
-    map(map)
+LinearMap<Value>::Iterator::Iterator(LinearMap<Value> & map, std::size_t index)
+    : map(map)
 {
     while (index < map.m_vec.size() && !map.m_vec[index])
     {
@@ -21,15 +20,13 @@ LinearMap<Value>::Iterator::Iterator(LinearMap<Value> & map, std::size_t index):
 }
 
 template<typename Value>
-LinearMap<Value>::Iterator::Iterator(const Iterator & other):
-    map(other.map),
-    pair(other.pair)
+LinearMap<Value>::Iterator::Iterator(const Iterator & other)
+    : map(other.map), pair(other.pair)
 {
-
 }
 
 template<typename Value>
-const std::pair<std::size_t, Value&> & LinearMap<Value>::Iterator::operator*()
+const std::pair<std::size_t, Value &> & LinearMap<Value>::Iterator::operator*()
 {
     Assert(pair.engaged(), "");
     return pair.get();
@@ -79,8 +76,9 @@ bool LinearMap<Value>::Iterator::operator!=(const Iterator & other) const
 }
 
 template<typename Value>
-LinearMap<Value>::CIterator::CIterator(const LinearMap<Value> & map, std::size_t index):
-    map(map)
+LinearMap<Value>::CIterator::CIterator(
+    const LinearMap<Value> & map, std::size_t index)
+    : map(map)
 {
     while (index < map.m_vec.size() && !map.m_vec[index])
     {
@@ -94,15 +92,14 @@ LinearMap<Value>::CIterator::CIterator(const LinearMap<Value> & map, std::size_t
 }
 
 template<typename Value>
-LinearMap<Value>::CIterator::CIterator(const CIterator & other):
-    map(other.map),
-    pair(other.pair)
+LinearMap<Value>::CIterator::CIterator(const CIterator & other)
+    : map(other.map), pair(other.pair)
 {
-
 }
 
 template<typename Value>
-const std::pair<std::size_t, const Value&> & LinearMap<Value>::CIterator::operator*()
+const std::pair<std::size_t, const Value &> & LinearMap<Value>::CIterator::
+                                              operator*()
 {
     Assert(!!pair, "");
     return *pair;
@@ -152,8 +149,7 @@ bool LinearMap<Value>::CIterator::operator!=(const CIterator & other) const
 }
 
 template<typename Value>
-LinearMap<Value>::LinearMap():
-    m_size(0)
+LinearMap<Value>::LinearMap() : m_size(0)
 {
 }
 
@@ -273,8 +269,9 @@ typename LinearMap<Value>::Iterator LinearMap<Value>::erase(const Iterator & i)
 }
 
 template<typename Value>
-template<typename ... Args>
-std::pair<typename LinearMap<Value>::Iterator, bool> LinearMap<Value>::emplace(std::size_t key, Args&&... args)
+template<typename... Args>
+std::pair<typename LinearMap<Value>::Iterator, bool>
+LinearMap<Value>::emplace(std::size_t key, Args &&... args)
 {
     if (contains(key))
     {
@@ -304,6 +301,4 @@ void LinearMap<Value>::ensureSize(std::size_t key)
         m_vec.resize(key + 1);
     }
 }
-
 }
-

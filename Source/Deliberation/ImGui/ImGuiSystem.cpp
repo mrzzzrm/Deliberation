@@ -2,8 +2,8 @@
 
 #include <glbinding/gl/gl.h>
 
-#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Draw.h>
+#include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Scene/Texture/TextureLoader.h>
 
@@ -20,11 +20,10 @@
 
 namespace deliberation
 {
-
-ImGuiSystem::ImGuiSystem(World & world):
-    Base(world),
-    InputLayer(200),
-    m_input(world.systemRef<ApplicationSystem>().input())
+ImGuiSystem::ImGuiSystem(World & world)
+    : Base(world)
+    , InputLayer(200)
+    , m_input(world.systemRef<ApplicationSystem>().input())
 {
     auto & renderManager = world.systemRef<RenderSystem>().renderManager();
     renderManager.addRenderer<ImGuiRenderer>();
@@ -61,15 +60,19 @@ void ImGuiSystem::onFrameBegin()
 {
     auto & io = ImGui::GetIO();
 
-    const auto & backbuffer = world().systemRef<ApplicationSystem>().drawContext().backbuffer();
+    const auto & backbuffer =
+        world().systemRef<ApplicationSystem>().drawContext().backbuffer();
 
-    io.DisplaySize = ImVec2((float)backbuffer.width(), (float)backbuffer.height());
+    io.DisplaySize =
+        ImVec2((float)backbuffer.width(), (float)backbuffer.height());
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 
-    auto mouseX = (m_input.mousePosition().x + 1.0f) / 2.0f * backbuffer.width();
-    auto mouseY = (1.0f - (m_input.mousePosition().y + 1.0f) / 2.0f) * backbuffer.height();
+    auto mouseX =
+        (m_input.mousePosition().x + 1.0f) / 2.0f * backbuffer.width();
+    auto mouseY = (1.0f - (m_input.mousePosition().y + 1.0f) / 2.0f) *
+                  backbuffer.height();
 
-   // io.MouseDrawCursor = true;
+    // io.MouseDrawCursor = true;
 
     io.MousePos = ImVec2(mouseX, mouseY);
 
@@ -82,11 +85,13 @@ void ImGuiSystem::onFrameBegin()
     io.MouseWheel = m_mouseWheel;
     m_mouseWheel = 0.0f;
 
-    for (size_t k = 0; k < 512; k++) {
-        io.KeysDown[k] = false;//m_input.keyPressed(k);
+    for (size_t k = 0; k < 512; k++)
+    {
+        io.KeysDown[k] = false; // m_input.keyPressed(k);
     }
-    
-    io.KeyCtrl = io.KeysDown[Key_LEFT_CONTROL] || io.KeysDown[Key_RIGHT_CONTROL];
+
+    io.KeyCtrl =
+        io.KeysDown[Key_LEFT_CONTROL] || io.KeysDown[Key_RIGHT_CONTROL];
     io.KeyShift = io.KeysDown[Key_LEFT_SHIFT] || io.KeysDown[Key_RIGHT_SHIFT];
     io.KeyAlt = io.KeysDown[Key_LEFT_ALT] || io.KeysDown[Key_RIGHT_ALT];
     io.KeySuper = io.KeysDown[Key_LEFT_SUPER] || io.KeysDown[Key_RIGHT_SUPER];
@@ -119,5 +124,4 @@ void ImGuiSystem::onMouseMotion(MouseMotionEvent & event)
 {
     if (m_wantsCaptureMouse) event.consume();
 }
-
 }

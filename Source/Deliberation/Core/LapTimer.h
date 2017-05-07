@@ -2,22 +2,18 @@
 
 #include <chrono>
 
-
-
 namespace deliberation
 {
-
 class LapTimer final
 {
-public:
+  public:
     LapTimer();
 
-    void lap();
+    void  lap();
     float seconds() const;
 
-private:
-    std::chrono::steady_clock::time_point   m_lastLap;
-    float                                   m_seconds;
+  private:
+    std::chrono::steady_clock::time_point m_lastLap;
+    float                                 m_seconds;
 };
-
 }

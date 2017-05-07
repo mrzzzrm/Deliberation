@@ -12,8 +12,8 @@
 #include <glbinding/ContextInfo.h>
 #include <glbinding/Version.h>
 
-#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/MainLoop.h>
+#include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Platform/InputLayerWrapper.h>
 
@@ -21,13 +21,9 @@
 
 namespace deliberation
 {
-
-Application::Application(const std::string & name,
-                         const std::string & prefixPath):
-    m_name(name),
-    m_prefixPath(prefixPath),
-    m_running(false),
-    m_returnCode(0)
+Application::Application(
+    const std::string & name, const std::string & prefixPath)
+    : m_name(name), m_prefixPath(prefixPath), m_running(false), m_returnCode(0)
 {
 }
 
@@ -45,23 +41,16 @@ const Input & Application::input() const
     return *m_input;
 }
 
-DrawContext & Application::drawContext()
-{
-    return m_drawContext.get();
-}
+DrawContext & Application::drawContext() { return m_drawContext.get(); }
 
 const DrawContext & Application::drawContext() const
 {
     return m_drawContext.get();
 }
 
-float Application::fps() const
-{
-    return m_fpsCounter.fps();
-}
+float Application::fps() const { return m_fpsCounter.fps(); }
 
-int Application::run(int argc,
-                     char ** argv)
+int Application::run(int argc, char ** argv)
 {
     /**
      * Parse command line
@@ -69,7 +58,10 @@ int Application::run(int argc,
     std::string cmdPrefix;
 
     cxxopts::Options options(m_name, "");
-    options.add_options()("prefix", "Deliberation install prefix", cxxopts::value<std::string>(cmdPrefix));
+    options.add_options()(
+        "prefix",
+        "Deliberation install prefix",
+        cxxopts::value<std::string>(cmdPrefix));
     options.parse(argc, argv);
 
     if (!cmdPrefix.empty())
@@ -87,31 +79,25 @@ int Application::run(int argc,
 
     onStartup();
 
-    if (deliberation::GLLoggingEnabled()) std::cout << "--- Frame ---" << std::endl;
+    if (deliberation::GLLoggingEnabled())
+        std::cout << "--- Frame ---" << std::endl;
 
-    MainLoop().run([this](float seconds)
-    {
+    MainLoop().run([this](float seconds) {
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
-                case SDL_KEYUP:
-                case SDL_KEYDOWN:
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                case SDL_MOUSEMOTION:
-                case SDL_MOUSEWHEEL:
-                    m_input->onSDLInputEvent(event);
-                    break;
+            case SDL_KEYUP:
+            case SDL_KEYDOWN:
+            case SDL_MOUSEBUTTONDOWN:
+            case SDL_MOUSEBUTTONUP:
+            case SDL_MOUSEMOTION:
+            case SDL_MOUSEWHEEL: m_input->onSDLInputEvent(event); break;
 
-                case SDL_WINDOWEVENT:
-                    handleWindowEvent(event);
-                    break;
+            case SDL_WINDOWEVENT: handleWindowEvent(event); break;
 
-                case SDL_QUIT:
-                    quit(0);
-                    break;
+            case SDL_QUIT: quit(0); break;
             }
         }
 
@@ -123,7 +109,8 @@ int Application::run(int argc,
 
         m_fpsCounter.onFrame();
 
-        if (deliberation::GLLoggingEnabled()) std::cout << "--- Frame ---" << std::endl;
+        if (deliberation::GLLoggingEnabled())
+            std::cout << "--- Frame ---" << std::endl;
 
         return m_running;
     });
@@ -139,20 +126,11 @@ void Application::quit(int returnCode)
     m_returnCode = returnCode;
 }
 
-void Application::onStartup()
-{
+void Application::onStartup() {}
 
-}
+void Application::onShutdown() {}
 
-void Application::onShutdown()
-{
-
-}
-
-void Application::onFrame(float seconds)
-{
-
-}
+void Application::onFrame(float seconds) {}
 
 void Application::init()
 {
@@ -166,29 +144,37 @@ void Application::init()
 
     // Init SDL_image
     {
-        int flags = IMG_INIT_JPG|IMG_INIT_PNG;
+        int flags = IMG_INIT_JPG | IMG_INIT_PNG;
         int sucess = IMG_Init(flags);
         if ((sucess & flags) != flags)
         {
-            std::cerr << "IMG_Init: Failed to init required jpg and png support!" << std::endl;
+            std::cerr
+                << "IMG_Init: Failed to init required jpg and png support!"
+                << std::endl;
             std::cerr << "IMG_Init: " << IMG_GetError() << std::endl;
             m_returnCode = -1;
-			return;
+            return;
         }
     }
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
+    SDL_GL_SetAttribute(
+        SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
 
-	m_displayWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                       m_displayWidth, m_displayHeight, SDL_WINDOW_OPENGL);
-	if (!m_displayWindow)
-	{
-		SDL_Quit();
-		m_returnCode = -1;
-		return;
-	}
+    m_displayWindow = SDL_CreateWindow(
+        "Test",
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        m_displayWidth,
+        m_displayHeight,
+        SDL_WINDOW_OPENGL);
+    if (!m_displayWindow)
+    {
+        SDL_Quit();
+        m_returnCode = -1;
+        return;
+    }
 
     m_glContext = SDL_GL_CreateContext(m_displayWindow);
     SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
@@ -202,9 +188,9 @@ void Application::init()
     // Init glbinding
     glbinding::Binding::initialize();
 
-	auto versionString = glbinding::ContextInfo::version().toString();
-	auto vendorString = glbinding::ContextInfo::vendor();
-	auto rendererString = glbinding::ContextInfo::renderer();
+    auto versionString = glbinding::ContextInfo::version().toString();
+    auto vendorString = glbinding::ContextInfo::vendor();
+    auto rendererString = glbinding::ContextInfo::renderer();
 
     std::cout << std::endl
               << "OpenGL Version:  " << versionString << std::endl
@@ -216,7 +202,8 @@ void Application::init()
     deliberation::setPrefixPath(m_prefixPath);
     deliberation::EnableGLErrorChecks();
 
-    std::cout << "Deliberation initialized with prefix '" << deliberation::prefixPath() << "'" << std::endl;
+    std::cout << "Deliberation initialized with prefix '"
+              << deliberation::prefixPath() << "'" << std::endl;
 
     m_drawContext.reset(m_displayWidth, m_displayHeight);
 
@@ -224,14 +211,11 @@ void Application::init()
      * Init input
      */
     m_input.reset();
-    m_input->addLayer(std::make_shared<InputLayerWrapper>(*this, std::numeric_limits<i32>::min()));
+    m_input->addLayer(std::make_shared<InputLayerWrapper>(
+        *this, std::numeric_limits<i32>::min()));
 
     m_initialized = true;
 }
 
-void Application::handleWindowEvent(const SDL_Event & event)
-{
+void Application::handleWindowEvent(const SDL_Event & event) {}
 }
-
-}
-

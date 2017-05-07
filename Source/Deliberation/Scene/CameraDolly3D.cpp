@@ -5,26 +5,16 @@
 
 namespace deliberation
 {
+CameraDolly3D::CameraDolly3D(Camera3D & camera) : m_camera(camera) {}
 
-CameraDolly3D::CameraDolly3D(Camera3D & camera):
-    m_camera(camera)
-{
-}
-
-float CameraDolly3D::linearAcceleration() const
-{
-    return m_linearAcceleration;
-}
+float CameraDolly3D::linearAcceleration() const { return m_linearAcceleration; }
 
 float CameraDolly3D::angularAcceleration() const
 {
     return m_angularAcceleration;
 }
 
-const Pose3D & CameraDolly3D::relativePose() const
-{
-    return m_relativePose;
-}
+const Pose3D & CameraDolly3D::relativePose() const { return m_relativePose; }
 
 void CameraDolly3D::setLinearAcceleration(float acceleration)
 {
@@ -36,14 +26,13 @@ void CameraDolly3D::setAngularAcceleration(float angularAcceleration)
     m_angularAcceleration = angularAcceleration;
 }
 
-void CameraDolly3D::setRelativePose(const Pose3D &pose)
+void CameraDolly3D::setRelativePose(const Pose3D & pose)
 {
     m_relativePose = pose;
 }
 
-void CameraDolly3D::update(const glm::vec3 & position,
-            const glm::quat & orientation,
-            float seconds)
+void CameraDolly3D::update(
+    const glm::vec3 & position, const glm::quat & orientation, float seconds)
 {
     Assert(m_linearAcceleration >= 0.0f, "Invalid acceleration");
 
@@ -66,9 +55,11 @@ void CameraDolly3D::update(const glm::vec3 & position,
         else
         {
             const auto t1 = t0 - seconds;
-            const auto deltaDistance = currentDistance - (m_linearAcceleration / 2.0f) * (t1 * t1);
+            const auto deltaDistance =
+                currentDistance - (m_linearAcceleration / 2.0f) * (t1 * t1);
 
-            m_camera.setPosition(m_camera.position() + direction * deltaDistance);
+            m_camera.setPosition(
+                m_camera.position() + direction * deltaDistance);
         }
     }
 
@@ -88,10 +79,10 @@ void CameraDolly3D::update(const glm::vec3 & position,
             }
             else
             {
-                m_camera.setOrientation(glm::mix(m_camera.orientation(), orientation, seconds / t0));
+                m_camera.setOrientation(glm::mix(
+                    m_camera.orientation(), orientation, seconds / t0));
             }
         }
     }
 }
-
 }

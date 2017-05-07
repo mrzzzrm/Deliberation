@@ -12,41 +12,39 @@
 
 namespace deliberation
 {
-
 struct PointLight
 {
     glm::vec3 position;
     glm::vec3 intensity;
 
     // To be populated by Renderer
-    i32       active = false;
+    i32 active = false;
 
     PointLight() = default;
 
-    PointLight(const glm::vec3 & position, const glm::vec3 intensity):
-        position(position),
-        intensity(intensity)
-    {}
+    PointLight(const glm::vec3 & position, const glm::vec3 intensity)
+        : position(position), intensity(intensity)
+    {
+    }
 };
 
-class PointLightRenderer:
-    public SingleNodeRenderer
+class PointLightRenderer : public SingleNodeRenderer
 {
-public:
+  public:
     PointLightRenderer(RenderManager & renderManager);
 
     // Reference invalidated by add/removePointLight()
     PointLight & pointLight(size_t index);
 
     size_t addPointLight(const PointLight & pointLight);
-    void removePointLight(size_t index);
+    void   removePointLight(size_t index);
 
     void render() override;
 
-protected:
+  protected:
     void onSetupRender() override;
 
-private:
+  private:
     Draw                    m_draw;
     Buffer                  m_lightBuffer;
     DataLayout              m_lightLayout;
@@ -58,5 +56,4 @@ private:
     Uniform                 m_viewProjectionUniform;
     Uniform                 m_viewUniform;
 };
-
 }

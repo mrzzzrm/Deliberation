@@ -4,17 +4,14 @@
 
 namespace deliberation
 {
-
-class HdrRenderer:
-    public Renderer
+class HdrRenderer : public Renderer
 {
-public:
-    HdrRenderer(RenderManager &renderManager);
+  public:
+    HdrRenderer(RenderManager & renderManager);
 
     void registerRenderNodes() override;
 
-private:
+  private:
     friend class HdrNode;
 };
-
 }

@@ -11,20 +11,17 @@
 
 namespace deliberation
 {
-
-MeshCompiler::Compilation::Compilation(const DataLayout & vertexLayout, size_t numVertices, size_t numIndices):
-    vertices(vertexLayout, numVertices),
-    indices({"Index", Type_U32}, numIndices)
+MeshCompiler::Compilation::Compilation(
+    const DataLayout & vertexLayout, size_t numVertices, size_t numIndices)
+    : vertices(vertexLayout, numVertices)
+    , indices({"Index", Type_U32}, numIndices)
 {
-
 }
 
-MeshCompiler::MeshCompiler()
-{
+MeshCompiler::MeshCompiler() {}
 
-}
-
-MeshCompiler::Compilation MeshCompiler::compile(const Mesh & mesh, MeshCompilerPrimitive primitive) const
+MeshCompiler::Compilation
+MeshCompiler::compile(const Mesh & mesh, MeshCompilerPrimitive primitive) const
 {
     if (primitive == MeshCompilerPrimitive::Triangles)
     {
@@ -40,7 +37,8 @@ MeshCompiler::Compilation MeshCompiler::compile(const Mesh & mesh, MeshCompilerP
     }
 }
 
-MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) const
+MeshCompiler::Compilation
+MeshCompiler::compileTriangles(const Mesh & mesh) const
 {
     size_t numVertices = 0;
 
@@ -60,7 +58,8 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
     auto faceFields = mesh.faceAttributes().layout().descs();
 
     auto combinedFields = vertexFields;
-    combinedFields.insert(combinedFields.end(), faceFields.begin(), faceFields.end());
+    combinedFields.insert(
+        combinedFields.end(), faceFields.begin(), faceFields.end());
 
     DataLayout vertexLayout(combinedFields);
 
@@ -74,25 +73,35 @@ MeshCompiler::Compilation MeshCompiler::compileTriangles(const Mesh & mesh) cons
     {
         auto & face = mesh.faces()[f];
 
-        for (std::size_t v = 1; v  < face.indices.size() - 1; v++)
+        for (std::size_t v = 1; v < face.indices.size() - 1; v++)
         {
-            for (auto fi = 0; fi < vertexFields.size(); fi++) {
+            for (auto fi = 0; fi < vertexFields.size(); fi++)
+            {
                 auto srcField = mesh.vertices().layout().field(fi);
                 auto dstField = vertexLayout.field(fi);
 
-                result.vertices[c + 0].value(dstField) = mesh.faceVertex(f, 0).value(srcField);
-                result.vertices[c + 1].value(dstField) = mesh.faceVertex(f, v).value(srcField);
-                result.vertices[c + 2].value(dstField) = mesh.faceVertex(f, v + 1).value(srcField);
+                result.vertices[c + 0].value(dstField) =
+                    mesh.faceVertex(f, 0).value(srcField);
+                result.vertices[c + 1].value(dstField) =
+                    mesh.faceVertex(f, v).value(srcField);
+                result.vertices[c + 2].value(dstField) =
+                    mesh.faceVertex(f, v + 1).value(srcField);
             }
 
-            for (auto fi = 0; fi < mesh.faceAttributes().layout().fields().size(); fi++) {
+            for (auto fi = 0;
+                 fi < mesh.faceAttributes().layout().fields().size();
+                 fi++)
+            {
                 auto srcField = mesh.faceAttributes().layout().field(fi);
                 auto dstField = vertexLayout.field(fi + vertexFields.size());
                 auto faceAttributes = mesh.faceAttributes()[f];
 
-                result.vertices[c + 0].value(dstField) = faceAttributes.value(srcField);
-                result.vertices[c + 1].value(dstField) = faceAttributes.value(srcField);
-                result.vertices[c + 2].value(dstField) = faceAttributes.value(srcField);
+                result.vertices[c + 0].value(dstField) =
+                    faceAttributes.value(srcField);
+                result.vertices[c + 1].value(dstField) =
+                    faceAttributes.value(srcField);
+                result.vertices[c + 2].value(dstField) =
+                    faceAttributes.value(srcField);
             }
 
             indices[c + 0] = c + 0;
@@ -130,7 +139,8 @@ MeshCompiler::Compilation MeshCompiler::compileLines(const Mesh & mesh) const
     /**
      * Combined Vertex Layout
      */
-    auto layout = DataLayout::concatenate({mesh.vertices().layout(), mesh.faceAttributes().layout()});
+    auto layout = DataLayout::concatenate(
+        {mesh.vertices().layout(), mesh.faceAttributes().layout()});
     std::vector<std::pair<DataLayoutField, DataLayoutField>> fromVertexFields;
     for (auto & field : mesh.vertices().layout().fields())
     {
@@ -167,11 +177,15 @@ MeshCompiler::Compilation MeshCompiler::compileLines(const Mesh & mesh) const
         {
             auto b = v < face.indices.size() - 1 ? v + 1 : 0;
 
-            for (auto &field : fromVertexFields) {
-                result.vertices[vIndex].value(field.first) = mesh.faceVertex(f, v).value(field.second);
+            for (auto & field : fromVertexFields)
+            {
+                result.vertices[vIndex].value(field.first) =
+                    mesh.faceVertex(f, v).value(field.second);
             }
-            for (auto &field : fromFaceFields) {
-                result.vertices[vIndex].value(field.first) = mesh.faceVertex(f, v).value(field.second);
+            for (auto & field : fromFaceFields)
+            {
+                result.vertices[vIndex].value(field.first) =
+                    mesh.faceVertex(f, v).value(field.second);
             }
 
             vIndex++;
@@ -183,7 +197,8 @@ MeshCompiler::Compilation MeshCompiler::compileLines(const Mesh & mesh) const
         for (size_t v = 0; v < face.indices.size(); v++)
         {
             indices[iIndex + 0] = baseIndex + v;
-            indices[iIndex + 1] = baseIndex + (v + 1 < face.indices.size() ? v + 1 : 0);
+            indices[iIndex + 1] =
+                baseIndex + (v + 1 < face.indices.size() ? v + 1 : 0);
 
             iIndex += 2;
         }
@@ -199,5 +214,4 @@ MeshCompiler::Compilation MeshCompiler::compileLines(const Mesh & mesh) const
 
     return result;
 }
-
 }

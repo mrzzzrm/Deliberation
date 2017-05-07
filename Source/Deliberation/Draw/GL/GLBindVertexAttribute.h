@@ -7,30 +7,26 @@
 
 namespace deliberation
 {
-
 class BufferImpl;
 class GLStateManager;
-
 
 /**
  * From Buffer
  */
 void GLBindVertexAttribute(
-    GLStateManager & glStateManager,
-    gl::GLuint vao,
+    GLStateManager &                        glStateManager,
+    gl::GLuint                              vao,
     const ProgramInterfaceVertexAttribute & attribute,
-    const BufferImpl & buffer,
-    u32 bufferFieldIndex,
-    gl::GLuint divisor,
-    gl::GLint baseOffset);
+    const BufferImpl &                      buffer,
+    u32                                     bufferFieldIndex,
+    gl::GLuint                              divisor,
+    gl::GLint                               baseOffset);
 
 /**
  * From Value
  */
 void GLBindVertexAttribute(
-    gl::GLuint vao,
+    gl::GLuint                              vao,
     const ProgramInterfaceVertexAttribute & attribute,
-    const void * data);
-
+    const void *                            data);
 }
-

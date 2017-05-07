@@ -11,21 +11,18 @@
 
 namespace deliberation
 {
-
 class Camera3D;
 class DrawContext;
 class RenderManager;
 
-class SkyboxRenderer:
-    public SingleNodeRenderer
+class SkyboxRenderer : public SingleNodeRenderer
 {
-public:
+  public:
     SkyboxRenderer(RenderManager & renderManager, const Texture & cubemap);
 
     void render() override;
 
-private:
-    Draw                m_draw;
+  private:
+    Draw m_draw;
 };
-
 }

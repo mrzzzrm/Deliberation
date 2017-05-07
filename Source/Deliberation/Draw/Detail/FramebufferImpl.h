@@ -14,7 +14,6 @@
 
 namespace deliberation
 {
-
 class DrawContext;
 class FramebufferDesc;
 class GLStateManager;
@@ -28,38 +27,32 @@ struct RenderTarget final
 
 class FramebufferImpl final
 {
-public:
-    static std::shared_ptr<FramebufferImpl> backbuffer(
-        DrawContext & drawContext,
-        u32 width,
-        u32 height
-    );
+  public:
+    static std::shared_ptr<FramebufferImpl>
+    backbuffer(DrawContext & drawContext, u32 width, u32 height);
 
-    static std::shared_ptr<FramebufferImpl> custom(
-        DrawContext & drawContext,
-        const FramebufferDesc & framebufferDesc
-    );
+    static std::shared_ptr<FramebufferImpl>
+    custom(DrawContext & drawContext, const FramebufferDesc & framebufferDesc);
 
-public:
+  public:
     FramebufferImpl(DrawContext & drawContext);
     ~FramebufferImpl();
 
     void bind(const std::vector<gl::GLenum> & drawBuffers);
-    size_t colorTargetIndex(const std::string & name, bool * found = nullptr) const;
+    size_t
+    colorTargetIndex(const std::string & name, bool * found = nullptr) const;
 
-    DrawContext &                   drawContext;
-    bool                            isBackbuffer;
+    DrawContext & drawContext;
+    bool          isBackbuffer;
 
-    std::vector<RenderTarget>       colorTargets;
-    boost::optional<RenderTarget>   depthTarget;
+    std::vector<RenderTarget>     colorTargets;
+    boost::optional<RenderTarget> depthTarget;
 
-    gl::GLuint                      glName = 0;
+    gl::GLuint glName = 0;
 
-    u32                             width;
-    u32                             height;
+    u32 width;
+    u32 height;
 
-    boost::optional<Clear>          clear;
+    boost::optional<Clear> clear;
 };
-
 }
-

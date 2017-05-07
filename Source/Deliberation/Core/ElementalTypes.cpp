@@ -2,58 +2,43 @@
 
 namespace
 {
-
 using namespace deliberation;
 
 struct ElementalTypeData
 {
     const char * name;
-    bool integer;
-    bool signedInteger;
-    u8 size;
+    bool         integer;
+    bool         signedInteger;
+    u8           size;
 };
 
 ElementalTypeData ELEMENTAL_TYPE_DATA[] = {
     {"None", false, false, 0}, // None
-    {"Bool", true, false, 1}, // Bool
-    {"U8", true, false, 1}, // U8
-    {"I8", true, true, 1},  // I8
-    {"U16", true, false, 2}, // U16
-    {"I16", true, true, 2},  // I16
-    {"U32", true, false, 4}, // U32
-    {"I32", true, true, 4},  // I32
-    {"Float", false, false, 4}  // Float
+    {"Bool", true, false, 1},  // Bool
+    {"U8", true, false, 1},    // U8
+    {"I8", true, true, 1},     // I8
+    {"U16", true, false, 2},   // U16
+    {"I16", true, true, 2},    // I16
+    {"U32", true, false, 4},   // U32
+    {"I32", true, true, 4},    // I32
+    {"Float", false, false, 4} // Float
 };
-
 }
 
 namespace deliberation
 {
+ElementalType::ElementalType(u8 id) : m_id(id) {}
 
-ElementalType::ElementalType(u8 id):
-    m_id(id)
-{
-}
-
-u8 ElementalType::id() const
-{
-    return m_id;
-}
+u8 ElementalType::id() const { return m_id; }
 
 const char * ElementalType::name() const
 {
     return ELEMENTAL_TYPE_DATA[m_id].name;
 }
 
-u8 ElementalType::size() const
-{
-    return ELEMENTAL_TYPE_DATA[m_id].size;
-}
+u8 ElementalType::size() const { return ELEMENTAL_TYPE_DATA[m_id].size; }
 
-bool ElementalType::isFloat() const
-{
-    return m_id == ElementalType_Float.m_id;
-}
+bool ElementalType::isFloat() const { return m_id == ElementalType_Float.m_id; }
 
 bool ElementalType::isInteger() const
 {
