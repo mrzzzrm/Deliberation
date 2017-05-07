@@ -30,7 +30,6 @@ public:
     gl::GLenum                      valueType;
     gl::GLuint                      location;
     std::shared_ptr<TextureImpl>    textureImpl;
-    std::shared_ptr<DrawImpl>       drawImpl;
 };
 
 

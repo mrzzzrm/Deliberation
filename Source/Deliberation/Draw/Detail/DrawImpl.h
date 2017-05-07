@@ -38,8 +38,6 @@ public:
     };
 
 public:
-
-
     DrawImpl(DrawContext & drawContext,
              const Program & program);
     ~DrawImpl();

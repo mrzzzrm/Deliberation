@@ -93,19 +93,10 @@ Sampler Draw::sampler(const std::string & name)
 
     auto location = m_impl->program->interface.samplerRef(name).location();
 
-    /*
-        TODO
-            O(n) complexity? You can do better!
-    */
 
     for (auto & sampler : m_impl->samplers)
     {
-        if (sampler->location == location)
-        {
-            if (!sampler->drawImpl) sampler->drawImpl = m_impl;
-
-            return Sampler(sampler);
-        }
+        if (sampler->location == location) return Sampler(sampler);
     }
 
     Fail("sampler");
