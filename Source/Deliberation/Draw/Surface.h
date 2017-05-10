@@ -19,6 +19,8 @@ class Surface final
     Surface() = default;
     Surface(const std::shared_ptr<SurfaceImpl> & impl);
 
+    bool isInitialized() const { return (bool)m_impl; }
+
     DrawContext & drawContext() const;
 
     u32 face() const;

@@ -29,6 +29,7 @@ class SingleNodeRenderer : public Renderer
             }
 
             void render() override { m_renderer.render(); }
+            std::string name() const override { return m_renderer.name(); }
 
             SingleNodeRenderer & m_renderer;
         };

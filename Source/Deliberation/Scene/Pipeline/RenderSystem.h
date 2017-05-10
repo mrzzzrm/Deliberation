@@ -18,5 +18,6 @@ class RenderSystem : public System<RenderSystem>
 
   private:
     RenderManager m_renderManager;
+    std::string m_selectedSurfaceKey;
 };
 }

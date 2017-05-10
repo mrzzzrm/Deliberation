@@ -8,8 +8,10 @@
 
 #include <Deliberation/ImGui/ImGuiSystem.h>
 
+#include <Deliberation/Scene/Debug/DebugSurfaceOverlayRenderer.h>
 #include <Deliberation/Scene/Pipeline/RenderNode.h>
 #include <Deliberation/Scene/Pipeline/Renderer.h>
+#include <Deliberation/Scene/Util/RangedGpuScope.h>
 
 namespace deliberation
 {
@@ -17,6 +19,8 @@ RenderManager::RenderManager(DrawContext & drawContext)
     : m_drawContext(drawContext)
 {
     m_backbufferClear = m_drawContext.createClear();
+
+    m_surfaceOverlayRenderer = addRenderer<DebugSurfaceOverlayRenderer>();
 }
 
 void RenderManager::registerRenderNode(
@@ -63,6 +67,8 @@ void RenderManager::render()
         m_pipelineBuild = true;
     }
 
+
+
     // Clear
     m_backbufferClear.render();
     m_gbuffer.clear().render();
@@ -70,9 +76,17 @@ void RenderManager::render()
     // Render Phases
     for (auto & pair : m_renderNodesByPhase)
     {
-        for (auto & node : pair.second)
+        auto & nodesInPhase = pair.second;
+
+        if (!nodesInPhase.empty())
         {
-            node->render();
+            RangedGpuScope gpuScope1("Phase - " + RenderPhaseToString((RenderPhase)pair.first));
+
+            for (auto & node : pair.second)
+            {
+                RangedGpuScope gpuScope2("Node - " + node->name());
+                node->render();
+            }
         }
     }
 }

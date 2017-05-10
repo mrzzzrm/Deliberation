@@ -18,6 +18,12 @@ class DrawContext;
 class Surface;
 class FramebufferImpl;
 
+struct RenderTarget final
+{
+    Surface     surface;
+    std::string name;
+};
+
 struct RenderTargetDesc final
 {
     // For DepthTargets
@@ -63,11 +69,15 @@ class Framebuffer final
     Framebuffer() = default;
     Framebuffer(const std::shared_ptr<FramebufferImpl> & impl);
 
+    bool isInitialized() const { return (bool)m_impl; }
+
     unsigned int width() const;
     unsigned int height() const;
     glm::uvec2   size() const { return {width(), height()}; }
 
     bool isBackbuffer() const;
+
+    const std::vector<RenderTarget> & colorTargets() const;
 
     boost::optional<Surface> colorTarget(const std::string & name);
     Surface &                colorTargetRef(const std::string & name);

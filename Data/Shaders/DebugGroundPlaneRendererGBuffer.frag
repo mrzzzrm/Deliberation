@@ -24,6 +24,8 @@ void main()
 	
 	o_Diffuse = ((qX + (qY % 2)) % 2 == 0 ? vec3(0.9f) - vec3(0.2f) * factor : vec3(0.9f));
 	o_Position = f_PositionVS;
-	o_Normal = f_Normal;
+
+	if (gl_FrontFacing) o_Normal = f_Normal;
+	else o_Normal = -f_Normal;
 }
 

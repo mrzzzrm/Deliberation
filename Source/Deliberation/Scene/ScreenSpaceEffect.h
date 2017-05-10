@@ -19,11 +19,19 @@ class ScreenSpaceEffect final
         DrawContext &                    drawContext,
         const std::vector<std::string> & shaders,
         const std::string &              name = std::string());
+    ScreenSpaceEffect(
+        DrawContext &       drawContext,
+        Program &           program,
+        const std::string & name = std::string());
 
     Draw &       draw();
     const Draw & draw() const;
 
     void render();
+
+  private:
+    void init(DrawContext &       drawContext,
+              const std::string & name);
 
   private:
     bool    m_initialised;

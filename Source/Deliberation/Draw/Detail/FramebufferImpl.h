@@ -11,6 +11,7 @@
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Texture.h>
+#include <Deliberation/Draw/Framebuffer.h>
 
 namespace deliberation
 {
@@ -19,11 +20,6 @@ class FramebufferDesc;
 class GLStateManager;
 class Surface;
 
-struct RenderTarget final
-{
-    Surface     surface;
-    std::string name;
-};
 
 class FramebufferImpl final
 {

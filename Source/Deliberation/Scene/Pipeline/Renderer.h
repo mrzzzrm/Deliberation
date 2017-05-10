@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+
+#include <Deliberation/Draw/Framebuffer.h>
 
 namespace deliberation
 {
@@ -20,10 +23,13 @@ class Renderer : public std::enable_shared_from_this<Renderer>
 
     RenderManager &     renderManager() const { return m_renderManager; }
     DrawContext &       drawContext() const;
-    const std::string & name() { return m_name; }
+    std::string name() const { return m_name; }
 
     virtual void registerRenderNodes() = 0;
+
+    // Debug
     virtual void renderDebugGui() {}
+    virtual std::vector<Framebuffer> framebuffers() { return {}; }
 
   protected:
     RenderManager & m_renderManager;

@@ -26,6 +26,6 @@ void Uniform::set(const std::vector<T> & vec)
         vec.size() <= m_field->arraySize(),
         "Bounds exceeded or Uniform not an array");
 
-    set(vec.data(), vec.size());
+    set(vec.data(), sizeof(T) * vec.size());
 }
 }

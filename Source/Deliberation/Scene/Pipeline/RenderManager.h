@@ -13,6 +13,7 @@
 
 namespace deliberation
 {
+class DebugSurfaceOverlayRenderer;
 class DrawContext;
 class Renderer;
 class RenderNode;
@@ -32,6 +33,7 @@ class RenderManager
     Framebuffer & gbuffer() { return m_gbuffer; }
     Framebuffer & hdrBuffer() { return m_hdrBuffer; }
     Framebuffer & ssaoBuffer() { return m_ssaoBuffer; }
+    DebugSurfaceOverlayRenderer & surfaceOverlayRenderer() { return *m_surfaceOverlayRenderer; }
 
     template<typename T, typename... Args>
     std::shared_ptr<T> addRenderer(Args &&... args);
@@ -52,6 +54,7 @@ class RenderManager
     Framebuffer                                         m_hdrBuffer;
     Framebuffer                                         m_ssaoBuffer;
     Clear                                               m_backbufferClear;
+    std::shared_ptr<DebugSurfaceOverlayRenderer>        m_surfaceOverlayRenderer;
 };
 }
 

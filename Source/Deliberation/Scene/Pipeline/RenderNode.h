@@ -13,6 +13,7 @@ class RenderNode
     virtual ~RenderNode() = default;
 
     virtual void render() = 0;
+    virtual std::string name() const { return "Unnamed"; };
 
   protected:
     RenderManager & m_renderManager;

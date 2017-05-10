@@ -128,7 +128,6 @@ set(sources
 	Draw/CullState.h
 	Draw/DepthState.cpp
 	Draw/DepthState.h
-	Draw/Detail/AttributeBinding.h
 	Draw/Detail/BufferBinding.h
 	Draw/Detail/BufferImpl.cpp
 	Draw/Detail/BufferImpl.h
@@ -324,8 +323,14 @@ set(sources
 	Scene/Debug/DebugGroundPlaneRenderer.h
 	Scene/Debug/DebugPhysicsWorldRenderer.cpp
 	Scene/Debug/DebugPhysicsWorldRenderer.h
+	Scene/Debug/DebugSurfaceOverlayRenderer.cpp
+	Scene/Debug/DebugSurfaceOverlayRenderer.h
 	Scene/Debug/DebugTexture2dRenderer.cpp
 	Scene/Debug/DebugTexture2dRenderer.h
+	Scene/Effects/BloomRenderer.cpp
+	Scene/Effects/BloomRenderer.h
+	Scene/Effects/GaussianBlur.cpp
+	Scene/Effects/GaussianBlur.h
 	Scene/EdgeToFaceSmoothing.cpp
 	Scene/EdgeToFaceSmoothing.h
 	Scene/HdrRenderer.cpp
@@ -350,6 +355,8 @@ set(sources
 	Scene/Texture/TextureLoaderSDLSurfaceImpl.cpp
 	Scene/Texture/TextureLoaderSDLSurfaceImpl.h
 	Scene/Texture/TextureLoaderUnicolorImpl.h
+	Scene/Util/RangedGpuScope.cpp
+    Scene/Util/RangedGpuScope.h
 	Scene/MeshCompiler.cpp
 	Scene/MeshCompiler.h
 	Scene/Mesh.cpp
@@ -389,6 +396,7 @@ set(libs
     ${IMGUI_LIBRARIES}
     ${GLBINDING_LIBRARIES}
     ${TINYOBJLOADER_LIBRARIES}
+	nvToolsExt
 )
 
 set(DELIBERATION_LIBRARIES

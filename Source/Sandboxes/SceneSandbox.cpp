@@ -20,6 +20,8 @@
 #include <Deliberation/Scene/Texture/TextureLoader.h>
 
 #include <Deliberation/ECS/World.h>
+#include <Deliberation/ECS/Systems/ApplicationSystem.h>
+#include <Deliberation/ImGui/ImGuiSystem.h>
 
 #include <Deliberation/Platform/Application.h>
 
@@ -28,6 +30,7 @@
 #include <Deliberation/Scene/Debug/DebugCubemapRenderer.h>
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
+#include <Deliberation/Scene/Effects/BloomRenderer.h>
 #include <Deliberation/Scene/HdrRenderer.h>
 #include <Deliberation/Scene/Lighting/AmbientLightRenderer.h>
 #include <Deliberation/Scene/Lighting/PointLightRenderer.h>
@@ -35,6 +38,7 @@
 #include <Deliberation/Scene/Model/ModelInstance.h>
 #include <Deliberation/Scene/Model/ModelRenderer.h>
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
+#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 #include <Deliberation/Scene/SkyboxRenderer.h>
 #include <Deliberation/Scene/SsaoRenderer.h>
 
@@ -47,15 +51,21 @@ class SceneSandbox : public Application
 
     virtual void onStartup() override
     {
-        m_renderManager = std::make_shared<RenderManager>(drawContext());
-        m_modelRenderer = m_renderManager->addRenderer<ModelRenderer>();
+        m_world.addSystem<ApplicationSystem>(*this);
+        m_renderSystem = m_world.addSystem<RenderSystem>();
+        m_world.addSystem<ImGuiSystem>();
+        auto & renderManager = m_renderSystem->renderManager();
+
+        m_modelRenderer = renderManager.addRenderer<ModelRenderer>();
         m_ambientLightRenderer =
-            m_renderManager->addRenderer<AmbientLightRenderer>();
+            renderManager.addRenderer<AmbientLightRenderer>();
         m_pointLightRenderer =
-            m_renderManager->addRenderer<PointLightRenderer>();
-        m_ssaoRenderer = m_renderManager->addRenderer<SsaoRenderer>();
-        m_hdrRenderer = m_renderManager->addRenderer<HdrRenderer>();
-        m_ground = m_renderManager->addRenderer<DebugGroundPlaneRenderer>();
+            renderManager.addRenderer<PointLightRenderer>();
+        m_ssaoRenderer = renderManager.addRenderer<SsaoRenderer>();
+        m_hdrRenderer = renderManager.addRenderer<HdrRenderer>();
+        m_ground = renderManager.addRenderer<DebugGroundPlaneRenderer>();
+        renderManager.addRenderer<BloomRenderer>();
+
         m_bunnyModel = m_modelRenderer->addModel(
             DeliberationDataPath("Data/Models/bunny.obj"));
         m_bunnyInstance = m_modelRenderer->addModelInstance(m_bunnyModel);
@@ -72,17 +82,14 @@ class SceneSandbox : public Application
         m_ground->setRadius(30.0f);
         m_ground->setQuadSize(1.0f);
 
-        m_renderManager->mainCamera().setPosition({0.0f, 1.0f, 3.0f});
-        m_renderManager->mainCamera().setOrientation(
+        renderManager.mainCamera().setPosition({0.0f, 1.0f, 3.0f});
+        renderManager.mainCamera().setOrientation(
             glm::quat({-0.2f, 0.0f, 0.0f}));
-        m_renderManager->mainCamera().setAspectRatio(
+        renderManager.mainCamera().setAspectRatio(
             (float)drawContext().backbuffer().width() /
             drawContext().backbuffer().height());
 
-        m_clear = drawContext().createClear();
-
-        m_transform.setPosition({0.0f, 1.0f, 0.0f});
-        m_navigator.reset(m_renderManager->mainCamera(), input(), 10.0f);
+        m_navigator.reset(renderManager.mainCamera(), input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6>{
             DeliberationDataPath("Data/Skybox/Cloudy/Right.png"),
@@ -95,12 +102,11 @@ class SceneSandbox : public Application
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
         auto skyboxCubemap = drawContext().createTexture(skyboxCubemapBinary);
 
-        m_skyboxRenderer =
-            m_renderManager->addRenderer<SkyboxRenderer>(skyboxCubemap);
+        renderManager.addRenderer<SkyboxRenderer>(skyboxCubemap);
 
         m_cubemapRenderer.reset(
             drawContext(),
-            m_renderManager->mainCamera(),
+            renderManager.mainCamera(),
             skyboxCubemap,
             DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
@@ -116,6 +122,9 @@ class SceneSandbox : public Application
 
     virtual void onFrame(float seconds) override
     {
+        m_world.frameBegin();
+        m_world.update(seconds);
+
         m_secondsAccum += seconds;
 
         // Update circle
@@ -139,7 +148,7 @@ class SceneSandbox : public Application
 
         m_navigator.get().update(seconds);
 
-        m_renderManager->render();
+        m_renderSystem->renderManager().render();
     }
 
     void onMouseMotion(MouseMotionEvent & event) override
@@ -148,15 +157,13 @@ class SceneSandbox : public Application
     }
 
   private:
-    Draw                             m_draw;
-    Clear                            m_clear;
-    Transform3D                      m_transform;
+    World                            m_world;
+
     Optional<DebugCameraNavigator3D> m_navigator;
-    std::shared_ptr<SkyboxRenderer>  m_skyboxRenderer;
     Optional<DebugCubemapRenderer>   m_cubemapRenderer;
     std::vector<size_t>              m_circlePointLights;
 
-    std::shared_ptr<RenderManager>            m_renderManager;
+    std::shared_ptr<RenderSystem>             m_renderSystem;
     std::shared_ptr<DebugGroundPlaneRenderer> m_ground;
     std::shared_ptr<PointLightRenderer>       m_pointLightRenderer;
     std::shared_ptr<AmbientLightRenderer>     m_ambientLightRenderer;

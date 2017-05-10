@@ -11,10 +11,33 @@ enum class RenderPhase
     Lighting,
     Alpha,
     PostAlpha,
+    PreHdr,
     Hdr,
 
+    PreOverlay,
     Overlay,
 
     Count
 };
+
+inline std::string RenderPhaseToString(RenderPhase phase)
+{
+    const auto index = (int)phase;
+
+    static const char * names[] = {
+        "Forward",
+        "GBuffer",
+        "PostGBuffer",
+        "PreLighting",
+        "Lighting",
+        "Alpha",
+        "PostAlpha",
+        "PreHdr",
+        "Hdr",
+        "PreOverlay"
+        "Overlay"
+    };
+
+    return names[index];
+}
 }

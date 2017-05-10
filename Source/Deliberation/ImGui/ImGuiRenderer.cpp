@@ -10,7 +10,7 @@
 namespace deliberation
 {
 ImGuiRenderer::ImGuiRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::Overlay)
+    : SingleNodeRenderer(renderManager, RenderPhase::Overlay, "ImGui")
 {
     // Setup Font Atlas has to happen before first ImGui::NewFrame();, thus:
     // here
@@ -27,17 +27,17 @@ void ImGuiRenderer::onSetupRender()
      * Setup draw
      */
     auto vertexLayout = DataLayout();
-    vertexLayout.addField(DataLayoutField::Desc{
+    vertexLayout.addField(DataLayoutField{
         "Position", Type_Vec2, offsetof(ImDrawVert, pos)});
     vertexLayout.addField(
-        DataLayoutField::Desc{"UV", Type_Vec2, offsetof(ImDrawVert, uv)});
+        DataLayoutField{"UV", Type_Vec2, offsetof(ImDrawVert, uv)});
     vertexLayout.addField(
-        DataLayoutField::Desc{"Color", Type_U8Vec4, offsetof(ImDrawVert, col)});
+        DataLayoutField{"Color", Type_U8Vec4, offsetof(ImDrawVert, col)});
 
     auto indexLayout =
         DataLayout("Index", sizeof(ImDrawIdx) == 2 ? Type_U16 : Type_U32);
 
-    m_vertexBuffer = drawContext().createBuffer(vertexLayout);
+    m_vertexBuffer = drawContext().createBuffer(vertexLayout); std::cout << "Layout: " << vertexLayout.toString() << std::endl;
     m_indexBuffer = drawContext().createBuffer(indexLayout);
 
     auto program = drawContext().createProgram(

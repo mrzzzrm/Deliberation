@@ -71,6 +71,12 @@ bool Framebuffer::isBackbuffer() const
     return m_impl->isBackbuffer;
 }
 
+const std::vector<RenderTarget> & Framebuffer::colorTargets() const
+{
+    Assert(m_impl.get(), "Framebuffer is hollow");
+    return m_impl->colorTargets;
+}
+
 boost::optional<Surface> Framebuffer::colorTarget(const std::string & name)
 {
     Assert(m_impl.get(), "Framebuffer is hollow");
