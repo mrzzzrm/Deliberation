@@ -51,14 +51,16 @@ struct RenderTargetDesc final
 struct FramebufferDesc final
 {
   public:
+    FramebufferDesc() = default;
+
     FramebufferDesc(
         u32                                       width,
         u32                                       height,
         const std::vector<RenderTargetDesc> &     colorTargetDescs,
         const boost::optional<RenderTargetDesc> & depthTargetDesc = {});
 
-    u32                               width;
-    u32                               height;
+    u32                               width = 0;
+    u32                               height = 0;
     std::vector<RenderTargetDesc>     colorTargetDescs;
     boost::optional<RenderTargetDesc> depthTargetDesc;
 };

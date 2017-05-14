@@ -126,6 +126,8 @@ Texture DrawContext::createTexture2D(u32 width, u32 height, PixelFormat format)
 Framebuffer
 DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
 {
+    Assert(framebufferDesc.width > 0 && framebufferDesc.height > 0, "Framebuffer axes must be > 0");
+
     return Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
 }
 

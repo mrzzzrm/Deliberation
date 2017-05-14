@@ -11,13 +11,11 @@
 #define Assert(expr, msg)                                                      \
     {                                                                          \
         ::deliberation::AssertImpl(                                            \
-            __FILE__, __func__, __LINE__, (expr), (msg));                      \
-        assert((expr));                                                        \
+            __FILE__, __func__, __LINE__, (expr), (msg));                      \                                      \
     }
 #define Fail(msg)                                                              \
     {                                                                          \
         ::deliberation::FailImpl(__FILE__, __func__, __LINE__, (msg));         \
-        assert(false);                                                         \
     }
 
 #else
@@ -46,6 +44,8 @@ inline void AssertImpl(
     std::cerr << "------------------- ASSERT: " << file << ": " << line << " ("
               << function << ") -------------------" << std::endl
               << msg << std::endl;
+
+    assert(false);
 }
 
 inline void AssertImpl(
@@ -87,6 +87,7 @@ inline void FailImpl(
     std::cerr << "------------------- FAIL: " << file << ":" << line << " ("
               << function << ") -------------------" << std::endl
               << msg << std::endl;
+    assert(false);
 }
 
 inline void FailImpl(

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Deliberation/Draw/Sampler.h>
+
 #include <Deliberation/Scene/Effects/GaussianBlur.h>
 #include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
 #include <Deliberation/Scene/ScreenSpaceEffect.h>
@@ -14,14 +16,20 @@ public:
 
     void render() override;
 
-    std::vector<Framebuffer> framebuffers() override { return {m_extractBuffer}; }
+    std::vector<Framebuffer> framebuffers() override { return {m_extractFb}; }
 
 protected:
     void onSetupRender() override;
 
 private:
     ScreenSpaceEffect m_extractEffect;
-    Framebuffer       m_extractBuffer;
+    Framebuffer       m_extractFb;
+    Surface           m_extractSurface;
+
+    ScreenSpaceEffect           m_downscaleEffect;
+    Sampler                     m_downscaleInput;
+    std::vector<Framebuffer>    m_downscaleAndVBlurFbs; // First fb only used for VBlur
+
     GaussianBlur      m_blur;
     ScreenSpaceEffect m_applyEffect;
 };
