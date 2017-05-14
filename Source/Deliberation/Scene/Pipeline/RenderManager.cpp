@@ -45,17 +45,17 @@ void RenderManager::render()
             {{PixelFormat_RGB_32_F, "Diffuse"},
              {PixelFormat_RGB_32_F, "Position"},
              {PixelFormat_RGB_32_F, "Normal"}},
-            {{PixelFormat_Depth_16_UN}});
+            {{PixelFormat_Depth_16_UN}}, "GBuffer");
 
         m_gbuffer = m_drawContext.createFramebuffer(gbufferDesc);
         m_gbuffer.clear().setColor(
             "Position",
             glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
 
-        FramebufferDesc hdrBufferDesc(w, h, {{PixelFormat_RGB_32_F, "Hdr"}});
+        FramebufferDesc hdrBufferDesc(w, h, {{PixelFormat_RGB_32_F, "Hdr"}}, {}, "HDR");
         m_hdrBuffer = m_drawContext.createFramebuffer(hdrBufferDesc);
 
-        FramebufferDesc ssaoBufferDesc(w, h, {{PixelFormat_R_32_F, "Ssao"}});
+        FramebufferDesc ssaoBufferDesc(w, h, {{PixelFormat_R_32_F, "Ssao"}}, {}, "SSAO");
         m_ssaoBuffer = m_drawContext.createFramebuffer(ssaoBufferDesc);
 
         m_renderNodesByPhase.clear();
@@ -63,6 +63,10 @@ void RenderManager::render()
         {
             renderer->registerRenderNodes();
         }
+
+        registerFramebuffer(m_ssaoBuffer);
+        registerFramebuffer(m_gbuffer);
+        registerFramebuffer(m_hdrBuffer);
 
         m_pipelineBuild = true;
     }

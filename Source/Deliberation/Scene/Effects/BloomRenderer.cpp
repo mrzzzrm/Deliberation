@@ -73,8 +73,14 @@ void BloomRenderer::onSetupRender() {
             desc.height = height;
             desc.colorTargetDescs = {{PixelFormat_RGB_32_F, "Color"}};
 
+            desc.name = "ScaleVBlur" + std::to_string(l);
             m_downscaleAndVBlurFbs.emplace_back(drawContext().createFramebuffer(desc));
+
+            desc.name = "HBlur" + std::to_string(l);
             m_hblurFbs.emplace_back(drawContext().createFramebuffer(desc));
+
+            renderManager().registerFramebuffer(m_downscaleAndVBlurFbs.back());
+            renderManager().registerFramebuffer(m_hblurFbs.back());
 
             width /= 2;
             height /= 2;

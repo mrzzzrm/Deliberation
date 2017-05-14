@@ -57,12 +57,14 @@ struct FramebufferDesc final
         u32                                       width,
         u32                                       height,
         const std::vector<RenderTargetDesc> &     colorTargetDescs,
-        const boost::optional<RenderTargetDesc> & depthTargetDesc = {});
+        const boost::optional<RenderTargetDesc> & depthTargetDesc = {},
+        const std::string & name = "Unnamed");
 
     u32                               width = 0;
     u32                               height = 0;
     std::vector<RenderTargetDesc>     colorTargetDescs;
     boost::optional<RenderTargetDesc> depthTargetDesc;
+    std::string                       name = "Unnamed";
 };
 
 class Framebuffer final
@@ -72,6 +74,8 @@ class Framebuffer final
     Framebuffer(const std::shared_ptr<FramebufferImpl> & impl);
 
     bool isInitialized() const { return (bool)m_impl; }
+
+    const std::string & name() const;
 
     unsigned int width() const;
     unsigned int height() const;

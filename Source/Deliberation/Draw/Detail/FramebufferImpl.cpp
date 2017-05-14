@@ -49,6 +49,7 @@ FramebufferImpl::backbuffer(DrawContext & drawContext, u32 width, u32 height)
     result->isBackbuffer = true;
     result->width = width;
     result->height = height;
+    result->name = "Backbuffer";
 
     return result;
 }
@@ -128,6 +129,8 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
     Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE, "");
     Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS, "");
     Assert(status == gl::GL_FRAMEBUFFER_COMPLETE, "");
+
+    result->name = framebufferDesc.name;
 
     return result;
 }

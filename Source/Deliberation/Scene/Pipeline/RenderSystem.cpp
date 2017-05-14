@@ -30,32 +30,20 @@ void RenderSystem::onUpdate(float seconds)
                 m_selectedSurfaceKey.clear();
             }
 
-            auto listSurfaces = [&] (const std::string & fbName, Framebuffer & framebuffer) {
+            // Renderer specific framebuffers
+            for (auto & framebuffer : m_renderManager.framebuffers())
+            {
                 if (!framebuffer.isInitialized()) return;
 
                 for (auto & rt : framebuffer.colorTargets())
                 {
-                    const auto surfaceKey = fbName + rt.name;
+                    const auto surfaceKey = framebuffer.name() + rt.name;
 
-                    if (ImGui::RadioButton((fbName + " - " + rt.name).c_str(), m_selectedSurfaceKey == surfaceKey))
+                    if (ImGui::RadioButton((framebuffer.name() + " - " + rt.name).c_str(), m_selectedSurfaceKey == surfaceKey))
                     {
                         m_renderManager.surfaceOverlayRenderer().showSurface(rt.surface);
                         m_selectedSurfaceKey = surfaceKey;
                     }
-                }
-            };
-
-            listSurfaces("SSAO", m_renderManager.ssaoBuffer());
-            listSurfaces("GBuffer", m_renderManager.gbuffer());
-            listSurfaces("HDR", m_renderManager.hdrBuffer());
-
-            // Renderer specific framebuffers
-            for (auto & renderer : m_renderManager.renderers())
-            {
-                auto framebuffers = renderer->framebuffers();
-                for (auto & framebuffer : framebuffers)
-                {
-                    listSurfaces(renderer->name(), framebuffer);
                 }
             }
         }

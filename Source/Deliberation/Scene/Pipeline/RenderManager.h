@@ -20,6 +20,13 @@ class RenderNode;
 
 class RenderManager
 {
+public:
+    struct RegisteredFramebuffer
+    {
+        Framebuffer framebuffer;
+        std::string name;
+    };
+
   public:
     RenderManager(DrawContext & drawContext);
     virtual ~RenderManager() = default;
@@ -42,6 +49,9 @@ class RenderManager
     void registerRenderNode(
         const std::shared_ptr<RenderNode> & node, const RenderPhase & phase);
 
+    void registerFramebuffer(const Framebuffer & framebuffer) { m_framebuffers.emplace_back(framebuffer); }
+    const std::vector<Framebuffer> & framebuffers() const { return m_framebuffers; }
+
     void render();
 
   private:
@@ -55,6 +65,9 @@ class RenderManager
     Framebuffer                                         m_ssaoBuffer;
     Clear                                               m_backbufferClear;
     std::shared_ptr<DebugSurfaceOverlayRenderer>        m_surfaceOverlayRenderer;
+
+    // For Debugging
+    std::vector<Framebuffer>                            m_framebuffers;
 };
 }
 

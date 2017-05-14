@@ -12,11 +12,13 @@ FramebufferDesc::FramebufferDesc(
     u32                                       width,
     u32                                       height,
     const std::vector<RenderTargetDesc> &     colorTargetDescs,
-    const boost::optional<RenderTargetDesc> & depthTargetDesc)
+    const boost::optional<RenderTargetDesc> & depthTargetDesc,
+    const std::string & name)
     : width(width)
     , height(height)
     , colorTargetDescs(colorTargetDescs)
     , depthTargetDesc(depthTargetDesc)
+    , name(name)
 {
     Assert(
         !colorTargetDescs.empty() || depthTargetDesc,
@@ -48,6 +50,13 @@ FramebufferDesc::FramebufferDesc(
 Framebuffer::Framebuffer(const std::shared_ptr<FramebufferImpl> & impl)
     : m_impl(impl)
 {
+}
+
+const std::string & Framebuffer::name() const
+{
+    Assert(m_impl.get(), "Framebuffer is hollow");
+
+    return m_impl->name;
 }
 
 unsigned int Framebuffer::width() const

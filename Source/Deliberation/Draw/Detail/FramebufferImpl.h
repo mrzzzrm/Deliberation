@@ -50,5 +50,7 @@ class FramebufferImpl final
     u32 height;
 
     boost::optional<Clear> clear;
+
+    std::string name;
 };
 }
