@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Deliberation/Draw/Sampler.h>
 #include <Deliberation/Draw/Framebuffer.h>
 
 #include <Deliberation/Scene/ScreenSpaceEffect.h>
@@ -12,19 +13,18 @@ class Surface;
 class GaussianBlur final
 {
 public:
-    GaussianBlur() = default;
-    GaussianBlur(DrawContext & drawContext, Surface & inputSurface);
+    GaussianBlur(DrawContext & drawContext);
 
-    void render();
+    void setInput(const Surface & surface);
+    void setFramebuffer(Framebuffer & framebuffer, const FramebufferBinding & fbBinding = {});
 
-    Framebuffer & output() { return m_outputBuffer; }
+    void renderHBlur();
+    void renderVBlur();
 
 private:
-    bool                m_initialized = false;
-    ScreenSpaceEffect   m_horizontalBlur;
-    ScreenSpaceEffect   m_verticalBlur;
-    Framebuffer         m_intermediateBuffer;
-    Framebuffer         m_outputBuffer;
+    ScreenSpaceEffect   m_blur;
+    Sampler             m_inputSampler;
+    Uniform             m_horizontalUniform;
 };
 
 }

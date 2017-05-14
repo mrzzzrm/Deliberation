@@ -29,6 +29,7 @@ private:
     ScreenSpaceEffect           m_downscaleEffect;
     Sampler                     m_downscaleInput;
     std::vector<Framebuffer>    m_downscaleAndVBlurFbs; // First fb only used for VBlur
+    std::vector<Framebuffer>    m_hblurFbs;
 
     GaussianBlur      m_blur;
     ScreenSpaceEffect m_applyEffect;

@@ -11,7 +11,7 @@
 #define Assert(expr, msg)                                                      \
     {                                                                          \
         ::deliberation::AssertImpl(                                            \
-            __FILE__, __func__, __LINE__, (expr), (msg));                      \                                      \
+            __FILE__, __func__, __LINE__, (expr), (msg));                      \
     }
 #define Fail(msg)                                                              \
     {                                                                          \
