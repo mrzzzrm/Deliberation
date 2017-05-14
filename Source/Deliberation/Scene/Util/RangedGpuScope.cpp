@@ -1,6 +1,6 @@
 #include <Deliberation/Scene/Util/RangedGpuScope.h>
 
-#define DELIBERATION_NV_TOOLS_EXT 0
+#define DELIBERATION_NV_TOOLS_EXT 1
 
 #if DELIBERATION_NV_TOOLS_EXT
 #include <nvToolsExt.h>

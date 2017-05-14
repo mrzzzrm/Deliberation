@@ -59,6 +59,7 @@ void BloomRenderer::onSetupRender() {
     auto & downscaleDraw = m_downscaleEffect.draw();
     m_downscaleInput = downscaleDraw.sampler("Input");
     m_downscaleInput.setMagFilter(TextureFilter::Linear);
+    m_downscaleInput.setWrap(TextureWrap::ClampToEdge);
 
     // Framebuffers
     {

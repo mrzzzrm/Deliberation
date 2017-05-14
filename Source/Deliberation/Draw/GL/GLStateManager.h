@@ -77,6 +77,8 @@ class GLStateManager final
     void setDrawBuffers(const std::vector<gl::GLenum> & bufs);
     void bindVertexArray(gl::GLuint vertexArray);
     void deleteVertexArray(gl::GLuint vertexArray);
+    void bindSampler(gl::GLuint unit, gl::GLuint sampler);
+    void deleteSampler(gl::GLuint sampler);
 
   private:
     void applyEnableDisableState(gl::GLenum state, bool & current, bool target);
@@ -179,5 +181,6 @@ class GLStateManager final
     std::tuple<gl::GLint, gl::GLint, gl::GLsizei, gl::GLsizei> m_scissorRect;
     std::vector<gl::GLenum>                                    m_drawBuffers;
     boost::optional<gl::GLuint>                                m_vertexArray;
+    std::vector<gl::GLuint>                                    m_boundSamplers;
 };
 }

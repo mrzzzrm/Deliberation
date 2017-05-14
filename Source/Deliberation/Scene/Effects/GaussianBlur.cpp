@@ -18,6 +18,10 @@ GaussianBlur::GaussianBlur(DrawContext & drawContext)
 
     m_blur = ScreenSpaceEffect(drawContext, program, "HorizontalBlur");
     m_inputSampler =  m_blur.draw().sampler("Input");
+    m_inputSampler.setWrap(TextureWrap::ClampToEdge);
+    m_inputSampler.setMagFilter(TextureFilter::Linear);
+    m_inputSampler.setMinFilter(TextureFilter::Linear);
+
     m_blur.draw().uniform("Weight").set(weights);
     m_horizontalUniform = m_blur.draw().uniform("Horizontal");
 }

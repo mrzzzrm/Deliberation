@@ -12,6 +12,7 @@ class GLSamplerState final
     GLSamplerState();
     ~GLSamplerState();
 
+
     gl::GLuint name() const;
 
     void setWrap(unsigned int index, gl::GLenum wrap);

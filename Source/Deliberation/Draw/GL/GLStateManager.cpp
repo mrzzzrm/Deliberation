@@ -641,6 +641,25 @@ void GLStateManager::deleteVertexArray(gl::GLuint vertexArray)
     glDeleteVertexArrays(1, &vertexArray);
 }
 
+void GLStateManager::bindSampler(gl::GLuint unit, gl::GLuint sampler)
+{
+    if (unit >= m_boundSamplers.size()) m_boundSamplers.resize(unit + 1, 0);
+    if (m_boundSamplers[unit] == sampler) return;
+
+    m_boundSamplers[unit] = sampler;
+    glBindSampler(unit, sampler);
+}
+
+void GLStateManager::deleteSampler(gl::GLuint sampler)
+{
+    for (auto & boundSampler : m_boundSamplers)
+    {
+        if (boundSampler == sampler) boundSampler = 0;
+    }
+
+    glDeleteSamplers(1, &sampler);
+}
+
 GLStateManager::QueryTarget
 GLStateManager::glEnumToQueryTarget(gl::GLenum e) const
 {

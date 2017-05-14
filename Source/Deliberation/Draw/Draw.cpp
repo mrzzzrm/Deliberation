@@ -25,6 +25,8 @@
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
+#include <Deliberation/Scene/Util/RangedGpuScope.h>
+
 namespace deliberation
 {
 Draw::Draw() : m_impl(nullptr) {}
@@ -278,6 +280,8 @@ void Draw::render() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
+    RangedGpuScope gpuScope("Draw - " + m_impl->name);
+
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
 
     if (m_impl->glVertexArray == 0) build();
@@ -483,6 +487,7 @@ void Draw::render() const
 
         glStateManager.setActiveTexture(b);
         glStateManager.bindTexture((gl::GLenum)texture->type, texture->glName);
+        glStateManager.bindSampler(b, sampler->glSampler.name());
         gl::glUniform1i(sampler->location, b);
     }
 
