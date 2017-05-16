@@ -142,4 +142,11 @@ Clear Framebuffer::createClear()
 
     return m_impl->drawContext.createClear(*this);
 }
+
+std::string Framebuffer::toString() const
+{
+    Assert(m_impl.get(), "Framebuffer is hollow");
+
+    return m_impl->toString();
+}
 }

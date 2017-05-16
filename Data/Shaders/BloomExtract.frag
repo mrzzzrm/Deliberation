@@ -14,5 +14,4 @@ void main()
     vec3 reduced = inputColor - (inputColor / max(1.0f, brightness));
 
     o_Extracted = max(vec3(0.0f), reduced);
-
 }

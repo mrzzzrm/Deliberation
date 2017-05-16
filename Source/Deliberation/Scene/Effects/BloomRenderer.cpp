@@ -35,7 +35,7 @@ void BloomRenderer::render()
     for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
     {
         auto & lFb = m_downscaleAndVBlurFbs[l];
-        auto & rFb = m_downscaleAndVBlurFbs[l];
+        auto & rFb = m_hblurFbs[l];
 
         m_blur.setInput(lFb.colorTargets()[0].surface);
         m_blur.setFramebuffer(rFb, {{"Blurred", "Color"}}); // TODO: don't create FB-binding dynamically

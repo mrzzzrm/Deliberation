@@ -38,6 +38,8 @@ class FramebufferImpl final
     size_t
     colorTargetIndex(const std::string & name, bool * found = nullptr) const;
 
+    std::string toString() const;
+
     DrawContext & drawContext;
     bool          isBackbuffer;
 

@@ -83,9 +83,6 @@ GLStateManager::GLStateManager()
         boundFramebuffer = 0;
     }
 
-    for (auto & boundTexture : m_boundTextures)
-        boundTexture = 0u;
-
     m_drawBuffers.emplace_back(gl::GL_BACK);
 }
 
@@ -584,9 +581,17 @@ void GLStateManager::bindTexture(gl::GLenum target, gl::GLuint texture)
     default: Fail("");
     }
 
-    if (m_boundTextures[targetIndex] == texture) return;
+    if (m_activeTextureUnit >= m_boundTexturesByUnit.size())
+    {
+        decltype(m_boundTexturesByUnit)::value_type initializedTextureUnit;
+        for (auto & texture : initializedTextureUnit) texture = 0;
 
-    m_boundTextures[targetIndex] = texture;
+        m_boundTexturesByUnit.resize(m_activeTextureUnit + 1, initializedTextureUnit);
+    }
+
+    if (m_boundTexturesByUnit[m_activeTextureUnit][targetIndex] == texture) return;
+
+    m_boundTexturesByUnit[m_activeTextureUnit][targetIndex] = texture;
     gl::glBindTexture(target, texture);
 }
 

@@ -13,3 +13,5 @@ public:
 };
 
 }
+
+#define DELIBERATION_GPU_SCOPE RangedGpuScope gpuScope

@@ -280,7 +280,7 @@ void Draw::render() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    RangedGpuScope gpuScope("Draw - " + m_impl->name);
+    DELIBERATION_GPU_SCOPE(m_impl->name.empty() ? "<Unnamed Draw>" : m_impl->name);
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
 

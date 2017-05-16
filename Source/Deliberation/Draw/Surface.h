@@ -32,6 +32,8 @@ class Surface final
 
     SurfaceDownload download() const;
 
+    std::string toString() const;
+
   private:
     friend class Framebuffer;
     friend class FramebufferImpl;

@@ -34,7 +34,7 @@ inline std::string RenderPhaseToString(RenderPhase phase)
         "PostAlpha",
         "PreHdr",
         "Hdr",
-        "PreOverlay"
+        "PreOverlay",
         "Overlay"
     };
 

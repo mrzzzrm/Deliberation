@@ -35,8 +35,6 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
             uniform.name(), uniform.type(), uniform.arraySize());
     }
 
-    std::cout << this->program->interface.toString() << std::endl;
-
     uniformLayout = DataLayout(uniformFieldsDescs);
     uniformData = LayoutedBlob(uniformLayout, 1);
 

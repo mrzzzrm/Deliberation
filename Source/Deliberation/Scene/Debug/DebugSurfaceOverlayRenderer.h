@@ -18,8 +18,9 @@ public:
     void render() override;
 
 private:
+    bool                m_active = false;
     ScreenSpaceEffect   m_effect;
-    Surface             m_surface;
+    Sampler             m_inputSampler;
 };
 
 }

@@ -185,4 +185,26 @@ FramebufferImpl::colorTargetIndex(const std::string & name, bool * found) const
 
     return (size_t)(iter - colorTargets.begin());
 }
+
+std::string FramebufferImpl::toString() const
+{
+    std::stringstream s;
+    s << "Framebuffer '" << name << "'{\n";
+    if (!colorTargets.empty())
+    {
+        s << "  ColorTargets {\n";
+        for (const auto & rt : colorTargets)
+        {
+            s << "    " << rt.name << ": " << rt.surface.toString() << "\n";
+        }
+        s << "  }\n";
+    }
+    if (depthTarget)
+    {
+        s << "  DepthTarget: " << depthTarget->surface.toString() << "\n";
+    }
+    s << "}\n";
+
+    return s.str();
+}
 }

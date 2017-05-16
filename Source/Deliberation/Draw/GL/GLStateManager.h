@@ -175,7 +175,7 @@ class GLStateManager final
     gl::GLsizei                                    m_glViewportHeight;
     std::array<gl::GLuint, QueryTargetCount>       m_activeQueries;
     gl::GLuint                                     m_program;
-    std::array<gl::GLuint, (size_t)TextureTargetCount> m_boundTextures;
+    std::vector<std::array<gl::GLuint, (size_t)TextureTargetCount>> m_boundTexturesByUnit;
     gl::GLuint                                         m_activeTextureUnit;
     bool                                               m_scissorTestEnabled;
     std::tuple<gl::GLint, gl::GLint, gl::GLsizei, gl::GLsizei> m_scissorRect;

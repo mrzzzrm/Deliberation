@@ -20,6 +20,8 @@
 #include "Detail/QueryImpl.h"
 #include "Detail/TextureImpl.h"
 
+#define VERBOSE 1
+
 namespace deliberation
 {
 DrawContext::DrawContext(
@@ -128,7 +130,13 @@ DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
 {
     Assert(framebufferDesc.width > 0 && framebufferDesc.height > 0, "Framebuffer axes must be > 0");
 
-    return Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
+    auto framebuffer = Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
+
+#if VERBOSE
+    std::cout << "DrawContext::createFramebuffer(): " << framebuffer.toString() << std::endl;
+#endif
+
+    return framebuffer;
 }
 
 Query DrawContext::createQuery(QueryType type)

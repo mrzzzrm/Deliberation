@@ -118,6 +118,19 @@ class SceneSandbox : public Application
                 m_pointLightRenderer->addPointLight({{}, {2.0f, 1.5f, 0.0f}});
             m_circlePointLights.emplace_back(index);
         }
+
+        // Init static point lights
+        auto numStaticPointLights = 15;
+        auto staticPointLightsXDist = 4.0f;
+        for (size_t p = 0; p < numStaticPointLights; p++)
+        {
+            glm::vec3 pos;
+            pos.x = (-numStaticPointLights / 2.0f + p) * staticPointLightsXDist;
+            pos.y = 0.05f + p * 0.05f;
+            pos.z = -5.0f;
+
+            m_pointLightRenderer->addPointLight({pos, {2.0f, 1.5f, 0.0f}});
+        }
     }
 
     virtual void onFrame(float seconds) override

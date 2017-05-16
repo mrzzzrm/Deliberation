@@ -18,23 +18,26 @@ DebugSurfaceOverlayRenderer::DebugSurfaceOverlayRenderer(RenderManager & renderM
         DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
         DeliberationDataPath("Data/Shaders/DebugOverlaySurface.frag")
     }, "DebugSurfaceOverlay");
+
+    m_inputSampler = m_effect.draw().sampler("Input");
+    m_inputSampler.setMagFilter(TextureFilter::Nearest);
 }
 
 void DebugSurfaceOverlayRenderer::showSurface(const Surface & surface)
 {
-    m_surface = surface;
+    m_inputSampler.setTexture(surface);
+    m_active = true;
 }
 
 void DebugSurfaceOverlayRenderer::disable()
 {
-    m_surface = Surface();
+    m_active = false;
 }
 
 void DebugSurfaceOverlayRenderer::render()
 {
-    if (!m_surface.isInitialized()) return;
+    if (!m_active) return;
 
-    m_effect.draw().sampler("Input").setTexture(m_surface);
     m_effect.render();
 }
 

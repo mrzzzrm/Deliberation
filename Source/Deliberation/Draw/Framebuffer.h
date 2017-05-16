@@ -95,6 +95,8 @@ class Framebuffer final
 
     Clear createClear();
 
+    std::string toString() const;
+
   private:
     friend class Clear;
     friend class Draw;
