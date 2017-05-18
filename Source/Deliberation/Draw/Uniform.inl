@@ -12,7 +12,9 @@ template<typename T>
 void Uniform::set(const T & value)
 {
     Assert((bool)m_drawImpl, "Hollow Uniform can't be set");
-    Assert(Type::resolve<T>() == m_field->type(), "Uniform type mismatch");
+    Assert(Type::resolve<T>() == m_field->type(),
+           std::string("Uniform type mismatch. Got ") + Type::resolve<T>().name() +
+               " where " + m_field->type().name() + " was required.");
 
     set(&value, sizeof(value));
 }

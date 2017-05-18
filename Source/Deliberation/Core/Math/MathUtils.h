@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Deliberation.h>
@@ -24,6 +26,11 @@ i32 SigNum(T value);
 // 1, -1
 template<typename T>
 i32 Sign(T value);
+
+
+float GaussianCDFWithDenominator(float x, float denom);
+std::vector<float> GaussianSamples(float std, u32 numSamples);
+
 }
 
 #include <Deliberation/Core/Math/MathUtils.inl>

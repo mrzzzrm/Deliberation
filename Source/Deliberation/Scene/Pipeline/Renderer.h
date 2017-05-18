@@ -29,7 +29,6 @@ class Renderer : public std::enable_shared_from_this<Renderer>
 
     // Debug
     virtual void renderDebugGui() {}
-    virtual std::vector<Framebuffer> framebuffers() { return {}; }
 
   protected:
     RenderManager & m_renderManager;

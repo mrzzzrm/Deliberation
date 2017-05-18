@@ -16,10 +16,11 @@ public:
 
     void render() override;
 
-    std::vector<Framebuffer> framebuffers() override { return {m_extractFb}; }
+    void renderDebugGui() override;
 
 protected:
     void onSetupRender() override;
+    void blurLevel(size_t level);
 
 private:
     ScreenSpaceEffect m_extractEffect;
@@ -30,6 +31,9 @@ private:
     Sampler                     m_downscaleInput;
     std::vector<Framebuffer>    m_downscaleAndVBlurFbs; // First fb only used for VBlur
     std::vector<Framebuffer>    m_hblurFbs;
+
+    std::vector<i32>            m_numBlursPerLevel;
+    std::vector<float>          m_stdPerLevel;
 
     GaussianBlur      m_blur;
     ScreenSpaceEffect m_applyEffect;

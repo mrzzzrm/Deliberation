@@ -1,5 +1,7 @@
 #include <Deliberation/Scene/Effects/BloomRenderer.h>
 
+#include <imgui.h>
+
 #include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
@@ -34,19 +36,42 @@ void BloomRenderer::render()
     // Blurring
     for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
     {
-        auto & lFb = m_downscaleAndVBlurFbs[l];
-        auto & rFb = m_hblurFbs[l];
-
-        m_blur.setInput(lFb.colorTargets()[0].surface);
-        m_blur.setFramebuffer(rFb, {{"Blurred", "Color"}}); // TODO: don't create FB-binding dynamically
-        m_blur.renderHBlur();
-
-        m_blur.setInput(rFb.colorTargets()[0].surface);
-        m_blur.setFramebuffer(lFb, {{"Blurred", "Color"}});// TODO: don't create FB-binding dynamically
-        m_blur.renderVBlur();
+        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+        {
+            blurLevel(l);
+        }
     }
 
     m_applyEffect.render();
+}
+
+void BloomRenderer::renderDebugGui()
+{
+    ImGui::Columns(3, "Levels");
+    ImGui::Separator();
+
+    ImGui::Text("%s", "Level");
+    ImGui::NextColumn();
+    ImGui::Text("%s", "Number of Blurs");
+    ImGui::NextColumn();
+    ImGui::Text("%s", "Sample Standard Deviation");
+    ImGui::NextColumn();
+
+    ImGui::Separator();
+
+    for (size_t l = 0; l < m_numBlursPerLevel.size(); l++)
+    {
+        ImGui::Text(std::to_string(l).c_str());
+        ImGui::NextColumn();
+
+        ImGui::SliderInt(("##BlurCount" + std::to_string(l)).c_str(), &m_numBlursPerLevel[l], 0, 10);
+        ImGui::NextColumn();
+
+        ImGui::SliderFloat(("##StandardDeviation" + std::to_string(l)).c_str(), &m_stdPerLevel[l], 0.1f, 9.0f, "%.2f");
+        ImGui::NextColumn();
+    }
+
+    ImGui::Columns(1);
 }
 
 void BloomRenderer::onSetupRender() {
@@ -59,16 +84,21 @@ void BloomRenderer::onSetupRender() {
     auto & downscaleDraw = m_downscaleEffect.draw();
     m_downscaleInput = downscaleDraw.sampler("Input");
     m_downscaleInput.setMagFilter(TextureFilter::Linear);
+    m_downscaleInput.setMinFilter(TextureFilter::Linear);
     m_downscaleInput.setWrap(TextureWrap::ClampToEdge);
 
     // Framebuffers
     {
+        size_t numLevels = 4;
+
         u32 width = drawContext().backbuffer().width();
         u32 height = drawContext().backbuffer().height();
 
-        for (size_t l = 0; l < 4; l++)
-        {
+        m_numBlursPerLevel.resize(numLevels, 1);
+        m_stdPerLevel.resize(numLevels, 1.0f);
 
+        for (size_t l = 0; l < numLevels; l++)
+        {
             FramebufferDesc desc;
             desc.width = width;
             desc.height = height;
@@ -96,7 +126,7 @@ void BloomRenderer::onSetupRender() {
     auto &extractDraw = m_extractEffect.draw();
 
     extractDraw.sampler("Input").setTexture(m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
-    extractDraw.uniform("Threshold").set(glm::vec3(1.5f, 1.5f, 1.5f));
+    extractDraw.uniform("Threshold").set(2.0f);
     extractDraw.setFramebuffer(m_downscaleAndVBlurFbs[0], {{"Extracted", "Color"}});
 
     // Apply
@@ -109,6 +139,22 @@ void BloomRenderer::onSetupRender() {
     m_applyEffect.draw().sampler("InputD").setTexture(m_downscaleAndVBlurFbs[3].colorTargets()[0].surface);
     m_applyEffect.draw().state().setBlendState({BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     m_applyEffect.draw().setFramebuffer(renderManager().hdrBuffer(), {{"Color", "Hdr"}});
+}
+
+void BloomRenderer::blurLevel(size_t level)
+{
+    m_blur.setStandardDeviation(m_stdPerLevel[level]);
+
+    auto & lFb = m_downscaleAndVBlurFbs[level];
+    auto & rFb = m_hblurFbs[level];
+
+    m_blur.setInput(lFb.colorTargets()[0].surface);
+    m_blur.setFramebuffer(rFb, {{"Blurred", "Color"}}); // TODO: don't create FB-binding dynamically
+    m_blur.renderHBlur();
+
+    m_blur.setInput(rFb.colorTargets()[0].surface);
+    m_blur.setFramebuffer(lFb, {{"Blurred", "Color"}});// TODO: don't create FB-binding dynamically
+    m_blur.renderVBlur();
 }
 
 }

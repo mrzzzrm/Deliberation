@@ -101,6 +101,9 @@ void ImGuiSystem::onFrameBegin()
     ImGui::NewFrame();
 
     m_wantsCaptureMouse = io.WantCaptureMouse;
+
+    bool open = true;
+    ImGui::ShowTestWindow(&open);
 }
 
 void ImGuiSystem::onMouseButtonPressed(MouseButtonEvent & event)

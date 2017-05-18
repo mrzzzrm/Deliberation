@@ -63,4 +63,24 @@ glm::quat QuaternionAxisRotation(const glm::quat & q, const glm::vec3 & a)
 glm::vec2 RotateHalfPiCW(const glm::vec2 & v) { return {v.y, -v.x}; }
 
 glm::vec2 RotateHalfPiCCW(const glm::vec2 & v) { return {-v.y, v.x}; }
+
+float GaussianCDFWithDenominator(float x, float denom)
+{
+    return 0.5f * (1.0f + (float)erf(x / denom));
+}
+
+std::vector<float> GaussianSamples(float std, u32 numSamples)
+{
+    std::vector<float> result(numSamples);
+
+    auto denom = (float)sqrt(2.0f * std * std);
+
+    for (int s = 0; s < numSamples; s++)
+    {
+        result[s] = GaussianCDFWithDenominator((float)s + 0.5f, denom) -
+                    GaussianCDFWithDenominator((float)s - 0.5f, denom);
+    }
+
+    return result;
+}
 }

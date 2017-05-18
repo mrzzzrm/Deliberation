@@ -20,7 +20,7 @@
 #include "Detail/QueryImpl.h"
 #include "Detail/TextureImpl.h"
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 namespace deliberation
 {

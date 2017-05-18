@@ -331,6 +331,8 @@ set(sources
 	Scene/Effects/BloomRenderer.h
 	Scene/Effects/GaussianBlur.cpp
 	Scene/Effects/GaussianBlur.h
+	Scene/Effects/GaussianBlurPass.cpp
+	Scene/Effects/GaussianBlurPass.h
 	Scene/EdgeToFaceSmoothing.cpp
 	Scene/EdgeToFaceSmoothing.h
 	Scene/HdrRenderer.cpp
