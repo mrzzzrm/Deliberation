@@ -3,6 +3,7 @@
 #include <Deliberation/Draw/Sampler.h>
 
 #include <Deliberation/Scene/Effects/GaussianBlur.h>
+#include <Deliberation/Scene/Effects/GaussianBlurPass.h>
 #include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
 #include <Deliberation/Scene/ScreenSpaceEffect.h>
 
@@ -20,12 +21,9 @@ public:
 
 protected:
     void onSetupRender() override;
-    void blurLevel(size_t level);
 
 private:
     ScreenSpaceEffect m_extractEffect;
-    Framebuffer       m_extractFb;
-    Surface           m_extractSurface;
 
     ScreenSpaceEffect           m_downscaleEffect;
     Sampler                     m_downscaleInput;
@@ -35,8 +33,9 @@ private:
     std::vector<i32>            m_numBlursPerLevel;
     std::vector<float>          m_stdPerLevel;
 
-    GaussianBlur      m_blur;
-    ScreenSpaceEffect m_applyEffect;
+    GaussianBlur                    m_blur;
+    std::vector<GaussianBlurPass>   m_blurPasses;
+    ScreenSpaceEffect               m_applyEffect;
 };
 
 }

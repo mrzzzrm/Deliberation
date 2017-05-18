@@ -15,10 +15,13 @@ class GaussianBlur final
 public:
     GaussianBlur(DrawContext & drawContext);
 
+    DrawContext & drawContext() const { return m_blur.drawContext(); }
+    const DataLayout & configBlockLayout() const { return m_configBlockLayout; }
+    u32 maxNumSamples() const { return m_maxNumSamples; }
+
     void setInput(const Surface & surface);
     void setFramebuffer(Framebuffer & framebuffer, const FramebufferBinding & fbBinding = {});
-
-    void setStandardDeviation(float std);
+    void setConfigBuffer(const Buffer & buffer);
 
     void renderHBlur();
     void renderVBlur();
@@ -27,9 +30,6 @@ private:
     ScreenSpaceEffect   m_blur;
     Sampler             m_inputSampler;
     Uniform             m_horizontalUniform;
-    Uniform             m_weightsUniform;
-    Uniform             m_numSamplesUniform;
-    Uniform             m_offsetsUniform;
     u32                 m_maxNumSamples;
 
     DataLayout          m_configBlockLayout;

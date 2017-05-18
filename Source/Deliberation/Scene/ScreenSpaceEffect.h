@@ -27,6 +27,8 @@ class ScreenSpaceEffect final
     Draw &       draw();
     const Draw & draw() const;
 
+    DrawContext & drawContext() const { Assert(m_drawContext, ""); return *m_drawContext; }
+
     void render();
 
   private:
@@ -34,6 +36,7 @@ class ScreenSpaceEffect final
               const std::string & name);
 
   private:
+    DrawContext * m_drawContext = nullptr;
     bool    m_initialised;
     Draw    m_draw;
     Program m_program;

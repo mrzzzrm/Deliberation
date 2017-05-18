@@ -19,7 +19,8 @@ ScreenSpaceEffect::ScreenSpaceEffect() : m_initialised(false) {}
 ScreenSpaceEffect::ScreenSpaceEffect(
     DrawContext &                    drawContext,
     const std::vector<std::string> & shaders,
-    const std::string &              name)
+    const std::string &              name):
+    m_drawContext(&drawContext)
 {
     m_program = drawContext.createProgram(shaders);
 
@@ -30,6 +31,7 @@ ScreenSpaceEffect::ScreenSpaceEffect(
     DrawContext &       drawContext,
     Program &           program,
     const std::string & name):
+    m_drawContext(&drawContext),
     m_program(program)
 {
     init(drawContext, name);

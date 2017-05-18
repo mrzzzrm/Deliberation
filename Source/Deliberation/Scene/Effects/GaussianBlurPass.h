@@ -32,6 +32,9 @@ private:
     Surface         m_lSurface;
     Buffer          m_configBuffer;
     u32             m_radius = 0;
+    DataLayoutField m_offsetsField;
+    DataLayoutField m_weightsField;
+    DataLayoutField m_numSamplesField;
 };
 
 }

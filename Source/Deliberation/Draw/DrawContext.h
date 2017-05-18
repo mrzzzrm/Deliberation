@@ -38,7 +38,7 @@ class DrawContext final
 
     void setBackbufferResolution(unsigned int width, unsigned height);
 
-    Buffer createBuffer(const DataLayout & layout);
+    Buffer createBuffer(const DataLayout & layout, size_t count = 0);
     Buffer createBuffer(const LayoutedBlob & data);
 
     Program createProgram(const std::vector<std::string> & paths);

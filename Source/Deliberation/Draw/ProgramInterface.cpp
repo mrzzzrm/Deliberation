@@ -285,7 +285,8 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     fields.emplace_back(
                         strippedName,
                         uniform.type(),
-                        uniformOffsets[indices[i]]);
+                        uniformOffsets[indices[i]],
+                        uniform.arraySize());
                 }
 
                 m_uniformBlocks.emplace_back(

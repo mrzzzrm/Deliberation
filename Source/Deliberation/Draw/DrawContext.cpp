@@ -46,9 +46,11 @@ void DrawContext::setBackbufferResolution(unsigned int width, unsigned height)
         Framebuffer(FramebufferImpl::backbuffer(*this, width, height));
 }
 
-Buffer DrawContext::createBuffer(const DataLayout & layout)
+Buffer DrawContext::createBuffer(const DataLayout & layout, size_t count)
 {
-    return Buffer(std::make_shared<BufferImpl>(*this, layout));
+    auto buffer = Buffer(std::make_shared<BufferImpl>(*this, layout));
+    if (count != 0) buffer.reinit(count);
+    return buffer;
 }
 
 Buffer DrawContext::createBuffer(const LayoutedBlob & data)
