@@ -161,6 +161,7 @@ class PixelFormat final
     unsigned int bytesPerPixel() const;
 
     PixelType pixelType() const;
+    bool numStencilBits() const;
 
     Type fragmentOutputType() const;
 

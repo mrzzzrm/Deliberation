@@ -60,6 +60,8 @@ void Clear::disableColor()
 void Clear::setDepth(float depth)
 {
     Assert(m_impl.get(), "Clear is hollow");
+    Assert((bool)m_impl->framebuffer.depthTarget(),
+           "Can't set depth, because there is no depth target in Framebuffer");
 
     m_impl->depth = depth;
 }
@@ -67,20 +69,25 @@ void Clear::setDepth(float depth)
 void Clear::disableDepth()
 {
     Assert(m_impl.get(), "Clear is hollow");
+
     m_impl->depth = boost::optional<float>();
 }
 
 void Clear::setStencil(u32 stencil)
 {
     Assert(m_impl.get(), "Clear is hollow");
+    Assert(m_impl->framebuffer.depthTarget() &&
+        m_impl->framebuffer.depthTarget()->format().numStencilBits() > 0,
+        "Can't set stencil, because there are no stencil bits in the Framebuffer");
+
     m_impl->stencil = stencil;
 }
 
 void Clear::disableStencil()
 {
     Assert(m_impl.get(), "Clear is hollow");
+
     m_impl->stencil = boost::optional<gl::GLint>();
-    ;
 }
 
 void Clear::render()

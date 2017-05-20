@@ -22,10 +22,12 @@ FramebufferDesc::FramebufferDesc(
 {
     Assert(
         !colorTargetDescs.empty() || depthTargetDesc,
-        "Framebuffer must at least have one color target or a depth target")
+        "Framebuffer must at least have one color target or a depth target");
 
-        for (const auto & colorTargetDesc : colorTargetDescs)
+    for (const auto & colorTargetDesc : colorTargetDescs)
     {
+        Assert(colorTargetDesc.format.pixelType() == PixelType_Color,
+               "Color Target must be color type, is " + colorTargetDesc.format.toString());
         Assert(!colorTargetDesc.name.empty(), "Color Target must be named");
 
         if (colorTargetDesc.format == PixelFormat_None)
@@ -39,6 +41,8 @@ FramebufferDesc::FramebufferDesc(
 
     if (depthTargetDesc && depthTargetDesc->format == PixelFormat_None)
     {
+        Assert(depthTargetDesc->format.pixelType() == PixelType_Depth,
+               "Depth target must be depth type, is " + depthTargetDesc->format.toString());
         Assert(depthTargetDesc->name.empty(), "Depth target must not be named");
         Assert(
             depthTargetDesc->surface.width() == width &&
