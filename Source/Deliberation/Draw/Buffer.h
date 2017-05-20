@@ -41,6 +41,7 @@ class Buffer final
     friend class DrawContext;
     friend class Draw;
     friend class GLVertexAttributeBinder;
+    friend class UniformBufferHandle;
 
   private:
     std::shared_ptr<BufferImpl> m_impl;

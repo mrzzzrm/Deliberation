@@ -18,14 +18,4 @@ void Draw::setAttribute(const std::string & name, const T & value)
 
     setAttribute(attribute, (const void *)&value);
 }
-
-template<typename T>
-void Draw::setAttribute(size_t index, const T & value)
-{
-    const auto & attributes = program().interface().attributes();
-
-    Assert(index < attributes.size(), "Attribute index out of range");
-
-    setAttribute(attributes[index], (const void *)&value);
-}
 }

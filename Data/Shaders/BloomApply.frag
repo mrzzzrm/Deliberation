@@ -16,7 +16,7 @@ void main()
     color += texture(InputA, f_UV).xyz * 0.9f;
     color += texture(InputB, f_UV).xyz * 0.9f;
     color += texture(InputC, f_UV).xyz * 0.9f;
-    color += texture(InputD, f_UV).xyz * 0.5f;
+    color += texture(InputD, f_UV).xyz * 0.9f;
 
     o_Color = color;
 }

@@ -20,7 +20,7 @@ public:
     u32 maxNumSamples() const { return m_maxNumSamples; }
 
     void setInput(const Surface & surface);
-    void setFramebuffer(Framebuffer & framebuffer, const FramebufferBinding & fbBinding = {});
+    void setFramebuffer(Framebuffer & framebuffer, const FramebufferMappings & mappings = {});
     void setConfigBuffer(const Buffer & buffer);
 
     void renderHBlur();
@@ -31,6 +31,7 @@ private:
     Sampler             m_inputSampler;
     Uniform             m_horizontalUniform;
     u32                 m_maxNumSamples;
+    UniformBufferHandle m_configBuffer;
 
     DataLayout          m_configBlockLayout;
 };

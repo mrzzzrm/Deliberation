@@ -7,18 +7,18 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 
+#include <Deliberation/Draw/FramebufferBinding.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/Sampler.h>
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Draw/Uniform.h>
+#include <Deliberation/Draw/UniformBufferHandle.h>
 #include <Deliberation/Draw/VertexAttribute.h>
 
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-using FragmentOutputMapping = std::pair<std::string, std::string>;
-using FramebufferBinding = std::vector<FragmentOutputMapping>;
 
 class Buffer;
 class DrawContext;
@@ -60,19 +60,23 @@ class Draw final
     template<typename T>
     void setAttribute(const std::string & name, const T & value);
 
-    template<typename T>
-    void setAttribute(size_t index, const T & value);
-
     VertexAttribute attribute(const std::string & name);
 
     void setFramebuffer(
-        const Framebuffer &        framebuffer,
-        const FramebufferBinding & binding = {});
+        Framebuffer & framebuffer,
+        const FramebufferMappings & mapping = {});
+
+    FramebufferBinding framebufferBinding(Framebuffer & framebuffer,
+                                          const FramebufferMappings & bindingParams = {});
+
+    void setFramebufferBinding(const FramebufferBinding & binding);
 
     void setUniformBuffer(
         const std::string & name,
         const Buffer &      buffer,
         unsigned int        begin = 0);
+
+    UniformBufferHandle uniformBuffer(const std::string & name);
 
     void render() const;
 

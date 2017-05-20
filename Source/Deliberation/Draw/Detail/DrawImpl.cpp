@@ -54,7 +54,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     }
 
     // Create framebuffer
-    framebuffer = drawContext.backbuffer();
+    framebufferBinding = FramebufferBinding(this->program->interface.fragmentOutputs(), drawContext.backbuffer(), {});
 
     // Allocate Uniform Buffer Bindings
     uniformBuffers.resize(this->program->interface.uniformBlocks().size());

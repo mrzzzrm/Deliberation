@@ -15,6 +15,7 @@
 #include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/DrawState.h>
 #include <Deliberation/Draw/Framebuffer.h>
+#include <Deliberation/Draw/FramebufferBinding.h>
 #include <Deliberation/Draw/VertexAttribute.h>
 
 #include "BufferBinding.h"
@@ -58,8 +59,7 @@ class DrawImpl final
 
     DrawState state;
 
-    std::vector<gl::GLenum> drawBuffers;
-    Framebuffer             framebuffer;
+    FramebufferBinding framebufferBinding;
 
     DataLayout                  uniformLayout;
     LayoutedBlob                uniformData;

@@ -160,6 +160,8 @@ set(sources
 	Draw/Enum.h
 	Draw/Framebuffer.cpp
 	Draw/Framebuffer.h
+	Draw/FramebufferBinding.cpp
+	Draw/FramebufferBinding.h
 	Draw/GL/GLBindVertexAttribute.cpp
 	Draw/GL/GLBindVertexAttribute.h
 	Draw/GL/GLSamplerState.cpp
@@ -209,6 +211,8 @@ set(sources
 	Draw/Texture.h
 	Draw/Uniform.cpp
 	Draw/Uniform.h
+	Draw/UniformBufferHandle.cpp
+	Draw/UniformBufferHandle.h
 	Draw/VertexAttribute.cpp
 	Draw/VertexAttribute.h
 

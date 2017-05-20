@@ -22,6 +22,8 @@ GaussianBlur::GaussianBlur(DrawContext & drawContext)
     m_horizontalUniform = m_blur.draw().uniform("Horizontal");
 
     m_configBlockLayout = m_blur.draw().program().interface().uniformBlockRef("Config").layout();
+
+    m_configBuffer = m_blur.draw().uniformBuffer("Config");
 }
 
 void GaussianBlur::setInput(const Surface & surface)
@@ -29,15 +31,14 @@ void GaussianBlur::setInput(const Surface & surface)
     m_inputSampler.setTexture(surface);
 }
 
-void GaussianBlur::setFramebuffer(Framebuffer & framebuffer, const FramebufferBinding & fbBinding)
+void GaussianBlur::setFramebuffer(Framebuffer & framebuffer, const FramebufferMappings & mappings)
 {
-    m_blur.draw().setFramebuffer(framebuffer, fbBinding);
+    m_blur.draw().setFramebuffer(framebuffer, mappings);
 }
 
 void GaussianBlur::setConfigBuffer(const Buffer & buffer)
 {
-    // TODO Do via handle
-    m_blur.draw().setUniformBuffer("Config", buffer);
+    m_configBuffer.setBuffer(buffer);
 }
 
 void GaussianBlur::renderHBlur()

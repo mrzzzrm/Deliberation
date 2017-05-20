@@ -104,6 +104,7 @@ class Framebuffer final
     friend class ClearExecution;
     friend class ClearImpl;
     friend class DrawImpl;
+    friend class FramebufferBinding;
 
   private:
     std::shared_ptr<FramebufferImpl> m_impl;

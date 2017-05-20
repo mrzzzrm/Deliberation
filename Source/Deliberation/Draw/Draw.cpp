@@ -58,13 +58,13 @@ const DrawState & Draw::state() const
 Framebuffer & Draw::framebuffer()
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    return m_impl->framebuffer;
+    return m_impl->framebufferBinding.framebuffer();
 }
 
 const Framebuffer & Draw::framebuffer() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    return m_impl->framebuffer;
+    return m_impl->framebufferBinding.framebuffer();
 }
 
 Uniform Draw::uniform(const std::string & name)
@@ -187,81 +187,24 @@ VertexAttribute Draw::attribute(const std::string & name)
 }
 
 void Draw::setFramebuffer(
-    const Framebuffer & framebuffer, const FramebufferBinding & binding)
+    Framebuffer & framebuffer,
+    const FramebufferMappings & mapping)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & fragmentOutputs = m_impl->program->interface.fragmentOutputs();
+    setFramebufferBinding(framebufferBinding(framebuffer, mapping));
+}
 
-    if (framebuffer.isBackbuffer())
-    {
-        Assert(
-            fragmentOutputs.size() == 1,
-            "Writing to multiple targets in backbuffer draw");
-    }
-    else
-    {
-        auto & colorTargets = framebuffer.m_impl->colorTargets;
+FramebufferBinding Draw::framebufferBinding(Framebuffer & framebuffer, const FramebufferMappings & bindingParams)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    return FramebufferBinding(m_impl->program->interface.fragmentOutputs(), framebuffer, bindingParams);
+}
 
-        Assert(
-            fragmentOutputs.size() == colorTargets.size(),
-            "Framebuffer/FragmentOutputs mismatch");
-
-        std::vector<gl::GLenum> bufs(fragmentOutputs.size(), gl::GL_NONE);
-        for (size_t o = 0; o < fragmentOutputs.size(); o++)
-        {
-            auto & fragmentOutput = fragmentOutputs[o];
-
-            std::string mappedTargetName;
-
-            // Does the output have a mapping?
-            auto iter = std::find_if(
-                binding.begin(),
-                binding.end(),
-                [&](const FragmentOutputMapping & fragmentOutputMapping) {
-                    return "o_" + fragmentOutputMapping.first ==
-                           fragmentOutput.name();
-                });
-
-            if (iter != binding.end()) mappedTargetName = "o_" + iter->second;
-
-            for (size_t t = 0; t < colorTargets.size(); t++)
-            {
-                auto &     colorTarget = colorTargets[t];
-                const auto colorTargetName = "o_" + colorTarget.name;
-
-                // If no mapping exist, mappedTargetName will be empty and never
-                // match
-                if (colorTargetName == mappedTargetName ||
-                    "o_" + colorTarget.name == fragmentOutput.name())
-                {
-                    Assert(
-                        colorTarget.surface.format().fragmentOutputType() ==
-                            fragmentOutput.type(),
-                        "Fragment output " + fragmentOutput.name() + "(" +
-                            fragmentOutput.type().name() +
-                            ") and RenderTarget (" +
-                            colorTarget.surface.format().toString() + " = " +
-                            colorTarget.surface.format()
-                                .fragmentOutputType()
-                                .name() +
-                            ") are incompatible");
-
-                    bufs[fragmentOutput.location()] =
-                        (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + t);
-                    break;
-                }
-            }
-
-            Assert(
-                bufs[fragmentOutput.location()] != gl::GL_NONE,
-                "No matching target in Framebuffer for fragment output '" +
-                    fragmentOutput.name() + "'");
-        }
-        m_impl->drawBuffers = std::move(bufs);
-    }
-
-    m_impl->framebuffer = framebuffer;
+void Draw::setFramebufferBinding(const FramebufferBinding & binding)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    m_impl->framebufferBinding = binding;
 }
 
 void Draw::setUniformBuffer(
@@ -274,6 +217,12 @@ void Draw::setUniformBuffer(
     UniformBufferBinding binding{buffer.m_impl, begin};
 
     m_impl->uniformBuffers[index].reset(binding);
+}
+
+UniformBufferHandle Draw::uniformBuffer(const std::string & name)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    return UniformBufferHandle(m_impl, m_impl->program->interface.uniformBlockRef(name).index());
 }
 
 void Draw::render() const
@@ -446,7 +395,7 @@ void Draw::render() const
     // Apply viewport
     {
         auto & state = m_impl->state;
-        auto & framebuffer = m_impl->framebuffer;
+        auto & framebuffer = m_impl->framebufferBinding.framebuffer();
         // gl::glProvokingVertex(m_provokingVertex);
 
         if (state.hasViewport())
@@ -492,7 +441,7 @@ void Draw::render() const
     }
 
     // Setup RenderTarget / Framebuffer
-    m_impl->framebuffer.m_impl->bind(m_impl->drawBuffers);
+    m_impl->framebufferBinding.framebuffer().m_impl->bind(m_impl->framebufferBinding.drawBuffersGL());
 
     // Set uniforms
     {

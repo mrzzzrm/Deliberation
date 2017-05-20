@@ -8,14 +8,6 @@ namespace deliberation
 {
 class DrawImpl;
 
-namespace detail
-{
-    void SetVertexAttribute(
-        DrawImpl &                              drawImpl,
-        const ProgramInterfaceVertexAttribute & attribute,
-        const void *                            data);
-}
-
 class VertexAttribute final
 {
   public:
