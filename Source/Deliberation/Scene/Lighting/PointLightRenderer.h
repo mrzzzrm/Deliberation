@@ -8,7 +8,11 @@
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Draw.h>
 
+#include <Deliberation/ECS/System.h>
+#include <Deliberation/ECS/World.h>
+
 #include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
+#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 
 namespace deliberation
 {
@@ -55,5 +59,21 @@ class PointLightRenderer : public SingleNodeRenderer
     std::stack<size_t>      m_pool;
     Uniform                 m_viewProjectionUniform;
     Uniform                 m_viewUniform;
+};
+
+class PointLightSystem : public System<PointLightSystem>
+{
+public:
+    PointLightSystem(World & world):
+        Base(world)
+    {
+        m_pointLightRenderer = world.systemRef<RenderSystem>().renderManager().addRenderer<PointLightRenderer>();
+    }
+
+    PointLightRenderer & pointLightRenderer() { return *m_pointLightRenderer; }
+    const PointLightRenderer & pointLightRenderer() const { return *m_pointLightRenderer; }
+
+private:
+    std::shared_ptr<PointLightRenderer> m_pointLightRenderer;
 };
 }

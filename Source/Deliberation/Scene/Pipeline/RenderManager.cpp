@@ -71,11 +71,10 @@ void RenderManager::render()
         m_pipelineBuild = true;
     }
 
-
-
     // Clear
     m_backbufferClear.render();
     m_gbuffer.clear().render();
+    m_hdrBuffer.clear().render();
 
     // Render Phases
     for (auto & pair : m_renderNodesByPhase)

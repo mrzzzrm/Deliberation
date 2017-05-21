@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <Deliberation/ECS/System.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
@@ -17,7 +19,7 @@ class RenderSystem : public System<RenderSystem>
     void onUpdate(float seconds) override;
 
   private:
-    RenderManager m_renderManager;
-    std::string m_selectedSurfaceKey;
+    RenderManager  m_renderManager;
+    std::string    m_selectedSurfaceKey;
 };
 }

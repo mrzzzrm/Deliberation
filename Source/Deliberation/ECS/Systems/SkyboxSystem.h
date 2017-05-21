@@ -5,6 +5,7 @@
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
+#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 #include <Deliberation/Scene/SkyboxRenderer.h>
 
 #include <Deliberation/Deliberation.h>

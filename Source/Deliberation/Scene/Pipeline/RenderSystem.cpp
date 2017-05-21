@@ -18,6 +18,7 @@ RenderSystem::RenderSystem(World & world)
 {
 }
 
+
 void RenderSystem::onUpdate(float seconds)
 {
     if (world().system<ImGuiSystem>())

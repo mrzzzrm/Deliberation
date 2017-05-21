@@ -27,6 +27,7 @@ class AmbientLightNode : public RenderNode
             m_renderer.renderManager().ssaoBuffer().colorTargetRef("Ssao"));
         m_effect.draw().sampler("Diffuse").setTexture(
             m_renderer.renderManager().gbuffer().colorTargetRef("Diffuse"));
+        m_effect.draw().state().setBlendState({BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     }
 
     void render() override { m_effect.render(); }

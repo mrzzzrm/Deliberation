@@ -19,6 +19,7 @@ class World;
 class Entity final
 {
   public:
+    Entity(World & world, EntityId id);
     Entity();
 
     World &                       world() const;
@@ -60,8 +61,6 @@ class Entity final
     friend class SystemBase;
 
   private:
-    Entity(World & world, EntityId id);
-
     EntityData & data() const;
 
     bool                  hasComponent(TypeID::value_t c) const;

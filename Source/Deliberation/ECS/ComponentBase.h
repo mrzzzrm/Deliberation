@@ -35,6 +35,8 @@ class ComponentBase
     virtual void
     dispatchEvent(TypeID::value_t eventType, const void * event) = 0;
 
+    virtual void onAttachedToEntity() {};
+
   protected:
     friend class World;
 

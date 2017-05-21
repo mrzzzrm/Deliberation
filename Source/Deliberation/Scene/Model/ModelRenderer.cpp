@@ -127,8 +127,6 @@ ModelRenderer::ModelRenderer(RenderManager & renderManager)
     m_gbufferProgram = renderManager.drawContext().createProgram(
         {DeliberationDataPath("Data/Shaders/ModelRenderer.vert"),
          DeliberationDataPath("Data/Shaders/ModelRenderer_GBuffer.frag")});
-
-    std::cout << m_gbufferProgram.interface().toString() << std::endl;
 }
 
 std::shared_ptr<Model> ModelRenderer::addModel(const std::string & path)

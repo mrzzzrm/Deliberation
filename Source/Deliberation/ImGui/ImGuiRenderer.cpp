@@ -37,7 +37,7 @@ void ImGuiRenderer::onSetupRender()
     auto indexLayout =
         DataLayout("Index", sizeof(ImDrawIdx) == 2 ? Type_U16 : Type_U32);
 
-    m_vertexBuffer = drawContext().createBuffer(vertexLayout); std::cout << "Layout: " << vertexLayout.toString() << std::endl;
+    m_vertexBuffer = drawContext().createBuffer(vertexLayout);
     m_indexBuffer = drawContext().createBuffer(indexLayout);
 
     auto program = drawContext().createProgram(
