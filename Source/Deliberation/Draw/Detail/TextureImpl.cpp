@@ -49,11 +49,6 @@ TextureImpl::TextureImpl(
     , numFaces(numFaces)
     , format(format)
 {
-    baseLevel = 0;
-    maxLevel = 0;
-    minFilter = gl::GL_LINEAR;
-    maxFilter = gl::GL_LINEAR;
-
     if (numFaces == 1)
     {
         type = TextureType::Texture2d;
@@ -68,16 +63,8 @@ TextureImpl::TextureImpl(
     gl::glGenTextures(1, &glName);
     Assert(glName != 0, "Failed to create GL Texture Object");
 
-    auto & glStateManager = drawContext.m_glStateManager;
-
-    glStateManager.bindTexture((gl::GLenum)type, glName);
-
-    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_BASE_LEVEL, baseLevel);
-    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAX_LEVEL, maxLevel);
-    gl::glTexParameteri(
-        (gl::GLenum)type, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
-    gl::glTexParameteri(
-        (gl::GLenum)type, gl::GL_TEXTURE_MAG_FILTER, (gl::GLint)maxFilter);
+    drawContext.m_glStateManager.bindTexture((gl::GLenum)type, glName);
+    gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAX_LEVEL, 0);
 
     // Create faces
     texImage2DAllFaces(nullptr);

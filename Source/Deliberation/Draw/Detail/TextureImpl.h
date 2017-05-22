@@ -38,11 +38,6 @@ class TextureImpl final
     TextureType type;
     PixelFormat format;
 
-    gl::GLuint baseLevel;
-    gl::GLuint maxLevel;
-    gl::GLenum minFilter;
-    gl::GLenum maxFilter;
-
     std::vector<Surface> surfaces;
 };
 }
