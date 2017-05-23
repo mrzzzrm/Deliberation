@@ -1,6 +1,7 @@
 #include "SamplerImpl.h"
 
 #include <glbinding/gl/enum.h>
+#include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
 
@@ -8,8 +9,22 @@ namespace deliberation
 {
 SamplerImpl::SamplerImpl(
     gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location)
-    : glSampler(), type(uniformType), valueType(valueType), location(location)
+    : type(uniformType), valueType(valueType), location(location)
 {
+    gl::glGenSamplers(1, &glName);
+    Assert(glName != 0, "Failed to create GL sampler object");
+
+    wrap[0] = TextureWrap::Repeat;
+    wrap[1] = TextureWrap::Repeat;
+    wrap[2] = TextureWrap::Repeat;
+
+    minFilter = TextureFilter::Nearest;
+    magFilter = TextureFilter::Nearest;
+}
+
+SamplerImpl::~SamplerImpl()
+{
+    gl::glDeleteSamplers(1, &glName);
 }
 
 gl::GLenum SamplerImpl::textureType() const

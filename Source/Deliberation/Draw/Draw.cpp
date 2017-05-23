@@ -25,7 +25,7 @@
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/ProgramInterface.h>
 
-#include <Deliberation/Scene/Util/RangedGpuScope.h>
+#include <Deliberation/Draw/Util/RangedGpuScope.h>
 
 namespace deliberation
 {
@@ -436,7 +436,7 @@ void Draw::render() const
 
         glStateManager.setActiveTexture(b);
         glStateManager.bindTexture((gl::GLenum)texture->type, texture->glName);
-        glStateManager.bindSampler(b, sampler->glSampler.name());
+        glStateManager.bindSampler(b, sampler->glName);
         gl::glUniform1i(sampler->location, b);
     }
 

@@ -12,6 +12,7 @@
 #include <Deliberation/Core/LayoutedBlob.h>
 
 #include <Deliberation/Draw/Detail/UniformImpl.h>
+#include <Deliberation/Draw/Detail/SamplerImpl.h>
 #include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/DrawState.h>
 #include <Deliberation/Draw/Framebuffer.h>
@@ -19,7 +20,6 @@
 #include <Deliberation/Draw/VertexAttribute.h>
 
 #include "BufferBinding.h"
-#include "SamplerImpl.h"
 #include "UniformBufferBinding.h"
 
 namespace deliberation

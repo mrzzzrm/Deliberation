@@ -7,7 +7,7 @@
 
 #include <Deliberation/Core/Optional.h>
 
-#include "../GL/GLSamplerState.h"
+#include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
 {
@@ -20,13 +20,17 @@ class SamplerImpl
   public:
     SamplerImpl(
         gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location);
+    ~SamplerImpl();
 
     gl::GLenum textureType() const;
 
-    GLSamplerState               glSampler;
+    gl::GLuint                   glName;
     gl::GLenum                   type;
     gl::GLenum                   valueType;
     gl::GLuint                   location;
     std::shared_ptr<TextureImpl> textureImpl;
+    TextureWrap                  wrap[3];
+    TextureFilter                minFilter;
+    TextureFilter                magFilter;
 };
 }

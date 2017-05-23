@@ -1,4 +1,4 @@
-#include <Deliberation/Scene/Util/RangedGpuScope.h>
+#include <Deliberation/Draw/Util/RangedGpuScope.h>
 
 #define DELIBERATION_NV_TOOLS_EXT 1
 

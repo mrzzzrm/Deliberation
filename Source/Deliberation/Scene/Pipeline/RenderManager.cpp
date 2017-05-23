@@ -11,7 +11,7 @@
 #include <Deliberation/Scene/Debug/DebugSurfaceOverlayRenderer.h>
 #include <Deliberation/Scene/Pipeline/RenderNode.h>
 #include <Deliberation/Scene/Pipeline/Renderer.h>
-#include <Deliberation/Scene/Util/RangedGpuScope.h>
+#include <Deliberation/Draw/Util/RangedGpuScope.h>
 
 namespace deliberation
 {

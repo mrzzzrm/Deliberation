@@ -4,6 +4,8 @@
 
 #include <glbinding/gl/enum.h>
 
+#include <Deliberation/Core/IntTypes.h>
+
 #include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
@@ -31,6 +33,8 @@ class Sampler final
 
   private:
     Sampler(const std::shared_ptr<SamplerImpl> & impl);
+
+    void setWrap(u32 index, TextureWrap wrap);
 
   private:
     std::shared_ptr<SamplerImpl> m_impl;

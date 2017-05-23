@@ -164,8 +164,6 @@ set(sources
 	Draw/FramebufferBinding.h
 	Draw/GL/GLBindVertexAttribute.cpp
 	Draw/GL/GLBindVertexAttribute.h
-	Draw/GL/GLSamplerState.cpp
-	Draw/GL/GLSamplerState.h
 	Draw/GL/GLSLSizeOf.cpp
 	Draw/GL/GLSLSizeOf.h
 	Draw/GL/GLSLTypeOf.h
@@ -213,6 +211,8 @@ set(sources
 	Draw/Uniform.h
 	Draw/UniformBufferHandle.cpp
 	Draw/UniformBufferHandle.h
+	Draw/Util/RangedGpuScope.cpp
+	Draw/Util/RangedGpuScope.h
 	Draw/VertexAttribute.cpp
 	Draw/VertexAttribute.h
 
@@ -361,8 +361,6 @@ set(sources
 	Scene/Texture/TextureLoaderSDLSurfaceImpl.cpp
 	Scene/Texture/TextureLoaderSDLSurfaceImpl.h
 	Scene/Texture/TextureLoaderUnicolorImpl.h
-	Scene/Util/RangedGpuScope.cpp
-    Scene/Util/RangedGpuScope.h
 	Scene/MeshCompiler.cpp
 	Scene/MeshCompiler.h
 	Scene/Mesh.cpp
