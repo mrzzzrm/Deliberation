@@ -62,6 +62,20 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     // Allocate vertex attribute bindings
     attributeBindings.resize(this->program->interface.attributes().size());
     valueAttributes = Blob(0);
+
+    // Create Buffer Textures
+    auto numBufferTextures = 0;
+    for (auto & uniformBuffer : this->program->interface.uniformBlocks())
+    {
+        if (uniformBuffer.type() != UniformBufferType::BufferTexture) continue;
+        numBufferTextures++;
+    }
+    bufferTextures.resize(numBufferTextures);
+    gl::glGenTextures(bufferTextures.size(), bufferTextures.data());
+    for (const auto bufferTexture : bufferTextures)
+    {
+        Assert(bufferTexture != 0, "Failed to create GL Texture Object");
+    }
 }
 
 DrawImpl::~DrawImpl()

@@ -78,6 +78,20 @@ class Draw final
 
     UniformBufferHandle uniformBuffer(const std::string & name);
 
+    void setBufferTexture(
+        const std::string & name,
+        const Buffer & buffer
+    );
+
+    void setBufferTextureRange(
+        const std::string & name,
+        const Buffer & buffer,
+        u32 begin,
+        u32 count
+    );
+
+    BufferTextureBinding bufferTexture(const std::string & name);
+
     void render() const;
 
     std::string toString() const;

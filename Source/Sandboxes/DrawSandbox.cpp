@@ -30,12 +30,14 @@ class DrawSandbox : public Application
 
         const auto program = drawContext().createProgram(
             {DeliberationDataPath(
-                 "Data/Shaders/Rgb_Position2_InstancePosition2.vert"),
-             DeliberationDataPath("Data/Shaders/Rgb.frag")});
+                 "Data/Shaders/PaletteRgb_Position2_InstancePosition2.vert"),
+             DeliberationDataPath("Data/Shaders/PaletteRgb.frag")});
+
+        std::cout << program.interface().toString() << std::endl;
 
         m_draw = drawContext().createDraw(program);
 
-        const auto vertexLayout = DataLayout("Position", Type_Vec2);
+        const auto vertexLayout = DataLayout({{"Position", Type_Vec2},  {"ColorIndex", Type_U32}});
 
         auto vertices = LayoutedBlob(vertexLayout, 3);
 
@@ -44,18 +46,34 @@ class DrawSandbox : public Application
                      glm::vec2(1.0f, -1.0f),
                      glm::vec2(1.0f, 1.0f)});
 
+        vertices.field<u32>("ColorIndex")
+            .assign({2, 1, 0});
+
         m_draw.addVertices(vertices);
 
-        m_draw.setAttribute("Rgb", glm::vec3(1.0f, 0.0f, 0.5f));
         m_draw.state().setCullState(CullState::disabled());
         m_draw.state().setDepthState(DepthState::disabledRW());
 
+        m_palette.resize(3);
+        m_palette[0] = glm::vec3(1.0f, 0.0f, 0.0f);
+        m_palette[1] = glm::vec3(0.0f, 1.0f, 0.0f);
+
         m_position = glm::vec2(0.2f, 0.1f);
+
+        m_paletteBuffer = drawContext().createBuffer({"Color", Type_Vec3});
+
+        m_draw.uniformBuffer("Palette").setBuffer(m_paletteBuffer);
     }
 
     void onFrame(float seconds) override
     {
         m_secondsAccumulator += seconds;
+
+        m_palette[2] = glm::vec3(
+            0.0f, 0.0f, (std::cos(m_secondsAccumulator) + 1.0f) * 0.5f
+        );
+
+        m_paletteBuffer.upload(m_palette);
 
         m_draw.setAttribute("InstancePosition", m_position);
         m_position.x = std::abs(std::sin(m_secondsAccumulator * 0.1f));
@@ -69,6 +87,8 @@ class DrawSandbox : public Application
     Draw      m_draw;
     glm::vec2 m_position;
     float     m_secondsAccumulator = 0.0f;
+    std::vector<glm::vec3> m_palette;
+    Buffer m_paletteBuffer;
 };
 
 int main(int argc, char * argv[]) { return DrawSandbox().run(argc, argv); }

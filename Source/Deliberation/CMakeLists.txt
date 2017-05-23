@@ -120,6 +120,8 @@ set(sources
 
 	Draw/BlendState.cpp
 	Draw/BlendState.h
+	Draw/BufferTextureBinding.cpp
+	Draw/BufferTextureBinding.h
 	Draw/Buffer.cpp
 	Draw/Buffer.h
 	Draw/Clear.cpp
@@ -181,6 +183,8 @@ set(sources
 	Draw/ProgramInterfaceFragmentOutput.cpp
 	Draw/ProgramInterfaceFragmentOutput.h
 	Draw/ProgramInterface.h
+	Draw/ProgramInterfaceBufferTexture.cpp
+	Draw/ProgramInterfaceBufferTexture.h
 	Draw/ProgramInterfaceSampler.cpp
 	Draw/ProgramInterfaceSampler.h
 	Draw/ProgramInterfaceUniformBlock.cpp

@@ -225,6 +225,31 @@ UniformBufferHandle Draw::uniformBuffer(const std::string & name)
     return UniformBufferHandle(m_impl, m_impl->program->interface.uniformBlockRef(name).index());
 }
 
+void Draw::setBufferTexture(
+        const std::string & name,
+        const Buffer & buffer
+    )
+{
+    bufferTexture(name).setBuffer(buffer);
+}
+
+void Draw::setBufferTextureRange(
+    const std::string & name,
+    const Buffer & buffer,
+    u32 begin,
+    u32 count
+)
+{
+    bufferTexture(name).setBufferRange(buffer, begin, count);
+}
+
+BufferTextureBinding Draw::bufferTexture(const std::string & name)
+{
+    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+
+    return BufferTextureBinding(m_impl, m_impl->program->interface.bufferTextureRef(name).index());
+}
+
 void Draw::render() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");

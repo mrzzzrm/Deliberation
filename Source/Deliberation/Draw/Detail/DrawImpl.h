@@ -50,6 +50,8 @@ class DrawImpl final
     BufferBinding                indexBufferBinding;
     bool                         indexBufferBindingDirty = true;
 
+    std::vector<gl::GLuint>      bufferTextures;
+
     /**
      * Vertex attributes
      */

@@ -5,6 +5,7 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/ProgramInterfaceBufferTexture.h>
 #include <Deliberation/Draw/ProgramInterfaceFragmentOutput.h>
 #include <Deliberation/Draw/ProgramInterfaceSampler.h>
 #include <Deliberation/Draw/ProgramInterfaceUniform.h>
@@ -27,6 +28,7 @@ class ProgramInterface final
     fragmentOutput(const std::string & name) const;
     const ProgramInterfaceUniformBlock *
     uniformBlock(const std::string & name) const;
+    const ProgramInterfaceBufferTexture * bufferTexture(const std::string & name) const;
 
     const ProgramInterfaceVertexAttribute &
                                     attributeRef(const std::string & name) const;
@@ -36,6 +38,7 @@ class ProgramInterface final
     fragmentOutputRef(const std::string & name) const;
     const ProgramInterfaceUniformBlock &
     uniformBlockRef(const std::string & name) const;
+    const ProgramInterfaceBufferTexture & bufferTextureRef(const std::string & name) const;
 
     const ProgramInterfaceVertexAttribute *
     attributeByLocation(unsigned int location) const;
@@ -51,6 +54,7 @@ class ProgramInterface final
     const std::vector<ProgramInterfaceSampler> &         samplers() const;
     const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs() const;
     const std::vector<ProgramInterfaceUniformBlock> &   uniformBlocks() const;
+    const std::vector<ProgramInterfaceBufferTexture> & bufferTextures() const;
 
     std::string toString() const;
 
@@ -71,7 +75,9 @@ class ProgramInterface final
     std::unordered_map<std::string, std::size_t> m_fragmentOutputIndexByName;
     std::vector<unsigned int> m_fragmentOutputIndexByLocation;
 
-    std::vector<ProgramInterfaceUniformBlock>    m_uniformBlocks;
-    std::unordered_map<std::string, std::size_t> m_uniformBlockByName;
+    std::vector<ProgramInterfaceUniformBlock>    m_uniformBuffers;
+    std::unordered_map<std::string, std::size_t> m_uniformBufferByName;
+
+    std::vector<ProgramInterfaceBufferTexture>   m_bufferTextures;
 };
 }

@@ -1,5 +1,6 @@
 #include <Deliberation/Draw/ProgramInterface.h>
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -132,8 +133,6 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             gl::GL_UNIFORM_BLOCK_INDEX,
             uniformBlockIndex.data());
 
-        m_uniforms.reserve(numUniforms);
-
         for (auto u = 0; u < numUniforms; u++)
         {
             auto name = GLGetActiveUniformName(glProgramName, u);
@@ -200,37 +199,52 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             }
             else
             {
-                if (location >=
-                    (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just
-                                                                // map location
-                                                                // -> uniform,
-                                                                // no need for
-                                                                // index->
+                if (type == gl::GL_SAMPLER_BUFFER)
                 {
-                    m_uniformIndexByLocation.resize(
-                        location + 1, (unsigned int)-1);
+                    m_bufferTextures.emplace_back(name, BufferTextureType::Float, m_bufferTextures.size(), location);
                 }
-
-                if (size > 1)
+                else if (type == gl::GL_INT_SAMPLER_BUFFER)
                 {
-                    StringRErase(name, "[0]");
+                    m_bufferTextures.emplace_back(name, BufferTextureType::Int, m_bufferTextures.size(), location);
                 }
-
-                if (uniformBlockIndex[u] >= 0)
+                else if (type == gl::GL_INT_SAMPLER_BUFFER)
                 {
-                    blockUniformsByIndex.emplace(std::make_pair(
-                        u,
-                        ProgramInterfaceUniform(
-                            name, GLTypeToType(type), location, size)));
+                    m_bufferTextures.emplace_back(name, BufferTextureType::UnsignedInt, m_bufferTextures.size(), location);
                 }
                 else
                 {
-                    Assert(location >= 0, "");
+                    if (location >=
+                        (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just
+                                                                    // map location
+                                                                    // -> uniform,
+                                                                    // no need for
+                                                                    // index->
+                    {
+                        m_uniformIndexByLocation.resize(
+                            location + 1, (unsigned int)-1);
+                    }
 
-                    m_uniformIndexByLocation[location] = m_uniforms.size();
-                    m_uniformIndexByName[name] = m_uniforms.size();
-                    m_uniforms.emplace_back(
-                        name, GLTypeToType(type), location, size);
+                    if (size > 1)
+                    {
+                        StringRErase(name, "[0]");
+                    }
+
+                    if (uniformBlockIndex[u] >= 0)
+                    {
+                        blockUniformsByIndex.emplace(std::make_pair(
+                            u,
+                            ProgramInterfaceUniform(
+                                name, GLTypeToType(type), location, size)));
+                    }
+                    else
+                    {
+                        Assert(location >= 0, "");
+
+                        m_uniformIndexByLocation[location] = m_uniforms.size();
+                        m_uniformIndexByName[name] = m_uniforms.size();
+                        m_uniforms.emplace_back(
+                            name, GLTypeToType(type), location, size);
+                    }
                 }
             }
         }
@@ -289,9 +303,9 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                         uniform.arraySize());
                 }
 
-                m_uniformBlocks.emplace_back(
+                m_uniformBuffers.emplace_back(
                     name, DataLayout(std::move(fields), size), b);
-                m_uniformBlockByName[name] = m_uniformBlocks.size() - 1;
+                m_uniformBufferByName[name] = m_uniformBuffers.size() - 1;
             }
             else
             {
@@ -433,10 +447,21 @@ ProgramInterface::fragmentOutput(const std::string & name) const
 const ProgramInterfaceUniformBlock *
 ProgramInterface::uniformBlock(const std::string & name) const
 {
-    auto iter = m_uniformBlockByName.find(name);
-    if (iter == m_uniformBlockByName.end()) return nullptr;
+    auto iter = m_uniformBufferByName.find(name);
+    if (iter == m_uniformBufferByName.end()) return nullptr;
 
-    return &m_uniformBlocks[iter->second];
+    return &m_uniformBuffers[iter->second];
+}
+
+const ProgramInterfaceBufferTexture * ProgramInterface::bufferTexture(const std::string & name) const
+{
+    auto iter = std::find_if(m_bufferTextures.begin(), m_bufferTextures.end(),
+                              [&](const ProgramInterfaceBufferTexture & bufferTexture)
+                              {
+                                  return bufferTexture.name() == name;
+                              });
+
+    return iter == m_bufferTextures.end() ? nullptr : &*iter;
 }
 
 const ProgramInterfaceVertexAttribute &
@@ -476,6 +501,13 @@ ProgramInterface::uniformBlockRef(const std::string & name) const
 {
     const auto * ptr = uniformBlock(name);
     Assert(ptr, "No such uniformBlock '" + name + "'");
+    return *ptr;
+}
+
+const ProgramInterfaceBufferTexture & ProgramInterface::bufferTextureRef(const std::string & name) const
+{
+    const auto * ptr = bufferTexture(name);
+    Assert(ptr != nullptr, "No such Buffer Texture '" + name + "'");
     return *ptr;
 }
 
@@ -571,7 +603,12 @@ ProgramInterface::fragmentOutputs() const
 const std::vector<ProgramInterfaceUniformBlock> &
 ProgramInterface::uniformBlocks() const
 {
-    return m_uniformBlocks;
+    return m_uniformBuffers;
+}
+
+const std::vector<ProgramInterfaceBufferTexture> & ProgramInterface::bufferTextures() const
+{
+    return m_bufferTextures;
 }
 
 std::string ProgramInterface::toString() const
@@ -590,8 +627,8 @@ std::string ProgramInterface::toString() const
         stream << "  " << uniform.toString() << std::endl;
     }
 
-    stream << "UniformBlocks: " << m_uniformBlocks.size() << std::endl;
-    for (auto & uniformBlock : m_uniformBlocks)
+    stream << "UniformBlocks: " << m_uniformBuffers.size() << std::endl;
+    for (auto & uniformBlock : m_uniformBuffers)
     {
         stream << "  " << uniformBlock.toString() << std::endl;
     }
@@ -604,6 +641,11 @@ std::string ProgramInterface::toString() const
 
     stream << "Fragment outputs: " << m_fragmentOutputs.size() << std::endl;
     for (auto & output : m_fragmentOutputs)
+    {
+        stream << "  " << output.toString() << std::endl;
+    }
+    stream << "Buffer Textures: " << m_bufferTextures.size() << std::endl;
+    for (auto & output : m_bufferTextures)
     {
         stream << "  " << output.toString() << std::endl;
     }

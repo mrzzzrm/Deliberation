@@ -19,10 +19,12 @@ UniformBufferHandle::UniformBufferHandle(const std::shared_ptr<DrawImpl> &drawIm
 void UniformBufferHandle::setBuffer(const Buffer &buffer, u32 begin) {
     Assert((bool)m_drawImpl, "UniformBufferHandle is hollow");
 
-    const auto & uniformBlockLayout = m_drawImpl->program->interface.uniformBlocks()[m_index].layout();
-    Assert(buffer.layout() == uniformBlockLayout,
+    const auto & uniformBufferInterface = m_drawImpl->program->interface.uniformBlocks()[m_index];
+    const auto & uniformBufferLayout = uniformBufferInterface.layout();
+
+    Assert(buffer.layout() == uniformBufferLayout,
            "UniformBlock layout doesn't match the buffer:\n\t" + buffer.layout().toString() +
-           "\n\t" + uniformBlockLayout.toString());
+           "\n\t" + uniformBufferLayout.toString());
 
     UniformBufferBinding binding{buffer.m_impl, begin};
 
