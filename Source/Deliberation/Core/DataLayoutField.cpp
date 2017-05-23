@@ -10,6 +10,11 @@ DataLayoutField::Desc::Desc(
 {
 }
 
+bool DataLayoutField::Desc::operator==(const DataLayoutField::Desc & rhs) const
+{
+    return name == rhs.name && type == rhs.type && arraySize == rhs.arraySize;
+}
+
 DataLayoutField::DataLayoutField(
     const std::string & name, Type type, size_t offset, size_t arraySize)
     : m_desc({name, type, arraySize}), m_offset(offset)
@@ -32,5 +37,11 @@ std::string DataLayoutField::toString() const
            << m_offset << "]";
 
     return stream.str();
+}
+
+bool DataLayoutField::operator==(const DataLayoutField & rhs) const
+{
+    if (m_offset != rhs.m_offset) return false;
+    return m_desc == rhs.m_desc;
 }
 }

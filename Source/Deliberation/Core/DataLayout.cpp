@@ -147,4 +147,11 @@ std::string DataLayout::toString() const
 
     return stream.str();
 }
+
+bool DataLayout::operator==(const DataLayout & rhs) const
+{
+    if (m_stride != rhs.stride()) return false;
+
+    return m_fields == rhs.m_fields;
+}
 }

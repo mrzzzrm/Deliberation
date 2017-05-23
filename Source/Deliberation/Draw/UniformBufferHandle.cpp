@@ -4,6 +4,7 @@
 
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Detail/DrawImpl.h>
+#include <Deliberation/Draw/Detail/ProgramImpl.h>
 
 namespace deliberation
 {
@@ -16,7 +17,12 @@ UniformBufferHandle::UniformBufferHandle(const std::shared_ptr<DrawImpl> &drawIm
 }
 
 void UniformBufferHandle::setBuffer(const Buffer &buffer, u32 begin) {
-    Assert((bool) m_drawImpl, "UniformBufferHandle is hollow");
+    Assert((bool)m_drawImpl, "UniformBufferHandle is hollow");
+
+    const auto & uniformBlockLayout = m_drawImpl->program->interface.uniformBlocks()[m_index].layout();
+    Assert(buffer.layout() == uniformBlockLayout,
+           "UniformBlock layout doesn't match the buffer:\n\t" + buffer.layout().toString() +
+           "\n\t" + uniformBlockLayout.toString());
 
     UniformBufferBinding binding{buffer.m_impl, begin};
 

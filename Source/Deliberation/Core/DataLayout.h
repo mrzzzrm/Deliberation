@@ -42,6 +42,8 @@ class DataLayout final
 
     std::string toString() const;
 
+    bool operator==(const DataLayout & rhs) const;
+
   private:
     std::vector<DataLayoutField> m_fields;
     size_t                       m_stride = 0u;

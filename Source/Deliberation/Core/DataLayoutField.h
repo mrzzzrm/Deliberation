@@ -19,6 +19,8 @@ class DataLayoutField final
         Desc & operator=(const Desc & rhs) = default;
         Desc & operator=(Desc && rhs) = default;
 
+        bool operator==(const Desc & rhs) const;
+
         std::string name;
         Type        type = Type_None;
         size_t      arraySize = 0;
@@ -39,6 +41,8 @@ class DataLayoutField final
     const Desc &        desc() const;
 
     std::string toString() const;
+
+    bool operator==(const DataLayoutField & rhs) const;
 
   private:
     Desc   m_desc;
