@@ -257,6 +257,7 @@ void Draw::render() const
     DELIBERATION_GPU_SCOPE(m_impl->name.empty() ? "<Unnamed Draw>" : m_impl->name);
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    auto activeTextureIndex = 0;
 
     if (m_impl->glVertexArray == 0) build();
 
@@ -451,7 +452,7 @@ void Draw::render() const
 
     glStateManager.useProgram(m_impl->program->glProgramName);
 
-    // Setup texture units
+    // Setup Sampled Textures
     for (auto b = 0u; b < m_impl->samplers.size(); b++)
     {
         auto & sampler = m_impl->samplers[b];
@@ -459,10 +460,12 @@ void Draw::render() const
 
         Assert((bool)texture, "Sampler has no Texture bound to it");
 
-        glStateManager.setActiveTexture(b);
+        glStateManager.setActiveTexture(activeTextureIndex);
         glStateManager.bindTexture((gl::GLenum)texture->type, texture->glName);
-        glStateManager.bindSampler(b, sampler->glName);
-        gl::glUniform1i(sampler->location, b);
+        glStateManager.bindSampler(activeTextureIndex, sampler->glName);
+        gl::glUniform1i(sampler->location, activeTextureIndex);
+
+        activeTextureIndex++;
     }
 
     // Setup RenderTarget / Framebuffer
@@ -571,6 +574,48 @@ void Draw::render() const
                 buffer.glName,
                 binding.get().begin,
                 buffer.layout.stride());
+        }
+    }
+
+    // Set buffer textures
+    {
+        for (u32 b = 0; b < m_impl->bufferTextures.size(); b++)
+        {
+            const auto texture = m_impl->bufferTextures[b];
+            const auto & interface = m_impl->program->interface.bufferTextures()[b];
+            auto & binding = m_impl->bufferTextureBindings[b];
+
+            Assert(binding.buffer.isInitialized(), "Buffer not set for BufferTexture '" + interface.name() + "'");
+
+            glStateManager.setActiveTexture(activeTextureIndex);
+            glStateManager.bindTexture(gl::GL_TEXTURE_BUFFER, texture);
+            gl::glUniform1i(interface.location(), activeTextureIndex);
+
+            if (binding.dirty)
+            {
+                if (binding.ranged)
+                {
+                    m_impl->drawContext.m_glStateManager.bindTexture(gl::GL_TEXTURE_BUFFER, texture);
+
+                    gl::glTexBufferRange(gl::GL_TEXTURE_BUFFER,
+                                         binding.internalFormat,
+                                         binding.buffer.m_impl->glName,
+                                         binding.begin * binding.buffer.layout().stride(),
+                                         binding.count * binding.buffer.layout().stride());
+                }
+                else
+                {
+                    m_impl->drawContext.m_glStateManager.bindTexture(gl::GL_TEXTURE_BUFFER, texture);
+
+                    gl::glTexBuffer(gl::GL_TEXTURE_BUFFER,
+                                    binding.internalFormat,
+                                    binding.buffer.m_impl->glName);
+                }
+
+                binding.dirty = false;
+            }
+
+            activeTextureIndex++;
         }
     }
 

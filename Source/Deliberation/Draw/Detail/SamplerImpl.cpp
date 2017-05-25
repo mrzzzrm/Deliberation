@@ -4,6 +4,8 @@
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Draw/Detail/TextureImpl.h>
+#include <Deliberation/Draw/DrawContext.h>
 
 namespace deliberation
 {
@@ -24,7 +26,7 @@ SamplerImpl::SamplerImpl(
 
 SamplerImpl::~SamplerImpl()
 {
-    gl::glDeleteSamplers(1, &glName);
+    textureImpl->drawContext.m_glStateManager.deleteSampler(glName);
 }
 
 gl::GLenum SamplerImpl::textureType() const

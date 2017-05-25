@@ -23,6 +23,7 @@ class TextureImpl final
         u32           height,
         u32           numFaces,
         PixelFormat   format);
+    ~TextureImpl();
 
     void setupSurfaces(const std::shared_ptr<TextureImpl> & textureImpl);
     void texImage2DAllFaces(const TextureBinary * binary) const;

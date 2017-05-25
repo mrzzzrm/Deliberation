@@ -70,6 +70,11 @@ TextureImpl::TextureImpl(
     texImage2DAllFaces(nullptr);
 }
 
+TextureImpl::~TextureImpl()
+{
+    drawContext.m_glStateManager.deleteTextures(1, &glName);
+}
+
 void TextureImpl::setupSurfaces(
     const std::shared_ptr<TextureImpl> & textureImpl)
 {

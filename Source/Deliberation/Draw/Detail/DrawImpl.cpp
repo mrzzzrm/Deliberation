@@ -64,17 +64,12 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     valueAttributes = Blob(0);
 
     // Create Buffer Textures
-    auto numBufferTextures = 0;
-    for (auto & uniformBuffer : this->program->interface.uniformBlocks())
-    {
-        if (uniformBuffer.type() != UniformBufferType::BufferTexture) continue;
-        numBufferTextures++;
-    }
-    bufferTextures.resize(numBufferTextures);
+    bufferTextureBindings.resize(this->program->interface.bufferTextures().size());
+    bufferTextures.resize(this->program->interface.bufferTextures().size());
     gl::glGenTextures(bufferTextures.size(), bufferTextures.data());
-    for (const auto bufferTexture : bufferTextures)
+    for (auto & texture : bufferTextures)
     {
-        Assert(bufferTexture != 0, "Failed to create GL Texture Object");
+        Assert(texture != 0, "Failed to create GL texture object");
     }
 }
 
@@ -83,6 +78,11 @@ DrawImpl::~DrawImpl()
     if (glVertexArray != 0)
     {
         drawContext.m_glStateManager.deleteVertexArray(glVertexArray);
+    }
+
+    if (!bufferTextures.empty())
+    {
+        drawContext.m_glStateManager.deleteTextures(bufferTextures.size(), bufferTextures.data());
     }
 }
 

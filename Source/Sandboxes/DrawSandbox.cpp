@@ -24,7 +24,7 @@ class DrawSandbox : public Application
 
     void onStartup() override
     {
-        DisableGLErrorChecks();
+        EnableGLErrorChecks();
 
         m_clear = drawContext().createClear();
 
@@ -47,7 +47,7 @@ class DrawSandbox : public Application
                      glm::vec2(1.0f, 1.0f)});
 
         vertices.field<u32>("ColorIndex")
-            .assign({2, 1, 0});
+            .assign({2, 2, 2});
 
         m_draw.addVertices(vertices);
 
@@ -55,14 +55,13 @@ class DrawSandbox : public Application
         m_draw.state().setDepthState(DepthState::disabledRW());
 
         m_palette.resize(3);
-        m_palette[0] = glm::vec3(1.0f, 0.0f, 0.0f);
+        m_palette[0] = glm::vec3(1.0f, 0.5f, 0.0f);
         m_palette[1] = glm::vec3(0.0f, 1.0f, 0.0f);
 
         m_position = glm::vec2(0.2f, 0.1f);
 
         m_paletteBuffer = drawContext().createBuffer({"Color", Type_Vec3});
 
-        m_draw.uniformBuffer("Palette").setBuffer(m_paletteBuffer);
     }
 
     void onFrame(float seconds) override
@@ -74,6 +73,7 @@ class DrawSandbox : public Application
         );
 
         m_paletteBuffer.upload(m_palette);
+        m_draw.bufferTexture("Palette").setBuffer(m_paletteBuffer);
 
         m_draw.setAttribute("InstancePosition", m_position);
         m_position.x = std::abs(std::sin(m_secondsAccumulator * 0.1f));
@@ -88,7 +88,7 @@ class DrawSandbox : public Application
     glm::vec2 m_position;
     float     m_secondsAccumulator = 0.0f;
     std::vector<glm::vec3> m_palette;
-    Buffer m_paletteBuffer;
+    Buffer      m_paletteBuffer;
 };
 
 int main(int argc, char * argv[]) { return DrawSandbox().run(argc, argv); }

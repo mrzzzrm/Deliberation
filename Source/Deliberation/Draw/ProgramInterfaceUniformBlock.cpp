@@ -5,9 +5,8 @@
 namespace deliberation
 {
 ProgramInterfaceUniformBlock::ProgramInterfaceUniformBlock(
-    const std::string & name,
-    UniformBufferType type, const DataLayout & layout, unsigned int index)
-    : m_name(name), m_type(type), m_layout(layout), m_index(index)
+    const std::string & name, const DataLayout & layout, unsigned int index)
+    : m_name(name), m_layout(layout), m_index(index)
 {
 }
 
@@ -15,9 +14,9 @@ std::string ProgramInterfaceUniformBlock::toString() const
 {
     std::stringstream stream;
 
-    const auto TYPES[] = {"UniformBlock", "TextureBuffer"};
+    static const char * TYPES[] = {"UniformBlock", "TextureBuffer"};
 
-    stream << "{Name: " << m_name << "; Type: " << TYPES[(int)m_type] << "; Index: " << m_index
+    stream << "{Name: " << m_name << "; Index: " << m_index
            << "; Layout: " << m_layout.toString() << "}";
 
     return stream.str();

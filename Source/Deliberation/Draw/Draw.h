@@ -7,6 +7,7 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 
+#include <Deliberation/Draw/BufferTextureBinding.h>
 #include <Deliberation/Draw/FramebufferBinding.h>
 #include <Deliberation/Draw/Program.h>
 #include <Deliberation/Draw/Sampler.h>

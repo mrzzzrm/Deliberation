@@ -10,6 +10,8 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Core/IntTypes.h>
+
 namespace deliberation
 {
 class GLStateManager final
@@ -70,9 +72,9 @@ class GLStateManager final
     void useProgram(gl::GLuint program);
     void setActiveTexture(gl::GLuint textureUnit);
     void bindTexture(gl::GLenum target, gl::GLuint texture);
+    void deleteTextures(u32 n, const gl::GLuint * textures);
     void enableScissorTest(bool enabled);
-    void
-         setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
+    void setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
     void setDrawBuffer(gl::GLenum buf);
     void setDrawBuffers(const std::vector<gl::GLenum> & bufs);
     void bindVertexArray(gl::GLuint vertexArray);

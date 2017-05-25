@@ -595,6 +595,24 @@ void GLStateManager::bindTexture(gl::GLenum target, gl::GLuint texture)
     gl::glBindTexture(target, texture);
 }
 
+void GLStateManager::deleteTextures(u32 n, const gl::GLuint * textures)
+{
+    for (u32 t = 0; t < n; t++)
+    {
+        const auto & texture = textures[t];
+
+        for (auto & boundTextures : m_boundTexturesByUnit)
+        {
+            for (auto & boundTexture : boundTextures)
+            {
+                if (boundTexture == texture) boundTexture = 0;
+            }
+        }
+    }
+
+    gl::glDeleteTextures(n, textures);
+}
+
 void GLStateManager::enableScissorTest(bool enabled)
 {
     applyEnableDisableState(gl::GL_SCISSOR_TEST, m_scissorTestEnabled, enabled);

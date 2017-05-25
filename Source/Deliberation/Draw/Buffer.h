@@ -20,6 +20,8 @@ class Buffer final
     Buffer() = default;
     Buffer(const std::shared_ptr<BufferImpl> & impl);
 
+    bool isInitialized() const { return (bool)m_impl; }
+
     size_t             count() const;
     size_t             size() const;
     const DataLayout & layout() const;
@@ -37,6 +39,7 @@ class Buffer final
     std::string toString() const;
 
   private:
+    friend class BufferTextureBinding;
     friend class BufferUploadExecution;
     friend class DrawContext;
     friend class Draw;

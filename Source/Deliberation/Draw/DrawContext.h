@@ -66,11 +66,13 @@ class DrawContext final
   private:
     friend class Buffer;
     friend class BufferImpl;
+    friend class BufferTextureBinding;
     friend class Clear;
     friend class Draw;
     friend class DrawImpl;
     friend class FramebufferImpl;
     friend class QueryImpl;
+    friend class SamplerImpl;
     friend class SurfaceDownloadImpl;
     friend class Texture;
     friend class TextureImpl;
