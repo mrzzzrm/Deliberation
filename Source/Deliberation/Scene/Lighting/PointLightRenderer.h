@@ -39,6 +39,7 @@ class PointLightRenderer : public SingleNodeRenderer
 
     // Reference invalidated by add/removePointLight()
     PointLight & pointLight(size_t index);
+    const std::vector<PointLight> & pointLights() const { return m_lights; }
 
     size_t addPointLight(const PointLight & pointLight);
     void   removePointLight(size_t index);
@@ -70,8 +71,7 @@ public:
         m_pointLightRenderer = world.systemRef<RenderSystem>().renderManager().addRenderer<PointLightRenderer>();
     }
 
-    PointLightRenderer & pointLightRenderer() { return *m_pointLightRenderer; }
-    const PointLightRenderer & pointLightRenderer() const { return *m_pointLightRenderer; }
+    const std::shared_ptr<PointLightRenderer> & pointLightRenderer() const { return m_pointLightRenderer; }
 
 private:
     std::shared_ptr<PointLightRenderer> m_pointLightRenderer;

@@ -2,7 +2,7 @@
 
 #include <Deliberation/Core/Optional.h>
 
-#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGeometryNode.h>
 
 namespace deliberation
 {
@@ -25,9 +25,9 @@ class DebugPhysicsWorldRenderer final
     const PhysicsWorld & m_physicsWorld;
     const Camera3D &     m_camera;
 
-    Optional<DebugGeometryRenderer> m_contactNormalRenderer;
-    Optional<DebugGeometryRenderer> m_contactVelocityRenderer;
-    Optional<DebugGeometryRenderer> m_linearVelocityRenderer;
-    Optional<DebugGeometryRenderer> m_angularVelocityRenderer;
+    Optional<DebugGeometryNode> m_contactNormalRenderer;
+    Optional<DebugGeometryNode> m_contactVelocityRenderer;
+    Optional<DebugGeometryNode> m_linearVelocityRenderer;
+    Optional<DebugGeometryNode> m_angularVelocityRenderer;
 };
 }

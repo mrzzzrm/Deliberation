@@ -58,6 +58,8 @@ set(sources
 	Core/LayoutedBlob.h
 	Core/LinearMap.h
 	Core/LinearOctree.h
+	Core/Noise.cpp
+	Core/Noise.h
 	Core/MainLoop.cpp
 	Core/MainLoop.h
 	Core/Math/AABB.cpp
@@ -321,14 +323,16 @@ set(sources
 	Scene/Debug/DebugCameraNavigator3D.h
 	Scene/Debug/DebugCubemapRenderer.cpp
 	Scene/Debug/DebugCubemapRenderer.h
-	Scene/Debug/DebugGeometryManager.cpp
-	Scene/Debug/DebugGeometryManager.h
 	Scene/Debug/DebugGeometryRenderer.cpp
 	Scene/Debug/DebugGeometryRenderer.h
+	Scene/Debug/DebugGeometryNode.cpp
+	Scene/Debug/DebugGeometryNode.h
 	Scene/Debug/DebugGrid3DRenderer.cpp
 	Scene/Debug/DebugGrid3DRenderer.h
 	Scene/Debug/DebugGroundPlaneRenderer.cpp
 	Scene/Debug/DebugGroundPlaneRenderer.h
+	Scene/Debug/DebugPointLightSystem.cpp
+	Scene/Debug/DebugPointLightSystem.h
 	Scene/Debug/DebugPhysicsWorldRenderer.cpp
 	Scene/Debug/DebugPhysicsWorldRenderer.h
 	Scene/Debug/DebugSurfaceOverlayRenderer.cpp

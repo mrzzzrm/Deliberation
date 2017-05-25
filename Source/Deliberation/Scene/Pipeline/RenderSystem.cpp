@@ -16,6 +16,7 @@ RenderSystem::RenderSystem(World & world)
     : Base(world)
     , m_renderManager(world.systemRef<ApplicationSystem>().drawContext())
 {
+    m_debugGeometryRenderer = m_renderManager.addRenderer<DebugGeometryRenderer>();
 }
 
 
