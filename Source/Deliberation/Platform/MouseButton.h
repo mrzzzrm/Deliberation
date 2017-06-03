@@ -4,14 +4,27 @@
 
 namespace deliberation
 {
-enum MouseButton
+enum class MouseButton
 {
-    MouseButton_None = 0,
-    MouseButton_Left = 1 << 0,
-    MouseButton_Middle = 1 << 1,
-    MouseButton_Right = 1 << 2,
-    MouseButton_X1 = 1 << 3,
-    MouseButton_X2 = 1 << 4,
-    MouseButton_Unknown = 1 << 5
+    None = 0,
+    Left,
+    Middle,
+    Right,
+    X1,
+    X2,
+    Unknown,
+
+    Count // Meta
+};
+
+enum class MouseButtonMask
+{
+    None = 0,
+    Left = 1 << (i32)MouseButton::Left,
+    Middle = 1 << (i32)MouseButton::Middle,
+    Right = 1 << (i32)MouseButton::Right,
+    X1 = 1 << (i32)MouseButton::X1,
+    X2 = 1 << (i32)MouseButton::X2,
+    Unknown = 1 << (i32)MouseButton::Unknown
 };
 }

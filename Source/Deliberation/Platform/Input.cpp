@@ -76,12 +76,12 @@ MouseButton SDLMouseButtonToDeliberation(uint8_t button)
 {
     switch (button)
     {
-    case SDL_BUTTON_LEFT: return deliberation::MouseButton_Left;
-    case SDL_BUTTON_RIGHT: return deliberation::MouseButton_Right;
-    case SDL_BUTTON_MIDDLE: return deliberation::MouseButton_Middle;
-    case SDL_BUTTON_X1: return deliberation::MouseButton_X1;
-    case SDL_BUTTON_X2: return deliberation::MouseButton_X2;
-    default: return deliberation::MouseButton_Unknown;
+    case SDL_BUTTON_LEFT: return deliberation::MouseButton::Left;
+    case SDL_BUTTON_RIGHT: return deliberation::MouseButton::Right;
+    case SDL_BUTTON_MIDDLE: return deliberation::MouseButton::Middle;
+    case SDL_BUTTON_X1: return deliberation::MouseButton::X1;
+    case SDL_BUTTON_X2: return deliberation::MouseButton::X2;
+    default: return deliberation::MouseButton::Unknown;
     }
 }
 
@@ -89,11 +89,11 @@ u32 DeliberationMouseButtonToSDL(MouseButton mouseButton)
 {
     switch (mouseButton)
     {
-    case MouseButton_Left: return SDL_BUTTON_LEFT;
-    case MouseButton_Middle: return SDL_BUTTON_MIDDLE;
-    case MouseButton_Right: return SDL_BUTTON_RIGHT;
-    case MouseButton_X1: return SDL_BUTTON_X1;
-    case MouseButton_X2: return SDL_BUTTON_X2;
+    case MouseButton::Left: return SDL_BUTTON_LEFT;
+    case MouseButton::Middle: return SDL_BUTTON_MIDDLE;
+    case MouseButton::Right: return SDL_BUTTON_RIGHT;
+    case MouseButton::X1: return SDL_BUTTON_X1;
+    case MouseButton::X2: return SDL_BUTTON_X2;
     default: Fail("");
     }
 }
@@ -101,6 +101,11 @@ u32 DeliberationMouseButtonToSDL(MouseButton mouseButton)
 
 namespace deliberation
 {
+Input::Input()
+{
+    m_mouseButtonsDown.reset();
+}
+
 bool Input::mouseButtonDown(MouseButton button) const
 {
     return (SDL_GetMouseState(NULL, NULL) &
@@ -188,35 +193,43 @@ void Input::onSDLInputEvent(const SDL_Event & sdlEvent)
         }
 
         // Dispatch Down/Release
-        processEvent<MouseButtonEvent>(
+        auto receivingLayer = processEvent<MouseButtonEvent>(
             event, [&](InputLayer & layer, MouseButtonEvent & event) {
                 if (sdlEvent.type == SDL_MOUSEBUTTONUP)
                     layer.onMouseButtonReleased(event);
                 if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
                     layer.onMouseButtonPressed(event);
             });
+
+        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN) m_mouseOwningLayer = receivingLayer;
+
+        // Mouse Button Down state/events
+        if (sdlEvent.type == SDL_MOUSEBUTTONUP) m_mouseButtonsDown.reset((size_t)mouseButton);
+        else m_mouseButtonsDown.set((size_t)mouseButton);
+
+        if (sdlEvent.type == SDL_MOUSEBUTTONUP && m_mouseButtonsDown.count() == 0) m_mouseOwningLayer.reset();
     }
     break;
 
     case SDL_MOUSEMOTION:
     {
-        auto mouseButtons = MouseButton_None;
-        mouseButtons = (MouseButton)(
+        auto mouseButtons = 0;
+        mouseButtons = (
             mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_LMASK ? MouseButton_Left : 0));
-        mouseButtons = (MouseButton)(
+            (sdlEvent.motion.state & SDL_BUTTON_LMASK ? (i32)MouseButtonMask::Left : 0));
+        mouseButtons = (
             mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_MMASK ? MouseButton_Middle
+            (sdlEvent.motion.state & SDL_BUTTON_MMASK ? (i32)MouseButtonMask::Middle
                                                       : 0));
-        mouseButtons = (MouseButton)(
+        mouseButtons = (
             mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_RMASK ? MouseButton_Right : 0));
-        mouseButtons = (MouseButton)(
+            (sdlEvent.motion.state & SDL_BUTTON_RMASK ? (i32)MouseButtonMask::Right : 0));
+        mouseButtons = (
             mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_X1MASK ? MouseButton_X1 : 0));
-        mouseButtons = (MouseButton)(
+            (sdlEvent.motion.state & SDL_BUTTON_X1MASK ? (i32)MouseButtonMask::X1 : 0));
+        mouseButtons = (
             mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_X2MASK ? MouseButton_X2 : 0));
+            (sdlEvent.motion.state & SDL_BUTTON_X2MASK ? (i32)MouseButtonMask::X2 : 0));
 
         const auto event = MouseMotionEvent(
             mouseButtons,
@@ -243,15 +256,41 @@ void Input::onSDLInputEvent(const SDL_Event & sdlEvent)
     }
 }
 
+void Input::onFrameBegin()
+{
+    // MouseDown event
+    {
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        MouseStateEvent event = MouseStateEvent{(u32)m_mouseButtonsDown.to_ulong(),
+                                                sdlMousePositionToNdc(mouseX, mouseY)};
+
+        if (m_mouseOwningLayer)
+        {
+            m_mouseOwningLayer->onMouseButtonDown(event);
+        }
+        else
+        {
+            processEvent<MouseStateEvent>(event,
+                                          [&](InputLayer & layer, MouseStateEvent & event) {
+                                              layer.onMouseButtonDown(event);
+                                          });
+        }
+    }
+}
+
 template<typename T>
-void Input::processEvent(
+std::shared_ptr<InputLayer> Input::processEvent(
     T event, const std::function<void(InputLayer &, T &)> & fn) const
 {
     for (const auto & layer : m_layers)
     {
         fn(*layer, event);
-        if (event.isConsumed()) break;
+        if (event.isConsumed()) return layer;
     }
+    return {};
 }
 
 glm::vec2 Input::sdlMousePositionToNdc(i32 x, i32 y) const

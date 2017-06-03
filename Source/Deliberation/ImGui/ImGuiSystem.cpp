@@ -76,8 +76,8 @@ void ImGuiSystem::onFrameBegin()
 
     io.MousePos = ImVec2(mouseX, mouseY);
 
-    io.MouseDown[0] = m_input.mouseButtonDown(MouseButton_Left);
-    io.MouseDown[1] = m_input.mouseButtonDown(MouseButton_Right);
+    io.MouseDown[0] = m_input.mouseButtonDown(MouseButton::Left);
+    io.MouseDown[1] = m_input.mouseButtonDown(MouseButton::Right);
     io.MouseDown[2] = false;
     io.MouseDown[3] = false;
     io.MouseDown[4] = false;

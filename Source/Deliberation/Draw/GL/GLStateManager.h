@@ -86,20 +86,20 @@ class GLStateManager final
     void applyEnableDisableState(gl::GLenum state, bool & current, bool target);
 
   private:
-    enum BufferTarget
-    {
-        ArrayBufferTarget = 0,
-        CopyReadBufferTarget,
-        CopyWriteBufferTarget,
-        ElementArrayBufferTarget,
-        PixelPackBufferTarget,
-        PixelUnpackBufferTarget,
-        TextureBufferTarget,
-        TransformFeedbackBufferTarget,
-        UniformBufferTarget,
-
-        BufferTargetCount
-    };
+//    enum BufferTarget
+//    {
+//        ArrayBufferTarget = 0,
+//        CopyReadBufferTarget,
+//        CopyWriteBufferTarget,
+//        ElementArrayBufferTarget,
+//        PixelPackBufferTarget,
+//        PixelUnpackBufferTarget,
+//        TextureBufferTarget,
+//        TransformFeedbackBufferTarget,
+//        UniformBufferTarget,
+//
+//        BufferTargetCount
+//    };
 
     enum FramebufferTarget
     {
@@ -163,7 +163,7 @@ class GLStateManager final
     gl::GLenum                                     m_glStencilSFail[2];
     gl::GLenum                                     m_glStencilDPFail[2];
     gl::GLenum                                     m_glStencilDPPass[2];
-    std::array<gl::GLuint, BufferTargetCount>      m_boundBuffers;
+//    std::array<gl::GLuint, BufferTargetCount>      m_boundBuffers;
     gl::GLclampf                                   m_glClearColorRed;
     gl::GLclampf                                   m_glClearColorGreen;
     gl::GLclampf                                   m_glClearColorBlue;

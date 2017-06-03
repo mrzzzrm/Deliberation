@@ -27,8 +27,11 @@
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
+#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGeometryNode.h>
 #include <Deliberation/Scene/Debug/DebugCubemapRenderer.h>
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
+#include <Deliberation/Scene/Debug/DebugPointLightSystem.h>
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
 #include <Deliberation/Scene/Effects/BloomRenderer.h>
 #include <Deliberation/Scene/HdrRenderer.h>
@@ -51,6 +54,8 @@ class SceneSandbox : public Application
 
     virtual void onStartup() override
     {
+        //EnableGLErrorChecksAndLogging();
+
         m_world.addSystem<ApplicationSystem>(*this);
         m_renderSystem = m_world.addSystem<RenderSystem>();
         m_world.addSystem<ImGuiSystem>();
@@ -62,9 +67,11 @@ class SceneSandbox : public Application
         m_pointLightRenderer =
             renderManager.addRenderer<PointLightRenderer>();
         m_ssaoRenderer = renderManager.addRenderer<SsaoRenderer>();
+        m_debugGeometryRenderer = renderManager.addRenderer<DebugGeometryRenderer>();
         m_hdrRenderer = renderManager.addRenderer<HdrRenderer>();
         m_ground = renderManager.addRenderer<DebugGroundPlaneRenderer>();
         renderManager.addRenderer<BloomRenderer>();
+        m_world.addSystem<DebugPointLightSystem>(m_pointLightRenderer);
 
         m_bunnyModel = m_modelRenderer->addModel(
             DeliberationDataPath("Data/Models/bunny.obj"));
@@ -178,6 +185,8 @@ class SceneSandbox : public Application
 
     std::shared_ptr<RenderSystem>             m_renderSystem;
     std::shared_ptr<DebugGroundPlaneRenderer> m_ground;
+    std::shared_ptr<DebugGeometryRenderer>    m_debugGeometryRenderer;
+    std::shared_ptr<DebugGeometryNode>        m_debugGeometryNode;
     std::shared_ptr<PointLightRenderer>       m_pointLightRenderer;
     std::shared_ptr<AmbientLightRenderer>     m_ambientLightRenderer;
     std::shared_ptr<HdrRenderer>              m_hdrRenderer;

@@ -347,6 +347,7 @@ void DebugSphereInstance::render() const
     }
 
     m_draw.render();
+    m_draw.render();
 }
 
 DebugPoseInstance::DebugPoseInstance(DebugGeometryNode & renderer)

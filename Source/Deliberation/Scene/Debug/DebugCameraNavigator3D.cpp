@@ -43,13 +43,13 @@ void DebugCameraNavigator3D::update(float seconds)
 
 void DebugCameraNavigator3D::onMouseMotion(MouseMotionEvent & event)
 {
-    if (!event.button(MouseButton_Left)) return;
+    if (!event.button(MouseButton::Left)) return;
 
     double mouseX;
     double mouseY;
 
     auto mousePos = event.mousePosition();
-    auto pressed = m_inputAdapter.mouseButtonDown(MouseButton_Left);
+    auto pressed = m_inputAdapter.mouseButtonDown(MouseButton::Left);
 
     if (!m_mousePressed && pressed)
     {

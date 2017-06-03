@@ -100,6 +100,7 @@ int Application::run(int argc, char ** argv)
             case SDL_QUIT: quit(0); break;
             }
         }
+        m_input->onFrameBegin();
 
         SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 

@@ -22,10 +22,16 @@ void BloomRenderer::render()
     m_extractEffect.render();
 
     m_downscaleInput.setTexture(m_downscaleAndVBlurFbs.front().colorTargets()[0].surface);
+    m_blurPasses[0].render();
 
     // Downscaling
     for (size_t l = 1; l < m_downscaleAndVBlurFbs.size(); l++)
     {
+//        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+//        {
+//            m_blurPasses[l].render();
+//        }
+
         auto & fb = m_downscaleAndVBlurFbs[l];
 
         m_downscaleEffect.draw().setFramebuffer(fb);
@@ -34,13 +40,13 @@ void BloomRenderer::render()
     }
 
     // Blurring
-    for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
-    {
-        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
-        {
-            m_blurPasses[l].render();
-        }
-    }
+//    for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
+//    {
+//        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+//        {
+//            m_blurPasses[l].render();
+//        }
+//    }
 
     m_applyEffect.render();
 }

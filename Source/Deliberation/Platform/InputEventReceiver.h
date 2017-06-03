@@ -4,6 +4,7 @@
 #include <Deliberation/Platform/KeyEvent.h>
 #include <Deliberation/Platform/MouseButtonEvent.h>
 #include <Deliberation/Platform/MouseMotionEvent.h>
+#include <Deliberation/Platform/MouseStateEvent.h>
 #include <Deliberation/Platform/MouseWheelEvent.h>
 
 #include <Deliberation/Deliberation.h>
@@ -16,6 +17,7 @@ class InputEventReceiver
     virtual ~InputEventReceiver() = default;
 
     virtual void onMouseMotion(MouseMotionEvent & event){};
+    virtual void onMouseButtonDown(MouseStateEvent & event){};
     virtual void onMouseButtonReleased(MouseButtonEvent & event){};
     virtual void onMouseButtonPressed(MouseButtonEvent & event){};
     virtual void onMouseWheel(MouseWheelEvent & event){};
