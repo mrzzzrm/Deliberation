@@ -11,8 +11,8 @@
 namespace deliberation
 {
 Camera3D::Camera3D()
-    : m_zNear(0.1f)
-    , m_zFar(9999.0f)
+    : m_zNear(1.0f)
+    , m_zFar(10000.0f)
     , m_yFoV(glm::radians(70.0f))
     , m_aspectRatio(1.0f)
     , m_viewDirty(true)

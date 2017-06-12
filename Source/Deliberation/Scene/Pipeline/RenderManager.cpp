@@ -45,7 +45,7 @@ void RenderManager::render()
             {{PixelFormat_RGB_32_F, "Diffuse"},
              {PixelFormat_RGB_32_F, "Position"},
              {PixelFormat_RGB_32_F, "Normal"}},
-            {{PixelFormat_Depth_16_UN}}, "GBuffer");
+            {{PixelFormat_Depth_24_UN}}, "GBuffer");
 
         m_gbuffer = m_drawContext.createFramebuffer(gbufferDesc);
         m_gbuffer.clear().setColor(
