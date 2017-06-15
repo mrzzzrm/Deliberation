@@ -156,7 +156,21 @@ void World::prePhysicsUpdate(float seconds)
     }
 }
 
-void World::frameComplete() { m_profiler.frameComplete(); }
+void World::frameComplete()
+{
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.frameComplete();
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "FrameComplete", micros});
+    }
+
+    m_profiler.frameComplete();
+}
 
 std::string World::toString() const
 {

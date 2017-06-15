@@ -699,8 +699,12 @@ void Draw::render() const
             offset = 0;
         }
 
+        if (elementCount == 0) return;
+
         if (instanceCount != 0)
         {
+            if (instanceCount == 0) return;
+
             gl::glDrawElementsInstanced(
                 (gl::GLenum)m_impl->state.rasterizerState().primitive(),
                 elementCount,
@@ -719,8 +723,12 @@ void Draw::render() const
     }
     else
     {
+        if (vertexCount == 0) return;
+
         if (instanceCount != 0)
         {
+            if (instanceCount == 0) return;
+
             gl::glDrawArraysInstanced(
                 (gl::GLenum)m_impl->state.rasterizerState().primitive(),
                 0u,

@@ -32,6 +32,7 @@ class SystemBase
     void beforeUpdate();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
+    void frameComplete();
 
     virtual void onCreated() {}
     virtual void onRemoved() {}
@@ -45,6 +46,7 @@ class SystemBase
     virtual void onFrameBegin();
     virtual void onUpdate(float seconds);
     virtual void onPrePhysicsUpdate(float seconds);
+    virtual void onFrameComplete();
 
   private:
     struct EntityEntry

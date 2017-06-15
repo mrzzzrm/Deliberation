@@ -80,6 +80,10 @@ void SystemBase::prePhysicsUpdate(float seconds)
     }
 }
 
+void SystemBase::frameComplete() {
+    onFrameComplete();
+}
+
 void SystemBase::onEntityAdded(Entity & entity)
 {
     // dummy
@@ -104,5 +108,8 @@ void SystemBase::onFrameBegin() {}
 
 void SystemBase::onPrePhysicsUpdate(float seconds) {}
 
+void SystemBase::onFrameComplete() {}
+
 void SystemBase::onUpdate(float seconds) {}
+
 }

@@ -243,7 +243,6 @@ set(sources
 	ECS/SystemBase.h
 	ECS/System.h
 	ECS/Systems/ApplicationSystem.h
-	ECS/Systems/DebugGeometrySystem.h
 	ECS/Systems/PhysicsWorldSystem.h
 	ECS/Systems/SkyboxSystem.h
 	ECS/World.cpp
