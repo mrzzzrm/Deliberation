@@ -1,0 +1,15 @@
+{
+  "Components": {
+    "Head": {
+      "x": 2.3,
+      "y": 4.6
+    },
+    "Body": {
+      "a": 5,
+      "b": "hello"
+    },
+    "Leg": {
+      "length": 10
+    }
+  }
+}

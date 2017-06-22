@@ -1,0 +1,12 @@
+[
+  [
+    {"Base": "base"},
+    {"Override": "Head", "y": 12}
+  ],
+
+  [
+    {"Base": "derivate"},
+    {"Component": "Neck", "type": "long"}
+  ]
+
+]

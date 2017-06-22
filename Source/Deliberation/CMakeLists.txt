@@ -45,6 +45,8 @@ set(sources
 	Core/ElementalTypes.h
 	Core/FileUtils.cpp
 	Core/FileUtils.h
+	Core/FilesystemUtils.cpp
+	Core/FilesystemUtils.h
 	Core/FpsCounter.cpp
 	Core/FpsCounter.h
 	Core/HashUtils.h
@@ -228,6 +230,8 @@ set(sources
 	ECS/ComponentFilter.cpp
 	ECS/ComponentFilter.h
 	ECS/Component.h
+	ECS/ComponentPrototype.inl
+	ECS/ComponentPrototype.h
 	ECS/Components.h
 	ECS/ComponentSubscriptions.cpp
 	ECS/ComponentSubscriptions.h
@@ -237,8 +241,12 @@ set(sources
 	ECS/Entity.cpp
 	ECS/EntityData.h
 	ECS/Entity.h
+	ECS/EntityPrototype.cpp
+	ECS/EntityPrototype.h
 	ECS/EventManager.cpp
 	ECS/EventManager.h
+	ECS/PrototypeManager.cpp
+	ECS/PrototypeManager.h
 	ECS/SystemBase.cpp
 	ECS/SystemBase.h
 	ECS/System.h

@@ -31,6 +31,10 @@ add_executable(CoreSandbox CoreSandbox.cpp)
 target_link_libraries(CoreSandbox ${libs})
 
 # SceneSandbox
+add_executable(PrototypeSandbox PrototypeSandbox.cpp)
+target_link_libraries(PrototypeSandbox ${libs})
+
+# SceneSandbox
 add_executable(SceneSandbox SceneSandbox.cpp)
 target_link_libraries(SceneSandbox ${libs})
 

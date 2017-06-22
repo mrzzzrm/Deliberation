@@ -1,0 +1,14 @@
+{
+  "Bases": ["base"],
+  "Components": {
+    "Body": {
+      "b": "goodbye"
+    },
+    "Leg": {
+      "c": 12
+    },
+    "Shoe": {
+      "size": 42
+    }
+  }
+}
