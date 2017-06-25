@@ -34,6 +34,8 @@ public:
 
     Entity createEntity(const std::string & name);
 
+    bool isEntityDirty(const Entity & entity) const;
+
     void updateEntities();
 
 private:

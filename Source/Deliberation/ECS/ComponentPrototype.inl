@@ -4,7 +4,13 @@ namespace deliberation
 {
 
 template<typename ComponentT>
-void ComponentPrototype<ComponentT>::updateEntity(Entity entity)
+bool ComponentPrototype<ComponentT>::hasComponent(const Entity & entity)
+{
+    return entity.hasComponent<ComponentT>();
+}
+
+template<typename ComponentT>
+void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
 {
     if (!entity.hasComponent<ComponentT>())
     {

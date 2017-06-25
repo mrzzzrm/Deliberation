@@ -2,13 +2,13 @@
   "Bases": ["base"],
   "Components": {
     "Body": {
-      "b": "goodbye"
+      "b": "goodbyes"
     },
     "Leg": {
-      "c": 12
+      "c": 13
     },
     "Shoe": {
-      "size": 42
+      "size": 57
     }
   }
 }

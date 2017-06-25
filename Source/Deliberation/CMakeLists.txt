@@ -43,6 +43,8 @@ set(sources
 	Core/Dispatch.h
 	Core/ElementalTypes.cpp
 	Core/ElementalTypes.h
+	Core/FileModificationPoll.cpp
+	Core/FileModificationPoll.h
 	Core/FileUtils.cpp
 	Core/FileUtils.h
 	Core/FilesystemUtils.cpp
@@ -245,6 +247,9 @@ set(sources
 	ECS/EntityPrototype.h
 	ECS/EventManager.cpp
 	ECS/EventManager.h
+	ECS/LevelEntity.h
+	ECS/Level.cpp
+	ECS/Level.h
 	ECS/PrototypeManager.cpp
 	ECS/PrototypeManager.h
 	ECS/SystemBase.cpp

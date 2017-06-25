@@ -13,8 +13,10 @@ class ComponentPrototype:
 {
 public:
     virtual void updateComponent(ComponentT & component) = 0;
+    bool hasComponent(const Entity & entity) override;
 
-    void updateEntity(Entity entity) override;
+protected:
+    void onUpdateEntity(Entity entity) override;
 };
 
 }

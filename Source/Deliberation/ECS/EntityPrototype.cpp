@@ -21,6 +21,15 @@ void EntityPrototype::addBaseEntityPrototype(const std::shared_ptr<EntityPrototy
     m_baseEntityPrototypes.emplace_back(entityPrototype);
 }
 
+bool EntityPrototype::isEntityDirty(const Entity & entity) const
+{
+    for (auto & componentPrototype : m_componentPrototypes)
+    {
+        if (!componentPrototype->hasComponent(entity) || componentPrototype->jsonChangedFag()) return true;
+    }
+    return false;
+}
+
 Entity EntityPrototype::createEntity(const std::string & name)
 {
     auto entity = m_world.createEntity(name);
@@ -43,6 +52,7 @@ void EntityPrototype::updateEntities()
     for (auto & entity : m_entities)
     {
         if (!entity.isValid()) continue;
+        if (!isEntityDirty(entity)) continue; // Overhead, but keeps logs clean
 
         std::cout << "Updating Entity '" << entity.name() << "'" << std::endl;
 
@@ -50,6 +60,14 @@ void EntityPrototype::updateEntities()
         {
             componentPrototype->updateEntity(entity);
         }
+    }
+
+    /**
+     * Clear changed flags
+     */
+    for (auto & componentPrototype : m_componentPrototypes)
+    {
+        componentPrototype->setJsonChangedFlag(false);
     }
 
     /**
