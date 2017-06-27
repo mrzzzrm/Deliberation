@@ -34,6 +34,8 @@ Entity EntityPrototype::createEntity(const std::string & name)
 {
     auto entity = m_world.createEntity(name);
 
+    std::cout << "EntityPrototype: Creating " << m_componentPrototypes.size() << " components" << std::endl;
+
     for (auto & componentPrototype : m_componentPrototypes)
     {
         componentPrototype->updateEntity(entity);

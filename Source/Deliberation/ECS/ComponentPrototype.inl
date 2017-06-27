@@ -14,7 +14,8 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
 {
     if (!entity.hasComponent<ComponentT>())
     {
-        addComponentToEntity(entity);
+        auto & component = entity.addComponent<ComponentT>();
+        initComponent(component);
     }
 
     auto & component = entity.component<ComponentT>();

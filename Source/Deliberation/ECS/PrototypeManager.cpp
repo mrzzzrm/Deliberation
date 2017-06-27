@@ -26,6 +26,8 @@ const std::shared_ptr<EntityPrototype> & PrototypeManager::getOrCreateEntityProt
 
     if (iter == m_entityPrototypeByKey.end())
     {
+        std::cout << "PrototypeManager: Registering EntityPrototype '" + key + "'" << std::endl;
+
         iter = m_entityPrototypeByKey.emplace(key, std::make_shared<EntityPrototype>(m_world, key)).first;
     }
 
@@ -61,6 +63,8 @@ std::shared_ptr<ComponentPrototypeBase> PrototypeManager::getOrAddComponentProto
 
 void PrototypeManager::reloadList()
 {
+    if (m_listPoll.path().empty()) return;
+
     /**
      * TODO Move to <filesystem> as soon as it becomes widely available
      */
@@ -101,7 +105,8 @@ void PrototypeManager::reloadList()
          * TODO(me) Skip if file didn't change timestamps
          */
 
-        std::cout << "PrototypeManager: Loading EntityPrototype '" + prototypeName.get<std::string>() + "'" << std::endl;
+        std::cout << "PrototypeManager: Loading EntityPrototype '" + prototypeName.get<std::string>() + "' from '"
+                  << prototypePath << "'" << std::endl;
 
         std::ifstream prototypeFile(prototypePath);
         Assert(prototypeFile.is_open(), "Failed to open prototype '" + prototypePath + "'");
@@ -115,6 +120,8 @@ void PrototypeManager::reloadList()
 
 Entity PrototypeManager::createEntity(const std::string & prototypeKey, const std::string & entityName)
 {
+    std::cout << "PrototypeManager: Creating '" << entityName << "' from '" << prototypeKey << "'" << std::endl;
+
     auto iter = m_entityPrototypeByKey.find(prototypeKey);
     Assert(iter != m_entityPrototypeByKey.end(), "Couldn't find '" + prototypeKey + "'");
 

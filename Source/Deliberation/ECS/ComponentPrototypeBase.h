@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Deliberation/Core/Json.h>
+#include <Deliberation/ECS/Entity.h>
 
 namespace deliberation
 {
@@ -22,8 +23,6 @@ public:
 
     const std::string & name() const { return m_name; }
     void setName(const std::string & name) { m_name = name; }
-
-    virtual void addComponentToEntity(Entity entity) = 0;
 
     void updateEntity(Entity entity)
     {

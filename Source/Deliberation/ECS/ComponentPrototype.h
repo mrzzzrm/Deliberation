@@ -16,7 +16,8 @@ public:
     bool hasComponent(const Entity & entity) override;
 
 protected:
-    void onUpdateEntity(Entity entity) override;
+    void onUpdateEntity(Entity entity) override final;
+    virtual void initComponent(ComponentT & component) {}
 };
 
 }

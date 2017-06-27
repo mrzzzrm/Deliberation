@@ -43,11 +43,6 @@ struct Shoe:
 struct HeadPrototype:
     public ComponentPrototype<Head>
 {
-    void addComponentToEntity(Entity entity)
-    {
-        entity.addComponent<Head>();
-    }
-
     void updateComponent(Head & head)
     {
         head.x = m_json.value("x", head.x);
@@ -61,11 +56,6 @@ struct HeadPrototype:
 struct BodyPrototype:
     public ComponentPrototype<Body>
 {
-    void addComponentToEntity(Entity entity)
-    {
-        entity.addComponent<Body>();
-    }
-
     void updateComponent(Body & body)
     {
         body.a = m_json.value("a", body.a);
@@ -79,11 +69,6 @@ struct BodyPrototype:
 struct LegPrototype:
     public ComponentPrototype<Leg>
 {
-    void addComponentToEntity(Entity entity)
-    {
-        entity.addComponent<Leg>();
-    }
-
     void updateComponent(Leg & leg)
     {
         leg.length = m_json.value("length", leg.length);
@@ -97,11 +82,6 @@ struct LegPrototype:
 struct ShoePrototype:
     public ComponentPrototype<Shoe>
 {
-    void addComponentToEntity(Entity entity)
-    {
-        entity.addComponent<Shoe>();
-    }
-
     void updateComponent(Shoe & shoe)
     {
         shoe.size = m_json.value("size", shoe.size);

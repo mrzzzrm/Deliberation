@@ -23,8 +23,8 @@ public:
 
     World & world() const { return m_world; }
 
-    template<typename T>
-    void registerComponentPrototype(const std::string & name);
+    template<typename T, typename ... Args>
+    void registerComponentPrototype(const std::string & name, Args ... args);
 
     void reloadList();
 
@@ -39,8 +39,10 @@ public:
 private:
     Json mergeJson(const Json & a, const Json & b);
 
-private:
+protected:
     World &                                 m_world;
+
+private:
     std::unordered_map<std::string,
         std::shared_ptr<EntityPrototype>>   m_entityPrototypeByKey;
     std::vector<std::shared_ptr<EntityPrototype>>
