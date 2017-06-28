@@ -156,6 +156,19 @@ void World::prePhysicsUpdate(float seconds)
     }
 }
 
+void World::postPhysicsUpdate(float seconds){
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.postPhysicsUpdate(seconds);
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "PostPhysicsUpdate", micros});
+    }
+}
+
 void World::frameComplete()
 {
     for (auto & pair : m_systems)

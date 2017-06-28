@@ -9,4 +9,11 @@
 namespace deliberation
 {
 using RigidBodyComponent = ComponentWrapper<std::shared_ptr<RigidBody>>;
+
+class Transform3DComponent : public ComponentWrapper<Transform3D>
+{
+public:
+    void renderImGui() override;
+};
+
 }

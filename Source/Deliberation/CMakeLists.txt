@@ -234,6 +234,7 @@ set(sources
 	ECS/Component.h
 	ECS/ComponentPrototype.inl
 	ECS/ComponentPrototype.h
+	ECS/Components.cpp
 	ECS/Components.h
 	ECS/ComponentSubscriptions.cpp
 	ECS/ComponentSubscriptions.h
@@ -272,6 +273,8 @@ set(sources
 	Font/MultilineLabel.cpp
 	Font/MultilineLabel.h
 
+	ImGui/ImGui.cpp
+	ImGui/ImGui.h
 	ImGui/ImGuiRenderer.cpp
 	ImGui/ImGuiRenderer.h
 	ImGui/ImGuiSystem.cpp

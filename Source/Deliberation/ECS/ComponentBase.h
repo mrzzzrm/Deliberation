@@ -37,6 +37,8 @@ class ComponentBase
 
     virtual void onAttachedToEntity() {};
 
+    virtual void renderImGui() {}
+
   protected:
     friend class World;
 

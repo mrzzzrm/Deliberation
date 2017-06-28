@@ -50,6 +50,7 @@ class World final : public AbstractWorld
     void frameBegin();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
+    void postPhysicsUpdate(float seconds);
 
     void frameComplete();
 

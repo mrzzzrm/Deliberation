@@ -240,6 +240,7 @@ void PrototypeManager::updateEntities()
         for (auto & componentPrototype : entityPrototype->componentPrototypes())
         {
             auto & name = componentPrototype->name();
+
             auto foundBaseEntityPrototype = false;
 
             for (auto & baseEntityPrototype : entityPrototype->baseEntityPrototypes())

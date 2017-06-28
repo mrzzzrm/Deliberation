@@ -22,42 +22,38 @@ RenderSystem::RenderSystem(World & world)
 
 void RenderSystem::onUpdate(float seconds)
 {
-    if (world().system<ImGuiSystem>())
+    auto imguiSystem = world().system<ImGuiSystem>();
+
+    if (imguiSystem && imguiSystem->showView(m_imguiViewTag))
     {
-        if (ImGui::Begin("Surfaces"))
-        {
-            if (ImGui::RadioButton("Default", m_selectedSurfaceKey.empty()))
-            {
-                m_renderManager.surfaceOverlayRenderer().disable();
-                m_selectedSurfaceKey.clear();
-            }
+        if (ImGui::Begin("Rendering")) {
+            if (ImGui::CollapsingHeader("Surfaces")) {
+                if (ImGui::RadioButton("Default", m_selectedSurfaceKey.empty())) {
+                    m_renderManager.surfaceOverlayRenderer().disable();
+                    m_selectedSurfaceKey.clear();
+                }
 
-            // Renderer specific framebuffers
-            for (auto & framebuffer : m_renderManager.framebuffers())
-            {
-                if (!framebuffer.isInitialized()) return;
+                // Renderer specific framebuffers
+                for (auto &framebuffer : m_renderManager.framebuffers()) {
+                    if (!framebuffer.isInitialized()) return;
 
-                for (auto & rt : framebuffer.colorTargets())
-                {
-                    const auto surfaceKey = framebuffer.name() + rt.name;
+                    for (auto &rt : framebuffer.colorTargets()) {
+                        const auto surfaceKey = framebuffer.name() + rt.name;
 
-                    if (ImGui::RadioButton((framebuffer.name() + " - " + rt.name).c_str(), m_selectedSurfaceKey == surfaceKey))
-                    {
-                        m_renderManager.surfaceOverlayRenderer().showSurface(rt.surface);
-                        m_selectedSurfaceKey = surfaceKey;
+                        if (ImGui::RadioButton((framebuffer.name() + " - " + rt.name).c_str(),
+                                               m_selectedSurfaceKey == surfaceKey)) {
+                            m_renderManager.surfaceOverlayRenderer().showSurface(rt.surface);
+                            m_selectedSurfaceKey = surfaceKey;
+                        }
                     }
                 }
             }
-        }
-        ImGui::End();
 
-        if (ImGui::Begin("Renderers"))
-        {
-            for (auto & renderer : m_renderManager.renderers())
-            {
-                if (ImGui::CollapsingHeader(renderer->name().c_str()))
-                {
-                    renderer->renderDebugGui();
+            if (ImGui::CollapsingHeader("Renderers")) {
+                for (auto &renderer : m_renderManager.renderers()) {
+                    if (ImGui::CollapsingHeader(renderer->name().c_str())) {
+                        renderer->renderDebugGui();
+                    }
                 }
             }
         }

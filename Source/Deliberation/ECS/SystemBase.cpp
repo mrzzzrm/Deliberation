@@ -80,6 +80,19 @@ void SystemBase::prePhysicsUpdate(float seconds)
     }
 }
 
+void SystemBase::postPhysicsUpdate(float seconds)
+{
+    onPostPhysicsUpdate(seconds);
+
+    for (auto & entry : m_entities)
+    {
+        if (!entry.active) continue;
+
+        Entity entity(m_world, entry.id);
+        onEntityPostPhysicsUpdate(entity, seconds);
+    }
+}
+
 void SystemBase::frameComplete() {
     onFrameComplete();
 }
