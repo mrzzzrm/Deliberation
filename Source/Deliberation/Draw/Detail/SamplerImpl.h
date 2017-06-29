@@ -11,6 +11,7 @@
 
 namespace deliberation
 {
+class DrawContext;
 class DrawImpl;
 class GLStateManager;
 class TextureImpl;
@@ -19,11 +20,12 @@ class SamplerImpl
 {
   public:
     SamplerImpl(
-        gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location);
+        DrawContext & drawContext, gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location);
     ~SamplerImpl();
 
     gl::GLenum textureType() const;
 
+    DrawContext &                drawContext;
     gl::GLuint                   glName;
     gl::GLenum                   type;
     gl::GLenum                   valueType;

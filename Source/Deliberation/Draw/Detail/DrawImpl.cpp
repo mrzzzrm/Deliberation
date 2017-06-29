@@ -47,6 +47,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
         {
             auto & sampler = this->program->interface.samplers()[s];
             samplers.emplace_back(std::make_shared<SamplerImpl>(
+                drawContext,
                 (gl::GLenum)sampler.type(),
                 TypeToGLType(sampler.valueType()),
                 sampler.location()));
