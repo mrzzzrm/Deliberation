@@ -32,9 +32,6 @@ class DrawContext final
     DrawContext(
         unsigned int backbufferWidth = 640u,
         unsigned int backbufferHeight = 480u);
-    ~DrawContext() {
-        std::cout << "~DrawContext()" << std::endl;
-    }
 
     Framebuffer &       backbuffer();
     const Framebuffer & backbuffer() const;

@@ -137,7 +137,7 @@ void BloomRenderer::onSetupRender() {
     // Extract effect
     m_extractEffect = ScreenSpaceEffect(drawContext(),
         DeliberationShaderPaths({"UV_Position2.vert", "BloomExtract.frag"}),
-     "BlurExtract");
+     "BloomExtract");
 
     auto &extractDraw = m_extractEffect.draw();
 

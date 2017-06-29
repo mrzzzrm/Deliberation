@@ -52,7 +52,7 @@ void RenderManager::render()
             "Position",
             glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
 
-        FramebufferDesc hdrBufferDesc(w, h, {{PixelFormat_RGB_32_F, "Hdr"}}, {}, "HDR");
+        FramebufferDesc hdrBufferDesc(w, h, {{PixelFormat_RGB_32_F, "Hdr"}}, {{m_gbuffer.depthTargetRef()}}, "HDR");
         m_hdrBuffer = m_drawContext.createFramebuffer(hdrBufferDesc);
 
         FramebufferDesc ssaoBufferDesc(w, h, {{PixelFormat_R_32_F, "Ssao"}}, {}, "SSAO");

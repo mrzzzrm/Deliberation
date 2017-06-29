@@ -99,17 +99,21 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                     if (colorTargetName == mappedTargetName ||
                         "o_" + colorTarget.name == fragmentOutput.name())
                     {
-                        Assert(
-                            colorTarget.surface.format().fragmentOutputType() ==
-                            fragmentOutput.type(),
-                            "Fragment output " + fragmentOutput.name() + "(" +
-                            fragmentOutput.type().name() +
-                            ") and RenderTarget (" +
-                            colorTarget.surface.format().toString() + " = " +
-                            colorTarget.surface.format()
-                                .fragmentOutputType()
-                                .name() +
-                            ") are incompatible");
+                        /**
+                         * This check is not correct: It is indeed logical to draw from RGBA to RGB, when, e.g.,
+                         * blending
+                         */
+//                        Assert(
+//                            colorTarget.surface.format().fragmentOutputType() ==
+//                            fragmentOutput.type(),
+//                            "Fragment output " + fragmentOutput.name() + "(" +
+//                            fragmentOutput.type().name() +
+//                            ") and RenderTarget (" +
+//                            colorTarget.surface.format().toString() + " = " +
+//                            colorTarget.surface.format()
+//                                .fragmentOutputType()
+//                                .name() +
+//                            ") are incompatible");
 
                         bufs[fragmentOutput.location()] =
                             (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + t);

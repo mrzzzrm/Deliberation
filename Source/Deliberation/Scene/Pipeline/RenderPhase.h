@@ -2,6 +2,10 @@
 
 namespace deliberation
 {
+
+/**
+ * Sync order with function below
+ */
 enum class RenderPhase
 {
     Forward,
