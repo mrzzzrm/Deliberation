@@ -2,6 +2,7 @@
 
 #include <Deliberation/ECS/Components.h>
 #include <Deliberation/ECS/System.h>
+#include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Physics/PhysicsWorld.h>
 
@@ -20,6 +21,23 @@ class PhysicsWorldSystem : public System<PhysicsWorldSystem>
 
     PhysicsWorld & physicsWorld() const { return m_physicsWorld; }
 
+    void updatePhysics(float seconds)
+    {
+        m_physicsWorld.update(seconds);
+
+        for (auto & entityEntry : m_entities)
+        {
+            if (!entityEntry.active) continue;
+
+            auto entity = m_world.entity(entityEntry.id);
+            if (entity.hasComponent<Transform3DComponent>())
+            {
+                entity.component<Transform3DComponent>().value() =
+                    entity.component<RigidBodyComponent>().value()->transform();
+            }
+        }
+    }
+
   protected:
     void onEntityAdded(Entity & entity) override
     {
@@ -33,6 +51,15 @@ class PhysicsWorldSystem : public System<PhysicsWorldSystem>
     {
         m_physicsWorld.removeRigidBody(
             entity.component<RigidBodyComponent>().value());
+    }
+
+    void onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep) override
+    {
+        if (entity.hasComponent<Transform3DComponent>())
+        {
+            entity.component<RigidBodyComponent>().value()->transform() =
+                entity.component<Transform3DComponent>().value();
+        }
     }
 
   private:

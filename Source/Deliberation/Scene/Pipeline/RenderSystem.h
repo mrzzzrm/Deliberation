@@ -24,5 +24,6 @@ class RenderSystem : public System<RenderSystem>
     RenderManager  m_renderManager;
     std::string    m_selectedSurfaceKey;
     std::shared_ptr<DebugGeometryRenderer> m_debugGeometryRenderer;
+    std::string    m_imguiViewTag = "Rendering";
 };
 }

@@ -32,6 +32,7 @@ class SystemBase
     void beforeUpdate();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
+    void postPhysicsUpdate(float seconds);
     void frameComplete();
 
     virtual void onCreated() {}
@@ -43,22 +44,28 @@ class SystemBase
     virtual void onEntityUpdate(Entity & entity, float seconds);
     virtual void
                  onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep);
+    virtual void
+                 onEntityPostPhysicsUpdate(Entity & entity, float physicsTimestep) {}
     virtual void onFrameBegin();
     virtual void onUpdate(float seconds);
     virtual void onPrePhysicsUpdate(float seconds);
+    virtual void onPostPhysicsUpdate(float seconds) {}
     virtual void onFrameComplete();
 
-  private:
+protected:
     struct EntityEntry
     {
         EntityId id;
         bool     active;
     };
 
-  private:
+protected:
     World &                                   m_world;
-    ComponentFilter                           m_filter;
     SparseVector<EntityEntry>                 m_entities;
+
+
+  private:
+    ComponentFilter                           m_filter;
     std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
 };
 };

@@ -56,6 +56,16 @@ ImGuiSystem::ImGuiSystem(World & world)
     io.KeyMap[ImGuiKey_Z] = Key_Z;
 }
 
+void ImGuiSystem::removeView(const std::string & name)
+{
+    m_viewToggles.erase(name);
+}
+
+bool ImGuiSystem::showView(const std::string & name)
+{
+    return m_viewToggles[name];
+}
+
 void ImGuiSystem::onFrameBegin()
 {
     auto & io = ImGui::GetIO();
@@ -102,8 +112,26 @@ void ImGuiSystem::onFrameBegin()
 
     m_wantsCaptureMouse = io.WantCaptureMouse;
 
-    bool open = true;
-    ImGui::ShowTestWindow(&open);
+    if (showView("ImGui Demo"))
+    {
+        bool open = true;
+        ImGui::ShowTestWindow(&open);
+    }
+
+    /**
+     * Show main menu bar
+     */
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("View")) {
+            for (auto & pair : m_viewToggles)
+            {
+                ImGui::MenuItem(pair.first.c_str(), NULL, &pair.second);
+            }
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
 }
 
 void ImGuiSystem::onMouseButtonPressed(MouseButtonEvent & event)

@@ -1,0 +1,19 @@
+{
+  "Components": {
+    "Head": {
+      "x": 2.3,
+      "y": 4.6
+    },
+    "Body": {
+      "a": 5,
+      "b": "hellos"
+    },
+    "Leg": {
+      "length": 10,
+      "c": 14
+    },
+    "Shoe": {
+      "size": 55
+    }
+  }
+}

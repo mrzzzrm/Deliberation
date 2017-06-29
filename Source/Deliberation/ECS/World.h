@@ -50,6 +50,7 @@ class World final : public AbstractWorld
     void frameBegin();
     void update(float seconds);
     void prePhysicsUpdate(float seconds);
+    void postPhysicsUpdate(float seconds);
 
     void frameComplete();
 
@@ -66,6 +67,14 @@ class World final : public AbstractWorld
      */
     void emit(size_t entityIndex, TypeID::value_t eventType, const void * event)
         final override;
+
+    /**
+     * Internals, use with care
+     */
+    std::shared_ptr<ComponentBase>
+    component(EntityId id, TypeID::value_t index);
+    std::shared_ptr<const ComponentBase>
+    component(EntityId id, TypeID::value_t index) const;
 
   private:
     friend class Entity;
@@ -85,10 +94,6 @@ class World final : public AbstractWorld
   private:
     bool isValid(EntityId id) const;
     void scheduleEntityRemoval(EntityId id);
-    std::shared_ptr<ComponentBase>
-    component(EntityId id, TypeID::value_t index);
-    std::shared_ptr<const ComponentBase>
-         component(EntityId id, TypeID::value_t index) const;
     void addComponent(
         EntityId                       id,
         TypeID::value_t                index,

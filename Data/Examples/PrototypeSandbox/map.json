@@ -1,0 +1,40 @@
+[
+  {
+    "LID": "a",
+    "Name": "A Base Entity",
+    "Bases": [
+      "derivate"
+    ],
+    "Components": {
+      "Head": {
+        "x": 15,
+        "y": 13
+      }
+    }
+  },
+
+  {
+    "LID": "b",
+    "Name": "A Derived Entity",
+    "Bases": [
+      "derivate"
+    ]
+  },
+
+  {
+    "LID": "c",
+    "Name": "A Deprived Entity",
+    "Bases": [
+      "derivate"
+    ],
+    "Components": {
+      "Head": {
+        "y": 13
+      },
+      "Body": {
+        "a": 6,
+        "b": "hellos"
+      }
+    }
+  }
+]

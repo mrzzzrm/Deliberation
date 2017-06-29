@@ -43,8 +43,12 @@ set(sources
 	Core/Dispatch.h
 	Core/ElementalTypes.cpp
 	Core/ElementalTypes.h
+	Core/FileModificationPoll.cpp
+	Core/FileModificationPoll.h
 	Core/FileUtils.cpp
 	Core/FileUtils.h
+	Core/FilesystemUtils.cpp
+	Core/FilesystemUtils.h
 	Core/FpsCounter.cpp
 	Core/FpsCounter.h
 	Core/HashUtils.h
@@ -228,6 +232,9 @@ set(sources
 	ECS/ComponentFilter.cpp
 	ECS/ComponentFilter.h
 	ECS/Component.h
+	ECS/ComponentPrototype.inl
+	ECS/ComponentPrototype.h
+	ECS/Components.cpp
 	ECS/Components.h
 	ECS/ComponentSubscriptions.cpp
 	ECS/ComponentSubscriptions.h
@@ -237,8 +244,15 @@ set(sources
 	ECS/Entity.cpp
 	ECS/EntityData.h
 	ECS/Entity.h
+	ECS/EntityPrototype.cpp
+	ECS/EntityPrototype.h
 	ECS/EventManager.cpp
 	ECS/EventManager.h
+	ECS/LevelEntity.h
+	ECS/Level.cpp
+	ECS/Level.h
+	ECS/PrototypeManager.cpp
+	ECS/PrototypeManager.h
 	ECS/SystemBase.cpp
 	ECS/SystemBase.h
 	ECS/System.h
@@ -259,6 +273,8 @@ set(sources
 	Font/MultilineLabel.cpp
 	Font/MultilineLabel.h
 
+	ImGui/ImGui.cpp
+	ImGui/ImGui.h
 	ImGui/ImGuiRenderer.cpp
 	ImGui/ImGuiRenderer.h
 	ImGui/ImGuiSystem.cpp

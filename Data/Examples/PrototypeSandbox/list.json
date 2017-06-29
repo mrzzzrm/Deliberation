@@ -1,0 +1,4 @@
+{
+  "Prototypes": ["base", "derivate"],
+  "Maps": ["map.json"]
+}
