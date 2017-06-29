@@ -4,10 +4,10 @@ uniform samplerCube Texture;
 
 in vec3 f_UVW;
 
-out vec3 o_Color;
+out vec3 o_Hdr;
 
 void main()
 {
-    o_Color = texture(Texture, f_UVW).xyz;
+    o_Hdr = texture(Texture, f_UVW).xyz;
     gl_FragDepth = 1.0f;
 }

@@ -8,11 +8,11 @@ namespace deliberation
  */
 enum class RenderPhase
 {
-    Forward,
     GBuffer,
     PostGBuffer, // e.g. SSAO
     PreLighting, // e.g. ShadowMaps
     Lighting,
+    Forward,
     Alpha,
     PostAlpha,
     PreHdr,
@@ -29,11 +29,11 @@ inline std::string RenderPhaseToString(RenderPhase phase)
     const auto index = (int)phase;
 
     static const char * names[] = {
-        "Forward",
         "GBuffer",
         "PostGBuffer",
         "PreLighting",
         "Lighting",
+        "Forward",
         "Alpha",
         "PostAlpha",
         "PreHdr",

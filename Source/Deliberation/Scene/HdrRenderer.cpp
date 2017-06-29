@@ -24,7 +24,7 @@ class HdrNode : public RenderNode
             m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
         m_effect.draw().sampler("Depth").setTexture(
             m_renderManager.gbuffer().depthTargetRef());
-        m_effect.draw().state().setDepthState(DepthState::enabled());
+        m_effect.draw().state().setDepthState({DepthTest::LessOrEqual, DepthWrite::Enabled});
     }
 
     void render() override { m_effect.render(); }

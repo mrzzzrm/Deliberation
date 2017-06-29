@@ -15,12 +15,26 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
     if (!entity.hasComponent<ComponentT>())
     {
         auto & component = entity.addComponent<ComponentT>();
-        initComponent(component);
+        try
+        {
+            initComponent(component);
+        }
+        catch(const std::exception & e)
+        {
+            std::cout << "ComponentPrototype: Error initializing Component: " << e.what() << "\nJSON:\n" << m_json << std::endl;
+        }
     }
 
     auto & component = entity.component<ComponentT>();
 
-    updateComponent(component);
+    try
+    {
+        updateComponent(component);
+    }
+    catch(const std::exception & e)
+    {
+        std::cout << "ComponentPrototype: Error updating Component: " << e.what() << "\nJSON:\n" << m_json << std::endl;
+    }
 }
 
 }
