@@ -20,7 +20,7 @@ class System : public SystemBase
     virtual std::string name() const override;
 
     template<typename EventType>
-    void subscribe();
+    void subscribeEvent();
 };
 }
 

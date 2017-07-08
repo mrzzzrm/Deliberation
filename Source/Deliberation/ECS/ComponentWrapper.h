@@ -8,8 +8,7 @@ namespace deliberation
 {
 template<typename T>
 class ComponentWrapper : public Component<
-                                   ComponentWrapper<T>,
-                                   ComponentSubscriptions<ComponentWrapper<T>>>
+                                   ComponentWrapper<T>>
 {
   public:
     template<typename... Args>

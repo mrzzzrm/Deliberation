@@ -5,6 +5,7 @@
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/ScopeProfiler.h>
+#include <Deliberation/ECS/EventListener.h>
 
 #define VERBOSE 0
 
@@ -26,8 +27,6 @@ World::~World()
         }
     }
 }
-
-EventManager & World::eventManager() { return m_eventManager; }
 
 const WorldProfiler & World::profiler() const { return m_profiler; }
 
@@ -219,19 +218,31 @@ std::string World::toString() const
     return stream.str();
 }
 
-void World::emit(
-    size_t entityIndex, TypeID::value_t eventType, const void * event)
+void World::addEventListener(const std::shared_ptr<EventListener> & listener)
 {
-    const auto * const entityComponentSetup =
-        m_entities[entityIndex].componentSetup;
+    m_eventListenersByEventType[listener->eventType()].emplace_back(listener);
+}
 
-    const auto iter =
-        entityComponentSetup->componentIndicesByEventType.find(eventType);
-    if (iter == entityComponentSetup->componentIndicesByEventType.end()) return;
+void World::removeEventListener(const std::shared_ptr<EventListener> & listener)
+{
+    auto & listeners = m_eventListenersByEventType[listener->eventType()];
 
-    for (const auto & index : iter->second)
+    auto iter = std::find(listeners.begin(), listeners.end(), listener);
+    Assert(iter != listeners.end(), "");
+
+    listeners.erase(iter);
+}
+
+void World::publishEvent(TypeID::value_t eventType, const void * event)
+{
+    auto iter = m_eventListenersByEventType.find(eventType);
+    if (iter == m_eventListenersByEventType.end()) return;
+
+    auto & listeners = iter->second;
+
+    for (auto & listener : listeners)
     {
-        m_components[index][entityIndex]->dispatchEvent(eventType, event);
+        listener->onEvent(event);
     }
 }
 
@@ -426,17 +437,6 @@ World::componentSetup(const ComponentBitset & componentBits)
             std::cout << "  Contains component " << b << std::endl;
 #endif
             setup.componentTypeIds.push_back(b);
-        }
-    }
-
-    for (const auto & componentIndex : setup.componentTypeIds)
-    {
-        const auto & componentSubscriptions = ComponentSubscriptionsBase::
-            subscriptionsByComponentType[componentIndex];
-        for (const auto & componentSubscription : componentSubscriptions)
-        {
-            setup.componentIndicesByEventType[componentSubscription]
-                .emplace_back(componentIndex);
         }
     }
 

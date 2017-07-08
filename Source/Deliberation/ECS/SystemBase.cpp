@@ -7,7 +7,13 @@ SystemBase::SystemBase(World & world, const ComponentFilter & filter)
 {
 }
 
-SystemBase::~SystemBase() = default;
+SystemBase::~SystemBase()
+{
+    for (const auto & listener : m_eventListeners)
+    {
+        m_world.removeEventListener(listener);
+    }
+}
 
 World & SystemBase::world() { return m_world; }
 

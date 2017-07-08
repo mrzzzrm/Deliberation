@@ -237,8 +237,6 @@ set(sources
 	ECS/ComponentPrototype.h
 	ECS/Components.cpp
 	ECS/Components.h
-	ECS/ComponentSubscriptions.cpp
-	ECS/ComponentSubscriptions.h
 	ECS/ComponentWrapper.h
 	ECS/Defines.h
 	ECS/EntityComponentSetup.h

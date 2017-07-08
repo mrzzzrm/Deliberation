@@ -1,0 +1,30 @@
+#pragma once
+
+#include <functional>
+
+#include <Deliberation/Core/TypeID.h>
+
+namespace deliberation
+{
+
+class EventListener final
+{
+public:
+    EventListener(TypeID::value_t eventType, const std::function<void(const void*)> & fn):
+        m_eventType(eventType),
+        m_fn(fn)
+    {}
+
+    TypeID::value_t eventType() const { return m_eventType; }
+
+    void onEvent(const void * event)
+    {
+        m_fn(event);
+    }
+
+private:
+    TypeID::value_t                     m_eventType;
+    std::function<void(const void*)>    m_fn;
+};
+
+}

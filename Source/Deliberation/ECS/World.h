@@ -30,7 +30,8 @@ class World final : public AbstractWorld
     World();
     ~World();
 
-    EventManager &        eventManager();
+    EventManager & eventManager() { return m_eventManager; }
+    const EventManager & eventManager() const { return m_eventManager; }
     const WorldProfiler & profiler() const;
 
     EntityData & entityData(EntityId id);
@@ -62,10 +63,13 @@ class World final : public AbstractWorld
     template<typename T>
     T & systemRef();
 
+    void addEventListener(const std::shared_ptr<EventListener> & listener) override;
+    void removeEventListener(const std::shared_ptr<EventListener> & listener) override;
+
     /**
      * From AbstractWorld
      */
-    void emit(size_t entityIndex, TypeID::value_t eventType, const void * event)
+    void publishEvent(TypeID::value_t eventType, const void * event)
         final override;
 
     /**
@@ -121,8 +125,10 @@ class World final : public AbstractWorld
 
     LinearMap<std::shared_ptr<SystemBase>> m_systems;
 
-    EventManager m_eventManager;
+    std::unordered_map<TypeID::value_t, std::vector<std::shared_ptr<EventListener>>>
+                                    m_eventListenersByEventType;
 
+    EventManager m_eventManager;
     WorldProfiler m_profiler;
 };
 }

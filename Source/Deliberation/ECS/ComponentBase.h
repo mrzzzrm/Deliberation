@@ -33,8 +33,8 @@ class ComponentBase
 
     void setPhase(ComponentPhase phase) { m_phase = phase; }
 
-    virtual void
-    dispatchEvent(TypeID::value_t eventType, const void * event) = 0;
+    template<typename T>
+    void publishEvent(const T & event);
 
     virtual void onAttachedToEntity() {};
 
@@ -50,3 +50,5 @@ class ComponentBase
     ComponentPhase  m_phase = ComponentPhase::Active;
 };
 }
+
+#include <Deliberation/ECS/ComponentBase.inl>

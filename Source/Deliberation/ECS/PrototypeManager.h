@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <memory>
+#include <unordered_map>
 #include <string>
 
 #include <Deliberation/Core/FileModificationPoll.h>

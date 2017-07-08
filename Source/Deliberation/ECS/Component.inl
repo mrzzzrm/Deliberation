@@ -8,14 +8,13 @@
 
 namespace deliberation
 {
-template<typename T, typename ComponentSubscriptionsType>
-Component<T, ComponentSubscriptionsType>::Component()
+template<typename T>
+Component<T>::Component()
 {
-    ComponentSubscriptionsType::instance();
 };
 
-template<typename T, typename ComponentSubscriptionsType>
-std::size_t Component<T, ComponentSubscriptionsType>::indexStatic()
+template<typename T>
+std::size_t Component<T>::indexStatic()
 {
     auto i = TypeID::value<ComponentBase, T>();
     Assert(i < ECS_MAX_NUM_COMPONENTS, "");
@@ -23,30 +22,15 @@ std::size_t Component<T, ComponentSubscriptionsType>::indexStatic()
     return i;
 }
 
-template<typename T, typename ComponentSubscriptionsType>
-std::size_t Component<T, ComponentSubscriptionsType>::index() const
+template<typename T>
+std::size_t Component<T>::index() const
 {
     return indexStatic();
 }
 
-template<typename T, typename ComponentSubscriptionsType>
-std::string Component<T, ComponentSubscriptionsType>::name() const
+template<typename T>
+std::string Component<T>::name() const
 {
     return typeid(T).name();
-}
-
-template<typename T, typename ComponentSubscriptionsType>
-template<typename Event>
-void Component<T, ComponentSubscriptionsType>::emit(const Event & event)
-{
-    Assert(m_world, "") m_world->emitEvent(
-        m_entityIndex, TypeID::value<ComponentEventFamily, Event>(), &event);
-}
-
-template<typename T, typename ComponentSubscriptionsType>
-void Component<T, ComponentSubscriptionsType>::dispatchEvent(
-    TypeID::value_t eventType, const void * event)
-{
-    ComponentSubscriptionsType::instance().dispatch(*this, eventType, event);
 }
 }

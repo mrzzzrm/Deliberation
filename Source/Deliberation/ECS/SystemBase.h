@@ -9,6 +9,7 @@
 
 namespace deliberation
 {
+class EventListener;
 class World;
 
 class SystemBase
@@ -60,12 +61,13 @@ protected:
     };
 
 protected:
-    World &                                   m_world;
-    SparseVector<EntityEntry>                 m_entities;
+    World &                                     m_world;
+    SparseVector<EntityEntry>                   m_entities;
+    std::vector<std::shared_ptr<EventListener>> m_eventListeners;
 
 
   private:
-    ComponentFilter                           m_filter;
-    std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
+    ComponentFilter                             m_filter;
+    std::unordered_map<EntityId, std::size_t>   m_entityIndexByID;
 };
 };
