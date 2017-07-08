@@ -41,6 +41,11 @@ set(sources
 	Core/Detail/NamedDataMemberOf.h
 	Core/Detail/VectorBlobImpl.h
 	Core/Dispatch.h
+	Core/EventListener.cpp
+	Core/EventListener.h
+	Core/EventDomain.cpp
+	Core/EventDomain.inl
+	Core/EventDomain.h
 	Core/ElementalTypes.cpp
 	Core/ElementalTypes.h
 	Core/FileModificationPoll.cpp
@@ -245,8 +250,6 @@ set(sources
 	ECS/Entity.h
 	ECS/EntityPrototype.cpp
 	ECS/EntityPrototype.h
-	ECS/EventManager.cpp
-	ECS/EventManager.h
 	ECS/LevelEntity.h
 	ECS/Level.cpp
 	ECS/Level.h

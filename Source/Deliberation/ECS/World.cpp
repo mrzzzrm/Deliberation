@@ -5,7 +5,7 @@
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/ScopeProfiler.h>
-#include <Deliberation/ECS/EventListener.h>
+#include <Deliberation/Core/EventListener.h>
 
 #define VERBOSE 0
 
@@ -216,34 +216,6 @@ std::string World::toString() const
     }
 
     return stream.str();
-}
-
-void World::addEventListener(const std::shared_ptr<EventListener> & listener)
-{
-    m_eventListenersByEventType[listener->eventType()].emplace_back(listener);
-}
-
-void World::removeEventListener(const std::shared_ptr<EventListener> & listener)
-{
-    auto & listeners = m_eventListenersByEventType[listener->eventType()];
-
-    auto iter = std::find(listeners.begin(), listeners.end(), listener);
-    Assert(iter != listeners.end(), "");
-
-    listeners.erase(iter);
-}
-
-void World::publishEvent(TypeID::value_t eventType, const void * event)
-{
-    auto iter = m_eventListenersByEventType.find(eventType);
-    if (iter == m_eventListenersByEventType.end()) return;
-
-    auto & listeners = iter->second;
-
-    for (auto & listener : listeners)
-    {
-        listener->onEvent(event);
-    }
 }
 
 bool World::isValid(EntityId id) const

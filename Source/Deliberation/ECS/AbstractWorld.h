@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <Deliberation/Core/EventDomain.h>
 #include <Deliberation/Core/TypeID.h>
 
 #include <Deliberation/ECS/Defines.h>
@@ -16,14 +17,15 @@ class SystemBase;
 class AbstractWorld
 {
   public:
-    virtual void
-    publishEvent(TypeID::value_t eventType, const void * event) = 0;
 
-    virtual void addEventListener(const std::shared_ptr<EventListener> & listener) = 0;
-    virtual void removeEventListener(const std::shared_ptr<EventListener> & listener) = 0;
+    std::shared_ptr<EventDomain> events() { return m_events; }
+    const std::shared_ptr<EventDomain> & events() const { return m_events; }
 
   protected:
     virtual ~AbstractWorld() = default;
+
+protected:
+    std::shared_ptr<EventDomain> m_events;
 };
 }
 

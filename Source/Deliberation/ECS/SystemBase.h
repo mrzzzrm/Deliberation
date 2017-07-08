@@ -16,7 +16,6 @@ class SystemBase
 {
   public:
     SystemBase(World & world, const ComponentFilter & filter);
-    virtual ~SystemBase();
 
     World &                 world();
     const ComponentFilter & filter() const;

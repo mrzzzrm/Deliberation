@@ -1,7 +1,7 @@
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/TypeID.h>
 
-#include <Deliberation/ECS/EventListener.h>
+#include <Deliberation/Core/EventListener.h>
 #include <Deliberation/ECS/World.h>
 
 namespace deliberation
@@ -37,12 +37,6 @@ template<typename T>
 template<typename EventType>
 void System<T>::subscribeEvent()
 {
-    auto eventListener = std::make_shared<EventListener>(TypeID::value<ComponentEventFamily, EventType>(),
-                                                         [&](const void * event) {
-        auto * self = (T*)this;
-        self->onEvent(*(const EventType*)event);
-    });
-    m_eventListeners.emplace_back(eventListener);
-    m_world.addEventListener(eventListener);
+    m_eventListeners.emplace_back(m_world.events()->subscribe<EventType>(*(T*)this));
 }
 }

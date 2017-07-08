@@ -71,7 +71,7 @@ struct GunSystem : public System<GunSystem>
             auto bullet = world().createEntity("Bullet");
             bullet.addComponent<PositionComponent>(glm::vec3{i, 1.0f, 2.0f});
             bullet.addComponent<ColliderComponent>();
-            world().eventManager().emit<GunFired>({entity, bullet});
+            world().events().emit<GunFired>({entity, bullet});
         }
     }
 
@@ -107,7 +107,7 @@ struct AnotherSystem : public System<AnotherSystem>
 {
     AnotherSystem(World & world) : Base(world, ComponentFilter::none())
     {
-        world.eventManager().subscribe<GunFired>(*this);
+        world.events().subscribe<GunFired>(*this);
     }
 
     void receive(const GunFired & gunFired)
