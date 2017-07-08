@@ -120,12 +120,26 @@ void PrototypeManager::reloadList()
 
 Entity PrototypeManager::createEntity(const std::string & prototypeKey, const std::string & entityName)
 {
-    std::cout << "PrototypeManager: Creating '" << entityName << "' from '" << prototypeKey << "'" << std::endl;
+    return createEntity(std::vector<std::string>{prototypeKey}, entityName);
+}
 
-    auto iter = m_entityPrototypeByKey.find(prototypeKey);
-    Assert(iter != m_entityPrototypeByKey.end(), "Couldn't find '" + prototypeKey + "'");
+Entity PrototypeManager::createEntity(const std::vector<std::string> & prototypeKeys, const std::string & entityName)
+{
+    std::cout << "PrototypeManager: Creating '" << entityName << "' from '";
+    for (const auto & prototypeKey : prototypeKeys) std::cout << prototypeKey << ",";
+    std::cout << "'" << std::endl;
 
-    return iter->second->createEntity(entityName.empty() ? "Unnamed " + prototypeKey : entityName);
+    auto entity = m_world.createEntity(entityName.empty() ? "Unnamed Entity" : entityName);
+
+    for (const auto & prototypeKey : prototypeKeys)
+    {
+        auto iter = m_entityPrototypeByKey.find(prototypeKey);
+        Assert(iter != m_entityPrototypeByKey.end(), "Couldn't find '" + prototypeKey + "'");
+
+        iter->second->applyToEntity(entity);
+    }
+
+    return entity;
 }
 
 void PrototypeManager::updateEntities()
@@ -168,7 +182,7 @@ void PrototypeManager::updateEntities()
             {
                 auto componentPrototypeName = pair.key();
                 auto componentPrototype = getOrAddComponentPrototype(entityPrototype, componentPrototypeName);
-                componentPrototype->setJson(mergeJson(pair.value(), componentPrototype->json()));
+                componentPrototype->setNewJson(mergeJson(pair.value(), componentPrototype->newJson()));
             }
         }
     }
@@ -258,7 +272,7 @@ void PrototypeManager::updateEntities()
 
                 auto & basePrototype = *iter;
 
-                componentPrototype->setJson(mergeJson(componentPrototype->json(), basePrototype->json()));
+                componentPrototype->setNewJson(mergeJson(componentPrototype->newJson(), basePrototype->newJson()));
 
                 foundBaseEntityPrototype = true;
             }

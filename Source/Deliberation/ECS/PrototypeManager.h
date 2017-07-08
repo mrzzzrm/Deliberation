@@ -24,7 +24,7 @@ public:
     World & world() const { return m_world; }
 
     template<typename T, typename ... Args>
-    void registerComponentPrototype(const std::string & name, Args ... args);
+    void registerComponentPrototype(const std::string & name, Args &&... args);
 
     void reloadList();
 
@@ -33,6 +33,7 @@ public:
         const std::shared_ptr<EntityPrototype> & entityPrototype, const std::string & componentPrototypeName);
 
     Entity createEntity(const std::string & prototypeKey, const std::string & entityName = {});
+    Entity createEntity(const std::vector<std::string> & prototypeKeys, const std::string & entityName = {});
 
     void updateEntities();
 

@@ -81,6 +81,7 @@ set(sources
 	Core/Math/Plane.h
 	Core/Math/PolygonClipping.cpp
 	Core/Math/PolygonClipping.h
+	Core/Math/Pose3D.cpp
 	Core/Math/Pose3D.h
 	Core/Math/PrimitiveCompare.h
 	Core/Math/PrimitiveIntersection.cpp

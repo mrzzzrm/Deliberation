@@ -21,7 +21,7 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
         }
         catch(const std::exception & e)
         {
-            std::cout << "ComponentPrototype: Error initializing Component: " << e.what() << "\nJSON:\n" << m_json << std::endl;
+            std::cout << "ComponentPrototype '" << name() << "': Error initializing Component: " << e.what() << "\nJSON:\n" << m_json << std::endl;
         }
     }
 

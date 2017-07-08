@@ -45,8 +45,8 @@ struct HeadPrototype:
 {
     void updateComponent(Head & head)
     {
-        head.x = m_json.value("x", head.x);
-        head.y = m_json.value("y", head.y);
+        head.x = m_newJson.value("x", head.x);
+        head.y = m_newJson.value("y", head.y);
 
         std::cout << "  Setting Head " << this << ": ";
         std::cout << head.x << ", " << head.y << std::endl;
@@ -58,8 +58,8 @@ struct BodyPrototype:
 {
     void updateComponent(Body & body)
     {
-        body.a = m_json.value("a", body.a);
-        body.b = m_json.value("b", body.b);
+        body.a = m_newJson.value("a", body.a);
+        body.b = m_newJson.value("b", body.b);
 
         std::cout << "  Setting Body " << this << ": ";
         std::cout << body.a << ", " << body.b << std::endl;
@@ -71,8 +71,8 @@ struct LegPrototype:
 {
     void updateComponent(Leg & leg)
     {
-        leg.length = m_json.value("length", leg.length);
-        leg.c = m_json.value("c", leg.c);
+        leg.length = m_newJson.value("length", leg.length);
+        leg.c = m_newJson.value("c", leg.c);
 
         std::cout << "  Setting Leg " << this << ": ";
         std::cout << leg.length << " " << leg.c << std::endl;
@@ -84,7 +84,7 @@ struct ShoePrototype:
 {
     void updateComponent(Shoe & shoe)
     {
-        shoe.size = m_json.value("size", shoe.size);
+        shoe.size = m_newJson.value("size", shoe.size);
 
         std::cout << "  Setting Shoe " << this << ": ";
         std::cout << shoe.size << std::endl;

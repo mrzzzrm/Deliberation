@@ -7,12 +7,16 @@
 
 namespace deliberation
 {
+class Transform3D;
+
 class Pose3D final
 {
   public:
     inline static Pose3D         atPosition(const glm::vec3 & position);
     inline static Pose3D         atOrientation(const glm::quat & orientation);
     inline static const Pose3D & identity();
+
+    static Pose3D fromTransform(const Transform3D & transform);
 
   public:
     Pose3D();

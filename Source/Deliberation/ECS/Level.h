@@ -17,6 +17,8 @@ public:
     Level(const std::shared_ptr<PrototypeManager> & prototypeManager, const std::string & path);
     virtual ~Level() = default;
 
+    std::shared_ptr<LevelEntity> getEntityByLid(const std::string & lid);
+
     std::string convertToUid(const std::string & lid);
 
     void reload();
@@ -26,7 +28,7 @@ protected:
     std::shared_ptr<PrototypeManager>   m_prototypeManager;
     std::string                         m_path;
     std::unordered_map<std::string, std::shared_ptr<LevelEntity>>
-                                        m_levelEntityByUid;
+                                        m_levelEntityByLid;
 
 };
 

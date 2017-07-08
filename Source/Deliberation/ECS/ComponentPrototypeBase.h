@@ -14,11 +14,17 @@ public:
     const Json & json() const { return m_json; }
     void setJson(const Json & json)
     {
-        if (m_json != json) m_jsonChangedFlag = true;
         m_json = json;
     }
 
-    bool jsonChangedFag() const { return m_jsonChangedFlag; }
+    const Json & newJson() const { return m_newJson; }
+    void setNewJson(const Json & newJson)
+    {
+        if (m_newJson != newJson) m_jsonChangedFlag = true;
+        m_newJson = newJson;
+    }
+
+    bool jsonChangedFlag() const { return m_jsonChangedFlag; }
     void setJsonChangedFlag(bool changed) { m_jsonChangedFlag = changed; }
 
     const std::string & name() const { return m_name; }
@@ -36,6 +42,7 @@ protected:
 
 protected:
     Json        m_json;
+    Json        m_newJson;
     std::string m_name;
     bool        m_jsonChangedFlag = true;
 };

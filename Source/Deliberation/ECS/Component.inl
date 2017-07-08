@@ -39,7 +39,7 @@ template<typename T, typename ComponentSubscriptionsType>
 template<typename Event>
 void Component<T, ComponentSubscriptionsType>::emit(const Event & event)
 {
-    Assert(m_world, "") m_world->emit(
+    Assert(m_world, "") m_world->emitEvent(
         m_entityIndex, TypeID::value<ComponentEventFamily, Event>(), &event);
 }
 

@@ -32,7 +32,7 @@ public:
     void addComponentPrototype(const std::shared_ptr<ComponentPrototypeBase> & componentPrototype);
     void addBaseEntityPrototype(const std::shared_ptr<EntityPrototype> & entityPrototype);
 
-    Entity createEntity(const std::string & name);
+    void applyToEntity(Entity & entity);
 
     bool isEntityDirty(const Entity & entity) const;
 

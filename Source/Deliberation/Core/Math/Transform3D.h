@@ -7,6 +7,8 @@
 
 namespace deliberation
 {
+class Pose3D;
+
 class Transform3D final
 {
   public:
@@ -14,6 +16,7 @@ class Transform3D final
     static Transform3D         atOrientation(const glm::quat & orientation);
     static Transform3D         withScale(float sclae);
     static const Transform3D & identity();
+    static Transform3D         fromPose(const Pose3D & pose);
 
   public:
     Transform3D();

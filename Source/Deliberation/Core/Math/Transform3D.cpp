@@ -9,6 +9,7 @@
 #include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Core/Math/GLMUtils.h>
+#include <Deliberation/Core/Math/Pose3D.h>
 
 namespace deliberation
 {
@@ -37,6 +38,15 @@ const Transform3D & Transform3D::identity()
 {
     static Transform3D i;
     return i;
+}
+
+Transform3D Transform3D::fromPose(const Pose3D & pose)
+{
+    Transform3D transform3D;
+    transform3D.setPosition(pose.position());
+    transform3D.setOrientation(pose.orientation());
+    transform3D.setCenter(pose.center());
+    return transform3D;
 }
 
 Transform3D::Transform3D()

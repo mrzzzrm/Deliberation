@@ -13,6 +13,8 @@ EntityPrototype::EntityPrototype(World & world, const std::string & key):
 
 void EntityPrototype::addComponentPrototype(const std::shared_ptr<ComponentPrototypeBase> & componentPrototype)
 {
+    std::cout << "EntityPrototype '" + m_key + "': Adding ComponentPrototype '"
+              << componentPrototype->name() << "'" << std::endl;
     m_componentPrototypes.emplace_back(componentPrototype);
 }
 
@@ -25,16 +27,14 @@ bool EntityPrototype::isEntityDirty(const Entity & entity) const
 {
     for (auto & componentPrototype : m_componentPrototypes)
     {
-        if (!componentPrototype->hasComponent(entity) || componentPrototype->jsonChangedFag()) return true;
+        if (!componentPrototype->hasComponent(entity) || componentPrototype->jsonChangedFlag()) return true;
     }
     return false;
 }
 
-Entity EntityPrototype::createEntity(const std::string & name)
+void EntityPrototype::applyToEntity(Entity & entity)
 {
-    auto entity = m_world.createEntity(name);
-
-    std::cout << "EntityPrototype: Creating " << m_componentPrototypes.size() << " components" << std::endl;
+    std::cout << "EntityPrototype '" + m_key + "': Applying " << m_componentPrototypes.size() << " components" << std::endl;
 
     for (auto & componentPrototype : m_componentPrototypes)
     {
@@ -42,8 +42,6 @@ Entity EntityPrototype::createEntity(const std::string & name)
     }
 
     m_entities.emplace_back(entity);
-
-    return entity;
 }
 
 void EntityPrototype::updateEntities()
@@ -56,7 +54,7 @@ void EntityPrototype::updateEntities()
         if (!entity.isValid()) continue;
         if (!isEntityDirty(entity)) continue; // Overhead, but keeps logs clean
 
-        std::cout << "Updating Entity '" << entity.name() << "'" << std::endl;
+        std::cout << "EntityPrototype '" + m_key + "': Updating Entity '" << entity.name() << "'" << std::endl;
 
         for (auto & componentPrototype : m_componentPrototypes)
         {
@@ -69,6 +67,7 @@ void EntityPrototype::updateEntities()
      */
     for (auto & componentPrototype : m_componentPrototypes)
     {
+        componentPrototype->setJson(componentPrototype->newJson());
         componentPrototype->setJsonChangedFlag(false);
     }
 
