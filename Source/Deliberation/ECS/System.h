@@ -1,11 +1,12 @@
 #pragma once
 
+#include <Deliberation/Core/EventListener.h>
 #include <Deliberation/ECS/SystemBase.h>
 
 namespace deliberation
 {
 template<typename T>
-class System : public SystemBase
+class System : public SystemBase, public EventListener<T>
 {
   public:
     typedef System<T> Base;
@@ -19,8 +20,6 @@ class System : public SystemBase
     virtual std::size_t index() const override;
     virtual std::string name() const override;
 
-    template<typename EventType>
-    void subscribeEvent();
 };
 }
 

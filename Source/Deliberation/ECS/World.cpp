@@ -5,7 +5,7 @@
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/ScopeProfiler.h>
-#include <Deliberation/Core/EventListener.h>
+#include <Deliberation/Core/EventListenerProxy.h>
 
 #define VERBOSE 0
 

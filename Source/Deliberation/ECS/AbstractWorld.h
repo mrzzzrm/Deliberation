@@ -11,7 +11,7 @@
 
 namespace deliberation
 {
-class EventListener;
+class EventListenerProxy;
 class SystemBase;
 
 class AbstractWorld

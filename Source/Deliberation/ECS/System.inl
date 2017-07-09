@@ -1,7 +1,7 @@
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/TypeID.h>
 
-#include <Deliberation/Core/EventListener.h>
+#include <Deliberation/Core/EventListenerProxy.h>
 #include <Deliberation/ECS/World.h>
 
 namespace deliberation
@@ -17,7 +17,7 @@ std::size_t System<T>::indexStatic()
 
 template<typename T>
 System<T>::System(World & world, const ComponentFilter & filter)
-    : SystemBase(world, filter)
+    : SystemBase(world, filter), EventListener<T>(world.events())
 {
 }
 
@@ -33,10 +33,4 @@ std::string System<T>::name() const
     return typeid(T).name();
 }
 
-template<typename T>
-template<typename EventType>
-void System<T>::subscribeEvent()
-{
-    m_eventListeners.emplace_back(m_world.events()->template subscribe<EventType>(*(T*)this));
-}
 }

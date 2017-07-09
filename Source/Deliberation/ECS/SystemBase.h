@@ -9,7 +9,7 @@
 
 namespace deliberation
 {
-class EventListener;
+class EventListenerProxy;
 class World;
 
 class SystemBase
@@ -62,7 +62,6 @@ protected:
 protected:
     World &                                     m_world;
     SparseVector<EntityEntry>                   m_entities;
-    std::vector<std::shared_ptr<EventListener>> m_eventListeners;
 
 
   private:

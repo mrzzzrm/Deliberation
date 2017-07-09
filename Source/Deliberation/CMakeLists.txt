@@ -41,8 +41,10 @@ set(sources
 	Core/Detail/NamedDataMemberOf.h
 	Core/Detail/VectorBlobImpl.h
 	Core/Dispatch.h
-	Core/EventListener.cpp
-	Core/EventListener.h
+	Core/EventListenerProxy.cpp
+	Core/EventListenerProxy.h
+	Core/EventListenerProxy.inl
+	Core/EventListenerProxyImpl.h
 	Core/EventDomain.cpp
 	Core/EventDomain.inl
 	Core/EventDomain.h
