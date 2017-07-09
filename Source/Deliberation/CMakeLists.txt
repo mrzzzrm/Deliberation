@@ -232,6 +232,7 @@ set(sources
 	Draw/VertexAttribute.cpp
 	Draw/VertexAttribute.h
 
+	ECS/AbstractWorld.cpp
 	ECS/AbstractWorld.h
 	ECS/ComponentBase.cpp
 	ECS/ComponentBase.h

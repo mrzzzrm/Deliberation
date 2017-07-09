@@ -8,19 +8,18 @@ std::shared_ptr<EventListener> EventDomain::subscribe(ReceiverType & receiver)
 {
     auto listener = EventListener::create<EventType>(receiver);
     addEventListener(listener);
+    return listener;
 }
 
 template<typename EventType>
 void EventDomain::publishEvent(const EventType & event)
 {
     auto eventTypeId = TypeID::value<EventListener, EventType>();
-    auto & listeners = m_eventListenersByEventType[eventTypeId];
+    auto & listenerProxies = m_eventListenerProxiesByEventType[eventTypeId];
     
-    for (auto & listenerW : listeners)
+    for (auto & listenerProxy : listenerProxies)
     {
-        auto listener = listenerW.lock();
-        Assert((bool)listener, "");
-        listener->onEvent(&event);
+        listenerProxy->onEvent(&event);
     }
 }
 }

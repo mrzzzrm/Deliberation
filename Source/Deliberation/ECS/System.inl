@@ -37,6 +37,6 @@ template<typename T>
 template<typename EventType>
 void System<T>::subscribeEvent()
 {
-    m_eventListeners.emplace_back(m_world.events()->subscribe<EventType>(*(T*)this));
+    m_eventListeners.emplace_back(m_world.events()->template subscribe<EventType>(*(T*)this));
 }
 }

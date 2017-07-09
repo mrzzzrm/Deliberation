@@ -17,6 +17,7 @@ class SystemBase;
 class AbstractWorld
 {
   public:
+    AbstractWorld();
 
     std::shared_ptr<EventDomain> events() { return m_events; }
     const std::shared_ptr<EventDomain> & events() const { return m_events; }

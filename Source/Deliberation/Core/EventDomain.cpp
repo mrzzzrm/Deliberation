@@ -3,21 +3,21 @@
 namespace deliberation
 {
 
-void EventDomain::addEventListener(const std::shared_ptr<EventListener> & listener)
+void EventDomain::addEventListener(const std::shared_ptr<EventListener> &listener)
 {
-    m_eventListenersByEventType[listener->eventType()].emplace_back(listener);
+    m_eventListenerProxiesByEventType[listener->proxy()->eventType()].emplace_back(listener->proxy());
     listener->m_domain = shared_from_this();
 }
 
-void EventDomain::removeEventListener(const std::shared_ptr<EventListener> & listener)
+void EventDomain::removeEventListener(const EventListener &listener)
 {
-    auto & listeners = m_eventListenersByEventType[listener->eventType()];
-    auto iter = std::find_if(listeners.begin(), listeners.end(), [&] (auto & listener2)
+    auto & listenerProxies = m_eventListenerProxiesByEventType[listener.proxy()->eventType()];
+    auto iter = std::find_if(listenerProxies.begin(), listenerProxies.end(), [&] (auto & listenerProxy)
     {
-      return listener2.lock() == listener;
+      return listenerProxy == listener.proxy();
     });
-    Assert(iter != listeners.end(), "");
-    listeners.erase(iter);
+    Assert(iter != listenerProxies.end(), "");
+    listenerProxies.erase(iter);
 }
 
 }

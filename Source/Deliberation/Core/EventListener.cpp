@@ -8,7 +8,7 @@ namespace deliberation
 EventListener::~EventListener()
 {
     auto domain = m_domain.lock();
-    if (domain) domain->removeEventListener(shared_from_this());
+    if (domain) domain->removeEventListener(*this);
 }
 
 }

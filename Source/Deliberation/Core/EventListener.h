@@ -3,6 +3,7 @@
 #include <memory>
 #include <functional>
 
+#include <Deliberation/Core/EventListenerProxy.h>
 #include <Deliberation/Core/TypeID.h>
 
 namespace deliberation
@@ -18,26 +19,21 @@ public:
 
 public:
     EventListener(TypeID::value_t eventType, const std::function<void(const void*)> & fn):
-        m_eventType(eventType),
-        m_fn(fn)
+        m_proxy(std::make_shared<EventListenerProxy>(eventType, fn))
     {}
 
     ~EventListener();
 
-    TypeID::value_t eventType() const { return m_eventType; }
+    const std::shared_ptr<EventListenerProxy> & proxy() { return m_proxy; };
+    std::shared_ptr<const EventListenerProxy> proxy() const { return m_proxy; };
 
-    void onEvent(const void * event)
-    {
-        m_fn(event);
-    }
 
  private:
     friend class EventDomain;
 
 private:
     std::weak_ptr<EventDomain>          m_domain;
-    TypeID::value_t                     m_eventType;
-    std::function<void(const void*)>    m_fn;
+    std::shared_ptr<EventListenerProxy> m_proxy;
 };
 
 }
