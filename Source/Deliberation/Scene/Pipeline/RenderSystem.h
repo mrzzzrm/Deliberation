@@ -18,7 +18,7 @@ class RenderSystem : public System<RenderSystem>
     const std::shared_ptr<DebugGeometryRenderer> & debugGeometryRenderer() const { return m_debugGeometryRenderer; }
 
   protected:
-    void onUpdate(float seconds) override;
+    void onGameUpdate(float seconds) override;
 
   private:
     RenderManager  m_renderManager;

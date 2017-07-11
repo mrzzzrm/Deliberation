@@ -17,7 +17,7 @@ public:
                             const std::shared_ptr<PointLightRenderer> & pointLightRenderer);
 
 protected:
-    void onUpdate(float seconds) override;
+    void onGameUpdate(float seconds) override;
 
 private:
     std::shared_ptr<DebugGeometryNode> m_node;

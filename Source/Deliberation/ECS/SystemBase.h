@@ -29,11 +29,12 @@ class SystemBase
     void removeEntity(Entity & entity);
 
     void frameBegin();
-    void beforeUpdate();
-    void update(float seconds);
+    void beforeGameUpdate();
+    void gameUpdate(float seconds);
+    void frameUpdate(float seconds);
     void prePhysicsUpdate(float seconds);
     void postPhysicsUpdate(float seconds);
-    void frameComplete();
+    void frameComplete(float seconds);
 
     virtual void onCreated() {}
     virtual void onRemoved() {}
@@ -41,16 +42,16 @@ class SystemBase
   protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
-    virtual void onEntityUpdate(Entity & entity, float seconds);
-    virtual void
-                 onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep);
-    virtual void
-                 onEntityPostPhysicsUpdate(Entity & entity, float physicsTimestep) {}
+
+    virtual void onEntityGameUpdate(Entity & entity, float seconds) {}
+    virtual void onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep);
+    virtual void onEntityPostPhysicsUpdate(Entity & entity, float physicsTimestep) {}
     virtual void onFrameBegin();
-    virtual void onUpdate(float seconds);
+    virtual void onGameUpdate(float seconds) {}
+    virtual void onFrameUpdate(float seconds) {}
     virtual void onPrePhysicsUpdate(float seconds);
     virtual void onPostPhysicsUpdate(float seconds) {}
-    virtual void onFrameComplete();
+    virtual void onFrameComplete(float seconds);
 
 protected:
     struct EntityEntry

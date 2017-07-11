@@ -20,7 +20,7 @@ RenderSystem::RenderSystem(World & world)
 }
 
 
-void RenderSystem::onUpdate(float seconds)
+void RenderSystem::onGameUpdate(float seconds)
 {
     auto imguiSystem = world().system<ImGuiSystem>();
 

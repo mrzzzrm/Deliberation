@@ -59,7 +59,7 @@ struct GunSystem : public System<GunSystem>
     {
     }
 
-    virtual void onEntityUpdate(Entity & entity, float seconds) override
+    virtual void onEntityGameUpdate(Entity & entity, float seconds) override
     {
         auto & gun = entity.component<GunComponent>();
 
@@ -97,7 +97,7 @@ struct PhysicsSystem : public System<PhysicsSystem>
     {
     }
 
-    virtual void onEntityUpdate(Entity & entity, float seconds) override
+    virtual void onEntityGameUpdate(Entity & entity, float seconds) override
     {
         std::cout << "Moving " << entity.name() << std::endl;
     }

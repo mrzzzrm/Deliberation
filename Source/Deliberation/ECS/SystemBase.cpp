@@ -44,7 +44,7 @@ void SystemBase::removeEntity(Entity & entity)
 
 void SystemBase::frameBegin() { onFrameBegin(); }
 
-void SystemBase::beforeUpdate()
+void SystemBase::beforeGameUpdate()
 {
     for (auto & entry : m_entities)
     {
@@ -52,17 +52,22 @@ void SystemBase::beforeUpdate()
     }
 }
 
-void SystemBase::update(float seconds)
+void SystemBase::gameUpdate(float seconds)
 {
-    onUpdate(seconds);
+    onGameUpdate(seconds);
 
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
-        onEntityUpdate(entity, seconds);
+        onEntityGameUpdate(entity, seconds);
     }
+}
+
+void SystemBase::frameUpdate(float seconds)
+{
+    onFrameUpdate(seconds);
 }
 
 void SystemBase::prePhysicsUpdate(float seconds)
@@ -91,8 +96,8 @@ void SystemBase::postPhysicsUpdate(float seconds)
     }
 }
 
-void SystemBase::frameComplete() {
-    onFrameComplete();
+void SystemBase::frameComplete(float seconds) {
+    onFrameComplete(seconds);
 }
 
 void SystemBase::onEntityAdded(Entity & entity)
@@ -101,11 +106,6 @@ void SystemBase::onEntityAdded(Entity & entity)
 }
 
 void SystemBase::onEntityRemoved(Entity & entity)
-{
-    // dummy
-}
-
-void SystemBase::onEntityUpdate(Entity & entity, float seconds)
 {
     // dummy
 }
@@ -119,8 +119,6 @@ void SystemBase::onFrameBegin() {}
 
 void SystemBase::onPrePhysicsUpdate(float seconds) {}
 
-void SystemBase::onFrameComplete() {}
-
-void SystemBase::onUpdate(float seconds) {}
+void SystemBase::onFrameComplete(float seconds) {}
 
 }

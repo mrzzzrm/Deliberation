@@ -27,6 +27,9 @@ class Application : public InputEventReceiver
     DrawContext &       drawContext();
     const DrawContext & drawContext() const;
 
+    bool gameplayPaused() const { return m_gameplayPaused; }
+    void setGameplayPaused(bool paused) { m_gameplayPaused = paused; }
+
     float fps() const;
 
     int run(int argc, char ** argv);
@@ -38,7 +41,10 @@ class Application : public InputEventReceiver
     virtual void onShutdown();
     virtual void onFrame(float seconds);
 
-  private:
+protected:
+    bool m_gameplayPaused = false;
+
+private:
     void init();
     void handleWindowEvent(const SDL_Event & event);
 

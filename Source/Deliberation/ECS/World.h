@@ -47,11 +47,11 @@ class World final : public AbstractWorld
     std::shared_ptr<T> addSystem(Args &&... args);
 
     void frameBegin();
-    void update(float seconds);
+    void gameUpdate(float seconds);
+    void frameUpdate(float seconds);
     void prePhysicsUpdate(float seconds);
     void postPhysicsUpdate(float seconds);
-
-    void frameComplete();
+    void frameComplete(float seconds);
 
     std::string toString() const;
 

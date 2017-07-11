@@ -116,14 +116,14 @@ void World::frameBegin()
     }
 }
 
-void World::update(float seconds)
+void World::gameUpdate(float seconds)
 {
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.beforeUpdate();
+        system.beforeGameUpdate();
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "BeforeUpdate", micros});
@@ -134,10 +134,24 @@ void World::update(float seconds)
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.update(seconds);
+        system.gameUpdate(seconds);
         const auto micros = profiler.stop();
 
-        m_profiler.addScope({system, "Update", micros});
+        m_profiler.addScope({system, "GameUpdate", micros});
+    }
+}
+
+void World::frameUpdate(float seconds)
+{
+    for (auto & pair : m_systems)
+    {
+        auto & system = *pair.second;
+
+        ScopeProfiler profiler;
+        system.frameUpdate(seconds);
+        const auto micros = profiler.stop();
+
+        m_profiler.addScope({system, "FrameUpdate", micros});
     }
 }
 
@@ -168,14 +182,14 @@ void World::postPhysicsUpdate(float seconds){
     }
 }
 
-void World::frameComplete()
+void World::frameComplete(float seconds)
 {
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.frameComplete();
+        system.frameComplete(seconds);
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "FrameComplete", micros});
