@@ -31,27 +31,27 @@ void PhysicsWorldSystem::updatePhysics(float seconds) {
 
 void PhysicsWorldSystem::onCreated()
 {
-    auto renderSystem = world().system<RenderSystem>();
-
-    if (renderSystem)
-    {
-        m_debugRenderer =
-            renderSystem->renderManager().addRenderer<DebugPhysicsWorldRenderer>(*renderSystem, m_physicsWorld);
-    }
-    else
-    {
-        std::cout << "PhysicsWorldSystem: No RenderSystem available, not adding DebugPhysicsWorldRenderer" << std::endl;
-    }
+//    auto renderSystem = world().system<RenderSystem>();
+//
+//    if (renderSystem)
+//    {
+//        m_debugRenderer =
+//            renderSystem->renderManager().addRenderer<DebugPhysicsWorldRenderer>(*renderSystem, m_physicsWorld);
+//    }
+//    else
+//    {
+//        std::cout << "PhysicsWorldSystem: No RenderSystem available, not adding DebugPhysicsWorldRenderer" << std::endl;
+//    }
 }
 
 void PhysicsWorldSystem::onRemoved()
 {
-    auto renderSystem = world().system<RenderSystem>();
-    if (renderSystem)
-    {
-        // TODO add once this is possible/makes sense
-        // renderSystem->renderManager().removeRenderer(m_debugRenderer);
-    }
+//    auto renderSystem = world().system<RenderSystem>();
+//    if (renderSystem)
+//    {
+//        // TODO add once this is possible/makes sense
+//        // renderSystem->renderManager().removeRenderer(m_debugRenderer);
+//    }
 }
 
 void PhysicsWorldSystem::onEntityAdded(Entity &entity) {

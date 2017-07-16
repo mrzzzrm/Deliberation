@@ -16,19 +16,11 @@ bool Entity::hasComponent() const
 }
 
 template<typename T>
-T & Entity::component()
+T & Entity::component() const
 {
     static_assert(std::is_base_of<ComponentBase, T>::value, "");
 
     return dynamic_cast<T &>(component(T::indexStatic()));
-}
-
-template<typename T>
-const T & Entity::component() const
-{
-    static_assert(std::is_base_of<ComponentBase, T>::value, "");
-
-    return dynamic_cast<const T &>(component(T::indexStatic()));
 }
 
 template<typename T, typename... Args>

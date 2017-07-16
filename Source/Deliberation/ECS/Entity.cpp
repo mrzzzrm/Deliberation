@@ -56,17 +56,7 @@ bool Entity::hasComponent(TypeID::value_t c) const
     return m_world->component(m_id, c) != nullptr;
 }
 
-ComponentBase & Entity::component(TypeID::value_t c)
-{
-    Assert(m_world, "Entity is hollow");
-
-    auto component = m_world->component(m_id, c);
-    Assert(!!component, "No such component in '" + name() + "'");
-
-    return *component;
-}
-
-const ComponentBase & Entity::component(TypeID::value_t c) const
+ComponentBase & Entity::component(TypeID::value_t c) const
 {
     Assert(m_world, "Entity is hollow");
 

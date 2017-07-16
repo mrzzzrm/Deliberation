@@ -35,10 +35,7 @@ class Entity final
     bool hasComponent() const;
 
     template<typename T>
-    T & component();
-
-    template<typename T>
-    const T & component() const;
+    T & component() const;
 
     template<typename T, typename... Args>
     T & addComponent(Args &&... args);
@@ -64,8 +61,7 @@ class Entity final
     EntityData & data() const;
 
     bool                  hasComponent(TypeID::value_t c) const;
-    ComponentBase &       component(TypeID::value_t c);
-    const ComponentBase & component(TypeID::value_t c) const;
+    ComponentBase &       component(TypeID::value_t c) const;
     void
          addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component);
     void scheduleComponentRemoval(TypeID::value_t c);
