@@ -13,7 +13,6 @@ using namespace gl;
 
 namespace deliberation
 {
-
 GLStateManager::GLStateManager()
     : m_glTextureCubeMapSeamless(false)
     , m_glDepthTest(false)
@@ -74,10 +73,10 @@ GLStateManager::GLStateManager()
     glViewport(
         m_glViewportX, m_glViewportY, m_glViewportWidth, m_glViewportHeight);
 
-//    for (auto & boundBuffer : m_boundBuffers)
-//    {
-//        boundBuffer = 0;
-//    }
+    //    for (auto & boundBuffer : m_boundBuffers)
+    //    {
+    //        boundBuffer = 0;
+    //    }
 
     for (auto & boundFramebuffer : m_boundFramebuffers)
     {
@@ -330,58 +329,58 @@ void GLStateManager::applyEnableDisableState(
 
 void GLStateManager::bindBuffer(GLenum target, GLuint buffer)
 {
-//    if (!m_vertexArray) {
-//        auto targetIndex = 0;
-//
-//        switch (target) {
-//            case GL_ARRAY_BUFFER:
-//                targetIndex = ArrayBufferTarget;
-//                break;
-//            case GL_COPY_READ_BUFFER:
-//                targetIndex = CopyReadBufferTarget;
-//                break;
-//            case GL_COPY_WRITE_BUFFER:
-//                targetIndex = CopyWriteBufferTarget;
-//                break;
-//            case GL_ELEMENT_ARRAY_BUFFER:
-//                targetIndex = ElementArrayBufferTarget;
-//                break;
-//            case GL_PIXEL_PACK_BUFFER:
-//                targetIndex = PixelPackBufferTarget;
-//                break;
-//            case GL_PIXEL_UNPACK_BUFFER:
-//                targetIndex = PixelUnpackBufferTarget;
-//                break;
-//            case GL_TEXTURE_BUFFER:
-//                targetIndex = TextureBufferTarget;
-//                break;
-//            case GL_TRANSFORM_FEEDBACK_BUFFER:
-//                targetIndex = TransformFeedbackBufferTarget;
-//                break;
-//            case GL_UNIFORM_BUFFER:
-//                targetIndex = UniformBufferTarget;
-//                break;
-//            default: Fail("");
-//        }
-//
-//        if (m_boundBuffers[targetIndex] == buffer) {
-//            return;
-//        }
-//        m_boundBuffers[targetIndex] = buffer;
-//    }
-//
+    //    if (!m_vertexArray) {
+    //        auto targetIndex = 0;
+    //
+    //        switch (target) {
+    //            case GL_ARRAY_BUFFER:
+    //                targetIndex = ArrayBufferTarget;
+    //                break;
+    //            case GL_COPY_READ_BUFFER:
+    //                targetIndex = CopyReadBufferTarget;
+    //                break;
+    //            case GL_COPY_WRITE_BUFFER:
+    //                targetIndex = CopyWriteBufferTarget;
+    //                break;
+    //            case GL_ELEMENT_ARRAY_BUFFER:
+    //                targetIndex = ElementArrayBufferTarget;
+    //                break;
+    //            case GL_PIXEL_PACK_BUFFER:
+    //                targetIndex = PixelPackBufferTarget;
+    //                break;
+    //            case GL_PIXEL_UNPACK_BUFFER:
+    //                targetIndex = PixelUnpackBufferTarget;
+    //                break;
+    //            case GL_TEXTURE_BUFFER:
+    //                targetIndex = TextureBufferTarget;
+    //                break;
+    //            case GL_TRANSFORM_FEEDBACK_BUFFER:
+    //                targetIndex = TransformFeedbackBufferTarget;
+    //                break;
+    //            case GL_UNIFORM_BUFFER:
+    //                targetIndex = UniformBufferTarget;
+    //                break;
+    //            default: Fail("");
+    //        }
+    //
+    //        if (m_boundBuffers[targetIndex] == buffer) {
+    //            return;
+    //        }
+    //        m_boundBuffers[targetIndex] = buffer;
+    //    }
+    //
     glBindBuffer(target, buffer);
 }
 
 void GLStateManager::deleteBuffer(gl::GLuint buffer)
 {
-//    for (auto & boundBuffer : m_boundBuffers)
-//    {
-//        if (boundBuffer == buffer)
-//        {
-//            boundBuffer = 0;
-//        }
-//    }
+    //    for (auto & boundBuffer : m_boundBuffers)
+    //    {
+    //        if (boundBuffer == buffer)
+    //        {
+    //            boundBuffer = 0;
+    //        }
+    //    }
 
     glDeleteBuffers(1, &buffer);
 }
@@ -600,12 +599,15 @@ void GLStateManager::bindTexture(gl::GLenum target, gl::GLuint texture)
     if (m_activeTextureUnit >= m_boundTexturesByUnit.size())
     {
         decltype(m_boundTexturesByUnit)::value_type initializedTextureUnit;
-        for (auto & texture : initializedTextureUnit) texture = 0;
+        for (auto & texture : initializedTextureUnit)
+            texture = 0;
 
-        m_boundTexturesByUnit.resize(m_activeTextureUnit + 1, initializedTextureUnit);
+        m_boundTexturesByUnit.resize(
+            m_activeTextureUnit + 1, initializedTextureUnit);
     }
 
-    if (m_boundTexturesByUnit[m_activeTextureUnit][targetIndex] == texture) return;
+    if (m_boundTexturesByUnit[m_activeTextureUnit][targetIndex] == texture)
+        return;
 
     m_boundTexturesByUnit[m_activeTextureUnit][targetIndex] = texture;
     gl::glBindTexture(target, texture);

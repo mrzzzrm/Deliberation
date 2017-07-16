@@ -27,13 +27,13 @@ enum class DepthWrite
 
 class DepthState final
 {
-  public:
+public:
     static DepthState enabled();
     static DepthState disabledRW();
     static DepthState disabledR();
     static DepthState disabledW(DepthTest depthTest = DepthTest::Enabled);
 
-  public:
+public:
     DepthState() = default;
     DepthState(DepthTest depthTest, DepthWrite depthWrite);
 
@@ -45,7 +45,7 @@ class DepthState final
 
     std::string toString() const;
 
-  private:
+private:
     DepthTest  m_depthTest = DepthTest::Enabled;
     DepthWrite m_depthWrite = DepthWrite::Enabled;
 };

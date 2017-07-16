@@ -10,14 +10,14 @@ namespace deliberation
 {
 class UVSphere
 {
-  public:
+public:
     UVSphere();
     UVSphere(unsigned int numParallels, unsigned int numMeridians);
 
     Mesh     generateMesh() const;
     MeshData generateMesh2() const;
 
-  private:
+private:
     unsigned int m_numParallels;
     unsigned int m_numMeridians;
 };

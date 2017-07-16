@@ -36,7 +36,6 @@ using namespace deliberation;
 
 namespace
 {
-
 // clang-format off
 const deliberation::detail::PixelFormatDesc
     DESCS[deliberation::_PixelFormat_Count_] = {

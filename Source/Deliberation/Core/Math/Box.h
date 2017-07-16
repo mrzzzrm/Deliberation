@@ -10,7 +10,7 @@ class Transform3D;
 
 class Box final
 {
-  public:
+public:
     Box();
     Box(const glm::vec3 & p,
         const glm::vec3 & x,
@@ -32,7 +32,7 @@ class Box final
 
     glm::vec3 point(size_t index) const;
 
-  private:
+private:
     glm::vec3 m_p;
     glm::vec3 m_halfExtent;
     glm::mat3 m_axes;

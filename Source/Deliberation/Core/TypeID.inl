@@ -11,7 +11,7 @@ namespace detail
     template<typename Family>
     struct TypeIDCounter
     {
-      public:
+    public:
         static std::atomic<TypeID::value_t> s_counter;
     };
 

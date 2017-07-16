@@ -34,7 +34,7 @@ struct ContactPoint : public Intersection
 
 class Contact
 {
-  public:
+public:
     Contact(RigidBody & bodyA, RigidBody & bodyB);
     virtual ~Contact();
 
@@ -54,11 +54,11 @@ class Contact
 
     virtual void update() = 0;
 
-  private:
+private:
     bool intersectionMatchesPoint(
         const Intersection & intersection, const ContactPoint & point) const;
 
-  protected:
+protected:
     RigidBody & m_bodyA;
     RigidBody & m_bodyB;
 

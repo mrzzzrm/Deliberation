@@ -17,7 +17,7 @@ enum CollisionShapeType
 
 class CollisionShape
 {
-  public:
+public:
     CollisionShape(int type);
     virtual ~CollisionShape();
 
@@ -28,7 +28,7 @@ class CollisionShape
     virtual float     mass() const;
     virtual glm::vec3 centerOfMass() const;
 
-  private:
+private:
     int m_type;
 };
 }

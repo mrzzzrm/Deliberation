@@ -24,10 +24,10 @@ enum class FrontFace : unsigned int
 
 class CullState final
 {
-  public:
+public:
     static CullState disabled();
 
-  public:
+public:
     CullState(
         CullFace  cullFace = CullFace::Back,
         FrontFace frontFace = FrontFace::CCW);
@@ -42,7 +42,7 @@ class CullState final
 
     std::string toString() const;
 
-  private:
+private:
     bool      m_enabled;
     CullFace  m_cullFace;
     FrontFace m_frontFace;

@@ -19,8 +19,8 @@ ScreenSpaceEffect::ScreenSpaceEffect() : m_initialised(false) {}
 ScreenSpaceEffect::ScreenSpaceEffect(
     DrawContext &                    drawContext,
     const std::vector<std::string> & shaders,
-    const std::string &              name):
-    m_drawContext(&drawContext)
+    const std::string &              name)
+    : m_drawContext(&drawContext)
 {
     m_program = drawContext.createProgram(shaders);
 
@@ -28,11 +28,8 @@ ScreenSpaceEffect::ScreenSpaceEffect(
 }
 
 ScreenSpaceEffect::ScreenSpaceEffect(
-    DrawContext &       drawContext,
-    Program &           program,
-    const std::string & name):
-    m_drawContext(&drawContext),
-    m_program(program)
+    DrawContext & drawContext, Program & program, const std::string & name)
+    : m_drawContext(&drawContext), m_program(program)
 {
     init(drawContext, name);
 }
@@ -55,12 +52,15 @@ void ScreenSpaceEffect::render()
     m_draw.render();
 }
 
-void ScreenSpaceEffect::init(DrawContext &       drawContext,
-                             const std::string & name)
+void ScreenSpaceEffect::init(
+    DrawContext & drawContext, const std::string & name)
 {
     std::vector<glm::vec2> vertices({
-                                        {-1.0f, -1.0f}, {1.0f, -1.0f}, {-1.0f, 1.0f}, {1.0f, 1.0f},
-                                    });
+        {-1.0f, -1.0f},
+        {1.0f, -1.0f},
+        {-1.0f, 1.0f},
+        {1.0f, 1.0f},
+    });
 
     auto layout = DataLayout("Position", Type_Vec2);
     m_vertexBuffer = drawContext.createBuffer(layout);
@@ -83,5 +83,4 @@ void ScreenSpaceEffect::init(DrawContext &       drawContext,
 
     m_initialised = true;
 }
-
 }

@@ -9,9 +9,9 @@
 #include <Deliberation/Core/Optional.h>
 
 #include <Deliberation/Draw/Clear.h>
+#include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/Surface.h>
 #include <Deliberation/Draw/Texture.h>
-#include <Deliberation/Draw/Framebuffer.h>
 
 namespace deliberation
 {
@@ -20,17 +20,16 @@ class FramebufferDesc;
 class GLStateManager;
 class Surface;
 
-
 class FramebufferImpl final
 {
-  public:
+public:
     static std::shared_ptr<FramebufferImpl>
     backbuffer(DrawContext & drawContext, u32 width, u32 height);
 
     static std::shared_ptr<FramebufferImpl>
     custom(DrawContext & drawContext, const FramebufferDesc & framebufferDesc);
 
-  public:
+public:
     FramebufferImpl(DrawContext & drawContext);
     ~FramebufferImpl();
 

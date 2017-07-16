@@ -18,7 +18,7 @@ class Font;
 
 class MultilineLabel final
 {
-  public:
+public:
     MultilineLabel(const Font & font);
 
     void setPosition(const glm::vec2 & position);
@@ -29,7 +29,7 @@ class MultilineLabel final
 
     void render(LabelRenderer & renderer, const Viewport & viewport);
 
-  private:
+private:
     const Font &                             m_font;
     glm::vec2                                m_position;
     glm::vec2                                m_center;

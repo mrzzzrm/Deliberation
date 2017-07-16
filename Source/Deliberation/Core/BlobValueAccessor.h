@@ -29,7 +29,7 @@ struct BlobValueAccessorData final
 
 class CBlobValueAccessor final
 {
-  public:
+public:
     CBlobValueAccessor() = default;
     CBlobValueAccessor(
         const Blob &            data,
@@ -38,13 +38,13 @@ class CBlobValueAccessor final
 
     CBlobValue operator[](size_t index) const;
 
-  private:
+private:
     Optional<BlobValueAccessorData<const Blob>> m_data;
 };
 
 class BlobValueAccessor final
 {
-  public:
+public:
     BlobValueAccessor() = default;
     BlobValueAccessor(
         Blob & data, const DataLayout & layout, const DataLayoutField & field);
@@ -52,7 +52,7 @@ class BlobValueAccessor final
     BlobValue  operator[](size_t index);
     CBlobValue operator[](size_t index) const;
 
-  private:
+private:
     Optional<BlobValueAccessorData<Blob>> m_data;
 };
 }

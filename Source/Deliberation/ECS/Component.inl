@@ -9,9 +9,7 @@
 namespace deliberation
 {
 template<typename T>
-Component<T>::Component()
-{
-};
+Component<T>::Component(){};
 
 template<typename T>
 std::size_t Component<T>::indexStatic()

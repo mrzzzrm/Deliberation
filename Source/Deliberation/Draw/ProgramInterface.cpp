@@ -201,24 +201,36 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             {
                 if (type == gl::GL_SAMPLER_BUFFER)
                 {
-                    m_bufferTextures.emplace_back(name, BufferTextureType::Float, m_bufferTextures.size(), location);
+                    m_bufferTextures.emplace_back(
+                        name,
+                        BufferTextureType::Float,
+                        m_bufferTextures.size(),
+                        location);
                 }
                 else if (type == gl::GL_INT_SAMPLER_BUFFER)
                 {
-                    m_bufferTextures.emplace_back(name, BufferTextureType::Int, m_bufferTextures.size(), location);
+                    m_bufferTextures.emplace_back(
+                        name,
+                        BufferTextureType::Int,
+                        m_bufferTextures.size(),
+                        location);
                 }
                 else if (type == gl::GL_INT_SAMPLER_BUFFER)
                 {
-                    m_bufferTextures.emplace_back(name, BufferTextureType::UnsignedInt, m_bufferTextures.size(), location);
+                    m_bufferTextures.emplace_back(
+                        name,
+                        BufferTextureType::UnsignedInt,
+                        m_bufferTextures.size(),
+                        location);
                 }
                 else
                 {
-                    if (location >=
-                        (gl::GLint)m_uniformIndexByLocation.size()) // TODO: Just
-                                                                    // map location
-                                                                    // -> uniform,
-                                                                    // no need for
-                                                                    // index->
+                    if (location >= (gl::GLint)m_uniformIndexByLocation
+                                        .size()) // TODO: Just
+                                                 // map location
+                                                 // -> uniform,
+                                                 // no need for
+                                                 // index->
                     {
                         m_uniformIndexByLocation.resize(
                             location + 1, (unsigned int)-1);
@@ -453,13 +465,15 @@ ProgramInterface::uniformBlock(const std::string & name) const
     return &m_uniformBuffers[iter->second];
 }
 
-const ProgramInterfaceBufferTexture * ProgramInterface::bufferTexture(const std::string & name) const
+const ProgramInterfaceBufferTexture *
+ProgramInterface::bufferTexture(const std::string & name) const
 {
-    auto iter = std::find_if(m_bufferTextures.begin(), m_bufferTextures.end(),
-                              [&](const ProgramInterfaceBufferTexture & bufferTexture)
-                              {
-                                  return bufferTexture.name() == name;
-                              });
+    auto iter = std::find_if(
+        m_bufferTextures.begin(),
+        m_bufferTextures.end(),
+        [&](const ProgramInterfaceBufferTexture & bufferTexture) {
+            return bufferTexture.name() == name;
+        });
 
     return iter == m_bufferTextures.end() ? nullptr : &*iter;
 }
@@ -504,7 +518,8 @@ ProgramInterface::uniformBlockRef(const std::string & name) const
     return *ptr;
 }
 
-const ProgramInterfaceBufferTexture & ProgramInterface::bufferTextureRef(const std::string & name) const
+const ProgramInterfaceBufferTexture &
+ProgramInterface::bufferTextureRef(const std::string & name) const
 {
     const auto * ptr = bufferTexture(name);
     Assert(ptr != nullptr, "No such Buffer Texture '" + name + "'");
@@ -606,7 +621,8 @@ ProgramInterface::uniformBlocks() const
     return m_uniformBuffers;
 }
 
-const std::vector<ProgramInterfaceBufferTexture> & ProgramInterface::bufferTextures() const
+const std::vector<ProgramInterfaceBufferTexture> &
+ProgramInterface::bufferTextures() const
 {
     return m_bufferTextures;
 }

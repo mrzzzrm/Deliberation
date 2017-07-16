@@ -15,7 +15,7 @@ class TextureImpl;
 
 class Surface final
 {
-  public:
+public:
     Surface() = default;
     Surface(const std::shared_ptr<SurfaceImpl> & impl);
 
@@ -34,7 +34,7 @@ class Surface final
 
     std::string toString() const;
 
-  private:
+private:
     friend class Framebuffer;
     friend class FramebufferImpl;
     friend class SurfaceDownloadImpl;
@@ -42,7 +42,7 @@ class Surface final
     friend class TextureImpl;
     friend class Texture;
 
-  private:
+private:
     std::shared_ptr<SurfaceImpl> m_impl;
 };
 }

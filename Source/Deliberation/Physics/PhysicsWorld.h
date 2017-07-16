@@ -21,10 +21,10 @@ class RigidBody;
 
 class PhysicsWorld final
 {
-  public:
+public:
     using RigidBodies = SparseVector<std::shared_ptr<RigidBody>>;
 
-  public:
+public:
     PhysicsWorld(float timestep = 1.0f / 60.0f);
     ~PhysicsWorld();
 
@@ -53,7 +53,7 @@ class PhysicsWorld final
 
     std::string toString() const;
 
-  private:
+private:
     void performTimestep(float seconds);
     void integrateTransforms(float seconds);
     void solve();
@@ -61,7 +61,7 @@ class PhysicsWorld final
     void solveContactVelocities(Contact & contact);
     void solvePositions(Contact & contact);
 
-  private:
+private:
     float                        m_timestep = 1.0f / 60.0f;
     float                        m_timeAccumulator = 0.0f;
     float                        m_gravity = 0.0f;

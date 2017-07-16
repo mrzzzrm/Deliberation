@@ -10,7 +10,7 @@ namespace deliberation
 {
 class BoxShape final : public CollisionShape
 {
-  public:
+public:
     BoxShape(const glm::vec3 & halfExtent = glm::vec3());
 
     const glm::vec3 & halfExtent();
@@ -23,7 +23,7 @@ class BoxShape final : public CollisionShape
     virtual AABB      bounds(const Transform3D & transform) const override;
     virtual glm::mat3 localInertia() const override;
 
-  private:
+private:
     glm::vec3 m_halfExtent;
 };
 }

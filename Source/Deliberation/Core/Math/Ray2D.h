@@ -8,10 +8,10 @@ class Sphere;
 
 class Ray2D final
 {
-  public:
+public:
     static Ray2D fromTo(const glm::vec2 & from, const glm::vec2 & to);
 
-  public:
+public:
     Ray2D(const glm::vec2 & origin, const glm::vec2 & direction);
 
     const glm::vec2 & origin() const;
@@ -25,7 +25,7 @@ class Ray2D final
 
     glm::vec2 at(float s) const;
 
-  protected:
+protected:
     glm::vec2 m_origin;
     glm::vec2 m_direction;
 };

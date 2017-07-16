@@ -9,7 +9,7 @@ namespace deliberation
 {
 class DataLayoutField final
 {
-  public:
+public:
     struct Desc
     {
         Desc() = default;
@@ -26,7 +26,7 @@ class DataLayoutField final
         size_t      arraySize = 0;
     };
 
-  public:
+public:
     DataLayoutField() = default;
     DataLayoutField(
         const std::string & name,
@@ -44,7 +44,7 @@ class DataLayoutField final
 
     bool operator==(const DataLayoutField & rhs) const;
 
-  private:
+private:
     Desc   m_desc;
     size_t m_offset;
 };

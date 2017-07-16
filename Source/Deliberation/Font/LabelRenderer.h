@@ -14,7 +14,7 @@ class Viewport;
 
 class LabelRenderer final
 {
-  public:
+public:
     LabelRenderer();
     LabelRenderer(DrawContext & drawContext);
 

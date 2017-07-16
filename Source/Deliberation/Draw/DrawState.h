@@ -15,7 +15,7 @@ namespace deliberation
 {
 class DrawState final
 {
-  public:
+public:
     DrawState();
 
     gl::GLenum provokingVertex() const;
@@ -50,7 +50,7 @@ class DrawState final
 
     std::string toString() const;
 
-  private:
+private:
     gl::GLenum m_provokingVertex;
 
     BlendState      m_blendState;

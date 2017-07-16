@@ -11,7 +11,7 @@ Blob Blob::fromValue(const T & value)
 
     class Impl : public detail::IBlobImpl
     {
-      public:
+    public:
         Impl(const T & value) : m_value(value) {}
 
         virtual std::unique_ptr<IBlobImpl> clone() const override
@@ -30,7 +30,7 @@ Blob Blob::fromValue(const T & value)
             Fail("Reserve not supported");
         }
 
-      private:
+    private:
         T m_value;
     };
 

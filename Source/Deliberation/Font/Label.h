@@ -12,7 +12,7 @@ class Font;
 
 class Label final
 {
-  public:
+public:
     Label();
     Label(const Font & font);
 
@@ -32,10 +32,10 @@ class Label final
 
     void renderText() const;
 
-  private:
+private:
     void updateTransform(const Viewport & viewport) const;
 
-  private:
+private:
     const Font *      m_font;
     glm::vec2         m_position;
     glm::vec2         m_center;

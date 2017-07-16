@@ -9,11 +9,11 @@ namespace deliberation
 {
 class Type final
 {
-  public:
+public:
     template<typename T>
     static constexpr Type & resolve();
 
-  public:
+public:
     Type(u8 id);
     Type(const Type & type) = default;
 
@@ -32,7 +32,7 @@ class Type final
     bool operator==(const Type & other) const;
     bool operator!=(const Type & other) const;
 
-  private:
+private:
     u8 m_id;
 };
 

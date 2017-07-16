@@ -9,8 +9,8 @@ namespace deliberation
 {
 SkyboxRenderer::SkyboxRenderer(
     RenderManager & renderManager, const Texture & cubemap)
-    : SingleNodeRenderer(renderManager, RenderPhase::Forward),
-      m_cubemap(cubemap)
+    : SingleNodeRenderer(renderManager, RenderPhase::Forward)
+    , m_cubemap(cubemap)
 {
     auto & drawContext = renderManager.drawContext();
 
@@ -18,7 +18,6 @@ SkyboxRenderer::SkyboxRenderer(
         {deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.vert"),
          deliberation::DeliberationDataPath(
              "Data/Shaders/SkyboxRenderer.frag")});
-
 
     //    auto vertices = LayoutedBlob(vertexLayout, 4);
     //    vertices.field<glm::vec3>("Position").assign({

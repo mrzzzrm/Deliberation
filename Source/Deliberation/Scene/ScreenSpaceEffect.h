@@ -13,7 +13,7 @@ class DrawContext;
 
 class ScreenSpaceEffect final
 {
-  public:
+public:
     ScreenSpaceEffect();
     ScreenSpaceEffect(
         DrawContext &                    drawContext,
@@ -27,19 +27,22 @@ class ScreenSpaceEffect final
     Draw &       draw();
     const Draw & draw() const;
 
-    DrawContext & drawContext() const { Assert(m_drawContext, ""); return *m_drawContext; }
+    DrawContext & drawContext() const
+    {
+        Assert(m_drawContext, "");
+        return *m_drawContext;
+    }
 
     void render();
 
-  private:
-    void init(DrawContext &       drawContext,
-              const std::string & name);
+private:
+    void init(DrawContext & drawContext, const std::string & name);
 
-  private:
+private:
     DrawContext * m_drawContext = nullptr;
-    bool    m_initialised;
-    Draw    m_draw;
-    Program m_program;
-    Buffer  m_vertexBuffer;
+    bool          m_initialised;
+    Draw          m_draw;
+    Program       m_program;
+    Buffer        m_vertexBuffer;
 };
 }

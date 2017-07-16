@@ -28,31 +28,31 @@ class Transform3D;
 
 class DebugGeometryInstance
 {
-  public:
+public:
     DebugGeometryInstance(DebugGeometryNode & renderer);
 
-    size_t                                 index() const;
-    DebugGeometryNode &                renderer() const;
+    size_t                                  index() const;
+    DebugGeometryNode &                     renderer() const;
     DebugGeometryRenderer &                 manager() const;
     const DebugGeometryRenderer::BuildIns & buildIns() const;
-    bool                                   visible() const;
-    const Transform3D &                    transform() const;
+    bool                                    visible() const;
+    const Transform3D &                     transform() const;
 
     void setIndex(size_t index);
     void setVisible(bool visible);
     void setTransform(const Transform3D & transform);
 
-  protected:
-    size_t                  m_index = 0;
-    DebugGeometryNode &     m_renderer;
-    bool                    m_visible = true;
-    Transform3D             m_transform;
-    mutable bool            m_transformDirty = true;
+protected:
+    size_t              m_index = 0;
+    DebugGeometryNode & m_renderer;
+    bool                m_visible = true;
+    Transform3D         m_transform;
+    mutable bool        m_transformDirty = true;
 };
 
 class DebugBoxInstance final : public DebugGeometryInstance
 {
-  public:
+public:
     DebugBoxInstance(DebugGeometryNode & renderer);
 
     bool              wireframe() const;
@@ -67,7 +67,7 @@ class DebugBoxInstance final : public DebugGeometryInstance
 
     Box toBox() const;
 
-  private:
+private:
     mutable Draw    m_draw;
     glm::vec3       m_halfExtent;
     glm::vec3       m_color;
@@ -79,7 +79,7 @@ class DebugBoxInstance final : public DebugGeometryInstance
 
 class DebugPointInstance final : public DebugGeometryInstance
 {
-  public:
+public:
     DebugPointInstance(DebugGeometryNode & renderer);
 
     const glm::vec3 & color() const;
@@ -88,7 +88,7 @@ class DebugPointInstance final : public DebugGeometryInstance
 
     void render() const;
 
-  private:
+private:
     Draw            m_draw;
     mutable Uniform m_transformUniform;
     glm::vec3       m_color;
@@ -97,7 +97,7 @@ class DebugPointInstance final : public DebugGeometryInstance
 
 class DebugArrowInstance final : public DebugGeometryInstance
 {
-  public:
+public:
     DebugArrowInstance(DebugGeometryNode & renderer);
 
     const glm::vec3 & origin() const;
@@ -112,7 +112,7 @@ class DebugArrowInstance final : public DebugGeometryInstance
 
     void render() const;
 
-  private:
+private:
     Draw         m_lineDraw;
     Buffer       m_lineVertexBuffer;
     LayoutedBlob m_lineVertices;
@@ -129,7 +129,7 @@ class DebugArrowInstance final : public DebugGeometryInstance
 
 class DebugWireframeInstance final : public DebugGeometryInstance
 {
-  public:
+public:
     DebugWireframeInstance(DebugGeometryNode & renderer);
 
     const glm::vec3 & color() const;
@@ -140,7 +140,7 @@ class DebugWireframeInstance final : public DebugGeometryInstance
 
     void render() const;
 
-  private:
+private:
     Draw            m_draw;
     Buffer          m_vertexBuffer;
     mutable Uniform m_transformUniform;
@@ -151,7 +151,7 @@ class DebugWireframeInstance final : public DebugGeometryInstance
 
 class DebugSphereInstance final : public DebugGeometryInstance
 {
-  public:
+public:
     DebugSphereInstance(DebugGeometryNode & renderer);
 
     const glm::vec3 & color() const;
@@ -162,7 +162,7 @@ class DebugSphereInstance final : public DebugGeometryInstance
 
     void render() const;
 
-  private:
+private:
     Draw            m_draw;
     Uniform         m_colorUniform;
     mutable Uniform m_transformUniform;
@@ -173,7 +173,7 @@ class DebugSphereInstance final : public DebugGeometryInstance
 
 class DebugPoseInstance final : public DebugGeometryInstance
 {
-  public:
+public:
     DebugPoseInstance(DebugGeometryNode & renderer);
 
     const Pose3D & pose() const;
@@ -182,7 +182,7 @@ class DebugPoseInstance final : public DebugGeometryInstance
 
     void render() const;
 
-  private:
+private:
     Draw                                                       m_draw;
     Pose3D                                                     m_pose;
     mutable std::array<boost::optional<DebugArrowInstance>, 3> m_arrows;
@@ -190,16 +190,16 @@ class DebugPoseInstance final : public DebugGeometryInstance
 
 class DebugGeometryNode final
 {
-  public:
+public:
     static constexpr size_t NO_INDEX = std::numeric_limits<size_t>::max();
 
-  public:
+public:
     DebugGeometryNode(DebugGeometryRenderer & manager);
 
     const DrawState &       drawState() const { return m_drawState; }
-    bool                   visible() const;
+    bool                    visible() const;
     DebugGeometryRenderer & manager() const;
-    const Buffer &         globalsBuffer() const;
+    const Buffer &          globalsBuffer() const;
 
     void setVisible(bool visible);
     void setDrawState(const DrawState & drawState);
@@ -240,7 +240,7 @@ class DebugGeometryNode final
 
     void render(const Camera3D & camera);
 
-  private:
+private:
     DebugGeometryRenderer & m_manager;
 
     Buffer       m_globalsBuffer;

@@ -2,7 +2,6 @@
 
 namespace deliberation
 {
-
 std::string GetDirFromPath(const std::string & path)
 {
     if (path.back() == '/') return path; // Path is already a dir
@@ -13,5 +12,4 @@ std::string GetDirFromPath(const std::string & path)
 
     return path.substr(0, lastSlashPos + 1);
 }
-
 }

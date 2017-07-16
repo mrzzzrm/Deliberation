@@ -8,16 +8,18 @@
 
 namespace deliberation
 {
-
-DebugSurfaceOverlayRenderer::DebugSurfaceOverlayRenderer(RenderManager & renderManager):
-    SingleNodeRenderer(renderManager, RenderPhase::PreOverlay, "SurfaceOverlay")
+DebugSurfaceOverlayRenderer::DebugSurfaceOverlayRenderer(
+    RenderManager & renderManager)
+    : SingleNodeRenderer(
+          renderManager, RenderPhase::PreOverlay, "SurfaceOverlay")
 {
     auto & drawContext = renderManager.drawContext();
 
-    m_effect = ScreenSpaceEffect(drawContext, {
-        DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
-        DeliberationDataPath("Data/Shaders/DebugOverlaySurface.frag")
-    }, "DebugSurfaceOverlay");
+    m_effect = ScreenSpaceEffect(
+        drawContext,
+        {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
+         DeliberationDataPath("Data/Shaders/DebugOverlaySurface.frag")},
+        "DebugSurfaceOverlay");
 
     m_inputSampler = m_effect.draw().sampler("Input");
     m_inputSampler.setMagFilter(TextureFilter::Nearest);
@@ -29,10 +31,7 @@ void DebugSurfaceOverlayRenderer::showSurface(const Surface & surface)
     m_active = true;
 }
 
-void DebugSurfaceOverlayRenderer::disable()
-{
-    m_active = false;
-}
+void DebugSurfaceOverlayRenderer::disable() { m_active = false; }
 
 void DebugSurfaceOverlayRenderer::render()
 {
@@ -40,5 +39,4 @@ void DebugSurfaceOverlayRenderer::render()
 
     m_effect.render();
 }
-
 }

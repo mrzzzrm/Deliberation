@@ -9,12 +9,12 @@ class SphereShape;
 
 class SphereContact : public Contact
 {
-  public:
+public:
     SphereContact(RigidBody & bodyA, RigidBody & objectB);
 
     virtual void update() override;
 
-  private:
+private:
     const SphereShape & m_shapeA;
     const SphereShape & m_shapeB;
 };

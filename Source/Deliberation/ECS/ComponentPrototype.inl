@@ -2,7 +2,6 @@
 
 namespace deliberation
 {
-
 template<typename ComponentT>
 bool ComponentPrototype<ComponentT>::hasComponent(const Entity & entity)
 {
@@ -19,9 +18,12 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
         {
             initComponent(component);
         }
-        catch(const std::exception & e)
+        catch (const std::exception & e)
         {
-            std::cout << "ComponentPrototype '" << name() << "': Error initializing Component: " << e.what() << "\nJSON:\n" << m_json << std::endl;
+            std::cout << "ComponentPrototype '" << name()
+                      << "': Error initializing Component: " << e.what()
+                      << "\nJSON:\n"
+                      << m_json << std::endl;
         }
     }
 
@@ -31,10 +33,11 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
     {
         updateComponent(component);
     }
-    catch(const std::exception & e)
+    catch (const std::exception & e)
     {
-        std::cout << "ComponentPrototype: Error updating Component: " << e.what() << "\nJSON:\n" << m_json << std::endl;
+        std::cout << "ComponentPrototype: Error updating Component: "
+                  << e.what() << "\nJSON:\n"
+                  << m_json << std::endl;
     }
 }
-
 }

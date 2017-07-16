@@ -8,15 +8,15 @@ namespace deliberation
 {
 class RandomColorGenerator final
 {
-  public:
+public:
     RandomColorGenerator();
 
     glm::vec3 generate();
 
-  private:
+private:
     glm::vec3 hsvToRGB(const glm::vec3 & hsv) const;
 
-  private:
+private:
     float m_val;
 };
 }

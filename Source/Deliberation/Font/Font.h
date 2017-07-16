@@ -20,7 +20,7 @@ class Texture;
 
 class Font final
 {
-  public:
+public:
     Font();
     Font(DrawContext & drawContext, const std::string & path);
     ~Font();
@@ -32,7 +32,7 @@ class Font final
         unsigned int        size,
         const glm::vec4 &   color) const;
 
-  private:
+private:
     DrawContext * m_drawContext;
     std::string   m_path;
     mutable std::

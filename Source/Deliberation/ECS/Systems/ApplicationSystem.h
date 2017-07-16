@@ -13,7 +13,7 @@ class Input;
 
 class ApplicationSystem : public System<ApplicationSystem>
 {
-  public:
+public:
     ApplicationSystem(World & world, Application & application)
         : Base(world), m_application(application)
     {
@@ -23,7 +23,7 @@ class ApplicationSystem : public System<ApplicationSystem>
     DrawContext & drawContext() const { return m_application.drawContext(); }
     Input &       input() const { return m_application.input(); }
 
-  private:
+private:
     Application & m_application;
 };
 }

@@ -9,18 +9,18 @@ namespace deliberation
 {
 class SsaoRenderer : public SingleNodeRenderer
 {
-  public:
+public:
     SsaoRenderer(RenderManager & renderManager);
 
     void render() override;
 
-  protected:
+protected:
     void renderDebugGui() override;
 
-  private:
+private:
     void init();
 
-  private:
+private:
     ScreenSpaceEffect m_effect;
     ScreenSpaceEffect m_blurEffect;
     Framebuffer       m_intermediateFb;

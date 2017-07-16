@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 class FileModificationPoll final
 {
 public:
@@ -21,5 +20,4 @@ private:
     std::string     m_path;
     struct timespec m_mtime;
 };
-
 }

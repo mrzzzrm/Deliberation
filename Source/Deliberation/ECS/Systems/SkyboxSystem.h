@@ -14,7 +14,7 @@ namespace deliberation
 {
 class SkyboxSystem : public System<SkyboxSystem>
 {
-  public:
+public:
     SkyboxSystem(World & world, const Texture & cubeMap) : Base(world)
     {
         world.systemRef<RenderSystem>()

@@ -49,7 +49,6 @@ std::unordered_map<u8, gl::GLenum> TYPE_TO_GL_TYPE{
     {TYPE_MAT3, GL_FLOAT_MAT3},
     {TYPE_MAT4, GL_FLOAT_MAT4}};
 
-
 std::unordered_map<i32, u8> GL_TYPE_TO_TYPE{
     {(i32)GL_BOOL, TYPE_BOOL},
     {(i32)GL_UNSIGNED_BYTE, TYPE_U8},

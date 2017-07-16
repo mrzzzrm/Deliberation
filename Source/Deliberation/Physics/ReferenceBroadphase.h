@@ -6,7 +6,7 @@ namespace deliberation
 {
 class ReferenceBroadphase final : public Broadphase
 {
-  public:
+public:
     ReferenceBroadphase(Narrowphase & narrowphase);
 
     virtual void

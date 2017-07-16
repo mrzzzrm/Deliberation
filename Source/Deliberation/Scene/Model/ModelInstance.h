@@ -6,7 +6,7 @@ namespace deliberation
 {
 class ModelInstance
 {
-  public:
+public:
     Transform3D transform;
 };
 }

@@ -16,7 +16,7 @@ namespace deliberation
 {
 class GLStateManager final
 {
-  public:
+public:
     GLStateManager();
 
     /*
@@ -74,7 +74,8 @@ class GLStateManager final
     void bindTexture(gl::GLenum target, gl::GLuint texture);
     void deleteTextures(u32 n, const gl::GLuint * textures);
     void enableScissorTest(bool enabled);
-    void setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
+    void
+         setScissor(gl::GLint x, gl::GLint y, gl::GLsizei width, gl::GLsizei height);
     void setDrawBuffer(gl::GLenum buf);
     void setDrawBuffers(const std::vector<gl::GLenum> & bufs);
     void bindVertexArray(gl::GLuint vertexArray);
@@ -82,24 +83,24 @@ class GLStateManager final
     void bindSampler(gl::GLuint unit, gl::GLuint sampler);
     void deleteSampler(gl::GLuint sampler);
 
-  private:
+private:
     void applyEnableDisableState(gl::GLenum state, bool & current, bool target);
 
-  private:
-//    enum BufferTarget
-//    {
-//        ArrayBufferTarget = 0,
-//        CopyReadBufferTarget,
-//        CopyWriteBufferTarget,
-//        ElementArrayBufferTarget,
-//        PixelPackBufferTarget,
-//        PixelUnpackBufferTarget,
-//        TextureBufferTarget,
-//        TransformFeedbackBufferTarget,
-//        UniformBufferTarget,
-//
-//        BufferTargetCount
-//    };
+private:
+    //    enum BufferTarget
+    //    {
+    //        ArrayBufferTarget = 0,
+    //        CopyReadBufferTarget,
+    //        CopyWriteBufferTarget,
+    //        ElementArrayBufferTarget,
+    //        PixelPackBufferTarget,
+    //        PixelUnpackBufferTarget,
+    //        TextureBufferTarget,
+    //        TransformFeedbackBufferTarget,
+    //        UniformBufferTarget,
+    //
+    //        BufferTargetCount
+    //    };
 
     enum FramebufferTarget
     {
@@ -136,34 +137,34 @@ class GLStateManager final
         TextureTargetCount
     };
 
-  private:
+private:
     QueryTarget glEnumToQueryTarget(gl::GLenum e) const;
 
-  private:
+private:
     /*
         Raw OpenGL State
     */
-    bool                                           m_glTextureCubeMapSeamless;
-    bool                                           m_glDepthTest;
-    gl::GLenum                                     m_glDepthFunc;
-    bool                                           m_glDepthMask;
-    bool                                           m_glBlend;
-    gl::GLenum                                     m_glBlendEquation;
-    gl::GLenum                                     m_glBlendFuncSFactor;
-    gl::GLenum                                     m_glBlendFuncDFactor;
-    bool                                           m_glCullFace;
-    gl::GLenum                                     m_glCullFaceMode;
-    float                                          m_glPointSize;
-    float                                          m_glLineWidth;
-    bool                                           m_glStencilTest;
-    gl::GLenum                                     m_glStencilFunc[2];
-    int                                            m_glStencilRef[2];
-    unsigned int                                   m_glStencilReadMask[2];
-    unsigned int                                   m_glStencilWriteMask[2];
-    gl::GLenum                                     m_glStencilSFail[2];
-    gl::GLenum                                     m_glStencilDPFail[2];
-    gl::GLenum                                     m_glStencilDPPass[2];
-//    std::array<gl::GLuint, BufferTargetCount>      m_boundBuffers;
+    bool         m_glTextureCubeMapSeamless;
+    bool         m_glDepthTest;
+    gl::GLenum   m_glDepthFunc;
+    bool         m_glDepthMask;
+    bool         m_glBlend;
+    gl::GLenum   m_glBlendEquation;
+    gl::GLenum   m_glBlendFuncSFactor;
+    gl::GLenum   m_glBlendFuncDFactor;
+    bool         m_glCullFace;
+    gl::GLenum   m_glCullFaceMode;
+    float        m_glPointSize;
+    float        m_glLineWidth;
+    bool         m_glStencilTest;
+    gl::GLenum   m_glStencilFunc[2];
+    int          m_glStencilRef[2];
+    unsigned int m_glStencilReadMask[2];
+    unsigned int m_glStencilWriteMask[2];
+    gl::GLenum   m_glStencilSFail[2];
+    gl::GLenum   m_glStencilDPFail[2];
+    gl::GLenum   m_glStencilDPPass[2];
+    //    std::array<gl::GLuint, BufferTargetCount>      m_boundBuffers;
     gl::GLclampf                                   m_glClearColorRed;
     gl::GLclampf                                   m_glClearColorGreen;
     gl::GLclampf                                   m_glClearColorBlue;
@@ -177,9 +178,10 @@ class GLStateManager final
     gl::GLsizei                                    m_glViewportHeight;
     std::array<gl::GLuint, QueryTargetCount>       m_activeQueries;
     gl::GLuint                                     m_program;
-    std::vector<std::array<gl::GLuint, (size_t)TextureTargetCount>> m_boundTexturesByUnit;
-    gl::GLuint                                         m_activeTextureUnit;
-    bool                                               m_scissorTestEnabled;
+    std::vector<std::array<gl::GLuint, (size_t)TextureTargetCount>>
+               m_boundTexturesByUnit;
+    gl::GLuint m_activeTextureUnit;
+    bool       m_scissorTestEnabled;
     std::tuple<gl::GLint, gl::GLint, gl::GLsizei, gl::GLsizei> m_scissorRect;
     std::vector<gl::GLenum>                                    m_drawBuffers;
     boost::optional<gl::GLuint>                                m_vertexArray;

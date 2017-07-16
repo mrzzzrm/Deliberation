@@ -11,13 +11,13 @@ namespace deliberation
 {
 class MouseWheelEvent final : public InputEvent
 {
-  public:
+public:
     MouseWheelEvent(float x, float y) : m_x(x), m_y(y) {}
 
     float x() const { return m_x; }
     float y() const { return m_y; }
 
-  private:
+private:
     float m_x;
     float m_y;
 };

@@ -10,7 +10,7 @@ class DrawImpl;
 
 class VertexAttribute final
 {
-  public:
+public:
     VertexAttribute(
         const std::shared_ptr<DrawImpl> &       drawImpl,
         const ProgramInterfaceVertexAttribute & attribute);
@@ -20,7 +20,7 @@ class VertexAttribute final
 
     void set(const void * data);
 
-  private:
+private:
     std::shared_ptr<DrawImpl>               m_drawImpl;
     const ProgramInterfaceVertexAttribute & m_attribute;
 };

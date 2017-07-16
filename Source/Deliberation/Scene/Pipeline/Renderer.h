@@ -12,7 +12,7 @@ class RenderManager;
 
 class Renderer : public std::enable_shared_from_this<Renderer>
 {
-  public:
+public:
     Renderer(
         RenderManager &     renderManager,
         const std::string & name = {"Unnamed Renderer"})
@@ -21,19 +21,19 @@ class Renderer : public std::enable_shared_from_this<Renderer>
     }
     virtual ~Renderer() = default;
 
-    RenderManager &     renderManager() const { return m_renderManager; }
-    DrawContext &       drawContext() const;
-    std::string name() const { return m_name; }
+    RenderManager & renderManager() const { return m_renderManager; }
+    DrawContext &   drawContext() const;
+    std::string     name() const { return m_name; }
 
     virtual void registerRenderNodes() = 0;
 
     // Debug
     virtual void renderDebugGui() {}
 
-  protected:
+protected:
     RenderManager & m_renderManager;
 
-  private:
+private:
     std::string m_name;
 };
 }

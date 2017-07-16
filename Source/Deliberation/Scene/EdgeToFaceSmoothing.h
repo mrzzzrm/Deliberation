@@ -10,12 +10,12 @@ class Mesh;
 
 class EdgeToFaceSmoothing final
 {
-  public:
+public:
     EdgeToFaceSmoothing(const Mesh & sourceMesh);
 
     Mesh run();
 
-  private:
+private:
     const Mesh & m_sourceMesh;
 };
 }

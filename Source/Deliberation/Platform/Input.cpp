@@ -101,10 +101,7 @@ u32 DeliberationMouseButtonToSDL(MouseButton mouseButton)
 
 namespace deliberation
 {
-Input::Input()
-{
-    m_mouseButtonsDown.reset();
-}
+Input::Input() { m_mouseButtonsDown.reset(); }
 
 bool Input::mouseButtonDown(MouseButton button) const
 {
@@ -201,35 +198,44 @@ void Input::onSDLInputEvent(const SDL_Event & sdlEvent)
                     layer.onMouseButtonPressed(event);
             });
 
-        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN) m_mouseOwningLayer = receivingLayer;
+        if (sdlEvent.type == SDL_MOUSEBUTTONDOWN)
+            m_mouseOwningLayer = receivingLayer;
 
         // Mouse Button Down state/events
-        if (sdlEvent.type == SDL_MOUSEBUTTONUP) m_mouseButtonsDown.reset((size_t)mouseButton);
-        else m_mouseButtonsDown.set((size_t)mouseButton);
+        if (sdlEvent.type == SDL_MOUSEBUTTONUP)
+            m_mouseButtonsDown.reset((size_t)mouseButton);
+        else
+            m_mouseButtonsDown.set((size_t)mouseButton);
 
-        if (sdlEvent.type == SDL_MOUSEBUTTONUP && m_mouseButtonsDown.count() == 0) m_mouseOwningLayer.reset();
+        if (sdlEvent.type == SDL_MOUSEBUTTONUP &&
+            m_mouseButtonsDown.count() == 0)
+            m_mouseOwningLayer.reset();
     }
     break;
 
     case SDL_MOUSEMOTION:
     {
         auto mouseButtons = 0;
-        mouseButtons = (
-            mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_LMASK ? (i32)MouseButtonMask::Left : 0));
-        mouseButtons = (
-            mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_MMASK ? (i32)MouseButtonMask::Middle
-                                                      : 0));
-        mouseButtons = (
-            mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_RMASK ? (i32)MouseButtonMask::Right : 0));
-        mouseButtons = (
-            mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_X1MASK ? (i32)MouseButtonMask::X1 : 0));
-        mouseButtons = (
-            mouseButtons |
-            (sdlEvent.motion.state & SDL_BUTTON_X2MASK ? (i32)MouseButtonMask::X2 : 0));
+        mouseButtons =
+            (mouseButtons | (sdlEvent.motion.state & SDL_BUTTON_LMASK
+                                 ? (i32)MouseButtonMask::Left
+                                 : 0));
+        mouseButtons =
+            (mouseButtons | (sdlEvent.motion.state & SDL_BUTTON_MMASK
+                                 ? (i32)MouseButtonMask::Middle
+                                 : 0));
+        mouseButtons =
+            (mouseButtons | (sdlEvent.motion.state & SDL_BUTTON_RMASK
+                                 ? (i32)MouseButtonMask::Right
+                                 : 0));
+        mouseButtons =
+            (mouseButtons | (sdlEvent.motion.state & SDL_BUTTON_X1MASK
+                                 ? (i32)MouseButtonMask::X1
+                                 : 0));
+        mouseButtons =
+            (mouseButtons | (sdlEvent.motion.state & SDL_BUTTON_X2MASK
+                                 ? (i32)MouseButtonMask::X2
+                                 : 0));
 
         const auto event = MouseMotionEvent(
             mouseButtons,
@@ -264,8 +270,9 @@ void Input::onFrameBegin()
         int mouseY;
         SDL_GetMouseState(&mouseX, &mouseY);
 
-        MouseStateEvent event = MouseStateEvent{(u32)m_mouseButtonsDown.to_ulong(),
-                                                sdlMousePositionToNdc(mouseX, mouseY)};
+        MouseStateEvent event =
+            MouseStateEvent{(u32)m_mouseButtonsDown.to_ulong(),
+                            sdlMousePositionToNdc(mouseX, mouseY)};
 
         if (m_mouseOwningLayer)
         {
@@ -273,10 +280,10 @@ void Input::onFrameBegin()
         }
         else
         {
-            processEvent<MouseStateEvent>(event,
-                                          [&](InputLayer & layer, MouseStateEvent & event) {
-                                              layer.onMouseButtonDown(event);
-                                          });
+            processEvent<MouseStateEvent>(
+                event, [&](InputLayer & layer, MouseStateEvent & event) {
+                    layer.onMouseButtonDown(event);
+                });
         }
     }
 }

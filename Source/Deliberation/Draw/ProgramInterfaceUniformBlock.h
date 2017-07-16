@@ -4,10 +4,9 @@
 
 namespace deliberation
 {
-
 class ProgramInterfaceUniformBlock final
 {
-  public:
+public:
     ProgramInterfaceUniformBlock(
         const std::string & name,
         const DataLayout &  layout,
@@ -22,9 +21,9 @@ class ProgramInterfaceUniformBlock final
     bool operator==(const ProgramInterfaceUniformBlock & other) const;
     bool operator!=(const ProgramInterfaceUniformBlock & other) const;
 
-  private:
-    std::string         m_name;
-    DataLayout          m_layout;
-    unsigned int        m_index = 0;
+private:
+    std::string  m_name;
+    DataLayout   m_layout;
+    unsigned int m_index = 0;
 };
 }

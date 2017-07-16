@@ -6,19 +6,19 @@ namespace deliberation
 {
 class MouseMotionEvent : public MouseStateEvent
 {
-  public:
+public:
     MouseMotionEvent(
-        u32 buttons,
+        u32               buttons,
         const glm::vec2 & mousePosition,
-        const glm::vec2 & mouseMovement):
-        MouseStateEvent(buttons, mousePosition)
+        const glm::vec2 & mouseMovement)
+        : MouseStateEvent(buttons, mousePosition)
         , m_mouseMovement(mouseMovement)
     {
     }
 
     const glm::vec2 & mouseMovement() const { return m_mouseMovement; }
 
-  private:
-    glm::vec2   m_mouseMovement;
+private:
+    glm::vec2 m_mouseMovement;
 };
 }

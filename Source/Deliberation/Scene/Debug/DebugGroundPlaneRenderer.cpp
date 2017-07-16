@@ -13,7 +13,7 @@ namespace deliberation
 {
 class DebugGroundPlaneNode : public RenderNode
 {
-  public:
+public:
     DebugGroundPlaneNode(
         DebugGroundPlaneRenderer &       renderer,
         const std::vector<std::string> & shaders)
@@ -57,7 +57,7 @@ class DebugGroundPlaneNode : public RenderNode
         m_draw.render();
     }
 
-  protected:
+protected:
     DebugGroundPlaneRenderer & m_renderer;
     Program                    m_program;
     Draw                       m_draw;
@@ -70,7 +70,7 @@ class DebugGroundPlaneNode : public RenderNode
 
 class DebugGroundPlaneForwardNode : public DebugGroundPlaneNode
 {
-  public:
+public:
     DebugGroundPlaneForwardNode(DebugGroundPlaneRenderer & renderer)
         : DebugGroundPlaneNode(
               renderer,
@@ -84,7 +84,7 @@ class DebugGroundPlaneForwardNode : public DebugGroundPlaneNode
 
 class DebugGroundPlaneGBufferNode : public DebugGroundPlaneNode
 {
-  public:
+public:
     DebugGroundPlaneGBufferNode(DebugGroundPlaneRenderer & renderer)
         : DebugGroundPlaneNode(
               renderer,

@@ -10,7 +10,7 @@ namespace deliberation
 {
 class ProgramInterfaceFragmentOutput final
 {
-  public:
+public:
     ProgramInterfaceFragmentOutput(
         const std::string & name, Type type, unsigned int location);
 
@@ -23,7 +23,7 @@ class ProgramInterfaceFragmentOutput final
     bool operator==(const ProgramInterfaceFragmentOutput & other) const;
     bool operator!=(const ProgramInterfaceFragmentOutput & other) const;
 
-  private:
+private:
     std::string  m_name;
     Type         m_type;
     unsigned int m_location;

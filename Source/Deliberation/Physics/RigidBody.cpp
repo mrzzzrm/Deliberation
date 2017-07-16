@@ -189,7 +189,8 @@ void RigidBody::adjustCenterOfMass()
     auto delta = m_shape->centerOfMass() - m_transform.center();
 
     m_transform.setCenter(m_shape->centerOfMass());
-    m_transform.worldTranslate(m_transform.orientation() * delta * m_transform.scale());
+    m_transform.worldTranslate(
+        m_transform.orientation() * delta * m_transform.scale());
 }
 
 std::string RigidBody::toString() const

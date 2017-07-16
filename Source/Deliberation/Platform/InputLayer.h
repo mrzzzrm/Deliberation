@@ -11,13 +11,13 @@ class MouseButtonEvent;
 
 class InputLayer : public InputEventReceiver
 {
-  public:
+public:
     InputLayer(i32 inputPriority);
     virtual ~InputLayer() = default;
 
     i32 inputPriority() const { return m_inputPriority; }
 
-  private:
+private:
     i32 m_inputPriority;
 };
 }

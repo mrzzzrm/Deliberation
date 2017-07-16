@@ -16,7 +16,7 @@ class ModelInstance;
 
 class ModelRenderer : public Renderer
 {
-  public:
+public:
     ModelRenderer(RenderManager & renderManager);
 
     std::shared_ptr<Model> addModel(const std::string & path);
@@ -27,10 +27,10 @@ class ModelRenderer : public Renderer
 
     void registerRenderNodes() override;
 
-  private:
+private:
     friend class ModelRendererMainNode;
 
-  private:
+private:
     std::unordered_map<
         std::shared_ptr<Model>,
         std::vector<std::shared_ptr<ModelInstance>>>

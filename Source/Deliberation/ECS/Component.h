@@ -13,21 +13,23 @@ class World;
 template<typename T>
 class Component : public std::enable_shared_from_this<T>, public ComponentBase
 {
-  public:
-    static std::size_t indexStatic();
+public:
+    static std::size_t                  indexStatic();
     static constexpr const char * const COMPONENT_NAME = "Unnamed Component";
 
-  public:
+public:
     Component();
 
     virtual std::size_t index() const override;
     virtual std::string name() const override;
 
-  private:
+private:
     friend class World;
 };
 }
 
-#define DELIBERATION_COMPONENT_NAME(name) public: static constexpr const char * const COMPONENT_NAME = name;
+#define DELIBERATION_COMPONENT_NAME(name)                                      \
+public:                                                                        \
+    static constexpr const char * const COMPONENT_NAME = name;
 
 #include <Deliberation/ECS/Component.inl>

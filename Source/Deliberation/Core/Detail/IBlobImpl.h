@@ -9,7 +9,7 @@ namespace detail
 {
     class IBlobImpl
     {
-      public:
+    public:
         virtual ~IBlobImpl() = default;
         virtual std::unique_ptr<IBlobImpl>
                              clone() const = 0; // TODO: With rvalue-ref-qualifier

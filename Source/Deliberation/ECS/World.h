@@ -12,13 +12,13 @@
 #include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Core/TypeID.h>
 
+#include <Deliberation/Core/EventDomain.h>
 #include <Deliberation/ECS/AbstractWorld.h>
 #include <Deliberation/ECS/Component.h>
 #include <Deliberation/ECS/Defines.h>
 #include <Deliberation/ECS/Entity.h>
 #include <Deliberation/ECS/EntityComponentSetup.h>
 #include <Deliberation/ECS/EntityData.h>
-#include <Deliberation/Core/EventDomain.h>
 #include <Deliberation/ECS/SystemBase.h>
 #include <Deliberation/ECS/WorldProfiler.h>
 
@@ -26,7 +26,7 @@ namespace deliberation
 {
 class World final : public AbstractWorld
 {
-  public:
+public:
     World();
     ~World();
 
@@ -61,7 +61,10 @@ class World final : public AbstractWorld
     template<typename T>
     T & systemRef();
 
-    const LinearMap<std::shared_ptr<SystemBase>> systems() const { return m_systems; }
+    const LinearMap<std::shared_ptr<SystemBase>> systems() const
+    {
+        return m_systems;
+    }
 
     /**
      * Internals, use with care
@@ -71,10 +74,10 @@ class World final : public AbstractWorld
     std::shared_ptr<const ComponentBase>
     component(EntityId id, TypeID::value_t index) const;
 
-  private:
+private:
     friend class Entity;
 
-  private:
+private:
     struct ComponentRemoval
     {
         ComponentRemoval(EntityId entityId, ComponentTypeId componentTypeId)
@@ -86,7 +89,7 @@ class World final : public AbstractWorld
         ComponentTypeId componentTypeId;
     };
 
-  private:
+private:
     bool isValid(EntityId id) const;
     void scheduleEntityRemoval(EntityId id);
     void addComponent(
@@ -101,7 +104,7 @@ class World final : public AbstractWorld
     EntityComponentSetup *
     componentSetup(const ComponentBitset & componentBits);
 
-  private:
+private:
     SparseVector<EntityData>                  m_entities;
     std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
     EntityId                                  m_entityIDCounter;

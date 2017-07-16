@@ -5,20 +5,21 @@
 
 namespace deliberation
 {
+EntityPrototype::EntityPrototype(World & world, const std::string & key)
+    : m_world(world), m_key(key)
+{
+}
 
-EntityPrototype::EntityPrototype(World & world, const std::string & key):
-    m_world(world),
-    m_key(key)
-{}
-
-void EntityPrototype::addComponentPrototype(const std::shared_ptr<ComponentPrototypeBase> & componentPrototype)
+void EntityPrototype::addComponentPrototype(
+    const std::shared_ptr<ComponentPrototypeBase> & componentPrototype)
 {
     std::cout << "EntityPrototype '" + m_key + "': Adding ComponentPrototype '"
               << componentPrototype->name() << "'" << std::endl;
     m_componentPrototypes.emplace_back(componentPrototype);
 }
 
-void EntityPrototype::addBaseEntityPrototype(const std::shared_ptr<EntityPrototype> & entityPrototype)
+void EntityPrototype::addBaseEntityPrototype(
+    const std::shared_ptr<EntityPrototype> & entityPrototype)
 {
     m_baseEntityPrototypes.emplace_back(entityPrototype);
 }
@@ -27,14 +28,17 @@ bool EntityPrototype::isEntityDirty(const Entity & entity) const
 {
     for (auto & componentPrototype : m_componentPrototypes)
     {
-        if (!componentPrototype->hasComponent(entity) || componentPrototype->jsonChangedFlag()) return true;
+        if (!componentPrototype->hasComponent(entity) ||
+            componentPrototype->jsonChangedFlag())
+            return true;
     }
     return false;
 }
 
 void EntityPrototype::applyToEntity(Entity & entity)
 {
-    std::cout << "EntityPrototype '" + m_key + "': Applying " << m_componentPrototypes.size() << " components" << std::endl;
+    std::cout << "EntityPrototype '" + m_key + "': Applying "
+              << m_componentPrototypes.size() << " components" << std::endl;
 
     for (auto & componentPrototype : m_componentPrototypes)
     {
@@ -52,9 +56,11 @@ void EntityPrototype::updateEntities()
     for (auto & entity : m_entities)
     {
         if (!entity.isValid()) continue;
-        if (!isEntityDirty(entity)) continue;; // Overhead, but keeps logs clean
+        if (!isEntityDirty(entity)) continue;
+        ; // Overhead, but keeps logs clean
 
-        std::cout << "EntityPrototype '" + m_key + "': Updating Entity '" << entity.name() << "'" << std::endl;
+        std::cout << "EntityPrototype '" + m_key + "': Updating Entity '"
+                  << entity.name() << "'" << std::endl;
 
         for (auto & componentPrototype : m_componentPrototypes)
         {
@@ -85,5 +91,4 @@ void EntityPrototype::updateEntities()
     };
     m_entities.resize(eOut);
 };
-
 }

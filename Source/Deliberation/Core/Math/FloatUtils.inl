@@ -13,7 +13,7 @@ bool EpsilonGt(const float a, const float b)
 }
 
 template<typename T, glm::precision P>
-bool EpsilonEq(const glm::tvec3<T,P> & a, const glm::tvec3<T,P> & b)
+bool EpsilonEq(const glm::tvec3<T, P> & a, const glm::tvec3<T, P> & b)
 {
     return EpsilonEq(a.x, b.x) && EpsilonEq(a.y, b.y) && EpsilonEq(a.z, b.z);
 };

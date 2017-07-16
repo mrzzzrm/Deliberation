@@ -16,16 +16,16 @@ namespace detail
 template<typename T>
 class TextureLoaderUnicolorImpl : public ITextureLoaderImpl
 {
-  public:
+public:
     TextureLoaderUnicolorImpl(const glm::uvec2 & size, const T & value);
 
     TextureBinary load() override;
 
-  private:
+private:
     Blob        createPixelData() const;
     PixelFormat pixelFormat() const;
 
-  private:
+private:
     glm::uvec2 m_size;
     T          m_value;
 };

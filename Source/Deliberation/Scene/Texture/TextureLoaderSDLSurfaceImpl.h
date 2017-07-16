@@ -11,14 +11,14 @@ namespace deliberation
 {
 class TextureLoaderSDLSurfaceImpl : public ITextureLoaderImpl
 {
-  public:
+public:
     TextureLoaderSDLSurfaceImpl(
         SDL_Surface * surface, TextureLoaderOrigin origin);
     virtual ~TextureLoaderSDLSurfaceImpl();
 
     virtual TextureBinary load() override;
 
-  private:
+private:
     SDL_Surface *       m_surface = nullptr;
     TextureLoaderOrigin m_origin = TextureLoaderOrigin::LowerLeft;
 };

@@ -23,10 +23,10 @@ class InputLayer;
 
 class Input final
 {
-  public:
+public:
     static constexpr DurationMillis CLICK_TIMEOUT = 300;
 
-  public:
+public:
     Input();
 
     bool      mouseButtonDown(MouseButton button) const;
@@ -40,17 +40,17 @@ class Input final
 
     void onFrameBegin();
 
-  private:
+private:
     template<typename T>
     std::shared_ptr<InputLayer> processEvent(
         T event, const std::function<void(InputLayer &, T &)> & fn) const;
 
     glm::vec2 sdlMousePositionToNdc(i32 x, i32 y) const;
 
-  private:
+private:
     std::vector<std::shared_ptr<InputLayer>> m_layers;
     std::map<MouseButton, TimestampMillis>   m_downTimestampByMouseButton;
-    std::bitset<(size_t)MouseButton::Count> m_mouseButtonsDown;
+    std::bitset<(size_t)MouseButton::Count>  m_mouseButtonsDown;
 
     std::shared_ptr<InputLayer> m_mouseOwningLayer;
 };

@@ -9,9 +9,15 @@
 
 namespace deliberation
 {
-SamplerImpl::SamplerImpl(DrawContext & drawContext,
-    gl::GLenum uniformType, gl::GLenum valueType, gl::GLuint location)
-    : drawContext(drawContext), type(uniformType), valueType(valueType), location(location)
+SamplerImpl::SamplerImpl(
+    DrawContext & drawContext,
+    gl::GLenum    uniformType,
+    gl::GLenum    valueType,
+    gl::GLuint    location)
+    : drawContext(drawContext)
+    , type(uniformType)
+    , valueType(valueType)
+    , location(location)
 {
     gl::glGenSamplers(1, &glName);
     Assert(glName != 0, "Failed to create GL sampler object");

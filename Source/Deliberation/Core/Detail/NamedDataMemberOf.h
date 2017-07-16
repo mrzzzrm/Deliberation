@@ -14,7 +14,7 @@ namespace detail
     template<typename T>
     class NamedDataMemberOf final
     {
-      public:
+    public:
         template<typename U>
         NamedDataMemberOf(const std::string & name, U T::*ptr);
 
@@ -22,7 +22,7 @@ namespace detail
         Type &              type() const;
         unsigned int        offset(const T & dummy) const;
 
-      private:
+    private:
         std::shared_ptr<INamedDataMemberOfImpl<T>> m_impl;
         std::string                                m_name;
     };

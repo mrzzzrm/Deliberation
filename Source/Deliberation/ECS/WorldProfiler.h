@@ -12,7 +12,7 @@ class SystemBase;
 
 class WorldProfilerScope final
 {
-  public:
+public:
     WorldProfilerScope(
         SystemBase & system, const std::string & phase, DurationMicros micros);
 
@@ -20,7 +20,7 @@ class WorldProfilerScope final
 
     bool operator<(const WorldProfilerScope & rhs) const;
 
-  private:
+private:
     SystemBase *   m_system;
     std::string    m_phase;
     DurationMicros m_micros;
@@ -28,14 +28,14 @@ class WorldProfilerScope final
 
 class WorldProfiler final
 {
-  public:
+public:
     const std::vector<WorldProfilerScope> & scopes() const;
 
     void addScope(const WorldProfilerScope & scope);
 
     void frameComplete();
 
-  private:
+private:
     std::vector<WorldProfilerScope> m_currentFrameScopes;
     std::vector<WorldProfilerScope> m_lastFrameScopes;
 };

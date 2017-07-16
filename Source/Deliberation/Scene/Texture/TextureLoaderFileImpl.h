@@ -9,12 +9,12 @@ namespace deliberation
 {
 class TextureLoaderFileImpl : public ITextureLoaderImpl
 {
-  public:
+public:
     TextureLoaderFileImpl(const std::string & path, TextureLoaderOrigin origin);
 
     virtual TextureBinary load() override;
 
-  private:
+private:
     std::string         m_path;
     TextureLoaderOrigin m_origin;
 };

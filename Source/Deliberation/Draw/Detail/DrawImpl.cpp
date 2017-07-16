@@ -55,7 +55,10 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     }
 
     // Create framebuffer
-    framebufferBinding = FramebufferBinding(this->program->interface.fragmentOutputs(), drawContext.backbuffer(), {});
+    framebufferBinding = FramebufferBinding(
+        this->program->interface.fragmentOutputs(),
+        drawContext.backbuffer(),
+        {});
 
     // Allocate Uniform Buffer Bindings
     uniformBuffers.resize(this->program->interface.uniformBlocks().size());
@@ -65,7 +68,8 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     valueAttributes = Blob(0);
 
     // Create Buffer Textures
-    bufferTextureBindings.resize(this->program->interface.bufferTextures().size());
+    bufferTextureBindings.resize(
+        this->program->interface.bufferTextures().size());
     bufferTextures.resize(this->program->interface.bufferTextures().size());
     gl::glGenTextures(bufferTextures.size(), bufferTextures.data());
     for (auto & texture : bufferTextures)
@@ -83,7 +87,8 @@ DrawImpl::~DrawImpl()
 
     if (!bufferTextures.empty())
     {
-        drawContext.m_glStateManager.deleteTextures(bufferTextures.size(), bufferTextures.data());
+        drawContext.m_glStateManager.deleteTextures(
+            bufferTextures.size(), bufferTextures.data());
     }
 }
 

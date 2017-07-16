@@ -2,46 +2,40 @@
 #include <iostream>
 #include <thread>
 
-#include <Deliberation/ECS/PrototypeManager.h>
 #include <Deliberation/ECS/ComponentPrototype.h>
 #include <Deliberation/ECS/EntityPrototype.h>
 #include <Deliberation/ECS/Level.h>
+#include <Deliberation/ECS/PrototypeManager.h>
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Deliberation.h>
 
 using namespace deliberation;
 
-
-struct Head:
-    public Component<Head>
+struct Head : public Component<Head>
 {
     float x = 0.0f;
     float y = 0.0f;
 };
 
-struct Body:
-    public Component<Body>
+struct Body : public Component<Body>
 {
-    float a = 0.0f;
+    float       a = 0.0f;
     std::string b;
 };
 
-struct Leg:
-    public Component<Leg>
+struct Leg : public Component<Leg>
 {
     int c;
     int length = 0;
 };
 
-struct Shoe:
-    public Component<Shoe>
+struct Shoe : public Component<Shoe>
 {
     int size = 0;
 };
 
-struct HeadPrototype:
-    public ComponentPrototype<Head>
+struct HeadPrototype : public ComponentPrototype<Head>
 {
     void updateComponent(Head & head)
     {
@@ -53,8 +47,7 @@ struct HeadPrototype:
     }
 };
 
-struct BodyPrototype:
-    public ComponentPrototype<Body>
+struct BodyPrototype : public ComponentPrototype<Body>
 {
     void updateComponent(Body & body)
     {
@@ -66,8 +59,7 @@ struct BodyPrototype:
     }
 };
 
-struct LegPrototype:
-    public ComponentPrototype<Leg>
+struct LegPrototype : public ComponentPrototype<Leg>
 {
     void updateComponent(Leg & leg)
     {
@@ -79,8 +71,7 @@ struct LegPrototype:
     }
 };
 
-struct ShoePrototype:
-    public ComponentPrototype<Shoe>
+struct ShoePrototype : public ComponentPrototype<Shoe>
 {
     void updateComponent(Shoe & shoe)
     {
@@ -93,61 +84,67 @@ struct ShoePrototype:
 
 int main(int argc, char ** argv)
 {
-    World world;
-    const auto listPath = DeliberationDataPath("Data/Examples/PrototypeSandbox/list.json");
+    World      world;
+    const auto listPath =
+        DeliberationDataPath("Data/Examples/PrototypeSandbox/list.json");
     auto prototypeManager = std::make_shared<PrototypeManager>(world, listPath);
 
-//    auto entityPrototype = prototypeManager->getOrCreateEntityPrototype("HumanBody");
-//
-//    auto headPrototype = std::make_shared<HeadPrototype>();
-//    headPrototype->setJson(Json::parse("{\"x\": 2.0, \"y\": 3.0}"));
-//    entityPrototype->addComponentPrototype(headPrototype);
-//
-//    auto body0 = prototypeManager->createEntity("HumanBody");
-//
-//    auto neckPrototype = std::make_shared<NeckPrototype>();
-//    neckPrototype->setJson(Json::parse("{\"Length\": 77.0}"));
-//    entityPrototype->addComponentPrototype(neckPrototype);
-//
-//    std::cout << "Updating Entities" << std::endl;
-//    prototypeManager->updateEntities();
-//    std::cout << "...done" << std::endl;
-//
-//
-//    auto derivedEntityPrototype = prototypeManager->getOrCreateEntityPrototype("EnhancedHumanBody");
-//    derivedEntityPrototype->addBaseEntityPrototype(entityPrototype);
-//
-//    auto derivedHeadPrototype = std::make_shared<HeadPrototype>();;
-//    derivedHeadPrototype->setJson(Json::parse("{\"x\": 5.0}"));
-//
-//    derivedEntityPrototype->addComponentPrototype(derivedHeadPrototype);
-//
-//    auto enhancedBody0 = prototypeManager->createEntity("EnhancedHumanBody");
-//
-//    std::cout << "Updating Entities" << std::endl;
-//    prototypeManager->updateEntities();
-//    std::cout << "...done" << std::endl;
-//
-//    std::cout << std::endl;
-//
-//
-//    auto alienPrototype = prototypeManager->getOrCreateEntityPrototype("AlienBody");
-//    auto tentaclesPrototype = std::make_shared<TentaclesPrototype>();
-//    tentaclesPrototype->setJson(Json::parse("{\"NumTentacles\": 11}"));
-//    alienPrototype->addComponentPrototype(tentaclesPrototype);
-//    derivedEntityPrototype->addBaseEntityPrototype(alienPrototype);
-//    derivedHeadPrototype->setJson(Json::parse("{\"x\": 6.0}"));
-//
-//    std::cout << "Updating Entities" << std::endl;
-//    prototypeManager->updateEntities();
-//    std::cout << "...done" << std::endl;
+    //    auto entityPrototype =
+    //    prototypeManager->getOrCreateEntityPrototype("HumanBody");
+    //
+    //    auto headPrototype = std::make_shared<HeadPrototype>();
+    //    headPrototype->setJson(Json::parse("{\"x\": 2.0, \"y\": 3.0}"));
+    //    entityPrototype->addComponentPrototype(headPrototype);
+    //
+    //    auto body0 = prototypeManager->createEntity("HumanBody");
+    //
+    //    auto neckPrototype = std::make_shared<NeckPrototype>();
+    //    neckPrototype->setJson(Json::parse("{\"Length\": 77.0}"));
+    //    entityPrototype->addComponentPrototype(neckPrototype);
+    //
+    //    std::cout << "Updating Entities" << std::endl;
+    //    prototypeManager->updateEntities();
+    //    std::cout << "...done" << std::endl;
+    //
+    //
+    //    auto derivedEntityPrototype =
+    //    prototypeManager->getOrCreateEntityPrototype("EnhancedHumanBody");
+    //    derivedEntityPrototype->addBaseEntityPrototype(entityPrototype);
+    //
+    //    auto derivedHeadPrototype = std::make_shared<HeadPrototype>();;
+    //    derivedHeadPrototype->setJson(Json::parse("{\"x\": 5.0}"));
+    //
+    //    derivedEntityPrototype->addComponentPrototype(derivedHeadPrototype);
+    //
+    //    auto enhancedBody0 =
+    //    prototypeManager->createEntity("EnhancedHumanBody");
+    //
+    //    std::cout << "Updating Entities" << std::endl;
+    //    prototypeManager->updateEntities();
+    //    std::cout << "...done" << std::endl;
+    //
+    //    std::cout << std::endl;
+    //
+    //
+    //    auto alienPrototype =
+    //    prototypeManager->getOrCreateEntityPrototype("AlienBody"); auto
+    //    tentaclesPrototype = std::make_shared<TentaclesPrototype>();
+    //    tentaclesPrototype->setJson(Json::parse("{\"NumTentacles\": 11}"));
+    //    alienPrototype->addComponentPrototype(tentaclesPrototype);
+    //    derivedEntityPrototype->addBaseEntityPrototype(alienPrototype);
+    //    derivedHeadPrototype->setJson(Json::parse("{\"x\": 6.0}"));
+    //
+    //    std::cout << "Updating Entities" << std::endl;
+    //    prototypeManager->updateEntities();
+    //    std::cout << "...done" << std::endl;
 
     prototypeManager->registerComponentPrototype<HeadPrototype>("Head");
     prototypeManager->registerComponentPrototype<BodyPrototype>("Body");
     prototypeManager->registerComponentPrototype<LegPrototype>("Leg");
     prototypeManager->registerComponentPrototype<ShoePrototype>("Shoe");
 
-    const auto mapPath = DeliberationDataPath("Data/Examples/PrototypeSandbox/map.json");
+    const auto mapPath =
+        DeliberationDataPath("Data/Examples/PrototypeSandbox/map.json");
 
     Level level(prototypeManager, mapPath);
 

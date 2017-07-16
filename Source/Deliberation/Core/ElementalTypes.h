@@ -19,7 +19,7 @@ enum ELEMENTAL_TYPE
 
 class ElementalType final
 {
-  public:
+public:
     ElementalType(u8 id);
 
     u8 id() const;
@@ -33,7 +33,7 @@ class ElementalType final
     bool operator==(const ElementalType & other) const;
     bool operator!=(const ElementalType & other) const;
 
-  private:
+private:
     u8 m_id;
 };
 

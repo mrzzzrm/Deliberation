@@ -15,7 +15,7 @@ namespace deliberation
 {
 class RasterizerState final
 {
-  public:
+public:
     RasterizerState();
     RasterizerState(DrawPrimitive primitive);
     RasterizerState(DrawPrimitive primitive, float pointSize, float lineWidth);
@@ -35,7 +35,7 @@ class RasterizerState final
 
     std::string toString() const;
 
-  private:
+private:
     DrawPrimitive m_primitive;
     float         m_pointSize;
     float         m_lineWidth;

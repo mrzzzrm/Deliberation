@@ -61,9 +61,9 @@ void Sampler::setWrapR(TextureWrap wrap)
 void Sampler::setMinFilter(TextureFilter minFilter)
 {
     Assert((bool)m_impl, "Hollow Sampler can't be set");
-    
+
     if (minFilter == m_impl->minFilter) return;
-    
+
     gl::glSamplerParameteri(
         m_impl->glName, gl::GL_TEXTURE_MIN_FILTER, (gl::GLint)minFilter);
 

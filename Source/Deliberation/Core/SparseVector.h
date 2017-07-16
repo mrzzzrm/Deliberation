@@ -13,11 +13,11 @@ namespace deliberation
 template<typename T>
 class SparseVector final
 {
-  public:
+public:
     template<typename QVecT, typename QValT>
     class IteratorT final
     {
-      public:
+    public:
         IteratorT(QVecT & vec, std::size_t index);
 
         template<typename OtherIteratorT>
@@ -27,11 +27,11 @@ class SparseVector final
         IteratorT<QVecT, QValT> & operator++();
         bool operator!=(const IteratorT<QVecT, QValT> & other) const;
 
-      private:
+    private:
         template<typename>
         friend class SparseVector;
 
-      private:
+    private:
         QVecT &     m_vec;
         std::size_t m_index;
     };
@@ -39,7 +39,7 @@ class SparseVector final
     typedef IteratorT<SparseVector, T>             Iterator;
     typedef IteratorT<const SparseVector, const T> CIterator;
 
-  public:
+public:
     bool contains(std::size_t index) const;
 
     size_t capacity() const;
@@ -78,16 +78,16 @@ class SparseVector final
 
     std::string toString() const;
 
-  private:
+private:
     template<typename, typename>
     friend class IteratorT;
 
-  private:
+private:
     void ensureSize(size_t size);
     void incCount();
     void decCount();
 
-  private:
+private:
     std::vector<boost::optional<T>> m_vec;
     std::stack<std::size_t>         m_pool;
     size_t                          m_count = 0;

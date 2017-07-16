@@ -12,11 +12,11 @@ namespace deliberation
 {
 class SurfaceBinary final
 {
-  public:
+public:
     static SurfaceBinary
     empty(unsigned int width, unsigned int height, PixelFormat format);
 
-  public:
+public:
     SurfaceBinary();
     SurfaceBinary(unsigned int width, unsigned int height, PixelFormat format);
     SurfaceBinary(
@@ -38,10 +38,10 @@ class SurfaceBinary final
 
     std::string toString() const;
 
-  private:
+private:
     std::size_t expectedDataSize() const;
 
-  private:
+private:
     Blob         m_data;
     unsigned int m_width;
     unsigned int m_height;

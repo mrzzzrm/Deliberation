@@ -16,13 +16,13 @@ class SystemBase;
 
 class AbstractWorld
 {
-  public:
+public:
     AbstractWorld();
 
-    std::shared_ptr<EventDomain> events() { return m_events; }
+    std::shared_ptr<EventDomain>         events() { return m_events; }
     const std::shared_ptr<EventDomain> & events() const { return m_events; }
 
-  protected:
+protected:
     virtual ~AbstractWorld() = default;
 
 protected:

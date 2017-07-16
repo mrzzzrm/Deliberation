@@ -11,7 +11,7 @@ class DrawContext;
 
 class BufferImpl final
 {
-  public:
+public:
     BufferImpl(DrawContext & drawContext, const DataLayout & layout);
     ~BufferImpl();
 

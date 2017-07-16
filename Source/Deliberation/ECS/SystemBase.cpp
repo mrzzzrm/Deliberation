@@ -65,10 +65,7 @@ void SystemBase::gameUpdate(float seconds)
     }
 }
 
-void SystemBase::frameUpdate(float seconds)
-{
-    onFrameUpdate(seconds);
-}
+void SystemBase::frameUpdate(float seconds) { onFrameUpdate(seconds); }
 
 void SystemBase::prePhysicsUpdate(float seconds)
 {
@@ -96,9 +93,7 @@ void SystemBase::postPhysicsUpdate(float seconds)
     }
 }
 
-void SystemBase::frameComplete(float seconds) {
-    onFrameComplete(seconds);
-}
+void SystemBase::frameComplete(float seconds) { onFrameComplete(seconds); }
 
 void SystemBase::onEntityAdded(Entity & entity)
 {
@@ -120,5 +115,4 @@ void SystemBase::onFrameBegin() {}
 void SystemBase::onPrePhysicsUpdate(float seconds) {}
 
 void SystemBase::onFrameComplete(float seconds) {}
-
 }

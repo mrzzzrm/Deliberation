@@ -16,7 +16,7 @@ class Surface;
 
 class Texture final
 {
-  public:
+public:
     Texture();
     Texture(const std::shared_ptr<TextureImpl> & impl);
     Texture(const Surface & surface);
@@ -34,7 +34,7 @@ class Texture final
 
     void upload(const TextureBinary & binary);
 
-  private:
+private:
     friend class DrawContext;
     friend class FramebufferImpl;
     friend class SurfaceDownloadImpl;
@@ -42,7 +42,7 @@ class Texture final
     friend class Sampler;
     friend class Surface;
 
-  private:
+private:
     std::shared_ptr<TextureImpl> m_impl;
 };
 }

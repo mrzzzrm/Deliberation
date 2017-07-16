@@ -4,11 +4,9 @@
 
 namespace deliberation
 {
-
 EventListenerProxy::~EventListenerProxy()
 {
     auto domain = m_domain.lock();
     if (domain) domain->removeEventListener(*this);
 }
-
 }

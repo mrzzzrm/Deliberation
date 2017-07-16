@@ -16,9 +16,9 @@ RenderSystem::RenderSystem(World & world)
     : Base(world)
     , m_renderManager(world.systemRef<ApplicationSystem>().drawContext())
 {
-    m_debugGeometryRenderer = m_renderManager.addRenderer<DebugGeometryRenderer>();
+    m_debugGeometryRenderer =
+        m_renderManager.addRenderer<DebugGeometryRenderer>();
 }
-
 
 void RenderSystem::onGameUpdate(float seconds)
 {
@@ -26,32 +26,43 @@ void RenderSystem::onGameUpdate(float seconds)
 
     if (imguiSystem && imguiSystem->showView(m_imguiViewTag))
     {
-        if (ImGui::Begin("Rendering")) {
-            if (ImGui::CollapsingHeader("Surfaces")) {
-                if (ImGui::RadioButton("Default", m_selectedSurfaceKey.empty())) {
+        if (ImGui::Begin("Rendering"))
+        {
+            if (ImGui::CollapsingHeader("Surfaces"))
+            {
+                if (ImGui::RadioButton("Default", m_selectedSurfaceKey.empty()))
+                {
                     m_renderManager.surfaceOverlayRenderer().disable();
                     m_selectedSurfaceKey.clear();
                 }
 
                 // Renderer specific framebuffers
-                for (auto &framebuffer : m_renderManager.framebuffers()) {
+                for (auto & framebuffer : m_renderManager.framebuffers())
+                {
                     if (!framebuffer.isInitialized()) return;
 
-                    for (auto &rt : framebuffer.colorTargets()) {
+                    for (auto & rt : framebuffer.colorTargets())
+                    {
                         const auto surfaceKey = framebuffer.name() + rt.name;
 
-                        if (ImGui::RadioButton((framebuffer.name() + " - " + rt.name).c_str(),
-                                               m_selectedSurfaceKey == surfaceKey)) {
-                            m_renderManager.surfaceOverlayRenderer().showSurface(rt.surface);
+                        if (ImGui::RadioButton(
+                                (framebuffer.name() + " - " + rt.name).c_str(),
+                                m_selectedSurfaceKey == surfaceKey))
+                        {
+                            m_renderManager.surfaceOverlayRenderer()
+                                .showSurface(rt.surface);
                             m_selectedSurfaceKey = surfaceKey;
                         }
                     }
                 }
             }
 
-            if (ImGui::CollapsingHeader("Renderers")) {
-                for (auto &renderer : m_renderManager.renderers()) {
-                    if (ImGui::CollapsingHeader(renderer->name().c_str())) {
+            if (ImGui::CollapsingHeader("Renderers"))
+            {
+                for (auto & renderer : m_renderManager.renderers())
+                {
+                    if (ImGui::CollapsingHeader(renderer->name().c_str()))
+                    {
                         renderer->renderDebugGui();
                     }
                 }

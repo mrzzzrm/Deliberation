@@ -14,10 +14,10 @@ namespace deliberation
 
 class BlendState final
 {
-  public:
+public:
     static BlendState disabled();
 
-  public:
+public:
     BlendState();
     BlendState(
         BlendEquation equation, BlendFactor sfactor, BlendFactor dfactor);
@@ -29,7 +29,7 @@ class BlendState final
 
     std::string toString() const;
 
-  private:
+private:
     bool          m_enabled;
     BlendEquation m_equation;
     BlendFactor   m_sfactor;

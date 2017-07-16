@@ -20,7 +20,6 @@
 
 namespace deliberation
 {
-
 class Buffer;
 class DrawContext;
 class Framebuffer;
@@ -28,7 +27,7 @@ class DrawState;
 
 class Draw final
 {
-  public:
+public:
     Draw();
 
     const std::string & name() const;
@@ -64,11 +63,11 @@ class Draw final
     VertexAttribute attribute(const std::string & name);
 
     void setFramebuffer(
-        Framebuffer & framebuffer,
-        const FramebufferMappings & mapping = {});
+        Framebuffer & framebuffer, const FramebufferMappings & mapping = {});
 
-    FramebufferBinding framebufferBinding(Framebuffer & framebuffer,
-                                          const FramebufferMappings & bindingParams = {});
+    FramebufferBinding framebufferBinding(
+        Framebuffer &               framebuffer,
+        const FramebufferMappings & bindingParams = {});
 
     void setFramebufferBinding(const FramebufferBinding & binding);
 
@@ -79,17 +78,10 @@ class Draw final
 
     UniformBufferHandle uniformBuffer(const std::string & name);
 
-    void setBufferTexture(
-        const std::string & name,
-        const Buffer & buffer
-    );
+    void setBufferTexture(const std::string & name, const Buffer & buffer);
 
     void setBufferTextureRange(
-        const std::string & name,
-        const Buffer & buffer,
-        u32 begin,
-        u32 count
-    );
+        const std::string & name, const Buffer & buffer, u32 begin, u32 count);
 
     BufferTextureBinding bufferTexture(const std::string & name);
 
@@ -97,11 +89,11 @@ class Draw final
 
     std::string toString() const;
 
-  private:
+private:
     friend class DrawContext;
     friend class DrawVerification;
 
-  private:
+private:
     Draw(const std::shared_ptr<DrawImpl> & impl);
 
     void build() const;
@@ -111,7 +103,7 @@ class Draw final
     void addVertexBuffer(
         const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor);
 
-  private:
+private:
     std::shared_ptr<DrawImpl> m_impl;
 };
 }

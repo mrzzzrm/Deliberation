@@ -10,13 +10,13 @@ namespace deliberation
 {
 class ScopeProfiler
 {
-  public:
+public:
     ScopeProfiler(const std::string & name = {});
     ~ScopeProfiler();
 
     DurationMicros stop();
 
-  private:
+private:
     std::string     m_name;
     TimestampMicros m_start;
     bool            m_stopped = false;

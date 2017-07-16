@@ -130,12 +130,16 @@ Texture DrawContext::createTexture2D(u32 width, u32 height, PixelFormat format)
 Framebuffer
 DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
 {
-    Assert(framebufferDesc.width > 0 && framebufferDesc.height > 0, "Framebuffer axes must be > 0");
+    Assert(
+        framebufferDesc.width > 0 && framebufferDesc.height > 0,
+        "Framebuffer axes must be > 0");
 
-    auto framebuffer = Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
+    auto framebuffer =
+        Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
 
 #if VERBOSE
-    std::cout << "DrawContext::createFramebuffer(): " << framebuffer.toString() << std::endl;
+    std::cout << "DrawContext::createFramebuffer(): " << framebuffer.toString()
+              << std::endl;
 #endif
 
     return framebuffer;

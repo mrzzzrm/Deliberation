@@ -24,7 +24,7 @@ using namespace deliberation;
 
 class ImguiSandbox : public deliberation::Application
 {
-  public:
+public:
     ImguiSandbox() : Application("ImguiSandbox") {}
 
     virtual void onStartup() override
@@ -64,7 +64,7 @@ class ImguiSandbox : public deliberation::Application
         m_world.render();
     }
 
-  private:
+private:
     Camera3D m_camera;
     Clear    m_clear;
     //    std::shared_ptr<DebugGroundPlaneRenderer>   m_ground;

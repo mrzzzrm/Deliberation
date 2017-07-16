@@ -6,12 +6,12 @@ namespace deliberation
 {
 class HdrRenderer : public Renderer
 {
-  public:
+public:
     HdrRenderer(RenderManager & renderManager);
 
     void registerRenderNodes() override;
 
-  private:
+private:
     friend class HdrNode;
 };
 }

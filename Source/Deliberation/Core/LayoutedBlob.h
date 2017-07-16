@@ -14,7 +14,7 @@ class DataLayout;
 
 class LayoutedBlob final
 {
-  public:
+public:
     template<typename T>
     using Field = TypedBlobValueAccessor<T>;
     template<typename T>
@@ -22,7 +22,7 @@ class LayoutedBlob final
     template<typename T>
     using Iterator = TypedBlobIterator<T>;
 
-  public:
+public:
     LayoutedBlob();
     LayoutedBlob(const DataLayout & layout, size_t count = 0);
     LayoutedBlob(const DataLayout & layout, Blob && blob);
@@ -76,13 +76,13 @@ class LayoutedBlob final
 
     std::string toString() const;
 
-  private:
+private:
     template<typename T>
     friend class LayoutedBlobElementBase;
     friend class CLayoutedBlobElement;
     friend class LayoutedBlobElement;
 
-  private:
+private:
     DataLayout m_layout;
     size_t     m_count = 0;
     Blob       m_data;

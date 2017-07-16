@@ -52,8 +52,8 @@ SurfaceDownload Surface::download() const
 std::string Surface::toString() const
 {
     Assert(m_impl.get(), "Surface object is hollow");
-    return std::string("Surface {GL-Object: ") + std::to_string(m_impl->textureImpl->glName) +
-        "; Format: " + m_impl->textureImpl->format.toString() + "}";
+    return std::string("Surface {GL-Object: ") +
+           std::to_string(m_impl->textureImpl->glName) +
+           "; Format: " + m_impl->textureImpl->format.toString() + "}";
 }
-
 }

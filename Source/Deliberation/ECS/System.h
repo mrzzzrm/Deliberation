@@ -8,18 +8,17 @@ namespace deliberation
 template<typename T>
 class System : public SystemBase, public EventListener<T>
 {
-  public:
+public:
     typedef System<T> Base;
 
-  public:
+public:
     static std::size_t indexStatic();
 
-  public:
+public:
     System(World & world, const ComponentFilter & filter = ComponentFilter());
 
     virtual std::size_t index() const override;
     virtual std::string name() const override;
-
 };
 }
 

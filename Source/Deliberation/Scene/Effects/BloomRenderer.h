@@ -9,7 +9,6 @@
 
 namespace deliberation
 {
-
 class BloomRenderer : public SingleNodeRenderer
 {
 public:
@@ -25,17 +24,17 @@ protected:
 private:
     ScreenSpaceEffect m_extractEffect;
 
-    ScreenSpaceEffect           m_downscaleEffect;
-    Sampler                     m_downscaleInput;
-    std::vector<Framebuffer>    m_downscaleAndVBlurFbs; // First fb only used for VBlur
-    std::vector<Framebuffer>    m_hblurFbs;
+    ScreenSpaceEffect m_downscaleEffect;
+    Sampler           m_downscaleInput;
+    std::vector<Framebuffer>
+                             m_downscaleAndVBlurFbs; // First fb only used for VBlur
+    std::vector<Framebuffer> m_hblurFbs;
 
-    std::vector<i32>            m_numBlursPerLevel;
-    std::vector<float>          m_stdPerLevel;
+    std::vector<i32>   m_numBlursPerLevel;
+    std::vector<float> m_stdPerLevel;
 
-    GaussianBlur                    m_blur;
-    std::vector<GaussianBlurPass>   m_blurPasses;
-    ScreenSpaceEffect               m_applyEffect;
+    GaussianBlur                  m_blur;
+    std::vector<GaussianBlurPass> m_blurPasses;
+    ScreenSpaceEffect             m_applyEffect;
 };
-
 }

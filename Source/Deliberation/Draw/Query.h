@@ -13,7 +13,7 @@ class QueryImpl;
 
 class Query final
 {
-  public:
+public:
     Query();
     ~Query();
 
@@ -28,13 +28,13 @@ class Query final
     void begin();
     void end();
 
-  private:
+private:
     friend class DrawContext;
 
-  private:
+private:
     Query(const std::shared_ptr<QueryImpl> & impl);
 
-  private:
+private:
     std::shared_ptr<QueryImpl> m_impl;
 };
 }

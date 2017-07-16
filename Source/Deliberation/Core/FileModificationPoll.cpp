@@ -7,18 +7,14 @@
 
 namespace deliberation
 {
-
-FileModificationPoll::FileModificationPoll(const std::string & path):
-    m_path(path)
+FileModificationPoll::FileModificationPoll(const std::string & path)
+    : m_path(path)
 {
     m_mtime.tv_nsec = 0;
     m_mtime.tv_sec = 0;
 }
 
-const std::string & FileModificationPoll::path() const
-{
-    return m_path;
-}
+const std::string & FileModificationPoll::path() const { return m_path; }
 
 bool FileModificationPoll::check()
 {
@@ -38,5 +34,4 @@ bool FileModificationPoll::check()
         return false;
     }
 }
-
 }

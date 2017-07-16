@@ -66,7 +66,8 @@ bool ImGuiSystem::showView(const std::string & name)
     return m_viewToggles[name];
 }
 
-void ImGuiSystem::addControlItem(const std::string & name, const std::function<void()> & fn)
+void ImGuiSystem::addControlItem(
+    const std::string & name, const std::function<void()> & fn)
 {
     const auto iter = m_controlItems.find(name);
     Assert(iter == m_controlItems.end(), "Already have " + name);
@@ -135,8 +136,10 @@ void ImGuiSystem::onFrameBegin()
     /**
      * Show main menu bar
      */
-    if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::BeginMenu("View")) {
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("View"))
+        {
             for (auto & pair : m_viewToggles)
             {
                 ImGui::MenuItem(pair.first.c_str(), NULL, &pair.second);
@@ -146,17 +149,18 @@ void ImGuiSystem::onFrameBegin()
 
         if (m_controlItems.size() > 0)
         {
-            if (ImGui::BeginMenu("Control")) {
+            if (ImGui::BeginMenu("Control"))
+            {
                 for (auto & pair : m_controlItems)
                 {
-                    if (ImGui::Button(pair.first.c_str())) {
+                    if (ImGui::Button(pair.first.c_str()))
+                    {
                         pair.second();
                     }
                 }
                 ImGui::EndMenu();
             }
         }
-
 
         ImGui::EndMainMenuBar();
     }

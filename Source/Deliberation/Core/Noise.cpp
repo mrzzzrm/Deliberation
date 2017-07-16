@@ -6,7 +6,6 @@
 
 namespace deliberation
 {
-
 float IntegerNoise(i32 v)
 {
     v = (v >> 13) ^ v;
@@ -21,5 +20,4 @@ float CoherentNoise(float v)
 
     return Lerp(a, b, v - floor(v));
 }
-
 }

@@ -23,7 +23,7 @@ struct ModelInstancesDraw
 
 class ModelRendererMainNode : public RenderNode
 {
-  public:
+public:
     ModelRendererMainNode(
         RenderManager & renderManager, ModelRenderer & modelRenderer)
         : RenderNode(renderManager), m_modelRenderer(modelRenderer)
@@ -104,7 +104,7 @@ class ModelRendererMainNode : public RenderNode
         }
     }
 
-  private:
+private:
     ModelRenderer & m_modelRenderer;
     DataLayout      m_instanceLayout;
     std::unordered_map<std::shared_ptr<Model>, ModelInstancesDraw>

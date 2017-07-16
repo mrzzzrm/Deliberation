@@ -32,5 +32,4 @@ std::string System<T>::name() const
 {
     return typeid(T).name();
 }
-
 }

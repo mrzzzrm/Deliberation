@@ -9,28 +9,27 @@
 
 namespace deliberation
 {
-
-BloomRenderer::BloomRenderer(RenderManager & renderManager):
-    SingleNodeRenderer(renderManager, RenderPhase::PreHdr, "Bloom"),
-    m_blur(renderManager.drawContext())
+BloomRenderer::BloomRenderer(RenderManager & renderManager)
+    : SingleNodeRenderer(renderManager, RenderPhase::PreHdr, "Bloom")
+    , m_blur(renderManager.drawContext())
 {
-
 }
 
 void BloomRenderer::render()
 {
     m_extractEffect.render();
 
-    m_downscaleInput.setTexture(m_downscaleAndVBlurFbs.front().colorTargets()[0].surface);
+    m_downscaleInput.setTexture(
+        m_downscaleAndVBlurFbs.front().colorTargets()[0].surface);
     m_blurPasses[0].render();
 
     // Downscaling
     for (size_t l = 1; l < m_downscaleAndVBlurFbs.size(); l++)
     {
-//        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
-//        {
-//            m_blurPasses[l].render();
-//        }
+        //        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+        //        {
+        //            m_blurPasses[l].render();
+        //        }
 
         auto & fb = m_downscaleAndVBlurFbs[l];
 
@@ -40,13 +39,13 @@ void BloomRenderer::render()
     }
 
     // Blurring
-//    for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
-//    {
-//        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
-//        {
-//            m_blurPasses[l].render();
-//        }
-//    }
+    //    for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
+    //    {
+    //        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+    //        {
+    //            m_blurPasses[l].render();
+    //        }
+    //    }
 
     m_applyEffect.render();
 }
@@ -72,10 +71,19 @@ void BloomRenderer::renderDebugGui()
         ImGui::Text(std::to_string(l).c_str());
         ImGui::NextColumn();
 
-        ImGui::SliderInt(("##BlurCount" + std::to_string(l)).c_str(), &m_numBlursPerLevel[l], 0, 10);
+        ImGui::SliderInt(
+            ("##BlurCount" + std::to_string(l)).c_str(),
+            &m_numBlursPerLevel[l],
+            0,
+            10);
         ImGui::NextColumn();
 
-        if (ImGui::SliderFloat(("##StandardDeviation" + std::to_string(l)).c_str(), &m_stdPerLevel[l], 0.1f, 9.0f, "%.2f"))
+        if (ImGui::SliderFloat(
+                ("##StandardDeviation" + std::to_string(l)).c_str(),
+                &m_stdPerLevel[l],
+                0.1f,
+                9.0f,
+                "%.2f"))
         {
             m_blurPasses[l].setStandardDeviation(m_stdPerLevel[l]);
         }
@@ -88,13 +96,13 @@ void BloomRenderer::renderDebugGui()
     ImGui::Columns(1);
 }
 
-void BloomRenderer::onSetupRender() {
+void BloomRenderer::onSetupRender()
+{
     // DownscaleEffect
     m_downscaleEffect = ScreenSpaceEffect(
         drawContext(),
         DeliberationShaderPaths({"UV_Position2.vert", "Texture2dRgb.frag"}),
-        "BilinearDownscale"
-    );
+        "BilinearDownscale");
     auto & downscaleDraw = m_downscaleEffect.draw();
     m_downscaleInput = downscaleDraw.sampler("Input");
     m_downscaleInput.setMagFilter(TextureFilter::Linear);
@@ -119,7 +127,8 @@ void BloomRenderer::onSetupRender() {
             desc.colorTargetDescs = {{PixelFormat_RGB_32_F, "Color"}};
 
             desc.name = "ScaleVBlur" + std::to_string(l);
-            m_downscaleAndVBlurFbs.emplace_back(drawContext().createFramebuffer(desc));
+            m_downscaleAndVBlurFbs.emplace_back(
+                drawContext().createFramebuffer(desc));
 
             desc.name = "HBlur" + std::to_string(l);
             m_hblurFbs.emplace_back(drawContext().createFramebuffer(desc));
@@ -127,7 +136,8 @@ void BloomRenderer::onSetupRender() {
             renderManager().registerFramebuffer(m_downscaleAndVBlurFbs.back());
             renderManager().registerFramebuffer(m_hblurFbs.back());
 
-            m_blurPasses.emplace_back(m_blur, m_downscaleAndVBlurFbs.back(), m_hblurFbs.back());
+            m_blurPasses.emplace_back(
+                m_blur, m_downscaleAndVBlurFbs.back(), m_hblurFbs.back());
 
             width /= 2;
             height /= 2;
@@ -135,26 +145,35 @@ void BloomRenderer::onSetupRender() {
     }
 
     // Extract effect
-    m_extractEffect = ScreenSpaceEffect(drawContext(),
+    m_extractEffect = ScreenSpaceEffect(
+        drawContext(),
         DeliberationShaderPaths({"UV_Position2.vert", "BloomExtract.frag"}),
-     "BloomExtract");
+        "BloomExtract");
 
-    auto &extractDraw = m_extractEffect.draw();
+    auto & extractDraw = m_extractEffect.draw();
 
-    extractDraw.sampler("Input").setTexture(m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
+    extractDraw.sampler("Input").setTexture(
+        m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
     extractDraw.uniform("Threshold").set(2.0f);
-    extractDraw.setFramebuffer(m_downscaleAndVBlurFbs[0], {{"Extracted", "Color"}});
+    extractDraw.setFramebuffer(
+        m_downscaleAndVBlurFbs[0], {{"Extracted", "Color"}});
 
     // Apply
-    m_applyEffect = ScreenSpaceEffect(drawContext(),
-                                      DeliberationShaderPaths({"UV_Position2.vert", "BloomApply.frag"}),
-                                      "BloomApply");
-    m_applyEffect.draw().sampler("InputA").setTexture(m_downscaleAndVBlurFbs[0].colorTargets()[0].surface);
-    m_applyEffect.draw().sampler("InputB").setTexture(m_downscaleAndVBlurFbs[1].colorTargets()[0].surface);
-    m_applyEffect.draw().sampler("InputC").setTexture(m_downscaleAndVBlurFbs[2].colorTargets()[0].surface);
-    m_applyEffect.draw().sampler("InputD").setTexture(m_downscaleAndVBlurFbs[3].colorTargets()[0].surface);
-    m_applyEffect.draw().state().setBlendState({BlendEquation::Add, BlendFactor::One, BlendFactor::One});
-    m_applyEffect.draw().setFramebuffer(renderManager().hdrBuffer(), {{"Color", "Hdr"}});
+    m_applyEffect = ScreenSpaceEffect(
+        drawContext(),
+        DeliberationShaderPaths({"UV_Position2.vert", "BloomApply.frag"}),
+        "BloomApply");
+    m_applyEffect.draw().sampler("InputA").setTexture(
+        m_downscaleAndVBlurFbs[0].colorTargets()[0].surface);
+    m_applyEffect.draw().sampler("InputB").setTexture(
+        m_downscaleAndVBlurFbs[1].colorTargets()[0].surface);
+    m_applyEffect.draw().sampler("InputC").setTexture(
+        m_downscaleAndVBlurFbs[2].colorTargets()[0].surface);
+    m_applyEffect.draw().sampler("InputD").setTexture(
+        m_downscaleAndVBlurFbs[3].colorTargets()[0].surface);
+    m_applyEffect.draw().state().setBlendState(
+        {BlendEquation::Add, BlendFactor::One, BlendFactor::One});
+    m_applyEffect.draw().setFramebuffer(
+        renderManager().hdrBuffer(), {{"Color", "Hdr"}});
 }
-
 }

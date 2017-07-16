@@ -20,7 +20,7 @@ enum class StencilFace
 
 class StencilState final
 {
-  public:
+public:
     struct Face
     {
         Face();
@@ -42,7 +42,7 @@ class StencilState final
         StencilOp       dppass = StencilOp::Keep;
     };
 
-  public:
+public:
     StencilState();
     StencilState(const Face & frontAndBack);
     StencilState(
@@ -88,7 +88,7 @@ class StencilState final
 
     std::string toString() const;
 
-  private:
+private:
     bool     m_enabled;
     uint32_t m_differentFrontAndBackBits;
     Face     m_faces[2];

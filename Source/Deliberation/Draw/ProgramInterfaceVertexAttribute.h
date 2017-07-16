@@ -10,7 +10,7 @@ namespace deliberation
 {
 class ProgramInterfaceVertexAttribute final
 {
-  public:
+public:
     ProgramInterfaceVertexAttribute();
     ProgramInterfaceVertexAttribute(
         const std::string & name,
@@ -30,7 +30,7 @@ class ProgramInterfaceVertexAttribute final
 
     std::string toString() const;
 
-  private:
+private:
     std::string m_name;
     u32         m_index = 0;
     gl::GLint   m_glLocation = 0;

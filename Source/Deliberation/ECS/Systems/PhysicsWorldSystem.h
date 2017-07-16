@@ -14,7 +14,7 @@ namespace deliberation
 {
 class PhysicsWorldSystem : public System<PhysicsWorldSystem>
 {
-  public:
+public:
     PhysicsWorldSystem(World & world, PhysicsWorld & physicsWorld);
 
     PhysicsWorld & physicsWorld() const { return m_physicsWorld; }
@@ -24,13 +24,14 @@ class PhysicsWorldSystem : public System<PhysicsWorldSystem>
     void onCreated() override;
     void onRemoved() override;
 
-  protected:
+protected:
     void onEntityAdded(Entity & entity) override;
     void onEntityRemoved(Entity & entity) override;
-    void onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep) override;
+    void
+    onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep) override;
 
-  private:
-    PhysicsWorld & m_physicsWorld;
+private:
+    PhysicsWorld &                             m_physicsWorld;
     std::shared_ptr<DebugPhysicsWorldRenderer> m_debugRenderer;
 };
 }

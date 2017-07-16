@@ -7,12 +7,12 @@ namespace deliberation
 {
 class KeyEvent : public InputEvent
 {
-  public:
+public:
     KeyEvent(Key key) : m_key(key) {}
 
     Key key() const { return m_key; }
 
-  private:
+private:
     Key m_key;
 };
 }

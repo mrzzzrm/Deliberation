@@ -9,7 +9,7 @@ class SurfaceDownloadImpl;
 
 class SurfaceDownload final
 {
-  public:
+public:
     SurfaceDownload();
 
     bool isDone() const;
@@ -18,14 +18,14 @@ class SurfaceDownload final
 
     const SurfaceBinary & result() const;
 
-  private:
+private:
     friend class DrawContext;
     friend class Surface;
 
-  private:
+private:
     SurfaceDownload(const std::shared_ptr<SurfaceDownloadImpl> & impl);
 
-  private:
+private:
     std::shared_ptr<SurfaceDownloadImpl> m_impl;
 };
 }

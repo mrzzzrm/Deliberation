@@ -4,8 +4,8 @@
 #include <sstream>
 
 #include <Deliberation/Core/Assert.h>
-#include <Deliberation/Core/ScopeProfiler.h>
 #include <Deliberation/Core/EventListenerProxy.h>
+#include <Deliberation/Core/ScopeProfiler.h>
 
 #define VERBOSE 0
 
@@ -169,7 +169,8 @@ void World::prePhysicsUpdate(float seconds)
     }
 }
 
-void World::postPhysicsUpdate(float seconds){
+void World::postPhysicsUpdate(float seconds)
+{
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;

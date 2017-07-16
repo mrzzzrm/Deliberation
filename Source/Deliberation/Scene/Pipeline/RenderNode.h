@@ -6,16 +6,16 @@ class RenderManager;
 
 class RenderNode
 {
-  public:
+public:
     RenderNode(RenderManager & renderManager) : m_renderManager(renderManager)
     {
     }
     virtual ~RenderNode() = default;
 
-    virtual void render() = 0;
+    virtual void        render() = 0;
     virtual std::string name() const { return "Unnamed"; };
 
-  protected:
+protected:
     RenderManager & m_renderManager;
 };
 }

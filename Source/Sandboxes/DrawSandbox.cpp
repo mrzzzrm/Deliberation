@@ -19,7 +19,7 @@ using namespace deliberation;
 
 class DrawSandbox : public Application
 {
-  public:
+public:
     DrawSandbox() : Application("DrawSandbox") {}
 
     void onStartup() override
@@ -37,7 +37,8 @@ class DrawSandbox : public Application
 
         m_draw = drawContext().createDraw(program);
 
-        const auto vertexLayout = DataLayout({{"Position", Type_Vec2},  {"ColorIndex", Type_U32}});
+        const auto vertexLayout =
+            DataLayout({{"Position", Type_Vec2}, {"ColorIndex", Type_U32}});
 
         auto vertices = LayoutedBlob(vertexLayout, 3);
 
@@ -46,8 +47,7 @@ class DrawSandbox : public Application
                      glm::vec2(1.0f, -1.0f),
                      glm::vec2(1.0f, 1.0f)});
 
-        vertices.field<u32>("ColorIndex")
-            .assign({2, 2, 2});
+        vertices.field<u32>("ColorIndex").assign({2, 2, 2});
 
         m_draw.addVertices(vertices);
 
@@ -61,7 +61,6 @@ class DrawSandbox : public Application
         m_position = glm::vec2(0.2f, 0.1f);
 
         m_paletteBuffer = drawContext().createBuffer({"Color", Type_Vec3});
-
     }
 
     void onFrame(float seconds) override
@@ -69,8 +68,7 @@ class DrawSandbox : public Application
         m_secondsAccumulator += seconds;
 
         m_palette[2] = glm::vec3(
-            0.0f, 0.0f, (std::cos(m_secondsAccumulator) + 1.0f) * 0.5f
-        );
+            0.0f, 0.0f, (std::cos(m_secondsAccumulator) + 1.0f) * 0.5f);
 
         m_paletteBuffer.upload(m_palette);
         m_draw.bufferTexture("Palette").setBuffer(m_paletteBuffer);
@@ -82,13 +80,13 @@ class DrawSandbox : public Application
         m_draw.render();
     }
 
-  private:
-    Clear     m_clear;
-    Draw      m_draw;
-    glm::vec2 m_position;
-    float     m_secondsAccumulator = 0.0f;
+private:
+    Clear                  m_clear;
+    Draw                   m_draw;
+    glm::vec2              m_position;
+    float                  m_secondsAccumulator = 0.0f;
     std::vector<glm::vec3> m_palette;
-    Buffer      m_paletteBuffer;
+    Buffer                 m_paletteBuffer;
 };
 
 int main(int argc, char * argv[]) { return DrawSandbox().run(argc, argv); }

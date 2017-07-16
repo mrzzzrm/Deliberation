@@ -4,10 +4,5 @@
 
 namespace deliberation
 {
-
-void Transform3DComponent::renderImGui() 
-{
-    ImGuiProperty(value());
-}
-
+void Transform3DComponent::renderImGui() { ImGuiProperty(value()); }
 }

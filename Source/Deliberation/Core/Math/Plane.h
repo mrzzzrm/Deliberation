@@ -6,7 +6,7 @@ namespace deliberation
 {
 class Plane final
 {
-  public:
+public:
     Plane();
     Plane(const glm::vec3 & a, const glm::vec3 & b, const glm::vec3 & c);
 
@@ -16,7 +16,7 @@ class Plane final
     void setNormal(const glm::vec3 & normal);
     void setD(float d);
 
-  private:
+private:
     glm::vec3 m_normal;
     float     m_d;
 };

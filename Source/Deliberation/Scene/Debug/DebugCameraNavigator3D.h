@@ -11,7 +11,7 @@ class Input;
 
 class DebugCameraNavigator3D final
 {
-  public:
+public:
     DebugCameraNavigator3D(
         Camera3D & camera, const Input & inputAdapter, float speed = 10.0f);
 
@@ -23,7 +23,7 @@ class DebugCameraNavigator3D final
     void update(float seconds);
     void onMouseMotion(MouseMotionEvent & event);
 
-  private:
+private:
     Camera3D &    m_camera;
     const Input & m_inputAdapter;
     float         m_speed;

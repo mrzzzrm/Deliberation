@@ -27,11 +27,10 @@ i32 SigNum(T value);
 template<typename T>
 i32 Sign(T value);
 
-float GaussianCDFWithDenominator(float x, float denom);
+float              GaussianCDFWithDenominator(float x, float denom);
 std::vector<float> GaussianSamples(float std, u32 numSamples);
 
 inline float Lerp(float a, float b, float w);
-
 }
 
 #include <Deliberation/Core/Math/MathUtils.inl>

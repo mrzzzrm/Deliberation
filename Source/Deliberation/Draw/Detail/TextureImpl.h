@@ -16,7 +16,7 @@ class TextureBinary;
 
 class TextureImpl final
 {
-  public:
+public:
     TextureImpl(
         DrawContext & drawContext,
         u32           width,

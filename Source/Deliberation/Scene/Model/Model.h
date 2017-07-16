@@ -8,7 +8,7 @@ namespace deliberation
 {
 class Model final
 {
-  public:
+public:
     AABB bounds;
 
     Buffer vertexBuffer;

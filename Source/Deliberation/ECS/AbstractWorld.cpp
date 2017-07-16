@@ -2,11 +2,5 @@
 
 namespace deliberation
 {
-
-AbstractWorld::AbstractWorld():
-    m_events(std::make_shared<EventDomain>())
-{
-
-}
-
+AbstractWorld::AbstractWorld() : m_events(std::make_shared<EventDomain>()) {}
 }

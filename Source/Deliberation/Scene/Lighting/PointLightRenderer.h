@@ -11,8 +11,8 @@
 #include <Deliberation/ECS/System.h>
 #include <Deliberation/ECS/World.h>
 
-#include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
 #include <Deliberation/Scene/Pipeline/RenderSystem.h>
+#include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
 
 namespace deliberation
 {
@@ -34,11 +34,11 @@ struct PointLight
 
 class PointLightRenderer : public SingleNodeRenderer
 {
-  public:
+public:
     PointLightRenderer(RenderManager & renderManager);
 
     // Reference invalidated by add/removePointLight()
-    PointLight & pointLight(size_t index);
+    PointLight &                    pointLight(size_t index);
     const std::vector<PointLight> & pointLights() const { return m_lights; }
 
     size_t addPointLight(const PointLight & pointLight);
@@ -46,10 +46,10 @@ class PointLightRenderer : public SingleNodeRenderer
 
     void render() override;
 
-  protected:
+protected:
     void onSetupRender() override;
 
-  private:
+private:
     Draw                    m_draw;
     Buffer                  m_lightBuffer;
     DataLayout              m_lightLayout;
@@ -65,13 +65,17 @@ class PointLightRenderer : public SingleNodeRenderer
 class PointLightSystem : public System<PointLightSystem>
 {
 public:
-    PointLightSystem(World & world):
-        Base(world)
+    PointLightSystem(World & world) : Base(world)
     {
-        m_pointLightRenderer = world.systemRef<RenderSystem>().renderManager().addRenderer<PointLightRenderer>();
+        m_pointLightRenderer = world.systemRef<RenderSystem>()
+                                   .renderManager()
+                                   .addRenderer<PointLightRenderer>();
     }
 
-    const std::shared_ptr<PointLightRenderer> & pointLightRenderer() const { return m_pointLightRenderer; }
+    const std::shared_ptr<PointLightRenderer> & pointLightRenderer() const
+    {
+        return m_pointLightRenderer;
+    }
 
 private:
     std::shared_ptr<PointLightRenderer> m_pointLightRenderer;

@@ -180,7 +180,9 @@ DebugArrowInstance::DebugArrowInstance(DebugGeometryNode & renderer)
         manager().drawContext().createBuffer(m_lineVertices.layout());
 
     m_lineDraw = manager().drawContext().createDraw(
-        manager().buildIns().unicolorProgram, DrawPrimitive::Lines, "DebugLineDraw");
+        manager().buildIns().unicolorProgram,
+        DrawPrimitive::Lines,
+        "DebugLineDraw");
     m_lineDraw.addVertexBuffer(m_lineVertexBuffer);
     m_lineDraw.setState(m_renderer.drawState());
     m_lineDraw.state().rasterizerState().setPrimitive(DrawPrimitive::Lines);
@@ -188,8 +190,10 @@ DebugArrowInstance::DebugArrowInstance(DebugGeometryNode & renderer)
     m_lineDraw.uniform("Transform").set(glm::mat4(1.0f));
     m_lineColorUniform = m_lineDraw.uniform("Color");
 
-    m_coneDraw =
-        manager().drawContext().createDraw(manager().buildIns().shadedProgram, DrawPrimitive::Triangles, "DebugConeDraw");
+    m_coneDraw = manager().drawContext().createDraw(
+        manager().buildIns().shadedProgram,
+        DrawPrimitive::Triangles,
+        "DebugConeDraw");
     m_coneDraw.setState(m_renderer.drawState());
     m_coneDraw.setUniformBuffer("Globals", m_renderer.globalsBuffer());
     m_coneDraw.addVertexBuffer(manager().buildIns().coneVertexBuffer);
@@ -392,9 +396,12 @@ void DebugPoseInstance::render() const
 
         auto orientation = m_transform.orientation() * m_pose.orientation();
 
-        m_arrows[0]->reset(origin, orientation * glm::vec3(m_transform.scale(), 0.0f, 0.0f));
-        m_arrows[1]->reset(origin, orientation * glm::vec3(0.0f, m_transform.scale(), 0.0f));
-        m_arrows[2]->reset(origin, orientation * glm::vec3(0.0f, 0.0f, m_transform.scale()));
+        m_arrows[0]->reset(
+            origin, orientation * glm::vec3(m_transform.scale(), 0.0f, 0.0f));
+        m_arrows[1]->reset(
+            origin, orientation * glm::vec3(0.0f, m_transform.scale(), 0.0f));
+        m_arrows[2]->reset(
+            origin, orientation * glm::vec3(0.0f, 0.0f, m_transform.scale()));
 
         m_transformDirty = false;
     }
@@ -418,10 +425,7 @@ DebugGeometryNode::DebugGeometryNode(DebugGeometryRenderer & manager)
 
 bool DebugGeometryNode::visible() const { return m_visible; }
 
-DebugGeometryRenderer & DebugGeometryNode::manager() const
-{
-    return m_manager;
-}
+DebugGeometryRenderer & DebugGeometryNode::manager() const { return m_manager; }
 
 const Buffer & DebugGeometryNode::globalsBuffer() const
 {
@@ -633,11 +637,17 @@ void DebugGeometryNode::render(const Camera3D & camera)
     m_globals.field<glm::mat4>("ViewProjection")[0] = camera.viewProjection();
     m_globalsBuffer.upload(m_globals);
 
-    for (auto & box : m_boxes) if (box->visible()) box->render();
-    for (auto & point : m_points) if (point->visible()) point->render();
-    for (auto & arrow : m_arrows) if (arrow->visible()) arrow->render();
-    for (auto & wireframe : m_wireframes) if (wireframe->visible()) wireframe->render();
-    for (auto & sphere : m_spheres) if (sphere->visible()) sphere->render();
-    for (auto & pose : m_poses) if (pose->visible()) pose->render();
+    for (auto & box : m_boxes)
+        if (box->visible()) box->render();
+    for (auto & point : m_points)
+        if (point->visible()) point->render();
+    for (auto & arrow : m_arrows)
+        if (arrow->visible()) arrow->render();
+    for (auto & wireframe : m_wireframes)
+        if (wireframe->visible()) wireframe->render();
+    for (auto & sphere : m_spheres)
+        if (sphere->visible()) sphere->render();
+    for (auto & pose : m_poses)
+        if (pose->visible()) pose->render();
 }
 }

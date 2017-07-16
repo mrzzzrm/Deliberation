@@ -9,7 +9,7 @@ namespace detail
     template<typename T>
     class INamedDataMemberOfImpl
     {
-      public:
+    public:
         virtual ~INamedDataMemberOfImpl();
 
         virtual Type &       type() const = 0;

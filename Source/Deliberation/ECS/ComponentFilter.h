@@ -12,19 +12,19 @@ namespace deliberation
 {
 class ComponentFilter final
 {
-  public:
+public:
     static ComponentFilter all();
     static ComponentFilter none();
 
     template<typename... Args>
     static ComponentFilter requires();
 
-  public:
+public:
     ComponentFilter();
 
     bool accepts(const ComponentBitset & componentBits) const;
 
-  private:
+private:
     ComponentBitset m_components;
 };
 }

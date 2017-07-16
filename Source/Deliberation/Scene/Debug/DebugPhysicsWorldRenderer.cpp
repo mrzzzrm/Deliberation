@@ -12,9 +12,11 @@
 namespace deliberation
 {
 DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(
-    RenderManager & renderManager, RenderSystem & renderSystem, PhysicsWorld & phyicsWorld):
-    SingleNodeRenderer(renderManager, RenderPhase::PreOverlay),
-    m_physicsWorld(phyicsWorld)
+    RenderManager & renderManager,
+    RenderSystem &  renderSystem,
+    PhysicsWorld &  phyicsWorld)
+    : SingleNodeRenderer(renderManager, RenderPhase::PreOverlay)
+    , m_physicsWorld(phyicsWorld)
 {
     m_debugNode = renderSystem.debugGeometryRenderer()->addNode();
 }
@@ -36,7 +38,7 @@ void DebugPhysicsWorldRenderer::render()
         boxIndex++;
     }
 
-    for(; boxIndex < m_numAllocatedBoxes; boxIndex++)
+    for (; boxIndex < m_numAllocatedBoxes; boxIndex++)
     {
         m_debugNode->box(boxIndex).setVisible(false);
     }

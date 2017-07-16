@@ -11,7 +11,7 @@ namespace detail
 {
     class TTF_Font_Wrapper
     {
-      public:
+    public:
         TTF_Font_Wrapper(const std::string & path, unsigned int size)
             : font(nullptr)
         {

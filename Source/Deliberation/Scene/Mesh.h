@@ -9,7 +9,7 @@ namespace deliberation
 {
 class Mesh final
 {
-  public:
+public:
     struct Face
     {
         Face() = default;
@@ -23,7 +23,7 @@ class Mesh final
 
     using Faces = std::vector<Face>;
 
-  public:
+public:
     Mesh();
     Mesh(LayoutedBlob && vertices, std::vector<Face> && faces);
     Mesh(
@@ -43,7 +43,7 @@ class Mesh final
     LayoutedBlobElement  faceVertex(size_t face, size_t vertex);
     CLayoutedBlobElement faceVertex(size_t face, size_t vertex) const;
 
-  private:
+private:
     LayoutedBlob      m_vertices;
     LayoutedBlob      m_faceAttributes;
     std::vector<Face> m_faces;

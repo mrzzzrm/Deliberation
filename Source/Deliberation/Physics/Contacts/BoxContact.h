@@ -28,7 +28,7 @@ struct CollideBox3DDebugInfo
 
 class CollideBox3D
 {
-  public:
+public:
     CollideBox3D(
         const Box &             boxA,
         const Box &             boxB,
@@ -36,11 +36,11 @@ class CollideBox3D
 
     bool execute();
 
-  public:
+public:
     uint         numIntersections;
     Intersection intersections[8];
 
-  private:
+private:
     struct BoxWrapper
     {
         const Box & box;
@@ -49,7 +49,7 @@ class CollideBox3D
         BoxWrapper(const Box & box);
     };
 
-  private:
+private:
     bool checkFaceNormalDepth(const Box & lhs, const Box & rhs, uint baseIndex);
     bool checkEdgeDepth(
         const glm::vec3 & normalA, const glm::vec3 & normalB, uint index);
@@ -61,7 +61,7 @@ class CollideBox3D
     void      checkEdgeIntersection(uint e0, uint e1);
     glm::vec3 normalFromDirection(const glm::vec3 & direction) const;
 
-  private:
+private:
     BoxWrapper m_a;
     BoxWrapper m_b;
 
@@ -85,7 +85,7 @@ class CollideBox3D
 
 class BoxContact final : public Contact
 {
-  public:
+public:
     BoxContact(RigidBody & bodyA, RigidBody & bodyB);
 
     virtual void update() override;

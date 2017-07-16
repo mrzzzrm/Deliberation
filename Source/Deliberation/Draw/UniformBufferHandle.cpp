@@ -8,27 +8,28 @@
 
 namespace deliberation
 {
-
-UniformBufferHandle::UniformBufferHandle(const std::shared_ptr<DrawImpl> &drawImpl,
-                                         u32 index) :
-    m_drawImpl(drawImpl),
-    m_index(index) {
-
+UniformBufferHandle::UniformBufferHandle(
+    const std::shared_ptr<DrawImpl> & drawImpl, u32 index)
+    : m_drawImpl(drawImpl), m_index(index)
+{
 }
 
-void UniformBufferHandle::setBuffer(const Buffer &buffer, u32 begin) {
+void UniformBufferHandle::setBuffer(const Buffer & buffer, u32 begin)
+{
     Assert((bool)m_drawImpl, "UniformBufferHandle is hollow");
 
-    const auto & uniformBufferInterface = m_drawImpl->program->interface.uniformBlocks()[m_index];
+    const auto & uniformBufferInterface =
+        m_drawImpl->program->interface.uniformBlocks()[m_index];
     const auto & uniformBufferLayout = uniformBufferInterface.layout();
 
-    Assert(buffer.layout() == uniformBufferLayout,
-           "UniformBlock layout doesn't match the buffer:\n\t" + buffer.layout().toString() +
-           "\n\t" + uniformBufferLayout.toString());
+    Assert(
+        buffer.layout() == uniformBufferLayout,
+        "UniformBlock layout doesn't match the buffer:\n\t" +
+            buffer.layout().toString() + "\n\t" +
+            uniformBufferLayout.toString());
 
     UniformBufferBinding binding{buffer.m_impl, begin};
 
     m_drawImpl->uniformBuffers[m_index].reset(binding);
 }
-
 }

@@ -7,13 +7,14 @@
 namespace deliberation
 {
 template<typename WrappedType, typename ComponentType>
-class ComponentWrapper : public Component<
-                                   ComponentWrapper<WrappedType, ComponentType>>
+class ComponentWrapper
+    : public Component<ComponentWrapper<WrappedType, ComponentType>>
 {
-DELIBERATION_COMPONENT_NAME("Unnamed ComponentWrapper")
+    DELIBERATION_COMPONENT_NAME("Unnamed ComponentWrapper")
 public:
     typedef ComponentWrapper<WrappedType, ComponentType> Base;
-  public:
+
+public:
     template<typename... Args>
     ComponentWrapper(Args &&... args);
 
@@ -22,7 +23,7 @@ public:
     WrappedType &       value();
     const WrappedType & value() const;
 
-  private:
+private:
     WrappedType m_value;
 };
 }

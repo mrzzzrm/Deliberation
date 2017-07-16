@@ -8,10 +8,10 @@ class AABB;
 
 class Sphere final
 {
-  public:
+public:
     static Sphere containingAABB(const AABB & aabb);
 
-  public:
+public:
     Sphere();
     Sphere(const glm::vec3 & position, float radius);
 
@@ -23,7 +23,7 @@ class Sphere final
 
     bool intersects(const Sphere & other) const;
 
-  protected:
+protected:
     glm::vec3 m_position;
     float     m_radius;
 };

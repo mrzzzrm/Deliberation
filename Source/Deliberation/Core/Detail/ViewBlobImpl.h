@@ -8,7 +8,7 @@ namespace detail
 {
     class ViewBlobImpl : public IBlobImpl
     {
-      public:
+    public:
         ViewBlobImpl(void * ptr, size_t size) : m_ptr(ptr), m_size(size) {}
 
         std::unique_ptr<IBlobImpl> clone() const override
@@ -20,7 +20,7 @@ namespace detail
         virtual void         resize(std::size_t size) override { Fail(""); }
         virtual void         reserve(std::size_t size) override { Fail(""); }
 
-      private:
+    private:
         void * m_ptr;
         size_t m_size;
     };

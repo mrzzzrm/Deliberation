@@ -12,7 +12,7 @@ class CollisionShape;
 
 class CollisionObject
 {
-  public:
+public:
     CollisionObject(
         const std::shared_ptr<CollisionShape> & shape,
         const Transform3D &                     transform = Transform3D());
@@ -28,7 +28,7 @@ class CollisionObject
     void setTransform(const Transform3D & transform);
     void setProxy(const std::shared_ptr<BroadphaseProxy> & proxy);
 
-  protected:
+protected:
     std::shared_ptr<CollisionShape>  m_shape;
     Transform3D                      m_transform;
     std::shared_ptr<BroadphaseProxy> m_proxy;

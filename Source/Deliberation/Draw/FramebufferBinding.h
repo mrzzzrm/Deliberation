@@ -11,7 +11,6 @@
 
 namespace deliberation
 {
-
 using FragmentOutputMapping = std::pair<std::string, std::string>;
 using FramebufferMappings = std::vector<FragmentOutputMapping>;
 
@@ -19,11 +18,12 @@ class FramebufferBinding final
 {
 public:
     FramebufferBinding() = default;
-    FramebufferBinding(const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs,
-                       Framebuffer & framebuffer,
-                       const FramebufferMappings & mappings);
+    FramebufferBinding(
+        const std::vector<ProgramInterfaceFragmentOutput> & fragmentOutputs,
+        Framebuffer &                                       framebuffer,
+        const FramebufferMappings &                         mappings);
 
-    Framebuffer & framebuffer() { return m_framebuffer; }
+    Framebuffer &       framebuffer() { return m_framebuffer; }
     const Framebuffer & framebuffer() const { return m_framebuffer; }
 
     void setFramebuffer(Framebuffer & framebuffer);
@@ -33,13 +33,12 @@ public:
     const std::vector<gl::GLenum> & drawBuffersGL() const;
 
 private:
-    const std::vector<ProgramInterfaceFragmentOutput> *
-                                            m_fragmentOutputs = nullptr;
-    Framebuffer                             m_framebuffer;
-    FramebufferMappings                     m_mappings;
+    const std::vector<ProgramInterfaceFragmentOutput> * m_fragmentOutputs =
+        nullptr;
+    Framebuffer         m_framebuffer;
+    FramebufferMappings m_mappings;
 
-    mutable bool                            m_drawBuffersDirty = true;
-    mutable std::vector<gl::GLenum>         m_drawBuffers;
+    mutable bool                    m_drawBuffersDirty = true;
+    mutable std::vector<gl::GLenum> m_drawBuffers;
 };
-
 }

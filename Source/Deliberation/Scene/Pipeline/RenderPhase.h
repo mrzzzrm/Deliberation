@@ -2,7 +2,6 @@
 
 namespace deliberation
 {
-
 /**
  * Sync order with function below
  */
@@ -28,19 +27,17 @@ inline std::string RenderPhaseToString(RenderPhase phase)
 {
     const auto index = (int)phase;
 
-    static const char * names[] = {
-        "GBuffer",
-        "PostGBuffer",
-        "PreLighting",
-        "Lighting",
-        "Forward",
-        "Alpha",
-        "PostAlpha",
-        "PreHdr",
-        "Hdr",
-        "PreOverlay",
-        "Overlay"
-    };
+    static const char * names[] = {"GBuffer",
+                                   "PostGBuffer",
+                                   "PreLighting",
+                                   "Lighting",
+                                   "Forward",
+                                   "Alpha",
+                                   "PostAlpha",
+                                   "PreHdr",
+                                   "Hdr",
+                                   "PreOverlay",
+                                   "Overlay"};
 
     return names[index];
 }

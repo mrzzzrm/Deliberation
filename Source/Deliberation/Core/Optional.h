@@ -5,7 +5,7 @@ namespace deliberation
 template<typename T>
 class Optional final
 {
-  public:
+public:
     Optional();
 
     template<typename... Args>
@@ -38,11 +38,11 @@ class Optional final
     bool operator==(const T & other) const;
     bool operator!=(const T & other) const;
 
-  private:
+private:
     template<typename... Args>
     void reset(Args &&... args) const;
 
-  private:
+private:
     bool m_engaged;
 
     static_assert(sizeof(T) > 0, "Cannot take sizeof of undefined type");

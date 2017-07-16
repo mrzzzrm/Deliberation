@@ -12,7 +12,7 @@ class DrawContext;
 
 class QueryImpl final
 {
-  public:
+public:
     QueryImpl(DrawContext & drawContext, QueryType type);
     ~QueryImpl();
 
@@ -27,7 +27,7 @@ class QueryImpl final
     void begin();
     void end();
 
-  private:
+private:
     DrawContext & m_drawContext;
     QueryType     m_type;
     gl::GLuint    m_glName;

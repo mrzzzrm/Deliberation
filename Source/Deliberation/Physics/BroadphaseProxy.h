@@ -8,7 +8,7 @@ namespace deliberation
 {
 class BroadphaseProxy final
 {
-  public:
+public:
     BroadphaseProxy(void * userData, const AABB & bounds = AABB());
 
     void *       userData() const;
@@ -18,7 +18,7 @@ class BroadphaseProxy final
     void setBounds(const AABB & bounds);
     void setIndex(size_t index);
 
-  private:
+private:
     void * m_userData;
     AABB   m_bounds;
     size_t m_index;

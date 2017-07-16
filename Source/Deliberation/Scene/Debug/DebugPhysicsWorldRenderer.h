@@ -11,18 +11,19 @@ class Camera3D;
 class PhysicsWorld;
 class RenderSystem;
 
-class DebugPhysicsWorldRenderer:
-    public SingleNodeRenderer
+class DebugPhysicsWorldRenderer : public SingleNodeRenderer
 {
-  public:
+public:
     DebugPhysicsWorldRenderer(
-        RenderManager & renderManager, RenderSystem & renderSystem, PhysicsWorld & phyicsWorld);
+        RenderManager & renderManager,
+        RenderSystem &  renderSystem,
+        PhysicsWorld &  phyicsWorld);
 
     void render() override;
 
-  private:
-    PhysicsWorld & m_physicsWorld;
+private:
+    PhysicsWorld &                     m_physicsWorld;
     std::shared_ptr<DebugGeometryNode> m_debugNode;
-    size_t m_numAllocatedBoxes = 0;
+    size_t                             m_numAllocatedBoxes = 0;
 };
 }

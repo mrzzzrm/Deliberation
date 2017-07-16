@@ -11,15 +11,16 @@ class Transform3D;
 
 class Pose3D final
 {
-  public:
+public:
     inline static Pose3D         atPosition(const glm::vec3 & position);
     inline static Pose3D         atOrientation(const glm::quat & orientation);
     inline static const Pose3D & identity();
 
     static Pose3D fromTransform(const Transform3D & transform);
-    static Pose3D fromTransformedPose(const Transform3D & transform, const Pose3D & pose);
+    static Pose3D
+    fromTransformedPose(const Transform3D & transform, const Pose3D & pose);
 
-  public:
+public:
     Pose3D();
     Pose3D(
         const glm::vec3 & position,
@@ -58,7 +59,7 @@ class Pose3D final
     bool operator==(const Pose3D & other) const;
     bool operator!=(const Pose3D & other) const;
 
-  protected:
+protected:
     glm::vec3 m_position;
     glm::quat m_orientation;
     glm::vec3 m_center;

@@ -21,10 +21,10 @@ struct RigidBodyPayload
 class RigidBody final : public std::enable_shared_from_this<RigidBody>,
                         public CollisionObject
 {
-  public:
+public:
     static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
 
-  public:
+public:
     RigidBody(
         const std::shared_ptr<CollisionShape> & shape,
         const Transform3D &                     transform = Transform3D(),
@@ -63,7 +63,7 @@ class RigidBody final : public std::enable_shared_from_this<RigidBody>,
 
     std::string toString() const;
 
-  private:
+private:
     float m_restitution = 0.1f;
     float m_friction = 0.03f;
 

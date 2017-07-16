@@ -187,18 +187,21 @@ VertexAttribute Draw::attribute(const std::string & name)
 }
 
 void Draw::setFramebuffer(
-    Framebuffer & framebuffer,
-    const FramebufferMappings & mapping)
+    Framebuffer & framebuffer, const FramebufferMappings & mapping)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
     setFramebufferBinding(framebufferBinding(framebuffer, mapping));
 }
 
-FramebufferBinding Draw::framebufferBinding(Framebuffer & framebuffer, const FramebufferMappings & bindingParams)
+FramebufferBinding Draw::framebufferBinding(
+    Framebuffer & framebuffer, const FramebufferMappings & bindingParams)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    return FramebufferBinding(m_impl->program->interface.fragmentOutputs(), framebuffer, bindingParams);
+    return FramebufferBinding(
+        m_impl->program->interface.fragmentOutputs(),
+        framebuffer,
+        bindingParams);
 }
 
 void Draw::setFramebufferBinding(const FramebufferBinding & binding)
@@ -222,23 +225,17 @@ void Draw::setUniformBuffer(
 UniformBufferHandle Draw::uniformBuffer(const std::string & name)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    return UniformBufferHandle(m_impl, m_impl->program->interface.uniformBlockRef(name).index());
+    return UniformBufferHandle(
+        m_impl, m_impl->program->interface.uniformBlockRef(name).index());
 }
 
-void Draw::setBufferTexture(
-        const std::string & name,
-        const Buffer & buffer
-    )
+void Draw::setBufferTexture(const std::string & name, const Buffer & buffer)
 {
     bufferTexture(name).setBuffer(buffer);
 }
 
 void Draw::setBufferTextureRange(
-    const std::string & name,
-    const Buffer & buffer,
-    u32 begin,
-    u32 count
-)
+    const std::string & name, const Buffer & buffer, u32 begin, u32 count)
 {
     bufferTexture(name).setBufferRange(buffer, begin, count);
 }
@@ -247,17 +244,19 @@ BufferTextureBinding Draw::bufferTexture(const std::string & name)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    return BufferTextureBinding(m_impl, m_impl->program->interface.bufferTextureRef(name).index());
+    return BufferTextureBinding(
+        m_impl, m_impl->program->interface.bufferTextureRef(name).index());
 }
 
 void Draw::render() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
 
-    DELIBERATION_GPU_SCOPE(m_impl->name.empty() ? "<Unnamed Draw>" : m_impl->name);
+    DELIBERATION_GPU_SCOPE(
+        m_impl->name.empty() ? "<Unnamed Draw>" : m_impl->name);
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
-    auto activeTextureIndex = 0;
+    auto   activeTextureIndex = 0;
 
     if (m_impl->glVertexArray == 0) build();
 
@@ -469,7 +468,8 @@ void Draw::render() const
     }
 
     // Setup RenderTarget / Framebuffer
-    m_impl->framebufferBinding.framebuffer().m_impl->bind(m_impl->framebufferBinding.drawBuffersGL());
+    m_impl->framebufferBinding.framebuffer().m_impl->bind(
+        m_impl->framebufferBinding.drawBuffersGL());
 
     // Set uniforms
     {
@@ -581,11 +581,14 @@ void Draw::render() const
     {
         for (u32 b = 0; b < m_impl->bufferTextures.size(); b++)
         {
-            const auto texture = m_impl->bufferTextures[b];
-            const auto & interface = m_impl->program->interface.bufferTextures()[b];
+            const auto   texture = m_impl->bufferTextures[b];
+            const auto & interface =
+                m_impl->program->interface.bufferTextures()[b];
             auto & binding = m_impl->bufferTextureBindings[b];
 
-            Assert(binding.buffer.isInitialized(), "Buffer not set for BufferTexture '" + interface.name() + "'");
+            Assert(
+                binding.buffer.isInitialized(),
+                "Buffer not set for BufferTexture '" + interface.name() + "'");
 
             glStateManager.setActiveTexture(activeTextureIndex);
             glStateManager.bindTexture(gl::GL_TEXTURE_BUFFER, texture);
@@ -595,21 +598,25 @@ void Draw::render() const
             {
                 if (binding.ranged)
                 {
-                    m_impl->drawContext.m_glStateManager.bindTexture(gl::GL_TEXTURE_BUFFER, texture);
+                    m_impl->drawContext.m_glStateManager.bindTexture(
+                        gl::GL_TEXTURE_BUFFER, texture);
 
-                    gl::glTexBufferRange(gl::GL_TEXTURE_BUFFER,
-                                         binding.internalFormat,
-                                         binding.buffer.m_impl->glName,
-                                         binding.begin * binding.buffer.layout().stride(),
-                                         binding.count * binding.buffer.layout().stride());
+                    gl::glTexBufferRange(
+                        gl::GL_TEXTURE_BUFFER,
+                        binding.internalFormat,
+                        binding.buffer.m_impl->glName,
+                        binding.begin * binding.buffer.layout().stride(),
+                        binding.count * binding.buffer.layout().stride());
                 }
                 else
                 {
-                    m_impl->drawContext.m_glStateManager.bindTexture(gl::GL_TEXTURE_BUFFER, texture);
+                    m_impl->drawContext.m_glStateManager.bindTexture(
+                        gl::GL_TEXTURE_BUFFER, texture);
 
-                    gl::glTexBuffer(gl::GL_TEXTURE_BUFFER,
-                                    binding.internalFormat,
-                                    binding.buffer.m_impl->glName);
+                    gl::glTexBuffer(
+                        gl::GL_TEXTURE_BUFFER,
+                        binding.internalFormat,
+                        binding.buffer.m_impl->glName);
                 }
 
                 binding.dirty = false;

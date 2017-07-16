@@ -8,10 +8,10 @@
 
 #include <Deliberation/ImGui/ImGuiSystem.h>
 
+#include <Deliberation/Draw/Util/RangedGpuScope.h>
 #include <Deliberation/Scene/Debug/DebugSurfaceOverlayRenderer.h>
 #include <Deliberation/Scene/Pipeline/RenderNode.h>
 #include <Deliberation/Scene/Pipeline/Renderer.h>
-#include <Deliberation/Draw/Util/RangedGpuScope.h>
 
 namespace deliberation
 {
@@ -46,17 +46,24 @@ void RenderManager::render()
             {{PixelFormat_RGB_32_F, "Diffuse"},
              {PixelFormat_RGB_32_F, "Position"},
              {PixelFormat_RGB_32_F, "Normal"}},
-            {{PixelFormat_Depth_24_UN}}, "GBuffer");
+            {{PixelFormat_Depth_24_UN}},
+            "GBuffer");
 
         m_gbuffer = m_drawContext.createFramebuffer(gbufferDesc);
         m_gbuffer.clear().setColor(
             "Position",
             glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
 
-        FramebufferDesc hdrBufferDesc(w, h, {{PixelFormat_RGB_32_F, "Hdr"}}, {{m_gbuffer.depthTargetRef()}}, "HDR");
+        FramebufferDesc hdrBufferDesc(
+            w,
+            h,
+            {{PixelFormat_RGB_32_F, "Hdr"}},
+            {{m_gbuffer.depthTargetRef()}},
+            "HDR");
         m_hdrBuffer = m_drawContext.createFramebuffer(hdrBufferDesc);
 
-        FramebufferDesc ssaoBufferDesc(w, h, {{PixelFormat_R_32_F, "Ssao"}}, {}, "SSAO");
+        FramebufferDesc ssaoBufferDesc(
+            w, h, {{PixelFormat_R_32_F, "Ssao"}}, {}, "SSAO");
         m_ssaoBuffer = m_drawContext.createFramebuffer(ssaoBufferDesc);
 
         m_renderNodesByPhase.clear();
@@ -84,7 +91,8 @@ void RenderManager::render()
 
         if (!nodesInPhase.empty())
         {
-            RangedGpuScope gpuScope1("Phase - " + RenderPhaseToString((RenderPhase)pair.first));
+            RangedGpuScope gpuScope1(
+                "Phase - " + RenderPhaseToString((RenderPhase)pair.first));
 
             for (auto & node : pair.second)
             {

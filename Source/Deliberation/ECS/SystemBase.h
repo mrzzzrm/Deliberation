@@ -14,7 +14,7 @@ class World;
 
 class SystemBase
 {
-  public:
+public:
     SystemBase(World & world, const ComponentFilter & filter);
 
     World &                 world();
@@ -41,13 +41,17 @@ class SystemBase
 
     virtual void renderImGui() const {}
 
-  protected:
+protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
 
     virtual void onEntityGameUpdate(Entity & entity, float seconds) {}
-    virtual void onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep);
-    virtual void onEntityPostPhysicsUpdate(Entity & entity, float physicsTimestep) {}
+    virtual void
+    onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep);
+    virtual void
+    onEntityPostPhysicsUpdate(Entity & entity, float physicsTimestep)
+    {
+    }
     virtual void onFrameBegin();
     virtual void onGameUpdate(float seconds) {}
     virtual void onFrameUpdate(float seconds) {}
@@ -62,12 +66,12 @@ protected:
         bool     active;
     };
 
-  protected:
-    World &                                     m_world;
-    SparseVector<EntityEntry>                   m_entities;
+protected:
+    World &                   m_world;
+    SparseVector<EntityEntry> m_entities;
 
-  private:
-    ComponentFilter                             m_filter;
-    std::unordered_map<EntityId, std::size_t>   m_entityIndexByID;
+private:
+    ComponentFilter                           m_filter;
+    std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
 };
 };

@@ -5,7 +5,7 @@
 
 class Camera2D final
 {
-  public:
+public:
     Camera2D();
     Camera2D(float scale, const glm::vec2 & center, float aspectRatio);
 
@@ -26,7 +26,7 @@ class Camera2D final
     virtual const glm::mat4 & viewProjection() const;
     virtual const glm::mat4 & viewProjectionInverted() const;
 
-  private:
+private:
     float     m_scale;
     glm::vec2 m_center;
     float     m_aspectRatio;

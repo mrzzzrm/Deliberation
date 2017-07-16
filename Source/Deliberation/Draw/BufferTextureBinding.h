@@ -8,7 +8,6 @@
 
 namespace deliberation
 {
-
 class Buffer;
 class BufferTextureBindingImpl;
 class DrawImpl;
@@ -17,10 +16,10 @@ class BufferTextureBinding final
 {
 public:
     BufferTextureBinding() = default;
-    BufferTextureBinding(const std::weak_ptr<DrawImpl> drawImpl,
-                         u32 index):
-        m_drawImpl(drawImpl), m_index(index)
-    {}
+    BufferTextureBinding(const std::weak_ptr<DrawImpl> drawImpl, u32 index)
+        : m_drawImpl(drawImpl), m_index(index)
+    {
+    }
 
     void setBuffer(const Buffer & buffer);
     void setBufferRange(const Buffer & buffer, u32 begin, u32 count);
@@ -30,7 +29,6 @@ private:
 
 private:
     std::weak_ptr<DrawImpl> m_drawImpl;
-    u32 m_index = 0;
+    u32                     m_index = 0;
 };
-
 }

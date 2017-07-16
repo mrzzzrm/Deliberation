@@ -6,7 +6,7 @@ namespace deliberation
 {
 class Viewport final
 {
-  public:
+public:
     Viewport();
     Viewport(
         unsigned int x,
@@ -29,7 +29,7 @@ class Viewport final
 
     std::string toString() const;
 
-  private:
+private:
     unsigned int m_x;
     unsigned int m_y;
     unsigned int m_width;

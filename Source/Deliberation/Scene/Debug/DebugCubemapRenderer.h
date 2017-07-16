@@ -15,14 +15,14 @@ namespace deliberation
 {
 class DebugCubemapRenderer final
 {
-  public:
+public:
     enum class MeshType
     {
         Cube,
         Sphere
     };
 
-  public:
+public:
     DebugCubemapRenderer(
         DrawContext &    drawContext,
         const Camera3D & camera,
@@ -35,7 +35,7 @@ class DebugCubemapRenderer final
 
     void render();
 
-  private:
+private:
     const Camera3D & m_camera;
 
     Pose3D m_pose;

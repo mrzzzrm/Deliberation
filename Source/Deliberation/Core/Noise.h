@@ -4,8 +4,6 @@
 
 namespace deliberation
 {
-
 float IntegerNoise(i32 v);
 float CoherentNoise(float v);
-
 }

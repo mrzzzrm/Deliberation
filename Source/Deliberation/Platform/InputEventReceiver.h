@@ -13,7 +13,7 @@ namespace deliberation
 {
 class InputEventReceiver
 {
-  public:
+public:
     virtual ~InputEventReceiver() = default;
 
     virtual void onMouseMotion(MouseMotionEvent & event){};

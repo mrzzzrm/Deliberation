@@ -11,14 +11,14 @@ namespace deliberation
 {
 class DataLayout final
 {
-  public:
+public:
     template<typename T>
     static DataLayout fromStructOrClass(
         const std::vector<detail::NamedDataMemberOf<T>> & members);
 
     static DataLayout concatenate(const std::vector<DataLayout> & layouts);
 
-  public:
+public:
     DataLayout();
     DataLayout(
         const std::string & name, const Type & type, size_t arraySize = 1);
@@ -44,7 +44,7 @@ class DataLayout final
 
     bool operator==(const DataLayout & rhs) const;
 
-  private:
+private:
     std::vector<DataLayoutField> m_fields;
     size_t                       m_stride = 0u;
 };

@@ -8,10 +8,10 @@ class Sphere;
 
 class Ray3D final
 {
-  public:
+public:
     static Ray3D fromTo(const glm::vec3 & from, const glm::vec3 & to);
 
-  public:
+public:
     Ray3D(const glm::vec3 & origin, const glm::vec3 & direction);
 
     const glm::vec3 & origin() const;
@@ -27,7 +27,7 @@ class Ray3D final
 
     glm::vec3 at(float s) const;
 
-  protected:
+protected:
     glm::vec3 m_origin;
     glm::vec3 m_direction;
 };

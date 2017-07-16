@@ -11,7 +11,7 @@ namespace deliberation
 {
 class MouseButtonEvent final : public InputEvent
 {
-  public:
+public:
     MouseButtonEvent(MouseButton button, const glm::vec2 & mousePosition)
         : m_button(button), m_mousePosition(mousePosition)
     {
@@ -20,7 +20,7 @@ class MouseButtonEvent final : public InputEvent
     MouseButton       button() const { return m_button; }
     const glm::vec2 & mousePosition() const { return m_mousePosition; }
 
-  private:
+private:
     MouseButton m_button;
     glm::vec2   m_mousePosition;
 };

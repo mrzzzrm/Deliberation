@@ -16,7 +16,7 @@ class Framebuffer;
 
 class Clear final
 {
-  public:
+public:
     Clear() = default;
     Clear(const std::shared_ptr<ClearImpl> & impl);
 
@@ -35,11 +35,11 @@ class Clear final
 
     void render();
 
-  private:
+private:
     friend class DrawContext;
     friend class ClearExecution;
 
-  private:
+private:
     std::shared_ptr<ClearImpl> m_impl;
 };
 }

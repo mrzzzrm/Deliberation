@@ -21,19 +21,20 @@ class ImGuiSystem : public std::enable_shared_from_this<ImGuiSystem>,
                     public System<ImGuiSystem>,
                     public InputLayer
 {
-  public:
+public:
     ImGuiSystem(World & world);
 
     void removeView(const std::string & name);
     bool showView(const std::string & name);
 
-    void addControlItem(const std::string & name, const std::function<void()> & fn);
+    void
+         addControlItem(const std::string & name, const std::function<void()> & fn);
     void removeControlItem(const std::string & name);
 
     void onCreated() override { m_input.addLayer(shared_from_this()); }
     void onRemoved() override { m_input.removeLayer(shared_from_this()); }
 
-  protected:
+protected:
     void onFrameBegin() override;
 
     void onMouseButtonPressed(MouseButtonEvent & event) override;
@@ -41,13 +42,13 @@ class ImGuiSystem : public std::enable_shared_from_this<ImGuiSystem>,
     void onMouseWheel(MouseWheelEvent & event) override;
     void onMouseMotion(MouseMotionEvent & event) override;
 
-  private:
+private:
     Input & m_input;
 
     bool  m_wantsCaptureMouse = false;
     float m_mouseWheel = 0;
 
-    std::unordered_map<std::string, bool>                   m_viewToggles;
-    std::unordered_map<std::string, std::function<void()>>  m_controlItems;
+    std::unordered_map<std::string, bool>                  m_viewToggles;
+    std::unordered_map<std::string, std::function<void()>> m_controlItems;
 };
 }

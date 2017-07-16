@@ -14,16 +14,14 @@
 
 namespace deliberation
 {
-
 class DebugGeometryNode;
 
-class DebugGeometryRenderer:
-    public SingleNodeRenderer
+class DebugGeometryRenderer : public SingleNodeRenderer
 {
-  public:
+public:
     static constexpr float ARROW_CONE_HEIGHT = 0.2f;
 
-  public:
+public:
     struct BuildIns
     {
         /**
@@ -58,7 +56,7 @@ class DebugGeometryRenderer:
         Buffer pointVertexBuffer;
     };
 
-  public:
+public:
     DebugGeometryRenderer(RenderManager & renderManager);
 
     const BuildIns & buildIns() const { return m_buildIns; }
@@ -68,7 +66,7 @@ class DebugGeometryRenderer:
 
     void render() override;
 
-  private:
+private:
     BuildIns                                        m_buildIns;
     std::vector<std::shared_ptr<DebugGeometryNode>> m_nodes;
 };

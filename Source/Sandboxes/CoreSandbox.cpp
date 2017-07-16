@@ -10,7 +10,6 @@
 
 using namespace deliberation;
 
-
 int main(int argc, char * argv[])
 {
     Transform3D transform3D;

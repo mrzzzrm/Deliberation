@@ -13,7 +13,7 @@ class DrawContext;
 
 class ProgramImpl final
 {
-  public:
+public:
     ProgramImpl(
         DrawContext & drawContext, const std::vector<std::string> & paths);
 

@@ -8,16 +8,16 @@ namespace deliberation
 {
 class CuboidMesh final
 {
-  public:
+public:
     static std::vector<glm::vec3> positions(const glm::vec3 & size);
     static std::vector<u32>       indices();
 
-  public:
+public:
     CuboidMesh(const glm::vec3 & size);
 
     Mesh generate() const;
 
-  private:
+private:
     glm::vec3 m_size;
 };
 }

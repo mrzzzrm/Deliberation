@@ -12,7 +12,7 @@ namespace deliberation
 {
 class SurfaceDownloadImpl
 {
-  public:
+public:
     SurfaceDownloadImpl(const Surface & surface);
 
     bool isDone() const;

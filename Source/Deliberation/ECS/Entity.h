@@ -18,7 +18,7 @@ class World;
 
 class Entity final
 {
-  public:
+public:
     Entity(World & world, EntityId id);
     Entity();
 
@@ -53,20 +53,20 @@ class Entity final
     bool operator==(const Entity & rhs) const;
     bool operator!=(const Entity & rhs) const;
 
-  private:
+private:
     friend class World;
     friend class SystemBase;
 
-  private:
+private:
     EntityData & data() const;
 
-    bool                  hasComponent(TypeID::value_t c) const;
-    ComponentBase &       component(TypeID::value_t c) const;
+    bool            hasComponent(TypeID::value_t c) const;
+    ComponentBase & component(TypeID::value_t c) const;
     void
          addComponent(TypeID::value_t c, std::shared_ptr<ComponentBase> component);
     void scheduleComponentRemoval(TypeID::value_t c);
 
-  private:
+private:
     World *  m_world;
     EntityId m_id;
 };

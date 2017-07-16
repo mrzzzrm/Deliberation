@@ -8,11 +8,11 @@ namespace deliberation
 template<typename T>
 class RingBuffer final
 {
-  public:
+public:
     template<typename QualifiedRingBufferType, typename QualifiedT>
     class IteratorT final
     {
-      public:
+    public:
         IteratorT(QualifiedRingBufferType & buffer, std::size_t index);
 
         template<typename OtherIteratorT>
@@ -23,7 +23,7 @@ class RingBuffer final
         IteratorT    operator++(int);
         bool         operator!=(const IteratorT & other);
 
-      private:
+    private:
         QualifiedRingBufferType & m_buffer;
         std::size_t               m_index;
     };
@@ -31,7 +31,7 @@ class RingBuffer final
     typedef IteratorT<RingBuffer, T>             Iterator;
     typedef IteratorT<const RingBuffer, const T> CIterator;
 
-  public:
+public:
     RingBuffer();
     RingBuffer(std::size_t capacity);
 
@@ -59,11 +59,11 @@ class RingBuffer final
 
     std::string toString() const;
 
-  private:
+private:
     template<typename _T, typename _K>
     friend class IteratorT;
 
-  private:
+private:
     std::vector<T> m_vec;
     std::size_t    m_begin;
     std::size_t    m_size;

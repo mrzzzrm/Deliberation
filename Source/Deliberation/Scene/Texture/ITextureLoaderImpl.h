@@ -6,7 +6,7 @@ namespace deliberation
 {
 class ITextureLoaderImpl
 {
-  public:
+public:
     virtual ~ITextureLoaderImpl();
 
     virtual TextureBinary load() = 0;

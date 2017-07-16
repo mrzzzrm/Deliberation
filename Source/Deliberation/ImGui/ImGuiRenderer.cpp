@@ -27,8 +27,8 @@ void ImGuiRenderer::onSetupRender()
      * Setup draw
      */
     auto vertexLayout = DataLayout();
-    vertexLayout.addField(DataLayoutField{
-        "Position", Type_Vec2, offsetof(ImDrawVert, pos)});
+    vertexLayout.addField(
+        DataLayoutField{"Position", Type_Vec2, offsetof(ImDrawVert, pos)});
     vertexLayout.addField(
         DataLayoutField{"UV", Type_Vec2, offsetof(ImDrawVert, uv)});
     vertexLayout.addField(

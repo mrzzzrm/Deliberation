@@ -58,7 +58,8 @@ std::string DeliberationDataPath(const std::string path)
     return prefixPath() + "/Deliberation2/" + path;
 }
 
-std::vector<std::string> DeliberationShaderPaths(const std::vector<std::string> & names)
+std::vector<std::string>
+DeliberationShaderPaths(const std::vector<std::string> & names)
 {
     std::vector<std::string> result;
     result.reserve(names.size());

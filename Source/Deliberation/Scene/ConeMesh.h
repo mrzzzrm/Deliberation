@@ -8,12 +8,12 @@ namespace deliberation
 {
 class ConeMesh final
 {
-  public:
+public:
     ConeMesh(float radius, float height, uint numSegments = 8);
 
     Mesh generate() const;
 
-  private:
+private:
     uint  m_numSegments;
     float m_radius;
     float m_height;

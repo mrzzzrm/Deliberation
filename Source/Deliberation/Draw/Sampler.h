@@ -15,7 +15,7 @@ class Texture;
 
 class Sampler final
 {
-  public:
+public:
     Sampler() = default;
 
     void setTexture(const Texture & texture);
@@ -28,15 +28,15 @@ class Sampler final
     void setMinFilter(TextureFilter minFilter);
     void setMagFilter(TextureFilter magFilter);
 
-  private:
+private:
     friend class Draw;
 
-  private:
+private:
     Sampler(const std::shared_ptr<SamplerImpl> & impl);
 
     void setWrap(u32 index, TextureWrap wrap);
 
-  private:
+private:
     std::shared_ptr<SamplerImpl> m_impl;
 };
 }

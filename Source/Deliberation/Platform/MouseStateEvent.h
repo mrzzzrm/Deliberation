@@ -12,19 +12,19 @@ namespace deliberation
 class MouseStateEvent : public InputEvent
 {
 public:
-    MouseStateEvent(
-        u32 buttons,
-        const glm::vec2 & mousePosition)
-        : m_buttons(buttons)
-        , m_mousePosition(mousePosition)
+    MouseStateEvent(u32 buttons, const glm::vec2 & mousePosition)
+        : m_buttons(buttons), m_mousePosition(mousePosition)
     {
     }
 
-    bool button(MouseButton button) const { return m_buttons & (1 << (i32)button); }
+    bool button(MouseButton button) const
+    {
+        return m_buttons & (1 << (i32)button);
+    }
     const glm::vec2 & mousePosition() const { return m_mousePosition; }
 
 private:
-    u32         m_buttons;
-    glm::vec2   m_mousePosition;
+    u32       m_buttons;
+    glm::vec2 m_mousePosition;
 };
 }

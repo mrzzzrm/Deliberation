@@ -17,7 +17,7 @@ class ITextureLoaderImpl;
 
 class TextureLoader final
 {
-  public:
+public:
     // Single face
     TextureLoader(SDL_Surface * surface);
     TextureLoader(const std::string & path);
@@ -34,7 +34,7 @@ class TextureLoader final
 
     TextureBinary load();
 
-  private:
+private:
     std::unique_ptr<ITextureLoaderImpl> m_impl;
 };
 }

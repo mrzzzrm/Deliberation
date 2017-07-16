@@ -8,13 +8,13 @@ namespace deliberation
 {
 class TextureLoaderPixelDataImpl : public ITextureLoaderImpl
 {
-  public:
+public:
     TextureLoaderPixelDataImpl(
         const Blob & blob, u32 width, u32 height, PixelFormat format);
 
     TextureBinary load() override;
 
-  private:
+private:
     const Blob & m_blob;
     u32          m_width;
     u32          m_height;

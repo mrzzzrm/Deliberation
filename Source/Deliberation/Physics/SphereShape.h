@@ -8,7 +8,7 @@ namespace deliberation
 {
 class SphereShape : public CollisionShape
 {
-  public:
+public:
     SphereShape(float radius);
 
     float radius() const;
@@ -17,7 +17,7 @@ class SphereShape : public CollisionShape
     virtual AABB      bounds(const Transform3D & transform) const override;
     virtual glm::mat3 localInertia() const override;
 
-  private:
+private:
     float m_radius;
 };
 }

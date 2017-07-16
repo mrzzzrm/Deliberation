@@ -9,7 +9,7 @@ namespace deliberation
 {
 class SingleNodeRenderer : public Renderer
 {
-  public:
+public:
     SingleNodeRenderer(
         RenderManager &     renderManager,
         RenderPhase         renderPhase,
@@ -22,13 +22,13 @@ class SingleNodeRenderer : public Renderer
     {
         class SingleRenderNode : public RenderNode
         {
-          public:
+        public:
             SingleRenderNode(SingleNodeRenderer & renderer)
                 : RenderNode(renderer.renderManager()), m_renderer(renderer)
             {
             }
 
-            void render() override { m_renderer.render(); }
+            void        render() override { m_renderer.render(); }
             std::string name() const override { return m_renderer.name(); }
 
             SingleNodeRenderer & m_renderer;
@@ -41,10 +41,10 @@ class SingleNodeRenderer : public Renderer
 
     virtual void render() = 0;
 
-  protected:
+protected:
     virtual void onSetupRender(){};
 
-  private:
+private:
     RenderPhase m_renderPhase;
 };
 }

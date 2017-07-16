@@ -11,11 +11,11 @@ namespace deliberation
 {
 class TextureBinary final
 {
-  public:
+public:
     static TextureBinary
     emptyTexture2D(unsigned int width, unsigned int height, PixelFormat format);
 
-  public:
+public:
     TextureBinary();
     TextureBinary(const SurfaceBinary & binary);
     TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces);
@@ -27,7 +27,7 @@ class TextureBinary final
     PixelFormat           format() const;
     const SurfaceBinary & surface(unsigned int face) const;
 
-  private:
+private:
     unsigned int               m_width;
     unsigned int               m_height;
     TextureType                m_type;

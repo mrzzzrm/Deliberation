@@ -14,7 +14,7 @@ enum class MeshCompilerPrimitive
 
 class MeshCompiler final
 {
-  public:
+public:
     struct Compilation
     {
         Compilation(
@@ -26,7 +26,7 @@ class MeshCompiler final
         LayoutedBlob indices;
     };
 
-  public:
+public:
     MeshCompiler();
 
     Compilation compile(
@@ -34,7 +34,7 @@ class MeshCompiler final
         MeshCompilerPrimitive primitive =
             MeshCompilerPrimitive::Triangles) const;
 
-  private:
+private:
     Compilation compileTriangles(const Mesh & mesh) const;
     Compilation compileLines(const Mesh & mesh) const;
 };

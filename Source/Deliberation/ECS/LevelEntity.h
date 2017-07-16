@@ -8,12 +8,10 @@
 
 namespace deliberation
 {
-
 struct LevelEntity
 {
-    std::string                         lid;
-    Entity                              entity;
-    std::shared_ptr<EntityPrototype>    entityPrototype;
+    std::string                      lid;
+    Entity                           entity;
+    std::shared_ptr<EntityPrototype> entityPrototype;
 };
-
 }

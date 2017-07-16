@@ -10,7 +10,7 @@ class Camera3D;
 
 class CameraDolly3D
 {
-  public:
+public:
     CameraDolly3D(Camera3D & camera);
 
     float          linearAcceleration() const;
@@ -26,7 +26,7 @@ class CameraDolly3D
         const glm::quat & orientation,
         float             seconds);
 
-  private:
+private:
     Camera3D & m_camera;
     float      m_linearAcceleration = 1750.0f;
     float      m_angularAcceleration = glm::pi<float>() * 10;

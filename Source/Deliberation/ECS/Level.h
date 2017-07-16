@@ -8,13 +8,14 @@
 
 namespace deliberation
 {
-
 class World;
 
 class Level
 {
 public:
-    Level(const std::shared_ptr<PrototypeManager> & prototypeManager, const std::string & path);
+    Level(
+        const std::shared_ptr<PrototypeManager> & prototypeManager,
+        const std::string &                       path);
     virtual ~Level() = default;
 
     std::shared_ptr<LevelEntity> getEntityByLid(const std::string & lid);
@@ -24,12 +25,10 @@ public:
     void reload();
 
 protected:
-    World &                             m_world;
-    std::shared_ptr<PrototypeManager>   m_prototypeManager;
-    std::string                         m_path;
+    World &                           m_world;
+    std::shared_ptr<PrototypeManager> m_prototypeManager;
+    std::string                       m_path;
     std::unordered_map<std::string, std::shared_ptr<LevelEntity>>
-                                        m_levelEntityByLid;
-
+        m_levelEntityByLid;
 };
-
 }

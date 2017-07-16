@@ -16,7 +16,7 @@ class LayoutedBlob;
 
 class Buffer final
 {
-  public:
+public:
     Buffer() = default;
     Buffer(const std::shared_ptr<BufferImpl> & impl);
 
@@ -38,7 +38,7 @@ class Buffer final
 
     std::string toString() const;
 
-  private:
+private:
     friend class BufferTextureBinding;
     friend class BufferUploadExecution;
     friend class DrawContext;
@@ -46,7 +46,7 @@ class Buffer final
     friend class GLVertexAttributeBinder;
     friend class UniformBufferHandle;
 
-  private:
+private:
     std::shared_ptr<BufferImpl> m_impl;
 };
 }

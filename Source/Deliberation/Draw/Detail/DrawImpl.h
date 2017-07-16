@@ -11,10 +11,10 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 
-#include <Deliberation/Draw/Detail/UniformImpl.h>
-#include <Deliberation/Draw/Detail/SamplerImpl.h>
-#include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/Buffer.h>
+#include <Deliberation/Draw/Detail/SamplerImpl.h>
+#include <Deliberation/Draw/Detail/UniformImpl.h>
+#include <Deliberation/Draw/Detail/VertexAttributeBinding.h>
 #include <Deliberation/Draw/DrawState.h>
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Draw/FramebufferBinding.h>
@@ -31,7 +31,7 @@ class ProgramImpl;
 
 class DrawImpl final : public std::enable_shared_from_this<DrawImpl>
 {
-  public:
+public:
     struct UniformBinding
     {
         size_t count = 0;
@@ -40,15 +40,15 @@ class DrawImpl final : public std::enable_shared_from_this<DrawImpl>
 
     struct BufferTextureBinding
     {
-        bool dirty = true;
-        Buffer buffer;
-        bool ranged = false;
-        u32 begin = 0;
-        u32 count = 0;
+        bool       dirty = true;
+        Buffer     buffer;
+        bool       ranged = false;
+        u32        begin = 0;
+        u32        count = 0;
         gl::GLenum internalFormat = gl::GL_NONE;
     };
 
-  public:
+public:
     DrawImpl(DrawContext & drawContext, const Program & program);
     ~DrawImpl();
 
@@ -61,7 +61,7 @@ class DrawImpl final : public std::enable_shared_from_this<DrawImpl>
     BufferBinding                indexBufferBinding;
     bool                         indexBufferBindingDirty = true;
 
-    std::vector<gl::GLuint> bufferTextures;
+    std::vector<gl::GLuint>           bufferTextures;
     std::vector<BufferTextureBinding> bufferTextureBindings;
 
     /**

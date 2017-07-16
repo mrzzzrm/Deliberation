@@ -8,7 +8,7 @@ namespace deliberation
 {
 class Rect3D final
 {
-  public:
+public:
     Rect3D(
         const glm::vec3 & origin,
         const glm::vec3 & right,
@@ -25,7 +25,7 @@ class Rect3D final
 
     Plane plane() const;
 
-  private:
+private:
     glm::vec3 m_origin;
     glm::vec3 m_right;
     glm::vec3 m_up;

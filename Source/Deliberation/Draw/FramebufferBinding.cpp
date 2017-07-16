@@ -6,15 +6,14 @@
 
 namespace deliberation
 {
-
-FramebufferBinding::FramebufferBinding(const std::vector<ProgramInterfaceFragmentOutput> & m_fragmentOutputs,
-                                       Framebuffer & framebuffer,
-                                       const FramebufferMappings & mappings):
-    m_fragmentOutputs(&m_fragmentOutputs),
-    m_framebuffer(framebuffer),
-    m_mappings(mappings)
+FramebufferBinding::FramebufferBinding(
+    const std::vector<ProgramInterfaceFragmentOutput> & m_fragmentOutputs,
+    Framebuffer &                                       framebuffer,
+    const FramebufferMappings &                         mappings)
+    : m_fragmentOutputs(&m_fragmentOutputs)
+    , m_framebuffer(framebuffer)
+    , m_mappings(mappings)
 {
-
 }
 
 void FramebufferBinding::setFramebuffer(Framebuffer & framebuffer)
@@ -71,7 +70,8 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                 m_fragmentOutputs->size() == colorTargets.size(),
                 "Framebuffer/m_fragmentOutputs mismatch");
 
-            std::vector<gl::GLenum> bufs(m_fragmentOutputs->size(), gl::GL_NONE);
+            std::vector<gl::GLenum> bufs(
+                m_fragmentOutputs->size(), gl::GL_NONE);
             for (size_t o = 0; o < m_fragmentOutputs->size(); o++)
             {
                 auto & fragmentOutput = (*m_fragmentOutputs)[o];
@@ -87,33 +87,38 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                                fragmentOutput.name();
                     });
 
-                if (iter != m_mappings.end()) mappedTargetName = "o_" + iter->second;
+                if (iter != m_mappings.end())
+                    mappedTargetName = "o_" + iter->second;
 
                 for (size_t t = 0; t < colorTargets.size(); t++)
                 {
                     auto &     colorTarget = colorTargets[t];
                     const auto colorTargetName = "o_" + colorTarget.name;
 
-                    // If no mapping exist, mappedTargetName will be empty and never
-                    // match
+                    // If no mapping exist, mappedTargetName will be empty and
+                    // never match
                     if (colorTargetName == mappedTargetName ||
                         "o_" + colorTarget.name == fragmentOutput.name())
                     {
                         /**
-                         * This check is not correct: It is indeed logical to draw from RGBA to RGB, when, e.g.,
-                         * blending
+                         * This check is not correct: It is indeed logical to
+                         * draw from RGBA to RGB, when, e.g., blending
                          */
-//                        Assert(
-//                            colorTarget.surface.format().fragmentOutputType() ==
-//                            fragmentOutput.type(),
-//                            "Fragment output " + fragmentOutput.name() + "(" +
-//                            fragmentOutput.type().name() +
-//                            ") and RenderTarget (" +
-//                            colorTarget.surface.format().toString() + " = " +
-//                            colorTarget.surface.format()
-//                                .fragmentOutputType()
-//                                .name() +
-//                            ") are incompatible");
+                        //                        Assert(
+                        //                            colorTarget.surface.format().fragmentOutputType()
+                        //                            == fragmentOutput.type(),
+                        //                            "Fragment output " +
+                        //                            fragmentOutput.name() +
+                        //                            "(" +
+                        //                            fragmentOutput.type().name()
+                        //                            +
+                        //                            ") and RenderTarget (" +
+                        //                            colorTarget.surface.format().toString()
+                        //                            + " = " +
+                        //                            colorTarget.surface.format()
+                        //                                .fragmentOutputType()
+                        //                                .name() +
+                        //                            ") are incompatible");
 
                         bufs[fragmentOutput.location()] =
                             (gl::GLenum)((u32)gl::GL_COLOR_ATTACHMENT0 + t);
@@ -124,11 +129,11 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                 Assert(
                     bufs[fragmentOutput.location()] != gl::GL_NONE,
                     "No matching target in Framebuffer for fragment output '" +
-                    fragmentOutput.name() + "'");
+                        fragmentOutput.name() + "'");
             }
             m_drawBuffers = std::move(bufs);
         }
-        
+
         m_drawBuffersDirty = false;
     }
 

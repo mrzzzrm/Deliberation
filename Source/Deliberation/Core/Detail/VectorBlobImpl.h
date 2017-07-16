@@ -11,7 +11,7 @@ namespace detail
     template<typename T>
     class VectorBlobImpl final : public IBlobImpl
     {
-      public:
+    public:
         VectorBlobImpl(std::size_t size);
         VectorBlobImpl(std::vector<T> && value);
         VectorBlobImpl(const std::vector<T> & value);
@@ -22,7 +22,7 @@ namespace detail
         virtual void                       resize(std::size_t size) override;
         virtual void                       reserve(std::size_t size) override;
 
-      private:
+    private:
         std::vector<T> m_value;
     };
 }

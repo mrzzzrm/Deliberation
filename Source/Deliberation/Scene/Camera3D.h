@@ -12,7 +12,7 @@ namespace deliberation
 {
 class Camera3D final
 {
-  public:
+public:
     Camera3D();
 
     const glm::vec3 & position() const;
@@ -41,10 +41,10 @@ class Camera3D final
 
     std::string toString() const;
 
-  private:
+private:
     glm::vec2 zPlaneSize(float z) const;
 
-  private:
+private:
     Pose3D            m_pose;
     float             m_zNear;
     float             m_zFar;

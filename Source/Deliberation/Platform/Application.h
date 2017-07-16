@@ -17,7 +17,7 @@ namespace deliberation
 {
 class Application : public InputEventReceiver
 {
-  public:
+public:
     Application(const std::string & name, const std::string & prefixPath = ".");
     virtual ~Application();
 
@@ -36,7 +36,7 @@ class Application : public InputEventReceiver
 
     void quit(int returnCode = 0);
 
-  protected:
+protected:
     virtual void onStartup();
     virtual void onShutdown();
     virtual void onFrame(float seconds);
@@ -48,7 +48,7 @@ private:
     void init();
     void handleWindowEvent(const SDL_Event & event);
 
-  private:
+private:
     std::string m_name;
     std::string m_prefixPath;
     bool        m_running = false;

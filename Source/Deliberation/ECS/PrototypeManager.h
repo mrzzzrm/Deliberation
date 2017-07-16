@@ -2,8 +2,8 @@
 
 #include <functional>
 #include <memory>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 #include <Deliberation/Core/FileModificationPoll.h>
 
@@ -12,7 +12,6 @@
 
 namespace deliberation
 {
-
 class ComponentPrototypeBase;
 class World;
 
@@ -24,19 +23,28 @@ public:
 
     World & world() const { return m_world; }
 
-    const std::unordered_map<std::string, std::shared_ptr<EntityPrototype>> & entityPrototypeByKey() const { return m_entityPrototypeByKey; };
+    const std::unordered_map<std::string, std::shared_ptr<EntityPrototype>> &
+    entityPrototypeByKey() const
+    {
+        return m_entityPrototypeByKey;
+    };
 
-    template<typename T, typename ... Args>
+    template<typename T, typename... Args>
     void registerComponentPrototype(const std::string & name, Args &&... args);
 
     void reloadList();
 
-    const std::shared_ptr<EntityPrototype> & getOrCreateEntityPrototype(const std::string & key);
+    const std::shared_ptr<EntityPrototype> &
+                                            getOrCreateEntityPrototype(const std::string & key);
     std::shared_ptr<ComponentPrototypeBase> getOrAddComponentPrototype(
-        const std::shared_ptr<EntityPrototype> & entityPrototype, const std::string & componentPrototypeName);
+        const std::shared_ptr<EntityPrototype> & entityPrototype,
+        const std::string &                      componentPrototypeName);
 
-    Entity createEntity(const std::string & prototypeKey, const std::string & entityName = {});
-    Entity createEntity(const std::vector<std::string> & prototypeKeys, const std::string & entityName = {});
+    Entity createEntity(
+        const std::string & prototypeKey, const std::string & entityName = {});
+    Entity createEntity(
+        const std::vector<std::string> & prototypeKeys,
+        const std::string &              entityName = {});
 
     void updateEntities();
 
@@ -44,22 +52,21 @@ private:
     Json mergeJson(const Json & a, const Json & b);
 
 protected:
-    World &                                 m_world;
+    World & m_world;
 
 private:
-    std::unordered_map<std::string,
-        std::shared_ptr<EntityPrototype>>   m_entityPrototypeByKey;
-    std::vector<std::shared_ptr<EntityPrototype>>
-                                            m_entityPrototypesInOrder;
-    std::unordered_map<std::string,
+    std::unordered_map<std::string, std::shared_ptr<EntityPrototype>>
+                                                  m_entityPrototypeByKey;
+    std::vector<std::shared_ptr<EntityPrototype>> m_entityPrototypesInOrder;
+    std::unordered_map<
+        std::string,
         std::function<std::shared_ptr<ComponentPrototypeBase>()>>
-                                            m_componentPrototypeFactoryByName;
+        m_componentPrototypeFactoryByName;
 
-    FileModificationPoll                    m_listPoll;
+    FileModificationPoll m_listPoll;
     std::unordered_map<std::string, FileModificationPoll>
-                                            m_entityPrototypeFilePollsByPath;
+        m_entityPrototypeFilePollsByPath;
 };
-
 }
 
 #include <Deliberation/ECS/PrototypeManager.inl>

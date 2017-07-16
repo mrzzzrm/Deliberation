@@ -28,7 +28,7 @@ namespace detail
 
 class DrawContext final
 {
-  public:
+public:
     DrawContext(
         unsigned int backbufferWidth = 640u,
         unsigned int backbufferHeight = 480u);
@@ -63,7 +63,7 @@ class DrawContext final
 
     Query createQuery(QueryType type);
 
-  private:
+private:
     friend class Buffer;
     friend class BufferImpl;
     friend class BufferTextureBinding;
@@ -77,7 +77,7 @@ class DrawContext final
     friend class Texture;
     friend class TextureImpl;
 
-  private:
+private:
     Framebuffer    m_backbuffer;
     GLStateManager m_glStateManager;
 };

@@ -19,17 +19,17 @@
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Scene/Texture/TextureLoader.h>
 
-#include <Deliberation/ECS/World.h>
 #include <Deliberation/ECS/Systems/ApplicationSystem.h>
+#include <Deliberation/ECS/World.h>
 #include <Deliberation/ImGui/ImGuiSystem.h>
 
 #include <Deliberation/Platform/Application.h>
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
-#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
-#include <Deliberation/Scene/Debug/DebugGeometryNode.h>
 #include <Deliberation/Scene/Debug/DebugCubemapRenderer.h>
+#include <Deliberation/Scene/Debug/DebugGeometryNode.h>
+#include <Deliberation/Scene/Debug/DebugGeometryRenderer.h>
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
 #include <Deliberation/Scene/Debug/DebugPointLightSystem.h>
 #include <Deliberation/Scene/Debug/DebugTexture2dRenderer.h>
@@ -49,12 +49,12 @@ using namespace deliberation;
 
 class SceneSandbox : public Application
 {
-  public:
+public:
     SceneSandbox() : Application("SceneSandbox") {}
 
     virtual void onStartup() override
     {
-        //EnableGLErrorChecksAndLogging();
+        // EnableGLErrorChecksAndLogging();
 
         m_world.addSystem<ApplicationSystem>(*this);
         m_renderSystem = m_world.addSystem<RenderSystem>();
@@ -64,10 +64,10 @@ class SceneSandbox : public Application
         m_modelRenderer = renderManager.addRenderer<ModelRenderer>();
         m_ambientLightRenderer =
             renderManager.addRenderer<AmbientLightRenderer>();
-        m_pointLightRenderer =
-            renderManager.addRenderer<PointLightRenderer>();
+        m_pointLightRenderer = renderManager.addRenderer<PointLightRenderer>();
         m_ssaoRenderer = renderManager.addRenderer<SsaoRenderer>();
-        m_debugGeometryRenderer = renderManager.addRenderer<DebugGeometryRenderer>();
+        m_debugGeometryRenderer =
+            renderManager.addRenderer<DebugGeometryRenderer>();
         m_hdrRenderer = renderManager.addRenderer<HdrRenderer>();
         m_ground = renderManager.addRenderer<DebugGroundPlaneRenderer>();
         renderManager.addRenderer<BloomRenderer>();
@@ -176,8 +176,8 @@ class SceneSandbox : public Application
         m_navigator->onMouseMotion(event);
     }
 
-  private:
-    World                            m_world;
+private:
+    World m_world;
 
     Optional<DebugCameraNavigator3D> m_navigator;
     Optional<DebugCubemapRenderer>   m_cubemapRenderer;

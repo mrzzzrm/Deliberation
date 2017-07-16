@@ -10,7 +10,7 @@ namespace deliberation
 {
 class AmbientLightNode : public RenderNode
 {
-  public:
+public:
     AmbientLightNode(AmbientLightRenderer & renderer)
         : m_renderer(renderer), RenderNode(renderer.renderManager())
     {
@@ -27,12 +27,13 @@ class AmbientLightNode : public RenderNode
             m_renderer.renderManager().ssaoBuffer().colorTargetRef("Ssao"));
         m_effect.draw().sampler("Diffuse").setTexture(
             m_renderer.renderManager().gbuffer().colorTargetRef("Diffuse"));
-        m_effect.draw().state().setBlendState({BlendEquation::Add, BlendFactor::One, BlendFactor::One});
+        m_effect.draw().state().setBlendState(
+            {BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     }
 
     void render() override { m_effect.render(); }
 
-  private:
+private:
     AmbientLightRenderer & m_renderer;
     ScreenSpaceEffect      m_effect;
 };

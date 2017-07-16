@@ -14,7 +14,7 @@ class DataLayoutField;
 template<typename T>
 class TypedBlobIteratorBase
 {
-  public:
+public:
     TypedBlobIteratorBase(T * ptr, size_t stride)
         : m_ptr((u8 *)ptr), m_stride(stride)
     {
@@ -22,10 +22,10 @@ class TypedBlobIteratorBase
 
     T get();
 
-  protected:
+protected:
     ~TypedBlobIteratorBase() = default;
 
-  protected:
+protected:
     u8 *   m_ptr;
     size_t m_stride;
 };
@@ -33,7 +33,7 @@ class TypedBlobIteratorBase
 template<typename T>
 class CTypedBlobIterator final : public TypedBlobIteratorBase<T>
 {
-  public:
+public:
     CTypedBlobIterator(T * ptr = nullptr, size_t stride = 0)
         : TypedBlobIteratorBase<T>(ptr, stride)
     {
@@ -43,7 +43,7 @@ class CTypedBlobIterator final : public TypedBlobIteratorBase<T>
 template<typename T>
 class TypedBlobIterator final : public TypedBlobIteratorBase<T>
 {
-  public:
+public:
     TypedBlobIterator(T * ptr = nullptr, size_t stride = 0)
         : TypedBlobIteratorBase<T>(ptr, stride)
     {
@@ -55,7 +55,7 @@ class TypedBlobIterator final : public TypedBlobIteratorBase<T>
 template<typename T>
 class CTypedBlobValueAccessor final
 {
-  public:
+public:
     CTypedBlobValueAccessor() = default;
     CTypedBlobValueAccessor(
         const Blob &            data,
@@ -66,14 +66,14 @@ class CTypedBlobValueAccessor final
 
     const T & operator[](size_t index) const;
 
-  private:
+private:
     Optional<BlobValueAccessorData<const Blob>> m_data;
 };
 
 template<typename T>
 class TypedBlobValueAccessor final
 {
-  public:
+public:
     TypedBlobValueAccessor() = default;
     TypedBlobValueAccessor(
         Blob & data, const DataLayout & layout, const DataLayoutField & field);
@@ -86,7 +86,7 @@ class TypedBlobValueAccessor final
     T &       operator[](size_t index);
     const T & operator[](size_t index) const;
 
-  private:
+private:
     Optional<BlobValueAccessorData<Blob>> m_data;
 };
 }

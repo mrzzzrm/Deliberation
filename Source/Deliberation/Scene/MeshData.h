@@ -8,7 +8,7 @@ namespace deliberation
 {
 class MeshData
 {
-  public:
+public:
     MeshData() = default;
     MeshData(
         LayoutedBlob &&      vertices,
@@ -22,7 +22,7 @@ class MeshData
     LayoutedBlob takeVertices();
     LayoutedBlob takeIndices();
 
-  private:
+private:
     LayoutedBlob         m_vertices;
     LayoutedBlob         m_indices;
     std::vector<Texture> m_textures;

@@ -16,10 +16,11 @@ namespace deliberation
 constexpr float DebugGeometryRenderer::ARROW_CONE_HEIGHT;
 
 DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::PreOverlay, "DebugGeometryRenderer")
+    : SingleNodeRenderer(
+          renderManager, RenderPhase::PreOverlay, "DebugGeometryRenderer")
 {
     auto & drawContext = renderManager.drawContext();
-    
+
     /**
      * Load programs
      */
@@ -116,7 +117,8 @@ std::shared_ptr<DebugGeometryNode> DebugGeometryRenderer::addNode()
     return node;
 }
 
-void DebugGeometryRenderer::removeNode(const std::shared_ptr<DebugGeometryNode> & node)
+void DebugGeometryRenderer::removeNode(
+    const std::shared_ptr<DebugGeometryNode> & node)
 {
     auto iter = std::find(m_nodes.begin(), m_nodes.end(), node);
     Assert(iter != m_nodes.end(), "");
@@ -131,5 +133,4 @@ void DebugGeometryRenderer::render()
         node->render(m_renderManager.mainCamera());
     }
 }
-
 }

@@ -8,14 +8,14 @@
 
 namespace deliberation
 {
-
 template<typename T>
 class EventListener
 {
 public:
-    EventListener(const std::shared_ptr<EventDomain> & events):
-        m_events(events)
-    {}
+    EventListener(const std::shared_ptr<EventDomain> & events)
+        : m_events(events)
+    {
+    }
 
     template<typename EventType>
     void subscribeEvent()
@@ -23,13 +23,12 @@ public:
         auto events = m_events.lock();
         Assert(static_cast<bool>(events), "");
 
-        m_eventListenerProxies.emplace_back(events->template subscribe<EventType>(*(T*)this));
+        m_eventListenerProxies.emplace_back(
+            events->template subscribe<EventType>(*(T *)this));
     }
 
 private:
-    std::weak_ptr<EventDomain>  m_events;
-    std::vector<std::shared_ptr<EventListenerProxy>>
-                                m_eventListenerProxies;
+    std::weak_ptr<EventDomain>                       m_events;
+    std::vector<std::shared_ptr<EventListenerProxy>> m_eventListenerProxies;
 };
-
 }

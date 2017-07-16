@@ -6,11 +6,11 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include <Deliberation/Core/Math/AABB.h>
+#include <Deliberation/Core/Math/Pose3D.h>
 #include <Deliberation/Core/Math/Ray2D.h>
 #include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/Math/Sphere.h>
 #include <Deliberation/Core/Math/Transform3D.h>
-#include <Deliberation/Core/Math/Pose3D.h>
 
 namespace deliberation
 {

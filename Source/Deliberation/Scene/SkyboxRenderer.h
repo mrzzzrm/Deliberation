@@ -17,14 +17,14 @@ class RenderManager;
 
 class SkyboxRenderer : public SingleNodeRenderer
 {
-  public:
+public:
     SkyboxRenderer(RenderManager & renderManager, const Texture & cubemap);
 
     void render() override;
 
-  private:
-    Draw m_draw;
-    bool m_drawDirty = true;
+private:
+    Draw    m_draw;
+    bool    m_drawDirty = true;
     Program m_program;
     Texture m_cubemap;
 };

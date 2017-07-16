@@ -35,7 +35,7 @@ enum class SamplerType : unsigned int
 
 class ProgramInterfaceSampler final
 {
-  public:
+public:
     ProgramInterfaceSampler(
         const std::string & name,
         SamplerType         type,
@@ -55,7 +55,7 @@ class ProgramInterfaceSampler final
     // GL specific stuff
     gl::GLint location() const;
 
-  private:
+private:
     std::string m_name;
     SamplerType m_type;
     Type        m_valueType;

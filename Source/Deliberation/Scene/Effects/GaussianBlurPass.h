@@ -7,16 +7,13 @@
 
 namespace deliberation
 {
-
 class GaussianBlur;
 
 class GaussianBlurPass
 {
 public:
     GaussianBlurPass(
-        GaussianBlur & gaussianBlur,
-        Framebuffer & lFb,
-        Framebuffer & rFb);
+        GaussianBlur & gaussianBlur, Framebuffer & lFb, Framebuffer & rFb);
 
     u32 radius() const;
 
@@ -36,5 +33,4 @@ private:
     DataLayoutField m_weightsField;
     DataLayoutField m_numSamplesField;
 };
-
 }

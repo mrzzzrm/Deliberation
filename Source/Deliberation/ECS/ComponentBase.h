@@ -20,30 +20,30 @@ enum class ComponentPhase
 
 class ComponentBase
 {
-  public:
+public:
     virtual ~ComponentBase();
 
     virtual std::size_t index() const = 0;
     virtual std::string name() const = 0;
 
-    AbstractWorld *world() const { return m_world; }
-    size_t         entityIndex() const { return m_entityIndex; };
-    EntityId       entityId() const { return m_entityId; };
-    ComponentPhase phase() const { return m_phase; }
+    AbstractWorld * world() const { return m_world; }
+    size_t          entityIndex() const { return m_entityIndex; };
+    EntityId        entityId() const { return m_entityId; };
+    ComponentPhase  phase() const { return m_phase; }
 
     void setPhase(ComponentPhase phase) { m_phase = phase; }
 
     template<typename T>
     void publishEvent(const T & event);
 
-    virtual void onAttachedToEntity() {};
+    virtual void onAttachedToEntity(){};
 
     virtual void renderImGui() {}
 
-  protected:
+protected:
     friend class World;
 
-  protected:
+protected:
     AbstractWorld * m_world = nullptr;
     size_t          m_entityIndex = 0;
     EntityId        m_entityId = ECS_INVALID_ENTITY_ID;

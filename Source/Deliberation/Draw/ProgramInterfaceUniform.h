@@ -11,7 +11,7 @@ namespace deliberation
 {
 class ProgramInterfaceUniform final
 {
-  public:
+public:
     ProgramInterfaceUniform(
         const std::string & name, Type type, gl::GLint location, u32 arraySize);
 
@@ -26,7 +26,7 @@ class ProgramInterfaceUniform final
     bool operator==(const ProgramInterfaceUniform & other) const;
     bool operator!=(const ProgramInterfaceUniform & other) const;
 
-  private:
+private:
     std::string m_name;
     Type        m_type;
     gl::GLint   m_location;

@@ -9,15 +9,15 @@ namespace deliberation
 {
 class ImGuiRenderer : public SingleNodeRenderer
 {
-  public:
+public:
     ImGuiRenderer(RenderManager & renderManager);
 
     void render() override;
 
-  protected:
+protected:
     void onSetupRender() override;
 
-  private:
+private:
     Draw    m_draw;
     Buffer  m_vertexBuffer;
     Buffer  m_indexBuffer;

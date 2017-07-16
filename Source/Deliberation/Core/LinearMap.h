@@ -12,7 +12,7 @@ namespace deliberation
 template<typename Value>
 class LinearMap final
 {
-  public:
+public:
     struct Iterator
     {
         LinearMap<Value> &                        map;
@@ -37,7 +37,7 @@ class LinearMap final
         bool operator!=(const CIterator & other) const;
     };
 
-  public:
+public:
     LinearMap();
 
     bool contains(std::size_t key) const;
@@ -66,14 +66,14 @@ class LinearMap final
     template<typename... Args>
     std::pair<Iterator, bool> emplace(std::size_t key, Args &&... args);
 
-  private:
+private:
     friend struct Iterator;
     friend struct CIterator;
 
-  private:
+private:
     void ensureSize(std::size_t key);
 
-  private:
+private:
     /* Number of active keys */
     std::size_t m_size;
 

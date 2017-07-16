@@ -13,14 +13,14 @@ inline std::size_t LinearOctreeLevelBaseIndex(unsigned int level);
 template<typename NodeType>
 class LinearOctree final
 {
-  public:
+public:
     template<typename QualifiedNodeType, typename QualifiedTreeType>
     class IteratorT final
     {
-      public:
+    public:
         typedef QualifiedNodeType Node;
 
-      public:
+    public:
         IteratorT(QualifiedTreeType & tree, uint32_t index);
 
         template<typename OtherIteratorT>
@@ -44,7 +44,7 @@ class LinearOctree final
         void toNextSibling();
         void toParent();
 
-      private:
+    private:
         QualifiedTreeType & m_tree;
         uint32_t            m_index;
     };
@@ -52,7 +52,7 @@ class LinearOctree final
     typedef IteratorT<NodeType, LinearOctree>             Iterator;
     typedef IteratorT<const NodeType, const LinearOctree> CIterator;
 
-  public:
+public:
     LinearOctree(unsigned int depth = 0);
 
     unsigned int depth() const;
@@ -74,7 +74,7 @@ class LinearOctree final
 
     std::string toString() const;
 
-  private:
+private:
     unsigned int          m_depth;
     std::vector<NodeType> m_nodes;
 };

@@ -13,7 +13,7 @@ FramebufferDesc::FramebufferDesc(
     u32                                       height,
     const std::vector<RenderTargetDesc> &     colorTargetDescs,
     const boost::optional<RenderTargetDesc> & depthTargetDesc,
-    const std::string & name)
+    const std::string &                       name)
     : width(width)
     , height(height)
     , colorTargetDescs(colorTargetDescs)
@@ -26,8 +26,10 @@ FramebufferDesc::FramebufferDesc(
 
     for (const auto & colorTargetDesc : colorTargetDescs)
     {
-        Assert(colorTargetDesc.format.pixelType() == PixelType_Color,
-               "Color Target must be color type, is " + colorTargetDesc.format.toString());
+        Assert(
+            colorTargetDesc.format.pixelType() == PixelType_Color,
+            "Color Target must be color type, is " +
+                colorTargetDesc.format.toString());
         Assert(!colorTargetDesc.name.empty(), "Color Target must be named");
 
         if (colorTargetDesc.format == PixelFormat_None)
@@ -41,8 +43,10 @@ FramebufferDesc::FramebufferDesc(
 
     if (depthTargetDesc && depthTargetDesc->format == PixelFormat_None)
     {
-        Assert(depthTargetDesc->surface.format().pixelType() == PixelType_Depth,
-               "Depth target must be depth type, is " + depthTargetDesc->surface.format().toString());
+        Assert(
+            depthTargetDesc->surface.format().pixelType() == PixelType_Depth,
+            "Depth target must be depth type, is " +
+                depthTargetDesc->surface.format().toString());
         Assert(depthTargetDesc->name.empty(), "Depth target must not be named");
         Assert(
             depthTargetDesc->surface.width() == width &&

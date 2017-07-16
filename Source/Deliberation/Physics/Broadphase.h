@@ -17,7 +17,7 @@ class RigidBody;
 
 class Broadphase
 {
-  public:
+public:
     Broadphase(Narrowphase & narrowphase);
     virtual ~Broadphase();
 
@@ -33,7 +33,7 @@ class Broadphase
 
     virtual void checkProximities() = 0;
 
-  protected:
+protected:
     Narrowphase &                                  m_narrowphase;
     SparseVector<std::shared_ptr<BroadphaseProxy>> m_proxies;
 };

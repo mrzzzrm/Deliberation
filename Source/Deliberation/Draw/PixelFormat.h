@@ -147,11 +147,11 @@ namespace detail
 
 class PixelFormat final
 {
-  public:
+public:
     template<typename T>
     static constexpr PixelFormatEnum resolve();
 
-  public:
+public:
     PixelFormat();
     PixelFormat(PixelFormatEnum format);
 
@@ -161,7 +161,7 @@ class PixelFormat final
     unsigned int bytesPerPixel() const;
 
     PixelType pixelType() const;
-    bool numStencilBits() const;
+    bool      numStencilBits() const;
 
     Type fragmentOutputType() const;
 
@@ -180,7 +180,7 @@ class PixelFormat final
     gl::GLenum glSamplerValueType() const;
     gl::GLenum glInternalFormat() const;
 
-  private:
+private:
     const detail::PixelFormatDesc * m_desc;
 };
 }

@@ -9,7 +9,7 @@ namespace deliberation
 {
 class UniformImpl final
 {
-  public:
+public:
     UniformImpl(Type type, unsigned int location, unsigned int arraySize);
 
     Type         type;

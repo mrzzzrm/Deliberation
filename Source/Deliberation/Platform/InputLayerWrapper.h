@@ -7,7 +7,7 @@ namespace deliberation
 {
 class InputLayerWrapper : public InputLayer
 {
-  public:
+public:
     InputLayerWrapper(InputEventReceiver & receiver, i32 inputPriority)
         : InputLayer(inputPriority), m_receiver(receiver)
     {
@@ -42,7 +42,7 @@ class InputLayerWrapper : public InputLayer
         m_receiver.onKeyReleased(event);
     }
 
-  private:
+private:
     InputEventReceiver & m_receiver;
 };
 }

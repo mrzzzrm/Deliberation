@@ -11,14 +11,14 @@ class Pose3D;
 
 class Transform3D final
 {
-  public:
+public:
     static Transform3D         atPosition(const glm::vec3 & position);
     static Transform3D         atOrientation(const glm::quat & orientation);
     static Transform3D         withScale(float sclae);
     static const Transform3D & identity();
     static Transform3D         fromPose(const Pose3D & pose);
 
-  public:
+public:
     Transform3D();
 
     const glm::vec3 & position() const;
@@ -54,7 +54,7 @@ class Transform3D final
     bool operator==(const Transform3D & other) const;
     bool operator!=(const Transform3D & other) const;
 
-  protected:
+protected:
     glm::vec3 m_position;
     glm::quat m_orientation;
     glm::vec3 m_center;

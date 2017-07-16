@@ -22,7 +22,7 @@ void ContactDispatcher::registerContactType(int typeA, int typeB)
 
     class Creator : public ContactCreator
     {
-      public:
+    public:
         Creator(int typeL, int typeR) : ContactCreator(typeL, typeR) {}
 
         virtual std::unique_ptr<Contact>

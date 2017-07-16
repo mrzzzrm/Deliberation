@@ -18,7 +18,7 @@ class Contact;
 
 class Narrowphase final
 {
-  public:
+public:
     Narrowphase();
     ~Narrowphase();
 
@@ -41,7 +41,7 @@ class Narrowphase final
 
     void updateContacts();
 
-  private:
+private:
     ContactDispatcher                      m_contactDispatcher;
     SparseVector<std::unique_ptr<Contact>> m_contacts;
     DoubleDispatch<size_t>                 m_keysToContactIndex;

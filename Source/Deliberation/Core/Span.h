@@ -8,7 +8,7 @@ namespace deliberation
 template<typename T>
 class Span
 {
-  public:
+public:
     template<size_t N>
     Span(T (&values)[N]);
 
@@ -25,7 +25,7 @@ class Span
 
     T & operator[](size_t index) const;
 
-  private:
+private:
     T *    m_ptr;
     size_t m_size;
 };

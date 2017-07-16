@@ -5,20 +5,16 @@
 
 namespace deliberation
 {
-
 class ComponentPrototypeBase
 {
 public:
     virtual ~ComponentPrototypeBase() = default;
 
     const Json & json() const { return m_json; }
-    void setJson(const Json & json)
-    {
-        m_json = json;
-    }
+    void         setJson(const Json & json) { m_json = json; }
 
     const Json & newJson() const { return m_newJson; }
-    void setNewJson(const Json & newJson)
+    void         setNewJson(const Json & newJson)
     {
         if (m_newJson != newJson) m_jsonChangedFlag = true;
         m_newJson = newJson;
@@ -28,7 +24,7 @@ public:
     void setJsonChangedFlag(bool changed) { m_jsonChangedFlag = changed; }
 
     const std::string & name() const { return m_name; }
-    void setName(const std::string & name) { m_name = name; }
+    void                setName(const std::string & name) { m_name = name; }
 
     void updateEntity(Entity entity)
     {
@@ -46,5 +42,4 @@ protected:
     std::string m_name;
     bool        m_jsonChangedFlag = true;
 };
-
 }

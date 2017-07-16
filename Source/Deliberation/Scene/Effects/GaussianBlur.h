@@ -1,13 +1,12 @@
 #pragma once
 
-#include <Deliberation/Draw/Sampler.h>
 #include <Deliberation/Draw/Framebuffer.h>
+#include <Deliberation/Draw/Sampler.h>
 
 #include <Deliberation/Scene/ScreenSpaceEffect.h>
 
 namespace deliberation
 {
-
 class Surface;
 
 class GaussianBlur final
@@ -15,12 +14,13 @@ class GaussianBlur final
 public:
     GaussianBlur(DrawContext & drawContext);
 
-    DrawContext & drawContext() const { return m_blur.drawContext(); }
+    DrawContext &      drawContext() const { return m_blur.drawContext(); }
     const DataLayout & configBlockLayout() const { return m_configBlockLayout; }
-    u32 maxNumSamples() const { return m_maxNumSamples; }
+    u32                maxNumSamples() const { return m_maxNumSamples; }
 
     void setInput(const Surface & surface);
-    void setFramebuffer(Framebuffer & framebuffer, const FramebufferMappings & mappings = {});
+    void setFramebuffer(
+        Framebuffer & framebuffer, const FramebufferMappings & mappings = {});
     void setConfigBuffer(const Buffer & buffer);
 
     void renderHBlur();
@@ -33,7 +33,6 @@ private:
     u32                 m_maxNumSamples;
     UniformBufferHandle m_configBuffer;
 
-    DataLayout          m_configBlockLayout;
+    DataLayout m_configBlockLayout;
 };
-
 }

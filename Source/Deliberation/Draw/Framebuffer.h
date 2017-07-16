@@ -50,7 +50,7 @@ struct RenderTargetDesc final
 
 struct FramebufferDesc final
 {
-  public:
+public:
     FramebufferDesc() = default;
 
     FramebufferDesc(
@@ -58,7 +58,7 @@ struct FramebufferDesc final
         u32                                       height,
         const std::vector<RenderTargetDesc> &     colorTargetDescs,
         const boost::optional<RenderTargetDesc> & depthTargetDesc = {},
-        const std::string & name = "Unnamed");
+        const std::string &                       name = "Unnamed");
 
     u32                               width = 0;
     u32                               height = 0;
@@ -69,7 +69,7 @@ struct FramebufferDesc final
 
 class Framebuffer final
 {
-  public:
+public:
     Framebuffer() = default;
     Framebuffer(const std::shared_ptr<FramebufferImpl> & impl);
 
@@ -97,7 +97,7 @@ class Framebuffer final
 
     std::string toString() const;
 
-  private:
+private:
     friend class Clear;
     friend class Draw;
     friend class DrawContext;
@@ -106,7 +106,7 @@ class Framebuffer final
     friend class DrawImpl;
     friend class FramebufferBinding;
 
-  private:
+private:
     std::shared_ptr<FramebufferImpl> m_impl;
 };
 }
