@@ -1,20 +1,20 @@
 namespace deliberation
 {
-template<typename T>
+template<typename WrappedType, typename ComponentType>
 template<typename... Args>
-ComponentWrapper<T>::ComponentWrapper(Args &&... args)
+ComponentWrapper<WrappedType, ComponentType>::ComponentWrapper(Args &&... args)
     : m_value(std::forward<Args>(args)...)
 {
 }
 
-template<typename T>
-T & ComponentWrapper<T>::value()
+template<typename WrappedType, typename ComponentType>
+WrappedType & ComponentWrapper<WrappedType, ComponentType>::value()
 {
     return m_value;
 }
 
-template<typename T>
-const T & ComponentWrapper<T>::value() const
+template<typename WrappedType, typename ComponentType>
+const WrappedType & ComponentWrapper<WrappedType, ComponentType>::value() const
 {
     return m_value;
 }

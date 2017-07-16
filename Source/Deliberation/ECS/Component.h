@@ -15,6 +15,7 @@ class Component : public std::enable_shared_from_this<T>, public ComponentBase
 {
   public:
     static std::size_t indexStatic();
+    static constexpr const char * const COMPONENT_NAME = "Unnamed Component";
 
   public:
     Component();
@@ -26,5 +27,7 @@ class Component : public std::enable_shared_from_this<T>, public ComponentBase
     friend class World;
 };
 }
+
+#define DELIBERATION_COMPONENT_NAME(name) public: static constexpr const char * const COMPONENT_NAME = name;
 
 #include <Deliberation/ECS/Component.inl>

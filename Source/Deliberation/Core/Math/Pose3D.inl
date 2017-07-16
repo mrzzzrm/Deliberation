@@ -202,15 +202,6 @@ inline Pose3D Pose3D::interpolated(const Pose3D & other, float v) const
     return result;
 }
 
-inline std::string Pose3D::toString() const
-{
-    std::stringstream stream;
-    stream << "[Position: " << m_position << "; Orientation: " << m_orientation
-           << "; Center: " << m_center << "]";
-
-    return stream.str();
-}
-
 inline bool Pose3D::operator==(const Pose3D & other) const
 {
     return m_position == other.m_position &&

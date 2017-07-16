@@ -61,6 +61,8 @@ class World final : public AbstractWorld
     template<typename T>
     T & systemRef();
 
+    const LinearMap<std::shared_ptr<SystemBase>> systems() const { return m_systems; }
+
     /**
      * Internals, use with care
      */

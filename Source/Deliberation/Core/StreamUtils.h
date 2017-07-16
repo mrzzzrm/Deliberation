@@ -9,6 +9,8 @@
 #include <Deliberation/Core/Math/Ray2D.h>
 #include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/Math/Sphere.h>
+#include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Core/Math/Pose3D.h>
 
 namespace deliberation
 {
@@ -44,6 +46,12 @@ StreamType & operator<<(StreamType && os, const Ray2D & sphere);
 
 template<typename StreamType>
 StreamType & operator<<(StreamType && os, const AABB & aabb);
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Transform3D & transform);
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Pose3D & pose);
 
 // template<typename T>
 // std::string operator+(const std::string & s, const T & value);

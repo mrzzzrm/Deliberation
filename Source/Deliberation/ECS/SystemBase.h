@@ -39,6 +39,8 @@ class SystemBase
     virtual void onCreated() {}
     virtual void onRemoved() {}
 
+    virtual void renderImGui() const {}
+
   protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
@@ -60,10 +62,9 @@ protected:
         bool     active;
     };
 
-protected:
+  protected:
     World &                                     m_world;
     SparseVector<EntityEntry>                   m_entities;
-
 
   private:
     ComponentFilter                             m_filter;

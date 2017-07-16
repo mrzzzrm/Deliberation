@@ -262,6 +262,7 @@ set(sources
 	ECS/SystemBase.h
 	ECS/System.h
 	ECS/Systems/ApplicationSystem.h
+	ECS/Systems/PhysicsWorldSystem.cpp
 	ECS/Systems/PhysicsWorldSystem.h
 	ECS/Systems/SkyboxSystem.h
 	ECS/World.cpp

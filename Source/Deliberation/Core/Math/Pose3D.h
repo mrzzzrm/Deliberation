@@ -17,6 +17,7 @@ class Pose3D final
     inline static const Pose3D & identity();
 
     static Pose3D fromTransform(const Transform3D & transform);
+    static Pose3D fromTransformedPose(const Transform3D & transform, const Pose3D & pose);
 
   public:
     Pose3D();
@@ -53,8 +54,6 @@ class Pose3D final
     Pose3D    poseLocalToWorld(const Pose3D & local) const;
 
     Pose3D interpolated(const Pose3D & other, float v) const;
-
-    std::string toString() const;
 
     bool operator==(const Pose3D & other) const;
     bool operator!=(const Pose3D & other) const;

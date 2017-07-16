@@ -31,6 +31,6 @@ std::size_t Component<T>::index() const
 template<typename T>
 std::string Component<T>::name() const
 {
-    return typeid(T).name();
+    return T::COMPONENT_NAME;
 }
 }

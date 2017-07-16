@@ -27,6 +27,9 @@ class ImGuiSystem : public std::enable_shared_from_this<ImGuiSystem>,
     void removeView(const std::string & name);
     bool showView(const std::string & name);
 
+    void addControlItem(const std::string & name, const std::function<void()> & fn);
+    void removeControlItem(const std::string & name);
+
     void onCreated() override { m_input.addLayer(shared_from_this()); }
     void onRemoved() override { m_input.removeLayer(shared_from_this()); }
 
@@ -44,6 +47,7 @@ class ImGuiSystem : public std::enable_shared_from_this<ImGuiSystem>,
     bool  m_wantsCaptureMouse = false;
     float m_mouseWheel = 0;
 
-    std::unordered_map<std::string, bool> m_viewToggles;
+    std::unordered_map<std::string, bool>                   m_viewToggles;
+    std::unordered_map<std::string, std::function<void()>>  m_controlItems;
 };
 }

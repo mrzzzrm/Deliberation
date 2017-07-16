@@ -16,7 +16,7 @@ namespace deliberation
 constexpr float DebugGeometryRenderer::ARROW_CONE_HEIGHT;
 
 DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::Forward, "DebugGeometryRenderer")
+    : SingleNodeRenderer(renderManager, RenderPhase::PreOverlay, "DebugGeometryRenderer")
 {
     auto & drawContext = renderManager.drawContext();
     

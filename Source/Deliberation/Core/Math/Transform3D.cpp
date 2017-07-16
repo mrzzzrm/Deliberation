@@ -173,12 +173,12 @@ glm::vec3 Transform3D::pointWorldToLocal(const glm::vec3 & point) const
 
 glm::vec3 Transform3D::directionWorldToLocal(const glm::vec3 & dir) const
 {
-    return glm::inverse(m_orientation) * dir;
+    return (glm::inverse(m_orientation) * dir) / m_scale;
 }
 
 glm::vec3 Transform3D::directionLocalToWorld(const glm::vec3 & dir) const
 {
-    return m_orientation * dir;
+    return (m_orientation * dir) * m_scale;
 }
 
 Transform3D Transform3D::scaled(float scale) const
@@ -205,15 +205,6 @@ Transform3D Transform3D::interpolated(const Transform3D & other, float v) const
     result.setCenter(glm::mix(m_center, other.center(), v));
 
     return result;
-}
-
-std::string Transform3D::toString() const
-{
-    std::stringstream stream;
-    stream << "[Position: " << m_position << "; Orientation: " << m_orientation
-           << "; Center: " << m_center << "; Scale: " << m_scale << "]";
-
-    return stream.str();
 }
 
 bool Transform3D::operator==(const Transform3D & other) const

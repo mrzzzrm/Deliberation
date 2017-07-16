@@ -19,6 +19,7 @@ RenderManager::RenderManager(DrawContext & drawContext)
     : m_drawContext(drawContext)
 {
     m_backbufferClear = m_drawContext.createClear();
+    m_mainCamera.setPosition({0.0f, 0.0f, 100.0f});
 
     m_surfaceOverlayRenderer = addRenderer<DebugSurfaceOverlayRenderer>();
 }

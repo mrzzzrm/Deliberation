@@ -3,31 +3,26 @@
 #include <Deliberation/Core/Optional.h>
 
 #include <Deliberation/Scene/Debug/DebugGeometryNode.h>
+#include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
 
 namespace deliberation
 {
 class Camera3D;
-class DrawContext;
 class PhysicsWorld;
+class RenderSystem;
 
-class DebugPhysicsWorldRenderer final
+class DebugPhysicsWorldRenderer:
+    public SingleNodeRenderer
 {
   public:
     DebugPhysicsWorldRenderer(
-        DrawContext &        drawContext,
-        const PhysicsWorld & physicsWorld,
-        const Camera3D &     camera);
+        RenderManager & renderManager, RenderSystem & renderSystem, PhysicsWorld & phyicsWorld);
 
-    void render();
+    void render() override;
 
   private:
-    DrawContext &        m_drawContext;
-    const PhysicsWorld & m_physicsWorld;
-    const Camera3D &     m_camera;
-
-    Optional<DebugGeometryNode> m_contactNormalRenderer;
-    Optional<DebugGeometryNode> m_contactVelocityRenderer;
-    Optional<DebugGeometryNode> m_linearVelocityRenderer;
-    Optional<DebugGeometryNode> m_angularVelocityRenderer;
+    PhysicsWorld & m_physicsWorld;
+    std::shared_ptr<DebugGeometryNode> m_debugNode;
+    size_t m_numAllocatedBoxes = 0;
 };
 }

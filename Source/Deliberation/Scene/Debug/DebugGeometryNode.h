@@ -44,7 +44,7 @@ class DebugGeometryInstance
 
   protected:
     size_t                  m_index = 0;
-    DebugGeometryNode & m_renderer;
+    DebugGeometryNode &     m_renderer;
     bool                    m_visible = true;
     Transform3D             m_transform;
     mutable bool            m_transformDirty = true;
@@ -196,11 +196,13 @@ class DebugGeometryNode final
   public:
     DebugGeometryNode(DebugGeometryRenderer & manager);
 
+    const DrawState &       drawState() const { return m_drawState; }
     bool                   visible() const;
     DebugGeometryRenderer & manager() const;
     const Buffer &         globalsBuffer() const;
 
     void setVisible(bool visible);
+    void setDrawState(const DrawState & drawState);
 
     DebugBoxInstance & addBox(
         const glm::vec3 & halfExtent,
@@ -243,6 +245,7 @@ class DebugGeometryNode final
 
     Buffer       m_globalsBuffer;
     LayoutedBlob m_globals;
+    DrawState    m_drawState;
 
     bool m_visible = true;
 

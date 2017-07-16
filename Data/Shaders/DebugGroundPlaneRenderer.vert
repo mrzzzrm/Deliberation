@@ -21,7 +21,7 @@ void main()
 	f_Normal = (View * vec4(0.0f, 1.0f, 0.0f, 0.0f)).xyz;
 	f_PositionVS = positionVS.xyz;
 	f_PositionLocal = Position.xz * Size;
-	f_PositionNormalized = (Position.xz + 1) / 2;
+	f_PositionNormalized = Position.xz + 0.5f;
 	gl_Position = Projection * positionVS;
 }
 

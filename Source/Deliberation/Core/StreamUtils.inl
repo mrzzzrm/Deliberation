@@ -121,6 +121,21 @@ StreamType & operator<<(StreamType && os, const Sphere & s)
     return os;
 }
 
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Transform3D & t)
+{
+    os << "{" << t.position() << ", " << t.orientation() << ", " << t.center() << ", " << t.scale() << "}";
+    return os;
+}
+
+template<typename StreamType>
+StreamType & operator<<(StreamType && os, const Pose3D & p)
+{
+    os << "{" << p.position() << ", " << p.orientation() << ", " << p.center() << "}";
+    return os;
+}
+
+
 // template<typename T>
 // std::string operator+(const std::string & s, const T & value)
 //{

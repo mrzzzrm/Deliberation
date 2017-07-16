@@ -36,10 +36,10 @@ class DebugGroundPlaneNode : public RenderNode
 
         auto positions = vertices.field<glm::vec3>("Position");
 
-        positions[0] = {1.0f, 0.0f, 1.0f};
-        positions[1] = {1.0f, 0.0f, -1.0f};
-        positions[2] = {-1.0f, 0.0f, 1.0f};
-        positions[3] = {-1.0f, 0.0f, -1.0f};
+        positions[0] = {0.5f, 0.0f, 0.5f};
+        positions[1] = {0.5, 0.0f, -0.5f};
+        positions[2] = {-0.5f, 0.0f, 0.5f};
+        positions[3] = {-0.5f, 0.0f, -0.5f};
 
         m_draw.state().setCullState(CullState::disabled());
         m_draw.addVertices(vertices);

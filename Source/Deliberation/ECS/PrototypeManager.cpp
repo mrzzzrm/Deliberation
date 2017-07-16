@@ -101,10 +101,6 @@ void PrototypeManager::reloadList()
         }
         if (!iter->second.check()) continue;
 
-        /**
-         * TODO(me) Skip if file didn't change timestamps
-         */
-
         std::cout << "PrototypeManager: Loading EntityPrototype '" + prototypeName.get<std::string>() + "' from '"
                   << prototypePath << "'" << std::endl;
 
@@ -182,7 +178,8 @@ void PrototypeManager::updateEntities()
             {
                 auto componentPrototypeName = pair.key();
                 auto componentPrototype = getOrAddComponentPrototype(entityPrototype, componentPrototypeName);
-                componentPrototype->setNewJson(mergeJson(pair.value(), componentPrototype->newJson()));
+                // Patch existing Json!?
+                componentPrototype->setNewJson(pair.value());
             }
         }
     }

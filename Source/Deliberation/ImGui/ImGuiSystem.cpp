@@ -66,6 +66,20 @@ bool ImGuiSystem::showView(const std::string & name)
     return m_viewToggles[name];
 }
 
+void ImGuiSystem::addControlItem(const std::string & name, const std::function<void()> & fn)
+{
+    const auto iter = m_controlItems.find(name);
+    Assert(iter == m_controlItems.end(), "Already have " + name);
+    m_controlItems.emplace(name, fn);
+}
+
+void ImGuiSystem::removeControlItem(const std::string & name)
+{
+    const auto iter = m_controlItems.find(name);
+    Assert(iter != m_controlItems.end(), "Don't have " + name);
+    m_controlItems.erase(iter);
+}
+
 void ImGuiSystem::onFrameBegin()
 {
     auto & io = ImGui::GetIO();
@@ -129,6 +143,20 @@ void ImGuiSystem::onFrameBegin()
             }
             ImGui::EndMenu();
         }
+
+        if (m_controlItems.size() > 0)
+        {
+            if (ImGui::BeginMenu("Control")) {
+                for (auto & pair : m_controlItems)
+                {
+                    if (ImGui::Button(pair.first.c_str())) {
+                        pair.second();
+                    }
+                }
+                ImGui::EndMenu();
+            }
+        }
+
 
         ImGui::EndMainMenuBar();
     }

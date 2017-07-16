@@ -24,6 +24,8 @@ public:
 
     World & world() const { return m_world; }
 
+    const std::unordered_map<std::string, std::shared_ptr<EntityPrototype>> & entityPrototypeByKey() const { return m_entityPrototypeByKey; };
+
     template<typename T, typename ... Args>
     void registerComponentPrototype(const std::string & name, Args &&... args);
 

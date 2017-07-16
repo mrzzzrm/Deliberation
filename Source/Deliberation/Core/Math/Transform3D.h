@@ -51,8 +51,6 @@ class Transform3D final
     Transform3D worldTranslated(const glm::vec3 & delta) const;
     Transform3D interpolated(const Transform3D & other, float v) const;
 
-    std::string toString() const;
-
     bool operator==(const Transform3D & other) const;
     bool operator!=(const Transform3D & other) const;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Deliberation/ECS/System.h>
+
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
 
 namespace deliberation
