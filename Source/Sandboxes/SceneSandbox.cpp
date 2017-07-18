@@ -143,7 +143,7 @@ public:
     virtual void onFrame(float seconds) override
     {
         m_world.frameBegin();
-        m_world.update(seconds);
+        m_world.gameUpdate(seconds);
 
         m_secondsAccum += seconds;
 
