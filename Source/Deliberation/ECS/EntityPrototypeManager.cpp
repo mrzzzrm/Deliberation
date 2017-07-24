@@ -1,4 +1,4 @@
-#include <Deliberation/ECS/PrototypeManager.h>
+#include <Deliberation/ECS/EntityPrototypeManager.h>
 
 #include <fstream>
 #include <limits>
@@ -12,19 +12,19 @@
 
 namespace deliberation
 {
-PrototypeManager::PrototypeManager(World & world, const std::string & listPath)
+EntityPrototypeManager::EntityPrototypeManager(World & world, const std::string & listPath)
     : m_world(world), m_listPoll(listPath)
 {
 }
 
 const std::shared_ptr<EntityPrototype> &
-PrototypeManager::getOrCreateEntityPrototype(const std::string & key)
+EntityPrototypeManager::getOrCreateEntityPrototype(const std::string & key)
 {
     auto iter = m_entityPrototypeByKey.find(key);
 
     if (iter == m_entityPrototypeByKey.end())
     {
-        std::cout << "PrototypeManager: Registering EntityPrototype '" + key +
+        std::cout << "EntityPrototypeManager: Registering EntityPrototype '" + key +
                          "'"
                   << std::endl;
 
@@ -38,7 +38,7 @@ PrototypeManager::getOrCreateEntityPrototype(const std::string & key)
 }
 
 std::shared_ptr<ComponentPrototypeBase>
-PrototypeManager::getOrAddComponentPrototype(
+EntityPrototypeManager::getOrAddComponentPrototype(
     const std::shared_ptr<EntityPrototype> & entityPrototype,
     const std::string &                      componentPrototypeName)
 {
@@ -66,13 +66,11 @@ PrototypeManager::getOrAddComponentPrototype(
 
         return componentPrototype;
     }
-    else
-    {
-        return *iter;
-    }
+
+    return *iter;
 }
 
-void PrototypeManager::reloadList()
+void EntityPrototypeManager::reloadList()
 {
     if (m_listPoll.path().empty()) return;
 
@@ -117,7 +115,7 @@ void PrototypeManager::reloadList()
         }
         if (!iter->second.check()) continue;
 
-        std::cout << "PrototypeManager: Loading EntityPrototype '" +
+        std::cout << "EntityPrototypeManager: Loading EntityPrototype '" +
                          prototypeName.get<std::string>() + "' from '"
                   << prototypePath << "'" << std::endl;
 
@@ -133,17 +131,17 @@ void PrototypeManager::reloadList()
     }
 }
 
-Entity PrototypeManager::createEntity(
+Entity EntityPrototypeManager::createEntity(
     const std::string & prototypeKey, const std::string & entityName)
 {
     return createEntity(std::vector<std::string>{prototypeKey}, entityName);
 }
 
-Entity PrototypeManager::createEntity(
+Entity EntityPrototypeManager::createEntity(
     const std::vector<std::string> & prototypeKeys,
     const std::string &              entityName)
 {
-    std::cout << "PrototypeManager: Creating '" << entityName << "' from '";
+    std::cout << "EntityPrototypeManager: Creating '" << entityName << "' from '";
     for (const auto & prototypeKey : prototypeKeys)
         std::cout << prototypeKey << ",";
     std::cout << "'" << std::endl;
@@ -164,7 +162,7 @@ Entity PrototypeManager::createEntity(
     return entity;
 }
 
-void PrototypeManager::updateEntities()
+void EntityPrototypeManager::updateEntities()
 {
     /**
      * Update Derivate->Base relations and ComponentPrototype JSONs
@@ -333,7 +331,7 @@ void PrototypeManager::updateEntities()
     }
 }
 
-Json PrototypeManager::mergeJson(const Json & a, const Json & b)
+Json EntityPrototypeManager::mergeJson(const Json & a, const Json & b)
 {
     Json mergedJson = b;
 

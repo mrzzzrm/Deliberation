@@ -5,7 +5,7 @@
 #include <Deliberation/ECS/ComponentPrototype.h>
 #include <Deliberation/ECS/EntityPrototype.h>
 #include <Deliberation/ECS/Level.h>
-#include <Deliberation/ECS/PrototypeManager.h>
+#include <Deliberation/ECS/EntityPrototypeManager.h>
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Deliberation.h>
@@ -87,7 +87,7 @@ int main(int argc, char ** argv)
     World      world;
     const auto listPath =
         DeliberationDataPath("Data/Examples/PrototypeSandbox/list.json");
-    auto prototypeManager = std::make_shared<PrototypeManager>(world, listPath);
+    auto prototypeManager = std::make_shared<EntityPrototypeManager>(world, listPath);
 
     //    auto entityPrototype =
     //    prototypeManager->getOrCreateEntityPrototype("HumanBody");

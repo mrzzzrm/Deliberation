@@ -6,7 +6,10 @@
 namespace deliberation
 {
 template<typename T>
-class System : public SystemBase, public EventListener<T>
+class System :
+    public SystemBase,
+    public EventListener<T>,
+    public std::enable_shared_from_this<T>
 {
 public:
     typedef System<T> Base;

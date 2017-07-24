@@ -15,11 +15,11 @@ namespace deliberation
 class ComponentPrototypeBase;
 class World;
 
-class PrototypeManager
+class EntityPrototypeManager
 {
 public:
-    PrototypeManager(World & world, const std::string & listPath);
-    virtual ~PrototypeManager() = default;
+    EntityPrototypeManager(World & world, const std::string & listPath);
+    virtual ~EntityPrototypeManager() = default;
 
     World & world() const { return m_world; }
 
@@ -69,4 +69,4 @@ private:
 };
 }
 
-#include <Deliberation/ECS/PrototypeManager.inl>
+#include <Deliberation/ECS/EntityPrototypeManager.inl>

@@ -3,12 +3,13 @@
 namespace deliberation
 {
 template<typename T, typename... Args>
-void PrototypeManager::registerComponentPrototype(
+void EntityPrototypeManager::registerComponentPrototype(
     const std::string & name, Args &&... args)
 {
-    m_componentPrototypeFactoryByName.emplace(name, [name, args...]() {
+    m_componentPrototypeFactoryByName.emplace(name, [this, name, args...]() {
         auto prototype = std::make_shared<T>(args...);
         prototype->setName(name);
+        prototype->setWorld(m_world);
         return prototype;
     });
 }

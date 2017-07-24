@@ -17,4 +17,6 @@ std::string StringRErased(const std::string & str, const std::string & testStr);
 
 std::string
 StringJoin(const std::vector<std::string> & strs, const std::string & sep);
+
+std::string & StringReplace(std::string & str, const std::string & original, const std::string & substitute);
 }

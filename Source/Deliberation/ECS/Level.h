@@ -4,7 +4,7 @@
 #include <string>
 
 #include <Deliberation/ECS/LevelEntity.h>
-#include <Deliberation/ECS/PrototypeManager.h>
+#include <Deliberation/ECS/EntityPrototypeManager.h>
 
 namespace deliberation
 {
@@ -14,7 +14,7 @@ class Level
 {
 public:
     Level(
-        const std::shared_ptr<PrototypeManager> & prototypeManager,
+        const std::shared_ptr<EntityPrototypeManager> & prototypeManager,
         const std::string &                       path);
     virtual ~Level() = default;
 
@@ -26,7 +26,7 @@ public:
 
 protected:
     World &                           m_world;
-    std::shared_ptr<PrototypeManager> m_prototypeManager;
+    std::shared_ptr<EntityPrototypeManager> m_prototypeManager;
     std::string                       m_path;
     std::unordered_map<std::string, std::shared_ptr<LevelEntity>>
         m_levelEntityByLid;

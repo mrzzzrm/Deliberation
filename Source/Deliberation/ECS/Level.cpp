@@ -9,7 +9,7 @@
 namespace deliberation
 {
 Level::Level(
-    const std::shared_ptr<PrototypeManager> & prototypeManager,
+    const std::shared_ptr<EntityPrototypeManager> & prototypeManager,
     const std::string &                       path)
     : m_world(prototypeManager->world())
     , m_prototypeManager(prototypeManager)

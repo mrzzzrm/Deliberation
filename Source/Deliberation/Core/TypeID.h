@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <stdint.h>
 
 namespace deliberation
@@ -21,5 +22,6 @@ private:
     static value_t generate();
 };
 }
+
 
 #include <Deliberation/Core/TypeID.inl>

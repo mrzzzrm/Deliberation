@@ -89,23 +89,29 @@ void GLBindVertexAttribute(
     const ProgramInterfaceVertexAttribute & attribute,
     const void *                            data)
 {
-    const auto i = (gl::GLuint)attribute.glLocation();
+    const auto location = (gl::GLuint)attribute.glLocation();
 
     switch (attribute.type().id())
     {
-    case TYPE_I32: gl::glVertexAttribI1iv(i, (gl::GLint *)data); break;
-    case TYPE_U32: gl::glVertexAttribI1uiv(i, (gl::GLuint *)data); break;
-    case TYPE_FLOAT: gl::glVertexAttrib1fv(i, (gl::GLfloat *)data); break;
-    case TYPE_DOUBLE: gl::glVertexAttrib1dv(i, (gl::GLdouble *)data); break;
-    case TYPE_VEC2: gl::glVertexAttrib2fv(i, (gl::GLfloat *)data); break;
-    case TYPE_VEC3: gl::glVertexAttrib3fv(i, (gl::GLfloat *)data); break;
-    case TYPE_VEC4: gl::glVertexAttrib4fv(i, (gl::GLfloat *)data); break;
-    case TYPE_I32VEC2: gl::glVertexAttribI2iv(i, (gl::GLint *)data); break;
-    case TYPE_I32VEC3: gl::glVertexAttribI3iv(i, (gl::GLint *)data); break;
-    case TYPE_I32VEC4: gl::glVertexAttribI4iv(i, (gl::GLint *)data); break;
-    case TYPE_U32VEC2: gl::glVertexAttribI2uiv(i, (gl::GLuint *)data); break;
-    case TYPE_U32VEC3: gl::glVertexAttribI3uiv(i, (gl::GLuint *)data); break;
-    case TYPE_U32VEC4: gl::glVertexAttribI4uiv(i, (gl::GLuint *)data); break;
+    case TYPE_I32: gl::glVertexAttribI1iv(location, (gl::GLint *)data); break;
+    case TYPE_U32: gl::glVertexAttribI1uiv(location, (gl::GLuint *)data); break;
+    case TYPE_FLOAT: gl::glVertexAttrib1fv(location, (gl::GLfloat *)data); break;
+    case TYPE_DOUBLE: gl::glVertexAttrib1dv(location, (gl::GLdouble *)data); break;
+    case TYPE_VEC2: gl::glVertexAttrib2fv(location, (gl::GLfloat *)data); break;
+    case TYPE_VEC3: gl::glVertexAttrib3fv(location, (gl::GLfloat *)data); break;
+    case TYPE_VEC4: gl::glVertexAttrib4fv(location, (gl::GLfloat *)data); break;
+    case TYPE_I32VEC2: gl::glVertexAttribI2iv(location, (gl::GLint *)data); break;
+    case TYPE_I32VEC3: gl::glVertexAttribI3iv(location, (gl::GLint *)data); break;
+    case TYPE_I32VEC4: gl::glVertexAttribI4iv(location, (gl::GLint *)data); break;
+    case TYPE_U32VEC2: gl::glVertexAttribI2uiv(location, (gl::GLuint *)data); break;
+    case TYPE_U32VEC3: gl::glVertexAttribI3uiv(location, (gl::GLuint *)data); break;
+    case TYPE_U32VEC4: gl::glVertexAttribI4uiv(location, (gl::GLuint *)data); break;
+
+    case TYPE_MAT3:
+        gl::glVertexAttrib3fv(location + 0, &((gl::GLfloat*)data)[0]);
+        gl::glVertexAttrib3fv(location + 1, &((gl::GLfloat*)data)[3]);
+        gl::glVertexAttrib3fv(location + 2, &((gl::GLfloat*)data)[6]);
+        break;
 
     default: Fail("Vertex attribute type not (yet?) supported");
     }

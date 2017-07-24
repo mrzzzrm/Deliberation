@@ -256,8 +256,8 @@ set(sources
 	ECS/LevelEntity.h
 	ECS/Level.cpp
 	ECS/Level.h
-	ECS/PrototypeManager.cpp
-	ECS/PrototypeManager.h
+    ECS/EntityPrototypeManager.cpp
+    ECS/EntityPrototypeManager.h
 	ECS/SystemBase.cpp
 	ECS/SystemBase.h
 	ECS/System.h
@@ -329,6 +329,12 @@ set(sources
 	Platform/KeyMap.h
 	Platform/MouseButtonEvent.h
 	Platform/MouseButton.h
+
+	Resource/AbstractPrototype.cpp
+	Resource/AbstractPrototype.h
+	Resource/PrototypeManager.cpp
+	Resource/PrototypeManager.h
+	Resource/PrototypeManager.inl
 
 	Scene/Camera2D.cpp
 	Scene/Camera2D.h

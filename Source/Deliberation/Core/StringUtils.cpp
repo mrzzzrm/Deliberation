@@ -102,4 +102,12 @@ StringJoin(const std::vector<std::string> & strs, const std::string & sep)
 
     return result;
 }
+
+std::string & StringReplace(std::string & str, const std::string & original, const std::string & substitute)
+{
+    const auto first = str.find(original);
+    if (first == std::string::npos) return str;
+
+    return str.replace(first, original.size(), substitute);
+}
 }
