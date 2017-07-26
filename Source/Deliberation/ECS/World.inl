@@ -9,7 +9,7 @@ std::shared_ptr<T> World::system()
 {
     Assert((std::is_base_of<SystemBase, T>::value), "");
 
-    const auto index = System<T>::indexStatic();
+    const auto index = T::indexStatic();
 
     if (!m_systems.contains(index)) return {};
 

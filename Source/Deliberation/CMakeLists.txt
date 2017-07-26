@@ -256,6 +256,8 @@ set(sources
 	ECS/LevelEntity.h
 	ECS/Level.cpp
 	ECS/Level.h
+	ECS/LevelSystem.cpp
+	ECS/LevelSystem.h
     ECS/EntityPrototypeManager.cpp
     ECS/EntityPrototypeManager.h
 	ECS/SystemBase.cpp
