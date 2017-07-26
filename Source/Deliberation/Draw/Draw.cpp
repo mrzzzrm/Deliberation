@@ -29,8 +29,6 @@
 
 namespace deliberation
 {
-Draw::Draw() : m_impl(nullptr) {}
-
 const std::string & Draw::name() const
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
@@ -769,7 +767,7 @@ std::string Draw::toString() const
     return stream.str();
 }
 
-Draw::Draw(const std::shared_ptr<DrawImpl> & impl) : m_impl(impl) {}
+Draw::Draw(const std::shared_ptr<DrawImpl> & impl) : Base(impl) {}
 
 void Draw::build() const
 {

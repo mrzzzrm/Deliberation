@@ -6,6 +6,7 @@
 #include <Deliberation/Core/Blob.h>
 #include <Deliberation/Core/DataLayout.h>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
@@ -14,7 +15,8 @@ class BufferImpl;
 class DrawContext;
 class LayoutedBlob;
 
-class Buffer final
+class Buffer final:
+    public AbstractDrawObject<BufferImpl>
 {
 public:
     Buffer() = default;
@@ -45,8 +47,5 @@ private:
     friend class Draw;
     friend class GLVertexAttributeBinder;
     friend class UniformBufferHandle;
-
-private:
-    std::shared_ptr<BufferImpl> m_impl;
 };
 }

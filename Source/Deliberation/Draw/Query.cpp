@@ -6,10 +6,6 @@
 
 namespace deliberation
 {
-Query::Query() = default;
-
-Query::~Query() = default;
-
 int64_t Query::resultI() const
 {
     Assert(m_impl.get(), "Query is hollow");
@@ -59,5 +55,5 @@ void Query::end()
     return m_impl->end();
 }
 
-Query::Query(const std::shared_ptr<QueryImpl> & impl) : m_impl(impl) {}
+Query::Query(const std::shared_ptr<QueryImpl> & impl) : Base(impl) {}
 }

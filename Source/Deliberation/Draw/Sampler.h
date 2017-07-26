@@ -6,6 +6,7 @@
 
 #include <Deliberation/Core/IntTypes.h>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
@@ -13,7 +14,8 @@ namespace deliberation
 class SamplerImpl;
 class Texture;
 
-class Sampler final
+class Sampler final:
+    public AbstractDrawObject<SamplerImpl>
 {
 public:
     Sampler() = default;
@@ -35,8 +37,5 @@ private:
     Sampler(const std::shared_ptr<SamplerImpl> & impl);
 
     void setWrap(u32 index, TextureWrap wrap);
-
-private:
-    std::shared_ptr<SamplerImpl> m_impl;
 };
 }

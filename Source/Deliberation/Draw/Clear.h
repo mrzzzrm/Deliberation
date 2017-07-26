@@ -7,6 +7,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
+
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
@@ -14,7 +16,8 @@ namespace deliberation
 class ClearImpl;
 class Framebuffer;
 
-class Clear final
+class Clear final:
+    public AbstractDrawObject<ClearImpl>
 {
 public:
     Clear() = default;
@@ -38,8 +41,5 @@ public:
 private:
     friend class DrawContext;
     friend class ClearExecution;
-
-private:
-    std::shared_ptr<ClearImpl> m_impl;
 };
 }

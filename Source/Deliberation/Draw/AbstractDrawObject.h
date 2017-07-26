@@ -2,6 +2,13 @@
 
 #include <memory>
 
+/**
+ * All top level objects in Draw/ (i.e. Buffer, Draw, Texture)... function as copy-able wrappers around an impl, in
+ * order to avoid having to carry around std::shared_ptr<>s explicitly. Design decision back than...
+ *
+ * This base class provides a uniform interface for holding the impl and checking whether it is engaged.
+ * @tparam ImplType
+ */
 template<typename ImplType>
 class AbstractDrawObject
 {

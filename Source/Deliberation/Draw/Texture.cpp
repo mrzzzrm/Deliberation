@@ -12,9 +12,7 @@
 
 namespace deliberation
 {
-Texture::Texture() = default;
-
-Texture::Texture(const std::shared_ptr<TextureImpl> & impl) : m_impl(impl) {}
+Texture::Texture(const std::shared_ptr<TextureImpl> & impl) : Base(impl) {}
 
 Texture::Texture(const Surface & surface)
 {

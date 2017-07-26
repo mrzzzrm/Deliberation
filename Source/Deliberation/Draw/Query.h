@@ -5,17 +5,18 @@
 #include <memory>
 #include <stdint.h>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/Enum.h>
 
 namespace deliberation
 {
 class QueryImpl;
 
-class Query final
+class Query final:
+    public AbstractDrawObject<QueryImpl>
 {
 public:
-    Query();
-    ~Query();
+    Query() = default;
 
     int64_t  resultI() const;
     uint64_t resultU() const;
@@ -33,8 +34,5 @@ private:
 
 private:
     Query(const std::shared_ptr<QueryImpl> & impl);
-
-private:
-    std::shared_ptr<QueryImpl> m_impl;
 };
 }

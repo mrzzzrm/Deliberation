@@ -40,7 +40,7 @@ std::string Buffer::toString() const
            std::to_string(count());
 }
 
-Buffer::Buffer(const std::shared_ptr<BufferImpl> & impl) : m_impl(impl) {}
+Buffer::Buffer(const std::shared_ptr<BufferImpl> & impl) : Base(impl) {}
 
 void Buffer::upload(const Blob & data)
 {

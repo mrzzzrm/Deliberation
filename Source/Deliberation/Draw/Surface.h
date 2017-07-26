@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/SurfaceDownload.h>
 
 namespace deliberation
@@ -13,7 +14,8 @@ class SurfaceImpl;
 class Texture;
 class TextureImpl;
 
-class Surface final
+class Surface final:
+    public AbstractDrawObject<SurfaceImpl>
 {
 public:
     Surface() = default;
@@ -41,8 +43,5 @@ private:
     friend class FramebufferImpl;
     friend class TextureImpl;
     friend class Texture;
-
-private:
-    std::shared_ptr<SurfaceImpl> m_impl;
 };
 }

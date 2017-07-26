@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/SurfaceBinary.h>
 
 namespace deliberation
@@ -7,7 +8,8 @@ namespace deliberation
 class DrawContext;
 class SurfaceDownloadImpl;
 
-class SurfaceDownload final
+class SurfaceDownload final:
+    public AbstractDrawObject<SurfaceDownloadImpl>
 {
 public:
     SurfaceDownload();
@@ -24,8 +26,5 @@ private:
 
 private:
     SurfaceDownload(const std::shared_ptr<SurfaceDownloadImpl> & impl);
-
-private:
-    std::shared_ptr<SurfaceDownloadImpl> m_impl;
 };
 }

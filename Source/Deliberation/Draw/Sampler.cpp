@@ -86,7 +86,7 @@ void Sampler::setMagFilter(TextureFilter magFilter)
     m_impl->magFilter = magFilter;
 }
 
-Sampler::Sampler(const std::shared_ptr<SamplerImpl> & impl) : m_impl(impl) {}
+Sampler::Sampler(const std::shared_ptr<SamplerImpl> & impl) : Base(impl) {}
 
 void Sampler::setWrap(u32 index, TextureWrap wrap)
 {

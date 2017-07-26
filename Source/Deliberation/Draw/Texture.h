@@ -4,6 +4,7 @@
 
 #include <glbinding/gl/types.h>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/Enum.h>
 #include <Deliberation/Draw/PixelFormat.h>
 #include <Deliberation/Draw/Surface.h>
@@ -14,10 +15,11 @@ class TextureImpl;
 class TextureBinary;
 class Surface;
 
-class Texture final
+class Texture final:
+    public AbstractDrawObject<TextureImpl>
 {
 public:
-    Texture();
+    Texture() = default;
     Texture(const std::shared_ptr<TextureImpl> & impl);
     Texture(const Surface & surface);
 
@@ -41,8 +43,5 @@ private:
     friend class TextureUploadExecution;
     friend class Sampler;
     friend class Surface;
-
-private:
-    std::shared_ptr<TextureImpl> m_impl;
 };
 }

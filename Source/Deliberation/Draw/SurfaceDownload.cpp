@@ -28,7 +28,7 @@ const SurfaceBinary & SurfaceDownload::result() const
 
 SurfaceDownload::SurfaceDownload(
     const std::shared_ptr<SurfaceDownloadImpl> & impl)
-    : m_impl(impl)
+    : Base(impl)
 {
 }
 }

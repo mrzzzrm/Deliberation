@@ -7,6 +7,7 @@
 
 #include <Deliberation/Core/Optional.h>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/Clear.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -67,7 +68,8 @@ public:
     std::string                       name = "Unnamed";
 };
 
-class Framebuffer final
+class Framebuffer final:
+    public AbstractDrawObject<FramebufferImpl>
 {
 public:
     Framebuffer() = default;
@@ -105,8 +107,5 @@ private:
     friend class ClearImpl;
     friend class DrawImpl;
     friend class FramebufferBinding;
-
-private:
-    std::shared_ptr<FramebufferImpl> m_impl;
 };
 }

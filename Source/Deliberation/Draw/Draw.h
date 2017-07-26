@@ -7,6 +7,7 @@
 #include <Deliberation/Core/DataLayout.h>
 #include <Deliberation/Core/LayoutedBlob.h>
 
+#include <Deliberation/Draw/AbstractDrawObject.h>
 #include <Deliberation/Draw/BufferTextureBinding.h>
 #include <Deliberation/Draw/FramebufferBinding.h>
 #include <Deliberation/Draw/Program.h>
@@ -25,10 +26,11 @@ class DrawContext;
 class Framebuffer;
 class DrawState;
 
-class Draw final
+class Draw final:
+    public AbstractDrawObject<DrawImpl>
 {
 public:
-    Draw();
+    Draw() = default;
 
     const std::string & name() const;
 
@@ -64,8 +66,8 @@ public:
 
     /**
      * Shortcut for setFramebufferBinding(framebufferBinding(framebuffer, mapping))
-     * @param framebuffer 
-     * @param mappings 
+     * @param framebuffer
+     * @param mappings
      */
     void setFramebuffer(
         Framebuffer & framebuffer, const FramebufferMappings & mappings = {});
@@ -114,9 +116,6 @@ private:
         const ProgramInterfaceVertexAttribute & attribute, const void * data);
     void addVertexBuffer(
         const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor);
-
-private:
-    std::shared_ptr<DrawImpl> m_impl;
 };
 }
 

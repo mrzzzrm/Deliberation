@@ -56,7 +56,7 @@ FramebufferDesc::FramebufferDesc(
 }
 
 Framebuffer::Framebuffer(const std::shared_ptr<FramebufferImpl> & impl)
-    : m_impl(impl)
+    : Base(impl)
 {
 }
 

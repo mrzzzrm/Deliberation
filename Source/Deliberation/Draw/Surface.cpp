@@ -10,7 +10,7 @@
 
 namespace deliberation
 {
-Surface::Surface(const std::shared_ptr<SurfaceImpl> & impl) : m_impl(impl) {}
+Surface::Surface(const std::shared_ptr<SurfaceImpl> & impl) : Base(impl) {}
 
 DrawContext & Surface::drawContext() const
 {

@@ -11,7 +11,7 @@
 
 namespace deliberation
 {
-Clear::Clear(const std::shared_ptr<ClearImpl> & impl) : m_impl(impl) {}
+Clear::Clear(const std::shared_ptr<ClearImpl> & impl) : Base(impl) {}
 
 const Framebuffer & Clear::framebuffer() const
 {
