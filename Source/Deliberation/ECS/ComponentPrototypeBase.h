@@ -16,7 +16,7 @@ public:
     const Json & newJson() const { return m_newJson; }
     void         setNewJson(const Json & newJson)
     {
-        if (m_newJson != newJson) m_jsonChangedFlag = true;
+        m_jsonChangedFlag = m_json != newJson;
         m_newJson = newJson;
     }
 
@@ -28,6 +28,9 @@ public:
 
     void updateEntity(Entity entity)
     {
+        if (!hasComponent(entity)) std::cout << "ComponentPrototype: '" << name() << ": Adding to " << entity.name() << std::endl;
+        else if (m_jsonChangedFlag) std::cout << "ComponentPrototype: '" << name() << ": JSON changed" << std::endl;
+
         if (!hasComponent(entity) || m_jsonChangedFlag) onUpdateEntity(entity);
     }
 

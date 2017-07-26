@@ -39,7 +39,7 @@ HdrRenderer::HdrRenderer(RenderManager & renderManager)
 {
 }
 
-void HdrRenderer::registerRenderNodes()
+void HdrRenderer::onRegisterRenderNodes()
 {
     m_renderManager.registerRenderNode(
         std::make_shared<HdrNode>(*this), RenderPhase::Hdr);

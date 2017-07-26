@@ -195,13 +195,13 @@ void Draw::setFramebuffer(
 }
 
 FramebufferBinding Draw::framebufferBinding(
-    Framebuffer & framebuffer, const FramebufferMappings & bindingParams)
+    Framebuffer & framebuffer, const FramebufferMappings & mappings)
 {
     Assert(m_impl.get(), "Can't perform action on hollow Draw");
     return FramebufferBinding(
-        m_impl->program->interface.fragmentOutputs(),
+        Program(m_impl->program),
         framebuffer,
-        bindingParams);
+        mappings);
 }
 
 void Draw::setFramebufferBinding(const FramebufferBinding & binding)
@@ -565,7 +565,8 @@ void Draw::render() const
             auto & buffer = *binding.get().buffer;
             auto   size = buffer.count * buffer.layout.stride();
 
-            Assert(size > binding.get().begin, "begin beyond buffer bounds");
+            Assert(size > binding.get().begin, "Begin " + std::to_string(binding.get().begin) + " beyond buffer bounds " +
+                std::to_string(size) + ". Uniform buffer not setup properly.");
 
             gl::glUniformBlockBinding(m_impl->program->glProgramName, b, b);
             gl::glBindBufferRange(

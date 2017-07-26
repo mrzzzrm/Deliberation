@@ -18,7 +18,7 @@ public:
     {
     }
 
-    void registerRenderNodes() override
+    void onRegisterRenderNodes() override
     {
         class SingleRenderNode : public RenderNode
         {

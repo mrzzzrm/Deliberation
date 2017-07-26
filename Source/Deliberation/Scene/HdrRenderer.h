@@ -9,7 +9,7 @@ class HdrRenderer : public Renderer
 public:
     HdrRenderer(RenderManager & renderManager);
 
-    void registerRenderNodes() override;
+    void onRegisterRenderNodes() override;
 
 private:
     friend class HdrNode;

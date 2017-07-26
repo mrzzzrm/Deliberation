@@ -27,6 +27,9 @@ class CBlobValue final : public BlobValueBase<const void>
 public:
     inline CBlobValue(const void * ptr, Type type);
 
+    inline BlobValue & operator=(const BlobValue & rhs) = delete;
+    inline BlobValue & operator=(const CBlobValue & rhs) = delete;
+
 private:
     friend class BlobValue;
 };

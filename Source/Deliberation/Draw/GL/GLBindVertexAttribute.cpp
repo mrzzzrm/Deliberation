@@ -107,10 +107,22 @@ void GLBindVertexAttribute(
     case TYPE_U32VEC3: gl::glVertexAttribI3uiv(location, (gl::GLuint *)data); break;
     case TYPE_U32VEC4: gl::glVertexAttribI4uiv(location, (gl::GLuint *)data); break;
 
+    case TYPE_MAT2:
+        gl::glVertexAttrib3fv(location + 0, &((gl::GLfloat*)data)[0]);
+        gl::glVertexAttrib3fv(location + 1, &((gl::GLfloat*)data)[2]);
+        break;
+
     case TYPE_MAT3:
         gl::glVertexAttrib3fv(location + 0, &((gl::GLfloat*)data)[0]);
         gl::glVertexAttrib3fv(location + 1, &((gl::GLfloat*)data)[3]);
         gl::glVertexAttrib3fv(location + 2, &((gl::GLfloat*)data)[6]);
+        break;
+
+    case TYPE_MAT4:
+        gl::glVertexAttrib3fv(location + 0, &((gl::GLfloat*)data)[0]);
+        gl::glVertexAttrib3fv(location + 1, &((gl::GLfloat*)data)[4]);
+        gl::glVertexAttrib3fv(location + 2, &((gl::GLfloat*)data)[8]);
+        gl::glVertexAttrib3fv(location + 3, &((gl::GLfloat*)data)[12]);
         break;
 
     default: Fail("Vertex attribute type not (yet?) supported");

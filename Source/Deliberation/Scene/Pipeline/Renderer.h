@@ -25,7 +25,8 @@ public:
     DrawContext &   drawContext() const;
     std::string     name() const { return m_name; }
 
-    virtual void registerRenderNodes() = 0;
+    virtual void onRegisterRenderNodes() = 0;
+    virtual void onBeforeRender() {};
 
     // Debug
     virtual void renderDebugGui() {}

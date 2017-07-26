@@ -56,7 +56,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
 
     // Create framebuffer
     framebufferBinding = FramebufferBinding(
-        this->program->interface.fragmentOutputs(),
+        Program(this->program),
         drawContext.backbuffer(),
         {});
 

@@ -69,7 +69,7 @@ void RenderManager::render()
         m_renderNodesByPhase.clear();
         for (auto & renderer : m_renderers)
         {
-            renderer->registerRenderNodes();
+            renderer->onRegisterRenderNodes();
         }
 
         registerFramebuffer(m_ssaoBuffer);
@@ -83,6 +83,11 @@ void RenderManager::render()
     m_backbufferClear.render();
     m_gbuffer.clear().render();
     m_hdrBuffer.clear().render();
+
+    for (auto & renderer : m_renderers)
+    {
+        renderer->onBeforeRender();
+    }
 
     // Render Phases
     for (auto & pair : m_renderNodesByPhase)

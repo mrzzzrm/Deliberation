@@ -112,7 +112,7 @@ void DebugGroundPlaneRenderer::setQuadSize(float quadSize)
 
 void DebugGroundPlaneRenderer::setRadius(float radius) { m_radius = radius; }
 
-void DebugGroundPlaneRenderer::registerRenderNodes()
+void DebugGroundPlaneRenderer::onRegisterRenderNodes()
 {
     if (m_renderToGBuffer)
     {

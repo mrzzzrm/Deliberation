@@ -68,7 +68,7 @@ void BloomRenderer::renderDebugGui()
 
     for (size_t l = 0; l < m_numBlursPerLevel.size(); l++)
     {
-        ImGui::Text(std::to_string(l).c_str());
+        ImGui::Text("%s", std::to_string(l).c_str());
         ImGui::NextColumn();
 
         ImGui::SliderInt(

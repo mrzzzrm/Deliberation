@@ -55,9 +55,9 @@ void EntityPrototype::updateEntities()
      */
     for (auto & entity : m_entities)
     {
+        // Overhead, but keeps logs clean
         if (!entity.isValid()) continue;
         if (!isEntityDirty(entity)) continue;
-        ; // Overhead, but keeps logs clean
 
         std::cout << "EntityPrototype '" + m_key + "': Updating Entity '"
                   << entity.name() << "'" << std::endl;

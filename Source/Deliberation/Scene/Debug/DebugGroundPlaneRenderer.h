@@ -23,7 +23,7 @@ public:
     void setRadius(float radius);
     void setRenderToGBuffer(bool enabled) { m_renderToGBuffer = enabled; }
 
-    void registerRenderNodes() override;
+    void onRegisterRenderNodes() override;
 
 private:
     friend class DebugGroundPlaneNode;

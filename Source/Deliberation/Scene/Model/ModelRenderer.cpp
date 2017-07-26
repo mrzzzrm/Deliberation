@@ -240,7 +240,7 @@ ModelRenderer::addModelInstance(const std::shared_ptr<Model> & model)
     return instance;
 }
 
-void ModelRenderer::registerRenderNodes()
+void ModelRenderer::onRegisterRenderNodes()
 {
     m_renderManager.registerRenderNode(
         std::make_shared<ModelRendererMainNode>(m_renderManager, *this),

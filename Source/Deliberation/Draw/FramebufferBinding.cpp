@@ -6,11 +6,13 @@
 
 namespace deliberation
 {
+const char * const FramebufferBinding::DISCARD_FRAGMENT_OUTPUT = "";
+
 FramebufferBinding::FramebufferBinding(
-    const std::vector<ProgramInterfaceFragmentOutput> & m_fragmentOutputs,
+    const Program & program,
     Framebuffer &                                       framebuffer,
     const FramebufferMappings &                         mappings)
-    : m_fragmentOutputs(&m_fragmentOutputs)
+    : m_program(program)
     , m_framebuffer(framebuffer)
     , m_mappings(mappings)
 {
@@ -18,7 +20,7 @@ FramebufferBinding::FramebufferBinding(
 
 void FramebufferBinding::setFramebuffer(Framebuffer & framebuffer)
 {
-    Assert(m_fragmentOutputs != nullptr, "FramebufferBinding is hollow");
+    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     m_framebuffer = framebuffer;
     m_drawBuffersDirty = true;
@@ -26,7 +28,7 @@ void FramebufferBinding::setFramebuffer(Framebuffer & framebuffer)
 
 void FramebufferBinding::setMappings(const FramebufferMappings & mappings)
 {
-    Assert(m_fragmentOutputs != nullptr, "FramebufferBinding is hollow");
+    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     m_mappings = mappings;
     m_drawBuffersDirty = true;
@@ -34,7 +36,7 @@ void FramebufferBinding::setMappings(const FramebufferMappings & mappings)
 
 void FramebufferBinding::setMapping(const FragmentOutputMapping & mapping)
 {
-    Assert(m_fragmentOutputs != nullptr, "FramebufferBinding is hollow");
+    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     m_drawBuffersDirty = true;
 
@@ -52,29 +54,54 @@ void FramebufferBinding::setMapping(const FragmentOutputMapping & mapping)
 
 const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
 {
-    Assert(m_fragmentOutputs != nullptr, "FramebufferBinding is hollow");
+    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     if (m_drawBuffersDirty)
     {
         if (m_framebuffer.isBackbuffer())
         {
-            Assert(
-                m_fragmentOutputs->size() == 1,
-                "Writing to multiple targets in backbuffer draw");
+            /**
+             * If we have just one output, everything is alright.
+             * Otherwise there has to be precisely one output being mapped to something different than
+             * DISCARD_FRAGMENT_OUTPUT
+             */
+            if (fragmentOutputs().size() != 1)
+            {
+                m_drawBuffers = std::vector<gl::GLenum>(fragmentOutputs().size(), gl::GL_NONE);
+                auto foundOutput = false;
+                for (size_t o = 0; o < fragmentOutputs().size(); o++)
+                {
+                    auto & fragmentOutput = fragmentOutputs()[o];
+
+                    // Does the output have a mapping?
+                    auto iter = std::find_if(
+                        m_mappings.begin(),
+                        m_mappings.end(),
+                        [&](const FragmentOutputMapping & fragmentOutputMapping) {
+                            return "o_" + fragmentOutputMapping.first ==
+                                   fragmentOutput.name();
+                        });
+
+                    if (iter != m_mappings.end() && iter->second != DISCARD_FRAGMENT_OUTPUT)
+                    {
+                        Assert(!foundOutput,
+                               "Multiple outputs in draw to backbuffer");
+                        foundOutput = true;
+                        m_drawBuffers[o] = gl::GL_BACK_LEFT;
+                    }
+                }
+                Assert(foundOutput, "");
+            }
         }
         else
         {
             auto & colorTargets = m_framebuffer.m_impl->colorTargets;
 
-            Assert(
-                m_fragmentOutputs->size() == colorTargets.size(),
-                "Framebuffer/m_fragmentOutputs mismatch");
-
             std::vector<gl::GLenum> bufs(
-                m_fragmentOutputs->size(), gl::GL_NONE);
-            for (size_t o = 0; o < m_fragmentOutputs->size(); o++)
+                fragmentOutputs().size(), gl::GL_NONE);
+            for (size_t o = 0; o < fragmentOutputs().size(); o++)
             {
-                auto & fragmentOutput = (*m_fragmentOutputs)[o];
+                auto & fragmentOutput = fragmentOutputs()[o];
 
                 std::string mappedTargetName;
 
@@ -87,8 +114,16 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                                fragmentOutput.name();
                     });
 
+
                 if (iter != m_mappings.end())
+                {
+                    /**
+                     * \ref bufs gets initialised with GL_NONE, which means: discard the output
+                     */
+                    if (iter->second == DISCARD_FRAGMENT_OUTPUT) continue;
+
                     mappedTargetName = "o_" + iter->second;
+                }
 
                 for (size_t t = 0; t < colorTargets.size(); t++)
                 {

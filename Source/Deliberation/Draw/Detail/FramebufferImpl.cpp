@@ -153,7 +153,9 @@ void FramebufferImpl::bind(const std::vector<gl::GLenum> & drawBuffers)
     if (isBackbuffer)
     {
         glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, 0);
-        glStateManager.setDrawBuffer(gl::GL_BACK);
+
+        if (drawBuffers.empty()) glStateManager.setDrawBuffer(gl::GL_BACK);
+        else glStateManager.setDrawBuffers(drawBuffers);
     }
     else
     {

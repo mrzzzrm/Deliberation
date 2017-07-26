@@ -62,12 +62,24 @@ public:
 
     VertexAttribute attribute(const std::string & name);
 
+    /**
+     * Shortcut for setFramebufferBinding(framebufferBinding(framebuffer, mapping))
+     * @param framebuffer 
+     * @param mappings 
+     */
     void setFramebuffer(
-        Framebuffer & framebuffer, const FramebufferMappings & mapping = {});
+        Framebuffer & framebuffer, const FramebufferMappings & mappings = {});
 
+    /**
+     * Create a FramebufferBinding for this Draw, but DO NOT use it (yet).
+     * Draw::setFramebufferBinding(const FramebufferBinding&) has to be invoked separately
+     * @param framebuffer
+     * @param mappings
+     * @return
+     */
     FramebufferBinding framebufferBinding(
         Framebuffer &               framebuffer,
-        const FramebufferMappings & bindingParams = {});
+        const FramebufferMappings & mappings = {});
 
     void setFramebufferBinding(const FramebufferBinding & binding);
 

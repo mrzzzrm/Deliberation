@@ -17,7 +17,7 @@ public:
 
     void setColor(const glm::vec3 & color) { m_color = color; }
 
-    void registerRenderNodes() override;
+    void onRegisterRenderNodes() override;
 
 private:
     friend class AmbientLightNode;

@@ -25,7 +25,7 @@ public:
     std::shared_ptr<ModelInstance>
     addModelInstance(const std::shared_ptr<Model> & model);
 
-    void registerRenderNodes() override;
+    void onRegisterRenderNodes() override;
 
 private:
     friend class ModelRendererMainNode;

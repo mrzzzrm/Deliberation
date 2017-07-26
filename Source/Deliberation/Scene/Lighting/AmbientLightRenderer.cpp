@@ -43,7 +43,7 @@ AmbientLightRenderer::AmbientLightRenderer(RenderManager & renderManager)
 {
 }
 
-void AmbientLightRenderer::registerRenderNodes()
+void AmbientLightRenderer::onRegisterRenderNodes()
 {
     m_renderManager.registerRenderNode(
         std::make_shared<AmbientLightNode>(*this), RenderPhase::Lighting);
