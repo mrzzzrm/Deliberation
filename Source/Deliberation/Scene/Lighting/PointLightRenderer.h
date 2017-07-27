@@ -22,7 +22,7 @@ struct PointLight
     glm::vec3 intensity;
 
     // To be populated by Renderer
-    i32 active = false;
+    i32 active = 0;
 
     PointLight() = default;
 
@@ -35,7 +35,7 @@ struct PointLight
 class PointLightRenderer : public SingleNodeRenderer
 {
 public:
-    PointLightRenderer(RenderManager & renderManager);
+    explicit PointLightRenderer(RenderManager & renderManager);
 
     // Reference invalidated by add/removePointLight()
     PointLight &                    pointLight(size_t index);

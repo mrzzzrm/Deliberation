@@ -18,10 +18,10 @@ public:
     static std::size_t indexStatic();
 
 public:
-    System(World & world, const ComponentFilter & filter = ComponentFilter());
+    explicit System(World & world, const ComponentFilter & filter = ComponentFilter());
 
-    virtual std::size_t index() const override;
-    virtual std::string name() const override;
+    std::size_t index() const override;
+    std::string name() const override;
 };
 }
 

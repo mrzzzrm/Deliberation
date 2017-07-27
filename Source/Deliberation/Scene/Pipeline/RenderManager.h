@@ -33,10 +33,9 @@ public:
 
     DrawContext & drawContext() { return m_drawContext; }
     Camera3D &    mainCamera() { return m_mainCamera; }
-    const std::vector<std::shared_ptr<Renderer>> & renderers()
-    {
-        return m_renderers;
-    }
+    const std::vector<std::shared_ptr<Renderer>> & renderers() { return m_renderers; }
+    template<typename RendererType> std::shared_ptr<RendererType> renderer();
+    template<typename RendererType> std::shared_ptr<const RendererType> renderer() const;
     Framebuffer &                 gbuffer() { return m_gbuffer; }
     Framebuffer &                 hdrBuffer() { return m_hdrBuffer; }
     Framebuffer &                 ssaoBuffer() { return m_ssaoBuffer; }
@@ -67,13 +66,15 @@ private:
     DrawContext &                                       m_drawContext;
     Camera3D                                            m_mainCamera;
     std::vector<std::shared_ptr<Renderer>>              m_renderers;
+    std::unordered_map<TypeID::value_t, std::shared_ptr<Renderer>>
+                                                        m_rendererByTypeId;
     bool                                                m_pipelineBuild = false;
     LinearMap<std::vector<std::shared_ptr<RenderNode>>> m_renderNodesByPhase;
     Framebuffer                                         m_gbuffer;
     Framebuffer                                         m_hdrBuffer;
     Framebuffer                                         m_ssaoBuffer;
     Clear                                               m_backbufferClear;
-    std::shared_ptr<DebugSurfaceOverlayRenderer> m_surfaceOverlayRenderer;
+    std::shared_ptr<DebugSurfaceOverlayRenderer>        m_surfaceOverlayRenderer;
 
     // For Debugging
     std::vector<Framebuffer> m_framebuffers;
