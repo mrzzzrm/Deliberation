@@ -15,8 +15,11 @@ public:
         LayoutedBlob &&      indices,
         std::vector<Texture> textures = {});
 
+    LayoutedBlob &         vertices() { return m_vertices; };
     const LayoutedBlob &         vertices() const;
+    LayoutedBlob &         indices() { return m_indices; };
     const LayoutedBlob &         indices() const;
+    std::vector<Texture> & textures() { return m_textures; };
     const std::vector<Texture> & textures() const;
 
     LayoutedBlob takeVertices();

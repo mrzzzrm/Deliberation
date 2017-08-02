@@ -29,6 +29,7 @@ using FramebufferMappings = std::vector<FragmentOutputMapping>;
 class FramebufferBinding final
 {
 public:
+    static const char * const BACKBUFFER;
     static const char * const DISCARD_FRAGMENT_OUTPUT;
 
 public:

@@ -21,6 +21,7 @@ public:
     }
 
     T get();
+    T peek();
 
 protected:
     ~TypedBlobIteratorBase() = default;

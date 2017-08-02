@@ -6,6 +6,7 @@
 
 namespace deliberation
 {
+const char * const FramebufferBinding::BACKBUFFER = "<Backbuffer>";
 const char * const FramebufferBinding::DISCARD_FRAGMENT_OUTPUT = "";
 
 FramebufferBinding::FramebufferBinding(
@@ -87,7 +88,7 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                         Assert(!foundOutput,
                                "Multiple outputs in draw to backbuffer");
                         foundOutput = true;
-                        m_drawBuffers[o] = gl::GL_BACK_LEFT;
+                        m_drawBuffers[fragmentOutput.location()] = gl::GL_BACK_LEFT;
                     }
                 }
                 Assert(foundOutput, "");

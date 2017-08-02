@@ -29,6 +29,15 @@ public:
     template<typename PrototypeType>
     std::shared_ptr<const PrototypeType> prototype(const std::string & name) const;
 
+    /**
+     * Don't bail if the prototype with @name doesn't exist, instead create it
+     * @tparam PrototypeType
+     * @param name
+     * @return
+     */
+    template<typename PrototypeType>
+    std::shared_ptr<const PrototypeType> getOrCreatePrototype(const std::string & name);
+
     void reload();
 
 private:

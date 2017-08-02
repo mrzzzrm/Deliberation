@@ -29,6 +29,7 @@ template<typename T, typename... Args>
 std::shared_ptr<T> World::addSystem(Args &&... args)
 {
     Assert((std::is_base_of<SystemBase, T>::value), "");
+    Assert(m_entities.empty(), "Can't add Systems once entities exist"); // We'd have to scan all entities again and add them to the World otherwise
 
     auto system = std::make_shared<T>(*this, std::forward<Args>(args)...);
     m_systems.emplace(system->index(), system);

@@ -16,6 +16,12 @@ T TypedBlobIteratorBase<T>::get()
 }
 
 template<typename T>
+T TypedBlobIteratorBase<T>::peek()
+{
+    return *(T *)m_ptr;
+}
+
+template<typename T>
 void TypedBlobIterator<T>::put(const T & value)
 {
     *(T *)TypedBlobIteratorBase<T>::m_ptr = value;

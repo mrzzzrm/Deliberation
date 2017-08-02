@@ -34,13 +34,29 @@ std::shared_ptr<const PrototypeType> PrototypeManager::prototype(const std::stri
 {
     const auto iter = m_prototypeTypeContainersByTypeID.find(TypeID::value<PrototypeManager, PrototypeType>());
     Assert(iter != m_prototypeTypeContainersByTypeID.end(),
-           "No such prototype '" + name + "' of type '" + typeid(PrototypeType).name() + "'")
+           std::string("No such prototype container for '") + typeid(PrototypeType).name() + "'")
 
     const auto & container = iter->second;
 
     const auto iter2 = container.prototypeByName.find(name);
     Assert(iter2 != container.prototypeByName.end(),
            "No such prototype '" + name + "' of type '" + typeid(name).name() + "'");
+
+    return std::static_pointer_cast<const PrototypeType>(iter2->second);
+}
+
+template<typename PrototypeType>
+std::shared_ptr<const PrototypeType> PrototypeManager::getOrCreatePrototype(const std::string &name) {
+    const auto iter = m_prototypeTypeContainersByTypeID.find(TypeID::value<PrototypeManager, PrototypeType>());
+    Assert(iter != m_prototypeTypeContainersByTypeID.end(),
+           std::string("No such prototype container for '") + typeid(PrototypeType).name() + "'")
+
+    auto & container = iter->second;
+
+    auto iter2 = container.prototypeByName.find(name);
+    if (iter2 == container.prototypeByName.end()) {
+        iter2 = container.prototypeByName.emplace(name, container.prototypeFactory()).first;
+    }
 
     return std::static_pointer_cast<const PrototypeType>(iter2->second);
 }

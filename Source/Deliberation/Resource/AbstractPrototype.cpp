@@ -12,4 +12,10 @@ PrototypeManager & AbstractPrototype::prototypeManagerRef() const
     return *prototypeManager;
 }
 
+void AbstractPrototype::reload(const Json &json)
+{
+    onReload(json);
+    m_revision++;
+}
+
 }

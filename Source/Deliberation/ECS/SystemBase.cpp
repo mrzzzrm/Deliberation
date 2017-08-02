@@ -34,7 +34,7 @@ void SystemBase::removeEntity(Entity & entity)
     Assert(&entity.world() == &m_world, "");
 
     auto i = m_entityIndexByID.find(entity.id());
-    Assert(i != m_entityIndexByID.end(), "");
+    Assert(i != m_entityIndexByID.end(), "Entity '" + entity.name() + "' not in System '" + name() + "'");
 
     m_entities.erase(i->second);
     m_entityIndexByID.erase(i);
