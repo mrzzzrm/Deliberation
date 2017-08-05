@@ -42,7 +42,7 @@ public:
     virtual void render() = 0;
 
 protected:
-    virtual void onSetupRender(){};
+    virtual void onSetupRender() {};
 
 private:
     RenderPhase m_renderPhase;

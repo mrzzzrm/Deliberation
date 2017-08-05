@@ -13,6 +13,12 @@ struct adl_serializer<glm::tvec3<T, P>>
     static void to_json(json & j, const glm::tvec3<T, P> & v);
     static void from_json(const json & j, glm::tvec3<T, P> & v);
 };
+template<typename T, glm::precision P>
+struct adl_serializer<glm::tvec4<T, P>>
+{
+    static void to_json(json & j, const glm::tvec4<T, P> & v);
+    static void from_json(const json & j, glm::tvec4<T, P> & v);
+};
 
 template<typename T, glm::precision P>
 struct adl_serializer<glm::tquat<T, P>>

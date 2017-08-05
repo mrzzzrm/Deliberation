@@ -445,12 +445,16 @@ DebugBoxInstance & DebugGeometryNode::addBox(
     bool              wireframe,
     size_t            index)
 {
+    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+
+    if (m_streaming) index = m_boxStreamingIndex++;
+
     auto ptr = std::make_unique<DebugBoxInstance>(*this);
 
     if (index == NO_INDEX)
         index = m_boxes.emplace(std::move(ptr));
     else
-        m_boxes.emplace_at(index, std::move(ptr));
+        m_boxes.replace_at(index, std::move(ptr));
 
     auto & box = *m_boxes[index];
 
@@ -465,12 +469,16 @@ DebugBoxInstance & DebugGeometryNode::addBox(
 DebugPointInstance & DebugGeometryNode::addPoint(
     const glm::vec3 & position, const glm::vec3 & color, size_t index)
 {
+    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+
+    if (m_streaming) index = m_pointStreamingIndex++;
+
     auto ptr = std::make_unique<DebugPointInstance>(*this);
 
     if (index == NO_INDEX)
         index = m_points.emplace(std::move(ptr));
     else
-        m_points.emplace_at(index, std::move(ptr));
+        m_points.replace_at(index, std::move(ptr));
 
     auto & point = *m_points[index];
 
@@ -487,12 +495,16 @@ DebugArrowInstance & DebugGeometryNode::addArrow(
     const glm::vec3 & color,
     size_t            index)
 {
+    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+
+    if (m_streaming) index = m_arrowStreamingIndex++;
+
     auto ptr = std::make_unique<DebugArrowInstance>(*this);
 
     if (index == NO_INDEX)
         index = m_arrows.emplace(std::move(ptr));
     else
-        m_arrows.emplace_at(index, std::move(ptr));
+        m_arrows.replace_at(index, std::move(ptr));
 
     auto & arrow = *m_arrows[index];
 
@@ -506,12 +518,16 @@ DebugArrowInstance & DebugGeometryNode::addArrow(
 DebugWireframeInstance &
 DebugGeometryNode::addWireframe(const glm::vec3 & color, size_t index)
 {
+    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+
+    if (m_streaming) index = m_wireframeStreamingIndex++;
+
     auto ptr = std::make_unique<DebugWireframeInstance>(*this);
 
     if (index == NO_INDEX)
         index = m_wireframes.emplace(std::move(ptr));
     else
-        m_wireframes.emplace_at(index, std::move(ptr));
+        m_wireframes.replace_at(index, std::move(ptr));
 
     auto & wireframe = *m_wireframes[index];
 
@@ -524,12 +540,16 @@ DebugGeometryNode::addWireframe(const glm::vec3 & color, size_t index)
 DebugSphereInstance & DebugGeometryNode::addSphere(
     const glm::vec3 & color, float radius, size_t index)
 {
+    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+
+    if (m_streaming) index = m_sphereStreamingIndex++;
+
     auto ptr = std::make_unique<DebugSphereInstance>(*this);
 
     if (index == NO_INDEX)
         index = m_spheres.emplace(std::move(ptr));
     else
-        m_spheres.emplace_at(index, std::move(ptr));
+        m_spheres.replace_at(index, std::move(ptr));
 
     auto & sphere = *m_spheres[index];
 
@@ -543,12 +563,16 @@ DebugSphereInstance & DebugGeometryNode::addSphere(
 DebugPoseInstance &
 DebugGeometryNode::addPose(const Pose3D & pose, size_t index)
 {
+    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+
+    if (m_streaming) index = m_poseStreamingIndex++;
+
     auto ptr = std::make_unique<DebugPoseInstance>(*this);
 
     if (index == NO_INDEX)
         index = m_poses.emplace(std::move(ptr));
     else
-        m_poses.emplace_at(index, std::move(ptr));
+        m_poses.replace_at(index, std::move(ptr));
 
     auto & poseInstance = *m_poses[index];
 
@@ -630,6 +654,29 @@ void DebugGeometryNode::removePose(size_t index)
     m_poses.erase(index);
 }
 
+void DebugGeometryNode::beginPrimitives()
+{
+    m_streaming = true;
+    m_boxStreamingIndex = 0;
+    m_arrowStreamingIndex = 0;
+    m_pointStreamingIndex = 0;
+    m_wireframeStreamingIndex = 0;
+    m_sphereStreamingIndex = 0;
+    m_poseStreamingIndex = 0;
+}
+
+void DebugGeometryNode::endPrimitives()
+{
+    hideRemainingPrimitives(m_boxes, m_boxStreamingIndex);
+    hideRemainingPrimitives(m_arrows, m_arrowStreamingIndex);
+    hideRemainingPrimitives(m_points, m_pointStreamingIndex);
+    hideRemainingPrimitives(m_wireframes, m_wireframeStreamingIndex);
+    hideRemainingPrimitives(m_spheres, m_sphereStreamingIndex);
+    hideRemainingPrimitives(m_poses, m_poseStreamingIndex);
+
+    m_streaming = false;
+}
+
 void DebugGeometryNode::render(const Camera3D & camera)
 {
     if (!m_visible) return;
@@ -649,5 +696,11 @@ void DebugGeometryNode::render(const Camera3D & camera)
         if (sphere->visible()) sphere->render();
     for (auto & pose : m_poses)
         if (pose->visible()) pose->render();
+}
+
+template<typename T>
+void DebugGeometryNode::hideRemainingPrimitives(SparseVector<std::unique_ptr<T>> & primitives, size_t begin)
+{
+    for (size_t i = begin; i < primitives.capacity(); i++) if (primitives.contains(i)) primitives[i]->setVisible(false);
 }
 }

@@ -33,6 +33,23 @@ void adl_serializer<glm::tvec3<T, P>>::from_json(
 }
 
 template<typename T, glm::precision P>
+void adl_serializer<glm::tvec4<T, P>>::to_json(
+    json & j, const glm::tvec4<T, P> & v)
+{
+    j = {v.x, v.y, v.z, v.w};
+}
+
+template<typename T, glm::precision P>
+void adl_serializer<glm::tvec4<T, P>>::from_json(
+    const json & j, glm::tvec4<T, P> & v)
+{
+    v.x = j[0];
+    v.y = j[1];
+    v.z = j[2];
+    v.w = j[3];
+}
+
+template<typename T, glm::precision P>
 void adl_serializer<glm::tquat<T, P>>::to_json(
     json & j, const glm::tquat<T, P> & v)
 {

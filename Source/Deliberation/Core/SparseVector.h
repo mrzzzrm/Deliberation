@@ -61,6 +61,8 @@ public:
 
     template<typename... Args>
     void emplace_at(size_t index, Args &&... args);
+    template<typename... Args>
+    void replace_at(size_t index, Args &&... args);
 
     void     erase(std::size_t index);
     Iterator erase(const Iterator & i);

@@ -21,15 +21,14 @@ void BloomRenderer::render()
 
     m_downscaleInput.setTexture(
         m_downscaleAndVBlurFbs.front().colorTargets()[0].surface);
-    m_blurPasses[0].render();
 
     // Downscaling
     for (size_t l = 1; l < m_downscaleAndVBlurFbs.size(); l++)
     {
-        //        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
-        //        {
-        //            m_blurPasses[l].render();
-        //        }
+        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+        {
+            m_blurPasses[l].render();
+        }
 
         auto & fb = m_downscaleAndVBlurFbs[l];
 
@@ -38,14 +37,14 @@ void BloomRenderer::render()
         m_downscaleInput.setTexture(fb.colorTargets()[0].surface);
     }
 
-    // Blurring
-    //    for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
-    //    {
-    //        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
-    //        {
-    //            m_blurPasses[l].render();
-    //        }
-    //    }
+     // Blurring
+    for (size_t l = 0; l < m_downscaleAndVBlurFbs.size(); l++)
+    {
+        for (size_t b = 0; b < m_numBlursPerLevel[l]; b++)
+        {
+            m_blurPasses[l].render();
+        }
+    }
 
     m_applyEffect.render();
 }
@@ -154,7 +153,7 @@ void BloomRenderer::onSetupRender()
 
     extractDraw.sampler("Input").setTexture(
         m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
-    extractDraw.uniform("Threshold").set(2.0f);
+    extractDraw.uniform("Threshold").set(1.5f);
     extractDraw.setFramebuffer(
         m_downscaleAndVBlurFbs[0], {{"Extracted", "Color"}});
 

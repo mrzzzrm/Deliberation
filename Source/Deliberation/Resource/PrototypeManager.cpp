@@ -11,6 +11,8 @@ void PrototypeManager::reload()
 
         for (const auto & path : container.paths)
         {
+            std::cout << "PrototypeManager: Reloading Prototypes from '" << path << "'" << std::endl;
+
             std::ifstream prototypeFile(path);
             Assert(prototypeFile.is_open(), "Couldn't open '" + path + "'");
 
@@ -23,6 +25,8 @@ void PrototypeManager::reload()
             {
                 auto name = pair2.key();
                 auto & prototypeJson = pair2.value();
+                
+                std::cout << "PrototypeManager: Reloading Prototype '" << name << "'" << std::endl;
 
                 std::shared_ptr<AbstractPrototype> prototype;
 
@@ -33,11 +37,15 @@ void PrototypeManager::reload()
                 }
                 prototype = iter->second;
 
-                prototype->reload(prototypeJson);
+                try {
+                    prototype->reload(prototypeJson);
+                } catch (const std::exception & e) {
+                    Fail("Error while loading prototype '" + name + "': " +
+                             e.what() + ". JSON:\n" + prototypeJson.dump());
+                }
             }
         }
     }
-
 }
 
 }

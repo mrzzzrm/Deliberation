@@ -214,6 +214,14 @@ template<typename... Args>
 void SparseVector<T>::emplace_at(size_t index, Args &&... args)
 {
     Assert(!contains(index), "Slot already taken");
+    replace_at(index, std::forward<Args>(args)...);
+}
+
+template<typename T>
+template<typename... Args>
+void SparseVector<T>::replace_at(size_t index, Args &&... args)
+{
+    if (contains(index)) decCount();
 
     m_vec.reserve(index + 1);
 

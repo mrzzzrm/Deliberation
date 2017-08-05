@@ -238,7 +238,18 @@ public:
     void removeSphere(size_t index);
     void removePose(size_t index);
 
+    /**
+     * Consecutively call add<Primitive> without specifiying an index between these two functions.
+     * Only added primitives will be renderer
+     */
+    void beginPrimitives();
+    void endPrimitives();
+
     void render(const Camera3D & camera);
+
+private:
+    template<typename T>
+    void hideRemainingPrimitives(SparseVector<std::unique_ptr<T>> & primitives, size_t begin);
 
 private:
     DebugGeometryRenderer & m_manager;
@@ -255,5 +266,13 @@ private:
     SparseVector<std::unique_ptr<DebugWireframeInstance>> m_wireframes;
     SparseVector<std::unique_ptr<DebugSphereInstance>>    m_spheres;
     SparseVector<std::unique_ptr<DebugPoseInstance>>      m_poses;
+
+    bool m_streaming = false;
+    size_t m_boxStreamingIndex = 0;
+    size_t m_arrowStreamingIndex = 0;
+    size_t m_pointStreamingIndex = 0;
+    size_t m_wireframeStreamingIndex = 0;
+    size_t m_sphereStreamingIndex = 0;
+    size_t m_poseStreamingIndex = 0;
 };
 }
