@@ -17,7 +17,7 @@ public:
     DebugGroundPlaneNode(
         DebugGroundPlaneRenderer &       renderer,
         const std::vector<std::string> & shaders)
-        : RenderNode(renderer.renderManager()), m_renderer(renderer)
+        : RenderNode(renderer.renderManager(), renderer.shared_from_this()), m_renderer(renderer)
     {
         auto & drawContext = renderer.renderManager().drawContext();
 

@@ -9,7 +9,7 @@
 namespace deliberation
 {
 PointLightRenderer::PointLightRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::Lighting)
+    : SingleNodeRenderer(renderManager, RenderPhase::Lighting, "PointLights")
 {
     m_lightLayout = DataLayout({{"LightPosition", Type_Vec3},
                                 {"Intensity", Type_Vec3},

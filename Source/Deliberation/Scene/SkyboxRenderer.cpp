@@ -9,7 +9,7 @@ namespace deliberation
 {
 SkyboxRenderer::SkyboxRenderer(
     RenderManager & renderManager, const Texture & cubemap)
-    : SingleNodeRenderer(renderManager, RenderPhase::Forward)
+    : SingleNodeRenderer(renderManager, RenderPhase::Forward, "Skybox")
     , m_cubemap(cubemap)
 {
     auto & drawContext = renderManager.drawContext();

@@ -13,7 +13,7 @@ namespace deliberation
 class HdrNode : public RenderNode
 {
 public:
-    HdrNode(HdrRenderer & hdrRenderer) : RenderNode(hdrRenderer.renderManager())
+    HdrNode(HdrRenderer & hdrRenderer) : RenderNode(hdrRenderer.renderManager(), hdrRenderer.shared_from_this())
     {
         m_effect = ScreenSpaceEffect(
             m_renderManager.drawContext(),
@@ -35,7 +35,7 @@ private:
 };
 
 HdrRenderer::HdrRenderer(RenderManager & renderManager)
-    : Renderer(renderManager)
+    : Renderer(renderManager, "HDR")
 {
 }
 

@@ -43,36 +43,59 @@ void Level::reload()
 
     if (levelJson.empty()) return;
 
-    try
-    {
-        for (auto & levelEntityJson : levelJson)
+    try {
+        // Children
         {
-            auto & lid = levelEntityJson["LID"];
-            auto   iter = m_levelEntityByLid.find(lid);
-
-            if (iter == m_levelEntityByLid.end())
+            const auto iter = levelJson.find("Children");
+            if (iter != levelJson.end())
             {
-                auto uid = convertToUid(lid);
+                for (const auto & child : *iter)
+                {
+                    const auto path = GameDataPath("Data/Levels/" + child.get<std::string>() + ".json");
 
-                auto & levelEntity = m_levelEntityByLid
-                                         .emplace(
-                                             lid.get<std::string>(),
-                                             std::make_shared<LevelEntity>())
-                                         .first->second;
-                levelEntity->entityPrototype =
-                    m_prototypeManager->getOrCreateEntityPrototype(uid);
-                levelEntity->entityPrototype->setJson(levelEntityJson);
-                levelEntity->lid = lid;
-                levelEntity->entity = m_prototypeManager->createEntity(
-                    uid,
-                    levelEntityJson.value(
-                        "Name",
-                        "Unnamed " +
-                            levelEntityJson["LID"].get<std::string>()));
+                    auto iter2 = m_childByPath.find(path);
+
+                    if (iter2 == m_childByPath.end())
+                    {
+                        iter2 = m_childByPath.emplace(path, std::make_shared<Level>(m_prototypeManager, path)).first;
+                    }
+
+                    iter2->second->reload();
+                }
             }
-            else
-            {
-                iter->second->entityPrototype->setJson(levelEntityJson);
+        }
+
+        // Entities
+        {
+            const auto iter = levelJson.find("Entities");
+
+            if (iter != levelJson.end()) {
+                for (auto &levelEntityJson : *iter) {
+                    auto &lid = levelEntityJson["LID"];
+                    auto iter = m_levelEntityByLid.find(lid);
+
+                    if (iter == m_levelEntityByLid.end()) {
+                        auto uid = convertToUid(lid);
+
+                        auto &levelEntity = m_levelEntityByLid
+                            .emplace(
+                                lid.get<std::string>(),
+                                std::make_shared<LevelEntity>())
+                            .first->second;
+                        levelEntity->entityPrototype =
+                            m_prototypeManager->getOrCreateEntityPrototype(uid);
+                        levelEntity->entityPrototype->setJson(levelEntityJson);
+                        levelEntity->lid = lid;
+                        levelEntity->entity = m_prototypeManager->createEntity(
+                            uid,
+                            levelEntityJson.value(
+                                "Name",
+                                "Unnamed " +
+                                levelEntityJson["LID"].get<std::string>()));
+                    } else {
+                        iter->second->entityPrototype->setJson(levelEntityJson);
+                    }
+                }
             }
         }
     }

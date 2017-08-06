@@ -16,7 +16,7 @@ public:
 
     void render() override;
 
-    void renderDebugGui() override;
+    void onRenderImGui() override;
 
 protected:
     void onSetupRender() override;

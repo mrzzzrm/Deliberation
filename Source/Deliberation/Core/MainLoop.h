@@ -7,6 +7,6 @@ namespace deliberation
 class MainLoop
 {
 public:
-    void run(const std::function<bool(float)> & fn);
+    void run(const std::function<bool(DurationMicros)> & fn);
 };
 }

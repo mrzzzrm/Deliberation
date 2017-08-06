@@ -412,6 +412,7 @@ set(sources
 	Scene/Pipeline/Renderer.h
 	Scene/Pipeline/RenderManager.cpp
 	Scene/Pipeline/RenderManager.h
+	Scene/Pipeline/RenderNode.cpp
 	Scene/Pipeline/RenderNode.h
 	Scene/Pipeline/RenderPhase.h
 	Scene/Pipeline/RenderSystem.cpp

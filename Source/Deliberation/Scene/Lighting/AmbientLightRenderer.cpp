@@ -12,7 +12,7 @@ class AmbientLightNode : public RenderNode
 {
 public:
     AmbientLightNode(AmbientLightRenderer & renderer)
-        : m_renderer(renderer), RenderNode(renderer.renderManager())
+        : m_renderer(renderer), RenderNode(renderer.renderManager(), renderer.shared_from_this())
     {
         auto & drawContext = m_renderer.renderManager().drawContext();
 
@@ -39,7 +39,7 @@ private:
 };
 
 AmbientLightRenderer::AmbientLightRenderer(RenderManager & renderManager)
-    : Renderer(renderManager)
+    : Renderer(renderManager, "AmbientLight")
 {
 }
 

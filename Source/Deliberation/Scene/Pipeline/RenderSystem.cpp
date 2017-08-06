@@ -63,7 +63,7 @@ void RenderSystem::onGameUpdate(float seconds)
                 {
                     if (ImGui::CollapsingHeader(renderer->name().c_str()))
                     {
-                        renderer->renderDebugGui();
+                        renderer->renderImGui();
                     }
                 }
             }

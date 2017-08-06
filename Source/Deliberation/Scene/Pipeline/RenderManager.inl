@@ -11,6 +11,9 @@ std::shared_ptr<T> RenderManager::addRenderer(Args &&... args)
     m_renderers.emplace_back(renderer);
     m_rendererByTypeId.emplace(TypeID::value<RenderManager, T>(), renderer);
     m_pipelineBuild = false;
+
+    renderer->onCreated();
+
     return renderer;
 }
 

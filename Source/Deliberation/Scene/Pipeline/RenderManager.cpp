@@ -102,7 +102,14 @@ void RenderManager::render()
             for (auto & node : pair.second)
             {
                 RangedGpuScope gpuScope2("Node - " + node->name());
-                node->render();
+
+                auto renderer = node->renderer();
+                Assert((bool)renderer, "");
+
+                if (renderer->enabled() && node->enabled())
+                {
+                    node->render();
+                }
             }
         }
     }

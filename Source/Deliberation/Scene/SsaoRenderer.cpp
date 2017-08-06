@@ -31,7 +31,7 @@ void SsaoRenderer::render()
     m_blurEffect.render();
 }
 
-void SsaoRenderer::renderDebugGui()
+void SsaoRenderer::onRenderImGui()
 {
     ImGui::SliderFloat(
         "Sample Radius", &m_sampleRadius, 0.005f, 10.0f, "%.3f", 1.5f);

@@ -1,29 +1,24 @@
 #include <Deliberation/Core/MainLoop.h>
 
+#include <Deliberation/Core/Chrono.h>
+
 #include <algorithm>
 #include <chrono>
 
 namespace deliberation
 {
-void MainLoop::run(const std::function<bool(float)> & fn)
+void MainLoop::run(const std::function<bool(DurationMicros)> & fn)
 {
-    float lastFrameSeconds = 0.0f;
+    TimestampMicros timestamp = CurrentMicros();
 
     while (true)
     {
-        auto before = std::chrono::steady_clock::now();
+        const auto newTimestamp = CurrentMicros();
+        const auto frameDuration = newTimestamp - timestamp;
+        timestamp = newTimestamp;
 
-        auto thisFrameSeconds = std::max(lastFrameSeconds, 0.0001f);
-
-        auto resume = fn(thisFrameSeconds);
+        auto resume = fn(frameDuration);
         if (!resume) break;
-
-        auto after = std::chrono::steady_clock::now();
-
-        auto dur = after - before;
-        lastFrameSeconds =
-            std::chrono::duration_cast<std::chrono::duration<float>>(dur)
-                .count();
     }
 }
 }

@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 
+#include <Deliberation/Core/UpdateFrame.h>
 #include <Deliberation/Core/FpsCounter.h>
 
 #include <Deliberation/Draw/DrawContext.h>
@@ -19,13 +20,15 @@ class Application : public InputEventReceiver
 {
 public:
     Application(const std::string & name, const std::string & prefixPath = ".");
-    virtual ~Application();
 
     Input &       input();
     const Input & input() const;
 
     DrawContext &       drawContext();
     const DrawContext & drawContext() const;
+
+    UpdateFrame & updateFrame() { return m_updateFrame; }
+    const UpdateFrame & updateFrame() const { return m_updateFrame; }
 
     bool gameplayPaused() const { return m_gameplayPaused; }
     void setGameplayPaused(bool paused) { m_gameplayPaused = paused; }
@@ -39,10 +42,11 @@ public:
 protected:
     virtual void onStartup();
     virtual void onShutdown();
-    virtual void onFrame(float seconds);
+    virtual void onFrame(DurationMicros micros) {}
 
 protected:
     bool m_gameplayPaused = false;
+    UpdateFrame m_updateFrame;
 
 private:
     void init();

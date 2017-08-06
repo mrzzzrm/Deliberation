@@ -30,5 +30,6 @@ protected:
     std::string                       m_path;
     std::unordered_map<std::string, std::shared_ptr<LevelEntity>>
         m_levelEntityByLid;
+    std::unordered_map<std::string, std::shared_ptr<Level>> m_childByPath;
 };
 }

@@ -27,8 +27,6 @@ Application::Application(
 {
 }
 
-Application::~Application() = default;
-
 Input & Application::input()
 {
     Assert(m_input.engaged(), "Input not yet setup");
@@ -82,7 +80,7 @@ int Application::run(int argc, char ** argv)
     if (deliberation::GLLoggingEnabled())
         std::cout << "--- Frame ---" << std::endl;
 
-    MainLoop().run([this](float seconds) {
+    MainLoop().run([this](DurationMicros micros) {
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -104,7 +102,7 @@ int Application::run(int argc, char ** argv)
 
         SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
-        onFrame(seconds);
+        onFrame(micros);
 
         SDL_GL_SwapWindow(m_displayWindow);
 
@@ -130,8 +128,6 @@ void Application::quit(int returnCode)
 void Application::onStartup() {}
 
 void Application::onShutdown() {}
-
-void Application::onFrame(float seconds) {}
 
 void Application::init()
 {

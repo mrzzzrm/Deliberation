@@ -49,7 +49,7 @@ void BloomRenderer::render()
     m_applyEffect.render();
 }
 
-void BloomRenderer::renderDebugGui()
+void BloomRenderer::onRenderImGui()
 {
     ImGui::Columns(4, "Levels");
     ImGui::Separator();

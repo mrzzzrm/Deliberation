@@ -26,7 +26,7 @@ class ModelRendererMainNode : public RenderNode
 public:
     ModelRendererMainNode(
         RenderManager & renderManager, ModelRenderer & modelRenderer)
-        : RenderNode(renderManager), m_modelRenderer(modelRenderer)
+        : RenderNode(renderManager, modelRenderer.shared_from_this()), m_modelRenderer(modelRenderer)
     {
         m_instanceLayout = DataLayout("Transform", Type_Mat4);
         m_instanceDataStaging = LayoutedBlob(m_instanceLayout);

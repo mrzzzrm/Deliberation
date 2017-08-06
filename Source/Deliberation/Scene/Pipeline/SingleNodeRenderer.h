@@ -24,7 +24,7 @@ public:
         {
         public:
             SingleRenderNode(SingleNodeRenderer & renderer)
-                : RenderNode(renderer.renderManager()), m_renderer(renderer)
+                : RenderNode(renderer.renderManager(), renderer.shared_from_this()), m_renderer(renderer)
             {
             }
 
