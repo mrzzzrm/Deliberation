@@ -16,7 +16,7 @@ DebugPointLightSystem::DebugPointLightSystem(
     m_node = world.system<RenderSystem>()->debugGeometryRenderer()->addNode();
 }
 
-void DebugPointLightSystem::onGameUpdate(float seconds)
+void DebugPointLightSystem::onGameUpdate(const UpdateFrame & updateFrame)
 {
     for (size_t l = 0; l < m_pointLightRenderer->pointLights().size(); l++)
     {

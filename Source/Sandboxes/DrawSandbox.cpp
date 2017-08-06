@@ -63,22 +63,22 @@ public:
         m_paletteBuffer = drawContext().createBuffer({"Color", Type_Vec3});
     }
 
-    void onFrame(float seconds) override
-    {
-        m_secondsAccumulator += seconds;
-
-        m_palette[2] = glm::vec3(
-            0.0f, 0.0f, (std::cos(m_secondsAccumulator) + 1.0f) * 0.5f);
-
-        m_paletteBuffer.upload(m_palette);
-        m_draw.bufferTexture("Palette").setBuffer(m_paletteBuffer);
-
-        m_draw.setAttribute("InstancePosition", m_position);
-        m_position.x = std::abs(std::sin(m_secondsAccumulator * 0.1f));
-
-        m_clear.render();
-        m_draw.render();
-    }
+//    void onFrame(float seconds) override
+//    {
+//        m_secondsAccumulator += seconds;
+//
+//        m_palette[2] = glm::vec3(
+//            0.0f, 0.0f, (std::cos(m_secondsAccumulator) + 1.0f) * 0.5f);
+//
+//        m_paletteBuffer.upload(m_palette);
+//        m_draw.bufferTexture("Palette").setBuffer(m_paletteBuffer);
+//
+//        m_draw.setAttribute("InstancePosition", m_position);
+//        m_position.x = std::abs(std::sin(m_secondsAccumulator * 0.1f));
+//
+//        m_clear.render();
+//        m_draw.render();
+//    }
 
 private:
     Clear                  m_clear;

@@ -2,6 +2,8 @@
 
 #include <functional>
 
+#include <Deliberation/Core/Chrono.h>
+
 namespace deliberation
 {
 class MainLoop

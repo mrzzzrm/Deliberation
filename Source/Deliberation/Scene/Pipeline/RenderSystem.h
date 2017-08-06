@@ -21,7 +21,7 @@ public:
     }
 
 protected:
-    void onGameUpdate(float seconds) override;
+    void onGameUpdate(const UpdateFrame & updateFrame) override;
 
 private:
     RenderManager                          m_renderManager;

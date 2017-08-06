@@ -52,48 +52,48 @@ void SystemBase::beforeGameUpdate()
     }
 }
 
-void SystemBase::gameUpdate(float seconds)
+void SystemBase::gameUpdate(const UpdateFrame & updateFrame)
 {
-    onGameUpdate(seconds);
+    onGameUpdate(updateFrame);
 
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
-        onEntityGameUpdate(entity, seconds);
+        onEntityGameUpdate(entity, updateFrame);
     }
 }
 
-void SystemBase::frameUpdate(float seconds) { onFrameUpdate(seconds); }
+void SystemBase::frameUpdate(const UpdateFrame & updateFrame) { onFrameUpdate(updateFrame); }
 
-void SystemBase::prePhysicsUpdate(float seconds)
+void SystemBase::prePhysicsUpdate(const UpdateFrame & updateFrame)
 {
-    onPrePhysicsUpdate(seconds);
+    onPrePhysicsUpdate(updateFrame);
 
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
-        onEntityPrePhysicsUpdate(entity, seconds);
+        onEntityPrePhysicsUpdate(entity, updateFrame);
     }
 }
 
-void SystemBase::postPhysicsUpdate(float seconds)
+void SystemBase::postPhysicsUpdate(const UpdateFrame & updateFrame)
 {
-    onPostPhysicsUpdate(seconds);
+    onPostPhysicsUpdate(updateFrame);
 
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
 
         Entity entity(m_world, entry.id);
-        onEntityPostPhysicsUpdate(entity, seconds);
+        onEntityPostPhysicsUpdate(entity, updateFrame);
     }
 }
 
-void SystemBase::frameComplete(float seconds) { onFrameComplete(seconds); }
+void SystemBase::frameComplete(const UpdateFrame & updateFrame) { onFrameComplete(updateFrame); }
 
 void SystemBase::onEntityAdded(Entity & entity)
 {
@@ -106,13 +106,13 @@ void SystemBase::onEntityRemoved(Entity & entity)
 }
 
 void SystemBase::onEntityPrePhysicsUpdate(
-    Entity & entity, float physicsTimestep)
+    Entity & entity, const UpdateFrame & updateFrame)
 {
 }
 
 void SystemBase::onFrameBegin() {}
 
-void SystemBase::onPrePhysicsUpdate(float seconds) {}
+void SystemBase::onPrePhysicsUpdate(const UpdateFrame & updateFrame) {}
 
-void SystemBase::onFrameComplete(float seconds) {}
+void SystemBase::onFrameComplete(const UpdateFrame & updateFrame) {}
 }

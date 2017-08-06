@@ -1,5 +1,6 @@
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 
+#include <Deliberation/Core/UpdateFrame.h>
 #include <Deliberation/Platform/Input.h>
 
 #include <Deliberation/Scene/Camera3D.h>

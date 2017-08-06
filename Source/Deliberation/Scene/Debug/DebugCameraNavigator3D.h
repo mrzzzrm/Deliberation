@@ -8,6 +8,7 @@ namespace deliberation
 {
 class Camera3D;
 class Input;
+class UpdateFrame;
 
 class DebugCameraNavigator3D final
 {

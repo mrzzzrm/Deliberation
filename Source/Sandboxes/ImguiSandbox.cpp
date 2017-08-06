@@ -48,7 +48,7 @@ public:
         m_clear = drawContext().createClear();
     }
 
-    virtual void onFrame(float seconds) override
+    virtual void onFrame(const UpdateFrame & updateFrame) override
     {
         m_clear.render();
 

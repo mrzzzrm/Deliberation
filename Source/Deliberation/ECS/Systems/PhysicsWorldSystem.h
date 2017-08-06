@@ -19,7 +19,7 @@ public:
 
     PhysicsWorld & physicsWorld() const { return m_physicsWorld; }
 
-    void updatePhysics(float seconds);
+    void updatePhysics(const UpdateFrame & updateFrame);
 
     void onCreated() override;
     void onRemoved() override;
@@ -28,7 +28,7 @@ protected:
     void onEntityAdded(Entity & entity) override;
     void onEntityRemoved(Entity & entity) override;
     void
-    onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep) override;
+    onEntityPrePhysicsUpdate(Entity & entity, const UpdateFrame & updateFrame) override;
 
 private:
     PhysicsWorld &                             m_physicsWorld;

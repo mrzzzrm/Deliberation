@@ -116,7 +116,7 @@ void World::frameBegin()
     }
 }
 
-void World::gameUpdate(float seconds)
+void World::gameUpdate(const UpdateFrame & updateFrame)
 {
     for (auto & pair : m_systems)
     {
@@ -134,63 +134,63 @@ void World::gameUpdate(float seconds)
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.gameUpdate(seconds);
+        system.gameUpdate(updateFrame);
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "GameUpdate", micros});
     }
 }
 
-void World::frameUpdate(float seconds)
+void World::frameUpdate(const UpdateFrame & updateFrame)
 {
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.frameUpdate(seconds);
+        system.frameUpdate(updateFrame);
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "FrameUpdate", micros});
     }
 }
 
-void World::prePhysicsUpdate(float seconds)
+void World::prePhysicsUpdate(const UpdateFrame & updateFrame)
 {
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.prePhysicsUpdate(seconds);
+        system.prePhysicsUpdate(updateFrame);
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "PrePhysicsUpdate", micros});
     }
 }
 
-void World::postPhysicsUpdate(float seconds)
+void World::postPhysicsUpdate(const UpdateFrame & updateFrame)
 {
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.postPhysicsUpdate(seconds);
+        system.postPhysicsUpdate(updateFrame);
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "PostPhysicsUpdate", micros});
     }
 }
 
-void World::frameComplete(float seconds)
+void World::frameComplete(const UpdateFrame & updateFrame)
 {
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
 
         ScopeProfiler profiler;
-        system.frameComplete(seconds);
+        system.frameComplete(updateFrame);
         const auto micros = profiler.stop();
 
         m_profiler.addScope({system, "FrameComplete", micros});

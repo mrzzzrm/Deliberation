@@ -10,6 +10,7 @@
 namespace deliberation
 {
 class EventListenerProxy;
+class UpdateFrame;
 class World;
 
 class SystemBase
@@ -30,11 +31,11 @@ public:
 
     void frameBegin();
     void beforeGameUpdate();
-    void gameUpdate(float seconds);
-    void frameUpdate(float seconds);
-    void prePhysicsUpdate(float seconds);
-    void postPhysicsUpdate(float seconds);
-    void frameComplete(float seconds);
+    void gameUpdate(const UpdateFrame & updateFrame);
+    void frameUpdate(const UpdateFrame & updateFrame);
+    void prePhysicsUpdate(const UpdateFrame & updateFrame);
+    void postPhysicsUpdate(const UpdateFrame & updateFrame);
+    void frameComplete(const UpdateFrame & updateFrame);
 
     virtual void onCreated() {}
     virtual void onRemoved() {}
@@ -45,19 +46,19 @@ protected:
     virtual void onEntityAdded(Entity & entity);
     virtual void onEntityRemoved(Entity & entity);
 
-    virtual void onEntityGameUpdate(Entity & entity, float seconds) {}
+    virtual void onEntityGameUpdate(Entity & entity, const UpdateFrame & updateFrame) {}
     virtual void
-    onEntityPrePhysicsUpdate(Entity & entity, float physicsTimestep);
+    onEntityPrePhysicsUpdate(Entity & entity, const UpdateFrame & updateFrame);
     virtual void
-    onEntityPostPhysicsUpdate(Entity & entity, float physicsTimestep)
+    onEntityPostPhysicsUpdate(Entity & entity, const UpdateFrame & updateFrame)
     {
     }
     virtual void onFrameBegin();
-    virtual void onGameUpdate(float seconds) {}
-    virtual void onFrameUpdate(float seconds) {}
-    virtual void onPrePhysicsUpdate(float seconds);
-    virtual void onPostPhysicsUpdate(float seconds) {}
-    virtual void onFrameComplete(float seconds);
+    virtual void onGameUpdate(const UpdateFrame & updateFrame) {}
+    virtual void onFrameUpdate(const UpdateFrame & updateFrame) {}
+    virtual void onPrePhysicsUpdate(const UpdateFrame & updateFrame);
+    virtual void onPostPhysicsUpdate(const UpdateFrame & updateFrame) {}
+    virtual void onFrameComplete(const UpdateFrame & updateFrame);
 
 protected:
     struct EntityEntry

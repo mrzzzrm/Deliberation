@@ -140,35 +140,35 @@ public:
         }
     }
 
-    virtual void onFrame(float seconds) override
+    virtual void onFrame(const UpdateFrame & updateFrame) override
     {
-        m_world.frameBegin();
-        m_world.gameUpdate(seconds);
+//        m_world.frameBegin();
+//        m_world.gameUpdate(updateFrame);
 
-        m_secondsAccum += seconds;
+//        m_secondsAccum += seconds;
 
-        // Update circle
-        auto angle = m_secondsAccum;
-        auto radiansPerLight =
-            (2.0f * glm::pi<float>()) / m_circlePointLights.size();
-        auto radius = 3.0f + std::sin(m_secondsAccum);
-        for (size_t p = 0; p < m_circlePointLights.size(); p++)
-        {
-            auto & pointLight =
-                m_pointLightRenderer->pointLight(m_circlePointLights[p]);
+//        // Update circle
+//        auto angle = m_secondsAccum;
+//        auto radiansPerLight =
+//            (2.0f * glm::pi<float>()) / m_circlePointLights.size();
+//        auto radius = 3.0f + std::sin(m_secondsAccum);
+//        for (size_t p = 0; p < m_circlePointLights.size(); p++)
+//        {
+//            auto & pointLight =
+//                m_pointLightRenderer->pointLight(m_circlePointLights[p]);
 
-            glm::vec3 position;
-            pointLight.position.y = 1.0f + std::sin(m_secondsAccum) * 0.7f;
+//            glm::vec3 position;
+//            pointLight.position.y = 1.0f + std::sin(m_secondsAccum) * 0.7f;
 
-            float lightAngle = angle + radiansPerLight * p;
+//            float lightAngle = angle + radiansPerLight * p;
 
-            pointLight.position.x = std::cos(lightAngle) * radius;
-            pointLight.position.z = std::sin(lightAngle) * radius;
-        }
+//            pointLight.position.x = std::cos(lightAngle) * radius;
+//            pointLight.position.z = std::sin(lightAngle) * radius;
+//        }
 
-        m_navigator.get().update(seconds);
+//        m_navigator.get().update(seconds);
 
-        m_renderSystem->renderManager().render();
+//        m_renderSystem->renderManager().render();
     }
 
     void onMouseMotion(MouseMotionEvent & event) override

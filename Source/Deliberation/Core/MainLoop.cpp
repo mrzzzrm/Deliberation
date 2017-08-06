@@ -13,8 +13,14 @@ void MainLoop::run(const std::function<bool(DurationMicros)> & fn)
 
     while (true)
     {
-        const auto newTimestamp = CurrentMicros();
-        const auto frameDuration = newTimestamp - timestamp;
+        DurationMicros frameDuration;
+        TimestampMicros newTimestamp;
+
+        do { // Hotloop until some time has passed
+            newTimestamp = CurrentMicros();
+            frameDuration = newTimestamp - timestamp;
+        } while (frameDuration < 200);
+
         timestamp = newTimestamp;
 
         auto resume = fn(frameDuration);

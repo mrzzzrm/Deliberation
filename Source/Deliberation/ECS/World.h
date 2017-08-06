@@ -24,6 +24,8 @@
 
 namespace deliberation
 {
+class UpdateFrame;
+
 class World final : public AbstractWorld
 {
 public:
@@ -47,11 +49,11 @@ public:
     std::shared_ptr<T> addSystem(Args &&... args);
 
     void frameBegin();
-    void gameUpdate(float seconds);
-    void frameUpdate(float seconds);
-    void prePhysicsUpdate(float seconds);
-    void postPhysicsUpdate(float seconds);
-    void frameComplete(float seconds);
+    void gameUpdate(const UpdateFrame & updateFrame);
+    void frameUpdate(const UpdateFrame & updateFrame);
+    void prePhysicsUpdate(const UpdateFrame & updateFrame);
+    void postPhysicsUpdate(const UpdateFrame & updateFrame);
+    void frameComplete(const UpdateFrame & updateFrame);
 
     std::string toString() const;
 

@@ -20,7 +20,7 @@ RenderSystem::RenderSystem(World & world)
         m_renderManager.addRenderer<DebugGeometryRenderer>();
 }
 
-void RenderSystem::onGameUpdate(float seconds)
+void RenderSystem::onGameUpdate(const UpdateFrame & updateFrame)
 {
     auto imguiSystem = world().system<ImGuiSystem>();
 

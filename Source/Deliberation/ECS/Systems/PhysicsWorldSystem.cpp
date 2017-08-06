@@ -1,5 +1,7 @@
 #include <Deliberation/ECS/Systems/PhysicsWorldSystem.h>
 
+#include <Deliberation/Core/UpdateFrame.h>
+
 #include <Deliberation/ECS/Components.h>
 #include <Deliberation/ECS/System.h>
 #include <Deliberation/ECS/World.h>
@@ -18,9 +20,9 @@ PhysicsWorldSystem::PhysicsWorldSystem(
 {
 }
 
-void PhysicsWorldSystem::updatePhysics(float seconds)
+void PhysicsWorldSystem::updatePhysics(const UpdateFrame & updateFrame)
 {
-    m_physicsWorld.update(seconds);
+    m_physicsWorld.update(updateFrame.gameSeconds());
 
     for (auto & entityEntry : m_entities)
     {
@@ -77,7 +79,7 @@ void PhysicsWorldSystem::onEntityRemoved(Entity & entity)
 }
 
 void PhysicsWorldSystem::onEntityPrePhysicsUpdate(
-    Entity & entity, float physicsTimestep)
+    Entity & entity, const UpdateFrame & updateFrame)
 {
     if (entity.hasComponent<Transform3DComponent>())
     {
