@@ -10,7 +10,7 @@ class Transform3DComponentPrototype
     : public ComponentPrototype<Transform3DComponent>
 {
 public:
-    void updateComponent(Transform3DComponent & transform3DComponent) override
+    void updateComponent(const Entity & entity, Transform3DComponent & transform3DComponent) override
     {
         if (!m_newJson.is_object()) return;
 

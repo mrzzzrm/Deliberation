@@ -334,8 +334,6 @@ void World::addComponent(
 
     m_components[index][i] = component;
 
-    component->onAttachedToEntity();
-
 #if VERBOSE
     std::cout << "World::addComponent()" << std::endl;
 #endif

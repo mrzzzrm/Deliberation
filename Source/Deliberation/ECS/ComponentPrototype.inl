@@ -16,7 +16,7 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
         auto & component = entity.addComponent<ComponentT>();
         try
         {
-            initComponent(component);
+            initComponent(entity, component);
         }
         catch (const std::exception & e)
         {
@@ -31,7 +31,7 @@ void ComponentPrototype<ComponentT>::onUpdateEntity(Entity entity)
 
     try
     {
-        updateComponent(component);
+        updateComponent(entity, component);
     }
     catch (const std::exception & e)
     {

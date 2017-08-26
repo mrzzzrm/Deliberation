@@ -14,12 +14,12 @@ public:
     World & world() const { Assert(m_world != nullptr, "World not yet set"); return *m_world; }
     void setWorld(World & world) { m_world = &world; }
 
-    virtual void updateComponent(ComponentT & component) = 0;
+    virtual void updateComponent(const Entity & entity, ComponentT & component) = 0;
     bool         hasComponent(const Entity & entity) override;
 
 protected:
     void         onUpdateEntity(Entity entity) final;
-    virtual void initComponent(ComponentT & component) {}
+    virtual void initComponent(const Entity & entity, ComponentT & component) {}
 
 protected:
     World * m_world = nullptr;
