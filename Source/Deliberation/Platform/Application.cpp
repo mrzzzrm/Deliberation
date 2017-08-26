@@ -12,6 +12,7 @@
 #include <glbinding/ContextInfo.h>
 #include <glbinding/Version.h>
 
+#include <Deliberation/Core/Log.h>
 #include <Deliberation/Core/MainLoop.h>
 #include <Deliberation/Core/StreamUtils.h>
 
@@ -80,7 +81,11 @@ int Application::run(int argc, char ** argv)
     if (deliberation::GLLoggingEnabled())
         std::cout << "--- Frame ---" << std::endl;
 
-    MainLoop().run([this](DurationMicros micros) {
+    u32 frameCounter = 0;
+
+    MainLoop().run([&](DurationMicros micros) {
+        LogSetFrameIndex(frameCounter);
+
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -110,6 +115,8 @@ int Application::run(int argc, char ** argv)
 
         if (deliberation::GLLoggingEnabled())
             std::cout << "--- Frame ---" << std::endl;
+
+        frameCounter++;
 
         return m_running;
     });

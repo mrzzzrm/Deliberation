@@ -14,6 +14,8 @@ set(DELIBERATION_INCLUDE_DIRS
     ${IMGUI_INCLUDE_DIRS}
     ${BOOST_INCLUDE_DIRS}
     ${TINYOBJLOADER_INCLUDE_DIRS}
+    ${SPDLOG_INCLUDE_DIR}
+    ${FMT_INCLUDE_DIR}
 
     CACHE INTERAL "All Deliberation include dirs" 
 )
@@ -56,6 +58,7 @@ set(sources
 	Core/FileUtils.h
 	Core/FilesystemUtils.cpp
 	Core/FilesystemUtils.h
+	Core/Format.h
 	Core/FpsCounter.cpp
 	Core/FpsCounter.h
 	Core/HashUtils.h
@@ -69,6 +72,8 @@ set(sources
 	Core/LayoutedBlob.h
 	Core/LinearMap.h
 	Core/LinearOctree.h
+	Core/Log.h
+	Core/Log.cpp
 	Core/Noise.cpp
 	Core/Noise.h
 	Core/MainLoop.cpp

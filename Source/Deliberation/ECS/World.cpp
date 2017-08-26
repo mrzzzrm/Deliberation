@@ -6,6 +6,7 @@
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/EventListenerProxy.h>
 #include <Deliberation/Core/ScopeProfiler.h>
+#include <Deliberation/Core/Log.h>
 
 #define VERBOSE 0
 
@@ -72,6 +73,8 @@ Entity World::createEntity(const std::string & name, EntityId parent)
 
 void World::frameBegin()
 {
+    DELIBERATION_LOG_OUTER_SCOPE("FrameBegin");
+
     /**
      * For all entity removals, schedule all the entities components for removal
      */
@@ -118,6 +121,8 @@ void World::frameBegin()
 
 void World::gameUpdate(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_LOG_OUTER_SCOPE("GameUpdate");
+
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
@@ -143,6 +148,8 @@ void World::gameUpdate(const UpdateFrame & updateFrame)
 
 void World::frameUpdate(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_LOG_OUTER_SCOPE("FrameUpdate");
+
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
@@ -157,6 +164,8 @@ void World::frameUpdate(const UpdateFrame & updateFrame)
 
 void World::prePhysicsUpdate(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_LOG_OUTER_SCOPE("PrePhysicsUpdate");
+
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
@@ -171,6 +180,8 @@ void World::prePhysicsUpdate(const UpdateFrame & updateFrame)
 
 void World::postPhysicsUpdate(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_LOG_OUTER_SCOPE("PostPhysicsUpdate");
+
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
@@ -185,6 +196,8 @@ void World::postPhysicsUpdate(const UpdateFrame & updateFrame)
 
 void World::frameComplete(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_LOG_OUTER_SCOPE("FrameComplete");
+
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;

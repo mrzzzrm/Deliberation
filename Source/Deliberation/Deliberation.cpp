@@ -3,11 +3,15 @@
 #include <cassert>
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include <glbinding/Binding.h>
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
 #include <SDL_ttf.h>
+
+#include <Deliberation/Core/Log.h>
 
 namespace
 {
@@ -19,6 +23,10 @@ namespace deliberation
 {
 void init()
 {
+    // Create logger
+    Log = spdlog::stdout_color_mt("Main");
+    LogSetOuterScope("*PreMainLoop*");
+
     // SDL_ttf
     {
         auto r = TTF_Init();

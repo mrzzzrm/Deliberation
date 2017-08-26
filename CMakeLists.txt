@@ -43,6 +43,7 @@ find_package(json           REQUIRED)
 find_package(imgui          REQUIRED)
 find_package(boost          REQUIRED)
 find_package(tinyobjloader  REQUIRED)
+find_package(spdlog         REQUIRED)
 
 # Include projects
 add_subdirectory(Extern/googletest-1.8.0)

@@ -5,6 +5,7 @@
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/FilesystemUtils.h>
+#include <Deliberation/Core/Log.h>
 #include <Deliberation/Core/Json.h>
 
 #include <Deliberation/ECS/ComponentPrototype.h>
@@ -20,13 +21,13 @@ EntityPrototypeManager::EntityPrototypeManager(World & world, const std::string 
 const std::shared_ptr<EntityPrototype> &
 EntityPrototypeManager::getOrCreateEntityPrototype(const std::string & key)
 {
+    DELIBERATION_LOG_INNER_SCOPE("EntityPrototypeManager");
+
     auto iter = m_entityPrototypeByKey.find(key);
 
     if (iter == m_entityPrototypeByKey.end())
     {
-        std::cout << "EntityPrototypeManager: Registering EntityPrototype '" + key +
-                         "'"
-                  << std::endl;
+        Log->info("Registering EntityPrototype '{}'", key);
 
         iter =
             m_entityPrototypeByKey
@@ -72,6 +73,8 @@ EntityPrototypeManager::getOrAddComponentPrototype(
 
 void EntityPrototypeManager::reloadList()
 {
+    DELIBERATION_LOG_INNER_SCOPE("EntityPrototypeManager");
+
     if (m_listPoll.path().empty()) return;
 
     /**
@@ -115,9 +118,7 @@ void EntityPrototypeManager::reloadList()
         }
         if (!iter->second.check()) continue;
 
-        std::cout << "EntityPrototypeManager: Loading EntityPrototype '" +
-                         prototypeName.get<std::string>() + "' from '"
-                  << prototypePath << "'" << std::endl;
+        Log->info("Loading EntityPrototype '{}' from '{}'", prototypeName.get<std::string>(), prototypePath);
 
         std::ifstream prototypeFile(prototypePath);
         Assert(
@@ -141,10 +142,9 @@ Entity EntityPrototypeManager::createEntity(
     const std::vector<std::string> & prototypeKeys,
     const std::string &              entityName)
 {
-    std::cout << "EntityPrototypeManager: Creating '" << entityName << "' from '";
-    for (const auto & prototypeKey : prototypeKeys)
-        std::cout << prototypeKey << ",";
-    std::cout << "'" << std::endl;
+    DELIBERATION_LOG_INNER_SCOPE("EntityPrototypeManager");
+
+    //Log->info("Creating '{}' from ''", entityName, prototypeKeys);
 
     auto entity = m_world.createEntity(
         entityName.empty() ? "Unnamed Entity" : entityName);

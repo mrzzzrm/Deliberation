@@ -1,17 +1,21 @@
 #include <Deliberation/Resource/PrototypeManager.h>
 
+#include <Deliberation/Core/Log.h>
+
 namespace deliberation
 {
 
 void PrototypeManager::reload()
 {
+    DELIBERATION_LOG_INNER_SCOPE("PrototypeManager");
+
     for (auto & pair : m_prototypeTypeContainersByTypeID)
     {
         auto & container = pair.second;
 
         for (const auto & path : container.paths)
         {
-            std::cout << "PrototypeManager: Reloading Prototypes from '" << path << "'" << std::endl;
+            Log->info("Reloading Prototypes from '{}'", path);
 
             std::ifstream prototypeFile(path);
             Assert(prototypeFile.is_open(), "Couldn't open '" + path + "'");
@@ -25,8 +29,8 @@ void PrototypeManager::reload()
             {
                 auto name = pair2.key();
                 auto & prototypeJson = pair2.value();
-                
-                std::cout << "PrototypeManager: Reloading Prototype '" << name << "'" << std::endl;
+
+                Log->info("Reloading Prototype '{}'", name);
 
                 std::shared_ptr<AbstractPrototype> prototype;
 
