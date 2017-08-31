@@ -1,3 +1,0 @@
-set(GLM_ROOT ${PROJECT_SOURCE_DIR}/Extern/glm-0.9.7.5)
-
-set(GLM_INCLUDE_DIR ${GLM_ROOT}/)

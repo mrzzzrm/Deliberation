@@ -33,18 +33,10 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/Platforms/Platform.cmake)
 
 # dependencies
 find_package(OpenGL         REQUIRED)
-find_package(glbinding      REQUIRED)
-find_package(cxxopts        REQUIRED)
-find_package(GLM            REQUIRED)
 find_package(SDL2           REQUIRED)
 find_package(SDL2_ttf       REQUIRED)
 find_package(SDL2_image     REQUIRED)
-find_package(json           REQUIRED)
-find_package(imgui          REQUIRED)
-find_package(boost          REQUIRED)
-find_package(tinyobjloader  REQUIRED)
-find_package(spdlog         REQUIRED)
 
 # Include projects
-add_subdirectory(Extern/googletest-1.8.0)
+add_subdirectory(Extern)
 add_subdirectory(Source)

@@ -1,48 +1,36 @@
-message(STATUS "Examples")
+message(STATUS "Sandboxes")
 
 # includes
 include_directories(
     BEFORE
-
-    ${PROJECT_SOURCE_DIR}/Source/Deliberation/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-
-    ${CXXOPTS_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${BANDIT_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-)
-
-# libs
-set(libs
-    ${DELIBERATION_LIBRARIES}
 )
 
 # DrawSandbox
 add_executable(DrawSandbox DrawSandbox.cpp)
-target_link_libraries(DrawSandbox ${libs})
+target_link_libraries(DrawSandbox Deliberation)
 
 # ECSSandbox
 add_executable(ECSSandbox ECSSandbox.cpp)
-target_link_libraries(ECSSandbox ${libs})
+target_link_libraries(ECSSandbox Deliberation)
 
 # CoreSandbox
 add_executable(CoreSandbox CoreSandbox.cpp)
-target_link_libraries(CoreSandbox ${libs})
+target_link_libraries(CoreSandbox Deliberation)
 
 # SceneSandbox
 add_executable(PrototypeSandbox PrototypeSandbox.cpp)
-target_link_libraries(PrototypeSandbox ${libs})
+target_link_libraries(PrototypeSandbox Deliberation)
 
 # SceneSandbox
 add_executable(SceneSandbox SceneSandbox.cpp)
-target_link_libraries(SceneSandbox ${libs})
+target_link_libraries(SceneSandbox Deliberation)
 
 # ImguiSandbox
 add_executable(ImguiSandbox ImguiSandbox.cpp)
-target_link_libraries(ImguiSandbox ${libs})
+target_link_libraries(ImguiSandbox Deliberation)
 
 # DeliberationSandbox
 add_executable(DeliberationSandbox DeliberationSandbox.cpp)
-target_link_libraries(DeliberationSandbox ${libs})
+target_link_libraries(DeliberationSandbox Deliberation)
 

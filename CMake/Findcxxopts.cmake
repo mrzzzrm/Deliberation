@@ -1,4 +1,0 @@
-set(CXXOPTS_ROOT ${PROJECT_SOURCE_DIR}/Extern/cxxopts)
-
-set(CXXOPTS_INCLUDE_DIR ${CXXOPTS_ROOT}/src)
-

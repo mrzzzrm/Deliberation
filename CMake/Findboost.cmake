@@ -1,3 +1,0 @@
-set(BOOST_ROOT ${PROJECT_SOURCE_DIR}/Extern/boost-1.63.0/)
-
-set(BOOST_INCLUDE_DIRS ${BOOST_ROOT}/)

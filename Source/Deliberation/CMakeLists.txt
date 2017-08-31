@@ -1,27 +1,7 @@
 message(STATUS "Deliberation")
 
-set(DELIBERATION_INCLUDE_DIRS
-
-    ${PROJECT_SOURCE_DIR}/Source/
-
-    ${CXXOPTS_INCLUDE_DIR}
-    ${SDL2_INCLUDE_DIR}
-    ${SDL2_TTF_INCLUDE_DIR}
-    ${SDL2_IMAGE_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${JSON_INCLUDE_DIR}
-    ${IMGUI_INCLUDE_DIRS}
-    ${BOOST_INCLUDE_DIRS}
-    ${TINYOBJLOADER_INCLUDE_DIRS}
-    ${SPDLOG_INCLUDE_DIR}
-    ${FMT_INCLUDE_DIR}
-
-    CACHE INTERAL "All Deliberation include dirs" 
-)
-
-# sources
-set(sources
+add_library(Deliberation 
+	STATIC
 	Core/Assert.cpp
 	Core/Assert.h
 	Core/BitUtils.cpp
@@ -265,8 +245,8 @@ set(sources
 	ECS/Level.h
 	ECS/LevelSystem.cpp
 	ECS/LevelSystem.h
-    ECS/EntityPrototypeManager.cpp
-    ECS/EntityPrototypeManager.h
+	ECS/EntityPrototypeManager.cpp
+	ECS/EntityPrototypeManager.h
 	ECS/SystemBase.cpp
 	ECS/SystemBase.h
 	ECS/System.h
@@ -433,41 +413,46 @@ set(sources
 	Scene/SsaoRenderer.h
 	Scene/UVSphere.cpp
 	Scene/UVSphere.h
-	Scene/Vertices.h
-)
+	Scene/Vertices.h)
 
-set(libs
-    ${GLFW_LIBRARY}
-    ${SDL2_LIBRARY}
-    ${SDL2_IMAGE_LIBRARY}
-    ${SDL2_TTF_LIBRARY}
-    ${OPENGL_gl_LIBRARY}
-    ${IMGUI_LIBRARIES}
-    ${GLBINDING_LIBRARIES}
-    ${TINYOBJLOADER_LIBRARIES}
-	-lnvToolsExt
-)
+if (${DELIBERATION_BUILD_TARGET_OS} STREQUAL "win64")
+	set(GLBINDING_FILE_NAME glbinding.lib)
+else()
+	set(GLBINDING_FILE_NAME libglbinding.a)
+endif()
 
-set(DELIBERATION_LIBRARIES
-    Deliberation
-    ${libs}
-    CACHE INTERNAL ""
-)
-
-# library
-add_library(Deliberation 
-	STATIC
-	${sources})
-	
 target_link_libraries(Deliberation
-    ${libs})
-	
-# include
-message("Deliberation include dirs: ${DELIBERATION_INCLUDE_DIRS}")
+	${SDL2_LIBRARY}
+	${SDL2_IMAGE_LIBRARY}
+	${SDL2_TTF_LIBRARY}
+	${OPENGL_gl_LIBRARY}
+
+	${PROJECT_SOURCE_DIR}/Extern/glbinding-2.1.1/lib/release/${DELIBERATION_BUILD_TARGET_OS}/${DELIBERATION_BUILD_COMPILER_PLATFORM}/${GLBINDING_FILE_NAME}
+
+	imgui
+	tinyobjloader
+
+	-lnvToolsExt
+	)
 
 target_include_directories(Deliberation
     PUBLIC
-    ${DELIBERATION_INCLUDE_DIRS}
+
+	${PROJECT_SOURCE_DIR}/Source/
+
+	# Bundled dependencies
+	${PROJECT_SOURCE_DIR}/Extern/cxxopts/src
+	${PROJECT_SOURCE_DIR}/Extern/glbinding-2.1.1/include
+	${PROJECT_SOURCE_DIR}/Extern/glm-0.9.7.5
+	${PROJECT_SOURCE_DIR}/Extern/json-2.1.1
+	${PROJECT_SOURCE_DIR}/Extern/boost-1.63.0/
+	${PROJECT_SOURCE_DIR}/Extern/spdlog-0.14.0/include
+	${PROJECT_SOURCE_DIR}/Extern/spdlog-0.14.0/include/spdlog/fmt
+
+	# System dependencies
+	${SDL2_INCLUDE_DIR}
+	${SDL2_TTF_INCLUDE_DIR}
+	${SDL2_IMAGE_INCLUDE_DIR}
 )
     
 target_compile_definitions(Deliberation

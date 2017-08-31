@@ -63,7 +63,7 @@ void setPrefixPath(const std::string & prefixPath)
 
 std::string DeliberationDataPath(const std::string & path)
 {
-    return prefixPath() + "/Deliberation2/" + path;
+    return prefixPath() + "/Deliberation/" + path;
 }
 
 std::vector<std::string>
