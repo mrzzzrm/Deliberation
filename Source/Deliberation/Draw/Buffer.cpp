@@ -13,21 +13,21 @@ namespace deliberation
 {
 const DataLayout & Buffer::layout() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
 
     return m_impl->layout;
 }
 
 size_t Buffer::count() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
 
     return m_impl->count;
 }
 
 size_t Buffer::size() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
 
     return count() * layout().stride();
 }
@@ -44,16 +44,16 @@ Buffer::Buffer(const std::shared_ptr<BufferImpl> & impl) : Base(impl) {}
 
 void Buffer::upload(const Blob & data)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
-    Assert(data.size() % layout().stride() == 0, "");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
+    Assert(data.size() % layout().stride() == 0);
 
     rawUpload(data, data.size() / layout().stride());
 }
 
 void Buffer::rawUpload(const Blob & data, size_t count)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
-    Assert(m_impl->glName != 0, "");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
+    Assert(m_impl->glName != 0);
 
     const auto glTarget = gl::GL_COPY_WRITE_BUFFER;
 
@@ -66,16 +66,16 @@ void Buffer::rawUpload(const Blob & data, size_t count)
 
 void Buffer::upload(const LayoutedBlob & data)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
-    Assert(layout().equals(data.layout()), "Layout mismatch");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
+    AssertM(layout().equals(data.layout()), "Layout mismatch");
 
     rawUpload(data.rawData(), data.count());
 }
 
 void Buffer::reinit(size_t count)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
-    Assert(m_impl->glName != 0, "Buffer not backed by GL object");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
+    AssertM(m_impl->glName != 0, "Buffer not backed by GL object");
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
@@ -91,9 +91,9 @@ void Buffer::reinit(size_t count)
 void Buffer::mapped(
     BufferMapping flags, const std::function<void(LayoutedBlob & mapping)> & fn)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow object");
-    Assert(m_impl->glName != 0, "Buffer not backed by GL object");
-    Assert(m_impl->count != 0, "Can't map empty buffer");
+    AssertM(m_impl.get(), "Can't perform action on hollow object");
+    AssertM(m_impl->glName != 0, "Buffer not backed by GL object");
+    AssertM(m_impl->count != 0, "Can't map empty buffer");
 
     auto & glStateManager = m_impl->drawContext.m_glStateManager;
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
@@ -109,7 +109,7 @@ void Buffer::mapped(
     do
     {
         auto * mapped = gl::glMapBuffer(gl::GL_COPY_WRITE_BUFFER, access);
-        Assert(mapped, "Failed to map buffer");
+        AssertM(mapped, "Failed to map buffer");
 
         auto viewBlob = std::make_unique<detail::ViewBlobImpl>(mapped, size());
 

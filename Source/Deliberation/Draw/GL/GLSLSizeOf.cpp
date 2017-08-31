@@ -142,8 +142,7 @@ gl::GLint GLSLSizeOf(gl::GLenum type)
     case gl::GL_COMPRESSED_SIGNED_RED_RGTC1: return 0;
 
     default:
-        std::cout << "No such type " << type << std::endl;
-        // Fail("No such type");
+        Fail("No such type");
     }
 
     return -1;

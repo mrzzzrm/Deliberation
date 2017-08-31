@@ -104,7 +104,7 @@ void Narrowphase::lineTest(
 void Narrowphase::registerPrimitiveTest(
     int shapeType, std::unique_ptr<NarrowphasePrimitiveTest> && primitiveTest)
 {
-    Assert(
+    AssertM(
         m_primitiveTestByShapeType.count(shapeType) == 0,
         "Shape type already registered");
     m_primitiveTestByShapeType[shapeType] = std::move(primitiveTest);

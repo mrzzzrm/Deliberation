@@ -12,7 +12,7 @@ ConeMesh::ConeMesh(float radius, float height, uint numSegments)
 
 Mesh ConeMesh::generate() const
 {
-    Assert(m_radius > 0 && m_height > 0, "");
+    Assert(m_radius > 0 && m_height > 0);
 
     DataLayout vertexLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 

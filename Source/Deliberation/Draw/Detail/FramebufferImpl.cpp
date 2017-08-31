@@ -91,7 +91,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
     auto & glStateManager = drawContext.m_glStateManager;
 
     glStateManager.genFramebuffers(1, &result->glName);
-    Assert(result->glName != 0, "Failed to create GL Framebuffer Object");
+    AssertM(result->glName != 0, "Failed to create GL Framebuffer Object");
 
     glStateManager.bindFramebuffer(gl::GL_DRAW_FRAMEBUFFER, result->glName);
 
@@ -119,16 +119,16 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
 
     // Framebuffer should be complete now
     auto status = gl::glCheckFramebufferStatus(gl::GL_DRAW_FRAMEBUFFER);
-    Assert(status != gl::GL_FRAMEBUFFER_UNDEFINED, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER, "");
-    Assert(status != gl::GL_FRAMEBUFFER_UNSUPPORTED, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE, "");
-    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS, "");
-    Assert(status == gl::GL_FRAMEBUFFER_COMPLETE, "");
+    Assert(status != gl::GL_FRAMEBUFFER_UNDEFINED);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER);
+    Assert(status != gl::GL_FRAMEBUFFER_UNSUPPORTED);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE);
+    Assert(status != gl::GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS);
+    Assert(status == gl::GL_FRAMEBUFFER_COMPLETE);
 
     result->name = framebufferDesc.name;
 
@@ -180,7 +180,7 @@ FramebufferImpl::colorTargetIndex(const std::string & name, bool * found) const
     }
     else
     {
-        Assert(
+        AssertM(
             iter != colorTargets.end(),
             "No such color target '" + name + "' in Framebuffer");
     }

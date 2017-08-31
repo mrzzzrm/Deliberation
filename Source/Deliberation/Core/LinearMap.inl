@@ -28,14 +28,14 @@ LinearMap<Value>::Iterator::Iterator(const Iterator & other)
 template<typename Value>
 const std::pair<std::size_t, Value &> & LinearMap<Value>::Iterator::operator*()
 {
-    Assert(pair.engaged(), "");
+    Assert(pair.engaged());
     return pair.get();
 }
 
 template<typename Value>
 typename LinearMap<Value>::Iterator & LinearMap<Value>::Iterator::operator++()
 {
-    Assert(pair.engaged(), "");
+    Assert(pair.engaged());
 
     auto index = pair.get().first;
 
@@ -101,14 +101,14 @@ template<typename Value>
 const std::pair<std::size_t, const Value &> & LinearMap<Value>::CIterator::
                                               operator*()
 {
-    Assert(!!pair, "");
+    Assert(!!pair);
     return *pair;
 }
 
 template<typename Value>
 typename LinearMap<Value>::CIterator & LinearMap<Value>::CIterator::operator++()
 {
-    Assert(!!pair, "");
+    Assert(!!pair);
 
     auto index = pair->first;
 
@@ -192,8 +192,8 @@ Value & LinearMap<Value>::operator[](std::size_t key)
 template<typename Value>
 const Value & LinearMap<Value>::operator[](std::size_t key) const
 {
-    Assert(key < m_vec.size(), "Invalid element");
-    Assert(!!m_vec[key], "Invalid element");
+    AssertM(key < m_vec.size(), "Invalid element");
+    AssertM(!!m_vec[key], "Invalid element");
 
     return *m_vec[key];
 }
@@ -201,14 +201,14 @@ const Value & LinearMap<Value>::operator[](std::size_t key) const
 template<typename Value>
 Value & LinearMap<Value>::at(std::size_t key)
 {
-    Assert(contains(key), "");
+    Assert(contains(key));
     return *m_vec[key];
 }
 
 template<typename Value>
 const Value & LinearMap<Value>::at(std::size_t key) const
 {
-    Assert(contains(key), "");
+    Assert(contains(key));
     return *m_vec[key];
 }
 
@@ -239,7 +239,7 @@ typename LinearMap<Value>::CIterator LinearMap<Value>::end() const
 template<typename Value>
 void LinearMap<Value>::erase(std::size_t key)
 {
-    Assert(contains(key), "");
+    Assert(contains(key));
 
     m_vec[key] = boost::optional<Value>();
     m_size--;
@@ -257,7 +257,7 @@ typename LinearMap<Value>::Iterator LinearMap<Value>::erase(const Iterator & i)
 {
     auto index = i.pair.first;
 
-    Assert(index < m_vec.size(), "");
+    Assert(index < m_vec.size());
 
     Iterator next(i);
     next++;

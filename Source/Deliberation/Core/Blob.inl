@@ -56,7 +56,7 @@ Blob::Blob(std::vector<T> && value)
 template<typename T>
 void Blob::write(std::size_t offset, const T & value)
 {
-    Assert(offset + sizeof(T) <= size(), "");
+    Assert(offset + sizeof(T) <= size());
 
     auto * bptr = (char *)ptr();
     auto * tptr = (T *)&bptr[offset];
@@ -67,7 +67,7 @@ void Blob::write(std::size_t offset, const T & value)
 template<typename T>
 void Blob::read(std::size_t offset, T & value) const
 {
-    Assert(offset + sizeof(T) <= size(), "");
+    Assert(offset + sizeof(T) <= size());
 
     auto * bptr = (char *)ptr();
     auto * tptr = (T *)&bptr[offset];
@@ -78,7 +78,7 @@ void Blob::read(std::size_t offset, T & value) const
 template<typename T>
 T & Blob::access(size_t offset)
 {
-    Assert(offset + sizeof(T) <= size(), "");
+    Assert(offset + sizeof(T) <= size());
 
     auto * bptr = (char *)ptr();
     return *(T *)&bptr[offset];
@@ -87,7 +87,7 @@ T & Blob::access(size_t offset)
 template<typename T>
 const T & Blob::access(size_t offset) const
 {
-    Assert(offset + sizeof(T) <= size(), "");
+    Assert(offset + sizeof(T) <= size());
 
     auto * bptr = (char *)ptr();
     return *(const T *)&bptr[offset];

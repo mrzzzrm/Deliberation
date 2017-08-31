@@ -16,7 +16,7 @@ LayoutedBlob::LayoutedBlob(const DataLayout & layout, size_t count)
 LayoutedBlob::LayoutedBlob(const DataLayout & layout, Blob && blob)
     : m_layout(layout), m_data(std::move(blob))
 {
-    Assert(
+    AssertM(
         blob.size() % layout.stride() == 0,
         "Layout can't be matched to Blob size");
     m_count = blob.size() / layout.stride();
@@ -75,14 +75,14 @@ void LayoutedBlob::reserve(size_t count)
 
 LayoutedBlobElement LayoutedBlob::operator[](size_t index)
 {
-    Assert(index < m_count, "");
+    Assert(index < m_count);
 
     return LayoutedBlobElement(m_data, m_layout, index);
 }
 
 CLayoutedBlobElement LayoutedBlob::operator[](size_t index) const
 {
-    Assert(index < m_count, "");
+    Assert(index < m_count);
 
     return CLayoutedBlobElement(m_data, m_layout, index);
 }

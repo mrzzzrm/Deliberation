@@ -167,7 +167,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             if (isSampler)
             {
-                Assert(location >= 0, "");
+                Assert(location >= 0);
 
                 if (location >=
                     (gl::GLint)m_samplerIndexByLocation.size()) // TODO: Just
@@ -250,7 +250,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                     }
                     else
                     {
-                        Assert(location >= 0, "");
+                        Assert(location >= 0);
 
                         m_uniformIndexByLocation[location] = m_uniforms.size();
                         m_uniformIndexByName[name] = m_uniforms.size();
@@ -277,7 +277,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
             auto numUniforms = GLGetActiveUniformBlockInt(
                 glProgramName, b, gl::GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS);
 
-            Assert(numUniforms >= 0, "");
+            Assert(numUniforms >= 0);
 
             std::vector<gl::GLint> indices(numUniforms);
             if (numUniforms > 0)
@@ -291,7 +291,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                 for (auto i = 0; i < indices.size(); i++)
                 {
                     auto it = blockUniformsByIndex.find(indices[i]);
-                    Assert(it != blockUniformsByIndex.end(), "");
+                    Assert(it != blockUniformsByIndex.end());
 
                     auto &      uniform = it->second;
                     auto &      blockAndName = uniform.name();
@@ -369,7 +369,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
                 params.data());
 
             auto nameLength = params[0];
-            Assert(
+            AssertM(
                 nameLength > 1,
                 "Program output " + std::to_string(r) +
                     " has no characters in its name. That shouldn't be the "
@@ -388,7 +388,7 @@ ProgramInterface::ProgramInterface(gl::GLuint glProgramName)
 
             auto type = gl::GLenum(params[1]);
             auto location = params[3];
-            Assert(
+            AssertM(
                 location >= 0,
                 "Program output " + std::to_string(r) + "/'" + name +
                     "' has a location < 0 (" + std::to_string(location) +
@@ -482,7 +482,7 @@ const ProgramInterfaceVertexAttribute &
 ProgramInterface::attributeRef(const std::string & name) const
 {
     const auto * ptr = attribute(name);
-    Assert(ptr, "No such attribute '" + name + "'");
+    AssertM(ptr, "No such attribute '" + name + "'");
     return *ptr;
 }
 
@@ -490,7 +490,7 @@ const ProgramInterfaceUniform &
 ProgramInterface::uniformRef(const std::string & name) const
 {
     const auto * ptr = uniform(name);
-    Assert(ptr, "No such uniform '" + name + "'");
+    AssertM(ptr, "No such uniform '" + name + "'");
     return *ptr;
 }
 
@@ -498,7 +498,7 @@ const ProgramInterfaceSampler &
 ProgramInterface::samplerRef(const std::string & name) const
 {
     const auto * ptr = sampler(name);
-    Assert(ptr, "No such sampler '" + name + "'");
+    AssertM(ptr, "No such sampler '" + name + "'");
     return *ptr;
 }
 
@@ -506,7 +506,7 @@ const ProgramInterfaceFragmentOutput &
 ProgramInterface::fragmentOutputRef(const std::string & name) const
 {
     const auto * ptr = fragmentOutput(name);
-    Assert(ptr, "No such fragmentOutput '" + name + "'");
+    AssertM(ptr, "No such fragmentOutput '" + name + "'");
     return *ptr;
 }
 
@@ -514,7 +514,7 @@ const ProgramInterfaceUniformBlock &
 ProgramInterface::uniformBlockRef(const std::string & name) const
 {
     const auto * ptr = uniformBlock(name);
-    Assert(ptr, "No such uniformBlock '" + name + "'");
+    AssertM(ptr, "No such uniformBlock '" + name + "'");
     return *ptr;
 }
 
@@ -522,7 +522,7 @@ const ProgramInterfaceBufferTexture &
 ProgramInterface::bufferTextureRef(const std::string & name) const
 {
     const auto * ptr = bufferTexture(name);
-    Assert(ptr != nullptr, "No such Buffer Texture '" + name + "'");
+    AssertM(ptr != nullptr, "No such Buffer Texture '" + name + "'");
     return *ptr;
 }
 

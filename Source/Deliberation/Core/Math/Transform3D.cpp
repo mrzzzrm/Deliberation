@@ -64,7 +64,7 @@ float Transform3D::scale() const { return m_scale; }
 
 void Transform3D::setPosition(const glm::vec3 & position)
 {
-    Assert(GLMIsFinite(position), "");
+    Assert(GLMIsFinite(position));
 
     m_position = position;
     m_matrixDirty = true;
@@ -72,7 +72,7 @@ void Transform3D::setPosition(const glm::vec3 & position)
 
 void Transform3D::setOrientation(const glm::quat & orientation)
 {
-    Assert(GLMIsFinite(orientation), "");
+    Assert(GLMIsFinite(orientation));
 
     m_orientation = orientation;
     m_matrixDirty = true;
@@ -81,7 +81,7 @@ void Transform3D::setOrientation(const glm::quat & orientation)
 
 void Transform3D::setCenter(const glm::vec3 & center)
 {
-    Assert(GLMIsFinite(center), "");
+    Assert(GLMIsFinite(center));
 
     m_center = center;
     m_matrixDirty = true;
@@ -89,8 +89,8 @@ void Transform3D::setCenter(const glm::vec3 & center)
 
 void Transform3D::setScale(float scale)
 {
-    Assert(std::isfinite(scale), "");
-    Assert(scale > 0.0f, "");
+    Assert(std::isfinite(scale));
+    Assert(scale > 0.0f);
 
     m_scale = scale;
     m_matrixDirty = true;
@@ -119,22 +119,22 @@ void Transform3D::worldTranslate(const glm::vec3 & delta)
 // rotate around local axis
 void Transform3D::localRotate(const glm::quat & delta)
 {
-    Assert(GLMIsFinite(delta), "");
+    Assert(GLMIsFinite(delta));
 
     m_orientation = m_orientation * delta;
     m_matrixDirty = true;
 
-    Assert(GLMIsFinite(m_orientation), "");
+    Assert(GLMIsFinite(m_orientation));
 }
 
 void Transform3D::worldRotate(const glm::quat & delta)
 {
-    Assert(GLMIsFinite(delta), "");
+    Assert(GLMIsFinite(delta));
 
     m_orientation = delta * m_orientation;
     m_matrixDirty = true;
 
-    Assert(GLMIsFinite(m_orientation), "");
+    Assert(GLMIsFinite(m_orientation));
 }
 
 const glm::mat3 & Transform3D::basis() const
@@ -218,4 +218,11 @@ bool Transform3D::operator!=(const Transform3D & other) const
 {
     return !(*this == other);
 }
+}
+
+std::ostream & operator<<(std::ostream & os, const deliberation::Transform3D & t)
+{
+    os << "{" << t.position() << ", " << t.orientation() << ", " << t.center()
+       << ", " << t.scale() << "}";
+    return os;
 }

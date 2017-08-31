@@ -8,7 +8,7 @@ namespace deliberation
 PrototypeManager & AbstractPrototype::prototypeManagerRef() const
 {
     auto prototypeManager = m_prototypeManager.lock();
-    Assert(static_cast<bool>(prototypeManager), "");
+    Assert(static_cast<bool>(prototypeManager));
     return *prototypeManager;
 }
 

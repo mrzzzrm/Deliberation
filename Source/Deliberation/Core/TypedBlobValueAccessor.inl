@@ -38,7 +38,7 @@ CTypedBlobValueAccessor<T>::CTypedBlobValueAccessor(
 template<typename T>
 CTypedBlobIterator<T> CTypedBlobValueAccessor<T>::citerator() const
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
 
     auto offset = m_data->field.offset();
 
@@ -49,7 +49,7 @@ CTypedBlobIterator<T> CTypedBlobValueAccessor<T>::citerator() const
 template<typename T>
 const T & CTypedBlobValueAccessor<T>::operator[](size_t index) const
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
     return m_data->data.access<T>(
         m_data->field.offset() + index * m_data->layout.stride());
 }
@@ -59,7 +59,7 @@ TypedBlobValueAccessor<T>::TypedBlobValueAccessor(
     Blob & data, const DataLayout & layout, const DataLayoutField & field)
     : m_data(data, layout, field)
 {
-    Assert(
+    AssertM(
         field.type() == Type::resolve<T>(),
         std::string("Trying to access: ") + Type::resolve<T>().name() +
             ", but is actually " + field.type().name() + ": " + field.name());
@@ -68,7 +68,7 @@ TypedBlobValueAccessor<T>::TypedBlobValueAccessor(
 template<typename T>
 TypedBlobIterator<T> TypedBlobValueAccessor<T>::iterator()
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
 
     auto offset = m_data->field.offset();
 
@@ -79,7 +79,7 @@ TypedBlobIterator<T> TypedBlobValueAccessor<T>::iterator()
 template<typename T>
 CTypedBlobIterator<T> TypedBlobValueAccessor<T>::citerator() const
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
 
     auto offset = m_data->field.offset();
 
@@ -90,9 +90,9 @@ CTypedBlobIterator<T> TypedBlobValueAccessor<T>::citerator() const
 template<typename T>
 void TypedBlobValueAccessor<T>::assign(const std::vector<T> & values)
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
 
-    Assert(values.size() == m_data->data.size() / m_data->layout.stride(), "");
+    Assert(values.size() == m_data->data.size() / m_data->layout.stride());
 
     for (int v = 0; v < values.size(); v++)
     {
@@ -103,7 +103,7 @@ void TypedBlobValueAccessor<T>::assign(const std::vector<T> & values)
 template<typename T>
 T & TypedBlobValueAccessor<T>::operator[](size_t index)
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
     return m_data->data.access<T>(
         m_data->field.offset() + index * m_data->layout.stride());
 }
@@ -111,7 +111,7 @@ T & TypedBlobValueAccessor<T>::operator[](size_t index)
 template<typename T>
 const T & TypedBlobValueAccessor<T>::operator[](size_t index) const
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
     return m_data->data.access<T>(
         m_data->field.offset() + index * m_data->layout.stride());
 }

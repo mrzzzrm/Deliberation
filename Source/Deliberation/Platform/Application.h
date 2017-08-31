@@ -20,6 +20,7 @@ class Application : public InputEventReceiver
 {
 public:
     Application(const std::string & name, const std::string & prefixPath = ".");
+    ~Application();
 
     Input &       input();
     const Input & input() const;

@@ -38,13 +38,13 @@ Color::Color(const Color & color)
 
 uint8_t & Color::operator[](std::size_t index)
 {
-    Assert(index < 4, "");
+    Assert(index < 4);
     return m_values[index];
 }
 
 const uint8_t & Color::operator[](std::size_t index) const
 {
-    Assert(index < 4, "");
+    Assert(index < 4);
     return m_values[index];
 }
 }

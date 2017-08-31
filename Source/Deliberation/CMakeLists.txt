@@ -123,6 +123,8 @@ set(sources
 	Core/ScopeProfiler.h
 	Core/Span.h
 	Core/SparseVector.h
+	Core/StreamUtils.cpp
+	Core/StreamUtils.inl
 	Core/StreamUtils.h
 	Core/StringUtils.cpp
 	Core/StringUtils.h

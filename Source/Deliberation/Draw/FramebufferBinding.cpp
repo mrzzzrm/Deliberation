@@ -21,7 +21,7 @@ FramebufferBinding::FramebufferBinding(
 
 void FramebufferBinding::setFramebuffer(Framebuffer & framebuffer)
 {
-    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
+    AssertM(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     m_framebuffer = framebuffer;
     m_drawBuffersDirty = true;
@@ -29,7 +29,7 @@ void FramebufferBinding::setFramebuffer(Framebuffer & framebuffer)
 
 void FramebufferBinding::setMappings(const FramebufferMappings & mappings)
 {
-    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
+    AssertM(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     m_mappings = mappings;
     m_drawBuffersDirty = true;
@@ -37,7 +37,7 @@ void FramebufferBinding::setMappings(const FramebufferMappings & mappings)
 
 void FramebufferBinding::setMapping(const FragmentOutputMapping & mapping)
 {
-    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
+    AssertM(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     m_drawBuffersDirty = true;
 
@@ -55,7 +55,7 @@ void FramebufferBinding::setMapping(const FragmentOutputMapping & mapping)
 
 const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
 {
-    Assert(m_program.isEngaged(), "FramebufferBinding is hollow");
+    AssertM(m_program.isEngaged(), "FramebufferBinding is hollow");
 
     if (m_drawBuffersDirty)
     {
@@ -85,13 +85,13 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
 
                     if (iter != m_mappings.end() && iter->second != DISCARD_FRAGMENT_OUTPUT)
                     {
-                        Assert(!foundOutput,
+                        AssertM(!foundOutput,
                                "Multiple outputs in draw to backbuffer");
                         foundOutput = true;
                         m_drawBuffers[fragmentOutput.location()] = gl::GL_BACK_LEFT;
                     }
                 }
-                Assert(foundOutput, "");
+                Assert(foundOutput);
             }
         }
         else
@@ -140,7 +140,7 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                          * This check is not correct: It is indeed logical to
                          * draw from RGBA to RGB, when, e.g., blending
                          */
-                        //                        Assert(
+                        //                        AssertM(
                         //                            colorTarget.surface.format().fragmentOutputType()
                         //                            == fragmentOutput.type(),
                         //                            "Fragment output " +
@@ -162,7 +162,7 @@ const std::vector<gl::GLenum> & FramebufferBinding::drawBuffersGL() const
                     }
                 }
 
-                Assert(
+                AssertM(
                     bufs[fragmentOutput.location()] != gl::GL_NONE,
                     "No matching target in Framebuffer for fragment output '" +
                         fragmentOutput.name() + "'");

@@ -18,7 +18,7 @@ i32 Sign(T value)
 
 float Lerp(float a, float b, float w)
 {
-    Assert(0.0f <= w && 1.0f >= w, "");
+    Assert(0.0f <= w && 1.0f >= w);
     return a * (1 - w) + b * w;
 }
 }

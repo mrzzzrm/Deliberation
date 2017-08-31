@@ -74,7 +74,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     gl::glGenTextures(bufferTextures.size(), bufferTextures.data());
     for (auto & texture : bufferTextures)
     {
-        Assert(texture != 0, "Failed to create GL texture object");
+        AssertM(texture != 0, "Failed to create GL texture object");
     }
 }
 
@@ -110,7 +110,7 @@ void DrawImpl::setAttribute(
         binding = valueBinding;
     }
 
-    Assert(
+    AssertM(
         binding.which() != 2,
         "Vertex attribute '" + attribute.name() +
             "' is already bound to buffer");

@@ -36,14 +36,14 @@ std::size_t Blob::size() const { return m_impl ? m_impl->size() : 0u; }
 
 void * Blob::ptr(size_t offset)
 {
-    Assert(offset < size(), "");
+    Assert(offset < size());
 
     return m_impl ? ((char *)m_impl->ptr()) + offset : nullptr;
 }
 
 const void * Blob::ptr(size_t offset) const
 {
-    Assert(offset < size(), "");
+    Assert(offset < size());
 
     return m_impl ? ((char *)m_impl->ptr()) + offset : nullptr;
 }
@@ -60,21 +60,21 @@ const void * Blob::ptrRaw(size_t offset) const
 
 void Blob::write(std::size_t offset, const void * src, size_t length)
 {
-    Assert(offset + length <= size(), "");
-    Assert(ptr(), "");
+    Assert(offset + length <= size());
+    Assert(ptr());
 
     memmove(ptr(offset), src, length);
 }
 
 void Blob::resize(size_t size)
 {
-    Assert(m_impl.get(), "Hollow Blob");
+    AssertM(m_impl.get(), "Hollow Blob");
     m_impl->resize(size);
 }
 
 void Blob::reserve(size_t size)
 {
-    Assert(m_impl.get(), "Hollow Blob");
+    AssertM(m_impl.get(), "Hollow Blob");
     m_impl->reserve(size);
 }
 

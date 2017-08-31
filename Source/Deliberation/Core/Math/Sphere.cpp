@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/AABB.h>
 
 namespace deliberation
@@ -40,4 +41,10 @@ bool Sphere::intersects(const Sphere & other) const
 
     return glm::dot(delta, delta) <= sumRadii * sumRadii;
 }
+}
+
+std::ostream & operator<<(std::ostream & os, const deliberation::Sphere & s)
+{
+    os << "{" << s.position() << " -> " << s.radius() << "}";
+    return os;
 }

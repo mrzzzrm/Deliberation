@@ -40,7 +40,7 @@ BlobValue LayoutedBlobElement::value(const std::string & name)
 LayoutedBlobElement & LayoutedBlobElement::
                       operator=(const LayoutedBlobElement & rhs)
 {
-    Assert(m_layout.equals(rhs.m_layout), "Incompatible layouts");
+    AssertM(m_layout.equals(rhs.m_layout), "Incompatible layouts");
 
     auto   stride = rhs.m_layout.stride();
     auto * src = rhs.m_blob.ptr(stride * rhs.m_index);
@@ -53,7 +53,7 @@ LayoutedBlobElement & LayoutedBlobElement::
 LayoutedBlobElement & LayoutedBlobElement::
                       operator=(const CLayoutedBlobElement & rhs)
 {
-    Assert(m_layout.equals(rhs.m_layout), "Incompatible layouts");
+    AssertM(m_layout.equals(rhs.m_layout), "Incompatible layouts");
 
     auto   stride = rhs.m_layout.stride();
     auto * src = rhs.m_blob.ptr(stride * rhs.m_index);

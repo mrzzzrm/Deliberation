@@ -10,19 +10,19 @@ SurfaceDownload::SurfaceDownload() {}
 
 bool SurfaceDownload::isDone() const
 {
-    Assert(m_impl.get(), "SurfaceDownload is hollow");
+    AssertM(m_impl.get(), "SurfaceDownload is hollow");
     return m_impl->isDone();
 }
 
 void SurfaceDownload::start()
 {
-    Assert(m_impl.get(), "SurfaceDownload is hollow");
+    AssertM(m_impl.get(), "SurfaceDownload is hollow");
     m_impl->start();
 }
 
 const SurfaceBinary & SurfaceDownload::result() const
 {
-    Assert(m_impl.get(), "SurfaceDownload is hollow");
+    AssertM(m_impl.get(), "SurfaceDownload is hollow");
     return m_impl->result();
 }
 

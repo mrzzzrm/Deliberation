@@ -32,7 +32,7 @@ ContactDispatcher::createContact(RigidBody & bodyA, RigidBody & bodyB) const
     auto typeA = bodyA.shape()->type();
     auto typeB = bodyB.shape()->type();
 
-    Assert(
+    AssertM(
         m_doubleDispatch.contains(typeA, typeB),
         "No Algorithm registered for CollisionShapeTypes " +
             std::to_string(typeA) + "/" + std::to_string(typeB));

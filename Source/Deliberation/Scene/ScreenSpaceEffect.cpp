@@ -36,19 +36,19 @@ ScreenSpaceEffect::ScreenSpaceEffect(
 
 Draw & ScreenSpaceEffect::draw()
 {
-    Assert(m_initialised, "");
+    Assert(m_initialised);
     return m_draw;
 }
 
 const Draw & ScreenSpaceEffect::draw() const
 {
-    Assert(m_initialised, "");
+    Assert(m_initialised);
     return m_draw;
 }
 
 void ScreenSpaceEffect::render()
 {
-    Assert(m_initialised, "");
+    Assert(m_initialised);
     m_draw.render();
 }
 

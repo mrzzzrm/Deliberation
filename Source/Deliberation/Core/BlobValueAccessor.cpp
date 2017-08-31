@@ -15,7 +15,7 @@ CBlobValueAccessor::CBlobValueAccessor(
 
 CBlobValue CBlobValueAccessor::operator[](size_t index) const
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
     return CBlobValue(
         m_data->data.ptr(
             m_data->field.offset() + index * m_data->layout.stride()),
@@ -30,7 +30,7 @@ BlobValueAccessor::BlobValueAccessor(
 
 BlobValue BlobValueAccessor::operator[](size_t index)
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
     return BlobValue(
         m_data->data.ptr(
             m_data->field.offset() + index * m_data->layout.stride()),
@@ -39,7 +39,7 @@ BlobValue BlobValueAccessor::operator[](size_t index)
 
 CBlobValue BlobValueAccessor::operator[](size_t index) const
 {
-    Assert(m_data, "Accessor is not initialized");
+    AssertM(m_data, "Accessor is not initialized");
     return CBlobValue(
         m_data->data.ptr(
             m_data->field.offset() + index * m_data->layout.stride()),

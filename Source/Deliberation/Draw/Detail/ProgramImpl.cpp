@@ -17,7 +17,7 @@ ProgramImpl::ProgramImpl(
     : drawContext(drawContext), glProgramName(0u)
 {
     glProgramName = gl::glCreateProgram();
-    Assert(glProgramName != 0, "Failed to create GL program");
+    AssertM(glProgramName != 0, "Failed to create GL program");
 
     auto typeByExtension = std::map<std::string, gl::GLenum>();
 
@@ -30,7 +30,7 @@ ProgramImpl::ProgramImpl(
             pathOrName; // TheResourcePathResolve::instance().resolve(pathOrName);
 
         auto dotPos = path.rfind(".");
-        Assert(
+        AssertM(
             dotPos != std::string::npos,
             "File '" + path + "' has no extension");
 
@@ -41,12 +41,12 @@ ProgramImpl::ProgramImpl(
         gl::GLint length = shaderSource.size();
 
         auto iter = typeByExtension.find(extension);
-        Assert(
+        AssertM(
             iter != typeByExtension.end(),
             "Unknown shader extension '" + extension + "'");
 
         auto glShaderName = glCreateShader(iter->second);
-        Assert(glShaderName > 0, "Failed to create shader");
+        AssertM(glShaderName > 0, "Failed to create shader");
 
         gl::glShaderSource(glShaderName, 1, &shaderSourceCStr, &length);
         gl::glCompileShader(glShaderName);

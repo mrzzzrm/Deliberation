@@ -15,14 +15,14 @@ Clear::Clear(const std::shared_ptr<ClearImpl> & impl) : Base(impl) {}
 
 const Framebuffer & Clear::framebuffer() const
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     return m_impl->framebuffer;
 }
 
 void Clear::setColor(const glm::vec4 & color)
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     for (auto & color2 : m_impl->colors)
     {
@@ -32,7 +32,7 @@ void Clear::setColor(const glm::vec4 & color)
 
 void Clear::setColor(const std::string & name, const glm::vec4 & color)
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     const auto index = m_impl->framebuffer.m_impl->colorTargetIndex(name);
 
@@ -41,7 +41,7 @@ void Clear::setColor(const std::string & name, const glm::vec4 & color)
 
 void Clear::disableColor(const std::string & name)
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     const auto index = m_impl->framebuffer.m_impl->colorTargetIndex(name);
     m_impl->colors[index] = boost::optional<glm::vec4>();
@@ -49,7 +49,7 @@ void Clear::disableColor(const std::string & name)
 
 void Clear::disableColor()
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     for (auto & color2 : m_impl->colors)
     {
@@ -59,8 +59,8 @@ void Clear::disableColor()
 
 void Clear::setDepth(float depth)
 {
-    Assert(m_impl.get(), "Clear is hollow");
-    Assert(
+    AssertM(m_impl.get(), "Clear is hollow");
+    AssertM(
         (bool)m_impl->framebuffer.depthTarget(),
         "Can't set depth, because there is no depth target in Framebuffer");
 
@@ -69,15 +69,15 @@ void Clear::setDepth(float depth)
 
 void Clear::disableDepth()
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     m_impl->depth = boost::optional<float>();
 }
 
 void Clear::setStencil(u32 stencil)
 {
-    Assert(m_impl.get(), "Clear is hollow");
-    Assert(
+    AssertM(m_impl.get(), "Clear is hollow");
+    AssertM(
         m_impl->framebuffer.depthTarget() &&
             m_impl->framebuffer.depthTarget()->format().numStencilBits() > 0,
         "Can't set stencil, because there are no stencil bits in the "
@@ -88,7 +88,7 @@ void Clear::setStencil(u32 stencil)
 
 void Clear::disableStencil()
 {
-    Assert(m_impl.get(), "Clear is hollow");
+    AssertM(m_impl.get(), "Clear is hollow");
 
     m_impl->stencil = boost::optional<gl::GLint>();
 }
@@ -112,7 +112,7 @@ void Clear::render()
 
     if (framebufferImpl.isBackbuffer)
     {
-        Assert(m_impl->colors.size() == 1, "");
+        Assert(m_impl->colors.size() == 1);
 
         auto flags = gl::ClearBufferMask::GL_NONE_BIT;
 
@@ -140,7 +140,7 @@ void Clear::render()
     }
     else
     {
-        Assert(
+        AssertM(
             m_impl->colors.size() == framebufferImpl.colorTargets.size(), "");
 
         glStateManager.setDrawBuffers(m_impl->drawBuffers);
@@ -158,7 +158,7 @@ void Clear::render()
 
         if (impl.depth)
         {
-            Assert(
+            AssertM(
                 (bool)framebufferImpl.depthTarget,
                 "Can't clear depth: No depth target in Framebuffer");
             gl::glClearBufferfv(gl::GL_DEPTH, 0, &*impl.depth);
@@ -166,7 +166,7 @@ void Clear::render()
 
         if (impl.stencil)
         {
-            Assert(
+            AssertM(
                 (bool)framebufferImpl.depthTarget,
                 "Can't clear stencil: No depth target in Framebuffer");
             gl::glClearBufferiv(gl::GL_STENCIL, 0, (gl::GLint *)&*impl.stencil);

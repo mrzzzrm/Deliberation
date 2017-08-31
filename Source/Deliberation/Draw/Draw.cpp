@@ -31,43 +31,43 @@ namespace deliberation
 {
 const std::string & Draw::name() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->name;
 }
 
 Program Draw::program() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return Program(m_impl->program);
 }
 
 DrawState & Draw::state()
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->state;
 }
 
 const DrawState & Draw::state() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->state;
 }
 
 Framebuffer & Draw::framebuffer()
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->framebufferBinding.framebuffer();
 }
 
 const Framebuffer & Draw::framebuffer() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return m_impl->framebufferBinding.framebuffer();
 }
 
 Uniform Draw::uniform(const std::string & name)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     const auto & uniforms = m_impl->program->interface.uniforms();
 
@@ -84,7 +84,7 @@ Uniform Draw::uniform(const std::string & name)
 
 Sampler Draw::sampler(const std::string & name)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto location = m_impl->program->interface.samplerRef(name).location();
 
@@ -98,7 +98,7 @@ Sampler Draw::sampler(const std::string & name)
 
 Buffer Draw::setIndices(const LayoutedBlob & data)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto & drawContext = m_impl->drawContext;
     auto   buffer = drawContext.createBuffer(data.layout());
@@ -110,7 +110,7 @@ Buffer Draw::setIndices(const LayoutedBlob & data)
 
 Buffer Draw::addVertices(const LayoutedBlob & data)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto & drawContext = m_impl->drawContext;
     auto   buffer = drawContext.createBuffer(data.layout());
@@ -122,7 +122,7 @@ Buffer Draw::addVertices(const LayoutedBlob & data)
 
 Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto & drawContext = m_impl->drawContext;
     auto   buffer = drawContext.createBuffer(data.layout());
@@ -134,8 +134,8 @@ Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
 
 void Draw::setIndexBuffer(const Buffer & buffer)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    Assert(buffer.layout().fields().size() == 1, "Invalid index buffer layout");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(buffer.layout().fields().size() == 1, "Invalid index buffer layout");
 
     m_impl->indexBufferBinding.buffer = buffer.m_impl;
     m_impl->indexBufferBinding.ranged = false;
@@ -144,8 +144,8 @@ void Draw::setIndexBuffer(const Buffer & buffer)
 
 void Draw::setIndexBufferRange(const Buffer & buffer, u32 first, u32 count)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
-    Assert(buffer.layout().fields().size() == 1, "Invalid index buffer layout");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(buffer.layout().fields().size() == 1, "Invalid index buffer layout");
 
     m_impl->indexBufferBinding.buffer = buffer.m_impl;
     m_impl->indexBufferBinding.ranged = true;
@@ -177,7 +177,7 @@ void Draw::addInstanceBufferRange(
 
 VertexAttribute Draw::attribute(const std::string & name)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     const auto & attribute = program().interface().attributeRef(name);
 
@@ -187,7 +187,7 @@ VertexAttribute Draw::attribute(const std::string & name)
 void Draw::setFramebuffer(
     Framebuffer & framebuffer, const FramebufferMappings & mapping)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     setFramebufferBinding(framebufferBinding(framebuffer, mapping));
 }
@@ -195,7 +195,7 @@ void Draw::setFramebuffer(
 FramebufferBinding Draw::framebufferBinding(
     Framebuffer & framebuffer, const FramebufferMappings & mappings)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return FramebufferBinding(
         Program(m_impl->program),
         framebuffer,
@@ -204,14 +204,14 @@ FramebufferBinding Draw::framebufferBinding(
 
 void Draw::setFramebufferBinding(const FramebufferBinding & binding)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     m_impl->framebufferBinding = binding;
 }
 
 void Draw::setUniformBuffer(
     const std::string & name, const Buffer & buffer, unsigned int begin)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     auto index = m_impl->program->interface.uniformBlockRef(name).index();
 
@@ -222,7 +222,7 @@ void Draw::setUniformBuffer(
 
 UniformBufferHandle Draw::uniformBuffer(const std::string & name)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     return UniformBufferHandle(
         m_impl, m_impl->program->interface.uniformBlockRef(name).index());
 }
@@ -240,7 +240,7 @@ void Draw::setBufferTextureRange(
 
 BufferTextureBinding Draw::bufferTexture(const std::string & name)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     return BufferTextureBinding(
         m_impl, m_impl->program->interface.bufferTextureRef(name).index());
@@ -248,7 +248,7 @@ BufferTextureBinding Draw::bufferTexture(const std::string & name)
 
 void Draw::render() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     DELIBERATION_GPU_SCOPE(
         m_impl->name.empty() ? "<Unnamed Draw>" : m_impl->name);
@@ -274,7 +274,7 @@ void Draw::render() const
         auto & attributes = m_impl->program->interface.attributes();
         for (const auto & a : m_impl->dirtyValueAttributes)
         {
-            Assert(a < attributes.size(), "");
+            Assert(a < attributes.size());
 
             const auto & valueBinding = boost::get<VertexAttributeValueBinding>(
                 m_impl->attributeBindings[a]);
@@ -455,7 +455,7 @@ void Draw::render() const
         auto & sampler = m_impl->samplers[b];
         auto   texture = sampler->textureImpl;
 
-        Assert((bool)texture, "Sampler has no Texture bound to it");
+        AssertM((bool)texture, "Sampler has no Texture bound to it");
 
         glStateManager.setActiveTexture(activeTextureIndex);
         glStateManager.bindTexture((gl::GLenum)texture->type, texture->glName);
@@ -477,10 +477,10 @@ void Draw::render() const
             const auto & uniformInterface =
                 m_impl->program->interface.uniforms()[u];
 
-            Assert(
+            AssertM(
                 uniformBinding.assigned,
                 "Uniform " + uniformInterface.name() + " not set");
-            Assert(uniformBinding.count > 0, "");
+            Assert(uniformBinding.count > 0);
 
             auto   count = uniformBinding.count;
             auto * data = m_impl->uniformData.rawData().ptr(
@@ -554,7 +554,7 @@ void Draw::render() const
         {
             auto & binding = m_impl->uniformBuffers[b];
 
-            Assert(
+            AssertM(
                 binding.engaged(),
                 "UniformBuffer " +
                     m_impl->program->interface.uniformBlocks()[b].name() +
@@ -563,7 +563,7 @@ void Draw::render() const
             auto & buffer = *binding.get().buffer;
             auto   size = buffer.count * buffer.layout.stride();
 
-            Assert(size > binding.get().begin, "Begin " + std::to_string(binding.get().begin) + " beyond buffer bounds " +
+            AssertM(size > binding.get().begin, "Begin " + std::to_string(binding.get().begin) + " beyond buffer bounds " +
                 std::to_string(size) + ". Uniform buffer not setup properly.");
 
             gl::glUniformBlockBinding(m_impl->program->glProgramName, b, b);
@@ -585,7 +585,7 @@ void Draw::render() const
                 m_impl->program->interface.bufferTextures()[b];
             auto & binding = m_impl->bufferTextureBindings[b];
 
-            Assert(
+            AssertM(
                 binding.buffer.isInitialized(),
                 "Buffer not set for BufferTexture '" + interface.name() + "'");
 
@@ -640,21 +640,21 @@ void Draw::render() const
 
         if (bufferBinding.ranged)
         {
-            Assert(
+            AssertM(
                 bufferBinding.count + bufferBinding.first <
                     bufferBinding.buffer->count,
                 "Buffer too small");
 
             if (bufferBinding.divisor > 0)
             {
-                Assert(
+                AssertM(
                     instanceCount == 0 || bufferBinding.count == instanceCount,
                     "Instance count mismatch");
                 instanceCount = bufferBinding.count;
             }
             else if (!m_impl->indexBufferBinding.buffer)
             {
-                Assert(
+                AssertM(
                     vertexCount == 0 || bufferBinding.count == vertexCount,
                     "Vertex count mismatch");
                 vertexCount = bufferBinding.count;
@@ -664,7 +664,7 @@ void Draw::render() const
         {
             if (bufferBinding.divisor > 0)
             {
-                Assert(
+                AssertM(
                     instanceCount == 0 ||
                         bufferBinding.buffer->count == instanceCount,
                     "Instance count mismatch");
@@ -674,7 +674,7 @@ void Draw::render() const
             {
                 if (!useIndices)
                 {
-                    Assert(
+                    AssertM(
                         vertexCount == 0 ||
                             bufferBinding.buffer->count == vertexCount,
                         "Vertex count mismatch");
@@ -753,14 +753,14 @@ void Draw::render() const
 
 void Draw::setState(const DrawState & state)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     m_impl->state = state;
 }
 
 std::string Draw::toString() const
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     std::stringstream stream;
 
@@ -777,14 +777,14 @@ void Draw::build() const
     */
 
     gl::glGenVertexArrays(1, &m_impl->glVertexArray);
-    Assert(m_impl->glVertexArray != 0, "");
+    Assert(m_impl->glVertexArray != 0);
 
     for (size_t a = 0; a < m_impl->attributeBindings.size(); a++)
     {
         const auto & attribute = m_impl->program->interface.attributes()[a];
         const auto & attributeBinding = m_impl->attributeBindings[a];
 
-        Assert(
+        AssertM(
             attributeBinding.which() != 0,
             "Attribute '" + attribute.name() + "' is not supplied");
 
@@ -812,7 +812,7 @@ void Draw::build() const
 void Draw::addVertexBuffer(
     const Buffer & buffer, bool ranged, u32 first, u32 count, u32 divisor)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     const auto & layout = buffer.layout();
     const auto & interface = m_impl->program->interface;
@@ -825,7 +825,7 @@ void Draw::addVertexBuffer(
         if (!attribute) continue;
 
         auto & binding = m_impl->attributeBindings[attribute->index()];
-        Assert(
+        AssertM(
             binding.which() == 0,
             "Vertex attribute '" + field.name() + "' is already supplied.");
 
@@ -846,7 +846,7 @@ void Draw::addVertexBuffer(
 void Draw::setAttribute(
     const ProgramInterfaceVertexAttribute & attribute, const void * data)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
     m_impl->setAttribute(attribute, data);
 }
 }

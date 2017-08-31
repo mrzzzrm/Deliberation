@@ -7,10 +7,10 @@ namespace deliberation
 template<typename T>
 void Draw::setAttribute(const std::string & name, const T & value)
 {
-    Assert(m_impl.get(), "Can't perform action on hollow Draw");
+    AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
     const auto & attribute = program().interface().attributeRef(name);
-    Assert(
+    AssertM(
         attribute.type() == Type::resolve<T>(),
         std::string("Vertex attribute type mismatch: '") +
             attribute.type().name() + "' and '" + Type::resolve<T>().name() +

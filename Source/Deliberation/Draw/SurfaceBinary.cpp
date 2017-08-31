@@ -35,7 +35,7 @@ SurfaceBinary::SurfaceBinary(
     , m_height(height)
     , m_format(format)
 {
-    Assert(
+    AssertM(
         expectedDataSize() == m_data.size(),
         "Requested size: " + std::to_string(width) + "x" +
             std::to_string(height) + "x" +

@@ -16,7 +16,7 @@ namespace detail
             : font(nullptr)
         {
             font = TTF_OpenFont(path.c_str(), size);
-            Assert(font, "Failed to open font '" + path + "'");
+            AssertM(font, "Failed to open font '" + path + "'");
         }
 
         ~TTF_Font_Wrapper()
@@ -42,14 +42,14 @@ Font::~Font() = default;
 
 DrawContext & Font::drawContext() const
 {
-    Assert(m_drawContext, "");
+    Assert(m_drawContext);
     return *m_drawContext;
 }
 
 Texture Font::render(
     const std::string & text, unsigned int size, const glm::vec4 & color) const
 {
-    Assert(m_drawContext, "");
+    Assert(m_drawContext);
 
     auto i = m_fontBySize.find(size);
     if (i == m_fontBySize.end())
@@ -58,7 +58,7 @@ Texture Font::render(
             size,
             std::unique_ptr<detail::TTF_Font_Wrapper>(
                 new detail::TTF_Font_Wrapper(m_path, size)));
-        Assert(result.second, "");
+        Assert(result.second);
 
         i = result.first;
     }

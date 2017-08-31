@@ -1,6 +1,8 @@
 #pragma once
 
+#include <Deliberation/Core/Log.h>
 #include <Deliberation/Core/Json.h>
+
 #include <Deliberation/ECS/Entity.h>
 
 namespace deliberation
@@ -28,8 +30,10 @@ public:
 
     void updateEntity(Entity entity)
     {
-        if (!hasComponent(entity)) std::cout << "ComponentPrototype: '" << name() << ": Adding to " << entity.name() << std::endl;
-        else if (m_jsonChangedFlag) std::cout << "ComponentPrototype: '" << name() << ": JSON changed" << std::endl;
+        DELIBERATION_LOG_INNER_SCOPE("ComponentPrototype");
+
+        if (!hasComponent(entity)) Log->info("'{}': Adding to '{}'", name(), entity.name());
+        else if (m_jsonChangedFlag) Log->info("'{}': JSON changed", name());
 
         if (!hasComponent(entity) || m_jsonChangedFlag) onUpdateEntity(entity);
     }

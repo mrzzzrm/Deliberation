@@ -151,7 +151,7 @@ std::shared_ptr<Model> ModelRenderer::addModel(const std::string & path)
         size_t shapeNumVertices = 0;
         for (const auto & numVertices : shape.mesh.num_face_vertices)
         {
-            Assert(numVertices == 3, "ModelRenderer: Model not triangulated");
+            AssertM(numVertices == 3, "ModelRenderer: Model not triangulated");
             shapeNumVertices += numVertices;
         }
 

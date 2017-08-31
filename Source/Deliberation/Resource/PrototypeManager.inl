@@ -33,13 +33,13 @@ template<typename PrototypeType>
 std::shared_ptr<const PrototypeType> PrototypeManager::prototype(const std::string & name) const
 {
     const auto iter = m_prototypeTypeContainersByTypeID.find(TypeID::value<PrototypeManager, PrototypeType>());
-    Assert(iter != m_prototypeTypeContainersByTypeID.end(),
+    AssertM(iter != m_prototypeTypeContainersByTypeID.end(),
            std::string("No such prototype container for '") + typeid(PrototypeType).name() + "'")
 
     const auto & container = iter->second;
 
     const auto iter2 = container.prototypeByName.find(name);
-    Assert(iter2 != container.prototypeByName.end(),
+    AssertM(iter2 != container.prototypeByName.end(),
            "No such prototype '" + name + "' of type '" + typeid(name).name() + "'");
 
     return std::static_pointer_cast<const PrototypeType>(iter2->second);
@@ -48,7 +48,7 @@ std::shared_ptr<const PrototypeType> PrototypeManager::prototype(const std::stri
 template<typename PrototypeType>
 std::shared_ptr<const PrototypeType> PrototypeManager::getOrCreatePrototype(const std::string &name) {
     const auto iter = m_prototypeTypeContainersByTypeID.find(TypeID::value<PrototypeManager, PrototypeType>());
-    Assert(iter != m_prototypeTypeContainersByTypeID.end(),
+    AssertM(iter != m_prototypeTypeContainersByTypeID.end(),
            std::string("No such prototype container for '") + typeid(PrototypeType).name() + "'")
 
     auto & container = iter->second;

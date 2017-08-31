@@ -34,7 +34,7 @@ void CameraDolly3D::setRelativePose(const Pose3D & pose)
 void CameraDolly3D::update(
     const glm::vec3 & position, const glm::quat & orientation, float seconds)
 {
-    Assert(m_linearAcceleration >= 0.0f, "Invalid acceleration");
+    AssertM(m_linearAcceleration >= 0.0f, "Invalid acceleration");
 
     /**
      * Move position

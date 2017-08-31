@@ -97,37 +97,37 @@ void AABB::setURB(const glm::vec3 & urb) { m_urb = urb; }
 
 void AABB::setLeft(float left)
 {
-    Assert(left <= right(), "");
+    Assert(left <= right());
     m_llf.x = left;
 }
 
 void AABB::setRight(float right)
 {
-    Assert(right >= left(), "");
+    Assert(right >= left());
     m_urb.x = right;
 }
 
 void AABB::setBottom(float bottom)
 {
-    Assert(bottom <= top(), "");
+    Assert(bottom <= top());
     m_llf.y = bottom;
 }
 
 void AABB::setTop(float top)
 {
-    Assert(top >= bottom(), "");
+    Assert(top >= bottom());
     m_urb.y = top;
 }
 
 void AABB::setFront(float front)
 {
-    Assert(front <= back(), "");
+    Assert(front <= back());
     m_llf.z = front;
 }
 
 void AABB::setBack(float back)
 {
-    Assert(back >= front(), "");
+    Assert(back >= front());
     m_urb.z = back;
 }
 
@@ -262,4 +262,10 @@ bool AABB::contains(const AABB & other) const
            m_llf.z <= other.m_llf.z && m_urb.x >= other.m_urb.x &&
            m_urb.y >= other.m_urb.y && m_urb.z >= other.m_urb.z;
 }
+}
+
+std::ostream & operator<<(std::ostream & os, const deliberation::AABB & aabb)
+{
+    os << "{" << aabb.llf() << " -> " << aabb.urb() << "}";
+    return os;
 }

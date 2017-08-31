@@ -137,7 +137,7 @@ void Input::addLayer(const std::shared_ptr<InputLayer> & layer)
 void Input::removeLayer(const std::shared_ptr<InputLayer> & layer)
 {
     const auto iter = std::find(m_layers.begin(), m_layers.end(), layer);
-    Assert(iter != m_layers.end(), "");
+    Assert(iter != m_layers.end());
 
     m_layers.erase(iter);
 }

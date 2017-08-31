@@ -62,7 +62,7 @@ bool DataLayout::hasField(const std::string & name) const
 
 const DataLayoutField & DataLayout::field(size_t index) const
 {
-    Assert(index < m_fields.size(), "");
+    Assert(index < m_fields.size());
     return m_fields[index];
 }
 
@@ -81,7 +81,7 @@ const DataLayoutField & DataLayout::field(const std::string & name) const
 
 void DataLayout::addField(const DataLayoutField & field)
 {
-    Assert(
+    AssertM(
         field.offset() >= m_stride,
         "Fields not added in offset-order, or fields are interleaving");
 

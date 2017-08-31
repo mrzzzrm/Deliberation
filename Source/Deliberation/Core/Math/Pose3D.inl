@@ -52,7 +52,7 @@ inline const glm::vec3 & Pose3D::center() const { return m_center; }
 
 inline void Pose3D::setPosition(const glm::vec3 & position)
 {
-    Assert(GLMIsFinite(position), "");
+    Assert(GLMIsFinite(position));
 
     m_position = position;
     m_matrixDirty = true;
@@ -60,7 +60,7 @@ inline void Pose3D::setPosition(const glm::vec3 & position)
 
 inline void Pose3D::setOrientation(const glm::quat & orientation)
 {
-    Assert(GLMIsFinite(orientation), "");
+    Assert(GLMIsFinite(orientation));
 
     m_orientation = orientation;
     m_matrixDirty = true;
@@ -69,7 +69,7 @@ inline void Pose3D::setOrientation(const glm::quat & orientation)
 
 inline void Pose3D::setCenter(const glm::vec3 & center)
 {
-    Assert(GLMIsFinite(center), "");
+    Assert(GLMIsFinite(center));
 
     m_center = center;
     m_matrixDirty = true;
@@ -104,12 +104,12 @@ inline Pose3D Pose3D::worldTranslated(const glm::vec3 & delta) const
 // rotate around local axis
 inline void Pose3D::localRotate(const glm::quat & delta)
 {
-    Assert(GLMIsFinite(delta), "");
+    Assert(GLMIsFinite(delta));
 
     m_orientation = m_orientation * delta;
     m_matrixDirty = true;
 
-    Assert(GLMIsFinite(m_orientation), "");
+    Assert(GLMIsFinite(m_orientation));
 }
 
 inline Pose3D Pose3D::localRotated(const glm::quat & delta) const
@@ -121,12 +121,12 @@ inline Pose3D Pose3D::localRotated(const glm::quat & delta) const
 
 inline void Pose3D::worldRotate(const glm::quat & delta)
 {
-    Assert(GLMIsFinite(delta), "");
+    Assert(GLMIsFinite(delta));
 
     m_orientation = delta * m_orientation;
     m_matrixDirty = true;
 
-    Assert(GLMIsFinite(m_orientation), "");
+    Assert(GLMIsFinite(m_orientation));
 }
 
 inline Pose3D Pose3D::worldRotated(const glm::quat & delta) const

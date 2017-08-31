@@ -22,7 +22,7 @@ GLGetActiveUniformName(gl::GLuint glProgramName, gl::GLuint uniformIndex)
     gl::GLint length;
     glGetActiveUniformsiv(
         glProgramName, 1, &uniformIndex, gl::GL_UNIFORM_NAME_LENGTH, &length);
-    Assert(length > 1, ""); // Has to include at least 1 char and '\0'
+    Assert(length > 1); // Has to include at least 1 char and '\0'
 
     std::vector<char> name(length);
     gl::glGetActiveUniformName(
@@ -41,7 +41,7 @@ GLGetActiveUniformBlockName(gl::GLuint glProgramName, gl::GLuint blockIndex)
     gl::GLint length;
     glGetActiveUniformBlockiv(
         glProgramName, blockIndex, gl::GL_UNIFORM_BLOCK_NAME_LENGTH, &length);
-    Assert(length > 1, ""); // Has to include at least 1 char and '\0'
+    Assert(length > 1); // Has to include at least 1 char and '\0'
 
     std::vector<char> name(length);
     gl::glGetActiveUniformBlockName(

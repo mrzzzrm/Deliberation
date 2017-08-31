@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ostream>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -67,6 +68,8 @@ public:
 
     bool intersects(const AABB & other) const;
     bool contains(const AABB & other) const;
+
+    friend std::ostream & operator<<(std::ostream & os, const AABB & aabb);
 
 private:
     glm::vec3 m_llf;

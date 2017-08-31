@@ -20,7 +20,7 @@ SamplerImpl::SamplerImpl(
     , location(location)
 {
     gl::glGenSamplers(1, &glName);
-    Assert(glName != 0, "Failed to create GL sampler object");
+    AssertM(glName != 0, "Failed to create GL sampler object");
 
     wrap[0] = TextureWrap::Repeat;
     wrap[1] = TextureWrap::Repeat;

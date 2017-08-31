@@ -29,7 +29,7 @@ public:
 
     DrawContext & drawContext() const
     {
-        Assert(m_drawContext, "");
+        Assert(m_drawContext);
         return *m_drawContext;
     }
 

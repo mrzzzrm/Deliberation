@@ -20,7 +20,7 @@
 //
 //    void decRefCount()
 //    {
-//        Assert(m_refCount > 0, "Can't dec ref count of 0");
+//        AssertM(m_refCount > 0, "Can't dec ref count of 0");
 //        m_refCount--;
 //    }
 //

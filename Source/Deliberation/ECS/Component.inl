@@ -15,7 +15,7 @@ template<typename T>
 std::size_t Component<T>::indexStatic()
 {
     auto i = TypeID::value<ComponentBase, T>();
-    Assert(i < ECS_MAX_NUM_COMPONENTS, "");
+    Assert(i < ECS_MAX_NUM_COMPONENTS);
 
     return i;
 }

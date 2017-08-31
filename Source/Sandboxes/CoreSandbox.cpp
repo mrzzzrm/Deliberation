@@ -1,16 +1,30 @@
-#include <chrono>
 #include <iostream>
 
-#include <Deliberation/Core/Log.h>
+#include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/Math/Sphere.h>
 #include <Deliberation/Deliberation.h>
 
-using namespace deliberation;
+struct Foo {
+//    template<typename ValueType>
+//    operator ValueType() const {
+//        return 0;
+//    }
 
-int main(int argc, char * argv[])
-{
+    friend std::ostream &operator<<(std::ostream &o, const Foo &f) {
+        o << "Foo";
+        return o;
+    }
+};
+
+
+int main(int argc, char *argv[]) {
     deliberation::init();
 
-    Log("MAIN", "Hallo {}, {} times", "Welt", 2);
+    Foo foo;
+    Sphere sphere({1.0f, 0.0f, 5.0f}, 3.3f);
+
+    AssertM(true, "Hello World");
+    AssertF(false, "The world is {}", sphere);
 
     return 0;
 }

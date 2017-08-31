@@ -11,7 +11,7 @@ namespace deliberation
 std::string FileToString(const std::string & path)
 {
     std::ifstream file(path.c_str());
-    Assert(file.is_open(), "Couldn't open '" + path + "'");
+    AssertM(file.is_open(), "Couldn't open '" + path + "'");
 
     file.seekg(0, std::ios::end);
     auto        size = file.tellg();

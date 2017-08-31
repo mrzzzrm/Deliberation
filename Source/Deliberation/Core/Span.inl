@@ -47,7 +47,7 @@ T * Span<T>::end() const
 template<typename T>
 T & Span<T>::operator[](size_t index) const
 {
-    Assert(index < m_size, "");
+    Assert(index < m_size);
     return m_ptr[index];
 }
 

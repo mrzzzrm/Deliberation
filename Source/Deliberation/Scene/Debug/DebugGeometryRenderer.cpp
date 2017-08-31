@@ -121,7 +121,7 @@ void DebugGeometryRenderer::removeNode(
     const std::shared_ptr<DebugGeometryNode> & node)
 {
     auto iter = std::find(m_nodes.begin(), m_nodes.end(), node);
-    Assert(iter != m_nodes.end(), "");
+    Assert(iter != m_nodes.end());
 
     m_nodes.erase(iter);
 }

@@ -63,7 +63,7 @@ template<typename QualifiedNodeType, typename QualifiedTreeType>
 uint32_t LinearOctree<NodeType>::
     IteratorT<QualifiedNodeType, QualifiedTreeType>::cellIndex() const
 {
-    Assert(isCell(), "");
+    Assert(isCell());
     return m_index - LinearOctreeLevelBaseIndex(m_tree.depth() - 1);
 }
 
@@ -90,7 +90,7 @@ QualifiedNodeType &
 LinearOctree<NodeType>::IteratorT<QualifiedNodeType, QualifiedTreeType>::node()
     const
 {
-    Assert(isValid(), "");
+    Assert(isValid());
     return m_tree.m_nodes[m_index];
 }
 
@@ -260,14 +260,14 @@ template<typename NodeType>
 typename LinearOctree<NodeType>::Iterator
 LinearOctree<NodeType>::node(std::size_t index)
 {
-    Assert(index < m_nodes.size(), "");
+    Assert(index < m_nodes.size());
     return Iterator(*this, index);
 }
 template<typename NodeType>
 typename LinearOctree<NodeType>::CIterator
 LinearOctree<NodeType>::node(std::size_t index) const
 {
-    Assert(index < m_nodes.size(), "");
+    Assert(index < m_nodes.size());
     return CIterator(*this, index);
 }
 

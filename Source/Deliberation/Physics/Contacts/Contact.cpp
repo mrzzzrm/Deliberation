@@ -90,7 +90,7 @@ uint Contact::numPoints() const { return m_numPoints; }
 
 ContactPoint & Contact::point(uint index)
 {
-    Assert(index < m_numPoints, "");
+    Assert(index < m_numPoints);
     return m_points[index];
 }
 

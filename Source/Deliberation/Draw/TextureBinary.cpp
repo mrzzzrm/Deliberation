@@ -44,8 +44,8 @@ TextureBinary::TextureBinary(std::array<SurfaceBinary, 6> && cubeFaces)
     m_faces.reserve(6);
     for (auto & face : cubeFaces)
     {
-        Assert(face.width() == m_width && face.height() == m_height, "");
-        Assert(face.format() == m_format, "");
+        Assert(face.width() == m_width && face.height() == m_height);
+        Assert(face.format() == m_format);
 
         m_faces.push_back(std::move(face));
     }
@@ -63,7 +63,7 @@ PixelFormat TextureBinary::format() const { return m_format; }
 
 const SurfaceBinary & TextureBinary::surface(unsigned int face) const
 {
-    Assert(
+    AssertM(
         face < m_faces.size(),
         "Surface '" + std::to_string(face) + "' out of range '" +
             std::to_string(m_faces.size()) + "'");

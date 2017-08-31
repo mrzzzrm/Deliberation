@@ -20,7 +20,7 @@ void EventDomain::removeEventListener(const EventListenerProxy & listener)
         [&](auto & listenerProxy) {
             return listenerProxy == listener.proxy();
         });
-    Assert(iter != listenerProxies.end(), "");
+    Assert(iter != listenerProxies.end());
     listenerProxies.erase(iter);
 }
 }

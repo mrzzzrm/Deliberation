@@ -23,7 +23,7 @@ PointLightRenderer::PointLightRenderer(RenderManager & renderManager)
 // Reference invalidated by add/removePointLight()
 PointLight & PointLightRenderer::pointLight(size_t index)
 {
-    Assert(index <= m_lights.size(), "Invalid index");
+    AssertM(index <= m_lights.size(), "Invalid index");
     return m_lights[index];
 }
 
@@ -50,7 +50,7 @@ size_t PointLightRenderer::addPointLight(const PointLight & pointLight)
 
 void PointLightRenderer::removePointLight(size_t index)
 {
-    Assert(index <= m_lights.size(), "Invalid index");
+    AssertM(index <= m_lights.size(), "Invalid index");
 
     m_lights[index].active = false;
 

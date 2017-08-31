@@ -62,7 +62,7 @@ void PhysicsWorld::addRigidBody(const std::shared_ptr<RigidBody> & body)
 void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
 {
     auto index = body->index();
-    Assert(
+    AssertM(
         index != RigidBody::INVALID_INDEX,
         "Body was never added to PhysicsWorld");
 
@@ -418,9 +418,6 @@ void PhysicsWorld::solvePositions(Contact & contact)
         auto impulse = normalMass > 0.0f ? -C / normalMass : 0.0f;
 
         auto P = impulse * n;
-
-        std::cout << P << " " << separation << " " << (-mA * P) << " "
-                  << (mB * P) << std::endl;
 
         transformA.setPosition(transformA.position() - mA * P);
         transformA.setOrientation(QuaternionAxisRotation(

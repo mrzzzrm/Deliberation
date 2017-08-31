@@ -70,14 +70,14 @@ void ImGuiSystem::addControlItem(
     const std::string & name, const std::function<void()> & fn)
 {
     const auto iter = m_controlItems.find(name);
-    Assert(iter == m_controlItems.end(), "Already have " + name);
+    AssertM(iter == m_controlItems.end(), "Already have " + name);
     m_controlItems.emplace(name, fn);
 }
 
 void ImGuiSystem::removeControlItem(const std::string & name)
 {
     const auto iter = m_controlItems.find(name);
-    Assert(iter != m_controlItems.end(), "Don't have " + name);
+    AssertM(iter != m_controlItems.end(), "Don't have " + name);
     m_controlItems.erase(iter);
 }
 

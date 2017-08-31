@@ -49,7 +49,7 @@ const glm::mat3 & Box::orientationMatrix() const { return m_axes; }
 
 const glm::vec3 & Box::axis(size_t i) const
 {
-    Assert(i < 3, "");
+    Assert(i < 3);
     return m_axes[i];
 }
 
@@ -61,7 +61,7 @@ AABB Box::bounds() const
 
 glm::vec3 Box::point(size_t index) const
 {
-    Assert(index < 8, "");
+    Assert(index < 8);
 
     auto x = m_halfExtent.x * this->x();
     auto y = m_halfExtent.y * this->y();

@@ -20,7 +20,7 @@ UVSphere::UVSphere(unsigned int numParallels, unsigned int numMeridians)
 
 Mesh UVSphere::generateMesh() const
 {
-    Assert(m_numParallels != 0 && m_numMeridians != 0, "");
+    Assert(m_numParallels != 0 && m_numMeridians != 0);
 
     DataLayout vertexLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 
@@ -95,7 +95,7 @@ Mesh UVSphere::generateMesh() const
 
 MeshData UVSphere::generateMesh2() const
 {
-    Assert(m_numParallels != 0 && m_numMeridians != 0, "");
+    Assert(m_numParallels != 0 && m_numMeridians != 0);
 
     DataLayout vertexLayout({{"Position", Type_Vec3}, {"Normal", Type_Vec3}});
 

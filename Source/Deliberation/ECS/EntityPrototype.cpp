@@ -1,5 +1,7 @@
 #include <Deliberation/ECS/EntityPrototype.h>
 
+#include <Deliberation/Core/Log.h>
+
 #include <Deliberation/ECS/ComponentPrototypeBase.h>
 #include <Deliberation/ECS/World.h>
 
@@ -13,8 +15,9 @@ EntityPrototype::EntityPrototype(World & world, const std::string & key)
 void EntityPrototype::addComponentPrototype(
     const std::shared_ptr<ComponentPrototypeBase> & componentPrototype)
 {
-    std::cout << "EntityPrototype '" + m_key + "': Adding ComponentPrototype '"
-              << componentPrototype->name() << "'" << std::endl;
+    DELIBERATION_LOG_INNER_SCOPE("EntityPrototype");
+
+    Log->info("EntityPrototype '{}': Adding ComponentPrototype '{}'", m_key, componentPrototype->name());
     m_componentPrototypes.emplace_back(componentPrototype);
 }
 
@@ -37,8 +40,9 @@ bool EntityPrototype::isEntityDirty(const Entity & entity) const
 
 void EntityPrototype::applyToEntity(Entity & entity)
 {
-    std::cout << "EntityPrototype '" + m_key + "': Applying "
-              << m_componentPrototypes.size() << " components" << std::endl;
+    DELIBERATION_LOG_INNER_SCOPE("EntityPrototype");
+
+    Log->info("'{}': Applying {} components", m_key, m_componentPrototypes.size());
 
     for (auto & componentPrototype : m_componentPrototypes)
     {
@@ -50,6 +54,8 @@ void EntityPrototype::applyToEntity(Entity & entity)
 
 void EntityPrototype::updateEntities()
 {
+    DELIBERATION_LOG_INNER_SCOPE("EntityPrototype");
+
     /**
      * Update entities
      */
@@ -59,8 +65,7 @@ void EntityPrototype::updateEntities()
         if (!entity.isValid()) continue;
         if (!isEntityDirty(entity)) continue;
 
-        std::cout << "EntityPrototype '" + m_key + "': Updating Entity '"
-                  << entity.name() << "'" << std::endl;
+        Log->info("'{}': Updating Entity '{}'", m_key, entity.name());
 
         for (auto & componentPrototype : m_componentPrototypes)
         {

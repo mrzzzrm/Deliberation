@@ -48,7 +48,7 @@ void Camera3D::setOrientation(const glm::quat & orientation)
 
 void Camera3D::setZNear(float zNear)
 {
-    Assert(zNear > 0.0f, "");
+    Assert(zNear > 0.0f);
 
     m_zNear = zNear;
     m_projectionDirty = true;
@@ -56,7 +56,7 @@ void Camera3D::setZNear(float zNear)
 
 void Camera3D::setZFar(float zFar)
 {
-    Assert(zFar > 0.0f, "");
+    Assert(zFar > 0.0f);
 
     m_zFar = zFar;
     m_projectionDirty = true;
@@ -64,7 +64,7 @@ void Camera3D::setZFar(float zFar)
 
 void Camera3D::setYFoV(float yFoV)
 {
-    Assert(yFoV > 0.0f, "");
+    Assert(yFoV > 0.0f);
 
     m_yFoV = yFoV;
     m_projectionDirty = true;
@@ -72,7 +72,7 @@ void Camera3D::setYFoV(float yFoV)
 
 void Camera3D::setAspectRatio(float aspectRatio)
 {
-    Assert(aspectRatio > 0.0f, "");
+    Assert(aspectRatio > 0.0f);
 
     m_aspectRatio = aspectRatio;
     m_projectionDirty = true;

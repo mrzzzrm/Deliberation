@@ -112,7 +112,7 @@ bool StencilState::enabled() const { return m_enabled; }
 
 StencilFunction StencilState::func(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & FUNC_BIT),
         "");
@@ -121,7 +121,7 @@ StencilFunction StencilState::func(StencilFace face) const
 
 u32 StencilState::ref(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & REF_BIT),
         "");
@@ -130,7 +130,7 @@ u32 StencilState::ref(StencilFace face) const
 
 u32 StencilState::readMask(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & READMASK_BIT),
         "");
@@ -139,7 +139,7 @@ u32 StencilState::readMask(StencilFace face) const
 
 u32 StencilState::writeMask(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & WRITEMASK_BIT),
         "");
@@ -148,7 +148,7 @@ u32 StencilState::writeMask(StencilFace face) const
 
 StencilOp StencilState::sfail(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & SFAIL_BIT),
         "");
@@ -157,7 +157,7 @@ StencilOp StencilState::sfail(StencilFace face) const
 
 StencilOp StencilState::dpfail(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & DPFAIL_BIT),
         "");
@@ -166,7 +166,7 @@ StencilOp StencilState::dpfail(StencilFace face) const
 
 StencilOp StencilState::dppass(StencilFace face) const
 {
-    Assert(
+    AssertM(
         face != StencilFace::FrontAndBack ||
             !(m_differentFrontAndBackBits & DPPASS_BIT),
         "");

@@ -1,5 +1,6 @@
 #include <Deliberation/Core/Math/Pose3D.h>
 
+#include <Deliberation/Core/StreamUtils.h>
 #include <Deliberation/Core/Math/Transform3D.h>
 
 namespace deliberation
@@ -22,4 +23,11 @@ Pose3D::fromTransformedPose(const Transform3D & transform, const Pose3D & pose)
     result.setCenter(pose.center());
     return result;
 }
+}
+
+std::ostream & operator<<(std::ostream & os, const deliberation::Pose3D & p)
+{
+    os << "{" << p.position() << ", " << p.orientation() << ", " << p.center()
+       << "}";
+    return os;
 }

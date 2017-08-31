@@ -97,7 +97,7 @@ void RigidBody::setFriction(float friction) { m_friction = friction; }
 
 void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
 {
-    Assert(GLMIsFinite(velocity), "");
+    Assert(GLMIsFinite(velocity));
 
     if (m_static) return;
 
@@ -106,7 +106,7 @@ void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
 
 void RigidBody::setAngularVelocity(const glm::vec3 & velocity)
 {
-    Assert(GLMIsFinite(velocity), "");
+    Assert(GLMIsFinite(velocity));
 
     if (m_static) return;
 

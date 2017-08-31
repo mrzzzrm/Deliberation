@@ -50,7 +50,7 @@ LabelRenderer::LabelRenderer(DrawContext & drawContext)
 
 void LabelRenderer::render(const Label & label, const Viewport & viewport)
 {
-    Assert(m_drawContext, "Hollow LabelRenderer can't render");
+    AssertM(m_drawContext, "Hollow LabelRenderer can't render");
 
     m_sampler.setTexture(label.texture());
     m_colorUniform.set(label.color());

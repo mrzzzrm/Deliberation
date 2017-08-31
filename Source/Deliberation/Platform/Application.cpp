@@ -26,17 +26,23 @@ Application::Application(
     const std::string & name, const std::string & prefixPath)
     : m_name(name), m_prefixPath(prefixPath), m_running(false), m_returnCode(0)
 {
+    deliberation::init();
+}
+
+Application::~Application()
+{
+    deliberation::shutdown();
 }
 
 Input & Application::input()
 {
-    Assert(m_input.engaged(), "Input not yet setup");
+    AssertM(m_input.engaged(), "Input not yet setup");
     return *m_input;
 }
 
 const Input & Application::input() const
 {
-    Assert(m_input.engaged(), "Input not yet setup");
+    AssertM(m_input.engaged(), "Input not yet setup");
     return *m_input;
 }
 
@@ -65,7 +71,7 @@ int Application::run(int argc, char ** argv)
 
     if (!cmdPrefix.empty())
     {
-        std::cout << "Prefix override: '" << cmdPrefix << "'" << std::endl;
+        Log->info("Prefix override: '{}'", cmdPrefix);
         m_prefixPath = cmdPrefix;
     }
 
@@ -78,8 +84,7 @@ int Application::run(int argc, char ** argv)
 
     onStartup();
 
-    if (deliberation::GLLoggingEnabled())
-        std::cout << "--- Frame ---" << std::endl;
+    if (deliberation::GLLoggingEnabled()) Log->info("--- Frame ---");
 
     u32 frameCounter = 0;
 
@@ -113,8 +118,7 @@ int Application::run(int argc, char ** argv)
 
         m_fpsCounter.onFrame();
 
-        if (deliberation::GLLoggingEnabled())
-            std::cout << "--- Frame ---" << std::endl;
+        if (deliberation::GLLoggingEnabled()) Log->info("--- Frame ---");
 
         frameCounter++;
 
@@ -150,15 +154,7 @@ void Application::init()
     {
         int flags = IMG_INIT_JPG | IMG_INIT_PNG;
         int sucess = IMG_Init(flags);
-        if ((sucess & flags) != flags)
-        {
-            std::cerr
-                << "IMG_Init: Failed to init required jpg and png support!"
-                << std::endl;
-            std::cerr << "IMG_Init: " << IMG_GetError() << std::endl;
-            m_returnCode = -1;
-            return;
-        }
+        AssertM((sucess & flags) == flags, "IMG_Init: Failed to init required jpg and png support! " + std::string(IMG_GetError()));
     }
 
     SDL_GL_SetAttribute(
@@ -196,18 +192,15 @@ void Application::init()
     auto vendorString = glbinding::ContextInfo::vendor();
     auto rendererString = glbinding::ContextInfo::renderer();
 
-    std::cout << std::endl
-              << "OpenGL Version:  " << versionString << std::endl
-              << "OpenGL Vendor:   " << vendorString << std::endl
-              << "OpenGL Renderer: " << rendererString << std::endl
-              << "DrawContext RGBA-bits: " << drawContextColorSize << std::endl;
+    Log->info("OpenGL Version:        {}", versionString);
+    Log->info("OpenGL Vendor:         {}", vendorString);
+    Log->info("OpenGL Renderer:       {}", rendererString);
+    Log->info("DrawContext RGBA-bits: {}", drawContextColorSize);
 
-    deliberation::init();
     deliberation::setPrefixPath(m_prefixPath);
     deliberation::EnableGLErrorChecks();
 
-    std::cout << "Deliberation initialized with prefix '"
-              << deliberation::prefixPath() << "'" << std::endl;
+    Log->info("Prefix:                {}", deliberation::prefixPath());
 
     m_drawContext.reset(m_displayWidth, m_displayHeight);
 

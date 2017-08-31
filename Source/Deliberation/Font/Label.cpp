@@ -110,7 +110,7 @@ void Label::setFontSize(unsigned int fontSize)
 
 void Label::renderText() const
 {
-    Assert(m_font, "Hollow Label object can't set text");
+    AssertM(m_font, "Hollow Label object can't set text");
 
     if (!m_textureDirty) return;
 
@@ -122,7 +122,7 @@ void Label::renderText() const
 
 void Label::updateTransform(const Viewport & viewport) const
 {
-    Assert(viewport.width() != 0 && viewport.height() != 0, "Invalid viewport");
+    AssertM(viewport.width() != 0 && viewport.height() != 0, "Invalid viewport");
 
     auto align = glm::translate(glm::mat4(1.0f), glm::vec3(-m_center, 0.0f));
 

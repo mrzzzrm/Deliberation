@@ -14,8 +14,8 @@ void PolygonClipping2D(
     const Span<glm::vec2> &  clipping,
     std::vector<glm::vec2> & result)
 {
-    Assert(subject.size() > 2, "");
-    Assert(clipping.size() > 2, "");
+    Assert(subject.size() > 2);
+    Assert(clipping.size() > 2);
 
     std::vector<glm::vec2> input;
     std::vector<glm::vec2> output;
@@ -72,7 +72,7 @@ void PolygonClipping2D(
                     bool exists;
                     output.push_back(Ray2DIntersectionPoint(
                         Ray2D::fromTo(S, E), edge, exists));
-                    Assert(exists, "");
+                    Assert(exists);
                 }
                 output.push_back(E);
             }
@@ -81,7 +81,7 @@ void PolygonClipping2D(
                 bool exists;
                 output.push_back(
                     Ray2DIntersectionPoint(Ray2D::fromTo(S, E), edge, exists));
-                Assert(exists, "");
+                Assert(exists);
             }
 
             S = E;

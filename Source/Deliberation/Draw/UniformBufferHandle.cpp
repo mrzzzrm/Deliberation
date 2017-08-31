@@ -16,13 +16,13 @@ UniformBufferHandle::UniformBufferHandle(
 
 void UniformBufferHandle::setBuffer(const Buffer & buffer, u32 begin)
 {
-    Assert((bool)m_drawImpl, "UniformBufferHandle is hollow");
+    AssertM((bool)m_drawImpl, "UniformBufferHandle is hollow");
 
     const auto & uniformBufferInterface =
         m_drawImpl->program->interface.uniformBlocks()[m_index];
     const auto & uniformBufferLayout = uniformBufferInterface.layout();
 
-    Assert(
+    AssertM(
         buffer.layout() == uniformBufferLayout,
         "UniformBlock layout doesn't match the buffer:\n\t" +
             buffer.layout().toString() + "\n\t" +

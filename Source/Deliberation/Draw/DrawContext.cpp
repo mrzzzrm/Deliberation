@@ -7,6 +7,7 @@
 #include <Deliberation/Deliberation.h>
 
 #include <Deliberation/Core/LayoutedBlob.h>
+#include <Deliberation/Core/Log.h>
 
 #include <Deliberation/Draw/Buffer.h>
 #include <Deliberation/Draw/Surface.h>
@@ -117,7 +118,7 @@ Texture DrawContext::createTexture(const TextureBinary & binary)
 
 Texture DrawContext::createTexture2D(u32 width, u32 height, PixelFormat format)
 {
-    Assert(width > 0 && height > 0, "Invalid size");
+    AssertM(width > 0 && height > 0, "Invalid size");
 
     auto impl = std::make_shared<TextureImpl>(*this, width, height, 1, format);
     impl->setupSurfaces(impl);
@@ -130,7 +131,9 @@ Texture DrawContext::createTexture2D(u32 width, u32 height, PixelFormat format)
 Framebuffer
 DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
 {
-    Assert(
+    DELIBERATION_LOG_INNER_SCOPE("DrawContext")
+
+    AssertM(
         framebufferDesc.width > 0 && framebufferDesc.height > 0,
         "Framebuffer axes must be > 0");
 
@@ -138,8 +141,7 @@ DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
         Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
 
 #if VERBOSE
-    std::cout << "DrawContext::createFramebuffer(): " << framebuffer.toString()
-              << std::endl;
+    Log->info("Creating Framebuffer: {}", framebuffer.toString());
 #endif
 
     return framebuffer;

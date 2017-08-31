@@ -21,7 +21,7 @@ template<typename RendererType>
 std::shared_ptr<RendererType> RenderManager::renderer()
 {
     const auto iter = m_rendererByTypeId.find(TypeID::value<RenderManager, RendererType>());
-    Assert(iter != m_rendererByTypeId.end(), std::string("Renderer '") + typeid(RendererType).name() + "' not registered");
+    AssertM(iter != m_rendererByTypeId.end(), std::string("Renderer '") + typeid(RendererType).name() + "' not registered");
     return std::static_pointer_cast<RendererType>(iter->second);
 }
 
@@ -29,7 +29,7 @@ template<typename RendererType>
 std::shared_ptr<const RendererType> RenderManager::renderer() const
 {
     const auto iter = m_rendererByTypeId.find(TypeID::value<RenderManager, RendererType>());
-    Assert(iter != m_rendererByTypeId.end(), std::string("Renderer '") + typeid(RendererType).name() + "' not registered");
+    AssertM(iter != m_rendererByTypeId.end(), std::string("Renderer '") + typeid(RendererType).name() + "' not registered");
     return std::static_pointer_cast<RendererType>(iter->second);
 }
 }

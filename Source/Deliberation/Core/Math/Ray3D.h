@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 #include <glm/glm.hpp>
 
 namespace deliberation
@@ -26,6 +28,8 @@ public:
     void  normalize();
 
     glm::vec3 at(float s) const;
+
+    friend std::ostream & operator<<(std::ostream & os, const deliberation::Ray3D & ray);
 
 protected:
     glm::vec3 m_origin;

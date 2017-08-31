@@ -91,28 +91,28 @@ const T & RingBuffer<T>::front() const
 template<typename T>
 T & RingBuffer<T>::back()
 {
-    Assert(m_size > 0, "");
+    Assert(m_size > 0);
     return at(m_size - 1);
 }
 
 template<typename T>
 const T & RingBuffer<T>::back() const
 {
-    Assert(m_size > 0, "");
+    Assert(m_size > 0);
     return at(m_size - 1);
 }
 
 template<typename T>
 T & RingBuffer<T>::at(std::size_t index)
 {
-    Assert(index < m_size, "");
+    Assert(index < m_size);
     return m_vec[(m_begin + index) % m_vec.size()];
 }
 
 template<typename T>
 const T & RingBuffer<T>::at(std::size_t index) const
 {
-    Assert(index < m_size, "");
+    Assert(index < m_size);
     return m_vec[(m_begin + index) % m_vec.size()];
 }
 
@@ -147,7 +147,7 @@ void RingBuffer<T>::push(T && value)
 template<typename T>
 void RingBuffer<T>::pop()
 {
-    Assert(m_size > 0, "");
+    Assert(m_size > 0);
     m_size--;
 }
 

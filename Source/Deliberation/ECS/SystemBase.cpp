@@ -18,7 +18,7 @@ bool SystemBase::accepts(const Entity & entity)
 
 void SystemBase::addEntity(Entity & entity)
 {
-    Assert(&entity.world() == &m_world, "");
+    Assert(&entity.world() == &m_world);
 
     EntityEntry entry;
     entry.id = entity.id();
@@ -31,10 +31,10 @@ void SystemBase::addEntity(Entity & entity)
 
 void SystemBase::removeEntity(Entity & entity)
 {
-    Assert(&entity.world() == &m_world, "");
+    Assert(&entity.world() == &m_world);
 
     auto i = m_entityIndexByID.find(entity.id());
-    Assert(i != m_entityIndexByID.end(), "Entity '" + entity.name() + "' not in System '" + name() + "'");
+    AssertM(i != m_entityIndexByID.end(), "Entity '" + entity.name() + "' not in System '" + name() + "'");
 
     m_entities.erase(i->second);
     m_entityIndexByID.erase(i);

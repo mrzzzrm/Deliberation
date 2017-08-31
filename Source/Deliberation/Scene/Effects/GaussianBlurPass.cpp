@@ -42,20 +42,20 @@ void GaussianBlurPass::setStandardDeviation(float s)
     const auto a = sqrt(var2 * glm::pi<float>());
 
     const auto b = log(a * THRESHOLD);
-    Assert(b < 0.0f, "Illegal Standard Deviation");
+    AssertM(b < 0.0f, "Illegal Standard Deviation");
 
     const auto c = -var2 * b;
     const auto d = sqrt(c);
 
     m_radius = (u32)ceil(d);
 
-    Assert(m_radius > 0, "Radius can't be zero");
+    AssertM(m_radius > 0, "Radius can't be zero");
 
     auto numInterpolatedSamples =
         1 +
         ((m_radius - 1) % 2 == 0 ? (m_radius - 1) / 2 : (m_radius - 1) / 2 + 1);
 
-    Assert(
+    AssertM(
         numInterpolatedSamples < m_gaussianBlur.maxNumSamples(),
         "Invalid number of samples: " + std::to_string(numInterpolatedSamples));
 
@@ -84,7 +84,7 @@ void GaussianBlurPass::setStandardDeviation(float s)
                 offsets[s] = baseOffset + dist[baseOffset + 1] / sum;
                 weights[s] = sum / 1.0f;
 
-                Assert(weights[s] < 1.0f, "");
+                Assert(weights[s] < 1.0f);
             }
         }
     });

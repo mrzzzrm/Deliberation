@@ -5,53 +5,21 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <Deliberation/Core/Math/AABB.h>
-#include <Deliberation/Core/Math/Pose3D.h>
-#include <Deliberation/Core/Math/Ray2D.h>
-#include <Deliberation/Core/Math/Ray3D.h>
-#include <Deliberation/Core/Math/Sphere.h>
-#include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Core/Log.h>
 
-namespace deliberation
-{
-template<typename StreamType, typename T, glm::precision precision>
-StreamType & operator<<(StreamType && os, const glm::tvec2<T, precision> & v);
+template<typename T, glm::precision precision>
+std::ostream & operator<<(std::ostream & os, const glm::tvec2<T, precision> & v);
 
-template<typename StreamType, typename T, glm::precision precision>
-StreamType & operator<<(StreamType && os, const glm::tvec3<T, precision> & v);
+template<typename T, glm::precision precision>
+std::ostream & operator<<(std::ostream & os, const glm::tvec3<T, precision> & v);
 
-template<typename StreamType, typename T, glm::precision precision>
-StreamType & operator<<(StreamType && os, const glm::tvec4<T, precision> & v);
+template<typename T, glm::precision precision>
+std::ostream & operator<<(std::ostream & os, const glm::tvec4<T, precision> & v);
 
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::quat & q);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::mat2 & v);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::mat3 & v);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const glm::mat4 & v);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const Sphere & sphere);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const Ray3D & sphere);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const Ray2D & sphere);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const AABB & aabb);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const Transform3D & transform);
-
-template<typename StreamType>
-StreamType & operator<<(StreamType && os, const Pose3D & pose);
+std::ostream & operator<<(std::ostream & os, const glm::quat & q);
+std::ostream & operator<<(std::ostream & os, const glm::mat2 & v);
+std::ostream & operator<<(std::ostream & os, const glm::mat3 & v);
+std::ostream & operator<<(std::ostream & os, const glm::mat4 & v);
 
 // template<typename T>
 // std::string operator+(const std::string & s, const T & value);
@@ -65,6 +33,8 @@ StreamType & operator<<(StreamType && os, const Pose3D & pose);
 // template<typename T>
 // std::string operator+(const T & value, const char * s);
 
+namespace deliberation
+{
 template<typename T, glm::precision precision>
 std::string ToString(const glm::tvec2<T, precision> & v);
 

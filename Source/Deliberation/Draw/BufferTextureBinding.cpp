@@ -16,8 +16,8 @@ void BufferTextureBinding::setBuffer(const Buffer & buffer)
 {
     auto drawImpl = m_drawImpl.lock();
 
-    Assert((bool)drawImpl, "Draw already expired or was never set");
-    Assert(
+    AssertM((bool)drawImpl, "Draw already expired or was never set");
+    AssertM(
         buffer.layout().fields().size() == 1,
         "Buffer Textures are only allowed to have one field");
 
@@ -34,12 +34,12 @@ void BufferTextureBinding::setBufferRange(
 {
     auto drawImpl = m_drawImpl.lock();
 
-    Assert((bool)drawImpl, "Draw already expired or was never set");
-    Assert(
+    AssertM((bool)drawImpl, "Draw already expired or was never set");
+    AssertM(
         buffer.layout().fields().size() == 1,
         "Buffer Textures are only allowed to have one field");
-    Assert(begin + count <= buffer.count(), "Setting buffer range out of range")
-        Assert(count > 0, "Can't set zero count");
+    AssertM(begin + count <= buffer.count(), "Setting buffer range out of range")
+        AssertM(count > 0, "Can't set zero count");
 
     auto & binding = drawImpl->bufferTextureBindings[m_index];
 

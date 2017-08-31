@@ -37,26 +37,26 @@ const std::vector<Mesh::Face> & Mesh::faces() const { return m_faces; }
 
 LayoutedBlobElement Mesh::faceVertex(size_t face, size_t vertex)
 {
-    Assert(face < m_faces.size(), "Out of range: " + std::to_string(face));
-    Assert(
+    AssertM(face < m_faces.size(), "Out of range: " + std::to_string(face));
+    AssertM(
         vertex < m_faces[face].indices.size(),
         "Out of range: " + std::to_string(vertex));
 
     auto index = m_faces[face].indices[vertex];
-    Assert(index < m_vertices.count(), "");
+    Assert(index < m_vertices.count());
 
     return m_vertices[index];
 }
 
 CLayoutedBlobElement Mesh::faceVertex(size_t face, size_t vertex) const
 {
-    Assert(face < m_faces.size(), "Out of range: " + std::to_string(face));
-    Assert(
+    AssertM(face < m_faces.size(), "Out of range: " + std::to_string(face));
+    AssertM(
         vertex < m_faces[face].indices.size(),
         "Out of range: " + std::to_string(vertex));
 
     auto index = m_faces[face].indices[vertex];
-    Assert(index < m_vertices.count(), "");
+    Assert(index < m_vertices.count());
 
     return m_vertices[index];
 }

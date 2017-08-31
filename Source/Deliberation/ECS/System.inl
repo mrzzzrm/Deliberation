@@ -10,7 +10,7 @@ template<typename T>
 std::size_t System<T>::indexStatic()
 {
     auto i = TypeID::value<SystemBase, T>();
-    Assert(i < ECS_MAX_NUM_SYSTEMS, "");
+    Assert(i < ECS_MAX_NUM_SYSTEMS);
 
     return i;
 }

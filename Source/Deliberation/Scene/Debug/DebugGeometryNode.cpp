@@ -290,7 +290,7 @@ void DebugWireframeInstance::setColor(const glm::vec3 & color)
 void DebugWireframeInstance::addLineStrip(
     const std::vector<BasicVertex> & vertices)
 {
-    Assert(vertices.size() >= 2, "Not a line strip");
+    AssertM(vertices.size() >= 2, "Not a line strip");
 
     auto oldNumVertices = m_vertices.count();
 
@@ -445,7 +445,7 @@ DebugBoxInstance & DebugGeometryNode::addBox(
     bool              wireframe,
     size_t            index)
 {
-    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+    AssertM(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
 
     if (m_streaming) index = m_boxStreamingIndex++;
 
@@ -469,7 +469,7 @@ DebugBoxInstance & DebugGeometryNode::addBox(
 DebugPointInstance & DebugGeometryNode::addPoint(
     const glm::vec3 & position, const glm::vec3 & color, size_t index)
 {
-    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+    AssertM(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
 
     if (m_streaming) index = m_pointStreamingIndex++;
 
@@ -495,7 +495,7 @@ DebugArrowInstance & DebugGeometryNode::addArrow(
     const glm::vec3 & color,
     size_t            index)
 {
-    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+    AssertM(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
 
     if (m_streaming) index = m_arrowStreamingIndex++;
 
@@ -518,7 +518,7 @@ DebugArrowInstance & DebugGeometryNode::addArrow(
 DebugWireframeInstance &
 DebugGeometryNode::addWireframe(const glm::vec3 & color, size_t index)
 {
-    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+    AssertM(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
 
     if (m_streaming) index = m_wireframeStreamingIndex++;
 
@@ -540,7 +540,7 @@ DebugGeometryNode::addWireframe(const glm::vec3 & color, size_t index)
 DebugSphereInstance & DebugGeometryNode::addSphere(
     const glm::vec3 & color, float radius, size_t index)
 {
-    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+    AssertM(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
 
     if (m_streaming) index = m_sphereStreamingIndex++;
 
@@ -563,7 +563,7 @@ DebugSphereInstance & DebugGeometryNode::addSphere(
 DebugPoseInstance &
 DebugGeometryNode::addPose(const Pose3D & pose, size_t index)
 {
-    Assert(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
+    AssertM(index == NO_INDEX || !m_streaming, "Can't stream with explicit indices");
 
     if (m_streaming) index = m_poseStreamingIndex++;
 
@@ -620,37 +620,37 @@ DebugPoseInstance & DebugGeometryNode::pose(size_t index)
 
 void DebugGeometryNode::removeBox(size_t index)
 {
-    Assert(m_boxes.contains(index), "Invalid index");
+    AssertM(m_boxes.contains(index), "Invalid index");
     m_boxes.erase(index);
 }
 
 void DebugGeometryNode::removePoint(size_t index)
 {
-    Assert(m_points.contains(index), "Invalid index");
+    AssertM(m_points.contains(index), "Invalid index");
     m_points.erase(index);
 }
 
 void DebugGeometryNode::removeArrow(size_t index)
 {
-    Assert(m_arrows.contains(index), "Invalid index");
+    AssertM(m_arrows.contains(index), "Invalid index");
     m_arrows.erase(index);
 }
 
 void DebugGeometryNode::removeWireframe(size_t index)
 {
-    Assert(m_wireframes.contains(index), "Invalid index");
+    AssertM(m_wireframes.contains(index), "Invalid index");
     m_wireframes.erase(index);
 }
 
 void DebugGeometryNode::removeSphere(size_t index)
 {
-    Assert(m_spheres.contains(index), "Invalid index");
+    AssertM(m_spheres.contains(index), "Invalid index");
     m_spheres.erase(index);
 }
 
 void DebugGeometryNode::removePose(size_t index)
 {
-    Assert(m_poses.contains(index), "Invalid index");
+    AssertM(m_poses.contains(index), "Invalid index");
     m_poses.erase(index);
 }
 

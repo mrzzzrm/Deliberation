@@ -18,12 +18,12 @@ void PrototypeManager::reload()
             Log->info("Reloading Prototypes from '{}'", path);
 
             std::ifstream prototypeFile(path);
-            Assert(prototypeFile.is_open(), "Couldn't open '" + path + "'");
+            AssertM(prototypeFile.is_open(), "Couldn't open '" + path + "'");
 
             Json prototypesJson;
             prototypesJson << prototypeFile;
 
-            Assert(prototypesJson.is_object(), "");
+            Assert(prototypesJson.is_object());
 
             for (auto & pair2 : Json::iterator_wrapper(prototypesJson))
             {

@@ -268,9 +268,9 @@ void CollideBox3D::checkFaceIntersection(
     /**
      *
      */
-    Assert(inNormalRef.z != 0.0f, "");
+    Assert(inNormalRef.z != 0.0f);
 
-    Assert(result.size() <= 8, "");
+    Assert(result.size() <= 8);
 
     numIntersections = 0;
     for (auto r = 0u; r < result.size(); r++)

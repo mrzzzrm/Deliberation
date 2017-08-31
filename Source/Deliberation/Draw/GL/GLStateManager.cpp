@@ -8,6 +8,7 @@
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/Log.h>
 
 using namespace gl;
 
@@ -502,6 +503,8 @@ void GLStateManager::genQueries(gl::GLsizei n, gl::GLuint * ids)
 
 void GLStateManager::deleteQueries(gl::GLsizei n, gl::GLuint * ids)
 {
+    DELIBERATION_LOG_INNER_SCOPE("GLStateManager");
+
     for (auto i = 0; i < n; i++)
     {
         auto name = ids[n];
@@ -510,8 +513,7 @@ void GLStateManager::deleteQueries(gl::GLsizei n, gl::GLuint * ids)
         {
             if (name == target)
             {
-                std::cout << "GLStateManager: Warning! Deleting active Query"
-                          << std::endl;
+                Log->warn("Deleting active Query");
                 target = 0;
             }
         }
@@ -522,13 +524,11 @@ void GLStateManager::deleteQueries(gl::GLsizei n, gl::GLuint * ids)
 
 void GLStateManager::beginQuery(gl::GLenum target, gl::GLuint id)
 {
+    DELIBERATION_LOG_INNER_SCOPE("GLStateManager");
+
     auto t = glEnumToQueryTarget(target);
 
-    if (m_activeQueries[t] != 0)
-    {
-        std::cout << "GLStateManager: Warning! Overwriting active query"
-                  << std::endl;
-    }
+    Log->warn_if(m_activeQueries[t] != 0, "Overwriting active query");
 
     glBeginQuery(target, id);
     m_activeQueries[t] = id;
@@ -536,12 +536,13 @@ void GLStateManager::beginQuery(gl::GLenum target, gl::GLuint id)
 
 void GLStateManager::endQuery(gl::GLenum target)
 {
+    DELIBERATION_LOG_INNER_SCOPE("GLStateManager");
+
     auto t = glEnumToQueryTarget(target);
 
     if (m_activeQueries[t] == 0)
     {
-        std::cout << "GLStateManager: Warning! No query is active on target"
-                  << std::endl;
+        Log->warn("No query is active on target");
         return;
     }
 
@@ -563,7 +564,7 @@ void GLStateManager::setActiveTexture(gl::GLuint textureUnit)
 {
     if (textureUnit == m_activeTextureUnit) return;
 
-    Assert(
+    AssertM(
         textureUnit < (gl::GLuint)gl::GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
         "Invalid texture unit");
 

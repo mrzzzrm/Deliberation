@@ -30,7 +30,7 @@ void GLBindVertexAttribute(
     const auto & attributeType = attribute.type();
     const auto & attributeElementalType = attributeType.elementalType();
 
-    Assert(
+    AssertM(
         attributeType.numColumns() == bufferField.type().numColumns() &&
             attributeType.numRows() == bufferField.type().numRows(),
         attribute.name() + ": " + std::string("Cannot bind ") +
@@ -38,7 +38,7 @@ void GLBindVertexAttribute(
 
     auto startLocation = attribute.glLocation();
 
-    Assert(startLocation >= 0, "");
+    Assert(startLocation >= 0);
 
     const auto normalize =
         attributeElementalType.isFloat() && bufferFieldElementalType.isInteger()

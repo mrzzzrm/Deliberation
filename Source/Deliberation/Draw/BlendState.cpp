@@ -26,9 +26,9 @@ BlendState::BlendState(
     , m_sfactor(sfactor)
     , m_dfactor(dfactor)
 {
-    Assert(m_equation != BlendEquation::None, "");
-    Assert(m_sfactor != BlendFactor::None, "");
-    Assert(m_dfactor != BlendFactor::None, "");
+    Assert(m_equation != BlendEquation::None);
+    Assert(m_sfactor != BlendFactor::None);
+    Assert(m_dfactor != BlendFactor::None);
 }
 
 bool BlendState::enabled() const { return m_enabled; }

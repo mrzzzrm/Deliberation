@@ -17,13 +17,13 @@ bool RandomBool(float probability)
 
 int RandomInt(int from, int to)
 {
-    Assert(from <= to, "");
+    Assert(from <= to);
     return from + std::rand() % (to - from);
 }
 
 float RandomFloat(float from, float to)
 {
-    Assert(from <= to, "");
+    Assert(from <= to);
     return from + (float)std::rand() / (float)(RAND_MAX / (to - from));
 }
 

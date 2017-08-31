@@ -40,7 +40,7 @@ bool DrawState::hasViewport() const { return m_viewport.engaged(); }
 
 const Viewport & DrawState::viewport() const
 {
-    Assert(hasViewport(), "");
+    Assert(hasViewport());
     return m_viewport.get();
 }
 

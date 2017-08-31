@@ -6,6 +6,7 @@
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
 
+#include <Deliberation/Core/Log.h>
 #include <Deliberation/Draw/DrawContext.h>
 #include <Deliberation/Draw/Surface.h>
 
@@ -40,8 +41,7 @@ bool SurfaceDownloadImpl::isDone() const
     auto r = gl::glClientWaitSync(sync, gl::GL_NONE_BIT, 0u);
     if (r == gl::GL_WAIT_FAILED)
     {
-        std::cout << "Wait for sync failed. This shouldn't happen."
-                  << std::endl;
+        Log->warn("Wait for sync failed. This shouldn't happen.");
         return false;
     }
 
@@ -52,14 +52,14 @@ bool SurfaceDownloadImpl::isDone() const
 
 void SurfaceDownloadImpl::start()
 {
-    Assert(!started, "");
+    Assert(!started);
 
     auto & drawContext = surface.m_impl->textureImpl->drawContext;
 
     size = surface.width() * surface.height() * format.bytesPerPixel();
 
     gl::glGenBuffers(1, &glName);
-    Assert(glName != 0, "");
+    Assert(glName != 0);
 
     drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
     gl::glBufferData(
@@ -81,7 +81,7 @@ void SurfaceDownloadImpl::start()
 
 const SurfaceBinary & SurfaceDownloadImpl::result() const
 {
-    Assert(started, "");
+    Assert(started);
 
     if (surfaceBinary.engaged())
     {

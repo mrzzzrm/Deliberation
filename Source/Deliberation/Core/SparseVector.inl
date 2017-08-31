@@ -129,7 +129,7 @@ std::size_t SparseVector<T>::insert(T && value)
             result = m_pool.top();
             m_pool.pop();
 
-            Assert(result < m_vec.size(), "");
+            Assert(result < m_vec.size());
 
             if (m_vec[result])
                 continue; // Using an index without notifying the pool is
@@ -155,7 +155,7 @@ std::size_t SparseVector<T>::insert(const T & value)
 template<typename T>
 void SparseVector<T>::insert_at(size_t index, T && value)
 {
-    Assert(!contains(index), "Slot already taken");
+    AssertM(!contains(index), "Slot already taken");
 
     m_vec.reserve(index + 1);
 
@@ -194,7 +194,7 @@ std::size_t SparseVector<T>::emplace(Args &&... args)
             result = m_pool.top();
             m_pool.pop();
 
-            Assert(result < m_vec.size(), "");
+            Assert(result < m_vec.size());
             if (m_vec[result])
                 continue; // Using an index without notifying the pool is
                           // possible
@@ -213,7 +213,7 @@ template<typename T>
 template<typename... Args>
 void SparseVector<T>::emplace_at(size_t index, Args &&... args)
 {
-    Assert(!contains(index), "Slot already taken");
+    AssertM(!contains(index), "Slot already taken");
     replace_at(index, std::forward<Args>(args)...);
 }
 
@@ -238,7 +238,7 @@ void SparseVector<T>::replace_at(size_t index, Args &&... args)
 template<typename T>
 void SparseVector<T>::erase(std::size_t index)
 {
-    Assert(contains(index), "");
+    Assert(contains(index));
 
     decCount();
 
@@ -292,14 +292,14 @@ typename SparseVector<T>::CIterator SparseVector<T>::end() const
 template<typename T>
 T & SparseVector<T>::operator[](std::size_t index)
 {
-    Assert(contains(index), "");
+    Assert(contains(index));
     return *m_vec[index];
 }
 
 template<typename T>
 const T & SparseVector<T>::operator[](std::size_t index) const
 {
-    Assert(contains(index), "");
+    Assert(contains(index));
     return *m_vec[index];
 }
 
@@ -342,7 +342,7 @@ void SparseVector<T>::incCount()
 template<typename T>
 void SparseVector<T>::decCount()
 {
-    Assert(m_count > 0, "");
+    Assert(m_count > 0);
     m_count--;
 }
 }

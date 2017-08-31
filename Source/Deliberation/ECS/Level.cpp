@@ -36,7 +36,7 @@ std::string Level::convertToUid(const std::string & lid)
 void Level::reload()
 {
     std::ifstream stream(m_path);
-    Assert(stream.is_open(), "Level: Failed to open '" + m_path + "'");
+    AssertM(stream.is_open(), "Level: Failed to open '" + m_path + "'");
 
     Json levelJson;
     stream >> levelJson;

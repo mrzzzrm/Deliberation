@@ -33,7 +33,7 @@ const WorldProfiler & World::profiler() const { return m_profiler; }
 
 EntityData & World::entityData(EntityId id)
 {
-    Assert(isValid(id), "");
+    Assert(isValid(id));
 
     return m_entities[entityIndex(id)];
 }
@@ -253,10 +253,10 @@ bool World::isValid(EntityId id) const
 
 void World::scheduleEntityRemoval(EntityId id)
 {
-    Assert(isValid(id), "");
+    Assert(isValid(id));
 
     auto & entity = entityData(id);
-    Assert(
+    AssertM(
         entity.phase == EntityPhase::Active ||
             entity.phase == EntityPhase::ScheduledForRemoval,
         "Can't schedule non-active entity for removal");
@@ -270,7 +270,7 @@ void World::scheduleEntityRemoval(EntityId id)
 
 void World::removeEntity(EntityId entityId)
 {
-    Assert(isValid(entityId), "");
+    Assert(isValid(entityId));
 
     auto   i = entityIndex(entityId);
     auto & entity = m_entities[i];
@@ -295,7 +295,7 @@ void World::removeEntity(EntityId entityId)
 std::shared_ptr<ComponentBase>
 World::component(EntityId id, TypeID::value_t index)
 {
-    Assert(isValid(id), "");
+    Assert(isValid(id));
 
     auto i = entityIndex(id);
 
@@ -308,7 +308,7 @@ World::component(EntityId id, TypeID::value_t index)
 std::shared_ptr<const ComponentBase>
 World::component(EntityId id, TypeID::value_t index) const
 {
-    Assert(isValid(id), "");
+    Assert(isValid(id));
 
     auto i = entityIndex(id);
 
@@ -330,7 +330,7 @@ void World::addComponent(
     TypeID::value_t                index,
     std::shared_ptr<ComponentBase> component)
 {
-    Assert(isValid(id), "");
+    Assert(isValid(id));
 
     auto   i = entityIndex(id);
     auto & entity = m_entities[i];
@@ -343,7 +343,7 @@ void World::addComponent(
     entity.componentBits.set(index);
     entity.componentSetup = componentSetup(entity.componentBits);
 
-    Assert(!m_components[index][i], "Entity already had this component");
+    AssertM(!m_components[index][i], "Entity already had this component");
 
     m_components[index][i] = component;
 
@@ -406,7 +406,7 @@ void World::removeComponent(const ComponentRemoval & componentRemoval)
 std::size_t World::entityIndex(EntityId id) const
 {
     auto i = m_entityIndexByID.find(id);
-    Assert(i != m_entityIndexByID.end(), "");
+    Assert(i != m_entityIndexByID.end());
 
     return i->second;
 }

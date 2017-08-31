@@ -10,14 +10,14 @@ Program::Program() = default;
 
 DrawContext & Program::drawContext() const
 {
-    Assert(m_impl.get(), "Program is hollow");
+    AssertM(m_impl.get(), "Program is hollow");
 
     return m_impl->drawContext;
 }
 
 const ProgramInterface & Program::interface() const
 {
-    Assert(m_impl.get(), "Program is hollow");
+    AssertM(m_impl.get(), "Program is hollow");
 
     return m_impl->interface;
 }

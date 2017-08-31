@@ -1,5 +1,9 @@
 #pragma once
 
+#if DELIBERATION_BUILD_DEBUG
+#define SPDLOG_DEBUG_ON
+#endif
+
 #include <spdlog/spdlog.h>
 
 #include <Deliberation/Core/Format.h>

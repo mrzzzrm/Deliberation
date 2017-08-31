@@ -21,7 +21,7 @@ bool FileModificationPoll::check()
     struct stat s;
 
     auto r = stat(m_path.c_str(), &s);
-    Assert(r == 0, "Error stat'ing '" + m_path + "'");
+    AssertM(r == 0, "Error stat'ing '" + m_path + "'");
 
     if (m_mtime.tv_nsec != s.st_mtim.tv_nsec ||
         m_mtime.tv_sec != s.st_mtim.tv_sec)

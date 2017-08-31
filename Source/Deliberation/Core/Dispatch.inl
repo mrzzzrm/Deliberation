@@ -47,7 +47,7 @@ void DoubleDispatch<T>::erase(size_t a, size_t b)
 {
     sort(a, b);
 
-    Assert(contains(a, b), "");
+    Assert(contains(a, b));
 
     m_data[a][b].disengage();
 }
@@ -55,7 +55,7 @@ void DoubleDispatch<T>::erase(size_t a, size_t b)
 template<typename T>
 T & DoubleDispatch<T>::dispatch(size_t a, size_t b)
 {
-    Assert(contains(a, b), "");
+    Assert(contains(a, b));
 
     sort(a, b);
 
@@ -65,7 +65,7 @@ T & DoubleDispatch<T>::dispatch(size_t a, size_t b)
 template<typename T>
 const T & DoubleDispatch<T>::dispatch(size_t a, size_t b) const
 {
-    Assert(contains(a, b), "");
+    Assert(contains(a, b));
 
     sort(a, b);
 

@@ -11,7 +11,7 @@ template<typename ComponentT>
 class ComponentPrototype : public ComponentPrototypeBase
 {
 public:
-    World & world() const { Assert(m_world != nullptr, "World not yet set"); return *m_world; }
+    World & world() const { AssertM(m_world != nullptr, "World not yet set"); return *m_world; }
     void setWorld(World & world) { m_world = &world; }
 
     virtual void updateComponent(const Entity & entity, ComponentT & component) = 0;

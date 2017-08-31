@@ -19,7 +19,7 @@ QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type)
     , m_resultsAvailable(false)
 {
     m_drawContext.m_glStateManager.genQueries(1, &m_glName);
-    Assert(m_glName != 0, "Failed to create Query");
+    AssertM(m_glName != 0, "Failed to create Query");
 }
 
 QueryImpl::~QueryImpl()
@@ -34,8 +34,8 @@ QueryType QueryImpl::type() const { return m_type; }
 
 int64_t QueryImpl::resultI() const
 {
-    Assert(m_glName != 0, "");
-    Assert(!m_active, "Query still active");
+    Assert(m_glName != 0);
+    AssertM(!m_active, "Query still active");
 
     if (m_resultsAvailable)
     {
@@ -53,8 +53,8 @@ int64_t QueryImpl::resultI() const
 
 uint64_t QueryImpl::resultU() const
 {
-    Assert(m_glName != 0, "");
-    Assert(!m_active, "Query still active");
+    Assert(m_glName != 0);
+    AssertM(!m_active, "Query still active");
 
     if (m_resultsAvailable)
     {
@@ -74,8 +74,8 @@ bool QueryImpl::isActive() const { return m_active; }
 
 bool QueryImpl::isResultAvailable() const
 {
-    Assert(m_glName != 0, "");
-    Assert(!m_active, "Query still active");
+    Assert(m_glName != 0);
+    AssertM(!m_active, "Query still active");
 
     if (m_resultsAvailable)
     {
@@ -92,8 +92,8 @@ bool QueryImpl::isResultAvailable() const
 
 void QueryImpl::begin()
 {
-    Assert(!m_active, "Can't restart query");
-    Assert(m_glName != 0, "");
+    AssertM(!m_active, "Can't restart query");
+    Assert(m_glName != 0);
 
     m_drawContext.m_glStateManager.beginQuery((gl::GLenum)m_type, m_glName);
 
@@ -103,7 +103,7 @@ void QueryImpl::begin()
 
 void QueryImpl::end()
 {
-    Assert(m_glName != 0, "");
+    Assert(m_glName != 0);
 
     m_drawContext.m_glStateManager.endQuery((gl::GLenum)m_type);
 

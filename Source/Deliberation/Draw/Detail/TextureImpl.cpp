@@ -14,10 +14,10 @@ gl::GLenum faceTarget(gl::GLenum type, unsigned int face)
 {
     switch (type)
     {
-    case gl::GL_TEXTURE_2D: Assert(face == 0u, ""); return gl::GL_TEXTURE_2D;
+    case gl::GL_TEXTURE_2D: Assert(face == 0u); return gl::GL_TEXTURE_2D;
     case gl::GL_TEXTURE_CUBE_MAP:
     {
-        Assert(face <= 6u, "");
+        Assert(face <= 6u);
 
         static gl::GLenum targets[] = {
             gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
@@ -55,13 +55,13 @@ TextureImpl::TextureImpl(
     }
     else
     {
-        Assert(numFaces == 6, "");
+        Assert(numFaces == 6);
         type = TextureType::CubeMap;
     }
 
     // Create GL Texture object
     gl::glGenTextures(1, &glName);
-    Assert(glName != 0, "Failed to create GL Texture Object");
+    AssertM(glName != 0, "Failed to create GL Texture Object");
 
     drawContext.m_glStateManager.bindTexture((gl::GLenum)type, glName);
     gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAX_LEVEL, 0);

@@ -46,7 +46,7 @@ namespace detail
     {
         auto num = size / sizeof(T);
         auto rem = size % sizeof(T);
-        Assert(rem == 0, "Invalid resize");
+        AssertM(rem == 0, "Invalid resize");
 
         return m_value.resize(num);
     }
@@ -56,7 +56,7 @@ namespace detail
     {
         auto num = size / sizeof(T);
         auto rem = size % sizeof(T);
-        Assert(rem == 0, "Invalid reserve");
+        AssertM(rem == 0, "Invalid reserve");
 
         return m_value.reserve(num);
     }

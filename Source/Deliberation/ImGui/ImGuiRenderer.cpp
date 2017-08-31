@@ -82,7 +82,7 @@ void ImGuiRenderer::render()
     ImGui::Render();
 
     const auto * drawData = ImGui::GetDrawData();
-    Assert(drawData->Valid, "");
+    Assert(drawData->Valid);
 
     auto projection = glm::mat4(
         2.0f / io.DisplaySize.x,

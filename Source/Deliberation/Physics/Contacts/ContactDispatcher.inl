@@ -18,7 +18,7 @@ void ContactDispatcher::registerContactType(int type)
 template<typename T>
 void ContactDispatcher::registerContactType(int typeA, int typeB)
 {
-    Assert(typeA >= 0 && typeB >= 0, "");
+    Assert(typeA >= 0 && typeB >= 0);
 
     class Creator : public ContactCreator
     {
@@ -30,15 +30,15 @@ void ContactDispatcher::registerContactType(int typeA, int typeB)
         {
             if (bodyA.shape()->type() != m_typeL)
             {
-                Assert(bodyA.shape()->type() == m_typeR, "");
-                Assert(bodyB.shape()->type() == m_typeL, "");
+                Assert(bodyA.shape()->type() == m_typeR);
+                Assert(bodyB.shape()->type() == m_typeL);
 
                 return std::unique_ptr<Contact>(new T(bodyB, bodyA));
             }
             else
             {
-                Assert(bodyA.shape()->type() == m_typeL, "");
-                Assert(bodyB.shape()->type() == m_typeR, "");
+                Assert(bodyA.shape()->type() == m_typeL);
+                Assert(bodyB.shape()->type() == m_typeR);
 
                 return std::unique_ptr<Contact>(new T(bodyA, bodyB));
             }

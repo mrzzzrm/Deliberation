@@ -57,7 +57,7 @@ EntityPrototypeManager::getOrAddComponentPrototype(
     {
         auto iter2 =
             m_componentPrototypeFactoryByName.find(componentPrototypeName);
-        Assert(
+        AssertM(
             iter2 != m_componentPrototypeFactoryByName.end(),
             "ComponentPrototype '" + componentPrototypeName +
                 "' not registered");
@@ -84,7 +84,7 @@ void EntityPrototypeManager::reloadList()
     const auto listDir = GetDirFromPath(m_listPoll.path());
 
     std::ifstream listFile(m_listPoll.path());
-    Assert(
+    AssertM(
         listFile.is_open(),
         "Failed to open prototype list '" + m_listPoll.path() + "'");
 
@@ -121,7 +121,7 @@ void EntityPrototypeManager::reloadList()
         Log->info("Loading EntityPrototype '{}' from '{}'", prototypeName.get<std::string>(), prototypePath);
 
         std::ifstream prototypeFile(prototypePath);
-        Assert(
+        AssertM(
             prototypeFile.is_open(),
             "Failed to open prototype '" + prototypePath + "'");
 
@@ -152,7 +152,7 @@ Entity EntityPrototypeManager::createEntity(
     for (const auto & prototypeKey : prototypeKeys)
     {
         auto iter = m_entityPrototypeByKey.find(prototypeKey);
-        Assert(
+        AssertM(
             iter != m_entityPrototypeByKey.end(),
             "Couldn't find '" + prototypeKey + "'");
 
@@ -308,7 +308,7 @@ void EntityPrototypeManager::updateEntities()
 
                 if (iter == prototypes.end()) continue;
 
-                Assert(
+                AssertM(
                     !foundBaseEntityPrototype,
                     "Multiple bases for component '" + name + "' found");
 

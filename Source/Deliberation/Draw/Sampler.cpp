@@ -14,13 +14,13 @@ namespace deliberation
 {
 void Sampler::setTexture(const Texture & texture)
 {
-    Assert((bool)texture.m_impl, "Texture is hollow");
-    Assert((bool)m_impl, "Hollow Sampler can't be set");
-    Assert(
+    AssertM((bool)texture.m_impl, "Texture is hollow");
+    AssertM((bool)m_impl, "Hollow Sampler can't be set");
+    AssertM(
         (gl::GLenum)texture.type() == m_impl->textureType(),
         "Texture type mismatch");
 
-    Assert(
+    AssertM(
         m_impl->valueType == texture.format().glSamplerValueType(),
         "Sampler (" + glbinding::Meta::getString(m_impl->type) +
             ") isn't compatible with texture of format " +
@@ -39,28 +39,28 @@ void Sampler::setWrap(TextureWrap wrap)
 
 void Sampler::setWrapS(TextureWrap wrap)
 {
-    Assert((bool)m_impl, "Hollow Sampler can't be set");
+    AssertM((bool)m_impl, "Hollow Sampler can't be set");
 
     setWrap(0, wrap);
 }
 
 void Sampler::setWrapT(TextureWrap wrap)
 {
-    Assert((bool)m_impl, "Hollow Sampler can't be set");
+    AssertM((bool)m_impl, "Hollow Sampler can't be set");
 
     setWrap(1, wrap);
 }
 
 void Sampler::setWrapR(TextureWrap wrap)
 {
-    Assert((bool)m_impl, "Hollow Sampler can't be set");
+    AssertM((bool)m_impl, "Hollow Sampler can't be set");
 
     setWrap(2, wrap);
 }
 
 void Sampler::setMinFilter(TextureFilter minFilter)
 {
-    Assert((bool)m_impl, "Hollow Sampler can't be set");
+    AssertM((bool)m_impl, "Hollow Sampler can't be set");
 
     if (minFilter == m_impl->minFilter) return;
 
@@ -72,8 +72,8 @@ void Sampler::setMinFilter(TextureFilter minFilter)
 
 void Sampler::setMagFilter(TextureFilter magFilter)
 {
-    Assert((bool)m_impl, "Hollow Sampler can't be set");
-    Assert(
+    AssertM((bool)m_impl, "Hollow Sampler can't be set");
+    AssertM(
         magFilter == TextureFilter::Nearest ||
             magFilter == TextureFilter::Linear,
         "Invalid mag filter");

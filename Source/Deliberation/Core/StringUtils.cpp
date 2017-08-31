@@ -51,7 +51,7 @@ bool StringContains(const std::string & str, const std::string & testStr)
 
 std::string & StringRErase(std::string & str, std::size_t num)
 {
-    Assert(str.size() >= num, "");
+    Assert(str.size() >= num);
     str.resize(str.size() - num);
     return str;
 }
@@ -64,7 +64,7 @@ std::string StringRErased(const std::string & str, std::size_t num)
 
 std::string & StringRErase(std::string & str, const std::string & testStr)
 {
-    Assert(
+    AssertM(
         StringEndsWith(str, testStr),
         "'" + str + "' doesn't end with '" + testStr + "'");
     StringRErase(str, testStr.size());

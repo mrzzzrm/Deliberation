@@ -21,7 +21,7 @@ public:
     void subscribeEvent()
     {
         auto events = m_events.lock();
-        Assert(static_cast<bool>(events), "");
+        Assert(static_cast<bool>(events));
 
         m_eventListenerProxies.emplace_back(
             events->template subscribe<EventType>(*(T *)this));
