@@ -32,7 +32,6 @@ set(CMAKE_CXX_STANDARD             14)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/Platforms/Platform.cmake)
 
 # dependencies
-find_package(OpenGL         REQUIRED)
 find_package(SDL2           REQUIRED)
 find_package(SDL2_ttf       REQUIRED)
 find_package(SDL2_image     REQUIRED)

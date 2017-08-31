@@ -415,22 +415,15 @@ add_library(Deliberation
 	Scene/UVSphere.h
 	Scene/Vertices.h)
 
-if (${DELIBERATION_BUILD_TARGET_OS} STREQUAL "win64")
-	set(GLBINDING_FILE_NAME glbinding.lib)
-else()
-	set(GLBINDING_FILE_NAME libglbinding.a)
-endif()
-
 target_link_libraries(Deliberation
 	${SDL2_LIBRARY}
 	${SDL2_IMAGE_LIBRARY}
 	${SDL2_TTF_LIBRARY}
 	${OPENGL_gl_LIBRARY}
 
-	${PROJECT_SOURCE_DIR}/Extern/glbinding-2.1.1/lib/release/${DELIBERATION_BUILD_TARGET_OS}/${DELIBERATION_BUILD_COMPILER_PLATFORM}/${GLBINDING_FILE_NAME}
-
 	imgui
 	tinyobjloader
+	glbinding
 
 	-lnvToolsExt
 	)
@@ -442,7 +435,6 @@ target_include_directories(Deliberation
 
 	# Bundled dependencies
 	${PROJECT_SOURCE_DIR}/Extern/cxxopts/src
-	${PROJECT_SOURCE_DIR}/Extern/glbinding-2.1.1/include
 	${PROJECT_SOURCE_DIR}/Extern/glm-0.9.7.5
 	${PROJECT_SOURCE_DIR}/Extern/json-2.1.1
 	${PROJECT_SOURCE_DIR}/Extern/boost-1.63.0/
