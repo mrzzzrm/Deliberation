@@ -1,4 +1,4 @@
-#include <Deliberation/Physics/NarrowphasePrimitiveTest.h>
+#include <Deliberation/Physics/PrimitiveTestAlgorithm.h>
 
 namespace deliberation
 {

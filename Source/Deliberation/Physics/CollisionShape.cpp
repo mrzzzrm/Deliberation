@@ -1,10 +1,14 @@
 #include <Deliberation/Physics/CollisionShape.h>
 
+
+#include <Deliberation/Physics/BulletPhysics.h>
+
+
 namespace deliberation
 {
-CollisionShape::CollisionShape(int type) : m_type(type) {}
-
-CollisionShape::~CollisionShape() = default;
+CollisionShape::CollisionShape(int type) : m_type(type)
+{
+}
 
 int CollisionShape::type() const { return m_type; }
 

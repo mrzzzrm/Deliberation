@@ -6,6 +6,7 @@
 #include <Deliberation/Core/Math/Ray3D.h>
 #include <Deliberation/Core/Math/Sphere.h>
 #include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Physics/BulletPhysics.h>
 
 std::ostream & operator<<(std::ostream & os, const glm::quat & q)
 {
@@ -68,4 +69,16 @@ std::ostream & operator<<(std::ostream & os, const glm::mat4 & v)
     os << "}" << std::endl;
 
     return os;
+}
+
+std::ostream & operator<<(std::ostream & o, const btVector3 & v)
+{
+    o << deliberation::BulletPhysicsConvert(v);
+    return o;
+}
+
+std::ostream & operator<<(std::ostream & o, const btQuaternion & q)
+{
+    o << deliberation::BulletPhysicsConvert(q);
+    return o;
 }

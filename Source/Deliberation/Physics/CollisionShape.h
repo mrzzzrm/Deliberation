@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Core/Math/AABB.h>
@@ -19,7 +21,6 @@ class CollisionShape
 {
 public:
     CollisionShape(int type);
-    virtual ~CollisionShape();
 
     int type() const;
 

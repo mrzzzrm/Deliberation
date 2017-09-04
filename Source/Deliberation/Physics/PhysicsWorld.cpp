@@ -3,60 +3,57 @@
 #include <iostream>
 #include <sstream>
 
+#include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
+#include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
+#include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
+#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
+
 #include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/Math/Transform3D.h>
 #include <Deliberation/Core/StreamUtils.h>
 
-#include <Deliberation/Physics/Contacts/Contact.h>
-#include <Deliberation/Physics/Narrowphase.h>
-#include <Deliberation/Physics/ReferenceBroadphase.h>
 #include <Deliberation/Physics/RigidBody.h>
-
-namespace
-{
-const auto BAUMGARTE = 0.005f;
-const auto LINEAR_SLOP = 0.005f;
-const auto MAX_LINEAR_CORRECTION = 0.2f;
-}
 
 namespace deliberation
 {
 PhysicsWorld::PhysicsWorld(float timestep) : m_timestep(timestep)
 {
-    m_narrowphase.reset(new Narrowphase());
-    m_broadphase.reset(new ReferenceBroadphase(*m_narrowphase));
+    m_collisionConfiguration = std::make_shared<btDefaultCollisionConfiguration>();
+    m_collisionDispatcher = std::make_shared<btCollisionDispatcher>(m_collisionConfiguration.get());
+    m_constraintSolver = std::make_shared<btSequentialImpulseConstraintSolver>();
+    m_broadphase = std::make_shared<btDbvtBroadphase>();
+    m_dynamicsWorld = std::make_shared<btDiscreteDynamicsWorld>(m_collisionDispatcher.get(),
+                                                                m_broadphase.get(),
+                                                                m_constraintSolver.get(),
+                                                                m_collisionConfiguration.get());
+    m_dynamicsWorld->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 }
 
-PhysicsWorld::~PhysicsWorld() = default;
 
-const PhysicsWorld::RigidBodies & PhysicsWorld::rigidBodies() const
+float PhysicsWorld::probeNextSimulationStepSeconds(float seconds) const
 {
-    return m_rigidBodies;
+    const auto nextTimeAccumulator = m_timeAccumulator + seconds;
+
+    if (nextTimeAccumulator >= m_timestep) {
+        return int(nextTimeAccumulator / m_timestep) * m_timestep;
+    } else {
+        return 0.0f;
+    }
 }
 
-float PhysicsWorld::timestep() const { return m_timestep; }
 
-float PhysicsWorld::nextSimulationStepSeconds(float seconds)
+void PhysicsWorld::setGravity(const glm::vec3 & gravity)
 {
-    return numNextSimulationSteps(seconds) * m_timestep;
+    m_dynamicsWorld->setGravity(BulletPhysicsConvert(gravity));
 }
-
-u32 PhysicsWorld::numNextSimulationSteps(float seconds)
-{
-    return (u32)std::floor((m_timeAccumulator + seconds) / m_timestep);
-}
-
-Narrowphase & PhysicsWorld::narrowphase() { return *m_narrowphase; }
-
-const Narrowphase & PhysicsWorld::narrowphase() const { return *m_narrowphase; }
 
 void PhysicsWorld::addRigidBody(const std::shared_ptr<RigidBody> & body)
 {
     auto index = m_rigidBodies.insert(body);
     body->setIndex(index);
 
-    auto proxy = m_broadphase->createProxy(*body);
-    body->setProxy(proxy);
+    m_dynamicsWorld->addRigidBody(body->bulletRigidBody().get());
 }
 
 void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
@@ -67,365 +64,62 @@ void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
         "Body was never added to PhysicsWorld");
 
     m_rigidBodies.erase(index);
-    m_broadphase->removeProxy(*body->proxy());
 
     body->setIndex(RigidBody::INVALID_INDEX);
-}
 
-void PhysicsWorld::setGravity(float gravity) { m_gravity = gravity; }
+    m_dynamicsWorld->removeRigidBody(body->bulletRigidBody().get());
+}
 
 float PhysicsWorld::update(float seconds)
 {
-    auto simulatedTime = 0.0f;
+    const auto numPerformedSteps = m_dynamicsWorld->stepSimulation(seconds, 10, m_timestep);
+    const auto simulatedSeconds = numPerformedSteps * m_timestep;
 
-    const auto numSteps = numNextSimulationSteps(seconds);
+    m_numSimulatedSteps += numPerformedSteps;
     m_timeAccumulator += seconds;
+    m_timeAccumulator -= simulatedSeconds;
 
-    for (u32 s = 0; s < numSteps; s++)
-    {
-        performTimestep(m_timestep);
-        m_timeAccumulator -= m_timestep;
-        simulatedTime += m_timestep;
-    }
-
-    return simulatedTime;
+    return simulatedSeconds;
 }
 
 void PhysicsWorld::lineCast(
     const Ray3D &                                            ray,
     const std::function<bool(const RayCastIntersection &)> & handler) const
 {
-    auto broadphaseResult = m_broadphase->lineCast(ray);
-
-    for (auto & proxy : broadphaseResult)
-    {
-        m_narrowphase->lineTest(ray, proxy, handler);
-    }
-}
-
-void PhysicsWorld::performTimestep(float seconds)
-{
-    for (auto & body : m_rigidBodies)
-    {
-        body->applyForce({0.0f, -m_gravity * body->shape()->mass(), 0.0f});
-        body->integrateVelocities(seconds);
-        body->adjustCenterOfMass();
-    }
-
-    /**
-     * Update broadphase
-     */
-    for (auto & body : m_rigidBodies)
-    {
-        m_broadphase->setProxyBounds(*body->proxy(), body->bounds());
-    }
-
-    m_broadphase->checkProximities();
-    m_narrowphase->updateContacts();
-
-    solve();
-
-    integrateTransforms(seconds);
-
-    /**
-     * Clear forces
-     */
-    for (auto & body : m_rigidBodies)
-    {
-        body->setForce({});
-    }
-}
-
-std::string PhysicsWorld::toString() const
-{
-    std::stringstream stream;
-    stream << "{\n";
-    for (auto & body : m_rigidBodies)
-    {
-        stream << "  " << body->toString() << "\n";
-    }
-    stream << "}\n";
-
-    return stream.str();
-}
-
-void PhysicsWorld::integrateTransforms(float seconds)
-{
-    for (auto & body : m_rigidBodies)
-    {
-        if (body->isStatic())
-        {
-            continue;
-        }
-
-        Transform3D predictedTransform;
-        body->predictTransform(seconds, predictedTransform);
-        body->setTransform(predictedTransform);
-    }
-}
-
-void PhysicsWorld::solve()
-{
-    if (m_narrowphase->contacts().empty())
-    {
-        return;
-    }
-
-    /**
-     * Warm starting
-     */
-    for (auto & contact : m_narrowphase->contacts())
-    {
-        warmStart(*contact);
-    }
-
-    /**
-     * Iterative solving
-     */
-
-    for (auto i = 0; i < m_numVelocityIterations; i++)
-    {
-        for (auto & contact : m_narrowphase->contacts())
-        {
-            solveContactVelocities(*contact);
-        }
-    }
-
-    for (auto i = 0; i < m_numPositionIterations; i++)
-    {
-        for (auto & contact : m_narrowphase->contacts())
-        {
-            solvePositions(*contact);
-        }
-    }
-}
-
-void PhysicsWorld::warmStart(Contact & contact) const
-{
-    if (!contact.intersect())
-    {
-        return;
-    }
-
-    auto & bodyA = contact.bodyA();
-    auto & bodyB = contact.bodyB();
-
-    auto   mA = bodyA.inverseMass();
-    auto & iA = bodyA.worldInverseInertia();
-    auto & vA = bodyA.linearVelocity();
-    auto & wA = bodyA.angularVelocity();
-    auto & cA = bodyA.transform().position();
-
-    auto   mB = bodyB.inverseMass();
-    auto & iB = bodyB.worldInverseInertia();
-    auto & vB = bodyB.linearVelocity();
-    auto & wB = bodyB.angularVelocity();
-    auto & cB = bodyB.transform().position();
-
-    for (uint p = 0; p < contact.numPoints(); p++)
-    {
-        auto & point = contact.point(p);
-
-        auto & n = point.normal;
-
-        auto rA = point.position - cA;
-        auto rB = point.position - cB;
-
-        auto lambda = point.normalImpulseAccumulator;
-
-        auto J = lambda * n;
-
-        bodyA.setLinearVelocity(vA - mA * J);
-        bodyA.setAngularVelocity(wA - iA * glm::cross(rA, J));
-
-        bodyB.setLinearVelocity(vB + mB * J);
-        bodyB.setAngularVelocity(wB + iB * glm::cross(rB, J));
-    }
-}
-
-void PhysicsWorld::solveContactVelocities(Contact & contact)
-{
-    if (!contact.intersect())
-    {
-        return;
-    }
-
-    auto & bodyA = contact.bodyA();
-    auto & bodyB = contact.bodyB();
-
-    auto   mA = bodyA.inverseMass();
-    auto & iA = bodyA.worldInverseInertia();
-    auto & vA = bodyA.linearVelocity();
-    auto & wA = bodyA.angularVelocity();
-    auto & cA = bodyA.transform().position();
-
-    auto   mB = bodyB.inverseMass();
-    auto & iB = bodyB.worldInverseInertia();
-    auto & vB = bodyB.linearVelocity();
-    auto & wB = bodyB.angularVelocity();
-    auto & cB = bodyB.transform().position();
-
-    // Coefficient of restitution
-    auto e = contact.restitution();
-
-    /**
-     * Solve tangent velocities
-     */
-    for (uint p = 0; p < contact.numPoints(); p++)
-    {
-        auto & point = contact.point(p);
-
-        auto rA = point.position - cA;
-        auto rB = point.position - cB;
-
-        // Relative velocity along normal
-        auto vra = bodyA.localVelocity(rA);
-        auto vrb = bodyB.localVelocity(rB);
-        auto vRel = vrb - vra;
-        auto vRelNormal = glm::dot(point.normal, vRel);
-
-        // Relative velocity along tangent
-        auto vRelTangent = vRel - (vRelNormal * point.normal);
-
-        if (vRelTangent == glm::vec3(0.0f))
-        {
-            continue;
-        }
-
-        auto tangent = glm::normalize(vRelTangent);
-
-        auto tangentMass = glm::dot(
-                               glm::cross(iA * glm::cross(rA, tangent), rA) +
-                                   glm::cross(iB * glm::cross(rB, tangent), rB),
-                               tangent) +
-                           mA + mB;
-
-        if (tangentMass == 0.0f)
-        {
-            continue;
-        }
-
-        auto lambda = -glm::length(vRelTangent) / tangentMass;
-
-        auto maxFriction = contact.friction() * point.normalImpulseAccumulator;
-        auto newImpulse = std::max(
-            -maxFriction,
-            std::min<float>(
-                maxFriction, point.tangentImpulseAccumulator + lambda));
-        lambda = newImpulse - point.tangentImpulseAccumulator;
-
-        auto P = lambda * tangent;
-
-        bodyA.setLinearVelocity(vA - mA * P);
-        bodyA.setAngularVelocity(wA - iA * glm::cross(rA, P));
-
-        bodyB.setLinearVelocity(vB + mB * P);
-        bodyB.setAngularVelocity(wB + iB * glm::cross(rB, P));
-    }
-
-    /**
-     * Solve normal velocities
-     */
-    for (uint p = 0; p < contact.numPoints(); p++)
-    {
-        auto & point = contact.point(p);
-
-        auto rA = point.position - cA;
-        auto rB = point.position - cB;
-
-        auto & n = point.normal;
-        auto   normalMass = point.normalMass;
-        auto   velocityBias = point.velocityBias;
-
-        // Relative velocity along normal
-        auto vra = bodyA.localVelocity(rA);
-        auto vrb = bodyB.localVelocity(rB);
-        auto vRel = glm::dot(n, vrb - vra);
-
-        //
-        auto vDelta = velocityBias - vRel;
-
-        auto lambda = vDelta / normalMass;
-
-        auto newNormalImpulseAccumulator =
-            std::max(lambda + point.normalImpulseAccumulator, 0.0f);
-        lambda = newNormalImpulseAccumulator - point.normalImpulseAccumulator;
-        point.normalImpulseAccumulator += lambda;
-
-        // Bias lambda
-        auto bias = (BAUMGARTE * std::max(point.depth - LINEAR_SLOP, 0.0f)) /
-                    m_timestep;
-
-        // J - impulse magnitude
-        auto J = (lambda + bias) * n;
-
-        bodyA.setLinearVelocity(vA - mA * J);
-        bodyA.setAngularVelocity(wA - iA * glm::cross(rA, J));
-
-        bodyB.setLinearVelocity(vB + mB * J);
-        bodyB.setAngularVelocity(wB + iB * glm::cross(rB, J));
-    }
-}
-
-void PhysicsWorld::solvePositions(Contact & contact)
-{
-    if (!contact.intersect())
-    {
-        return;
-    }
-
-    contact.update();
-
-    auto & bodyA = contact.bodyA();
-    auto & bodyB = contact.bodyB();
-
-    auto & transformA = bodyA.transform();
-    auto & transformB = bodyB.transform();
-
-    auto mA = bodyA.inverseMass();
-    auto mB = bodyB.inverseMass();
-
-    auto & iA = bodyA.worldInverseInertia();
-    auto & iB = bodyB.worldInverseInertia();
-
-    auto & cA = transformA.position();
-    auto & cB = transformB.position();
-
-    for (uint p = 0; p < contact.numPoints(); p++)
-    {
-        auto & point = contact.point(p);
-
-        auto & n = point.normal;
-
-        auto position = point.position;
-        auto separation = -point.depth;
-
-        auto rA = position - cA;
-        auto rB = position - cB;
-
-        // Track max constraint error.
-        //  auto minSeparation = std::min(minSeparation, separation);
-
-        // Prevent large corrections and allow slop.
-        auto C = std::min(
-            std::max(0.5f * (separation + LINEAR_SLOP), -MAX_LINEAR_CORRECTION),
-            0.0f);
-
-        // Compute the effective mass.
-        auto normalMass = point.normalMass;
-
-        // Compute normal impulse
-        auto impulse = normalMass > 0.0f ? -C / normalMass : 0.0f;
-
-        auto P = impulse * n;
-
-        transformA.setPosition(transformA.position() - mA * P);
-        transformA.setOrientation(QuaternionAxisRotation(
-            transformA.orientation(), iA * glm::cross(rA, -P)));
-
-        transformB.setPosition(transformB.position() + mB * P);
-        transformB.setOrientation(QuaternionAxisRotation(
-            transformB.orientation(), iB * glm::cross(rB, P)));
-    }
+//    struct Callback : btBroadphaseRayCallback
+//    {
+//        Callback(const Ray3D &                                            ray,
+//                 const std::function<bool(const RayCastIntersection &)> & handler,
+//                 const PrimitiveTester & primitiveTester):
+//            m_ray(ray), m_handler(handler), m_primitiveTester(primitiveTester)
+//        {
+//            m_signs[0] = 0;
+//            m_signs[1] = 0;
+//            m_signs[2] = 0;
+//
+//        }
+//
+//        virtual bool process(const btBroadphaseProxy* proxy)
+//        {
+//            auto * bulletBody = (btRigidBody*)proxy->m_clientObject;
+//            auto * body = (RigidBody*)bulletBody->getUserPointer();
+//
+//            m_primitiveTester.lineTest(m_ray, body->shared_from_this(), m_handler);
+//
+//            return true;
+//        }
+//
+//        const PrimitiveTester &                                  m_primitiveTester;
+//        const Ray3D &                                            m_ray;
+//        const std::function<bool(const RayCastIntersection &)> & m_handler;
+//    };
+//
+//    Callback callback(ray, handler, m_primitiveTester);
+//
+//    m_broadphase->rayTest(
+//            BulletPhysicsConvert(ray.origin()),
+//            BulletPhysicsConvert(ray.origin() + ray.direction()),
+//            callback
+//    );
 }
 }

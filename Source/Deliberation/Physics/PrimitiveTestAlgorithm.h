@@ -15,7 +15,7 @@ struct RayCastIntersection
     std::shared_ptr<RigidBody> body;
 };
 
-class NarrowphasePrimitiveTest
+class PrimitiveTestAlgorithm
 {
 public:
     virtual std::unique_ptr<RayCastIntersection>

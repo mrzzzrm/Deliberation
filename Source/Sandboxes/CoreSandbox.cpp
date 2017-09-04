@@ -1,30 +1,96 @@
 #include <iostream>
 
-#include <Deliberation/Core/Assert.h>
-#include <Deliberation/Core/Math/Sphere.h>
+#include <btBulletDynamicsCommon.h>
+
 #include <Deliberation/Deliberation.h>
+#include <Deliberation/Physics/CollisionShape.h>
+#include <Deliberation/Physics/PhysicsWorld.h>
+#include <Deliberation/Physics/RigidBody.h>
 
-struct Foo {
-//    template<typename ValueType>
-//    operator ValueType() const {
-//        return 0;
-//    }
+using namespace deliberation;
 
-    friend std::ostream &operator<<(std::ostream &o, const Foo &f) {
-        o << "Foo";
-        return o;
+class FooShape:
+    public CollisionShape
+{
+public:
+    FooShape():
+        CollisionShape(CollisionShape_Box)
+    {}
+
+    AABB bounds(const Transform3D & transform) const override
+    {
+        return AABB();
     }
 };
 
-
-int main(int argc, char *argv[]) {
+int main()
+{
     deliberation::init();
 
-    Foo foo;
-    Sphere sphere({1.0f, 0.0f, 5.0f}, 3.3f);
+    PhysicsWorld physicsWorld;
+    //physicsWorld.setGravity(glm::vec3(0, -10, 0));
 
-    AssertM(true, "Hello World");
-    AssertF(false, "The world is {}", sphere);
+//    btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+//
+//    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+//    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+//
+//    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+//
+//    btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+//
+//    dynamicsWorld->setGravity(btVector3(0, -10, 0));
+
+    auto shape = std::make_shared<FooShape>();
+    auto rigidBody = std::make_shared<RigidBody>(shape);
+
+    physicsWorld.addRigidBody(rigidBody);
+
+//    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
+//    btRigidBody::btRigidBodyConstructionInfo
+//        groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
+//    btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+//    dynamicsWorld->addRigidBody(groundRigidBody);
+//
+//
+//    btDefaultMotionState* fallMotionState =
+//        new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+//    btScalar mass = 1;
+//    btVector3 fallInertia(0, 0, 0);
+//    fallShape->calculateLocalInertia(mass, fallInertia);
+//    btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
+//    btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
+//    dynamicsWorld->addRigidBody(fallRigidBody);
+
+
+    for (int i = 0; i < 300; i++) {
+        physicsWorld.update(1.3f / 60.0f);
+
+//        btTransform trans;
+//        fallRigidBody->getMotionState()->getWorldTransform(trans);
+
+        Log->info("{} {}", rigidBody->transform().position(), rigidBody->transform().orientation());
+    }
+
+//    dynamicsWorld->removeRigidBody(fallRigidBody);
+//    delete fallRigidBody->getMotionState();
+//    delete fallRigidBody;
+
+//    dynamicsWorld->removeRigidBody(groundRigidBody);
+//    delete groundRigidBody->getMotionState();
+//    delete groundRigidBody;
+
+
+//    delete fallShape;
+
+//    delete groundShape;
+
+
+//    delete dynamicsWorld;
+//    delete solver;
+//    delete collisionConfiguration;
+//    delete dispatcher;
+//    delete broadphase;
 
     return 0;
 }

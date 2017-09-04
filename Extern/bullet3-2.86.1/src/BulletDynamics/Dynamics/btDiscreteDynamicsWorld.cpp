@@ -13,7 +13,6 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-
 #include "btDiscreteDynamicsWorld.h"
 
 //collision detection
@@ -1083,7 +1082,6 @@ void btDiscreteDynamicsWorld::integrateTransformsInternal( btRigidBody** bodies,
 					}
 				}
 			}
-
 
 			body->proceedToTransform( predictedTrans);
 

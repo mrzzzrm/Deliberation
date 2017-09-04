@@ -2,14 +2,19 @@
 
 #include <memory>
 
+#include <BulletDynamics/Dynamics/btRigidBody.h>
+
 #include <glm/glm.hpp>
 
 #include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Core/Math/GLMUtils.h>
 
 #include <Deliberation/ECS/Entity.h>
 
-#include <Deliberation/Physics/CollisionObject.h>
+#include <Deliberation/Physics/BulletPhysics.h>
 #include <Deliberation/Physics/CollisionShape.h>
+
+class btMotionState;
 
 namespace deliberation
 {
@@ -18,8 +23,7 @@ struct RigidBodyPayload
     virtual ~RigidBodyPayload() = default;
 };
 
-class RigidBody final : public std::enable_shared_from_this<RigidBody>,
-                        public CollisionObject
+class RigidBody final : public std::enable_shared_from_this<RigidBody>
 {
 public:
     static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
@@ -27,57 +31,48 @@ public:
 public:
     RigidBody(
         const std::shared_ptr<CollisionShape> & shape,
-        const Transform3D &                     transform = Transform3D(),
-        const glm::vec3 &                       linearVelocity = {},
-        const glm::vec3 &                       angularVelocity = {});
+        const Transform3D &                     transform = Transform3D());
 
-    float             inverseMass() const;
-    float             restitution() const;
-    float             friction() const;
-    const glm::mat3 & worldInverseInertia() const;
-    const glm::vec3 & linearVelocity() const;
-    const glm::vec3 & angularVelocity() const;
-    const glm::vec3 & force() const;
-    bool              isStatic() const;
-    size_t            index() const;
-    Entity &          entity() const;
+    AABB bounds() const { return m_shape->bounds(transform()); }
+    const Transform3D & transform() const;
 
-    glm::vec3 localVelocity(const glm::vec3 & r) const;
+    glm::vec3 linearVelocity() const { return BulletPhysicsConvert(m_btRigidBody->getLinearVelocity()); }
+    glm::vec3 angularVelocity() const { return BulletPhysicsConvert(m_btRigidBody->getAngularVelocity()); }
 
-    void setRestitution(float restitution);
-    void setFriction(float friction);
-    void setLinearVelocity(const glm::vec3 & velocity);
-    void setAngularVelocity(const glm::vec3 & velocity);
-    void setForce(const glm::vec3 & force);
-    void setStatic(bool isStatic);
-    void setIndex(size_t index);
-    void setEntity(Entity entity);
+    const std::shared_ptr<CollisionShape> & shape() const { return m_shape; }
+    size_t                                  index() const { return m_index; }
+    Entity &                                entity() const { return m_entity; }
 
-    void applyForce(const glm::vec3 & force);
-    void applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse);
+    std::shared_ptr<btRigidBody> bulletRigidBody() { return m_btRigidBody; }
+    const std::shared_ptr<btRigidBody> & bulletRigidBody() const { return m_btRigidBody; }
 
-    void integrateVelocities(float seconds);
+    glm::vec3 localVelocity(const glm::vec3 & r) const {
+        return BulletPhysicsConvert(m_btRigidBody->getVelocityInLocalPoint(BulletPhysicsConvert(r)));
+    }
+
+    void setLinearVelocity(const glm::vec3 & velocity) { Assert(GLMIsFinite(velocity)); m_btRigidBody->setLinearVelocity(BulletPhysicsConvert(velocity)); }
+    void setAngularVelocity(const glm::vec3 & velocity) { Assert(GLMIsFinite(velocity)); m_btRigidBody->setAngularVelocity(BulletPhysicsConvert(velocity)); }
+
+    void setIndex(size_t index) { m_index = index; }
+    void setEntity(Entity entity) { m_entity = entity; }
+
+    void setTransform(const Transform3D & transform);
+
+    void applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse) {
+        m_btRigidBody->applyImpulse(BulletPhysicsConvert(impulse), BulletPhysicsConvert(point));
+    }
+
     void adjustCenterOfMass();
 
-    void predictTransform(float seconds, Transform3D & prediction);
-
-    std::string toString() const;
+    void predictTransform(float seconds, Transform3D & prediction) const;
 
 private:
-    float m_restitution = 0.1f;
-    float m_friction = 0.03f;
-
-    mutable glm::mat3 m_worldInverseInertia;
-
-    glm::vec3 m_linearVelocity;
-    glm::vec3 m_angularVelocity;
-
-    glm::vec3 m_force;
-    glm::vec3 m_torque;
-
-    bool   m_static = false;
-    size_t m_index = INVALID_INDEX;
-
-    mutable Entity m_entity;
+    std::shared_ptr<btRigidBody>        m_btRigidBody;
+    size_t                              m_index = INVALID_INDEX;
+    std::shared_ptr<CollisionShape>     m_shape;
+    std::shared_ptr<btCollisionShape>   m_btCollisionShape;
+    std::shared_ptr<btMotionState>      m_btMotionState;
+    mutable Entity                      m_entity;
+    mutable Transform3D                 m_transform;
 };
 }

@@ -40,7 +40,7 @@ public:
     virtual void onCreated() {}
     virtual void onRemoved() {}
 
-    virtual void renderImGui() const {}
+    virtual void renderImGui() {}
 
 protected:
     virtual void onEntityAdded(Entity & entity);
