@@ -26,7 +26,7 @@ public:
     virtual std::size_t index() const = 0;
     virtual std::string name() const = 0;
 
-    AbstractWorld * worlds() const { return m_world; }
+    AbstractWorld * world() const { return m_world; }
     size_t          entityIndex() const { return m_entityIndex; };
     EntityId        entityId() const { return m_entityId; };
     ComponentPhase  phase() const { return m_phase; }
