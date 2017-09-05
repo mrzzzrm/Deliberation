@@ -80,10 +80,10 @@ RigidBody::RigidBody(
     m_btMotionState = std::make_shared<btDefaultMotionState>(BulletPhysicsConvert(transform));
 
     btRigidBody::btRigidBodyConstructionInfo constructionInfo(
-        1.0f,
+        shape->mass(transform.scale()),
         m_btMotionState.get(),
         m_btCollisionShape.get(),
-        btVector3(1.0f, 1.0f, 1.0f)
+        BulletPhysicsConvert(shape->localInertia(transform.scale()))
     );
 
     m_btRigidBody = std::make_shared<btRigidBody>(constructionInfo);
@@ -112,6 +112,8 @@ void RigidBody::predictTransform(float seconds, Transform3D & prediction) const 
 
 void RigidBody::setTransform(const Transform3D & transform)
 {
+    const auto massPropertiesDirty = transform.scale() != m_transform.scale();
+
     m_transform = transform;
 
     btTransform bulletTransform;
@@ -119,17 +121,23 @@ void RigidBody::setTransform(const Transform3D & transform)
     bulletTransform.setRotation(BulletPhysicsConvert(transform.orientation()));
 
     m_btRigidBody->proceedToTransform(bulletTransform);
+
+    if (massPropertiesDirty) updateMassProperties();
 }
 
-void RigidBody::adjustCenterOfMass()
+void RigidBody::updateMassProperties()
 {
-    if (m_transform.center() == m_shape->centerOfMass()) return;
+    m_btRigidBody->setMassProps(m_shape->mass(m_transform.scale()),
+                                BulletPhysicsConvert(m_shape->localInertia(m_transform.scale())));
 
-    auto delta = m_shape->centerOfMass() - m_transform.center();
+    if (m_transform.center() != m_shape->centerOfMass())
+    {
+        auto delta = m_shape->centerOfMass() - m_transform.center();
 
-    m_transform.setCenter(m_shape->centerOfMass());
-    m_transform.worldTranslate(
-        m_transform.orientation() * delta * m_transform.scale());
+        m_transform.setCenter(m_shape->centerOfMass());
+        m_transform.worldTranslate(
+            m_transform.orientation() * delta * m_transform.scale());
+    }
 }
 
 }

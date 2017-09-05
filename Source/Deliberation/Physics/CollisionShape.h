@@ -25,8 +25,8 @@ public:
     int type() const;
 
     virtual AABB      bounds(const Transform3D & transform) const = 0;
-    virtual glm::mat3 localInertia() const;
-    virtual float     mass() const;
+    virtual glm::vec3 localInertia(float scale) const;
+    virtual float     mass(float scale) const;
     virtual glm::vec3 centerOfMass() const;
 
 private:

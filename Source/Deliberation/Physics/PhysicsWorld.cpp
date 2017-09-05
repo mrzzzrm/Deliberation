@@ -86,40 +86,56 @@ void PhysicsWorld::lineCast(
     const Ray3D &                                            ray,
     const std::function<bool(const RayCastIntersection &)> & handler) const
 {
-//    struct Callback : btBroadphaseRayCallback
-//    {
-//        Callback(const Ray3D &                                            ray,
-//                 const std::function<bool(const RayCastIntersection &)> & handler,
-//                 const PrimitiveTester & primitiveTester):
-//            m_ray(ray), m_handler(handler), m_primitiveTester(primitiveTester)
-//        {
-//            m_signs[0] = 0;
-//            m_signs[1] = 0;
-//            m_signs[2] = 0;
-//
-//        }
-//
-//        virtual bool process(const btBroadphaseProxy* proxy)
-//        {
-//            auto * bulletBody = (btRigidBody*)proxy->m_clientObject;
-//            auto * body = (RigidBody*)bulletBody->getUserPointer();
-//
-//            m_primitiveTester.lineTest(m_ray, body->shared_from_this(), m_handler);
-//
-//            return true;
-//        }
-//
-//        const PrimitiveTester &                                  m_primitiveTester;
-//        const Ray3D &                                            m_ray;
-//        const std::function<bool(const RayCastIntersection &)> & m_handler;
-//    };
-//
-//    Callback callback(ray, handler, m_primitiveTester);
-//
-//    m_broadphase->rayTest(
-//            BulletPhysicsConvert(ray.origin()),
-//            BulletPhysicsConvert(ray.origin() + ray.direction()),
-//            callback
-//    );
+
+    struct Callback : public btBroadphaseRayCallback
+    {
+        const PrimitiveTester &                                  m_primitiveTester;
+        const Ray3D &                                            m_ray;
+        const std::function<bool(const RayCastIntersection &)> & m_handler;
+
+        Callback(const Ray3D &                                            ray,
+                 const std::function<bool(const RayCastIntersection &)> & handler,
+                 const PrimitiveTester & primitiveTester):
+            m_ray(ray), m_handler(handler), m_primitiveTester(primitiveTester)
+        {
+            const auto normalizedDirection = glm::normalize(ray.direction());
+
+            ///what about division by zero? --> just set rayDirection[i] to INF/BT_LARGE_FLOAT
+            m_rayDirectionInverse[0] = normalizedDirection[0] == btScalar(0.0) ? btScalar(BT_LARGE_FLOAT) : btScalar(1.0) / normalizedDirection[0];
+            m_rayDirectionInverse[1] = normalizedDirection[1] == btScalar(0.0) ? btScalar(BT_LARGE_FLOAT) : btScalar(1.0) / normalizedDirection[1];
+            m_rayDirectionInverse[2] = normalizedDirection[2] == btScalar(0.0) ? btScalar(BT_LARGE_FLOAT) : btScalar(1.0) / normalizedDirection[2];
+            m_signs[0] = m_rayDirectionInverse[0] < 0.0;
+            m_signs[1] = m_rayDirectionInverse[1] < 0.0;
+            m_signs[2] = m_rayDirectionInverse[2] < 0.0;
+
+            m_lambda_max = glm::dot(normalizedDirection, m_ray.direction());
+        }
+
+
+
+        virtual bool process(const btBroadphaseProxy* proxy)
+        {
+            auto * bulletBody = (btRigidBody*)proxy->m_clientObject;
+            auto * body = (RigidBody*)bulletBody->getUserPointer();
+
+            m_primitiveTester.lineTest(m_ray, body->shared_from_this(), m_handler);
+
+            return true;
+        }
+    };
+
+
+    const auto bulletFrom = BulletPhysicsConvert(ray.origin());
+    const auto bulletTo = BulletPhysicsConvert(ray.origin() + ray.direction());
+
+    Callback callback(
+        ray, handler, m_primitiveTester
+    );
+
+    m_broadphase->rayTest(
+        bulletFrom,
+        bulletTo,
+        callback
+    );
 }
 }

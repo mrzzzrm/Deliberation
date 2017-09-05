@@ -67,20 +67,25 @@ void CameraDolly3D::update(
      * Move orientation
      */
     {
-        const auto diff = orientation * glm::inverse(m_camera.orientation());
-        const auto angle = glm::angle(diff);
+        auto o = orientation;
 
-        if (angle == angle)
+        const auto diff = o * glm::inverse(m_camera.orientation());
+
+        // sometimes the angle will snap from nearly 0 to nearly 2*pi, for whatever reason... we always want the shorter angle
+        auto angle = glm::angle(diff);
+        if (angle > glm::pi<float>()) angle = glm::two_pi<float>() - angle;
+
+        if (angle == angle) // Is this supposed to be NaN detection?
         {
             const auto t0 = std::sqrt(2 * angle / m_angularAcceleration);
             if (seconds >= t0)
             {
-                m_camera.setOrientation(orientation);
+                m_camera.setOrientation(o);
             }
             else
             {
-                m_camera.setOrientation(glm::mix(
-                    m_camera.orientation(), orientation, seconds / t0));
+                m_camera.setOrientation(glm::slerp(
+                    m_camera.orientation(), o, seconds / t0));
             }
         }
     }

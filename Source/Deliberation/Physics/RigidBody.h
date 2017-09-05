@@ -62,7 +62,7 @@ public:
         m_btRigidBody->applyImpulse(BulletPhysicsConvert(impulse), BulletPhysicsConvert(point));
     }
 
-    void adjustCenterOfMass();
+    void updateMassProperties();
 
     void predictTransform(float seconds, Transform3D & prediction) const;
 
