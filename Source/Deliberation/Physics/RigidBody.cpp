@@ -2,6 +2,10 @@
 
 #include <sstream>
 
+#include <BulletCollision/CollisionShapes/btCollisionShape.h>
+#include <BulletCollision/CollisionShapes/btSphereShape.h>
+#include <LinearMath/btDefaultMotionState.h>
+
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -11,193 +15,129 @@
 #include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/StreamUtils.h>
 
+namespace
+{
+class BulletCollisionShapeWrapper:
+    public btCollisionShape
+{
+public:
+    BulletCollisionShapeWrapper(deliberation::RigidBody & body):
+        m_rigidBody(body)
+    {}
+
+    void getAabb(const btTransform& bulletTransform, btVector3& aabbMin, btVector3& aabbMax) const override
+    {
+        auto transform = deliberation::BulletPhysicsConvert(bulletTransform);
+        transform.setScale(m_rigidBody.transform().scale());
+        transform.setScale(m_rigidBody.transform().scale());
+        auto bounds = m_rigidBody.shape()->bounds(transform);
+        aabbMin = deliberation::BulletPhysicsConvert(bounds.llf());
+        aabbMax = deliberation::BulletPhysicsConvert(bounds.urb());
+    }
+
+    void setLocalScaling(const btVector3& scaling) override {
+        m_localScaling = scaling;
+    }
+
+    const btVector3& getLocalScaling() const override {
+        return m_localScaling;
+    }
+
+    void calculateLocalInertia(btScalar mass, btVector3& inertia) const override {
+        Fail("What does this even do")
+    }
+
+    const char*	getName() const override {
+        return "WrappedShape";
+    }
+
+    btScalar getMargin() const override {
+        return m_collisionMargin;
+    }
+
+    void setMargin(btScalar collisionMargin) override {
+        m_collisionMargin = collisionMargin;
+    }
+
+private:
+    deliberation::RigidBody & m_rigidBody;
+    btVector3 m_localScaling;
+    btScalar m_collisionMargin = 0.0f;
+};
+}
+
 namespace deliberation
 {
 RigidBody::RigidBody(
     const std::shared_ptr<CollisionShape> & shape,
-    const Transform3D &                     transform,
-    const glm::vec3 &                       linearVelocity,
-    const glm::vec3 &                       angularVelocity)
-    : CollisionObject(shape, transform)
-    , m_linearVelocity(linearVelocity)
-    , m_angularVelocity(angularVelocity)
+    const Transform3D &                     transform):
+    m_shape(shape)
 {
+    m_btCollisionShape = std::make_shared<BulletCollisionShapeWrapper>(
+        *this
+    );
+
+    m_btMotionState = std::make_shared<btDefaultMotionState>(BulletPhysicsConvert(transform));
+
+    btRigidBody::btRigidBodyConstructionInfo constructionInfo(
+        shape->mass(transform.scale()),
+        m_btMotionState.get(),
+        m_btCollisionShape.get(),
+        BulletPhysicsConvert(shape->localInertia(transform.scale()))
+    );
+
+    m_btRigidBody = std::make_shared<btRigidBody>(constructionInfo);
+    m_btRigidBody->setUserPointer(this);
+    m_btRigidBody->setActivationState(DISABLE_DEACTIVATION);
+
+    setTransform(transform);
 }
 
-float RigidBody::inverseMass() const
+const Transform3D & RigidBody::transform() const
 {
-    if (m_static) return 0.0f;
+    btTransform bulletTransform = m_btRigidBody->getWorldTransform();
+    //m_btMotionState->getWorldTransform(bulletTransform);
 
-    return EpsilonGt(shape()->mass(), 0.0f) ? 1.0f / shape()->mass() : 0.0f;
+    m_transform.setPosition(BulletPhysicsConvert(bulletTransform.getOrigin()));
+    m_transform.setOrientation(BulletPhysicsConvert(bulletTransform.getRotation()));
+
+    return m_transform;
 }
 
-float RigidBody::restitution() const { return m_restitution; }
-
-float RigidBody::friction() const { return m_friction; }
-
-const glm::mat3 & RigidBody::worldInverseInertia() const
-{
-    static glm::mat3 staticBodyInertia(0.0f);
-
-    if (m_static) return staticBodyInertia;
-
-    m_worldInverseInertia = transform().basis() *
-                            glm::inverse(shape()->localInertia()) *
-                            glm::transpose(transform().basis());
-
-    return m_worldInverseInertia;
+void RigidBody::predictTransform(float seconds, Transform3D & prediction) const {
+    btTransform btPrediction;
+    m_btRigidBody->predictIntegratedTransform(seconds, btPrediction);
+    prediction = BulletPhysicsConvert(btPrediction);
 }
 
-const glm::vec3 & RigidBody::linearVelocity() const
+void RigidBody::setTransform(const Transform3D & transform)
 {
-    static glm::vec3 staticBodyLinearVelocity(0.0f);
-    if (m_static)
+    const auto massPropertiesDirty = transform.scale() != m_transform.scale();
+
+    m_transform = transform;
+
+    btTransform bulletTransform;
+    bulletTransform.setOrigin(BulletPhysicsConvert(transform.position()));
+    bulletTransform.setRotation(BulletPhysicsConvert(transform.orientation()));
+
+    m_btRigidBody->proceedToTransform(bulletTransform);
+
+    if (massPropertiesDirty) updateMassProperties();
+}
+
+void RigidBody::updateMassProperties()
+{
+    m_btRigidBody->setMassProps(m_shape->mass(m_transform.scale()),
+                                BulletPhysicsConvert(m_shape->localInertia(m_transform.scale())));
+
+    if (m_transform.center() != m_shape->centerOfMass())
     {
-        return staticBodyLinearVelocity;
-    }
+        auto delta = m_shape->centerOfMass() - m_transform.center();
 
-    return m_linearVelocity;
-}
-
-const glm::vec3 & RigidBody::angularVelocity() const
-{
-    static glm::vec3 staticAngularVelocity(0.0f);
-    if (m_static)
-    {
-        return staticAngularVelocity;
-    }
-
-    return m_angularVelocity;
-}
-
-const glm::vec3 & RigidBody::force() const { return m_force; }
-
-size_t RigidBody::index() const { return m_index; }
-
-Entity & RigidBody::entity() const { return m_entity; }
-
-bool RigidBody::isStatic() const { return m_static; }
-
-glm::vec3 RigidBody::localVelocity(const glm::vec3 & r) const
-{
-    if (m_static)
-    {
-        return glm::vec3(0.0f);
-    }
-
-    return m_linearVelocity + glm::cross(m_angularVelocity, r);
-}
-
-void RigidBody::setRestitution(float restitution)
-{
-    m_restitution = restitution;
-}
-
-void RigidBody::setFriction(float friction) { m_friction = friction; }
-
-void RigidBody::setLinearVelocity(const glm::vec3 & velocity)
-{
-    Assert(GLMIsFinite(velocity));
-
-    if (m_static) return;
-
-    m_linearVelocity = velocity;
-}
-
-void RigidBody::setAngularVelocity(const glm::vec3 & velocity)
-{
-    Assert(GLMIsFinite(velocity));
-
-    if (m_static) return;
-
-    m_angularVelocity = velocity;
-}
-
-void RigidBody::setForce(const glm::vec3 & force)
-{
-    if (m_static)
-    {
-        return;
-    }
-
-    m_force = force;
-}
-
-void RigidBody::setStatic(bool isStatic) { m_static = isStatic; }
-
-void RigidBody::setIndex(size_t index) { m_index = index; }
-
-void RigidBody::setEntity(Entity entity) { m_entity = entity; }
-
-void RigidBody::applyForce(const glm::vec3 & force)
-{
-    if (m_static)
-    {
-        return;
-    }
-
-    m_force += force;
-}
-
-void RigidBody::applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse)
-{
-    setLinearVelocity(m_linearVelocity + inverseMass() * impulse);
-    setAngularVelocity(
-        m_angularVelocity + worldInverseInertia() * glm::cross(point, impulse));
-}
-
-void RigidBody::predictTransform(float seconds, Transform3D & prediction)
-{
-    prediction.setCenter(transform().center());
-    prediction.setScale(transform().scale());
-    prediction.setPosition(transform().position() + seconds * m_linearVelocity);
-
-    auto w = m_angularVelocity * seconds;
-
-    auto angle = glm::length(w);
-
-    if (angle > 0.0001f)
-    {
-        auto axis = glm::normalize(w);
-
-        auto quat = glm::rotate(glm::quat(), angle, axis);
-
-        prediction.setOrientation(quat * transform().orientation());
-    }
-    else
-    {
-        prediction.setOrientation(transform().orientation());
+        m_transform.setCenter(m_shape->centerOfMass());
+        m_transform.worldTranslate(
+            m_transform.orientation() * delta * m_transform.scale());
     }
 }
 
-void RigidBody::integrateVelocities(float seconds)
-{
-    if (m_static)
-    {
-        return;
-    }
-
-    setLinearVelocity(m_linearVelocity + inverseMass() * m_force * seconds);
-    setAngularVelocity(
-        m_angularVelocity + worldInverseInertia() * m_torque * seconds);
-}
-
-void RigidBody::adjustCenterOfMass()
-{
-    if (m_transform.center() == m_shape->centerOfMass()) return;
-
-    auto delta = m_shape->centerOfMass() - m_transform.center();
-
-    m_transform.setCenter(m_shape->centerOfMass());
-    m_transform.worldTranslate(
-        m_transform.orientation() * delta * m_transform.scale());
-}
-
-std::string RigidBody::toString() const
-{
-    std::stringstream stream;
-    stream << "{" << transform().position() << ", " << transform().orientation()
-           << "}";
-    return stream.str();
-}
 }

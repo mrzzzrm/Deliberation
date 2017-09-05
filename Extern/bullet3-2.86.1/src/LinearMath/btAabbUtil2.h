@@ -17,6 +17,8 @@ subject to the following restrictions:
 #ifndef BT_AABB_UTIL2
 #define BT_AABB_UTIL2
 
+#include <iostream>
+
 #include "btTransform.h"
 #include "btVector3.h"
 #include "btMinMax.h"
@@ -95,6 +97,11 @@ SIMD_FORCE_INLINE bool btRayAabb2(const btVector3& rayFrom,
 								  btScalar lambda_min,
 								  btScalar lambda_max)
 {
+//    std::cout << "rayFrom: " << rayFrom.x() << ", " << rayFrom.y() << ", " << rayFrom.z() << std::endl;
+//    std::cout << "rayInvDirection: " << rayInvDirection.x() << ", " << rayInvDirection.y() << ", " << rayInvDirection.z() << std::endl;
+//    std::cout << "bounds[0]: " << bounds[0].x() << ", " << bounds[0].y() << ", " << bounds[0].z() << std::endl;
+//    std::cout << "bounds[1]: " << bounds[1].x() << ", " << bounds[1].y() << ", " << bounds[1].z() << std::endl;
+
 	btScalar tmax, tymin, tymax, tzmin, tzmax;
 	tmin = (bounds[raySign[0]].getX() - rayFrom.getX()) * rayInvDirection.getX();
 	tmax = (bounds[1-raySign[0]].getX() - rayFrom.getX()) * rayInvDirection.getX();

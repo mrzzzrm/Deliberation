@@ -71,7 +71,7 @@ public:
         m_hdrRenderer = renderManager.addRenderer<HdrRenderer>();
         m_ground = renderManager.addRenderer<DebugGroundPlaneRenderer>();
         renderManager.addRenderer<BloomRenderer>();
-        m_world.addSystem<DebugPointLightSystem>(m_pointLightRenderer);
+        //m_world.addSystem<DebugPointLightSystem>(m_pointLightRenderer);
 
         m_bunnyModel = m_modelRenderer->addModel(
             DeliberationDataPath("Data/Models/bunny.obj"));

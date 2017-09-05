@@ -31,6 +31,11 @@ float              GaussianCDFWithDenominator(float x, float denom);
 std::vector<float> GaussianSamples(float std, u32 numSamples);
 
 inline float Lerp(float a, float b, float w);
+
+/**
+ * Returns the quaternion representing a rotation from a to b
+ */
+inline glm::quat GetArcQuaternion(glm::vec3 a, glm::vec3 b);
 }
 
 #include <Deliberation/Core/Math/MathUtils.inl>

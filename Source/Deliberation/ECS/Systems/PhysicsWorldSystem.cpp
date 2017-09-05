@@ -15,26 +15,25 @@ namespace deliberation
 {
 PhysicsWorldSystem::PhysicsWorldSystem(
     World & world, PhysicsWorld & physicsWorld)
-    : Base(world, ComponentFilter::requires<RigidBodyComponent>())
+    : Base(world, ComponentFilter::requires<RigidBodyComponent, Transform3DComponent>())
     , m_physicsWorld(physicsWorld)
 {
 }
 
-void PhysicsWorldSystem::updatePhysics(const UpdateFrame & updateFrame)
+float PhysicsWorldSystem::updatePhysics(const UpdateFrame & updateFrame)
 {
-    m_physicsWorld.update(updateFrame.gameSeconds());
+    const auto simulatedSeconds = m_physicsWorld.update(updateFrame.gameSeconds());
 
     for (auto & entityEntry : m_entities)
     {
         if (!entityEntry.active) continue;
 
         auto entity = m_world.entity(entityEntry.id);
-        if (entity.hasComponent<Transform3DComponent>())
-        {
-            entity.component<Transform3DComponent>().value() =
-                entity.component<RigidBodyComponent>().value()->transform();
-        }
+        entity.component<Transform3DComponent>().value() =
+            entity.component<RigidBodyComponent>().value()->transform();
     }
+
+    return simulatedSeconds;
 }
 
 void PhysicsWorldSystem::onCreated()
@@ -69,6 +68,9 @@ void PhysicsWorldSystem::onEntityAdded(Entity & entity)
     auto & rigidBody = entity.component<RigidBodyComponent>().value();
     rigidBody->setEntity(entity);
 
+    entity.component<RigidBodyComponent>().value()->setTransform(
+        entity.component<Transform3DComponent>().value());
+
     m_physicsWorld.addRigidBody(rigidBody);
 }
 
@@ -78,13 +80,4 @@ void PhysicsWorldSystem::onEntityRemoved(Entity & entity)
         entity.component<RigidBodyComponent>().value());
 }
 
-void PhysicsWorldSystem::onEntityPrePhysicsUpdate(
-    Entity & entity, const UpdateFrame & updateFrame)
-{
-    if (entity.hasComponent<Transform3DComponent>())
-    {
-        entity.component<RigidBodyComponent>().value()->transform() =
-            entity.component<Transform3DComponent>().value();
-    }
-}
 }

@@ -4,8 +4,9 @@
 
 #include <Deliberation/Core/StreamUtils.h>
 
-#include <Deliberation/Physics/Narrowphase.h>
+#include <Deliberation/Physics/PrimitiveTester.h>
 #include <Deliberation/Physics/PhysicsWorld.h>
+#include <Deliberation/Physics/RigidBody.h>
 
 #include <Deliberation/Scene/Pipeline/RenderSystem.h>
 

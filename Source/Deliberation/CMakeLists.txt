@@ -275,33 +275,16 @@ add_library(Deliberation
 	ImGui/ImGuiSystem.cpp
 	ImGui/ImGuiSystem.h
 
-	Physics/BoxShape.cpp
-	Physics/BoxShape.h
-	Physics/Broadphase.cpp
-	Physics/BroadphaseFilter.h
-	Physics/Broadphase.h
-	Physics/BroadphaseProxy.cpp
-	Physics/BroadphaseProxy.h
-	Physics/CollisionObject.cpp
-	Physics/CollisionObject.h
+	Physics/BulletPhysics.cpp
+	Physics/BulletPhysics.h
 	Physics/CollisionShape.cpp
 	Physics/CollisionShape.h
-	Physics/Contacts/BoxContact.cpp
-	Physics/Contacts/BoxContact.h
-	Physics/Contacts/Contact.cpp
-	Physics/Contacts/ContactDispatcher.cpp
-	Physics/Contacts/ContactDispatcher.h
-	Physics/Contacts/Contact.h
-	Physics/Contacts/SphereContact.cpp
-	Physics/Contacts/SphereContact.h
-	Physics/Narrowphase.cpp
-	Physics/Narrowphase.h
-	Physics/NarrowphasePrimitiveTest.cpp
-	Physics/NarrowphasePrimitiveTest.h
+	Physics/PrimitiveTester.cpp
+	Physics/PrimitiveTester.h
+	Physics/PrimitiveTestAlgorithm.cpp
+	Physics/PrimitiveTestAlgorithm.h
 	Physics/PhysicsWorld.cpp
 	Physics/PhysicsWorld.h
-	Physics/ReferenceBroadphase.cpp
-	Physics/ReferenceBroadphase.h
 	Physics/RigidBody.cpp
 	Physics/RigidBody.h
 	Physics/SphereShape.cpp
@@ -421,6 +404,10 @@ target_link_libraries(Deliberation
 	${SDL2_TTF_LIBRARY}
 	${OPENGL_gl_LIBRARY}
 
+	BulletDynamics
+	BulletCollision
+	LinearMath
+
 	imgui
 	tinyobjloader
 	glbinding
@@ -440,6 +427,7 @@ target_include_directories(Deliberation
 	${PROJECT_SOURCE_DIR}/Extern/boost-1.63.0/
 	${PROJECT_SOURCE_DIR}/Extern/spdlog-0.14.0/include
 	${PROJECT_SOURCE_DIR}/Extern/spdlog-0.14.0/include/spdlog/fmt
+	${PROJECT_SOURCE_DIR}/Extern/bullet3-2.86.1/src
 
 	# System dependencies
 	${SDL2_INCLUDE_DIR}
