@@ -18,6 +18,8 @@ RenderSystem::RenderSystem(World & world)
 {
     m_debugGeometryRenderer =
         m_renderManager.addRenderer<DebugGeometryRenderer>();
+
+    activatePhases<GameUpdatePhase>();
 }
 
 void RenderSystem::onGameUpdate(const UpdateFrame & updateFrame)

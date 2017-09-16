@@ -8,11 +8,15 @@
 #include <Deliberation/Core/ScopeProfiler.h>
 #include <Deliberation/Core/Log.h>
 
+#include <Deliberation/ECS/ActivityManager.h>
+
 #define VERBOSE 0
 
 namespace deliberation
 {
-World::World() : m_entityIDCounter(1) {}
+World::World() : m_entityIDCounter(1) {
+    m_activityManager = std::make_shared<ActivityManager>();
+}
 
 World::~World()
 {

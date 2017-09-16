@@ -1,6 +1,7 @@
 #include <Deliberation/Scene/Debug/DebugPointLightSystem.h>
 
 #include <Deliberation/Core/Math/FloatUtils.h>
+#include <Deliberation/ECS/Phase.h>
 #include <Deliberation/ECS/World.h>
 #include <Deliberation/Scene/Debug/DebugGeometryNode.h>
 #include <Deliberation/Scene/Lighting/PointLightRenderer.h>
@@ -13,10 +14,13 @@ DebugPointLightSystem::DebugPointLightSystem(
     const std::shared_ptr<PointLightRenderer> & pointLightRenderer)
     : Base(world), m_pointLightRenderer(pointLightRenderer)
 {
+    activatePhases<GameUpdatePhase>();
+
     m_node = world.system<RenderSystem>()->debugGeometryRenderer()->addNode();
 }
 
-void DebugPointLightSystem::onGameUpdate(const UpdateFrame & updateFrame)
+void DebugPointLightSystem::
+onGameUpdate(const UpdateFrame & updateFrame)
 {
     for (size_t l = 0; l < m_pointLightRenderer->pointLights().size(); l++)
     {

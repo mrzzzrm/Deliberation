@@ -223,6 +223,11 @@ add_library(Deliberation
 
 	ECS/AbstractWorld.cpp
 	ECS/AbstractWorld.h
+	ECS/Activity.h
+	ECS/Activity.inl
+	ECS/ActivityManager.cpp
+	ECS/ActivityManager.h
+	ECS/ActivityManager.inl
 	ECS/ComponentBase.cpp
 	ECS/ComponentBase.h
 	ECS/ComponentFilter.cpp
@@ -245,8 +250,11 @@ add_library(Deliberation
 	ECS/Level.h
 	ECS/LevelSystem.cpp
 	ECS/LevelSystem.h
+	ECS/Phase.cpp
+	ECS/Phase.h
 	ECS/EntityPrototypeManager.cpp
 	ECS/EntityPrototypeManager.h
+	ECS/UntypedActivity.h
 	ECS/SystemBase.cpp
 	ECS/SystemBase.h
 	ECS/System.h

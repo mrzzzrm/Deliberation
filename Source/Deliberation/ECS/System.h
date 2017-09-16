@@ -2,11 +2,13 @@
 
 #include <Deliberation/Core/EventListener.h>
 #include <Deliberation/ECS/SystemBase.h>
+#include <Deliberation/ECS/Activity.h>
 
 namespace deliberation
 {
 template<typename T>
 class System :
+    public Activity<T>,
     public SystemBase,
     public EventListener<T>,
     public std::enable_shared_from_this<T>

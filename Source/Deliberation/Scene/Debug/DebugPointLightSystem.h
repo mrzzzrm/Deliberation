@@ -16,7 +16,6 @@ public:
         World &                                     world,
         const std::shared_ptr<PointLightRenderer> & pointLightRenderer);
 
-protected:
     void onGameUpdate(const UpdateFrame & updateFrame) override;
 
 private:

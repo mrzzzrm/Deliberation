@@ -20,7 +20,6 @@ public:
         return m_debugGeometryRenderer;
     }
 
-protected:
     void onGameUpdate(const UpdateFrame & updateFrame) override;
 
 private:

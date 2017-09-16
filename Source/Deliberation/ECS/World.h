@@ -13,6 +13,7 @@
 #include <Deliberation/Core/TypeID.h>
 
 #include <Deliberation/Core/EventDomain.h>
+
 #include <Deliberation/ECS/AbstractWorld.h>
 #include <Deliberation/ECS/Component.h>
 #include <Deliberation/ECS/Defines.h>
@@ -24,6 +25,7 @@
 
 namespace deliberation
 {
+class ActivityManager;
 class UpdateFrame;
 
 class World final : public AbstractWorld
@@ -33,6 +35,7 @@ public:
     ~World();
 
     const WorldProfiler & profiler() const;
+    const std::shared_ptr<ActivityManager> & activityManager() { return m_activityManager; }
 
     EntityData & entityData(EntityId id);
     Entity       entity(EntityId id);
@@ -107,6 +110,8 @@ private:
     componentSetup(const ComponentBitset & componentBits);
 
 private:
+    std::shared_ptr<ActivityManager>          m_activityManager;
+
     SparseVector<EntityData>                  m_entities;
     std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
     EntityId                                  m_entityIDCounter;

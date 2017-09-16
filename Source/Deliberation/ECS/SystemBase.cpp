@@ -54,8 +54,6 @@ void SystemBase::beforeGameUpdate()
 
 void SystemBase::gameUpdate(const UpdateFrame & updateFrame)
 {
-    onGameUpdate(updateFrame);
-
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;

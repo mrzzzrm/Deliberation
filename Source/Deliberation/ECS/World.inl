@@ -1,5 +1,6 @@
 #include <type_traits>
 
+#include <Deliberation/ECS/ActivityManager.h>
 #include <Deliberation/ECS/System.h>
 
 namespace deliberation
@@ -33,6 +34,8 @@ std::shared_ptr<T> World::addSystem(Args &&... args)
 
     auto system = std::make_shared<T>(*this, std::forward<Args>(args)...);
     m_systems.emplace(system->index(), system);
+
+    m_activityManager->addActivity(system);
 
     system->onCreated();
 
