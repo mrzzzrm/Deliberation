@@ -406,6 +406,9 @@ add_library(Deliberation
 	Scene/UVSphere.h
 	Scene/Vertices.h)
 
+
+message("SDL_ttf: ${SDL2_TTF_LIBRARY} ${SDL2_TTF_INCLUDE_DIR}")
+
 target_link_libraries(Deliberation
 	${SDL2_LIBRARY}
 	${SDL2_IMAGE_LIBRARY}

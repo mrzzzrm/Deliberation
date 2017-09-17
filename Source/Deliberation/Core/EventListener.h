@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <Deliberation/Core/Assert.h>
+#include <Deliberation/Core/EventDomain.h>
 #include <Deliberation/Core/EventListenerProxy.h>
 
 namespace deliberation

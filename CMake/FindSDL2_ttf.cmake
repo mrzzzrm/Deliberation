@@ -89,10 +89,11 @@
 # License text for the above reference.)
 
 SET(SDL2_TTF_SEARCH_PATHS
-	${PROJECT_SOURCE_DIR}/Extern/SDL2_ttf-2.0.14
+	/usr/lib
 	${SDL2}
 	$ENV{SDL2}
 	$ENV{SDL2_TTF}
+	${PROJECT_SOURCE_DIR}/Extern/SDL2_ttf-2.0.14
 	PATH_SUFFIXES include/SDL2 include SDL2
 	i686-w64-mingw32/include/SDL2
 	PATHS
@@ -100,6 +101,7 @@ SET(SDL2_TTF_SEARCH_PATHS
 	/Library/Frameworks
 	/usr/local/include/SDL2
 	/usr/include/SDL2
+	/usr/include/SDL
 	/sw # Fink
 	/opt/local # DarwinPorts
 	/opt/csw # Blastwave
@@ -117,6 +119,7 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		NAMES SDL2_ttf
 		PATH_SUFFIXES lib64 lib
 		lib/x64
+		x86_64-linux-gnu
 		x86_64-w64-mingw32/lib
 		HINTS
 		${SDL2_TTF_SEARCH_PATHS}
@@ -125,7 +128,9 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	FIND_LIBRARY(SDL2_TTF_LIBRARY_TEMP
 		NAMES SDL2_ttf
-		PATH_SUFFIXES lib64 lib
+		PATH_SUFFIXES
+		lib64
+		lib
 		lib/x64
 		x86_64-w64-mingw32/lib
 		HINTS

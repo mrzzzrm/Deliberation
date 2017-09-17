@@ -69,7 +69,7 @@ Texture Font::render(
     sdlColor.r = color.r * 255;
     sdlColor.g = color.g * 255;
     sdlColor.b = color.b * 255;
-    sdlColor.a = color.a * 255;
+//    sdlColor.a = color.a * 255;
 
     auto * surface = TTF_RenderText_Blended(font->font, text.c_str(), sdlColor);
 
