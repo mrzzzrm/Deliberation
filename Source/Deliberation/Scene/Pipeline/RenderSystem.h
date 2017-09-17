@@ -20,7 +20,7 @@ public:
         return m_debugGeometryRenderer;
     }
 
-    void onGameUpdate(const UpdateFrame & updateFrame) override;
+    void onGameUpdate(const UpdateFrame & updateFrame);
 
 private:
     RenderManager                          m_renderManager;

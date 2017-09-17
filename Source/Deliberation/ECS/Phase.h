@@ -28,6 +28,9 @@ public:
     virtual void removeInvoker(const std::shared_ptr<AbstractPhaseInvoker> & invoker) = 0;
 };
 
+// Used to generate Family of Phase Type IDs
+struct PhaseFamily {};
+
 template<typename T, typename ... Args>
 class Phase
 {
@@ -79,6 +82,11 @@ public:
             }
         }
     };
+
+public:
+    static TypeID::value_t phaseTypeId() {
+        return TypeID::value<PhaseFamily, T>();
+    }
 };
 
 template<typename T, typename ... Args>
@@ -87,21 +95,41 @@ std::shared_ptr<AbstractPhaseContainer> Phase<T, Args...>::Invoker::createContai
     return std::make_shared<typename T::Container>();
 };
 
-
-class GameUpdatePhase:
-    public Phase<GameUpdatePhase, UpdateFrame>
-{
-public:
-    static TypeID::value_t phaseTypeId();
-
-    template<typename T>
-    static std::shared_ptr<Invoker> createInvoker(T & obj)
-    {
-        Fn fn = [&](UpdateFrame & updateFrame) {
-            obj.onGameUpdate(updateFrame);
-        };
-        return std::make_shared<Invoker>(fn);
-    }
+#define DELIBERATION_DECLARE_PHASE_0(phaseName, methodName) \
+class phaseName: \
+    public Phase<phaseName> \
+{ \
+public:\
+    template<typename T> \
+    static std::shared_ptr<Invoker> createInvoker(T & obj) \
+    { \
+        Fn fn = [&]() { \
+            obj.methodName(); \
+        }; \
+        return std::make_shared<Invoker>(fn); \
+    } \
 };
+
+#define DELIBERATION_DECLARE_PHASE_1(phaseName, methodName, arg0) \
+class phaseName: \
+    public Phase<phaseName, arg0> \
+{ \
+public:\
+    template<typename T> \
+    static std::shared_ptr<Invoker> createInvoker(T & obj) \
+    { \
+        Fn fn = [&](arg0 & v0) { \
+            obj.methodName(v0); \
+        }; \
+        return std::make_shared<Invoker>(fn); \
+    } \
+}; \
+
+DELIBERATION_DECLARE_PHASE_0(FrameBeginPhase, onFrameBegin)
+DELIBERATION_DECLARE_PHASE_1(GameUpdatePhase, onGameUpdate, const UpdateFrame)
+DELIBERATION_DECLARE_PHASE_1(FrameUpdatePhase, onFrameUpdate, const UpdateFrame)
+DELIBERATION_DECLARE_PHASE_1(PrePhysicsUpdatePhase, onPrePhysicsUpdate, const UpdateFrame)
+DELIBERATION_DECLARE_PHASE_1(PostPhysicsUpdatePhase, onPostPhysicsUpdate, const UpdateFrame)
+DELIBERATION_DECLARE_PHASE_1(FrameCompletePhase, onFrameComplete, const UpdateFrame)
 
 }

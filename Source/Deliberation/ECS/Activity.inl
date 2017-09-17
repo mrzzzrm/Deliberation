@@ -49,7 +49,7 @@ template<typename T>
 template<typename P>
 void Activity<T>::deactivatePhase()
 {
-    const auto phaseTypeId = TypeID::value<ActivityManager, P>();
+    const auto phaseTypeId = P::phaseTypeId();
 
     auto iter = std::find_if(m_phaseInvokers.begin(), m_phaseInvokers.end(), [&](const auto & rhs) {
         return rhs->phaseTypeId() == phaseTypeId;

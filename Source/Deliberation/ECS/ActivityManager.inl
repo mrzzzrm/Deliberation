@@ -12,8 +12,10 @@ namespace deliberation
 template<typename T, typename ... Args>
 void ActivityManager::invokePhase(Args &&... args)
 {
-    auto iter = m_containersByPhaseTypeId.find(TypeID::value<ActivityManager, T>());
-    Assert(iter != m_containersByPhaseTypeId.end());
+    auto iter = m_containersByPhaseTypeId.find(T::phaseTypeId());
+
+    // No registered invokers in this phase - can happen, not an error
+    if (iter == m_containersByPhaseTypeId.end()) return;
 
     const auto & abstractContainer = iter->second;
     const auto container = std::static_pointer_cast<typename T::Container>(abstractContainer);

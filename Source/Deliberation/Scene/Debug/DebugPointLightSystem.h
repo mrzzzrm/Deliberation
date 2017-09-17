@@ -16,7 +16,7 @@ public:
         World &                                     world,
         const std::shared_ptr<PointLightRenderer> & pointLightRenderer);
 
-    void onGameUpdate(const UpdateFrame & updateFrame) override;
+    void onGameUpdate(const UpdateFrame & updateFrame);
 
 private:
     std::shared_ptr<DebugGeometryNode>  m_node;

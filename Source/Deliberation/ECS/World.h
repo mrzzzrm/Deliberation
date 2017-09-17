@@ -32,7 +32,7 @@ class World final : public AbstractWorld
 {
 public:
     World();
-    ~World();
+    ~World() override;
 
     const WorldProfiler & profiler() const;
     const std::shared_ptr<ActivityManager> & activityManager() { return m_activityManager; }
@@ -51,12 +51,17 @@ public:
     template<typename T, typename... Args>
     std::shared_ptr<T> addSystem(Args &&... args);
 
-    void frameBegin();
-    void gameUpdate(const UpdateFrame & updateFrame);
-    void frameUpdate(const UpdateFrame & updateFrame);
-    void prePhysicsUpdate(const UpdateFrame & updateFrame);
-    void postPhysicsUpdate(const UpdateFrame & updateFrame);
-    void frameComplete(const UpdateFrame & updateFrame);
+    /**
+     * Predefined phases of a frame
+     */
+    // @{
+    void frameBeginPhase();
+    void gameUpdatePhase(const UpdateFrame & updateFrame);
+    void frameUpdatePhase(const UpdateFrame & updateFrame);
+    void prePhysicsUpdatePhase(const UpdateFrame & updateFrame);
+    void postPhysicsUpdatePhase(const UpdateFrame & updateFrame);
+    void frameCompletePhase(const UpdateFrame & updateFrame);
+    // @}
 
     std::string toString() const;
 

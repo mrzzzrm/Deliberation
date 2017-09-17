@@ -42,8 +42,6 @@ void SystemBase::removeEntity(Entity & entity)
     onEntityRemoved(entity);
 }
 
-void SystemBase::frameBegin() { onFrameBegin(); }
-
 void SystemBase::beforeGameUpdate()
 {
     for (auto & entry : m_entities)
@@ -63,12 +61,8 @@ void SystemBase::gameUpdate(const UpdateFrame & updateFrame)
     }
 }
 
-void SystemBase::frameUpdate(const UpdateFrame & updateFrame) { onFrameUpdate(updateFrame); }
-
 void SystemBase::prePhysicsUpdate(const UpdateFrame & updateFrame)
 {
-    onPrePhysicsUpdate(updateFrame);
-
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
@@ -80,8 +74,6 @@ void SystemBase::prePhysicsUpdate(const UpdateFrame & updateFrame)
 
 void SystemBase::postPhysicsUpdate(const UpdateFrame & updateFrame)
 {
-    onPostPhysicsUpdate(updateFrame);
-
     for (auto & entry : m_entities)
     {
         if (!entry.active) continue;
@@ -90,8 +82,6 @@ void SystemBase::postPhysicsUpdate(const UpdateFrame & updateFrame)
         onEntityPostPhysicsUpdate(entity, updateFrame);
     }
 }
-
-void SystemBase::frameComplete(const UpdateFrame & updateFrame) { onFrameComplete(updateFrame); }
 
 void SystemBase::onEntityAdded(Entity & entity)
 {
@@ -107,10 +97,4 @@ void SystemBase::onEntityPrePhysicsUpdate(
     Entity & entity, const UpdateFrame & updateFrame)
 {
 }
-
-void SystemBase::onFrameBegin() {}
-
-void SystemBase::onPrePhysicsUpdate(const UpdateFrame & updateFrame) {}
-
-void SystemBase::onFrameComplete(const UpdateFrame & updateFrame) {}
 }

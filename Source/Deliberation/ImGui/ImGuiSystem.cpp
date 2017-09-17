@@ -25,6 +25,8 @@ ImGuiSystem::ImGuiSystem(World & world)
     , InputLayer(200)
     , m_input(world.systemRef<ApplicationSystem>().input())
 {
+    activatePhases<FrameBeginPhase>();
+
     auto & renderManager = world.systemRef<RenderSystem>().renderManager();
     renderManager.addRenderer<ImGuiRenderer>();
 

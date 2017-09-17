@@ -5,9 +5,4 @@
 namespace deliberation
 {
 
-TypeID::value_t GameUpdatePhase::phaseTypeId()
-{
-    return TypeID::value<ActivityManager, GameUpdatePhase>();
-}
-
 }

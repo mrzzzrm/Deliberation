@@ -29,13 +29,10 @@ public:
     void addEntity(Entity & entity);
     void removeEntity(Entity & entity);
 
-    void frameBegin();
     void beforeGameUpdate();
     void gameUpdate(const UpdateFrame & updateFrame);
-    void frameUpdate(const UpdateFrame & updateFrame);
     void prePhysicsUpdate(const UpdateFrame & updateFrame);
     void postPhysicsUpdate(const UpdateFrame & updateFrame);
-    void frameComplete(const UpdateFrame & updateFrame);
 
     virtual void onCreated() {}
     virtual void onRemoved() {}
@@ -53,12 +50,6 @@ protected:
     onEntityPostPhysicsUpdate(Entity & entity, const UpdateFrame & updateFrame)
     {
     }
-    virtual void onFrameBegin();
-    virtual void onGameUpdate(const UpdateFrame & updateFrame) {}
-    virtual void onFrameUpdate(const UpdateFrame & updateFrame) {}
-    virtual void onPrePhysicsUpdate(const UpdateFrame & updateFrame);
-    virtual void onPostPhysicsUpdate(const UpdateFrame & updateFrame) {}
-    virtual void onFrameComplete(const UpdateFrame & updateFrame);
 
 protected:
     struct EntityEntry

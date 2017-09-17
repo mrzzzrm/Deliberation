@@ -75,7 +75,7 @@ Entity World::createEntity(const std::string & name, EntityId parent)
     return Entity(*this, id);
 }
 
-void World::frameBegin()
+void World::frameBeginPhase()
 {
     DELIBERATION_LOG_OUTER_SCOPE("FrameBegin");
 
@@ -111,19 +111,14 @@ void World::frameBegin()
     }
     m_entityRemovals.clear();
 
-    for (auto & pair : m_systems)
-    {
-        auto & system = *pair.second;
 
-        ScopeProfiler profiler;
-        system.frameBegin();
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "FrameBegin", micros});
-    }
+    /**
+     * Invoke Phase on Activities
+     */
+    m_activityManager->invokePhase<FrameBeginPhase>();
 }
 
-void World::gameUpdate(const UpdateFrame & updateFrame)
+void World::gameUpdatePhase(const UpdateFrame & updateFrame)
 {
     DELIBERATION_LOG_OUTER_SCOPE("GameUpdate");
 
@@ -148,25 +143,17 @@ void World::gameUpdate(const UpdateFrame & updateFrame)
 
         m_profiler.addScope({system, "GameUpdate", micros});
     }
+
+    m_activityManager->invokePhase<GameUpdatePhase>(updateFrame);
 }
 
-void World::frameUpdate(const UpdateFrame & updateFrame)
+void World::frameUpdatePhase(const UpdateFrame & updateFrame)
 {
     DELIBERATION_LOG_OUTER_SCOPE("FrameUpdate");
-
-    for (auto & pair : m_systems)
-    {
-        auto & system = *pair.second;
-
-        ScopeProfiler profiler;
-        system.frameUpdate(updateFrame);
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "FrameUpdate", micros});
-    }
+    m_activityManager->invokePhase<FrameUpdatePhase>(updateFrame);
 }
 
-void World::prePhysicsUpdate(const UpdateFrame & updateFrame)
+void World::prePhysicsUpdatePhase(const UpdateFrame & updateFrame)
 {
     DELIBERATION_LOG_OUTER_SCOPE("PrePhysicsUpdate");
 
@@ -180,9 +167,11 @@ void World::prePhysicsUpdate(const UpdateFrame & updateFrame)
 
         m_profiler.addScope({system, "PrePhysicsUpdate", micros});
     }
+
+    m_activityManager->invokePhase<PrePhysicsUpdatePhase>(updateFrame);
 }
 
-void World::postPhysicsUpdate(const UpdateFrame & updateFrame)
+void World::postPhysicsUpdatePhase(const UpdateFrame & updateFrame)
 {
     DELIBERATION_LOG_OUTER_SCOPE("PostPhysicsUpdate");
 
@@ -196,22 +185,15 @@ void World::postPhysicsUpdate(const UpdateFrame & updateFrame)
 
         m_profiler.addScope({system, "PostPhysicsUpdate", micros});
     }
+
+    m_activityManager->invokePhase<PostPhysicsUpdatePhase>(updateFrame);
 }
 
-void World::frameComplete(const UpdateFrame & updateFrame)
+void World::frameCompletePhase(const UpdateFrame & updateFrame)
 {
     DELIBERATION_LOG_OUTER_SCOPE("FrameComplete");
 
-    for (auto & pair : m_systems)
-    {
-        auto & system = *pair.second;
-
-        ScopeProfiler profiler;
-        system.frameComplete(updateFrame);
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "FrameComplete", micros});
-    }
+    m_activityManager->invokePhase<FrameCompletePhase>(updateFrame);
 
     m_profiler.frameComplete();
 }
