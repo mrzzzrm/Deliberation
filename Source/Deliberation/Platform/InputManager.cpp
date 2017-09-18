@@ -1,4 +1,4 @@
-#include <Deliberation/Platform/Input.h>
+#include <Deliberation/Platform/InputManager.h>
 
 #include <algorithm>
 #include <iostream>
@@ -101,27 +101,27 @@ u32 DeliberationMouseButtonToSDL(MouseButton mouseButton)
 
 namespace deliberation
 {
-Input::Input() { m_mouseButtonsDown.reset(); }
+InputManager::InputManager() { m_mouseButtonsDown.reset(); }
 
-bool Input::mouseButtonDown(MouseButton button) const
+bool InputManager::mouseButtonDown(MouseButton button) const
 {
     return (SDL_GetMouseState(NULL, NULL) &
             SDL_BUTTON(DeliberationMouseButtonToSDL(button))) != 0;
 }
 
-bool Input::keyPressed(Key key) const
+bool InputManager::keyPressed(Key key) const
 {
     return SDL_GetKeyboardState(NULL)[DeliberationKeyToSDLScancode(key)];
 }
 
-glm::vec2 Input::mousePosition() const
+glm::vec2 InputManager::mousePosition() const
 {
     int x, y;
     SDL_GetMouseState(&x, &y);
     return sdlMousePositionToNdc(x, y);
 }
 
-void Input::addLayer(const std::shared_ptr<InputLayer> & layer)
+void InputManager::addLayer(const std::shared_ptr<InputLayer> & layer)
 {
     m_layers.emplace_back(layer);
 
@@ -134,7 +134,7 @@ void Input::addLayer(const std::shared_ptr<InputLayer> & layer)
         });
 }
 
-void Input::removeLayer(const std::shared_ptr<InputLayer> & layer)
+void InputManager::removeLayer(const std::shared_ptr<InputLayer> & layer)
 {
     const auto iter = std::find(m_layers.begin(), m_layers.end(), layer);
     Assert(iter != m_layers.end());
@@ -142,7 +142,7 @@ void Input::removeLayer(const std::shared_ptr<InputLayer> & layer)
     m_layers.erase(iter);
 }
 
-void Input::onSDLInputEvent(const SDL_Event & sdlEvent)
+void InputManager::onSDLInputEvent(const SDL_Event & sdlEvent)
 {
     switch (sdlEvent.type)
     {
@@ -262,7 +262,7 @@ void Input::onSDLInputEvent(const SDL_Event & sdlEvent)
     }
 }
 
-void Input::onFrameBegin()
+void InputManager::onFrameBegin()
 {
     // MouseDown event
     {
@@ -289,7 +289,7 @@ void Input::onFrameBegin()
 }
 
 template<typename T>
-std::shared_ptr<InputLayer> Input::processEvent(
+std::shared_ptr<InputLayer> InputManager::processEvent(
     T event, const std::function<void(InputLayer &, T &)> & fn) const
 {
     for (const auto & layer : m_layers)
@@ -300,7 +300,7 @@ std::shared_ptr<InputLayer> Input::processEvent(
     return {};
 }
 
-glm::vec2 Input::sdlMousePositionToNdc(i32 x, i32 y) const
+glm::vec2 InputManager::sdlMousePositionToNdc(i32 x, i32 y) const
 {
     // This might be the wrong window, but duuh, not supporting multiple atm
     // anyway

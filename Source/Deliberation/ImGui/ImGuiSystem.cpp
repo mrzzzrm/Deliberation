@@ -7,12 +7,12 @@
 #include <Deliberation/Draw/Framebuffer.h>
 #include <Deliberation/Scene/Texture/TextureLoader.h>
 
-#include <Deliberation/ECS/Systems/ApplicationSystem.h>
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/ImGui/ImGuiRenderer.h>
 
-#include <Deliberation/Platform/Input.h>
+#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/InputManager.h>
 #include <Deliberation/Platform/KeyMap.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
@@ -23,7 +23,7 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world)
     : Base(world)
     , InputLayer(200)
-    , m_input(world.systemRef<ApplicationSystem>().input())
+    , m_inputManager(Application::instance().inputManager())
 {
     activatePhases<FrameBeginPhase>();
 
@@ -88,23 +88,23 @@ void ImGuiSystem::onFrameBegin()
     auto & io = ImGui::GetIO();
 
     const auto & backbuffer =
-        world().systemRef<ApplicationSystem>().drawContext().backbuffer();
+    Application::instance().drawContext().backbuffer();
 
     io.DisplaySize =
         ImVec2((float)backbuffer.width(), (float)backbuffer.height());
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 
     auto mouseX =
-        (m_input.mousePosition().x + 1.0f) / 2.0f * backbuffer.width();
-    auto mouseY = (1.0f - (m_input.mousePosition().y + 1.0f) / 2.0f) *
+        (m_inputManager.mousePosition().x + 1.0f) / 2.0f * backbuffer.width();
+    auto mouseY = (1.0f - (m_inputManager.mousePosition().y + 1.0f) / 2.0f) *
                   backbuffer.height();
 
     // io.MouseDrawCursor = true;
 
     io.MousePos = ImVec2(mouseX, mouseY);
 
-    io.MouseDown[0] = m_input.mouseButtonDown(MouseButton::Left);
-    io.MouseDown[1] = m_input.mouseButtonDown(MouseButton::Right);
+    io.MouseDown[0] = m_inputManager.mouseButtonDown(MouseButton::Left);
+    io.MouseDown[1] = m_inputManager.mouseButtonDown(MouseButton::Right);
     io.MouseDown[2] = false;
     io.MouseDown[3] = false;
     io.MouseDown[4] = false;

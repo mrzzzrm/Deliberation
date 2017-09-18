@@ -6,7 +6,7 @@
 
 namespace deliberation
 {
-class Input;
+class InputManager;
 class MouseButtonEvent;
 
 class InputLayer : public InputListener

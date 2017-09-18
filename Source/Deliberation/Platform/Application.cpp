@@ -16,34 +16,30 @@
 #include <Deliberation/Core/MainLoop.h>
 #include <Deliberation/Core/StreamUtils.h>
 
+#include <Deliberation/Platform/ApplicationRuntime.h>
 #include <Deliberation/Platform/InputLayerWrapper.h>
 
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-Application::Application(
-    const std::string & name, const std::string & prefixPath)
-    : m_name(name), m_prefixPath(prefixPath), m_running(false), m_returnCode(0)
+
+Application & Application::instance()
 {
-    deliberation::init();
+    static Application application;
+    return application;
 }
 
-Application::~Application()
+InputManager & Application::inputManager()
 {
-    deliberation::shutdown();
+    AssertM(m_inputManager.engaged(), "InputManager not yet setup");
+    return *m_inputManager;
 }
 
-Input & Application::input()
+const InputManager & Application::inputManager() const
 {
-    AssertM(m_input.engaged(), "Input not yet setup");
-    return *m_input;
-}
-
-const Input & Application::input() const
-{
-    AssertM(m_input.engaged(), "Input not yet setup");
-    return *m_input;
+    AssertM(m_inputManager.engaged(), "InputManager not yet setup");
+    return *m_inputManager;
 }
 
 DrawContext & Application::drawContext() { return m_drawContext.get(); }
@@ -55,14 +51,18 @@ const DrawContext & Application::drawContext() const
 
 float Application::fps() const { return m_fpsCounter.fps(); }
 
-int Application::run(int argc, char ** argv)
+int Application::run(const std::shared_ptr<ApplicationRuntime> & runtime, int argc, char ** argv)
 {
+    deliberation::init();
+
+    m_runtime = runtime;
+
     /**
      * Parse command line
      */
     std::string cmdPrefix;
 
-    cxxopts::Options options(m_name, "");
+    cxxopts::Options options(m_runtime->name(), "");
     options.add_options()(
         "prefix",
         "Deliberation install prefix",
@@ -72,7 +72,7 @@ int Application::run(int argc, char ** argv)
     if (!cmdPrefix.empty())
     {
         Log->info("Prefix override: '{}'", cmdPrefix);
-        m_prefixPath = cmdPrefix;
+        m_runtime->setPrefix(cmdPrefix);
     }
 
     /**
@@ -82,7 +82,7 @@ int Application::run(int argc, char ** argv)
 
     m_running = true;
 
-    onStartup();
+    m_runtime->onStartup();
 
     if (deliberation::GLLoggingEnabled()) Log->info("--- Frame ---");
 
@@ -101,18 +101,18 @@ int Application::run(int argc, char ** argv)
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEMOTION:
-            case SDL_MOUSEWHEEL: m_input->onSDLInputEvent(event); break;
+            case SDL_MOUSEWHEEL: m_inputManager->onSDLInputEvent(event); break;
 
             case SDL_WINDOWEVENT: handleWindowEvent(event); break;
 
             case SDL_QUIT: quit(0); break;
             }
         }
-        m_input->onFrameBegin();
+        m_inputManager->onFrameBegin();
 
         SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
-        onFrame(micros);
+        m_runtime->onFrame(micros);
 
         SDL_GL_SwapWindow(m_displayWindow);
 
@@ -125,7 +125,9 @@ int Application::run(int argc, char ** argv)
         return m_running;
     });
 
-    onShutdown();
+    m_runtime->onShutdown();
+
+    deliberation::shutdown();
 
     return m_returnCode;
 }
@@ -135,10 +137,6 @@ void Application::quit(int returnCode)
     m_running = false;
     m_returnCode = returnCode;
 }
-
-void Application::onStartup() {}
-
-void Application::onShutdown() {}
 
 void Application::init()
 {
@@ -197,7 +195,7 @@ void Application::init()
     Log->info("OpenGL Renderer:       {}", rendererString);
     Log->info("DrawContext RGBA-bits: {}", drawContextColorSize);
 
-    deliberation::setPrefixPath(m_prefixPath);
+    deliberation::setPrefixPath(m_runtime->prefix());
     deliberation::EnableGLErrorChecks();
 
     Log->info("Prefix:                {}", deliberation::prefixPath());
@@ -207,9 +205,7 @@ void Application::init()
     /**
      * Init input
      */
-    m_input.reset();
-    m_input->addLayer(std::make_shared<InputLayerWrapper>(
-        *this, std::numeric_limits<i32>::min()));
+    m_inputManager.reset();
 
     m_initialized = true;
 }

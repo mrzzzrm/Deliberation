@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Platform/Input.h>
+#include <Deliberation/Platform/InputManager.h>
 #include <Deliberation/Platform/KeyEvent.h>
 #include <Deliberation/Platform/MouseButtonEvent.h>
 #include <Deliberation/Platform/MouseMotionEvent.h>
@@ -24,6 +24,6 @@ public:
     virtual void onMouseButtonClicked(MouseButtonEvent & event){};
     virtual void onKeyPressed(KeyEvent & event){};
     virtual void onKeyReleased(KeyEvent & event){};
-    virtual void onInputUpdate(Input & input){};
+    virtual void onInputUpdate(InputManager & input){};
 };
 }

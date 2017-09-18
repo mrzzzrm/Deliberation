@@ -7,7 +7,7 @@
 
 #include <Deliberation/ECS/System.h>
 
-#include <Deliberation/Platform/Input.h>
+#include <Deliberation/Platform/InputManager.h>
 #include <Deliberation/Platform/InputLayer.h>
 
 #include <Deliberation/Deliberation.h>
@@ -15,7 +15,7 @@
 namespace deliberation
 {
 class DrawContext;
-class Input;
+class InputManager;
 
 class ImGuiSystem : public System<ImGuiSystem>,
                     public InputLayer
@@ -30,8 +30,8 @@ public:
          addControlItem(const std::string & name, const std::function<void()> & fn);
     void removeControlItem(const std::string & name);
 
-    void onCreated() override { m_input.addLayer(shared_from_this()); }
-    void onRemoved() override { m_input.removeLayer(shared_from_this()); }
+    void onCreated() override { m_inputManager.addLayer(shared_from_this()); }
+    void onRemoved() override { m_inputManager.removeLayer(shared_from_this()); }
 
     void onFrameBegin();
 
@@ -42,7 +42,7 @@ protected:
     void onMouseMotion(MouseMotionEvent & event) override;
 
 private:
-    Input & m_input;
+    InputManager & m_inputManager;
 
     bool  m_wantsCaptureMouse = false;
     float m_mouseWheel = 0;

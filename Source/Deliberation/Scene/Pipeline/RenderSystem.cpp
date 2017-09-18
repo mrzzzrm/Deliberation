@@ -2,19 +2,19 @@
 
 #include <imgui.h>
 
-#include <Deliberation/ECS/Systems/ApplicationSystem.h>
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/ImGui/ImGuiSystem.h>
 
 #include <Deliberation/Scene/Debug/DebugSurfaceOverlayRenderer.h>
 #include <Deliberation/Scene/Pipeline/Renderer.h>
+#include <Deliberation/Platform/Application.h>
 
 namespace deliberation
 {
 RenderSystem::RenderSystem(World & world)
     : Base(world)
-    , m_renderManager(world.systemRef<ApplicationSystem>().drawContext())
+    , m_renderManager(Application::instance().drawContext())
 {
     m_debugGeometryRenderer =
         m_renderManager.addRenderer<DebugGeometryRenderer>();

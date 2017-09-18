@@ -7,14 +7,14 @@
 namespace deliberation
 {
 class Camera3D;
-class Input;
+class InputManager;
 class UpdateFrame;
 
 class DebugCameraNavigator3D final
 {
 public:
     DebugCameraNavigator3D(
-        Camera3D & camera, const Input & inputAdapter, float speed = 10.0f);
+        Camera3D & camera, const InputManager & inputAdapter, float speed = 10.0f);
 
     Camera3D & camera() const;
     float      speed() const;
@@ -26,7 +26,7 @@ public:
 
 private:
     Camera3D &    m_camera;
-    const Input & m_inputAdapter;
+    const InputManager & m_inputAdapter;
     float         m_speed;
     bool          m_mousePressed;
 };

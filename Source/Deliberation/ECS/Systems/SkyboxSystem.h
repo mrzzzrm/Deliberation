@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Deliberation/ECS/System.h>
-#include <Deliberation/ECS/Systems/ApplicationSystem.h>
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>

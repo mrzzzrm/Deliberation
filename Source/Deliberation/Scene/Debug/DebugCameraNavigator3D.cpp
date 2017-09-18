@@ -1,7 +1,7 @@
 #include <Deliberation/Scene/Debug/DebugCameraNavigator3D.h>
 
 #include <Deliberation/Core/UpdateFrame.h>
-#include <Deliberation/Platform/Input.h>
+#include <Deliberation/Platform/InputManager.h>
 
 #include <Deliberation/Scene/Camera3D.h>
 
@@ -10,7 +10,7 @@
 namespace deliberation
 {
 DebugCameraNavigator3D::DebugCameraNavigator3D(
-    Camera3D & camera, const Input & inputAdapter, float speed)
+    Camera3D & camera, const InputManager & inputAdapter, float speed)
     : m_camera(camera)
     , m_inputAdapter(inputAdapter)
     , m_speed(speed)

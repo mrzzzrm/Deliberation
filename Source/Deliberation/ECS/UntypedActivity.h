@@ -20,6 +20,8 @@ public:
     m_name(name)
     {}
 
+    virtual ~UntypedActivity();
+
     const std::string & name() const { return m_name; }
 
     void activateInputLayer(i32 inputPriority);

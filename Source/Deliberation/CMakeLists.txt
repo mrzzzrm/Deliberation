@@ -254,14 +254,14 @@ add_library(Deliberation
 	ECS/Phase.h
 	ECS/EntityPrototypeManager.cpp
 	ECS/EntityPrototypeManager.h
-	ECS/UntypedActivity.h
 	ECS/SystemBase.cpp
 	ECS/SystemBase.h
 	ECS/System.h
-	ECS/Systems/ApplicationSystem.h
 	ECS/Systems/PhysicsWorldSystem.cpp
 	ECS/Systems/PhysicsWorldSystem.h
 	ECS/Systems/SkyboxSystem.h
+	ECS/UntypedActivity.cpp
+	ECS/UntypedActivity.h
 	ECS/World.cpp
 	ECS/World.h
 	ECS/WorldProfiler.cpp
@@ -300,8 +300,10 @@ add_library(Deliberation
 
 	Platform/Application.cpp
 	Platform/Application.h
-	Platform/Input.cpp
-	Platform/Input.h
+	Platform/ApplicationRuntime.cpp
+	Platform/ApplicationRuntime.h
+	Platform/InputManager.cpp
+	Platform/InputManager.h
 	Platform/InputEvent.h
 	Platform/InputListener.h
 	Platform/InputLayer.cpp
