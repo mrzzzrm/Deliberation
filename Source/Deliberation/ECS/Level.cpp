@@ -4,16 +4,18 @@
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/Json.h>
+
 #include <Deliberation/ECS/World.h>
+
+#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/ApplicationRuntime.h>
+
 
 namespace deliberation
 {
 Level::Level(
-    const std::shared_ptr<EntityPrototypeManager> & prototypeManager,
     const std::string &                       path)
-    : m_world(prototypeManager->world())
-    , m_prototypeManager(prototypeManager)
-    , m_path(path)
+    : m_path(path)
 {
     reload();
 }
@@ -57,7 +59,7 @@ void Level::reload()
 
                     if (iter2 == m_childByPath.end())
                     {
-                        iter2 = m_childByPath.emplace(path, std::make_shared<Level>(m_prototypeManager, path)).first;
+                        iter2 = m_childByPath.emplace(path, std::make_shared<Level>(path)).first;
                     }
 
                     iter2->second->reload();
@@ -83,10 +85,10 @@ void Level::reload()
                                 std::make_shared<LevelEntity>())
                             .first->second;
                         levelEntity->entityPrototype =
-                            m_prototypeManager->getOrCreateEntityPrototype(uid);
+                            Application::instance().runtime()->entityPrototypeManager()->getOrCreateEntityPrototype(uid);
                         levelEntity->entityPrototype->setJson(levelEntityJson);
                         levelEntity->lid = lid;
-                        levelEntity->entity = m_prototypeManager->createEntity(
+                        levelEntity->entity = Application::instance().runtime()->entityPrototypeManager()->createEntity(
                             uid,
                             levelEntityJson.value(
                                 "Name",
@@ -94,6 +96,24 @@ void Level::reload()
                                 levelEntityJson["LID"].get<std::string>()));
                     } else {
                         iter->second->entityPrototype->setJson(levelEntityJson);
+                    }
+                }
+            }
+        }
+
+        // Activities
+        {
+            const auto iter = levelJson.find("Activities");
+            if (iter != levelJson.end()) {
+                for (auto & activityJson : *iter) {
+                    auto & lid = activityJson["LID"];
+                    auto iter2 = m_activityByLid.find(lid);
+
+                    if (iter2 == m_activityByLid.end()) {
+                        auto activity = Application::instance().runtime()->world()->activityManager()->createActivity(activityJson["Type"]);
+                        Application::instance().runtime()->world()->activityManager()->addActivity(activity);
+
+                        m_activityByLid.emplace(lid.get<std::string>(), activity);
                     }
                 }
             }
@@ -106,6 +126,6 @@ void Level::reload()
         Fail("");
     }
 
-    m_prototypeManager->updateEntities();
+    Application::instance().runtime()->entityPrototypeManager()->updateEntities();
 }
 }

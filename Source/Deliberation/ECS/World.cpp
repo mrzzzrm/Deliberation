@@ -133,6 +133,8 @@ void World::gameUpdatePhase(const UpdateFrame & updateFrame)
         m_profiler.addScope({system, "BeforeUpdate", micros});
     }
 
+    m_activityManager->invokePhase<GameUpdatePhase>(updateFrame);
+
     for (auto & pair : m_systems)
     {
         auto & system = *pair.second;
@@ -143,8 +145,6 @@ void World::gameUpdatePhase(const UpdateFrame & updateFrame)
 
         m_profiler.addScope({system, "GameUpdate", micros});
     }
-
-    m_activityManager->invokePhase<GameUpdatePhase>(updateFrame);
 }
 
 void World::frameUpdatePhase(const UpdateFrame & updateFrame)

@@ -23,4 +23,14 @@ void ActivityManager::invokePhase(Args &&... args)
     container->invokeAll(std::forward<Args>(args)...);
 }
 
+template<typename T>
+void ActivityManager::addActivityType(const std::string &name)
+{
+    m_activityFactoryByName.emplace(name, [=]() {
+        auto activity = std::make_shared<T>();
+        activity->setName(name);
+        return activity;
+    });
+}
+
 }

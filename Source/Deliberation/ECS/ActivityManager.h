@@ -13,6 +13,12 @@ namespace deliberation
 class ActivityManager : public std::enable_shared_from_this<ActivityManager>
 {
 public:
+    template<typename T>
+    void addActivityType(const std::string & name);
+
+    std::shared_ptr<UntypedActivity>
+    createActivity(const std::string & name);
+
     void addActivity(const std::shared_ptr<UntypedActivity> & activity);
     void removeActivity(const std::shared_ptr<UntypedActivity> & activity);
 
@@ -31,6 +37,9 @@ private:
      std::shared_ptr<AbstractPhaseContainer>> m_containersByPhaseTypeId;
     std::vector<std::shared_ptr<UntypedActivity>> m_activities;
 
+    std::unordered_map<
+        std::string,
+        std::function<std::shared_ptr<UntypedActivity>()>> m_activityFactoryByName;
 };
 
 }

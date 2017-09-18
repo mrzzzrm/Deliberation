@@ -30,6 +30,8 @@ public:
     DrawContext &       drawContext();
     const DrawContext & drawContext() const;
 
+    const std::shared_ptr<ApplicationRuntime> & runtime() { return m_runtime; }
+
     bool gameplayPaused() const { return m_gameplayPaused; }
     void setGameplayPaused(bool paused) { m_gameplayPaused = paused; }
 

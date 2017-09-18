@@ -11,11 +11,15 @@
 #include <Deliberation/ECS/ComponentPrototype.h>
 #include <Deliberation/ECS/World.h>
 
+#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/ApplicationRuntime.h>
+
 namespace deliberation
 {
 EntityPrototypeManager::EntityPrototypeManager(World & world, const std::string & listPath)
     : m_world(world), m_listPoll(listPath)
 {
+    std::cout << "EntityPrototypeManager: World = " << &m_world << std::endl;
 }
 
 const std::shared_ptr<EntityPrototype> &
@@ -146,7 +150,9 @@ Entity EntityPrototypeManager::createEntity(
 
     //Log->info("Creating '{}' from ''", entityName, prototypeKeys);
 
-    auto entity = m_world.createEntity(
+    std::cout << "EntityPrototypeManager: Getting World = " << &m_world << std::endl;
+
+    auto entity = Application::instance().runtime()->world()->createEntity(
         entityName.empty() ? "Unnamed Entity" : entityName);
 
     for (const auto & prototypeKey : prototypeKeys)

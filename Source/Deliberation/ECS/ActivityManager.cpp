@@ -7,6 +7,17 @@
 namespace deliberation
 {
 
+std::shared_ptr<UntypedActivity>
+ActivityManager::createActivity(const std::string & name)
+{
+    const auto iter = m_activityFactoryByName.find(name);
+    AssertM(
+    iter != m_activityFactoryByName.end(),
+    "No such Behaviour '" + name + "'");
+
+    return iter->second();
+}
+
 void ActivityManager::addActivity(const std::shared_ptr<UntypedActivity> & activity)
 {
     for (const auto & invoker : activity->m_phaseInvokers)

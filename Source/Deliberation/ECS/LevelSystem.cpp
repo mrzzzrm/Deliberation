@@ -1,7 +1,5 @@
 #include <Deliberation/ECS/LevelSystem.h>
 
-#include <Deliberation/ECS/EntityPrototypeSystem.h>
-
 namespace deliberation
 {
 
@@ -15,8 +13,7 @@ void LevelSystem::onCreated()
 {
     if (!m_levelPath.empty())
     {
-        auto & entityPrototypeSystem = world().systemRef<EntityPrototypeSystem>();
-        m_level = std::make_shared<Level>(entityPrototypeSystem.manager(), m_levelPath);
+        m_level = std::make_shared<Level>(m_levelPath);
         m_level->reload();
     }
 }
