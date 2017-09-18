@@ -303,7 +303,7 @@ add_library(Deliberation
 	Platform/Input.cpp
 	Platform/Input.h
 	Platform/InputEvent.h
-	Platform/InputEventReceiver.h
+	Platform/InputListener.h
 	Platform/InputLayer.cpp
 	Platform/InputLayer.h
 	Platform/KeyMap.h
@@ -405,9 +405,6 @@ add_library(Deliberation
 	Scene/UVSphere.cpp
 	Scene/UVSphere.h
 	Scene/Vertices.h)
-
-
-message("SDL_ttf: ${SDL2_TTF_LIBRARY} ${SDL2_TTF_INCLUDE_DIR}")
 
 target_link_libraries(Deliberation
 	${SDL2_LIBRARY}

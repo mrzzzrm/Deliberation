@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Platform/InputEventReceiver.h>
+#include <Deliberation/Platform/InputListener.h>
 
 #include <Deliberation/Deliberation.h>
 
@@ -9,7 +9,7 @@ namespace deliberation
 class Input;
 class MouseButtonEvent;
 
-class InputLayer : public InputEventReceiver
+class InputLayer : public InputListener
 {
 public:
     InputLayer(i32 inputPriority);

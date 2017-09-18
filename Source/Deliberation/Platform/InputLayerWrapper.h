@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/Platform/InputEventReceiver.h>
+#include <Deliberation/Platform/InputListener.h>
 #include <Deliberation/Platform/InputLayer.h>
 
 namespace deliberation
@@ -8,7 +8,7 @@ namespace deliberation
 class InputLayerWrapper : public InputLayer
 {
 public:
-    InputLayerWrapper(InputEventReceiver & receiver, i32 inputPriority)
+    InputLayerWrapper(InputListener & receiver, i32 inputPriority)
         : InputLayer(inputPriority), m_receiver(receiver)
     {
     }
@@ -43,6 +43,6 @@ public:
     }
 
 private:
-    InputEventReceiver & m_receiver;
+    InputListener & m_receiver;
 };
 }

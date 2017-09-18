@@ -11,10 +11,10 @@
 
 namespace deliberation
 {
-class InputEventReceiver
+class InputListener
 {
 public:
-    virtual ~InputEventReceiver() = default;
+    virtual ~InputListener() = default;
 
     virtual void onMouseMotion(MouseMotionEvent & event){};
     virtual void onMouseButtonDown(MouseStateEvent & event){};

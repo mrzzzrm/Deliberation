@@ -10,13 +10,13 @@
 #include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/Platform/Input.h>
-#include <Deliberation/Platform/InputEventReceiver.h>
+#include <Deliberation/Platform/InputListener.h>
 
 #include <Deliberation/Deliberation.h>
 
 namespace deliberation
 {
-class Application : public InputEventReceiver
+class Application : public InputListener
 {
 public:
     Application(const std::string & name, const std::string & prefixPath = ".");
