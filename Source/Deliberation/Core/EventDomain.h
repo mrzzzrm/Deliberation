@@ -14,7 +14,8 @@ class EventDomain final : public std::enable_shared_from_this<EventDomain>
 {
 public:
     template<typename EventType, typename ReceiverType>
-    std::shared_ptr<EventListenerProxy> subscribe(ReceiverType & receiver);
+    std::shared_ptr<EventListenerProxy> subscribe(ReceiverType & receiver,
+                                                  void (ReceiverType::*handlerFn)(const EventType &));
 
     void addEventListener(const std::shared_ptr<EventListenerProxy> & listener);
     void removeEventListener(const EventListenerProxy & listener);

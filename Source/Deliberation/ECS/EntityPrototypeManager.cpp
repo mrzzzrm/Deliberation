@@ -16,10 +16,9 @@
 
 namespace deliberation
 {
-EntityPrototypeManager::EntityPrototypeManager(World & world, const std::string & listPath)
+EntityPrototypeManager::EntityPrototypeManager(const std::shared_ptr<World> & world, const std::string & listPath)
     : m_world(world), m_listPoll(listPath)
 {
-    std::cout << "EntityPrototypeManager: World = " << &m_world << std::endl;
 }
 
 const std::shared_ptr<EntityPrototype> &
@@ -35,7 +34,7 @@ EntityPrototypeManager::getOrCreateEntityPrototype(const std::string & key)
 
         iter =
             m_entityPrototypeByKey
-                .emplace(key, std::make_shared<EntityPrototype>(m_world, key))
+                .emplace(key, std::make_shared<EntityPrototype>(key))
                 .first;
     }
 
@@ -152,7 +151,7 @@ Entity EntityPrototypeManager::createEntity(
 
     std::cout << "EntityPrototypeManager: Getting World = " << &m_world << std::endl;
 
-    auto entity = Application::instance().runtime()->world()->createEntity(
+    auto entity = Application::get().runtime()->world()->createEntity(
         entityName.empty() ? "Unnamed Entity" : entityName);
 
     for (const auto & prototypeKey : prototypeKeys)

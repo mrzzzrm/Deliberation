@@ -13,6 +13,7 @@
 #include <Deliberation/Core/Math/Transform3D.h>
 #include <Deliberation/Core/StreamUtils.h>
 
+#include <Deliberation/Physics/CollisionShape.h>
 #include <Deliberation/Physics/RigidBody.h>
 
 namespace deliberation
@@ -72,6 +73,11 @@ void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
 
 float PhysicsWorld::update(float seconds)
 {
+    for (auto & body : m_rigidBodies)
+    {
+        body->adaptShape();
+    }
+
     const auto numPerformedSteps = m_dynamicsWorld->stepSimulation(seconds, 10, m_timestep);
     const auto simulatedSeconds = numPerformedSteps * m_timestep;
 

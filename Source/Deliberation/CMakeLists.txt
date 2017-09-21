@@ -235,8 +235,8 @@ add_library(Deliberation
 	ECS/Component.h
 	ECS/ComponentPrototype.inl
 	ECS/ComponentPrototype.h
-	ECS/Components.cpp
-	ECS/Components.h
+    ECS/RigidBodyComponent.cpp
+    ECS/RigidBodyComponent.h
 	ECS/ComponentWrapper.h
 	ECS/Defines.h
 	ECS/EntityComponentSetup.h
@@ -260,6 +260,8 @@ add_library(Deliberation
 	ECS/Systems/PhysicsWorldSystem.cpp
 	ECS/Systems/PhysicsWorldSystem.h
 	ECS/Systems/SkyboxSystem.h
+	ECS/Transform3DComponent.cpp
+	ECS/Transform3DComponent.h
 	ECS/UntypedActivity.cpp
 	ECS/UntypedActivity.h
 	ECS/World.cpp

@@ -14,4 +14,11 @@ struct GLMVec3Compare
 {
     bool operator()(const glm::vec3 & a, const glm::vec3 & b) const;
 };
+
+template<typename T, glm::precision precision>
+glm::tvec3<T, precision> GLMSafeNormalize(const glm::tvec3<T, precision> & v)
+{
+    if (glm::dot(v, v) == 0) return glm::tvec3<T, precision>(0.0f);
+    return glm::normalize(v);
+};
 }

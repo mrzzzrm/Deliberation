@@ -23,7 +23,7 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world)
     : Base(world)
     , InputLayer(200)
-    , m_inputManager(Application::instance().inputManager())
+    , m_inputManager(Application::get().inputManager())
 {
     activatePhases<FrameBeginPhase>();
 
@@ -88,7 +88,7 @@ void ImGuiSystem::onFrameBegin()
     auto & io = ImGui::GetIO();
 
     const auto & backbuffer =
-    Application::instance().drawContext().backbuffer();
+    Application::get().drawContext().backbuffer();
 
     io.DisplaySize =
         ImVec2((float)backbuffer.width(), (float)backbuffer.height());

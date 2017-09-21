@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Deliberation/ECS/Components.h>
+#include <Deliberation/ECS/RigidBodyComponent.h>
 #include <Deliberation/ECS/System.h>
 #include <Deliberation/ECS/World.h>
 
@@ -15,9 +15,9 @@ namespace deliberation
 class PhysicsWorldSystem : public System<PhysicsWorldSystem>
 {
 public:
-    PhysicsWorldSystem(World & world, PhysicsWorld & physicsWorld);
+    PhysicsWorldSystem(World & world);
 
-    PhysicsWorld & physicsWorld() const { return m_physicsWorld; }
+    PhysicsWorld & physicsWorld() { return m_physicsWorld; }
 
     // Returns the time passed in the PhysicsWorld
     float updatePhysics(const UpdateFrame & updateFrame);
@@ -30,7 +30,7 @@ protected:
     void onEntityRemoved(Entity & entity) override;
 
 private:
-    PhysicsWorld &                             m_physicsWorld;
+    PhysicsWorld                               m_physicsWorld;
     std::shared_ptr<DebugPhysicsWorldRenderer> m_debugRenderer;
 };
 }

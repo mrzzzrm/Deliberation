@@ -18,10 +18,10 @@ class World;
 class EntityPrototypeManager
 {
 public:
-    EntityPrototypeManager(World & world, const std::string & listPath);
+    EntityPrototypeManager(const std::shared_ptr<World> & world, const std::string & listPath);
     virtual ~EntityPrototypeManager() = default;
 
-    World & world() const { return m_world; }
+    const std::shared_ptr<World> & world() { return m_world;}
 
     const std::unordered_map<std::string, std::shared_ptr<EntityPrototype>> &
     entityPrototypeByKey() const
@@ -52,7 +52,7 @@ private:
     Json mergeJson(const Json & a, const Json & b);
 
 protected:
-    World & m_world;
+    std::shared_ptr<World> m_world;
 
 private:
     std::unordered_map<std::string, std::shared_ptr<EntityPrototype>>

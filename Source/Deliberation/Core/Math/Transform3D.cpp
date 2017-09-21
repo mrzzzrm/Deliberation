@@ -218,11 +218,5 @@ bool Transform3D::operator!=(const Transform3D & other) const
 {
     return !(*this == other);
 }
-}
 
-std::ostream & operator<<(std::ostream & os, const deliberation::Transform3D & t)
-{
-    os << "{" << t.position() << ", " << t.orientation() << ", " << t.center()
-       << ", " << t.scale() << "}";
-    return os;
 }

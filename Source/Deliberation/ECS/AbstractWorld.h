@@ -19,14 +19,10 @@ class AbstractWorld
 public:
     AbstractWorld();
 
-    std::shared_ptr<EventDomain>         events() { return m_events; }
-    const std::shared_ptr<EventDomain> & events() const { return m_events; }
-
 protected:
     virtual ~AbstractWorld() = default;
 
 protected:
-    std::shared_ptr<EventDomain> m_events;
 };
 }
 

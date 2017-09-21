@@ -14,7 +14,7 @@ class ComponentPrototypeBase;
 class EntityPrototype
 {
 public:
-    EntityPrototype(World & world, const std::string & key);
+    EntityPrototype(const std::string & key);
     virtual ~EntityPrototype() = default;
 
     const std::string & key() const { return m_key; }
@@ -48,7 +48,6 @@ public:
     void updateEntities();
 
 private:
-    World &                                              m_world;
     std::vector<std::shared_ptr<ComponentPrototypeBase>> m_componentPrototypes;
     std::vector<std::shared_ptr<EntityPrototype>>        m_baseEntityPrototypes;
     std::vector<Entity>                                  m_entities;

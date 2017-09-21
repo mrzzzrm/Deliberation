@@ -54,8 +54,6 @@ public:
     bool operator==(const Transform3D & other) const;
     bool operator!=(const Transform3D & other) const;
 
-    friend std::ostream & operator<<(std::ostream & os, const Transform3D & transform);
-
 protected:
     glm::vec3 m_position;
     glm::quat m_orientation;

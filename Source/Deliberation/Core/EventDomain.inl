@@ -5,9 +5,9 @@ namespace deliberation
 {
 template<typename EventType, typename ReceiverType>
 std::shared_ptr<EventListenerProxy>
-EventDomain::subscribe(ReceiverType & receiver)
+EventDomain::subscribe(ReceiverType & receiver, void (ReceiverType::*handlerFn)(const EventType &))
 {
-    auto listener = EventListenerProxy::create<EventType>(receiver);
+    auto listener = EventListenerProxy::create<EventType>(receiver, handlerFn);
     addEventListener(listener);
     return listener;
 }

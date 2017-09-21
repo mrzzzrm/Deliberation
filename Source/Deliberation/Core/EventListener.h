@@ -19,13 +19,13 @@ public:
     }
 
     template<typename EventType>
-    void subscribeEvent()
+    void subscribeEvent(void (T::*handlerFn)(const EventType &) = &T::onEvent)
     {
         auto events = m_events.lock();
         Assert(static_cast<bool>(events));
 
         m_eventListenerProxies.emplace_back(
-            events->template subscribe<EventType>(*(T *)this));
+            events->template subscribe<EventType>(*(T *)this, handlerFn));
     }
 
 private:

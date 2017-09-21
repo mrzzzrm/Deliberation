@@ -29,6 +29,8 @@ public:
     virtual float     mass(float scale) const;
     virtual glm::vec3 centerOfMass() const;
 
+    virtual void updateMassProperties() {};
+
 private:
     int m_type;
 };

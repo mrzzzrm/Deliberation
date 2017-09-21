@@ -3,94 +3,28 @@
 #include <btBulletDynamicsCommon.h>
 
 #include <Deliberation/Deliberation.h>
+#include <Deliberation/Core/SparseVector.h>
 #include <Deliberation/Physics/CollisionShape.h>
 #include <Deliberation/Physics/PhysicsWorld.h>
 #include <Deliberation/Physics/RigidBody.h>
 
 using namespace deliberation;
 
-class FooShape:
-    public CollisionShape
+struct Foo
 {
-public:
-    FooShape():
-        CollisionShape(CollisionShape_Box)
-    {}
-
-    AABB bounds(const Transform3D & transform) const override
-    {
-        return AABB();
-    }
+    int i = 42;
+    double d = 4.2f;
 };
 
 int main()
 {
-    deliberation::init();
+    SparseVector<Foo> foos;
 
-    PhysicsWorld physicsWorld;
-    //physicsWorld.setGravity(glm::vec3(0, -10, 0));
+    foos.insert(Foo());
+    foos.insert(Foo());
 
-//    btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-//
-//    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-//    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-//
-//    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-//
-//    btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-//
-//    dynamicsWorld->setGravity(btVector3(0, -10, 0));
-
-    auto shape = std::make_shared<FooShape>();
-    auto rigidBody = std::make_shared<RigidBody>(shape);
-
-    physicsWorld.addRigidBody(rigidBody);
-
-//    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
-//    btRigidBody::btRigidBodyConstructionInfo
-//        groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-//    btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-//    dynamicsWorld->addRigidBody(groundRigidBody);
-//
-//
-//    btDefaultMotionState* fallMotionState =
-//        new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
-//    btScalar mass = 1;
-//    btVector3 fallInertia(0, 0, 0);
-//    fallShape->calculateLocalInertia(mass, fallInertia);
-//    btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
-//    btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
-//    dynamicsWorld->addRigidBody(fallRigidBody);
-
-
-    for (int i = 0; i < 300; i++) {
-        physicsWorld.update(1.3f / 60.0f);
-
-//        btTransform trans;
-//        fallRigidBody->getMotionState()->getWorldTransform(trans);
-
-        Log->info("{} {}", rigidBody->transform().position(), rigidBody->transform().orientation());
-    }
-
-//    dynamicsWorld->removeRigidBody(fallRigidBody);
-//    delete fallRigidBody->getMotionState();
-//    delete fallRigidBody;
-
-//    dynamicsWorld->removeRigidBody(groundRigidBody);
-//    delete groundRigidBody->getMotionState();
-//    delete groundRigidBody;
-
-
-//    delete fallShape;
-
-//    delete groundShape;
-
-
-//    delete dynamicsWorld;
-//    delete solver;
-//    delete collisionConfiguration;
-//    delete dispatcher;
-//    delete broadphase;
+    foos.erase(0);
+    foos.erase(1);
 
     return 0;
 }

@@ -69,19 +69,16 @@
 namespace deliberation
 {
 
-template<typename ... Args>
+template<typename T, typename ... Args>
 inline void AssertImpl(
     const char * file,
     const char * function,
     unsigned int line,
-    bool         expr,
+    const T &    expr,
     const char * msg,
     Args &&...   args)
 {
-    if (expr)
-    {
-        return;
-    }
+    if (expr) return;
 
     Log->error("\"------------------- ASSERT: {}: {}():{} -------------------", file, function, line);
     if (msg != nullptr) Log->error(msg, std::forward<Args>(args)...);
@@ -89,16 +86,16 @@ inline void AssertImpl(
     assert(false);
 }
 
-template<typename ... Args>
+template<typename T, typename ... Args>
 inline void AssertImpl(
     const char *        file,
     const char *        function,
     unsigned int        line,
-    bool                expr,
+    const T &           expr,
     const std::string & msg,
     Args &&...   args)
 {
-    AssertImpl(file, function, line, expr, msg.c_str(), std::forward<Args>(args)...);
+    AssertImpl(file, function, line, static_cast<bool>(expr), msg.c_str(), std::forward<Args>(args)...);
 }
 
 inline void FailImpl(

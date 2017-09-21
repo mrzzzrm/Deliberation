@@ -30,11 +30,13 @@ public:
 
 public:
     RigidBody(
-        const std::shared_ptr<CollisionShape> & shape,
-        const Transform3D &                     transform = Transform3D());
+        const std::shared_ptr<CollisionShape> & shape);
 
     AABB bounds() const { return m_shape->bounds(transform()); }
     const Transform3D & transform() const;
+
+    float mass() const { return inverseMass() == 0.0f ? 0.0f : 1.0f / inverseMass(); }
+    float inverseMass() const { return m_btRigidBody->getInvMass(); }
 
     glm::vec3 linearVelocity() const { return BulletPhysicsConvert(m_btRigidBody->getLinearVelocity()); }
     glm::vec3 angularVelocity() const { return BulletPhysicsConvert(m_btRigidBody->getAngularVelocity()); }
@@ -56,13 +58,24 @@ public:
     void setIndex(size_t index) { m_index = index; }
     void setEntity(Entity entity) { m_entity = entity; }
 
-    void setTransform(const Transform3D & transform);
+    void setPosition(const glm::vec3 & position);
+    void setOrientation(const glm::quat & orientation);
+    void setScale(float scale);
+
+//    void setTransform(const Transform3D & transform);
 
     void applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse) {
         m_btRigidBody->applyImpulse(BulletPhysicsConvert(impulse), BulletPhysicsConvert(point));
     }
 
-    void updateMassProperties();
+    void applyTorqueImpulse(const glm::vec3 & torque) { m_btRigidBody->applyTorqueImpulse(BulletPhysicsConvert(torque)); }
+    void applyCentralImpulse(const glm::vec3 & impulse) { m_btRigidBody->applyCentralImpulse(BulletPhysicsConvert(impulse)); }
+
+    // Update the lazy state of the shape and afterwards the center of mass, mass and inertia
+    void adaptShape();
+
+    void updateMassAndInertia();
+    void updateCenterOfMass();
 
     void predictTransform(float seconds, Transform3D & prediction) const;
 

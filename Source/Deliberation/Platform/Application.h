@@ -21,7 +21,7 @@ class ApplicationRuntime;
 class Application final
 {
 public:
-    static Application & instance();
+    static Application & get();
 
 public:
     InputManager &       inputManager();
@@ -30,9 +30,10 @@ public:
     DrawContext &       drawContext();
     const DrawContext & drawContext() const;
 
+    bool gameplayPaused() const { return m_gameplayPaused; }
+
     const std::shared_ptr<ApplicationRuntime> & runtime() { return m_runtime; }
 
-    bool gameplayPaused() const { return m_gameplayPaused; }
     void setGameplayPaused(bool paused) { m_gameplayPaused = paused; }
 
     float fps() const;
@@ -41,9 +42,6 @@ public:
 
     void quit(int returnCode = 0);
 
-protected:
-    bool m_gameplayPaused = false;
-
 private:
     void init();
     void handleWindowEvent(const SDL_Event & event);
@@ -51,6 +49,7 @@ private:
 private:
     std::shared_ptr<ApplicationRuntime> m_runtime;
     bool        m_running = false;
+    bool        m_gameplayPaused = false;
     bool        m_initialized = false;
     int         m_returnCode = 0;
 

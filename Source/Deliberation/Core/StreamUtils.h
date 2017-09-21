@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <ostream>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -39,8 +40,6 @@ std::ostream & operator<<(std::ostream & o, const btQuaternion & q);
 // template<typename T>
 // std::string operator+(const T & value, const char * s);
 
-namespace deliberation
-{
 template<typename T, glm::precision precision>
 std::string ToString(const glm::tvec2<T, precision> & v);
 
@@ -49,6 +48,6 @@ std::string ToString(const glm::tvec3<T, precision> & v);
 
 template<typename T, glm::precision precision>
 std::string ToString(const glm::tvec4<T, precision> & v);
-}
+
 
 #include <Deliberation/Core/StreamUtils.inl>

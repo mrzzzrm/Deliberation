@@ -33,11 +33,4 @@ public:
     }
 };
 
-class Transform3DComponent
-    : public ComponentWrapper<Transform3D, Transform3DComponent>
-{
-    DELIBERATION_COMPONENT_NAME("Transform3D")
-public:
-    void renderImGui() override;
-};
 }

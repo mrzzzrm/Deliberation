@@ -57,8 +57,7 @@ std::ostream & operator<<(std::ostream & os, const glm::tvec4<T, precision> & v)
 //    return stream.str();
 //}
 
-namespace deliberation
-{
+
 template<typename T, glm::precision precision>
 std::string ToString(const glm::tvec2<T, precision> & v)
 {
@@ -81,5 +80,4 @@ std::string ToString(const glm::tvec4<T, precision> & v)
     std::stringstream stream;
     stream << v;
     return stream.str();
-}
 }

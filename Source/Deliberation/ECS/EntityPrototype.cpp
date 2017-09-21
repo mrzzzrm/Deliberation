@@ -7,8 +7,8 @@
 
 namespace deliberation
 {
-EntityPrototype::EntityPrototype(World & world, const std::string & key)
-    : m_world(world), m_key(key)
+EntityPrototype::EntityPrototype(const std::string & key)
+    : m_key(key)
 {
 }
 

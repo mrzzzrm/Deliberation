@@ -15,7 +15,8 @@ class EventListenerProxy final
 {
 public:
     template<typename EventType, typename ReceiverType>
-    static std::shared_ptr<EventListenerProxy> create(ReceiverType & receiver);
+    static std::shared_ptr<EventListenerProxy> create(ReceiverType & receiver,
+                                                      void (ReceiverType::*handlerFn)(const EventType &));
 
 public:
     EventListenerProxy(

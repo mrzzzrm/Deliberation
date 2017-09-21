@@ -2,8 +2,9 @@
 
 #include <Deliberation/Core/UpdateFrame.h>
 
-#include <Deliberation/ECS/Components.h>
+#include <Deliberation/ECS/RigidBodyComponent.h>
 #include <Deliberation/ECS/System.h>
+#include <Deliberation/ECS/Transform3DComponent.h>
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Physics/PhysicsWorld.h>
@@ -13,27 +14,14 @@
 
 namespace deliberation
 {
-PhysicsWorldSystem::PhysicsWorldSystem(
-    World & world, PhysicsWorld & physicsWorld)
+PhysicsWorldSystem::PhysicsWorldSystem(World & world)
     : Base(world, ComponentFilter::requires<RigidBodyComponent, Transform3DComponent>())
-    , m_physicsWorld(physicsWorld)
 {
 }
 
 float PhysicsWorldSystem::updatePhysics(const UpdateFrame & updateFrame)
 {
-    const auto simulatedSeconds = m_physicsWorld.update(updateFrame.gameSeconds());
-
-    for (auto & entityEntry : m_entities)
-    {
-        if (!entityEntry.active) continue;
-
-        auto entity = m_world.entity(entityEntry.id);
-        entity.component<Transform3DComponent>().value() =
-            entity.component<RigidBodyComponent>().value()->transform();
-    }
-
-    return simulatedSeconds;
+    return m_physicsWorld.update(updateFrame.gameSeconds());
 }
 
 void PhysicsWorldSystem::onCreated()
@@ -68,8 +56,8 @@ void PhysicsWorldSystem::onEntityAdded(Entity & entity)
     auto & rigidBody = entity.component<RigidBodyComponent>().value();
     rigidBody->setEntity(entity);
 
-    entity.component<RigidBodyComponent>().value()->setTransform(
-        entity.component<Transform3DComponent>().value());
+    auto & transformComponent = entity.component<Transform3DComponent>();
+    transformComponent.referenceBody(rigidBody);
 
     m_physicsWorld.addRigidBody(rigidBody);
 }

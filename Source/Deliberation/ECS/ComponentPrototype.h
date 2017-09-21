@@ -11,8 +11,8 @@ template<typename ComponentT>
 class ComponentPrototype : public ComponentPrototypeBase
 {
 public:
-    World & world() const { AssertM(m_world != nullptr, "World not yet set"); return *m_world; }
-    void setWorld(World & world) { m_world = &world; }
+    std::shared_ptr<World> world() const { return m_world.lock(); }
+    void setWorld(const std::shared_ptr<World> & world) { m_world = world; }
 
     virtual void updateComponent(const Entity & entity, ComponentT & component) = 0;
     bool         hasComponent(const Entity & entity) override;
@@ -22,7 +22,7 @@ protected:
     virtual void initComponent(const Entity & entity, ComponentT & component) {}
 
 protected:
-    World * m_world = nullptr;
+    std::weak_ptr<World> m_world;
 };
 }
 

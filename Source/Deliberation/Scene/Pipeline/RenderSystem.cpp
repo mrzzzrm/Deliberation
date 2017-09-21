@@ -14,7 +14,7 @@ namespace deliberation
 {
 RenderSystem::RenderSystem(World & world)
     : Base(world)
-    , m_renderManager(Application::instance().drawContext())
+    , m_renderManager(Application::get().drawContext())
 {
     m_debugGeometryRenderer =
         m_renderManager.addRenderer<DebugGeometryRenderer>();

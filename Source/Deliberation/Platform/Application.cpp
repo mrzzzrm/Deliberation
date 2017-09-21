@@ -24,7 +24,7 @@
 namespace deliberation
 {
 
-Application & Application::instance()
+Application & Application::get()
 {
     static Application application;
     return application;
