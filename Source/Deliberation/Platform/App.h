@@ -16,12 +16,12 @@
 
 namespace deliberation
 {
-class ApplicationRuntime;
+class AppRuntime;
 
-class Application final
+class App final
 {
 public:
-    static Application & get();
+    static App & get();
 
 public:
     InputManager &       inputManager();
@@ -32,13 +32,13 @@ public:
 
     bool gameplayPaused() const { return m_gameplayPaused; }
 
-    const std::shared_ptr<ApplicationRuntime> & runtime() { return m_runtime; }
+    const std::shared_ptr<AppRuntime> & runtime() { return m_runtime; }
 
     void setGameplayPaused(bool paused) { m_gameplayPaused = paused; }
 
     float fps() const;
 
-    int run(const std::shared_ptr<ApplicationRuntime> & runtime, int argc, char ** argv);
+    int run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv);
 
     void quit(int returnCode = 0);
 
@@ -47,7 +47,7 @@ private:
     void handleWindowEvent(const SDL_Event & event);
 
 private:
-    std::shared_ptr<ApplicationRuntime> m_runtime;
+    std::shared_ptr<AppRuntime> m_runtime;
     bool        m_running = false;
     bool        m_gameplayPaused = false;
     bool        m_initialized = false;

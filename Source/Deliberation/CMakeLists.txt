@@ -300,10 +300,10 @@ add_library(Deliberation
 	Physics/SphereShape.cpp
 	Physics/SphereShape.h
 
-	Platform/Application.cpp
-	Platform/Application.h
-	Platform/ApplicationRuntime.cpp
-	Platform/ApplicationRuntime.h
+	Platform/App.cpp
+	Platform/App.h
+    Platform/AppRuntime.cpp
+    Platform/AppRuntime.h
 	Platform/InputManager.cpp
 	Platform/InputManager.h
 	Platform/InputEvent.h
@@ -319,6 +319,10 @@ add_library(Deliberation
 	Resource/PrototypeManager.cpp
 	Resource/PrototypeManager.h
 	Resource/PrototypeManager.inl
+	Resource/ResourceManager.cpp
+	Resource/ResourceManager.h
+	Resource/ResourceManager.inl
+	Resource/ResourceToken.h
 
 	Scene/Camera2D.cpp
 	Scene/Camera2D.h

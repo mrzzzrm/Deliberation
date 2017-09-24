@@ -6,7 +6,7 @@ EventListenerProxy::create(ReceiverType & receiver, void (ReceiverType::*handler
 {
     return std::make_shared<EventListenerProxy>(
         TypeID::value<EventListenerProxy, EventType>(),
-        [&](const void * event) {
+        [&receiver, handlerFn](const void * event) {
             (receiver.*handlerFn)(*(const EventType *)event);
         });
 };

@@ -4,8 +4,8 @@
 
 #include <Deliberation/ECS/World.h>
 
-#include <Deliberation/Platform/Application.h>
-#include <Deliberation/Platform/ApplicationRuntime.h>
+#include <Deliberation/Platform/App.h>
+#include <Deliberation/Platform/AppRuntime.h>
 
 namespace deliberation
 {
@@ -20,7 +20,7 @@ std::size_t System<T>::indexStatic()
 
 template<typename T>
 System<T>::System(World & world, const ComponentFilter & filter)
-    : SystemBase(world, filter), EventListener<T>(Application::get().runtime()->events())
+    : SystemBase(world, filter), EventListener<T>(App::get().runtime()->events())
 {
 }
 

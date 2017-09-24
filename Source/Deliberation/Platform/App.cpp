@@ -1,4 +1,4 @@
-#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/App.h>
 
 #include <iostream>
 
@@ -16,7 +16,7 @@
 #include <Deliberation/Core/MainLoop.h>
 #include <Deliberation/Core/StreamUtils.h>
 
-#include <Deliberation/Platform/ApplicationRuntime.h>
+#include <Deliberation/Platform/AppRuntime.h>
 #include <Deliberation/Platform/InputLayerWrapper.h>
 
 #include <Deliberation/Deliberation.h>
@@ -24,34 +24,34 @@
 namespace deliberation
 {
 
-Application & Application::get()
+App & App::get()
 {
-    static Application application;
+    static App application;
     return application;
 }
 
-InputManager & Application::inputManager()
+InputManager & App::inputManager()
 {
     AssertM(m_inputManager.engaged(), "InputManager not yet setup");
     return *m_inputManager;
 }
 
-const InputManager & Application::inputManager() const
+const InputManager & App::inputManager() const
 {
     AssertM(m_inputManager.engaged(), "InputManager not yet setup");
     return *m_inputManager;
 }
 
-DrawContext & Application::drawContext() { return m_drawContext.get(); }
+DrawContext & App::drawContext() { return m_drawContext.get(); }
 
-const DrawContext & Application::drawContext() const
+const DrawContext & App::drawContext() const
 {
     return m_drawContext.get();
 }
 
-float Application::fps() const { return m_fpsCounter.fps(); }
+float App::fps() const { return m_fpsCounter.fps(); }
 
-int Application::run(const std::shared_ptr<ApplicationRuntime> & runtime, int argc, char ** argv)
+int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv)
 {
     deliberation::init();
 
@@ -132,13 +132,13 @@ int Application::run(const std::shared_ptr<ApplicationRuntime> & runtime, int ar
     return m_returnCode;
 }
 
-void Application::quit(int returnCode)
+void App::quit(int returnCode)
 {
     m_running = false;
     m_returnCode = returnCode;
 }
 
-void Application::init()
+void App::init()
 {
     m_initialized = false;
 
@@ -210,5 +210,5 @@ void Application::init()
     m_initialized = true;
 }
 
-void Application::handleWindowEvent(const SDL_Event & event) {}
+void App::handleWindowEvent(const SDL_Event & event) {}
 }

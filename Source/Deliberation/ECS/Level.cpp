@@ -7,8 +7,8 @@
 
 #include <Deliberation/ECS/World.h>
 
-#include <Deliberation/Platform/Application.h>
-#include <Deliberation/Platform/ApplicationRuntime.h>
+#include <Deliberation/Platform/App.h>
+#include <Deliberation/Platform/AppRuntime.h>
 
 
 namespace deliberation
@@ -85,10 +85,10 @@ void Level::reload()
                                 std::make_shared<LevelEntity>())
                             .first->second;
                         levelEntity->entityPrototype =
-                            Application::get().runtime()->entityPrototypeManager()->getOrCreateEntityPrototype(uid);
+                            App::get().runtime()->entityPrototypeManager()->getOrCreateEntityPrototype(uid);
                         levelEntity->entityPrototype->setJson(levelEntityJson);
                         levelEntity->lid = lid;
-                        levelEntity->entity = Application::get().runtime()->entityPrototypeManager()->createEntity(
+                        levelEntity->entity = App::get().runtime()->entityPrototypeManager()->createEntity(
                             uid,
                             levelEntityJson.value(
                                 "Name",
@@ -110,8 +110,8 @@ void Level::reload()
                     auto iter2 = m_activityByLid.find(lid);
 
                     if (iter2 == m_activityByLid.end()) {
-                        auto activity = Application::get().runtime()->world()->activityManager()->createActivity(activityJson["Type"]);
-                        Application::get().runtime()->world()->activityManager()->addActivity(activity);
+                        auto activity = App::get().runtime()->world()->activityManager()->createActivity(activityJson["Type"]);
+                        App::get().runtime()->world()->activityManager()->addActivity(activity);
 
                         m_activityByLid.emplace(lid.get<std::string>(), activity);
                     }
@@ -126,6 +126,6 @@ void Level::reload()
         Fail("");
     }
 
-    Application::get().runtime()->entityPrototypeManager()->updateEntities();
+    App::get().runtime()->entityPrototypeManager()->updateEntities();
 }
 }

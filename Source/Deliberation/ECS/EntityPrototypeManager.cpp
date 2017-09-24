@@ -11,8 +11,8 @@
 #include <Deliberation/ECS/ComponentPrototype.h>
 #include <Deliberation/ECS/World.h>
 
-#include <Deliberation/Platform/Application.h>
-#include <Deliberation/Platform/ApplicationRuntime.h>
+#include <Deliberation/Platform/App.h>
+#include <Deliberation/Platform/AppRuntime.h>
 
 namespace deliberation
 {
@@ -151,7 +151,7 @@ Entity EntityPrototypeManager::createEntity(
 
     std::cout << "EntityPrototypeManager: Getting World = " << &m_world << std::endl;
 
-    auto entity = Application::get().runtime()->world()->createEntity(
+    auto entity = App::get().runtime()->world()->createEntity(
         entityName.empty() ? "Unnamed Entity" : entityName);
 
     for (const auto & prototypeKey : prototypeKeys)

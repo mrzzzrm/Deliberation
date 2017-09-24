@@ -12,7 +12,7 @@
 
 #include <Deliberation/ImGui/ImGuiSystem.h>
 
-#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/App.h>
 
 #include <Deliberation/Scene/Camera3D.h>
 #include <Deliberation/Scene/Debug/DebugGroundPlaneRenderer.h>
@@ -22,10 +22,10 @@
 
 using namespace deliberation;
 
-class ImguiSandbox : public deliberation::Application
+class ImguiSandbox : public deliberation::App
 {
 public:
-    ImguiSandbox() : Application("ImguiSandbox") {}
+    ImguiSandbox() : App("ImguiSandbox") {}
 
     virtual void onStartup() override
     {

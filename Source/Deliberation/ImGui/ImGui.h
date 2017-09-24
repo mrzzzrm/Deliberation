@@ -2,8 +2,12 @@
 
 #include <imgui.h>
 
+#include <Deliberation/Core/Math/Transform3D.h>
+
 namespace deliberation
 {
-template<typename T>
-void ImGuiProperty(T & property);
+void ImGuiProperty(float & value, const char * label);
+
+void ImGuiProperty(Transform3D &transform3D);
+void ImGuiProperty(const Transform3D &transform3D);
 }

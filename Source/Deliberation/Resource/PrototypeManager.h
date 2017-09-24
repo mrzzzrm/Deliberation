@@ -17,12 +17,6 @@ class PrototypeManager:
     public std::enable_shared_from_this<PrototypeManager>
 {
 public:
-    PrototypeManager(World & world):
-        m_world(world)
-    {}
-
-    World & world() const { return m_world; }
-
     template<typename PrototypeType>
     void addPath(const std::string & path);
 
@@ -54,7 +48,6 @@ private:
     };
 
 private:
-    World & m_world;
     std::unordered_map<TypeID::value_t, PrototypeTypeContainer>
         m_prototypeTypeContainersByTypeID;
 };

@@ -1,13 +1,13 @@
 #include <Deliberation/ECS/AbstractWorld.h>
 
-#include <Deliberation/Platform/Application.h>
-#include <Deliberation/Platform/ApplicationRuntime.h>
+#include <Deliberation/Platform/App.h>
+#include <Deliberation/Platform/AppRuntime.h>
 
 namespace deliberation
 {
 template<typename T>
 void ComponentBase::publishEvent(const T & event)
 {
-    Application::get().runtime()->events()->publishEvent(event);
+    App::get().runtime()->events()->publishEvent(event);
 }
 }

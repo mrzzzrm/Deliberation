@@ -5,8 +5,13 @@
 #include <Deliberation/Core/Math/Transform3D.h>
 
 namespace deliberation {
-template<>
-void ImGuiProperty<Transform3D>(Transform3D &transform3D) {
+
+void ImGuiProperty(float & value, const char * label)
+{
+    ImGui::InputFloat(label, &value);
+}
+
+void ImGuiProperty(Transform3D &transform3D) {
     auto position = transform3D.position();
     auto center = transform3D.center();
     auto scale = transform3D.scale();
@@ -21,8 +26,7 @@ void ImGuiProperty<Transform3D>(Transform3D &transform3D) {
         transform3D.setOrientation(orientation);
 }
 
-template<>
-void ImGuiProperty<const Transform3D>(const Transform3D &transform3D) {
+void ImGuiProperty(const Transform3D &transform3D) {
     auto position = transform3D.position();
     auto center = transform3D.center();
     auto scale = transform3D.scale();

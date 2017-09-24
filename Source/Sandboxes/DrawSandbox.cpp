@@ -13,14 +13,14 @@
 #include <Deliberation/Draw/Texture.h>
 #include <Deliberation/Scene/Texture/TextureLoader.h>
 
-#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/App.h>
 
 using namespace deliberation;
 
-class DrawSandbox : public Application
+class DrawSandbox : public App
 {
 public:
-    DrawSandbox() : Application("DrawSandbox") {}
+    DrawSandbox() : App("DrawSandbox") {}
 
     void onStartup() override
     {

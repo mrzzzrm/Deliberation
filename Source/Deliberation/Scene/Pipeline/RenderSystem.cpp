@@ -8,13 +8,13 @@
 
 #include <Deliberation/Scene/Debug/DebugSurfaceOverlayRenderer.h>
 #include <Deliberation/Scene/Pipeline/Renderer.h>
-#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/App.h>
 
 namespace deliberation
 {
 RenderSystem::RenderSystem(World & world)
     : Base(world)
-    , m_renderManager(Application::get().drawContext())
+    , m_renderManager(App::get().drawContext())
 {
     m_debugGeometryRenderer =
         m_renderManager.addRenderer<DebugGeometryRenderer>();

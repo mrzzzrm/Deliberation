@@ -11,7 +11,7 @@
 
 #include <Deliberation/ImGui/ImGuiRenderer.h>
 
-#include <Deliberation/Platform/Application.h>
+#include <Deliberation/Platform/App.h>
 #include <Deliberation/Platform/InputManager.h>
 #include <Deliberation/Platform/KeyMap.h>
 
@@ -23,7 +23,7 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world)
     : Base(world)
     , InputLayer(200)
-    , m_inputManager(Application::get().inputManager())
+    , m_inputManager(App::get().inputManager())
 {
     activatePhases<FrameBeginPhase>();
 
@@ -88,7 +88,7 @@ void ImGuiSystem::onFrameBegin()
     auto & io = ImGui::GetIO();
 
     const auto & backbuffer =
-    Application::get().drawContext().backbuffer();
+    App::get().drawContext().backbuffer();
 
     io.DisplaySize =
         ImVec2((float)backbuffer.width(), (float)backbuffer.height());
