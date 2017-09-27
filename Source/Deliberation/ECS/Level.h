@@ -5,7 +5,7 @@
 
 #include <Deliberation/ECS/LevelEntity.h>
 #include <Deliberation/ECS/EntityPrototypeManager.h>
-#include <Deliberation/ECS/UntypedActivity.h>
+#include <Deliberation/ECS/AbstractActivity.h>
 
 namespace deliberation
 {
@@ -29,6 +29,6 @@ protected:
     std::unordered_map<std::string, std::shared_ptr<LevelEntity>>
         m_levelEntityByLid;
     std::unordered_map<std::string, std::shared_ptr<Level>> m_childByPath;
-    std::unordered_map<std::string, std::shared_ptr<UntypedActivity>> m_activityByLid;
+    std::unordered_map<std::string, std::shared_ptr<AbstractActivity>> m_activityByLid;
 };
 }

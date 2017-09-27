@@ -227,6 +227,10 @@ add_library(Deliberation
 	ECS/AbstractWorld.h
 	ECS/Activity.h
 	ECS/Activity.inl
+	ECS/ActivityComponent.cpp
+	ECS/ActivityComponent.h
+	ECS/ActivityComponentPrototype.cpp
+	ECS/ActivityComponentPrototype.h
 	ECS/ActivityManager.cpp
 	ECS/ActivityManager.h
 	ECS/ActivityManager.inl
@@ -264,8 +268,8 @@ add_library(Deliberation
 	ECS/Systems/SkyboxSystem.h
 	ECS/Transform3DComponent.cpp
 	ECS/Transform3DComponent.h
-	ECS/UntypedActivity.cpp
-	ECS/UntypedActivity.h
+	ECS/AbstractActivity.cpp
+	ECS/AbstractActivity.h
 	ECS/World.cpp
 	ECS/World.h
 	ECS/WorldProfiler.cpp

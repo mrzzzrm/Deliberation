@@ -22,6 +22,7 @@ template<typename T>
 System<T>::System(World & world, const ComponentFilter & filter)
     : SystemBase(world, filter), EventListener<T>(App::get().runtime()->events())
 {
+    Activity<T>::setName(name());
 }
 
 template<typename T>
@@ -30,9 +31,4 @@ std::size_t System<T>::index() const
     return indexStatic();
 }
 
-template<typename T>
-std::string System<T>::name() const
-{
-    return typeid(T).name();
-}
 }

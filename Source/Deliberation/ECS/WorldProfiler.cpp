@@ -14,7 +14,7 @@ WorldProfilerScope::WorldProfilerScope(
 
 std::string WorldProfilerScope::toString() const
 {
-    return m_system->name() + "::" + m_phase + ": " + std::to_string(m_micros);
+    return std::string(m_system->name()) + "::" + m_phase + ": " + std::to_string(m_micros);
 }
 
 bool WorldProfilerScope::operator<(const WorldProfilerScope & rhs) const

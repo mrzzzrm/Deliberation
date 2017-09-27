@@ -16,13 +16,16 @@ class World;
 class SystemBase
 {
 public:
+    static constexpr const char * const SYSTEM_NAME = "Unnamed System";
+
+public:
     SystemBase(World & world, const ComponentFilter & filter);
 
     World &                 world();
     const ComponentFilter & filter() const;
 
     virtual std::size_t index() const = 0;
-    virtual std::string name() const = 0;
+    virtual const char * name() const = 0;
 
     bool accepts(const Entity & entity);
 
@@ -33,9 +36,6 @@ public:
     void gameUpdate(const UpdateFrame & updateFrame);
     void prePhysicsUpdate(const UpdateFrame & updateFrame);
     void postPhysicsUpdate(const UpdateFrame & updateFrame);
-
-    virtual void onCreated() {}
-    virtual void onRemoved() {}
 
     virtual void renderImGui() {}
 
@@ -67,3 +67,4 @@ private:
     std::unordered_map<EntityId, std::size_t> m_entityIndexByID;
 };
 };
+

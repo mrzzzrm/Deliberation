@@ -37,8 +37,6 @@ std::shared_ptr<T> World::addSystem(Args &&... args)
 
     m_activityManager->addActivity(system);
 
-    system->onCreated();
-
     return system;
 }
 }

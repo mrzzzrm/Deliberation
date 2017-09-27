@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+#include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/UpdateFrame.h>
 #include <Deliberation/Core/TypeID.h>
 

@@ -5,7 +5,7 @@
 #include <memory>
 
 #include <Deliberation/ECS/Phase.h>
-#include <Deliberation/ECS/UntypedActivity.h>
+#include <Deliberation/ECS/AbstractActivity.h>
 
 namespace deliberation
 {
@@ -13,14 +13,17 @@ namespace deliberation
 class ActivityManager : public std::enable_shared_from_this<ActivityManager>
 {
 public:
+    // Internal - just use for debugging
+    const std::vector<std::shared_ptr<AbstractActivity>> & activities() const { return m_activities; }
+
     template<typename T>
     void addActivityType(const std::string & name);
 
-    std::shared_ptr<UntypedActivity>
+    std::shared_ptr<AbstractActivity>
     createActivity(const std::string & name);
 
-    void addActivity(const std::shared_ptr<UntypedActivity> & activity);
-    void removeActivity(const std::shared_ptr<UntypedActivity> & activity);
+    void addActivity(const std::shared_ptr<AbstractActivity> & activity);
+    void removeActivity(const std::shared_ptr<AbstractActivity> & activity);
 
     template<typename T, typename ... Args>
     void invokePhase(Args &&... args);
@@ -35,11 +38,11 @@ private:
 private:
     std::unordered_map<TypeID::value_t,
      std::shared_ptr<AbstractPhaseContainer>> m_containersByPhaseTypeId;
-    std::vector<std::shared_ptr<UntypedActivity>> m_activities;
+    std::vector<std::shared_ptr<AbstractActivity>> m_activities;
 
     std::unordered_map<
         std::string,
-        std::function<std::shared_ptr<UntypedActivity>()>> m_activityFactoryByName;
+        std::function<std::shared_ptr<AbstractActivity>()>> m_activityFactoryByName;
 };
 
 }

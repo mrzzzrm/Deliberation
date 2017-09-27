@@ -13,7 +13,7 @@ namespace deliberation
 
 template<typename T>
 Activity<T>::Activity(const std::string & name):
-UntypedActivity(name)
+AbstractActivity(name)
 {
 }
 

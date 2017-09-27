@@ -7,7 +7,7 @@
 namespace deliberation
 {
 
-std::shared_ptr<UntypedActivity>
+std::shared_ptr<AbstractActivity>
 ActivityManager::createActivity(const std::string & name)
 {
     const auto iter = m_activityFactoryByName.find(name);
@@ -18,7 +18,7 @@ ActivityManager::createActivity(const std::string & name)
     return iter->second();
 }
 
-void ActivityManager::addActivity(const std::shared_ptr<UntypedActivity> & activity)
+void ActivityManager::addActivity(const std::shared_ptr<AbstractActivity> & activity)
 {
     for (const auto & invoker : activity->m_phaseInvokers)
     {
@@ -26,10 +26,14 @@ void ActivityManager::addActivity(const std::shared_ptr<UntypedActivity> & activ
     }
     m_activities.emplace_back(activity);
     activity->m_manager = shared_from_this();
+
+    activity->onCreated();
 }
 
-void ActivityManager::removeActivity(const std::shared_ptr<UntypedActivity> & activity)
+void ActivityManager::removeActivity(const std::shared_ptr<AbstractActivity> & activity)
 {
+    activity->onRemoved();
+
     for (const auto & invoker : activity->m_phaseInvokers)
     {
         removeInvoker(invoker);

@@ -4,13 +4,13 @@
 #include <memory>
 
 #include <Deliberation/Core/TypeID.h>
-#include <Deliberation/ECS/UntypedActivity.h>
+#include <Deliberation/ECS/AbstractActivity.h>
 
 namespace deliberation
 {
 
 template<typename T>
-class Activity : public UntypedActivity
+class Activity : public AbstractActivity
 {
 public:
     using Base = Activity<T>;

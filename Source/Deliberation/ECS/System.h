@@ -23,7 +23,7 @@ public:
     explicit System(World & world, const ComponentFilter & filter = ComponentFilter());
 
     std::size_t index() const override;
-    std::string name() const override;
+    const char * name() const override { return T::SYSTEM_NAME; }
 };
 }
 
