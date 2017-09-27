@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <Deliberation/Core/IntTypes.h>
+#include <Deliberation/Core/Globals.h>
 
 namespace deliberation
 {

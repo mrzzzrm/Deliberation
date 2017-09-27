@@ -24,7 +24,7 @@ class FramebufferImpl final
 {
 public:
     static std::shared_ptr<FramebufferImpl>
-    backbuffer(DrawContext & drawContext, u32 width, u32 height);
+    backbuffer(DrawContext & drawContext);
 
     static std::shared_ptr<FramebufferImpl>
     custom(DrawContext & drawContext, const FramebufferDesc & framebufferDesc);

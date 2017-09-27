@@ -25,11 +25,13 @@
 
 namespace deliberation
 {
+DELIBERATION_DEFINE_GLOBAL(DrawContext);
+
 DrawContext::DrawContext(
     unsigned int backbufferWidth, unsigned int backbufferHeight)
 {
     m_backbuffer = Framebuffer(
-        FramebufferImpl::backbuffer(*this, backbufferWidth, backbufferHeight));
+        FramebufferImpl::backbuffer(*this));
 }
 
 Framebuffer & DrawContext::backbuffer() { return m_backbuffer; }

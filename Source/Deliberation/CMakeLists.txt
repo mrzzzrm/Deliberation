@@ -41,6 +41,8 @@ add_library(Deliberation
 	Core/Format.h
 	Core/FpsCounter.cpp
 	Core/FpsCounter.h
+	Core/Globals.cpp
+	Core/Globals.h
 	Core/HashUtils.h
 	Core/IntTypes.h
 	Core/Json.h

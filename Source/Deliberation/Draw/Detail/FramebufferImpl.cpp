@@ -43,12 +43,12 @@ void RenderTargetFromDesc(
 namespace deliberation
 {
 std::shared_ptr<FramebufferImpl>
-FramebufferImpl::backbuffer(DrawContext & drawContext, u32 width, u32 height)
+FramebufferImpl::backbuffer(DrawContext & drawContext)
 {
     auto result = std::make_shared<FramebufferImpl>(drawContext);
     result->isBackbuffer = true;
-    result->width = width;
-    result->height = height;
+    result->width = 0;
+    result->height = 0;
     result->name = "Backbuffer";
 
     return result;

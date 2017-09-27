@@ -42,13 +42,6 @@ const InputManager & App::inputManager() const
     return *m_inputManager;
 }
 
-DrawContext & App::drawContext() { return m_drawContext.get(); }
-
-const DrawContext & App::drawContext() const
-{
-    return m_drawContext.get();
-}
-
 float App::fps() const { return m_fpsCounter.fps(); }
 
 int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv)
@@ -200,7 +193,8 @@ void App::init()
 
     Log->info("Prefix:                {}", deliberation::prefixPath());
 
-    m_drawContext.reset(m_displayWidth, m_displayHeight);
+    InitGlobal<DrawContext>();
+    GetGlobal<DrawContext>()->setBackbufferResolution(m_displayWidth, m_displayHeight);
 
     /**
      * Init input

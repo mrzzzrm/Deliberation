@@ -20,16 +20,11 @@
 
 namespace deliberation
 {
-namespace detail
-{
-    class BufferImpl;
-    class QueryImpl;
-}
 
 class DrawContext final
 {
 public:
-    DrawContext(
+    explicit DrawContext(
         unsigned int backbufferWidth = 640u,
         unsigned int backbufferHeight = 480u);
 

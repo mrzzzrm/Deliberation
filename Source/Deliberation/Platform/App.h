@@ -27,9 +27,6 @@ public:
     InputManager &       inputManager();
     const InputManager & inputManager() const;
 
-    DrawContext &       drawContext();
-    const DrawContext & drawContext() const;
-
     bool gameplayPaused() const { return m_gameplayPaused; }
 
     const std::shared_ptr<AppRuntime> & runtime() { return m_runtime; }
@@ -43,6 +40,8 @@ public:
     void quit(int returnCode = 0);
 
 private:
+    App() = default;
+
     void init();
     void handleWindowEvent(const SDL_Event & event);
 
@@ -54,8 +53,6 @@ private:
     int         m_returnCode = 0;
 
     FpsCounter m_fpsCounter;
-
-    Optional<DrawContext> m_drawContext;
 
     SDL_Window *     m_displayWindow;
     SDL_Renderer *   m_displayRenderer;
