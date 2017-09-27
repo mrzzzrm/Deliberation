@@ -50,7 +50,7 @@ void ResourceManager::registerBuildIns() {
         const auto textureBinary =
             TextureLoader(GameDataPath("Data/Particles/BaseParticle.png"))
                 .load();
-        const auto texture = App::get().drawContext().createTexture(textureBinary);
+        const auto texture = GetGlobal<DrawContext>()->createTexture(textureBinary);
 
         auto meshData = std::make_shared<MeshData>(std::move(vertices), std::move(indicesBlob),
                                                    std::vector<Texture>{texture});
@@ -119,7 +119,7 @@ void ResourceManager::registerBuildIns() {
 
         const auto textureBinary =
             TextureLoader(GameDataPath("Data/Ui/Crosshairs.png")).load();
-        const auto texture = App::get().drawContext().createTexture(textureBinary);
+        const auto texture = GetGlobal<DrawContext>()->createTexture(textureBinary);
 
         MeshData mesh(std::move(vertices), std::move(indicesBlob), {texture});
         m_meshByResourceId.emplace(
@@ -155,7 +155,7 @@ void ResourceManager::registerBuildIns() {
         const auto textureBinary =
             TextureLoader(GameDataPath("Data/Ui/HudEntityMarkerUpperLeft.png"))
                 .load();
-        const auto texture = App::get().drawContext().createTexture(textureBinary);
+        const auto texture = GetGlobal<DrawContext>()->createTexture(textureBinary);
 
         MeshData mesh(std::move(vertices), std::move(indicesBlob), {texture});
         m_meshByResourceId.emplace(
@@ -163,10 +163,8 @@ void ResourceManager::registerBuildIns() {
             std::make_shared<MeshData>(mesh));
     }
 
-    auto &context = App::get().drawContext();
-
     {
-        auto program = App::get().drawContext().createProgram(
+        auto program = GetGlobal<DrawContext>()->createProgram(
             {GameDataPath("Data/Shaders/HudElement.vert"),
              GameDataPath("Data/Shaders/HudElement.frag")});
         m_programByResourceId.emplace((size_t) R::HudElement, program);

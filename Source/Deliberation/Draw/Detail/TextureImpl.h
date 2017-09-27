@@ -18,7 +18,6 @@ class TextureImpl final
 {
 public:
     TextureImpl(
-        DrawContext & drawContext,
         u32           width,
         u32           height,
         u32           numFaces,
@@ -27,8 +26,6 @@ public:
 
     void setupSurfaces(const std::shared_ptr<TextureImpl> & textureImpl);
     void texImage2DAllFaces(const TextureBinary * binary) const;
-
-    DrawContext & drawContext;
 
     gl::GLuint glName;
 

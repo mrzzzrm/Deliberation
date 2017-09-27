@@ -16,7 +16,6 @@ public:
     HdrNode(HdrRenderer & hdrRenderer) : RenderNode(hdrRenderer.renderManager(), hdrRenderer.shared_from_this())
     {
         m_effect = ScreenSpaceEffect(
-            m_renderManager.drawContext(),
             {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
              DeliberationDataPath("Data/Shaders/Hdr.frag")},
             "HDR");

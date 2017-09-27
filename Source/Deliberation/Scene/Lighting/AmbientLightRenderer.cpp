@@ -14,10 +14,7 @@ public:
     AmbientLightNode(AmbientLightRenderer & renderer)
         : m_renderer(renderer), RenderNode(renderer.renderManager(), renderer.shared_from_this())
     {
-        auto & drawContext = m_renderer.renderManager().drawContext();
-
         m_effect = ScreenSpaceEffect(
-            drawContext,
             {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
              DeliberationDataPath("Data/Shaders/AmbientLight.frag")},
             "AmbientLight");

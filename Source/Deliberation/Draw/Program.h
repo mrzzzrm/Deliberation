@@ -17,8 +17,6 @@ class Program final:
 public:
     Program();
 
-    DrawContext & drawContext() const;
-
     const ProgramInterface & interface() const;
 
 private:

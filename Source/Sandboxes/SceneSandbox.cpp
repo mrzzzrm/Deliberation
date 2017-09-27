@@ -92,8 +92,8 @@ public:
         renderManager.mainCamera().setOrientation(
             glm::quat({-0.2f, 0.0f, 0.0f}));
         renderManager.mainCamera().setAspectRatio(
-            (float)drawContext().backbuffer().width() /
-            drawContext().backbuffer().height());
+            (float)GetGlobal<DrawContext>()->backbuffer().width() /
+                GetGlobal<DrawContext>()->backbuffer().height());
 
         m_navigator.reset(renderManager.mainCamera(), input(), 10.0f);
 
@@ -106,12 +106,11 @@ public:
             DeliberationDataPath("Data/Skybox/Cloudy/Front.png")};
 
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
-        auto skyboxCubemap = drawContext().createTexture(skyboxCubemapBinary);
+        auto skyboxCubemap = GetGlobal<DrawContext>()->createTexture(skyboxCubemapBinary);
 
         renderManager.addRenderer<SkyboxRenderer>(skyboxCubemap);
 
         m_cubemapRenderer.reset(
-            drawContext(),
             renderManager.mainCamera(),
             skyboxCubemap,
             DebugCubemapRenderer::MeshType::Sphere);

@@ -26,16 +26,16 @@ public:
     {
         EnableGLErrorChecks();
 
-        m_clear = drawContext().createClear();
+        m_clear = GetGlobal<DrawContext>()->createClear();
 
-        const auto program = drawContext().createProgram(
+        const auto program = GetGlobal<DrawContext>()->createProgram(
             {DeliberationDataPath(
                  "Data/Shaders/PaletteRgb_Position2_InstancePosition2.vert"),
              DeliberationDataPath("Data/Shaders/PaletteRgb.frag")});
 
         std::cout << program.interface().toString() << std::endl;
 
-        m_draw = drawContext().createDraw(program);
+        m_draw = GetGlobal<DrawContext>()->createDraw(program);
 
         const auto vertexLayout =
             DataLayout({{"Position", Type_Vec2}, {"ColorIndex", Type_U32}});
@@ -60,7 +60,7 @@ public:
 
         m_position = glm::vec2(0.2f, 0.1f);
 
-        m_paletteBuffer = drawContext().createBuffer({"Color", Type_Vec3});
+        m_paletteBuffer = GetGlobal<DrawContext>()->createBuffer({"Color", Type_Vec3});
     }
 
 //    void onFrame(float seconds) override

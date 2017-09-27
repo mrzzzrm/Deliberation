@@ -11,7 +11,7 @@ namespace deliberation
 {
 BloomRenderer::BloomRenderer(RenderManager & renderManager)
     : SingleNodeRenderer(renderManager, RenderPhase::PreHdr, "Bloom")
-    , m_blur(renderManager.drawContext())
+    , m_blur()
 {
 }
 
@@ -99,7 +99,6 @@ void BloomRenderer::onSetupRender()
 {
     // DownscaleEffect
     m_downscaleEffect = ScreenSpaceEffect(
-        drawContext(),
         DeliberationShaderPaths({"UV_Position2.vert", "Texture2dRgb.frag"}),
         "BilinearDownscale");
     auto & downscaleDraw = m_downscaleEffect.draw();
@@ -111,8 +110,8 @@ void BloomRenderer::onSetupRender()
     // Framebuffers
     size_t numLevels = 4;
     {
-        u32 width = drawContext().backbuffer().width();
-        u32 height = drawContext().backbuffer().height();
+        u32 width = GetGlobal<DrawContext>()->backbuffer().width();
+        u32 height = GetGlobal<DrawContext>()->backbuffer().height();
 
         m_numBlursPerLevel.resize(numLevels, 1);
         m_stdPerLevel.resize(numLevels, 1.0f);
@@ -127,10 +126,10 @@ void BloomRenderer::onSetupRender()
 
             desc.name = "ScaleVBlur" + std::to_string(l);
             m_downscaleAndVBlurFbs.emplace_back(
-                drawContext().createFramebuffer(desc));
+                GetGlobal<DrawContext>()->createFramebuffer(desc));
 
             desc.name = "HBlur" + std::to_string(l);
-            m_hblurFbs.emplace_back(drawContext().createFramebuffer(desc));
+            m_hblurFbs.emplace_back(GetGlobal<DrawContext>()->createFramebuffer(desc));
 
             renderManager().registerFramebuffer(m_downscaleAndVBlurFbs.back());
             renderManager().registerFramebuffer(m_hblurFbs.back());
@@ -145,7 +144,6 @@ void BloomRenderer::onSetupRender()
 
     // Extract effect
     m_extractEffect = ScreenSpaceEffect(
-        drawContext(),
         DeliberationShaderPaths({"UV_Position2.vert", "BloomExtract.frag"}),
         "BloomExtract");
 
@@ -159,7 +157,6 @@ void BloomRenderer::onSetupRender()
 
     // Apply
     m_applyEffect = ScreenSpaceEffect(
-        drawContext(),
         DeliberationShaderPaths({"UV_Position2.vert", "BloomApply.frag"}),
         "BloomApply");
     m_applyEffect.draw().sampler("InputA").setTexture(

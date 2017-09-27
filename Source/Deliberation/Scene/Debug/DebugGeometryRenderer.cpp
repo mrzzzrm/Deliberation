@@ -19,24 +19,22 @@ DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
     : SingleNodeRenderer(
           renderManager, RenderPhase::PreOverlay, "DebugGeometryRenderer")
 {
-    auto & drawContext = renderManager.drawContext();
-
     /**
      * Load programs
      */
-    m_buildIns.shadedProgram = drawContext.createProgram(
+    m_buildIns.shadedProgram = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath(
              "Data/Shaders/DebugGeometryShaded.vert"),
          deliberation::DeliberationDataPath(
              "Data/Shaders/DebugGeometryShaded.frag")});
 
-    m_buildIns.unicolorProgram = drawContext.createProgram(
+    m_buildIns.unicolorProgram = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath(
              "Data/Shaders/DebugGeometryUnicolor.vert"),
          deliberation::DeliberationDataPath(
              "Data/Shaders/DebugGeometryUnicolor.frag")});
 
-    m_buildIns.vertexColorProgram = drawContext.createProgram(
+    m_buildIns.vertexColorProgram = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath(
              "Data/Shaders/DebugGeometryVertexColor.vert"),
          deliberation::DeliberationDataPath(
@@ -51,9 +49,9 @@ DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
             MeshCompiler().compile(mesh, MeshCompilerPrimitive::Triangles);
 
         m_buildIns.boxTrianglesVertexBuffer =
-            drawContext.createBuffer(compilation.vertices);
+            GetGlobal<DrawContext>()->createBuffer(compilation.vertices);
         m_buildIns.boxTrianglesIndexBuffer =
-            drawContext.createBuffer(compilation.indices);
+            GetGlobal<DrawContext>()->createBuffer(compilation.indices);
     }
 
     {
@@ -61,9 +59,9 @@ DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
             MeshCompiler().compile(mesh, MeshCompilerPrimitive::Lines);
 
         m_buildIns.boxLinesVertexBuffer =
-            drawContext.createBuffer(compilation.vertices);
+            GetGlobal<DrawContext>()->createBuffer(compilation.vertices);
         m_buildIns.boxLinesIndexBuffer =
-            drawContext.createBuffer(compilation.indices);
+            GetGlobal<DrawContext>()->createBuffer(compilation.indices);
     }
 
     /**
@@ -75,9 +73,9 @@ DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
             MeshCompiler().compile(mesh, MeshCompilerPrimitive::Triangles);
 
         m_buildIns.coneVertexBuffer =
-            drawContext.createBuffer(compilation.vertices);
+            GetGlobal<DrawContext>()->createBuffer(compilation.vertices);
         m_buildIns.coneIndexBuffer =
-            drawContext.createBuffer(compilation.indices);
+            GetGlobal<DrawContext>()->createBuffer(compilation.indices);
     }
 
     /**
@@ -86,9 +84,9 @@ DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
     {
         auto sphereMesh = UVSphere(16, 16).generateMesh2();
         m_buildIns.sphereVertexBuffer =
-            drawContext.createBuffer(sphereMesh.takeVertices());
+            GetGlobal<DrawContext>()->createBuffer(sphereMesh.takeVertices());
         m_buildIns.sphereIndexBuffer =
-            drawContext.createBuffer(sphereMesh.takeIndices());
+            GetGlobal<DrawContext>()->createBuffer(sphereMesh.takeIndices());
     }
 
     /**
@@ -97,7 +95,7 @@ DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
     {
         LayoutedBlob vertex(DataLayout("Position", Type_Vec3), 1);
         vertex.field<glm::vec3>("Position")[0] = glm::vec3(0.0f, 0.0f, 0.0f);
-        m_buildIns.pointVertexBuffer = drawContext.createBuffer(vertex);
+        m_buildIns.pointVertexBuffer = GetGlobal<DrawContext>()->createBuffer(vertex);
     }
 
     /**

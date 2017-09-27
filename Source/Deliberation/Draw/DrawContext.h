@@ -24,9 +24,7 @@ namespace deliberation
 class DrawContext final
 {
 public:
-    explicit DrawContext(
-        unsigned int backbufferWidth = 640u,
-        unsigned int backbufferHeight = 480u);
+    explicit DrawContext();
 
     Framebuffer &       backbuffer();
     const Framebuffer & backbuffer() const;

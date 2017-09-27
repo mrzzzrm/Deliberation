@@ -8,13 +8,6 @@ namespace deliberation
 {
 Program::Program() = default;
 
-DrawContext & Program::drawContext() const
-{
-    AssertM(m_impl.get(), "Program is hollow");
-
-    return m_impl->drawContext;
-}
-
 const ProgramInterface & Program::interface() const
 {
     AssertM(m_impl.get(), "Program is hollow");

@@ -19,11 +19,9 @@ public:
         const std::vector<std::string> & shaders)
         : RenderNode(renderer.renderManager(), renderer.shared_from_this()), m_renderer(renderer)
     {
-        auto & drawContext = renderer.renderManager().drawContext();
-
-        m_program = drawContext.createProgram(shaders);
+        m_program = GetGlobal<DrawContext>()->createProgram(shaders);
         m_draw =
-            drawContext.createDraw(m_program, DrawPrimitive::TriangleStrip);
+            GetGlobal<DrawContext>()->createDraw(m_program, DrawPrimitive::TriangleStrip);
 
         m_view = m_draw.uniform("View");
         m_projection = m_draw.uniform("Projection");

@@ -20,7 +20,6 @@ class SamplerImpl
 {
 public:
     SamplerImpl(
-        DrawContext & drawContext,
         gl::GLenum    uniformType,
         gl::GLenum    valueType,
         gl::GLuint    location);
@@ -28,7 +27,6 @@ public:
 
     gl::GLenum textureType() const;
 
-    DrawContext &                drawContext;
     gl::GLuint                   glName;
     gl::GLenum                   type;
     gl::GLenum                   valueType;

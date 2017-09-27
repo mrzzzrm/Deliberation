@@ -31,26 +31,17 @@ namespace detail
     };
 }
 
-Font::Font() : m_drawContext(nullptr) {}
-
-Font::Font(DrawContext & drawContext, const std::string & path)
-    : m_drawContext(&drawContext), m_path(path)
+Font::Font(const std::string & path)
+    :m_path(path)
 {
 }
 
 Font::~Font() = default;
 
-DrawContext & Font::drawContext() const
-{
-    Assert(m_drawContext);
-    return *m_drawContext;
-}
 
 Texture Font::render(
     const std::string & text, unsigned int size, const glm::vec4 & color) const
 {
-    Assert(m_drawContext);
-
     auto i = m_fontBySize.find(size);
     if (i == m_fontBySize.end())
     {
@@ -73,7 +64,7 @@ Texture Font::render(
 
     auto * surface = TTF_RenderText_Blended(font->font, text.c_str(), sdlColor);
 
-    auto texture = m_drawContext->createTexture(TextureLoader(surface).load());
+    auto texture = GetGlobal<DrawContext>()->createTexture(TextureLoader(surface).load());
 
     SDL_FreeSurface(surface);
 

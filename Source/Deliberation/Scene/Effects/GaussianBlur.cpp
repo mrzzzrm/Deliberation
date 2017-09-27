@@ -4,9 +4,9 @@
 
 namespace deliberation
 {
-GaussianBlur::GaussianBlur(DrawContext & drawContext)
+GaussianBlur::GaussianBlur()
 {
-    auto program = drawContext.createProgram(
+    auto program = GetGlobal<DrawContext>()->createProgram(
         {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
          DeliberationDataPath("Data/Shaders/GaussianBlur.frag")});
 
@@ -16,7 +16,7 @@ GaussianBlur::GaussianBlur(DrawContext & drawContext)
                           .field("Weights")
                           .arraySize();
 
-    m_blur = ScreenSpaceEffect(drawContext, program, "GaussianBlur");
+    m_blur = ScreenSpaceEffect(program, "GaussianBlur");
     m_inputSampler = m_blur.draw().sampler("Input");
     m_inputSampler.setWrap(TextureWrap::ClampToEdge);
     m_inputSampler.setMagFilter(TextureFilter::Linear);

@@ -10,15 +10,14 @@
 
 namespace deliberation
 {
-QueryImpl::QueryImpl(DrawContext & drawContext, QueryType type)
-    : m_drawContext(drawContext)
-    , m_type(type)
+QueryImpl::QueryImpl(QueryType type)
+    : m_type(type)
     , m_glName(0)
     , m_glTarget(gl::GL_NONE)
     , m_active(false)
     , m_resultsAvailable(false)
 {
-    m_drawContext.m_glStateManager.genQueries(1, &m_glName);
+    GetGlobal<DrawContext>()->m_glStateManager.genQueries(1, &m_glName);
     AssertM(m_glName != 0, "Failed to create Query");
 }
 
@@ -26,7 +25,7 @@ QueryImpl::~QueryImpl()
 {
     if (m_glName != 0)
     {
-        m_drawContext.m_glStateManager.deleteQueries(1, &m_glName);
+        GetGlobal<DrawContext>()->m_glStateManager.deleteQueries(1, &m_glName);
     }
 }
 
@@ -95,7 +94,7 @@ void QueryImpl::begin()
     AssertM(!m_active, "Can't restart query");
     Assert(m_glName != 0);
 
-    m_drawContext.m_glStateManager.beginQuery((gl::GLenum)m_type, m_glName);
+    GetGlobal<DrawContext>()->m_glStateManager.beginQuery((gl::GLenum)m_type, m_glName);
 
     m_active = true;
     m_resultsAvailable = false;
@@ -105,7 +104,7 @@ void QueryImpl::end()
 {
     Assert(m_glName != 0);
 
-    m_drawContext.m_glStateManager.endQuery((gl::GLenum)m_type);
+    GetGlobal<DrawContext>()->m_glStateManager.endQuery((gl::GLenum)m_type);
 
     m_active = false;
 }

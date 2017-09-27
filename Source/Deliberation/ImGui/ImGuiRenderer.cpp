@@ -37,14 +37,14 @@ void ImGuiRenderer::onSetupRender()
     auto indexLayout =
         DataLayout("Index", sizeof(ImDrawIdx) == 2 ? Type_U16 : Type_U32);
 
-    m_vertexBuffer = drawContext().createBuffer(vertexLayout);
-    m_indexBuffer = drawContext().createBuffer(indexLayout);
+    m_vertexBuffer = GetGlobal<DrawContext>()->createBuffer(vertexLayout);
+    m_indexBuffer = GetGlobal<DrawContext>()->createBuffer(indexLayout);
 
-    auto program = drawContext().createProgram(
+    auto program = GetGlobal<DrawContext>()->createProgram(
         {DeliberationDataPath("Data/Shaders/ImGui.vert"),
          DeliberationDataPath("Data/Shaders/ImGui.frag")});
 
-    m_draw = drawContext().createDraw(program);
+    m_draw = GetGlobal<DrawContext>()->createDraw(program);
 
     m_draw.addVertexBuffer(m_vertexBuffer);
 
@@ -68,7 +68,7 @@ void ImGuiRenderer::onSetupRender()
             m_fontAtlasHeight,
             PixelFormat_RGBA_8_U)
             .load();
-    const auto texture = drawContext().createTexture(textureBinary);
+    const auto texture = GetGlobal<DrawContext>()->createTexture(textureBinary);
 
     auto sampler = m_draw.sampler("Texture");
     sampler.setTexture(texture);

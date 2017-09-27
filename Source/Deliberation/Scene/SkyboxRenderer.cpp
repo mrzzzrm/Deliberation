@@ -12,9 +12,7 @@ SkyboxRenderer::SkyboxRenderer(
     : SingleNodeRenderer(renderManager, RenderPhase::Forward, "Skybox")
     , m_cubemap(cubemap)
 {
-    auto & drawContext = renderManager.drawContext();
-
-    m_program = renderManager.drawContext().createProgram(
+    m_program = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath("Data/Shaders/SkyboxRenderer.vert"),
          deliberation::DeliberationDataPath(
              "Data/Shaders/SkyboxRenderer.frag")});
@@ -35,7 +33,7 @@ void SkyboxRenderer::render()
 {
     if (m_drawDirty)
     {
-        m_draw = m_renderManager.drawContext().createDraw(m_program);
+        m_draw = GetGlobal<DrawContext>()->createDraw(m_program);
 
         const auto vertexLayout = DataLayout{{{"Position", Type_Vec3}}};
 

@@ -13,10 +13,7 @@ DebugSurfaceOverlayRenderer::DebugSurfaceOverlayRenderer(
     : SingleNodeRenderer(
           renderManager, RenderPhase::PreOverlay, "SurfaceOverlay")
 {
-    auto & drawContext = renderManager.drawContext();
-
     m_effect = ScreenSpaceEffect(
-        drawContext,
         {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
          DeliberationDataPath("Data/Shaders/DebugOverlaySurface.frag")},
         "DebugSurfaceOverlay");

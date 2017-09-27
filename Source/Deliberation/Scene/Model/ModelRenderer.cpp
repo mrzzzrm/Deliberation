@@ -36,7 +36,7 @@ public:
                 .uniformBlock("ViewBlock")
                 ->layout();
         m_viewUniformBuffer =
-            renderManager.drawContext().createBuffer(viewUniformBlockLayout);
+            GetGlobal<DrawContext>()->createBuffer(viewUniformBlockLayout);
         m_viewUniformData = LayoutedBlob(viewUniformBlockLayout, 1);
 
         m_viewField = m_viewUniformData.field<glm::mat4>("View");
@@ -62,16 +62,14 @@ public:
             auto         iter = m_drawPerModel.find(model);
             if (iter == m_drawPerModel.end())
             {
-                auto & drawContext = m_renderManager.drawContext();
-
                 ModelInstancesDraw modelRenderContext;
 
                 modelRenderContext.instanceBuffer =
-                    m_renderManager.drawContext().createBuffer(
+                    GetGlobal<DrawContext>()->createBuffer(
                         m_instanceLayout);
 
                 auto & draw = modelRenderContext.draw;
-                draw = drawContext.createDraw(m_modelRenderer.m_gbufferProgram);
+                draw = GetGlobal<DrawContext>()->createDraw(m_modelRenderer.m_gbufferProgram);
                 draw.setUniformBuffer("ViewBlock", m_viewUniformBuffer);
                 draw.addInstanceBuffer(modelRenderContext.instanceBuffer);
                 draw.addVertexBuffer(model->vertexBuffer);
@@ -124,7 +122,7 @@ namespace deliberation
 ModelRenderer::ModelRenderer(RenderManager & renderManager)
     : Renderer(renderManager)
 {
-    m_gbufferProgram = renderManager.drawContext().createProgram(
+    m_gbufferProgram = GetGlobal<DrawContext>()->createProgram(
         {DeliberationDataPath("Data/Shaders/ModelRenderer.vert"),
          DeliberationDataPath("Data/Shaders/ModelRenderer_GBuffer.frag")});
 }
@@ -205,7 +203,7 @@ std::shared_ptr<Model> ModelRenderer::addModel(const MeshData & meshData)
 {
     auto model = std::make_shared<Model>();
     model->vertexBuffer =
-        m_renderManager.drawContext().createBuffer(meshData.vertices());
+        GetGlobal<DrawContext>()->createBuffer(meshData.vertices());
 
     if (meshData.indices().empty())
     {
@@ -214,7 +212,7 @@ std::shared_ptr<Model> ModelRenderer::addModel(const MeshData & meshData)
     else
     {
         model->indexBuffer =
-            m_renderManager.drawContext().createBuffer(meshData.indices());
+            GetGlobal<DrawContext>()->createBuffer(meshData.indices());
         model->hasIndices = true;
     }
 

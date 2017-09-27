@@ -23,8 +23,6 @@ public:
 
     bool isInitialized() const { return (bool)m_impl; }
 
-    DrawContext & drawContext() const;
-
     u32 face() const;
 
     u32 width() const;

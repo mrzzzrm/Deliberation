@@ -27,11 +27,10 @@ namespace deliberation
 {
 DELIBERATION_DEFINE_GLOBAL(DrawContext);
 
-DrawContext::DrawContext(
-    unsigned int backbufferWidth, unsigned int backbufferHeight)
+DrawContext::DrawContext()
 {
     m_backbuffer = Framebuffer(
-        FramebufferImpl::backbuffer(*this));
+        FramebufferImpl::backbuffer(0, 0));
 }
 
 Framebuffer & DrawContext::backbuffer() { return m_backbuffer; }
@@ -46,12 +45,12 @@ void DrawContext::setBackbufferResolution(unsigned int width, unsigned height)
     }
 
     m_backbuffer =
-        Framebuffer(FramebufferImpl::backbuffer(*this, width, height));
+        Framebuffer(FramebufferImpl::backbuffer(width, height));
 }
 
 Buffer DrawContext::createBuffer(const DataLayout & layout, size_t count)
 {
-    auto buffer = Buffer(std::make_shared<BufferImpl>(*this, layout));
+    auto buffer = Buffer(std::make_shared<BufferImpl>(layout));
     if (count != 0) buffer.reinit(count);
     return buffer;
 }
@@ -65,14 +64,14 @@ Buffer DrawContext::createBuffer(const LayoutedBlob & data)
 
 Program DrawContext::createProgram(const std::vector<std::string> & paths)
 {
-    Program program(std::make_shared<ProgramImpl>(*this, paths));
+    Program program(std::make_shared<ProgramImpl>( paths));
     return program;
 }
 
 Draw DrawContext::createDraw(
     const Program & program, DrawPrimitive primitive, const std::string & name)
 {
-    auto impl = std::make_shared<DrawImpl>(*this, program);
+    auto impl = std::make_shared<DrawImpl>(program);
     impl->state.rasterizerState().setPrimitive(primitive);
     impl->name = name;
 
@@ -84,7 +83,7 @@ Draw DrawContext::createDraw(
     const DrawState &   drawState,
     const std::string & name)
 {
-    auto impl = std::make_shared<DrawImpl>(*this, program);
+    auto impl = std::make_shared<DrawImpl>(program);
     impl->state = drawState;
     impl->name = name;
 
@@ -93,18 +92,17 @@ Draw DrawContext::createDraw(
 
 Clear DrawContext::createClear()
 {
-    return Clear(std::make_shared<ClearImpl>(*this, backbuffer().m_impl));
+    return Clear(std::make_shared<ClearImpl>(backbuffer().m_impl));
 }
 
 Clear DrawContext::createClear(Framebuffer & framebuffer)
 {
-    return Clear(std::make_shared<ClearImpl>(*this, framebuffer.m_impl));
+    return Clear(std::make_shared<ClearImpl>(framebuffer.m_impl));
 }
 
 Texture DrawContext::createTexture(const TextureBinary & binary)
 {
     auto impl = std::make_shared<TextureImpl>(
-        *this,
         binary.width(),
         binary.height(),
         binary.numFaces(),
@@ -122,7 +120,7 @@ Texture DrawContext::createTexture2D(u32 width, u32 height, PixelFormat format)
 {
     AssertM(width > 0 && height > 0, "Invalid size");
 
-    auto impl = std::make_shared<TextureImpl>(*this, width, height, 1, format);
+    auto impl = std::make_shared<TextureImpl>(width, height, 1, format);
     impl->setupSurfaces(impl);
 
     auto texture = Texture(impl);
@@ -140,7 +138,7 @@ DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
         "Framebuffer axes must be > 0");
 
     auto framebuffer =
-        Framebuffer(FramebufferImpl::custom(*this, framebufferDesc));
+        Framebuffer(FramebufferImpl::custom(framebufferDesc));
 
 #if VERBOSE
     Log->info("Creating Framebuffer: {}", framebuffer.toString());
@@ -151,6 +149,6 @@ DrawContext::createFramebuffer(const FramebufferDesc & framebufferDesc)
 
 Query DrawContext::createQuery(QueryType type)
 {
-    return Query(std::make_shared<QueryImpl>(*this, type));
+    return Query(std::make_shared<QueryImpl>(type));
 }
 };

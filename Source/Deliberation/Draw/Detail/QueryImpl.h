@@ -13,7 +13,7 @@ class DrawContext;
 class QueryImpl final
 {
 public:
-    QueryImpl(DrawContext & drawContext, QueryType type);
+    QueryImpl(QueryType type);
     ~QueryImpl();
 
     QueryType type() const;
@@ -28,7 +28,6 @@ public:
     void end();
 
 private:
-    DrawContext & m_drawContext;
     QueryType     m_type;
     gl::GLuint    m_glName;
     gl::GLenum    m_glTarget;

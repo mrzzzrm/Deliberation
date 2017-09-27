@@ -24,13 +24,13 @@ class FramebufferImpl final
 {
 public:
     static std::shared_ptr<FramebufferImpl>
-    backbuffer(DrawContext & drawContext);
+    backbuffer(u32 width, u32 height);
 
     static std::shared_ptr<FramebufferImpl>
-    custom(DrawContext & drawContext, const FramebufferDesc & framebufferDesc);
+    custom(const FramebufferDesc & framebufferDesc);
 
 public:
-    FramebufferImpl(DrawContext & drawContext);
+    FramebufferImpl();
     ~FramebufferImpl();
 
     void bind(const std::vector<gl::GLenum> & drawBuffers);
@@ -39,7 +39,6 @@ public:
 
     std::string toString() const;
 
-    DrawContext & drawContext;
     bool          isBackbuffer;
 
     std::vector<RenderTarget>     colorTargets;

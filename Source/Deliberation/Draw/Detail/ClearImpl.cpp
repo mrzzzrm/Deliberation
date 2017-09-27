@@ -6,9 +6,8 @@
 namespace deliberation
 {
 ClearImpl::ClearImpl(
-    DrawContext &                            drawContext,
     const std::shared_ptr<FramebufferImpl> & framebufferImpl)
-    : drawContext(drawContext), framebuffer(framebufferImpl)
+    : framebuffer(framebufferImpl)
 {
     if (framebufferImpl->isBackbuffer)
     {

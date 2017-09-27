@@ -17,21 +17,18 @@ namespace deliberation
 ScreenSpaceEffect::ScreenSpaceEffect() : m_initialised(false) {}
 
 ScreenSpaceEffect::ScreenSpaceEffect(
-    DrawContext &                    drawContext,
     const std::vector<std::string> & shaders,
     const std::string &              name)
-    : m_drawContext(&drawContext)
 {
-    m_program = drawContext.createProgram(shaders);
+    m_program = GetGlobal<DrawContext>()->createProgram(shaders);
 
-    init(drawContext, name);
+    init( name);
 }
 
-ScreenSpaceEffect::ScreenSpaceEffect(
-    DrawContext & drawContext, Program & program, const std::string & name)
-    : m_drawContext(&drawContext), m_program(program)
+ScreenSpaceEffect::ScreenSpaceEffect(Program & program, const std::string & name)
+    : m_program(program)
 {
-    init(drawContext, name);
+    init(name);
 }
 
 Draw & ScreenSpaceEffect::draw()
@@ -52,8 +49,7 @@ void ScreenSpaceEffect::render()
     m_draw.render();
 }
 
-void ScreenSpaceEffect::init(
-    DrawContext & drawContext, const std::string & name)
+void ScreenSpaceEffect::init(const std::string & name)
 {
     std::vector<glm::vec2> vertices({
         {-1.0f, -1.0f},
@@ -63,10 +59,10 @@ void ScreenSpaceEffect::init(
     });
 
     auto layout = DataLayout("Position", Type_Vec2);
-    m_vertexBuffer = drawContext.createBuffer(layout);
+    m_vertexBuffer = GetGlobal<DrawContext>()->createBuffer(layout);
     m_vertexBuffer.upload(vertices);
 
-    m_draw = drawContext.createDraw(
+    m_draw = GetGlobal<DrawContext>()->createDraw(
         m_program,
         DrawPrimitive::TriangleStrip,
         name.empty() ? "ScreenSpaceEffect" : name);

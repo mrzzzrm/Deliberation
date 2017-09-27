@@ -57,7 +57,7 @@ void Buffer::rawUpload(const Blob & data, size_t count)
 
     const auto glTarget = gl::GL_COPY_WRITE_BUFFER;
 
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
     glStateManager.bindBuffer(glTarget, m_impl->glName);
     gl::glBufferData(glTarget, data.size(), data.ptr(), gl::GL_STATIC_DRAW);
 
@@ -77,7 +77,7 @@ void Buffer::reinit(size_t count)
     AssertM(m_impl.get(), "Can't perform action on hollow object");
     AssertM(m_impl->glName != 0, "Buffer not backed by GL object");
 
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
     gl::glBufferData(
         gl::GL_COPY_WRITE_BUFFER,
@@ -95,7 +95,7 @@ void Buffer::mapped(
     AssertM(m_impl->glName != 0, "Buffer not backed by GL object");
     AssertM(m_impl->count != 0, "Can't map empty buffer");
 
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
     glStateManager.bindBuffer(gl::GL_COPY_WRITE_BUFFER, m_impl->glName);
 
     gl::GLenum access;

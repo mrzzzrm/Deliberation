@@ -6,19 +6,18 @@
 namespace deliberation
 {
 DebugCubemapRenderer::DebugCubemapRenderer(
-    DrawContext &    drawContext,
     const Camera3D & camera,
     const Texture &  cubemap,
     MeshType         meshType)
     : m_camera(camera)
 {
-    const auto program = drawContext.createProgram(
+    const auto program = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath(
              "Data/Shaders/DebugCubemapRenderer.vert"),
          deliberation::DeliberationDataPath(
              "Data/Shaders/DebugCubemapRenderer.frag")});
 
-    m_draw = drawContext.createDraw(program);
+    m_draw = GetGlobal<DrawContext>()->createDraw(program);
 
     if (meshType == MeshType::Cube)
     {

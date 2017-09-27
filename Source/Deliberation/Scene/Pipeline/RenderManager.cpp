@@ -15,10 +15,9 @@
 
 namespace deliberation
 {
-RenderManager::RenderManager(DrawContext & drawContext)
-    : m_drawContext(drawContext)
+RenderManager::RenderManager()
 {
-    m_backbufferClear = m_drawContext.createClear();
+    m_backbufferClear = GetGlobal<DrawContext>()->createClear();
     m_mainCamera.setPosition({0.0f, 0.0f, 100.0f});
 
     m_surfaceOverlayRenderer = addRenderer<DebugSurfaceOverlayRenderer>();
@@ -34,8 +33,8 @@ void RenderManager::render()
 {
     if (!m_pipelineBuild)
     {
-        const auto w = m_drawContext.backbuffer().width();
-        const auto h = m_drawContext.backbuffer().height();
+        const auto w = GetGlobal<DrawContext>()->backbuffer().width();
+        const auto h = GetGlobal<DrawContext>()->backbuffer().height();
 
         m_mainCamera.setAspectRatio((float)w / (float)h);
 
@@ -49,7 +48,7 @@ void RenderManager::render()
             {{PixelFormat_Depth_24_UN}},
             "GBuffer");
 
-        m_gbuffer = m_drawContext.createFramebuffer(gbufferDesc);
+        m_gbuffer = GetGlobal<DrawContext>()->createFramebuffer(gbufferDesc);
         m_gbuffer.clear().setColor(
             "Position",
             glm::vec4(0.0f, 0.0f, -std::numeric_limits<float>::max(), 0.0f));
@@ -60,11 +59,11 @@ void RenderManager::render()
             {{PixelFormat_RGB_32_F, "Hdr"}},
             {{m_gbuffer.depthTargetRef()}},
             "HDR");
-        m_hdrBuffer = m_drawContext.createFramebuffer(hdrBufferDesc);
+        m_hdrBuffer = GetGlobal<DrawContext>()->createFramebuffer(hdrBufferDesc);
 
         FramebufferDesc ssaoBufferDesc(
             w, h, {{PixelFormat_R_32_F, "Ssao"}}, {}, "SSAO");
-        m_ssaoBuffer = m_drawContext.createFramebuffer(ssaoBufferDesc);
+        m_ssaoBuffer = GetGlobal<DrawContext>()->createFramebuffer(ssaoBufferDesc);
 
         m_renderNodesByPhase.clear();
         for (auto & renderer : m_renderers)

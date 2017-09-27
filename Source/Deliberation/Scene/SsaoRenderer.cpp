@@ -40,15 +40,12 @@ void SsaoRenderer::onRenderImGui()
 
 void SsaoRenderer::init()
 {
-    auto & drawContext = m_renderManager.drawContext();
-
-    m_intermediateFb = drawContext.createFramebuffer(
-        {drawContext.backbuffer().width(),
-         drawContext.backbuffer().height(),
+    m_intermediateFb = GetGlobal<DrawContext>()->createFramebuffer(
+        {GetGlobal<DrawContext>()->backbuffer().width(),
+         GetGlobal<DrawContext>()->backbuffer().height(),
          {{PixelFormat_R_32_F, "UnblurredSsao"}}});
 
     m_effect = ScreenSpaceEffect(
-        m_renderManager.drawContext(),
         {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
          DeliberationDataPath("Data/Shaders/Ssao.frag")},
         "SSAO");
@@ -97,7 +94,7 @@ void SsaoRenderer::init()
         noise.put({RandomFloat(-1.0f, 1.0f), RandomFloat(-1.0f, 1.0f), 0.0f});
     }
 
-    auto noiseTexture = drawContext.createTexture(
+    auto noiseTexture = GetGlobal<DrawContext>()->createTexture(
         TextureLoader(
             noiseData.rawData(), noiseWidth, noiseHeight, PixelFormat_RGB_32_F)
             .load());
@@ -109,9 +106,9 @@ void SsaoRenderer::init()
 
     // NoiseScale
     const auto noiseScaleX =
-        (float)drawContext.backbuffer().width() / (float)noiseWidth;
+        (float)GetGlobal<DrawContext>()->backbuffer().width() / (float)noiseWidth;
     const auto noiseScaleY =
-        (float)drawContext.backbuffer().height() / (float)noiseHeight;
+        (float)GetGlobal<DrawContext>()->backbuffer().height() / (float)noiseHeight;
     m_effect.draw()
         .uniform("NoiseScale")
         .set(glm::vec2(noiseScaleX, noiseScaleY));
@@ -123,7 +120,6 @@ void SsaoRenderer::init()
 
     // Blur
     m_blurEffect = ScreenSpaceEffect(
-        drawContext,
         {DeliberationDataPath("Data/Shaders/Blur4x4.frag"),
          DeliberationDataPath("Data/Shaders/UV_Position2.vert")},
         "SSAO Blur");

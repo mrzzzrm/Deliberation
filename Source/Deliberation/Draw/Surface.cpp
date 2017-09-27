@@ -12,13 +12,6 @@ namespace deliberation
 {
 Surface::Surface(const std::shared_ptr<SurfaceImpl> & impl) : Base(impl) {}
 
-DrawContext & Surface::drawContext() const
-{
-    AssertM(m_impl.get(), "Surface object is hollow");
-
-    return m_impl->textureImpl->drawContext;
-}
-
 unsigned int Surface::face() const
 {
     AssertM(m_impl.get(), "Surface object is hollow");

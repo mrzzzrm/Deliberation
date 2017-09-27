@@ -23,7 +23,6 @@ public:
     virtual ~Renderer() = default;
 
     RenderManager & renderManager() const { return m_renderManager; }
-    DrawContext &   drawContext() const;
     std::string     name() const { return m_name; }
     bool enabled() const { return m_enabled; }
 

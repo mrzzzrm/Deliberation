@@ -34,7 +34,7 @@ public:
         m_camera.setPosition({0.0f, 1.0f, 3.0f});
         m_camera.setOrientation(glm::quat({-0.2f, 0.0f, 0.0f}));
         m_camera.setAspectRatio(
-            (float)drawContext().backbuffer().width() /
+            (float)GetGlobal<DrawContext>()->backbuffer().width() /
             drawContext().backbuffer().height());
 
         //        m_ground =

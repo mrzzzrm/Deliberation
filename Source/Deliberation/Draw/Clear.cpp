@@ -97,7 +97,7 @@ void Clear::render()
 {
     auto & framebufferImpl = *m_impl->framebuffer.m_impl;
 
-    auto glStateManager = m_impl->drawContext.m_glStateManager;
+    auto glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
 
     framebufferImpl.bind(m_impl->drawBuffers);
 

@@ -28,10 +28,9 @@ public:
     };
 
 public:
-    RenderManager(DrawContext & drawContext);
+    RenderManager();
     virtual ~RenderManager() = default;
 
-    DrawContext & drawContext() { return m_drawContext; }
     Camera3D &    mainCamera() { return m_mainCamera; }
     const std::vector<std::shared_ptr<Renderer>> & renderers() { return m_renderers; }
     template<typename RendererType> std::shared_ptr<RendererType> renderer();
@@ -63,7 +62,6 @@ public:
     void render();
 
 private:
-    DrawContext &                                       m_drawContext;
     Camera3D                                            m_mainCamera;
     std::vector<std::shared_ptr<Renderer>>              m_renderers;
     std::unordered_map<TypeID::value_t, std::shared_ptr<Renderer>>

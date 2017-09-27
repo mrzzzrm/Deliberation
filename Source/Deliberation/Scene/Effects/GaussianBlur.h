@@ -12,9 +12,8 @@ class Surface;
 class GaussianBlur final
 {
 public:
-    GaussianBlur(DrawContext & drawContext);
+    GaussianBlur();
 
-    DrawContext &      drawContext() const { return m_blur.drawContext(); }
     const DataLayout & configBlockLayout() const { return m_configBlockLayout; }
     u32                maxNumSamples() const { return m_maxNumSamples; }
 

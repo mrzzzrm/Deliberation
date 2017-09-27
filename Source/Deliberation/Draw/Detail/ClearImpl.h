@@ -19,10 +19,8 @@ class FramebufferImpl;
 struct ClearImpl
 {
     ClearImpl(
-        DrawContext &                            drawContext,
         const std::shared_ptr<FramebufferImpl> & framebufferImpl);
 
-    DrawContext & drawContext;
     Framebuffer   framebuffer;
 
     std::vector<gl::GLenum>                 drawBuffers;

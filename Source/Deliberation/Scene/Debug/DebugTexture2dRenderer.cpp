@@ -5,15 +5,15 @@
 namespace deliberation
 {
 DebugTexture2dRenderer::DebugTexture2dRenderer(
-    DrawContext & drawContext, const Texture & texture)
+    const Texture & texture)
 {
-    const auto program = drawContext.createProgram(
+    const auto program = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath(
              "Data/Shaders/DebugTexture2dRenderer.vert"),
          deliberation::DeliberationDataPath(
              "Data/Shaders/DebugTexture2dRenderer.frag")});
 
-    m_draw = drawContext.createDraw(program);
+    m_draw = GetGlobal<DrawContext>()->createDraw(program);
 
     LayoutedBlob vertices({"Position", Type_Vec2}, 4);
     vertices.field<glm::vec2>("Position")

@@ -100,8 +100,7 @@ Buffer Draw::setIndices(const LayoutedBlob & data)
 {
     AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & drawContext = m_impl->drawContext;
-    auto   buffer = drawContext.createBuffer(data.layout());
+    auto   buffer = GetGlobal<DrawContext>()->createBuffer(data.layout());
     buffer.upload(data);
     setIndexBuffer(buffer);
 
@@ -112,8 +111,7 @@ Buffer Draw::addVertices(const LayoutedBlob & data)
 {
     AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & drawContext = m_impl->drawContext;
-    auto   buffer = drawContext.createBuffer(data.layout());
+    auto   buffer = GetGlobal<DrawContext>()->createBuffer(data.layout());
     buffer.upload(data);
     addVertexBuffer(buffer);
 
@@ -124,8 +122,7 @@ Buffer Draw::addInstances(const LayoutedBlob & data, u32 divisor)
 {
     AssertM(m_impl.get(), "Can't perform action on hollow Draw");
 
-    auto & drawContext = m_impl->drawContext;
-    auto   buffer = drawContext.createBuffer(data.layout());
+    auto   buffer = GetGlobal<DrawContext>()->createBuffer(data.layout());
     buffer.upload(data);
     addInstanceBuffer(buffer, divisor);
 
@@ -253,7 +250,7 @@ void Draw::render() const
     DELIBERATION_GPU_SCOPE(
         m_impl->name.empty() ? "<Unnamed Draw>" : m_impl->name);
 
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
     auto   activeTextureIndex = 0;
 
     if (m_impl->glVertexArray == 0) build();
@@ -436,8 +433,8 @@ void Draw::render() const
                 glStateManager.setViewport(
                     0,
                     0,
-                    m_impl->drawContext.backbuffer().width(),
-                    m_impl->drawContext.backbuffer().height());
+                    GetGlobal<DrawContext>()->backbuffer().width(),
+                    GetGlobal<DrawContext>()->backbuffer().height());
             }
             else
             {
@@ -597,7 +594,7 @@ void Draw::render() const
             {
                 if (binding.ranged)
                 {
-                    m_impl->drawContext.m_glStateManager.bindTexture(
+                    GetGlobal<DrawContext>()->m_glStateManager.bindTexture(
                         gl::GL_TEXTURE_BUFFER, texture);
 
                     gl::glTexBufferRange(
@@ -609,7 +606,7 @@ void Draw::render() const
                 }
                 else
                 {
-                    m_impl->drawContext.m_glStateManager.bindTexture(
+                    GetGlobal<DrawContext>()->m_glStateManager.bindTexture(
                         gl::GL_TEXTURE_BUFFER, texture);
 
                     gl::glTexBuffer(
@@ -799,7 +796,7 @@ void Draw::build() const
                 : 0;
 
         GLBindVertexAttribute(
-            m_impl->drawContext.m_glStateManager,
+            GetGlobal<DrawContext>()->m_glStateManager,
             m_impl->glVertexArray,
             attribute,
             *bufferBinding.buffer,

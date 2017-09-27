@@ -16,8 +16,8 @@
 
 namespace deliberation
 {
-DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
-    : drawContext(drawContext), program(program.m_impl), glVertexArray(0u)
+DrawImpl::DrawImpl(const Program & program)
+    : program(program.m_impl), glVertexArray(0u)
 {
     /*
         TODO
@@ -47,7 +47,6 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
         {
             auto & sampler = this->program->interface.samplers()[s];
             samplers.emplace_back(std::make_shared<SamplerImpl>(
-                drawContext,
                 (gl::GLenum)sampler.type(),
                 TypeToGLType(sampler.valueType()),
                 sampler.location()));
@@ -57,7 +56,7 @@ DrawImpl::DrawImpl(DrawContext & drawContext, const Program & program)
     // Create framebuffer
     framebufferBinding = FramebufferBinding(
         Program(this->program),
-        drawContext.backbuffer(),
+        GetGlobal<DrawContext>()->backbuffer(),
         {});
 
     // Allocate Uniform Buffer Bindings
@@ -82,12 +81,12 @@ DrawImpl::~DrawImpl()
 {
     if (glVertexArray != 0)
     {
-        drawContext.m_glStateManager.deleteVertexArray(glVertexArray);
+        GetGlobal<DrawContext>()->m_glStateManager.deleteVertexArray(glVertexArray);
     }
 
     if (!bufferTextures.empty())
     {
-        drawContext.m_glStateManager.deleteTextures(
+        GetGlobal<DrawContext>()->m_glStateManager.deleteTextures(
             bufferTextures.size(), bufferTextures.data());
     }
 }

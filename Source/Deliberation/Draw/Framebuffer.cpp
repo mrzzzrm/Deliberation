@@ -138,7 +138,7 @@ Clear & Framebuffer::clear()
 
     if (!m_impl->clear)
     {
-        m_impl->clear = m_impl->drawContext.createClear(*this);
+        m_impl->clear = GetGlobal<DrawContext>()->createClear(*this);
     }
 
     return *m_impl->clear;
@@ -148,7 +148,7 @@ Clear Framebuffer::createClear()
 {
     AssertM(m_impl.get(), "Framebuffer is hollow");
 
-    return m_impl->drawContext.createClear(*this);
+    return GetGlobal<DrawContext>()->createClear(*this);
 }
 
 std::string Framebuffer::toString() const

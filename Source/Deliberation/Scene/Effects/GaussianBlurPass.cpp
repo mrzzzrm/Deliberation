@@ -20,10 +20,8 @@ GaussianBlurPass::GaussianBlurPass(
     , m_rFb(rFb)
     , m_rSurface(rFb.colorTargets()[0].surface)
 {
-    auto & drawContext = gaussianBlur.drawContext();
-
     m_configBuffer =
-        drawContext.createBuffer(m_gaussianBlur.configBlockLayout(), 1);
+        GetGlobal<DrawContext>()->createBuffer(m_gaussianBlur.configBlockLayout(), 1);
 
     m_offsetsField = m_configBuffer.layout().field("Offsets");
     m_weightsField = m_configBuffer.layout().field("Weights");

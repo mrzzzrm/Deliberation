@@ -71,7 +71,7 @@ void Texture::upload(const TextureBinary & binary)
         "Incompatible Texture/Binary types");
     AssertM(binary.format() == format(), "Incompatible Texture/Binary types");
 
-    auto & glStateManager = m_impl->drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
 
     glStateManager.bindTexture((gl::GLenum)m_impl->type, m_impl->glName);
 

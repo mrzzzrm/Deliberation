@@ -11,9 +11,8 @@
 
 namespace deliberation
 {
-DebugGrid3DRenderer::DebugGrid3DRenderer(
-    DrawContext & drawContext, float scale, const Camera3D & camera)
-    : m_drawContext(drawContext), m_camera(camera)
+DebugGrid3DRenderer::DebugGrid3DRenderer(float scale, const Camera3D & camera)
+    :  m_camera(camera)
 {
     init(scale);
 }
@@ -63,20 +62,20 @@ void DebugGrid3DRenderer::init(float scale)
 
     auto layout = DataLayout({{"Position", Type_Vec3}});
 
-    m_vertexBuffer = m_drawContext.createBuffer(layout);
+    m_vertexBuffer = GetGlobal<DrawContext>()->createBuffer(layout);
     m_vertexBuffer.upload(vertices);
 
-    m_program = m_drawContext.createProgram(
+    m_program = GetGlobal<DrawContext>()->createProgram(
         {deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.vert"),
          deliberation::DeliberationDataPath("Data/Shaders/GridRenderer.frag")});
 
-    m_normalLines = m_drawContext.createDraw(
+    m_normalLines = GetGlobal<DrawContext>()->createDraw(
         m_program, DrawPrimitive::Lines, "GridRenderer - normal lines");
     m_normalLines.addVertexBufferRange(m_vertexBuffer, 0u, vertices.size() - 4);
     m_normalLines.uniform("Color").set(glm::vec3(0.3f, 0.3f, 0.3f));
     // m_normalLines.state().setStencilState(StencilState::clearsBit(0));
 
-    m_fatLines = m_drawContext.createDraw(
+    m_fatLines = GetGlobal<DrawContext>()->createDraw(
         m_program, DrawPrimitive::Lines, "GridRenderer - origin lines");
     m_fatLines.addVertexBufferRange(m_vertexBuffer, vertices.size() - 4, 4);
     m_fatLines.state().rasterizerState().setLineWidth(5.0f);

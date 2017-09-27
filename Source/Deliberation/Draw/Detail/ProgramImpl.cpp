@@ -12,9 +12,8 @@
 
 namespace deliberation
 {
-ProgramImpl::ProgramImpl(
-    DrawContext & drawContext, const std::vector<std::string> & paths)
-    : drawContext(drawContext), glProgramName(0u)
+ProgramImpl::ProgramImpl(const std::vector<std::string> & paths)
+    : glProgramName(0u)
 {
     glProgramName = gl::glCreateProgram();
     AssertM(glProgramName != 0, "Failed to create GL program");

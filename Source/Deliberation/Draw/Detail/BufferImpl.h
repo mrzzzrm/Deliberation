@@ -12,10 +12,9 @@ class DrawContext;
 class BufferImpl final
 {
 public:
-    BufferImpl(DrawContext & drawContext, const DataLayout & layout);
+    BufferImpl(const DataLayout & layout);
     ~BufferImpl();
 
-    DrawContext & drawContext;
     gl::GLuint    glName;
     size_t        count;
     DataLayout    layout;

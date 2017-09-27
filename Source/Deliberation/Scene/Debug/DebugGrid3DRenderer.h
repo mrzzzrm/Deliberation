@@ -14,8 +14,7 @@ class Camera3D;
 class DebugGrid3DRenderer final
 {
 public:
-    DebugGrid3DRenderer(
-        DrawContext & drawContext, float scale, const Camera3D & camera);
+    DebugGrid3DRenderer(float scale, const Camera3D & camera);
 
     void setFramebuffer(deliberation::Framebuffer & fb);
 
@@ -25,7 +24,6 @@ private:
     void init(float scale);
 
 private:
-    DrawContext &    m_drawContext;
     const Camera3D & m_camera;
     Draw             m_normalLines;
     Draw             m_fatLines;

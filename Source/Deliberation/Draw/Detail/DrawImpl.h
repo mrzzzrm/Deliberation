@@ -49,13 +49,12 @@ public:
     };
 
 public:
-    DrawImpl(DrawContext & drawContext, const Program & program);
+    DrawImpl(const Program & program);
     ~DrawImpl();
 
     void setAttribute(
         const ProgramInterfaceVertexAttribute & attribute, const void * data);
 
-    DrawContext &                drawContext;
     std::string                  name;
     std::shared_ptr<ProgramImpl> program;
     BufferBinding                indexBufferBinding;

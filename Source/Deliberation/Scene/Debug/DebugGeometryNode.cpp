@@ -95,7 +95,7 @@ void DebugBoxInstance::render() const
     {
         if (m_wireframe)
         {
-            m_draw = manager().drawContext().createDraw(
+            m_draw = GetGlobal<DrawContext>()->createDraw(
                 buildIns().unicolorProgram, DrawPrimitive::Lines);
             m_draw.addVertexBuffer(buildIns().boxLinesVertexBuffer);
             m_draw.setIndexBuffer(buildIns().boxLinesIndexBuffer);
@@ -103,7 +103,7 @@ void DebugBoxInstance::render() const
         else
         {
             m_draw =
-                manager().drawContext().createDraw(buildIns().shadedProgram);
+                GetGlobal<DrawContext>()->createDraw(buildIns().shadedProgram);
             m_draw.addVertexBuffer(buildIns().boxTrianglesVertexBuffer);
             m_draw.setIndexBuffer(buildIns().boxTrianglesIndexBuffer);
         }
@@ -141,7 +141,7 @@ Box DebugBoxInstance::toBox() const { return Box(m_halfExtent, m_transform); }
 DebugPointInstance::DebugPointInstance(DebugGeometryNode & renderer)
     : DebugGeometryInstance(renderer)
 {
-    m_draw = manager().drawContext().createDraw(
+    m_draw = GetGlobal<DrawContext>()->createDraw(
         manager().buildIns().unicolorProgram, DrawPrimitive::Points);
     m_draw.addVertexBuffer(manager().buildIns().pointVertexBuffer);
     ;
@@ -177,9 +177,9 @@ DebugArrowInstance::DebugArrowInstance(DebugGeometryNode & renderer)
 {
     m_lineVertices = LayoutedBlob(DataLayout("Position", Type_Vec3), 2);
     m_lineVertexBuffer =
-        manager().drawContext().createBuffer(m_lineVertices.layout());
+        GetGlobal<DrawContext>()->createBuffer(m_lineVertices.layout());
 
-    m_lineDraw = manager().drawContext().createDraw(
+    m_lineDraw = GetGlobal<DrawContext>()->createDraw(
         manager().buildIns().unicolorProgram,
         DrawPrimitive::Lines,
         "DebugLineDraw");
@@ -190,7 +190,7 @@ DebugArrowInstance::DebugArrowInstance(DebugGeometryNode & renderer)
     m_lineDraw.uniform("Transform").set(glm::mat4(1.0f));
     m_lineColorUniform = m_lineDraw.uniform("Color");
 
-    m_coneDraw = manager().drawContext().createDraw(
+    m_coneDraw = GetGlobal<DrawContext>()->createDraw(
         manager().buildIns().shadedProgram,
         DrawPrimitive::Triangles,
         "DebugConeDraw");
@@ -266,9 +266,9 @@ DebugWireframeInstance::DebugWireframeInstance(DebugGeometryNode & renderer)
 {
     m_vertices = LayoutedBlob(DataLayout("Position", Type_Vec3));
 
-    m_vertexBuffer = manager().drawContext().createBuffer(m_vertices.layout());
+    m_vertexBuffer = GetGlobal<DrawContext>()->createBuffer(m_vertices.layout());
 
-    m_draw = manager().drawContext().createDraw(
+    m_draw = GetGlobal<DrawContext>()->createDraw(
         manager().buildIns().unicolorProgram, DrawPrimitive::Lines);
     m_draw.setState(m_renderer.drawState());
     m_draw.state().rasterizerState().setPrimitive(DrawPrimitive::Lines);
@@ -327,7 +327,7 @@ DebugSphereInstance::DebugSphereInstance(DebugGeometryNode & renderer)
     : DebugGeometryInstance(renderer)
 {
     m_draw =
-        manager().drawContext().createDraw(manager().buildIns().shadedProgram);
+        GetGlobal<DrawContext>()->createDraw(manager().buildIns().shadedProgram);
     m_draw.addVertexBuffer(manager().buildIns().sphereVertexBuffer);
     m_draw.setIndexBuffer(manager().buildIns().sphereIndexBuffer);
     m_draw.setState(m_renderer.drawState());
@@ -420,7 +420,7 @@ DebugGeometryNode::DebugGeometryNode(DebugGeometryRenderer & manager)
                              .uniformBlockRef("Globals")
                              .layout();
     m_globals = LayoutedBlob(globalsLayout, 1);
-    m_globalsBuffer = m_manager.drawContext().createBuffer(globalsLayout);
+    m_globalsBuffer = GetGlobal<DrawContext>()->createBuffer(globalsLayout);
 }
 
 bool DebugGeometryNode::visible() const { return m_visible; }

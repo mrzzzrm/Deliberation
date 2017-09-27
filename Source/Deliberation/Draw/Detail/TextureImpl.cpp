@@ -38,13 +38,11 @@ gl::GLenum faceTarget(gl::GLenum type, unsigned int face)
 namespace deliberation
 {
 TextureImpl::TextureImpl(
-    DrawContext & drawContext,
     u32           width,
     u32           height,
     u32           numFaces,
     PixelFormat   format)
-    : drawContext(drawContext)
-    , width(width)
+    : width(width)
     , height(height)
     , numFaces(numFaces)
     , format(format)
@@ -63,7 +61,7 @@ TextureImpl::TextureImpl(
     gl::glGenTextures(1, &glName);
     AssertM(glName != 0, "Failed to create GL Texture Object");
 
-    drawContext.m_glStateManager.bindTexture((gl::GLenum)type, glName);
+    GetGlobal<DrawContext>()->m_glStateManager.bindTexture((gl::GLenum)type, glName);
     gl::glTexParameteri((gl::GLenum)type, gl::GL_TEXTURE_MAX_LEVEL, 0);
 
     // Create faces
@@ -72,7 +70,7 @@ TextureImpl::TextureImpl(
 
 TextureImpl::~TextureImpl()
 {
-    drawContext.m_glStateManager.deleteTextures(1, &glName);
+    GetGlobal<DrawContext>()->m_glStateManager.deleteTextures(1, &glName);
 }
 
 void TextureImpl::setupSurfaces(

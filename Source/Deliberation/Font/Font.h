@@ -22,10 +22,8 @@ class Font final
 {
 public:
     Font();
-    Font(DrawContext & drawContext, const std::string & path);
+    Font(const std::string & path);
     ~Font();
-
-    DrawContext & drawContext() const;
 
     Texture render(
         const std::string & text,
@@ -33,7 +31,6 @@ public:
         const glm::vec4 &   color) const;
 
 private:
-    DrawContext * m_drawContext;
     std::string   m_path;
     mutable std::
         unordered_map<unsigned int, std::shared_ptr<detail::TTF_Font_Wrapper>>

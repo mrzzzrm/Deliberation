@@ -88,7 +88,7 @@ void ImGuiSystem::onFrameBegin()
     auto & io = ImGui::GetIO();
 
     const auto & backbuffer =
-    App::get().drawContext().backbuffer();
+        GetGlobal<DrawContext>()->backbuffer();
 
     io.DisplaySize =
         ImVec2((float)backbuffer.width(), (float)backbuffer.height());

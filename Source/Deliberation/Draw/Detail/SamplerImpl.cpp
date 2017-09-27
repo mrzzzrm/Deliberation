@@ -10,12 +10,10 @@
 namespace deliberation
 {
 SamplerImpl::SamplerImpl(
-    DrawContext & drawContext,
     gl::GLenum    uniformType,
     gl::GLenum    valueType,
     gl::GLuint    location)
-    : drawContext(drawContext)
-    , type(uniformType)
+    : type(uniformType)
     , valueType(valueType)
     , location(location)
 {
@@ -32,7 +30,7 @@ SamplerImpl::SamplerImpl(
 
 SamplerImpl::~SamplerImpl()
 {
-    drawContext.m_glStateManager.deleteSampler(glName);
+    GetGlobal<DrawContext>()->m_glStateManager.deleteSampler(glName);
 }
 
 gl::GLenum SamplerImpl::textureType() const

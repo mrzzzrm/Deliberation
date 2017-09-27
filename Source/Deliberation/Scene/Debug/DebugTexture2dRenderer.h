@@ -12,7 +12,7 @@ class Texture;
 class DebugTexture2dRenderer final
 {
 public:
-    DebugTexture2dRenderer(DrawContext & drawContext, const Texture & texture);
+    DebugTexture2dRenderer(const Texture & texture);
 
     void render();
 

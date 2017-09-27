@@ -54,19 +54,17 @@ void SurfaceDownloadImpl::start()
 {
     Assert(!started);
 
-    auto & drawContext = surface.m_impl->textureImpl->drawContext;
-
     size = surface.width() * surface.height() * format.bytesPerPixel();
 
     gl::glGenBuffers(1, &glName);
     Assert(glName != 0);
 
-    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
+    GetGlobal<DrawContext>()->m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
     gl::glBufferData(
         gl::GL_PIXEL_PACK_BUFFER, size, nullptr, gl::GL_STREAM_READ);
 
     const auto textureType = (gl::GLenum)surface.m_impl->textureImpl->type;
-    drawContext.m_glStateManager.bindTexture(
+    GetGlobal<DrawContext>()->m_glStateManager.bindTexture(
         textureType, surface.m_impl->textureImpl->glName);
     gl::glGetTexImage(
         textureType, 0, format.glFormat(), format.glType(), nullptr);
@@ -74,7 +72,7 @@ void SurfaceDownloadImpl::start()
     sync =
         gl::glFenceSync(gl::GL_SYNC_GPU_COMMANDS_COMPLETE, (gl::UnusedMask)0);
 
-    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
+    GetGlobal<DrawContext>()->m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
 
     started = true;
 }
@@ -106,12 +104,11 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
         }
     }
 
-    auto & drawContext = surface.m_impl->textureImpl->drawContext;
     auto   numValues = surface.width() * surface.height() *
                      surface.format().componentsPerPixel();
     auto type = format.glType();
 
-    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
+    GetGlobal<DrawContext>()->m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, glName);
 
     switch (type)
     {
@@ -127,7 +124,7 @@ const SurfaceBinary & SurfaceDownloadImpl::result() const
     default: Fail("Unknown format");
     }
 
-    drawContext.m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
+    GetGlobal<DrawContext>()->m_glStateManager.bindBuffer(gl::GL_PIXEL_PACK_BUFFER, 0);
 
     return surfaceBinary.get();
 }

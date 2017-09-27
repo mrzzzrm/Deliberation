@@ -18,7 +18,6 @@ namespace
 using namespace deliberation;
 
 void RenderTargetFromDesc(
-    DrawContext &            drawContext,
     RenderTarget &           renderTarget,
     const FramebufferDesc &  framebufferDesc,
     const RenderTargetDesc & renderTargetDesc)
@@ -27,7 +26,7 @@ void RenderTargetFromDesc(
 
     if (renderTargetDesc.format != PixelFormat_None)
     {
-        auto texture = drawContext.createTexture2D(
+        auto texture = GetGlobal<DrawContext>()->createTexture2D(
             framebufferDesc.width,
             framebufferDesc.height,
             renderTargetDesc.format);
@@ -43,21 +42,20 @@ void RenderTargetFromDesc(
 namespace deliberation
 {
 std::shared_ptr<FramebufferImpl>
-FramebufferImpl::backbuffer(DrawContext & drawContext)
+FramebufferImpl::backbuffer(u32 width, u32 height)
 {
-    auto result = std::make_shared<FramebufferImpl>(drawContext);
+    auto result = std::make_shared<FramebufferImpl>();
     result->isBackbuffer = true;
-    result->width = 0;
-    result->height = 0;
+    result->width = width;
+    result->height = height;
     result->name = "Backbuffer";
 
     return result;
 }
 
-std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
-    DrawContext & drawContext, const FramebufferDesc & framebufferDesc)
+std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(const FramebufferDesc & framebufferDesc)
 {
-    auto result = std::make_shared<FramebufferImpl>(drawContext);
+    auto result = std::make_shared<FramebufferImpl>();
     result->isBackbuffer = false;
     result->width = framebufferDesc.width;
     result->height = framebufferDesc.height;
@@ -68,8 +66,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
     {
         RenderTarget colorTarget;
 
-        RenderTargetFromDesc(
-            drawContext, colorTarget, framebufferDesc, renderTargetDesc);
+        RenderTargetFromDesc(colorTarget, framebufferDesc, renderTargetDesc);
 
         result->colorTargets.emplace_back(colorTarget);
     }
@@ -79,7 +76,6 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
         RenderTarget depthTarget;
 
         RenderTargetFromDesc(
-            drawContext,
             depthTarget,
             framebufferDesc,
             *framebufferDesc.depthTargetDesc);
@@ -88,7 +84,7 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
     }
 
     // Setup GL framebuffer
-    auto & glStateManager = drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
 
     glStateManager.genFramebuffers(1, &result->glName);
     AssertM(result->glName != 0, "Failed to create GL Framebuffer Object");
@@ -135,20 +131,19 @@ std::shared_ptr<FramebufferImpl> FramebufferImpl::custom(
     return result;
 }
 
-FramebufferImpl::FramebufferImpl(DrawContext & drawContext)
-    : drawContext(drawContext)
+FramebufferImpl::FramebufferImpl()
 {
 }
 
 FramebufferImpl::~FramebufferImpl()
 {
-    auto & glStateManager = drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
     glStateManager.deleteFramebuffers(1, &glName);
 }
 
 void FramebufferImpl::bind(const std::vector<gl::GLenum> & drawBuffers)
 {
-    auto & glStateManager = drawContext.m_glStateManager;
+    auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
 
     if (isBackbuffer)
     {

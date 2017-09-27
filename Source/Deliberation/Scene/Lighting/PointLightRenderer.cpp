@@ -91,12 +91,12 @@ void PointLightRenderer::onSetupRender()
 {
     const auto mesh = UVSphere(10, 10).generateMesh2();
 
-    auto program = drawContext().createProgram(
+    auto program = GetGlobal<DrawContext>()->createProgram(
         {DeliberationDataPath("Data/Shaders/PointLight.vert"),
          DeliberationDataPath("Data/Shaders/PointLight.frag")});
 
-    m_lightBuffer = drawContext().createBuffer(m_lightLayout);
-    m_draw = drawContext().createDraw(program);
+    m_lightBuffer = GetGlobal<DrawContext>()->createBuffer(m_lightLayout);
+    m_draw = GetGlobal<DrawContext>()->createDraw(program);
 
     m_draw.addVertices(mesh.vertices());
     m_draw.setIndices(mesh.indices());
