@@ -24,9 +24,6 @@ public:
     static App & get();
 
 public:
-    InputManager &       inputManager();
-    const InputManager & inputManager() const;
-
     bool gameplayPaused() const { return m_gameplayPaused; }
 
     const std::shared_ptr<AppRuntime> & runtime() { return m_runtime; }
@@ -58,8 +55,6 @@ private:
     SDL_Renderer *   m_displayRenderer;
     SDL_RendererInfo m_displayRendererInfo;
     SDL_GLContext    m_glContext;
-
-    Optional<InputManager> m_inputManager;
 
     int m_displayWidth = 1600;
     int m_displayHeight = 900;

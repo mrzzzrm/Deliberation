@@ -14,7 +14,7 @@ class DebugCameraNavigator3D final
 {
 public:
     DebugCameraNavigator3D(
-        Camera3D & camera, const InputManager & inputAdapter, float speed = 10.0f);
+        Camera3D & camera, float speed = 10.0f);
 
     Camera3D & camera() const;
     float      speed() const;
@@ -26,7 +26,6 @@ public:
 
 private:
     Camera3D &    m_camera;
-    const InputManager & m_inputAdapter;
     float         m_speed;
     bool          m_mousePressed;
 };

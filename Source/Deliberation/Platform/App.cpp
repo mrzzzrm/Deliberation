@@ -30,18 +30,6 @@ App & App::get()
     return application;
 }
 
-InputManager & App::inputManager()
-{
-    AssertM(m_inputManager.engaged(), "InputManager not yet setup");
-    return *m_inputManager;
-}
-
-const InputManager & App::inputManager() const
-{
-    AssertM(m_inputManager.engaged(), "InputManager not yet setup");
-    return *m_inputManager;
-}
-
 float App::fps() const { return m_fpsCounter.fps(); }
 
 int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv)
@@ -94,14 +82,14 @@ int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEMOTION:
-            case SDL_MOUSEWHEEL: m_inputManager->onSDLInputEvent(event); break;
+            case SDL_MOUSEWHEEL: GetGlobal<InputManager>()->onSDLInputEvent(event); break;
 
             case SDL_WINDOWEVENT: handleWindowEvent(event); break;
 
             case SDL_QUIT: quit(0); break;
             }
         }
-        m_inputManager->onFrameBegin();
+        GetGlobal<InputManager>()->onFrameBegin();
 
         SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
 
@@ -196,10 +184,7 @@ void App::init()
     InitGlobal<DrawContext>();
     GetGlobal<DrawContext>()->setBackbufferResolution(m_displayWidth, m_displayHeight);
 
-    /**
-     * Init input
-     */
-    m_inputManager.reset();
+    InitGlobal<InputManager>();
 
     m_initialized = true;
 }

@@ -101,6 +101,8 @@ u32 DeliberationMouseButtonToSDL(MouseButton mouseButton)
 
 namespace deliberation
 {
+DELIBERATION_DEFINE_GLOBAL(InputManager);
+
 InputManager::InputManager() { m_mouseButtonsDown.reset(); }
 
 bool InputManager::mouseButtonDown(MouseButton button) const

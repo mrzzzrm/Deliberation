@@ -23,7 +23,6 @@ namespace deliberation
 ImGuiSystem::ImGuiSystem(World & world)
     : Base(world)
     , InputLayer(200)
-    , m_inputManager(App::get().inputManager())
 {
     activatePhases<FrameBeginPhase>();
 
@@ -95,16 +94,16 @@ void ImGuiSystem::onFrameBegin()
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 
     auto mouseX =
-        (m_inputManager.mousePosition().x + 1.0f) / 2.0f * backbuffer.width();
-    auto mouseY = (1.0f - (m_inputManager.mousePosition().y + 1.0f) / 2.0f) *
+        (GetGlobal<InputManager>()->mousePosition().x + 1.0f) / 2.0f * backbuffer.width();
+    auto mouseY = (1.0f - (GetGlobal<InputManager>()->mousePosition().y + 1.0f) / 2.0f) *
                   backbuffer.height();
 
     // io.MouseDrawCursor = true;
 
     io.MousePos = ImVec2(mouseX, mouseY);
 
-    io.MouseDown[0] = m_inputManager.mouseButtonDown(MouseButton::Left);
-    io.MouseDown[1] = m_inputManager.mouseButtonDown(MouseButton::Right);
+    io.MouseDown[0] = GetGlobal<InputManager>()->mouseButtonDown(MouseButton::Left);
+    io.MouseDown[1] = GetGlobal<InputManager>()->mouseButtonDown(MouseButton::Right);
     io.MouseDown[2] = false;
     io.MouseDown[3] = false;
     io.MouseDown[4] = false;

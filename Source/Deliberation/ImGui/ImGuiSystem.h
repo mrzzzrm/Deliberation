@@ -30,8 +30,8 @@ public:
          addControlItem(const std::string & name, const std::function<void()> & fn);
     void removeControlItem(const std::string & name);
 
-    void onCreated() override { m_inputManager.addLayer(shared_from_this()); }
-    void onRemoved() override { m_inputManager.removeLayer(shared_from_this()); }
+    void onCreated() override { GetGlobal<InputManager>()->addLayer(shared_from_this()); }
+    void onRemoved() override { GetGlobal<InputManager>()->removeLayer(shared_from_this()); }
 
     void onFrameBegin();
 
@@ -42,8 +42,6 @@ protected:
     void onMouseMotion(MouseMotionEvent & event) override;
 
 private:
-    InputManager & m_inputManager;
-
     bool  m_wantsCaptureMouse = false;
     float m_mouseWheel = 0;
 

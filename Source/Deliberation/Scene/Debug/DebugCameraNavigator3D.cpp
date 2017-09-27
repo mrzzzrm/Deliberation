@@ -10,9 +10,8 @@
 namespace deliberation
 {
 DebugCameraNavigator3D::DebugCameraNavigator3D(
-    Camera3D & camera, const InputManager & inputAdapter, float speed)
+    Camera3D & camera, float speed)
     : m_camera(camera)
-    , m_inputAdapter(inputAdapter)
     , m_speed(speed)
     , m_mousePressed(false)
 {
@@ -30,12 +29,12 @@ void DebugCameraNavigator3D::update(float seconds)
     auto up = glm::normalize(m_camera.orientation() * glm::vec3(0, 1, 0));
     auto r = glm::cross(fw, up);
 
-    float x = (m_inputAdapter.keyPressed(Key_A) ? -1 : 0) +
-              (m_inputAdapter.keyPressed(Key_D) ? 1 : 0);
-    float y = (m_inputAdapter.keyPressed(Key_F) ? -1 : 0) +
-              (m_inputAdapter.keyPressed(Key_R) ? 1 : 0);
-    float z = (m_inputAdapter.keyPressed(Key_W) ? -1 : 0) +
-              (m_inputAdapter.keyPressed(Key_S) ? 1 : 0);
+    float x = (GetGlobal<InputManager>()->keyPressed(Key_A) ? -1 : 0) +
+              (GetGlobal<InputManager>()->keyPressed(Key_D) ? 1 : 0);
+    float y = (GetGlobal<InputManager>()->keyPressed(Key_F) ? -1 : 0) +
+              (GetGlobal<InputManager>()->keyPressed(Key_R) ? 1 : 0);
+    float z = (GetGlobal<InputManager>()->keyPressed(Key_W) ? -1 : 0) +
+              (GetGlobal<InputManager>()->keyPressed(Key_S) ? 1 : 0);
 
     auto step = m_camera.orientation() * glm::vec3(x, y, z) * m_speed * seconds;
 
@@ -50,7 +49,7 @@ void DebugCameraNavigator3D::onMouseMotion(MouseMotionEvent & event)
     double mouseY;
 
     auto mousePos = event.mousePosition();
-    auto pressed = m_inputAdapter.mouseButtonDown(MouseButton::Left);
+    auto pressed = GetGlobal<InputManager>()->mouseButtonDown(MouseButton::Left);
 
     if (!m_mousePressed && pressed)
     {

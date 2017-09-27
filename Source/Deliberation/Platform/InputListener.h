@@ -24,6 +24,5 @@ public:
     virtual void onMouseButtonClicked(MouseButtonEvent & event){};
     virtual void onKeyPressed(KeyEvent & event){};
     virtual void onKeyReleased(KeyEvent & event){};
-    virtual void onInputUpdate(InputManager & input){};
 };
 }
