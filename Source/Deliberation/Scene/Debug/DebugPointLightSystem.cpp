@@ -15,7 +15,7 @@ DebugPointLightSystem::DebugPointLightSystem(
 {
     activatePhases<GameUpdatePhase>();
 
-    m_node = world.system<RenderSystem>()->debugGeometryRenderer()->addNode();
+    m_node = GetGlobal<RenderManager>()->renderer<DebugGeometryRenderer>()->addNode();
 }
 
 void DebugPointLightSystem::

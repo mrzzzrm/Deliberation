@@ -12,31 +12,9 @@ class SingleNodeRenderer : public Renderer
 public:
     SingleNodeRenderer(
         RenderPhase         renderPhase,
-        const std::string & name = {"Unnamed Renderer"})
-        : Renderer(name), m_renderPhase(renderPhase)
-    {
-    }
+        const std::string & name = {"Unnamed Renderer"});
 
-    void onRegisterRenderNodes() override
-    {
-        class SingleRenderNode : public RenderNode
-        {
-        public:
-            SingleRenderNode(SingleNodeRenderer & renderer)
-                : RenderNode(renderer.shared_from_this()), m_renderer(renderer)
-            {
-            }
-
-            void        render() override { m_renderer.render(); }
-            std::string name() const override { return m_renderer.name(); }
-
-            SingleNodeRenderer & m_renderer;
-        };
-
-        GetGlobal<RenderManager>()->registerRenderNode(
-            std::make_shared<SingleRenderNode>(*this), m_renderPhase);
-        onSetupRender();
-    }
+    void onRegisterRenderNodes() override;
 
     virtual void render() = 0;
 

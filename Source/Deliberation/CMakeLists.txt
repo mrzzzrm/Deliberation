@@ -407,6 +407,7 @@ add_library(Deliberation
 	Scene/Pipeline/RenderNode.cpp
 	Scene/Pipeline/RenderNode.h
 	Scene/Pipeline/RenderPhase.h
+	Scene/Pipeline/SingleNodeRenderer.cpp
 	Scene/Pipeline/SingleNodeRenderer.h
 	Scene/ScreenSpaceEffect.cpp
 	Scene/ScreenSpaceEffect.h

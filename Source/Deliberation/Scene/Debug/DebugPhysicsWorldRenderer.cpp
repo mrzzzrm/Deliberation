@@ -15,7 +15,7 @@ DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(
     : SingleNodeRenderer(RenderPhase::PreOverlay)
     , m_physicsWorld(phyicsWorld)
 {
-    m_debugNode = renderSystem.debugGeometryRenderer()->addNode();
+    m_debugNode = GetGlobal<RenderManager>()->renderer<DebugGeometryRenderer>()->addNode();
 }
 
 void DebugPhysicsWorldRenderer::render()
