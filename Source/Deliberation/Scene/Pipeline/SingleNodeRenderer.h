@@ -11,10 +11,9 @@ class SingleNodeRenderer : public Renderer
 {
 public:
     SingleNodeRenderer(
-        RenderManager &     renderManager,
         RenderPhase         renderPhase,
         const std::string & name = {"Unnamed Renderer"})
-        : Renderer(renderManager, name), m_renderPhase(renderPhase)
+        : Renderer(name), m_renderPhase(renderPhase)
     {
     }
 
@@ -24,7 +23,7 @@ public:
         {
         public:
             SingleRenderNode(SingleNodeRenderer & renderer)
-                : RenderNode(renderer.renderManager(), renderer.shared_from_this()), m_renderer(renderer)
+                : RenderNode(renderer.shared_from_this()), m_renderer(renderer)
             {
             }
 
@@ -34,7 +33,7 @@ public:
             SingleNodeRenderer & m_renderer;
         };
 
-        m_renderManager.registerRenderNode(
+        GetGlobal<RenderManager>()->registerRenderNode(
             std::make_shared<SingleRenderNode>(*this), m_renderPhase);
         onSetupRender();
     }

@@ -5,7 +5,6 @@
 #include <Deliberation/ECS/World.h>
 #include <Deliberation/Scene/Debug/DebugGeometryNode.h>
 #include <Deliberation/Scene/Lighting/PointLightRenderer.h>
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 
 namespace deliberation
 {

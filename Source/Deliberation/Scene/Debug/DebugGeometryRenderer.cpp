@@ -15,9 +15,8 @@ namespace deliberation
 {
 constexpr float DebugGeometryRenderer::ARROW_CONE_HEIGHT;
 
-DebugGeometryRenderer::DebugGeometryRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(
-          renderManager, RenderPhase::PreOverlay, "DebugGeometryRenderer")
+DebugGeometryRenderer::DebugGeometryRenderer()
+    : SingleNodeRenderer(RenderPhase::PreOverlay, "DebugGeometryRenderer")
 {
     /**
      * Load programs
@@ -128,7 +127,7 @@ void DebugGeometryRenderer::render()
 {
     for (auto & node : m_nodes)
     {
-        node->render(m_renderManager.mainCamera());
+        node->render(GetGlobal<RenderManager>()->mainCamera());
     }
 }
 }

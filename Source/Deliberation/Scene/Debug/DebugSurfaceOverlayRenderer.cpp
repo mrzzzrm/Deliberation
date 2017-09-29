@@ -8,10 +8,9 @@
 
 namespace deliberation
 {
-DebugSurfaceOverlayRenderer::DebugSurfaceOverlayRenderer(
-    RenderManager & renderManager)
+DebugSurfaceOverlayRenderer::DebugSurfaceOverlayRenderer()
     : SingleNodeRenderer(
-          renderManager, RenderPhase::PreOverlay, "SurfaceOverlay")
+          RenderPhase::PreOverlay, "SurfaceOverlay")
 {
     m_effect = ScreenSpaceEffect(
         {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),

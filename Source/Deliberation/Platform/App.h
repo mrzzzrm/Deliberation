@@ -40,13 +40,13 @@ private:
     App() = default;
 
     void init();
+    void shutdown();
     void handleWindowEvent(const SDL_Event & event);
 
 private:
     std::shared_ptr<AppRuntime> m_runtime;
     bool        m_running = false;
     bool        m_gameplayPaused = false;
-    bool        m_initialized = false;
     int         m_returnCode = 0;
 
     FpsCounter m_fpsCounter;

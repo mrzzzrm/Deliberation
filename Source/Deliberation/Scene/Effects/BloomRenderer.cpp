@@ -9,8 +9,8 @@
 
 namespace deliberation
 {
-BloomRenderer::BloomRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::PreHdr, "Bloom")
+BloomRenderer::BloomRenderer()
+    : SingleNodeRenderer(RenderPhase::PreHdr, "Bloom")
     , m_blur()
 {
 }
@@ -131,8 +131,8 @@ void BloomRenderer::onSetupRender()
             desc.name = "HBlur" + std::to_string(l);
             m_hblurFbs.emplace_back(GetGlobal<DrawContext>()->createFramebuffer(desc));
 
-            renderManager().registerFramebuffer(m_downscaleAndVBlurFbs.back());
-            renderManager().registerFramebuffer(m_hblurFbs.back());
+            GetGlobal<RenderManager>()->registerFramebuffer(m_downscaleAndVBlurFbs.back());
+            GetGlobal<RenderManager>()->registerFramebuffer(m_hblurFbs.back());
 
             m_blurPasses.emplace_back(
                 m_blur, m_downscaleAndVBlurFbs.back(), m_hblurFbs.back());
@@ -150,7 +150,7 @@ void BloomRenderer::onSetupRender()
     auto & extractDraw = m_extractEffect.draw();
 
     extractDraw.sampler("Input").setTexture(
-        m_renderManager.hdrBuffer().colorTargetRef("Hdr"));
+        GetGlobal<RenderManager>()->hdrBuffer().colorTargetRef("Hdr"));
     extractDraw.uniform("Threshold").set(1.5f);
     extractDraw.setFramebuffer(
         m_downscaleAndVBlurFbs[0], {{"Extracted", "Color"}});
@@ -170,6 +170,6 @@ void BloomRenderer::onSetupRender()
     m_applyEffect.draw().state().setBlendState(
         {BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     m_applyEffect.draw().setFramebuffer(
-        renderManager().hdrBuffer(), {{"Color", "Hdr"}});
+        GetGlobal<RenderManager>()->hdrBuffer(), {{"Color", "Hdr"}});
 }
 }

@@ -8,15 +8,11 @@
 #include <Deliberation/Physics/PhysicsWorld.h>
 #include <Deliberation/Physics/RigidBody.h>
 
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
-
 namespace deliberation
 {
 DebugPhysicsWorldRenderer::DebugPhysicsWorldRenderer(
-    RenderManager & renderManager,
-    RenderSystem &  renderSystem,
     PhysicsWorld &  phyicsWorld)
-    : SingleNodeRenderer(renderManager, RenderPhase::PreOverlay)
+    : SingleNodeRenderer(RenderPhase::PreOverlay)
     , m_physicsWorld(phyicsWorld)
 {
     m_debugNode = renderSystem.debugGeometryRenderer()->addNode();

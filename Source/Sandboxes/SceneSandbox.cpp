@@ -39,8 +39,7 @@
 #include <Deliberation/Scene/Model/Model.h>
 #include <Deliberation/Scene/Model/ModelInstance.h>
 #include <Deliberation/Scene/Model/ModelRenderer.h>
-#include <Deliberation/Scene/Pipeline/RenderManager.h>
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
+#include <Deliberation/Scene/Pipeline/GetGlobal<RenderManager>()->h>
 #include <Deliberation/Scene/SkyboxRenderer.h>
 #include <Deliberation/Scene/SsaoRenderer.h>
 
@@ -58,18 +57,16 @@ public:
         m_world.addSystem<ApplicationSystem>(*this);
         m_renderSystem = m_world.addSystem<RenderSystem>();
         m_world.addSystem<ImGuiSystem>();
-        auto & renderManager = m_renderSystem->renderManager();
-
-        m_modelRenderer = renderManager.addRenderer<ModelRenderer>();
+        m_modelRenderer = GetGlobal<RenderManager>()->addRenderer<ModelRenderer>();
         m_ambientLightRenderer =
-            renderManager.addRenderer<AmbientLightRenderer>();
-        m_pointLightRenderer = renderManager.addRenderer<PointLightRenderer>();
-        m_ssaoRenderer = renderManager.addRenderer<SsaoRenderer>();
+            GetGlobal<RenderManager>()->addRenderer<AmbientLightRenderer>();
+        m_pointLightRenderer = GetGlobal<RenderManager>()->addRenderer<PointLightRenderer>();
+        m_ssaoRenderer = GetGlobal<RenderManager>()->addRenderer<SsaoRenderer>();
         m_debugGeometryRenderer =
-            renderManager.addRenderer<DebugGeometryRenderer>();
-        m_hdrRenderer = renderManager.addRenderer<HdrRenderer>();
-        m_ground = renderManager.addRenderer<DebugGroundPlaneRenderer>();
-        renderManager.addRenderer<BloomRenderer>();
+            GetGlobal<RenderManager>()->addRenderer<DebugGeometryRenderer>();
+        m_hdrRenderer = GetGlobal<RenderManager>()->addRenderer<HdrRenderer>();
+        m_ground = GetGlobal<RenderManager>()->addRenderer<DebugGroundPlaneRenderer>();
+        GetGlobal<RenderManager>()->addRenderer<BloomRenderer>();
         //m_world.addSystem<DebugPointLightSystem>(m_pointLightRenderer);
 
         m_bunnyModel = m_modelRenderer->addModel(
@@ -88,14 +85,14 @@ public:
         m_ground->setRadius(30.0f);
         m_ground->setQuadSize(1.0f);
 
-        renderManager.mainCamera().setPosition({0.0f, 1.0f, 3.0f});
-        renderManager.mainCamera().setOrientation(
+        GetGlobal<RenderManager>()->mainCamera().setPosition({0.0f, 1.0f, 3.0f});
+        GetGlobal<RenderManager>()->mainCamera().setOrientation(
             glm::quat({-0.2f, 0.0f, 0.0f}));
-        renderManager.mainCamera().setAspectRatio(
+        GetGlobal<RenderManager>()->mainCamera().setAspectRatio(
             (float)GetGlobal<DrawContext>()->backbuffer().width() /
                 GetGlobal<DrawContext>()->backbuffer().height());
 
-        m_navigator.reset(renderManager.mainCamera(), input(), 10.0f);
+        m_navigator.reset(GetGlobal<RenderManager>()->mainCamera(), input(), 10.0f);
 
         auto skyboxPaths = std::array<std::string, 6>{
             DeliberationDataPath("Data/Skybox/Cloudy/Right.png"),
@@ -108,10 +105,10 @@ public:
         auto skyboxCubemapBinary = TextureLoader(skyboxPaths).load();
         auto skyboxCubemap = GetGlobal<DrawContext>()->createTexture(skyboxCubemapBinary);
 
-        renderManager.addRenderer<SkyboxRenderer>(skyboxCubemap);
+        GetGlobal<RenderManager>()->addRenderer<SkyboxRenderer>(skyboxCubemap);
 
         m_cubemapRenderer.reset(
-            renderManager.mainCamera(),
+            GetGlobal<RenderManager>()->mainCamera(),
             skyboxCubemap,
             DebugCubemapRenderer::MeshType::Sphere);
         m_cubemapRenderer->setPose(Pose3D::atPosition({10.0f, 10.0f, 0.0f}));
@@ -181,7 +178,6 @@ private:
     Optional<DebugCubemapRenderer>   m_cubemapRenderer;
     std::vector<size_t>              m_circlePointLights;
 
-    std::shared_ptr<RenderSystem>             m_renderSystem;
     std::shared_ptr<DebugGroundPlaneRenderer> m_ground;
     std::shared_ptr<DebugGeometryRenderer>    m_debugGeometryRenderer;
     std::shared_ptr<DebugGeometryNode>        m_debugGeometryNode;

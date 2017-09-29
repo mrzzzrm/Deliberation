@@ -12,7 +12,7 @@ namespace deliberation
 class BloomRenderer : public SingleNodeRenderer
 {
 public:
-    BloomRenderer(RenderManager & renderManager);
+    BloomRenderer();
 
     void render() override;
 

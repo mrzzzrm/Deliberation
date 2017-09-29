@@ -3,13 +3,11 @@
 #include <cassert>
 #include <iostream>
 
-#include <spdlog/spdlog.h>
-
 #include <glbinding/Binding.h>
+#include <glbinding/ContextInfo.h>
+#include <glbinding/Version.h>
 #include <glbinding/gl/enum.h>
 #include <glbinding/gl/functions.h>
-
-#include <SDL_ttf.h>
 
 #include <Deliberation/Core/Log.h>
 
@@ -21,31 +19,6 @@ bool        loggingEnabled = false;
 
 namespace deliberation
 {
-void init()
-{
-    // Create logger
-    Log = spdlog::stdout_color_mt("Main");
-    LogSetOuterScope("*PreMainLoop*");
-
-    // SDL_ttf
-    {
-        auto r = TTF_Init();
-        if (r)
-        {
-            std::cout << "Failed to init SDL_ttf: '" << TTF_GetError() << "'"
-                      << std::endl;
-        }
-    }
-}
-
-void shutdown()
-{
-    // SDL_ttf
-    if (TTF_WasInit())
-    {
-        TTF_Quit();
-    }
-}
 
 const std::string & prefixPath() { return ::prefixPath; }
 

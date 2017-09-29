@@ -7,7 +7,7 @@ namespace deliberation
 class HdrRenderer : public Renderer
 {
 public:
-    HdrRenderer(RenderManager & renderManager);
+    HdrRenderer();
 
     void onRegisterRenderNodes() override;
 

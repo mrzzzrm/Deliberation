@@ -15,6 +15,8 @@
 
 namespace deliberation
 {
+DELIBERATION_DEFINE_GLOBAL(RenderManager);
+
 RenderManager::RenderManager()
 {
     m_backbufferClear = GetGlobal<DrawContext>()->createClear();

@@ -18,7 +18,7 @@ class DrawContext;
 class Renderer;
 class RenderNode;
 
-class RenderManager
+class RenderManager final
 {
 public:
     struct RegisteredFramebuffer
@@ -29,7 +29,6 @@ public:
 
 public:
     RenderManager();
-    virtual ~RenderManager() = default;
 
     Camera3D &    mainCamera() { return m_mainCamera; }
     const std::vector<std::shared_ptr<Renderer>> & renderers() { return m_renderers; }

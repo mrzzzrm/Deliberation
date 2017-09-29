@@ -8,7 +8,7 @@ namespace deliberation
 class DebugSurfaceOverlayRenderer : public SingleNodeRenderer
 {
 public:
-    DebugSurfaceOverlayRenderer(RenderManager & renderManager);
+    DebugSurfaceOverlayRenderer();
 
     void showSurface(const Surface & surface);
     void disable();

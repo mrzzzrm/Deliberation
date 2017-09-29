@@ -17,7 +17,7 @@ public:
     DebugGroundPlaneNode(
         DebugGroundPlaneRenderer &       renderer,
         const std::vector<std::string> & shaders)
-        : RenderNode(renderer.renderManager(), renderer.shared_from_this()), m_renderer(renderer)
+        : RenderNode(renderer.shared_from_this()), m_renderer(renderer)
     {
         m_program = GetGlobal<DrawContext>()->createProgram(shaders);
         m_draw =
@@ -49,8 +49,8 @@ public:
         m_quadSize.set(m_renderer.m_quadSize);
         m_radius.set(m_renderer.m_radius);
 
-        m_view.set(m_renderManager.mainCamera().view());
-        m_projection.set(m_renderManager.mainCamera().projection());
+        m_view.set(GetGlobal<RenderManager>()->mainCamera().view());
+        m_projection.set(GetGlobal<RenderManager>()->mainCamera().projection());
 
         m_draw.render();
     }
@@ -91,13 +91,11 @@ public:
                DeliberationDataPath(
                    "Data/Shaders/DebugGroundPlaneRendererGBuffer.frag")})
     {
-        m_draw.setFramebuffer(m_renderManager.gbuffer());
+        m_draw.setFramebuffer(GetGlobal<RenderManager>()->gbuffer());
     }
 };
 
-DebugGroundPlaneRenderer::DebugGroundPlaneRenderer(
-    RenderManager & renderManager)
-    : Renderer(renderManager)
+DebugGroundPlaneRenderer::DebugGroundPlaneRenderer()
 {
 }
 
@@ -114,13 +112,13 @@ void DebugGroundPlaneRenderer::onRegisterRenderNodes()
 {
     if (m_renderToGBuffer)
     {
-        m_renderManager.registerRenderNode(
+        GetGlobal<RenderManager>()->registerRenderNode(
             std::make_shared<DebugGroundPlaneGBufferNode>(*this),
             RenderPhase::GBuffer);
     }
     else
     {
-        m_renderManager.registerRenderNode(
+        GetGlobal<RenderManager>()->registerRenderNode(
             std::make_shared<DebugGroundPlaneForwardNode>(*this),
             RenderPhase::Forward);
     }

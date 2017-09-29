@@ -10,8 +10,7 @@ class RenderManager;
 class RenderNode
 {
 public:
-    explicit RenderNode(RenderManager & renderManager, const std::weak_ptr<Renderer> & renderer) :
-        m_renderManager(renderManager),
+    explicit RenderNode(const std::weak_ptr<Renderer> & renderer) :
         m_renderer(renderer)
     {
     }
@@ -27,7 +26,6 @@ public:
     virtual std::string name() const { return "Unnamed"; };
 
 protected:
-    RenderManager & m_renderManager;
     std::weak_ptr<Renderer> m_renderer;
     bool m_enabled = true;
 };

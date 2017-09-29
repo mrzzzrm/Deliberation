@@ -57,7 +57,7 @@ public:
     };
 
 public:
-    DebugGeometryRenderer(RenderManager & renderManager);
+    DebugGeometryRenderer();
 
     const BuildIns & buildIns() const { return m_buildIns; }
 

@@ -17,7 +17,7 @@ class ModelInstance;
 class ModelRenderer : public Renderer
 {
 public:
-    ModelRenderer(RenderManager & renderManager);
+    ModelRenderer();
 
     std::shared_ptr<Model> addModel(const std::string & path);
     std::shared_ptr<Model> addModel(const MeshData & meshData);

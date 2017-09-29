@@ -18,7 +18,7 @@ class RenderManager;
 class SkyboxRenderer : public SingleNodeRenderer
 {
 public:
-    SkyboxRenderer(RenderManager & renderManager, const Texture & cubemap);
+    SkyboxRenderer(const Texture & cubemap);
 
     void render() override;
 

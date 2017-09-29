@@ -11,7 +11,6 @@
 #include <Deliberation/ECS/System.h>
 #include <Deliberation/ECS/World.h>
 
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 #include <Deliberation/Scene/Pipeline/SingleNodeRenderer.h>
 
 namespace deliberation
@@ -35,7 +34,7 @@ struct PointLight
 class PointLightRenderer : public SingleNodeRenderer
 {
 public:
-    explicit PointLightRenderer(RenderManager & renderManager);
+    explicit PointLightRenderer();
 
     // Reference invalidated by add/removePointLight()
     PointLight &                    pointLight(size_t index);
@@ -67,9 +66,7 @@ class PointLightSystem : public System<PointLightSystem>
 public:
     PointLightSystem(World & world) : Base(world)
     {
-        m_pointLightRenderer = world.systemRef<RenderSystem>()
-                                   .renderManager()
-                                   .addRenderer<PointLightRenderer>();
+        m_pointLightRenderer = GetGlobal<RenderManager>()->addRenderer<PointLightRenderer>();
     }
 
     const std::shared_ptr<PointLightRenderer> & pointLightRenderer() const

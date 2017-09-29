@@ -8,9 +8,6 @@
 
 namespace deliberation
 {
-void init();
-void shutdown();
-
 const std::string & prefixPath();
 void                setPrefixPath(const std::string & prefixPath);
 

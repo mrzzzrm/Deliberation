@@ -8,8 +8,8 @@
 
 namespace deliberation
 {
-PointLightRenderer::PointLightRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::Lighting, "PointLights")
+PointLightRenderer::PointLightRenderer()
+    : SingleNodeRenderer(RenderPhase::Lighting, "PointLights")
 {
     m_lightLayout = DataLayout({{"LightPosition", Type_Vec3},
                                 {"Intensity", Type_Vec3},
@@ -81,8 +81,8 @@ void PointLightRenderer::render()
             }
         });
 
-    m_viewProjectionUniform.set(renderManager().mainCamera().viewProjection());
-    m_viewUniform.set(renderManager().mainCamera().view());
+    m_viewProjectionUniform.set(GetGlobal<RenderManager>()->mainCamera().viewProjection());
+    m_viewUniform.set(GetGlobal<RenderManager>()->mainCamera().view());
 
     m_draw.render();
 }
@@ -108,14 +108,14 @@ void PointLightRenderer::onSetupRender()
         {BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     m_draw.state().setCullState({CullFace::Front});
 
-    m_draw.setFramebuffer(renderManager().hdrBuffer());
+    m_draw.setFramebuffer(GetGlobal<RenderManager>()->hdrBuffer());
 
     m_draw.sampler("Diffuse").setTexture(
-        renderManager().gbuffer().colorTargetRef("Diffuse"));
+        GetGlobal<RenderManager>()->gbuffer().colorTargetRef("Diffuse"));
     m_draw.sampler("Position")
-        .setTexture(renderManager().gbuffer().colorTargetRef("Position"));
+        .setTexture(GetGlobal<RenderManager>()->gbuffer().colorTargetRef("Position"));
     m_draw.sampler("Normal").setTexture(
-        renderManager().gbuffer().colorTargetRef("Normal"));
+        GetGlobal<RenderManager>()->gbuffer().colorTargetRef("Normal"));
 
     m_viewProjectionUniform = m_draw.uniform("ViewProjection");
     m_viewUniform = m_draw.uniform("View");

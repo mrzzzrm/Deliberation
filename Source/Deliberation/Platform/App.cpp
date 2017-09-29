@@ -6,11 +6,16 @@
 
 #include <cxxopts.hpp>
 
+#include <spdlog/spdlog.h>
+
+#include <SDL_ttf.h>
 #include <SDL_image.h>
 
 #include <glbinding/Binding.h>
 #include <glbinding/ContextInfo.h>
 #include <glbinding/Version.h>
+#include <glbinding/gl/enum.h>
+#include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Log.h>
 #include <Deliberation/Core/MainLoop.h>
@@ -34,8 +39,6 @@ float App::fps() const { return m_fpsCounter.fps(); }
 
 int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv)
 {
-    deliberation::init();
-
     m_runtime = runtime;
 
     /**
@@ -108,7 +111,7 @@ int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv
 
     m_runtime->onShutdown();
 
-    deliberation::shutdown();
+    shutdown();
 
     return m_returnCode;
 }
@@ -121,7 +124,19 @@ void App::quit(int returnCode)
 
 void App::init()
 {
-    m_initialized = false;
+    // Create logger
+    Log = spdlog::stdout_color_mt("Main");
+    LogSetOuterScope("*PreMainLoop*");
+
+    // SDL_ttf
+    {
+        auto r = TTF_Init();
+        if (r)
+        {
+            std::cout << "Failed to init SDL_ttf: '" << TTF_GetError() << "'"
+                      << std::endl;
+        }
+    }
 
     // Init SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -185,8 +200,18 @@ void App::init()
     GetGlobal<DrawContext>()->setBackbufferResolution(m_displayWidth, m_displayHeight);
 
     InitGlobal<InputManager>();
+}
 
-    m_initialized = true;
+
+void App::shutdown()
+{
+    // SDL_ttf
+    if (TTF_WasInit())
+    {
+        TTF_Quit();
+    }
+
+    DeleteGlobals();
 }
 
 void App::handleWindowEvent(const SDL_Event & event) {}

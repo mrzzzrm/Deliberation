@@ -16,7 +16,6 @@
 #include <Deliberation/Platform/KeyMap.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 
 namespace deliberation
 {
@@ -26,8 +25,7 @@ ImGuiSystem::ImGuiSystem(World & world)
 {
     activatePhases<FrameBeginPhase>();
 
-    auto & renderManager = world.systemRef<RenderSystem>().renderManager();
-    renderManager.addRenderer<ImGuiRenderer>();
+    GetGlobal<RenderManager>()->addRenderer<ImGuiRenderer>();
 
     auto & io = ImGui::GetIO();
 

@@ -10,7 +10,7 @@ namespace deliberation
 class ImGuiRenderer : public SingleNodeRenderer
 {
 public:
-    ImGuiRenderer(RenderManager & renderManager);
+    ImGuiRenderer();
 
     void render() override;
 

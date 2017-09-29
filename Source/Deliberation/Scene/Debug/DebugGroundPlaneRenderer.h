@@ -16,7 +16,7 @@ class Framebuffer;
 class DebugGroundPlaneRenderer : public Renderer
 {
 public:
-    DebugGroundPlaneRenderer(RenderManager & renderManager);
+    DebugGroundPlaneRenderer();
 
     void setSize(float size);
     void setQuadSize(float quadSize);

@@ -10,7 +10,7 @@ namespace deliberation
 class SsaoRenderer : public SingleNodeRenderer
 {
 public:
-    SsaoRenderer(RenderManager & renderManager);
+    SsaoRenderer();
 
     void render() override;
 

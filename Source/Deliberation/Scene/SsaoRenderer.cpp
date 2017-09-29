@@ -14,8 +14,8 @@
 
 namespace deliberation
 {
-SsaoRenderer::SsaoRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::PostGBuffer, "SSAO")
+SsaoRenderer::SsaoRenderer()
+    : SingleNodeRenderer(RenderPhase::PostGBuffer, "SSAO")
 {
 }
 
@@ -25,7 +25,7 @@ void SsaoRenderer::render()
 
     m_effect.draw().uniform("Radius").set(m_sampleRadius);
     m_effect.draw().uniform("NumSamples").set(m_numSamples);
-    m_projectionUniform.set(m_renderManager.mainCamera().projection());
+    m_projectionUniform.set(GetGlobal<RenderManager>()->mainCamera().projection());
 
     m_effect.render();
     m_blurEffect.render();
@@ -52,12 +52,12 @@ void SsaoRenderer::init()
 
     auto positionSampler = m_effect.draw().sampler("Position");
     positionSampler.setTexture(
-        m_renderManager.gbuffer().colorTargetRef("Position"));
+        GetGlobal<RenderManager>()->gbuffer().colorTargetRef("Position"));
     positionSampler.setWrap(TextureWrap::ClampToEdge);
 
     auto normalSampler = m_effect.draw().sampler("Normal");
     normalSampler.setTexture(
-        m_renderManager.gbuffer().colorTargetRef("Normal"));
+        GetGlobal<RenderManager>()->gbuffer().colorTargetRef("Normal"));
     normalSampler.setWrap(TextureWrap::ClampToEdge);
 
     m_effect.draw().setFramebuffer(m_intermediateFb);
@@ -131,7 +131,7 @@ void SsaoRenderer::init()
     FramebufferMappings blurBinding({{"Blurred", "Ssao"}});
 
     m_blurEffect.draw().setFramebuffer(
-        m_renderManager.ssaoBuffer(), blurBinding);
+        GetGlobal<RenderManager>()->ssaoBuffer(), blurBinding);
 
     m_dirty = false;
 }

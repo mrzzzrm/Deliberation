@@ -9,8 +9,8 @@
 
 namespace deliberation
 {
-ImGuiRenderer::ImGuiRenderer(RenderManager & renderManager)
-    : SingleNodeRenderer(renderManager, RenderPhase::Overlay, "ImGui")
+ImGuiRenderer::ImGuiRenderer()
+    : SingleNodeRenderer(RenderPhase::Overlay, "ImGui")
 {
     // Setup Font Atlas has to happen before first ImGui::NewFrame();, thus:
     // here

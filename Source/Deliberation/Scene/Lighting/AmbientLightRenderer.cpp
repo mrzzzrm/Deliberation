@@ -12,18 +12,18 @@ class AmbientLightNode : public RenderNode
 {
 public:
     AmbientLightNode(AmbientLightRenderer & renderer)
-        : m_renderer(renderer), RenderNode(renderer.renderManager(), renderer.shared_from_this())
+        : m_renderer(renderer), RenderNode(renderer.shared_from_this())
     {
         m_effect = ScreenSpaceEffect(
             {DeliberationDataPath("Data/Shaders/UV_Position2.vert"),
              DeliberationDataPath("Data/Shaders/AmbientLight.frag")},
             "AmbientLight");
 
-        m_effect.draw().setFramebuffer(m_renderer.renderManager().hdrBuffer());
+        m_effect.draw().setFramebuffer(GetGlobal<RenderManager>()->hdrBuffer());
         m_effect.draw().sampler("Ssao").setTexture(
-            m_renderer.renderManager().ssaoBuffer().colorTargetRef("Ssao"));
+            GetGlobal<RenderManager>()->ssaoBuffer().colorTargetRef("Ssao"));
         m_effect.draw().sampler("Diffuse").setTexture(
-            m_renderer.renderManager().gbuffer().colorTargetRef("Diffuse"));
+            GetGlobal<RenderManager>()->gbuffer().colorTargetRef("Diffuse"));
         m_effect.draw().state().setBlendState(
             {BlendEquation::Add, BlendFactor::One, BlendFactor::One});
     }
@@ -35,14 +35,14 @@ private:
     ScreenSpaceEffect      m_effect;
 };
 
-AmbientLightRenderer::AmbientLightRenderer(RenderManager & renderManager)
-    : Renderer(renderManager, "AmbientLight")
+AmbientLightRenderer::AmbientLightRenderer()
+    : Renderer("AmbientLight")
 {
 }
 
 void AmbientLightRenderer::onRegisterRenderNodes()
 {
-    m_renderManager.registerRenderNode(
+    GetGlobal<RenderManager>()->registerRenderNode(
         std::make_shared<AmbientLightNode>(*this), RenderPhase::Lighting);
 }
 }

@@ -4,7 +4,6 @@
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Scene/Pipeline/RenderManager.h>
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 #include <Deliberation/Scene/SkyboxRenderer.h>
 
 #include <Deliberation/Deliberation.h>
@@ -16,9 +15,7 @@ class SkyboxSystem : public System<SkyboxSystem>
 public:
     SkyboxSystem(World & world, const Texture & cubeMap) : Base(world)
     {
-        world.systemRef<RenderSystem>()
-            .renderManager()
-            .addRenderer<SkyboxRenderer>(cubeMap);
+        GetGlobal<RenderManager>()->addRenderer<SkyboxRenderer>(cubeMap);
     }
 };
 }

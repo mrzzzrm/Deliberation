@@ -7,9 +7,8 @@
 
 namespace deliberation
 {
-SkyboxRenderer::SkyboxRenderer(
-    RenderManager & renderManager, const Texture & cubemap)
-    : SingleNodeRenderer(renderManager, RenderPhase::Forward, "Skybox")
+SkyboxRenderer::SkyboxRenderer(const Texture & cubemap)
+    : SingleNodeRenderer(RenderPhase::Forward, "Skybox")
     , m_cubemap(cubemap)
 {
     m_program = GetGlobal<DrawContext>()->createProgram(
@@ -50,17 +49,17 @@ void SkyboxRenderer::render()
         m_draw.state().setDepthState(
             {DepthTest::LessOrEqual, DepthWrite::Disabled});
         m_draw.state().setCullState(CullState::disabled());
-        m_draw.setFramebuffer(renderManager().hdrBuffer());
+        m_draw.setFramebuffer(GetGlobal<RenderManager>()->hdrBuffer());
 
         m_drawDirty = false;
     }
 
     auto view = glm::mat4(glm::mat3(
-        m_renderManager.mainCamera()
+        GetGlobal<RenderManager>()->mainCamera()
             .view())); // Remove any translation component of the view matrix
 
     m_draw.uniform("View").set(view);
-    m_draw.uniform("Projection").set(m_renderManager.mainCamera().projection());
+    m_draw.uniform("Projection").set(GetGlobal<RenderManager>()->mainCamera().projection());
     m_draw.render();
 }
 }

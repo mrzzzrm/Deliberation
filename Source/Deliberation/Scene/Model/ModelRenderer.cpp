@@ -24,9 +24,8 @@ struct ModelInstancesDraw
 class ModelRendererMainNode : public RenderNode
 {
 public:
-    ModelRendererMainNode(
-        RenderManager & renderManager, ModelRenderer & modelRenderer)
-        : RenderNode(renderManager, modelRenderer.shared_from_this()), m_modelRenderer(modelRenderer)
+    ModelRendererMainNode(ModelRenderer & modelRenderer)
+        : RenderNode(modelRenderer.shared_from_this()), m_modelRenderer(modelRenderer)
     {
         m_instanceLayout = DataLayout("Transform", Type_Mat4);
         m_instanceDataStaging = LayoutedBlob(m_instanceLayout);
@@ -47,7 +46,7 @@ public:
 
     void render() override
     {
-        const auto & camera = m_renderManager.mainCamera();
+        const auto & camera = GetGlobal<RenderManager>()->mainCamera();
 
         // Update view data
         m_viewField[0] = camera.view();
@@ -74,7 +73,7 @@ public:
                 draw.addInstanceBuffer(modelRenderContext.instanceBuffer);
                 draw.addVertexBuffer(model->vertexBuffer);
                 if (model->hasIndices) draw.setIndexBuffer(model->indexBuffer);
-                draw.setFramebuffer(m_renderManager.gbuffer());
+                draw.setFramebuffer(GetGlobal<RenderManager>()->gbuffer());
 
                 const auto & vertexLayout = model->vertexBuffer.layout();
                 if (!vertexLayout.hasField("Color"))
@@ -119,8 +118,7 @@ private:
 
 namespace deliberation
 {
-ModelRenderer::ModelRenderer(RenderManager & renderManager)
-    : Renderer(renderManager)
+ModelRenderer::ModelRenderer()
 {
     m_gbufferProgram = GetGlobal<DrawContext>()->createProgram(
         {DeliberationDataPath("Data/Shaders/ModelRenderer.vert"),
@@ -240,8 +238,8 @@ ModelRenderer::addModelInstance(const std::shared_ptr<Model> & model)
 
 void ModelRenderer::onRegisterRenderNodes()
 {
-    m_renderManager.registerRenderNode(
-        std::make_shared<ModelRendererMainNode>(m_renderManager, *this),
+    GetGlobal<RenderManager>()->registerRenderNode(
+        std::make_shared<ModelRendererMainNode>(*this),
         RenderPhase::GBuffer);
 }
 }

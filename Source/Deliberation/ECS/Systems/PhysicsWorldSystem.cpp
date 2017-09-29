@@ -8,7 +8,6 @@
 #include <Deliberation/ECS/World.h>
 
 #include <Deliberation/Physics/PhysicsWorld.h>
-#include <Deliberation/Scene/Pipeline/RenderSystem.h>
 
 #include <Deliberation/Deliberation.h>
 

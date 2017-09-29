@@ -14,15 +14,13 @@ class Renderer : public std::enable_shared_from_this<Renderer>
 {
 public:
     Renderer(
-        RenderManager &     renderManager,
         const std::string & name = {"Unnamed Renderer"})
-        : m_renderManager(renderManager), m_name(name)
+        : m_name(name)
     {
     }
 
     virtual ~Renderer() = default;
 
-    RenderManager & renderManager() const { return m_renderManager; }
     std::string     name() const { return m_name; }
     bool enabled() const { return m_enabled; }
 
@@ -37,9 +35,6 @@ public:
 
 protected:
     virtual void onRenderImGui() {}
-
-protected:
-    RenderManager & m_renderManager;
 
 private:
     std::string m_name;

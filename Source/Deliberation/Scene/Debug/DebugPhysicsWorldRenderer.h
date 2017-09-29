@@ -9,14 +9,11 @@ namespace deliberation
 {
 class Camera3D;
 class PhysicsWorld;
-class RenderSystem;
 
 class DebugPhysicsWorldRenderer : public SingleNodeRenderer
 {
 public:
     DebugPhysicsWorldRenderer(
-        RenderManager & renderManager,
-        RenderSystem &  renderSystem,
         PhysicsWorld &  phyicsWorld);
 
     void render() override;

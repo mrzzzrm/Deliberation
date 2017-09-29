@@ -11,7 +11,7 @@ namespace deliberation
 class AmbientLightRenderer : public Renderer
 {
 public:
-    AmbientLightRenderer(RenderManager & renderManager);
+    AmbientLightRenderer();
 
     const glm::vec3 & color() const { return m_color; }
 
