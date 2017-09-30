@@ -85,10 +85,10 @@ void Level::reload()
                                 std::make_shared<LevelEntity>())
                             .first->second;
                         levelEntity->entityPrototype =
-                            App::get().runtime()->entityPrototypeManager()->getOrCreateEntityPrototype(uid);
+                            GetGlobal<EntityPrototypeManager>()->getOrCreateEntityPrototype(uid);
                         levelEntity->entityPrototype->setJson(levelEntityJson);
                         levelEntity->lid = lid;
-                        levelEntity->entity = App::get().runtime()->entityPrototypeManager()->createEntity(
+                        levelEntity->entity = GetGlobal<EntityPrototypeManager>()->createEntity(
                             uid,
                             levelEntityJson.value(
                                 "Name",
@@ -110,8 +110,8 @@ void Level::reload()
                     auto iter2 = m_activityByLid.find(lid);
 
                     if (iter2 == m_activityByLid.end()) {
-                        auto activity = App::get().runtime()->world()->activityManager()->createActivity(activityJson["Type"]);
-                        App::get().runtime()->world()->activityManager()->addActivity(activity);
+                        auto activity = GetGlobal<World>()->activityManager()->createActivity(activityJson["Type"]);
+                        GetGlobal<World>()->activityManager()->addActivity(activity);
 
                         m_activityByLid.emplace(lid.get<std::string>(), activity);
                     }
@@ -126,6 +126,6 @@ void Level::reload()
         Fail("");
     }
 
-    App::get().runtime()->entityPrototypeManager()->updateEntities();
+    GetGlobal<EntityPrototypeManager>()->updateEntities();
 }
 }

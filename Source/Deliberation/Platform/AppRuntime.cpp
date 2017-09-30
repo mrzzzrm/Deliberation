@@ -8,18 +8,13 @@
 namespace deliberation
 {
 
-AppRuntime::AppRuntime(const std::string & name,
-                                       const std::string & prefix,
-                                       const std::string & entityPrototypeListPath):
-    m_name(name),
-    m_prefix(prefix)
+AppRuntime::AppRuntime(const std::string & entityPrototypeListPath)
 {
-    m_world = std::make_shared<World>();
-    m_entityPrototypeManager = std::make_shared<EntityPrototypeManager>(m_world,
-                                                                        entityPrototypeListPath);
-    m_events = std::make_shared<EventDomain>();
-    m_prototypeManager = std::make_shared<PrototypeManager>();
-    m_resourceManager = std::make_shared<ResourceManager>();
+    InitGlobal<World>();
+    InitGlobal<EntityPrototypeManager>()->setPrototypeListPath(entityPrototypeListPath);
+    InitGlobal<EventDomain>();
+    InitGlobal<PrototypeManager>();
+    InitGlobal<ResourceManager>();
 }
 
 }

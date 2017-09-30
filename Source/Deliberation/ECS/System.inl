@@ -20,7 +20,7 @@ std::size_t System<T>::indexStatic()
 
 template<typename T>
 System<T>::System(World & world, const ComponentFilter & filter)
-    : SystemBase(world, filter), EventListener<T>(App::get().runtime()->events())
+    : SystemBase(world, filter), EventListener<T>(GetGlobal<EventDomain>())
 {
     Activity<T>::setName(name());
 }

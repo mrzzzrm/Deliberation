@@ -15,6 +15,8 @@
 
 namespace deliberation {
 
+DELIBERATION_DEFINE_GLOBAL(ResourceManager);
+
 ResourceManager::ResourceManager()
 {
 

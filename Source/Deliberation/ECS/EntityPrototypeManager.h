@@ -15,13 +15,10 @@ namespace deliberation
 class ComponentPrototypeBase;
 class World;
 
-class EntityPrototypeManager
+class EntityPrototypeManager final
 {
 public:
-    EntityPrototypeManager(const std::shared_ptr<World> & world, const std::string & listPath);
-    virtual ~EntityPrototypeManager() = default;
-
-    const std::shared_ptr<World> & world() { return m_world;}
+    void setPrototypeListPath(const std::string & path) { m_listPoll = FileModificationPoll(path); }
 
     const std::unordered_map<std::string, std::shared_ptr<EntityPrototype>> &
     entityPrototypeByKey() const
@@ -50,9 +47,6 @@ public:
 
 private:
     Json mergeJson(const Json & a, const Json & b);
-
-protected:
-    std::shared_ptr<World> m_world;
 
 private:
     std::unordered_map<std::string, std::shared_ptr<EntityPrototype>>

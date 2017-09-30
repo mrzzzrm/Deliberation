@@ -16,10 +16,7 @@
 
 namespace deliberation
 {
-EntityPrototypeManager::EntityPrototypeManager(const std::shared_ptr<World> & world, const std::string & listPath)
-    : m_world(world), m_listPoll(listPath)
-{
-}
+DELIBERATION_DEFINE_GLOBAL(EntityPrototypeManager);
 
 const std::shared_ptr<EntityPrototype> &
 EntityPrototypeManager::getOrCreateEntityPrototype(const std::string & key)
@@ -149,9 +146,7 @@ Entity EntityPrototypeManager::createEntity(
 
     //Log->info("Creating '{}' from ''", entityName, prototypeKeys);
 
-    std::cout << "EntityPrototypeManager: Getting World = " << &m_world << std::endl;
-
-    auto entity = App::get().runtime()->world()->createEntity(
+    auto entity = GetGlobal<World>()->createEntity(
         entityName.empty() ? "Unnamed Entity" : entityName);
 
     for (const auto & prototypeKey : prototypeKeys)

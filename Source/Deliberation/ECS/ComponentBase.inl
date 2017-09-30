@@ -8,6 +8,6 @@ namespace deliberation
 template<typename T>
 void ComponentBase::publishEvent(const T & event)
 {
-    App::get().runtime()->events()->publishEvent(event);
+    GetGlobal<EventDomain>()->publishEvent(event);
 }
 }

@@ -28,93 +28,9 @@
 
 namespace deliberation
 {
-
-App & App::get()
-{
-    static App application;
-    return application;
-}
+DELIBERATION_DEFINE_GLOBAL(App);
 
 float App::fps() const { return m_fpsCounter.fps(); }
-
-int App::run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv)
-{
-    m_runtime = runtime;
-
-    /**
-     * Parse command line
-     */
-    std::string cmdPrefix;
-
-    cxxopts::Options options(m_runtime->name(), "");
-    options.add_options()(
-        "prefix",
-        "Deliberation install prefix",
-        cxxopts::value<std::string>(cmdPrefix));
-    options.parse(argc, argv);
-
-    if (!cmdPrefix.empty())
-    {
-        Log->info("Prefix override: '{}'", cmdPrefix);
-        m_runtime->setPrefix(cmdPrefix);
-    }
-
-    /**
-     *
-     */
-    init();
-
-    m_running = true;
-
-    m_runtime->onStartup();
-
-    if (deliberation::GLLoggingEnabled()) Log->info("--- Frame ---");
-
-    u32 frameCounter = 0;
-
-    MainLoop().run([&](DurationMicros micros) {
-        LogSetFrameIndex(frameCounter);
-
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-            case SDL_KEYUP:
-            case SDL_KEYDOWN:
-            case SDL_MOUSEBUTTONDOWN:
-            case SDL_MOUSEBUTTONUP:
-            case SDL_MOUSEMOTION:
-            case SDL_MOUSEWHEEL: GetGlobal<InputManager>()->onSDLInputEvent(event); break;
-
-            case SDL_WINDOWEVENT: handleWindowEvent(event); break;
-
-            case SDL_QUIT: quit(0); break;
-            }
-        }
-        GetGlobal<InputManager>()->onFrameBegin();
-
-        SDL_GL_MakeCurrent(m_displayWindow, m_glContext);
-
-        m_runtime->onFrame(micros);
-
-        SDL_GL_SwapWindow(m_displayWindow);
-
-        m_fpsCounter.onFrame();
-
-        if (deliberation::GLLoggingEnabled()) Log->info("--- Frame ---");
-
-        frameCounter++;
-
-        return m_running;
-    });
-
-    m_runtime->onShutdown();
-
-    shutdown();
-
-    return m_returnCode;
-}
 
 void App::quit(int returnCode)
 {
@@ -191,10 +107,9 @@ void App::init()
     Log->info("OpenGL Renderer:       {}", rendererString);
     Log->info("DrawContext RGBA-bits: {}", drawContextColorSize);
 
-    deliberation::setPrefixPath(m_runtime->prefix());
     deliberation::EnableGLErrorChecks();
 
-    Log->info("Prefix:                {}", deliberation::prefixPath());
+    Log->info("Prefix:                {}", m_prefix);
 
     InitGlobal<DrawContext>();
     GetGlobal<DrawContext>()->setBackbufferResolution(m_displayWidth, m_displayHeight);
@@ -210,8 +125,6 @@ void App::shutdown()
     {
         TTF_Quit();
     }
-
-    DeleteGlobals();
 }
 
 void App::handleWindowEvent(const SDL_Event & event) {}

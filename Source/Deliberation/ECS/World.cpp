@@ -14,6 +14,8 @@
 
 namespace deliberation
 {
+DELIBERATION_DEFINE_GLOBAL(World);
+
 World::World() : m_entityIDCounter(1) {
     m_activityManager = std::make_shared<ActivityManager>();
 }

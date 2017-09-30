@@ -14,8 +14,8 @@ glm::vec3 CalculateTrajectory(
     const glm::vec3 & targetVelocity,
     bool &            success)
 {
-    const auto v = originVelocity - targetVelocity;
-    const auto p = targetPosition - originPosition;
+    const auto v = originVelocity - targetVelocity; // relative velocity
+    const auto p = targetPosition - originPosition; // relative position
 
     const auto p2 = glm::length2(p);
     const auto v2 = glm::length2(v);

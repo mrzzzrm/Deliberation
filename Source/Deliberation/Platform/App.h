@@ -21,33 +21,33 @@ class AppRuntime;
 class App final
 {
 public:
-    static App & get();
+    App() = default;
 
-public:
+    const std::string & prefix() const { return m_prefix; }
     bool gameplayPaused() const { return m_gameplayPaused; }
-
-    const std::shared_ptr<AppRuntime> & runtime() { return m_runtime; }
 
     void setGameplayPaused(bool paused) { m_gameplayPaused = paused; }
 
     float fps() const;
 
-    int run(const std::shared_ptr<AppRuntime> & runtime, int argc, char ** argv);
+    template<typename RuntimeType>
+    int run(const std::string & name, int argc, char ** argv);
 
     void quit(int returnCode = 0);
 
 private:
-    App() = default;
-
     void init();
     void shutdown();
     void handleWindowEvent(const SDL_Event & event);
 
 private:
-    std::shared_ptr<AppRuntime> m_runtime;
     bool        m_running = false;
     bool        m_gameplayPaused = false;
     int         m_returnCode = 0;
+    std::string m_prefix;
+
+    // Only valid during run()
+    std::unique_ptr<AppRuntime> m_runtime;
 
     FpsCounter m_fpsCounter;
 
@@ -60,3 +60,5 @@ private:
     int m_displayHeight = 900;
 };
 }
+
+#include <Deliberation/Platform/App.inl>

@@ -29,40 +29,34 @@ public:
     static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
 
 public:
-    RigidBody(
+    explicit RigidBody(
         const std::shared_ptr<CollisionShape> & shape);
 
     AABB bounds() const { return m_shape->bounds(transform()); }
     const Transform3D & transform() const;
-
     float mass() const { return inverseMass() == 0.0f ? 0.0f : 1.0f / inverseMass(); }
     float inverseMass() const { return m_btRigidBody->getInvMass(); }
-
     glm::vec3 linearVelocity() const { return BulletPhysicsConvert(m_btRigidBody->getLinearVelocity()); }
     glm::vec3 angularVelocity() const { return BulletPhysicsConvert(m_btRigidBody->getAngularVelocity()); }
-
     const std::shared_ptr<CollisionShape> & shape() const { return m_shape; }
     size_t                                  index() const { return m_index; }
     Entity &                                entity() const { return m_entity; }
-
     std::shared_ptr<btRigidBody> bulletRigidBody() { return m_btRigidBody; }
     const std::shared_ptr<btRigidBody> & bulletRigidBody() const { return m_btRigidBody; }
-
     glm::vec3 localVelocity(const glm::vec3 & r) const {
         return BulletPhysicsConvert(m_btRigidBody->getVelocityInLocalPoint(BulletPhysicsConvert(r)));
     }
+    float linearDamping() const { return m_btRigidBody->getLinearDamping(); }
+    float angularDamping() const { return m_btRigidBody->getAngularDamping(); }
+    void setDamping(float linear, float angular) { m_btRigidBody->setDamping(linear, angular); }
 
     void setLinearVelocity(const glm::vec3 & velocity) { Assert(GLMIsFinite(velocity)); m_btRigidBody->setLinearVelocity(BulletPhysicsConvert(velocity)); }
     void setAngularVelocity(const glm::vec3 & velocity) { Assert(GLMIsFinite(velocity)); m_btRigidBody->setAngularVelocity(BulletPhysicsConvert(velocity)); }
-
     void setIndex(size_t index) { m_index = index; }
     void setEntity(Entity entity) { m_entity = entity; }
-
     void setPosition(const glm::vec3 & position);
     void setOrientation(const glm::quat & orientation);
     void setScale(float scale);
-
-//    void setTransform(const Transform3D & transform);
 
     void applyImpulse(const glm::vec3 & point, const glm::vec3 & impulse) {
         m_btRigidBody->applyImpulse(BulletPhysicsConvert(impulse), BulletPhysicsConvert(point));

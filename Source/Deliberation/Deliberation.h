@@ -8,9 +8,6 @@
 
 namespace deliberation
 {
-const std::string & prefixPath();
-void                setPrefixPath(const std::string & prefixPath);
-
 std::string DeliberationDataPath(const std::string & path = ".");
 std::vector<std::string>
 DeliberationShaderPaths(const std::vector<std::string> & paths);

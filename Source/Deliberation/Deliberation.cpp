@@ -10,33 +10,19 @@
 #include <glbinding/gl/functions.h>
 
 #include <Deliberation/Core/Log.h>
+#include <Deliberation/Platform/App.h>
 
 namespace
 {
-std::string prefixPath(".");
 bool        loggingEnabled = false;
 }
 
 namespace deliberation
 {
 
-const std::string & prefixPath() { return ::prefixPath; }
-
-void setPrefixPath(const std::string & prefixPath)
-{
-    if (prefixPath.empty())
-    {
-        ::prefixPath = ".";
-    }
-    else
-    {
-        ::prefixPath = prefixPath;
-    }
-}
-
 std::string DeliberationDataPath(const std::string & path)
 {
-    return prefixPath() + "/Deliberation/" + path;
+    return GetGlobal<App>()->prefix() + "/Deliberation/" + path;
 }
 
 std::vector<std::string>
@@ -55,7 +41,7 @@ DeliberationShaderPaths(const std::vector<std::string> & names)
 
 std::string GameDataPath(const std::string & path)
 {
-    return prefixPath() + "/" + path;
+    return GetGlobal<App>()->prefix() + "/" + path;
 }
 
 void EnableGLErrorChecks()

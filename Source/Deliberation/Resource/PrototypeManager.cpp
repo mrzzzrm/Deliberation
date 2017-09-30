@@ -5,6 +5,8 @@
 namespace deliberation
 {
 
+DELIBERATION_DEFINE_GLOBAL(PrototypeManager);
+
 void PrototypeManager::reload()
 {
     DELIBERATION_LOG_INNER_SCOPE("PrototypeManager");

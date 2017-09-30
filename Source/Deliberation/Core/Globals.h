@@ -6,6 +6,8 @@
 #include <utility>
 #include <vector>
 
+#include <Deliberation/Core/Assert.h>
+
 namespace deliberation {
 
 class AbstractGlobalHandle {
@@ -30,7 +32,7 @@ public:
  * Init the Singleton of type T. Caller needs to keep the returned shared_ptr<> in order to manage the global's lifetime
  */
 template<typename T>
-void InitGlobal();
+std::shared_ptr<T> InitGlobal();
 
 template<typename T>
 std::shared_ptr<T> GetGlobal();
@@ -42,7 +44,7 @@ std::shared_ptr<T> GetGlobal();
 class Globals final {
 private:
     template<typename T>
-    friend void InitGlobal();
+    friend std::shared_ptr<T> InitGlobal();
 
     friend void DeleteGlobals();
 
@@ -64,15 +66,18 @@ inline void DeleteGlobals() {
 #define DELIBERATION_DEFINE_GLOBAL(Type) \
     std::weak_ptr<Type> Instance_##Type; \
     template<> \
-    void InitGlobal<Type>() \
+    std::shared_ptr<Type> InitGlobal<Type>() \
     { \
         auto instance = std::make_shared<Type>(); \
         Instance_##Type = instance; \
         auto handle = std::make_unique<GlobalHandle<Type>>(instance); \
         globals.handles.emplace_back(std::move(handle)); \
+        return instance; \
     } \
     template<> \
     std::shared_ptr<Type> GetGlobal<Type>() \
     { \
-       return Instance_##Type.lock(); \
+        auto instance = Instance_##Type.lock(); \
+        Assert(instance); \
+        return instance;  \
     }

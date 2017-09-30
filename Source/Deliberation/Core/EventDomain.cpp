@@ -2,6 +2,9 @@
 
 namespace deliberation
 {
+
+DELIBERATION_DEFINE_GLOBAL(EventDomain);
+
 void EventDomain::addEventListener(
     const std::shared_ptr<EventListenerProxy> & listener)
 {

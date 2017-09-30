@@ -9,7 +9,7 @@ void EntityPrototypeManager::registerComponentPrototype(
     m_componentPrototypeFactoryByName.emplace(name, [this, name, args...]() {
         auto prototype = std::make_shared<T>(args...);
         prototype->setName(name);
-        prototype->setWorld(m_world);
+        prototype->setWorld(GetGlobal<World>());
         return prototype;
     });
 }
