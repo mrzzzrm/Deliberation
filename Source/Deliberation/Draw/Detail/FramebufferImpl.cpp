@@ -137,6 +137,7 @@ FramebufferImpl::FramebufferImpl()
 
 FramebufferImpl::~FramebufferImpl()
 {
+    if (isBackbuffer) return;
     auto & glStateManager = GetGlobal<DrawContext>()->m_glStateManager;
     glStateManager.deleteFramebuffers(1, &glName);
 }
