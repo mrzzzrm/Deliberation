@@ -20,6 +20,7 @@
 #include <Deliberation/Core/Log.h>
 #include <Deliberation/Core/MainLoop.h>
 #include <Deliberation/Core/StreamUtils.h>
+#include <Deliberation/Core/ScopeStack.h>
 
 #include <Deliberation/Platform/AppRuntime.h>
 #include <Deliberation/Platform/InputLayerWrapper.h>
@@ -115,6 +116,10 @@ void App::init()
     GetGlobal<DrawContext>()->setBackbufferResolution(m_displayWidth, m_displayHeight);
 
     InitGlobal<InputManager>();
+
+#if DELIBERATION_BUILD_DEBUG
+    InitGlobal<ScopeStack>();
+#endif
 }
 
 

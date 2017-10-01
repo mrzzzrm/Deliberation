@@ -28,7 +28,7 @@
     }
 // @}
 
-#if DELIBERATION_BUILD_TYPE_DEBUG
+#if DELIBERATION_BUILD_DEBUG
 
 // @{
 /**

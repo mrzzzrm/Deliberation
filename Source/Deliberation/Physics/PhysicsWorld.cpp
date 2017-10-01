@@ -11,6 +11,7 @@
 
 #include <Deliberation/Core/Math/MathUtils.h>
 #include <Deliberation/Core/Math/Transform3D.h>
+#include <Deliberation/Core/Scope.h>
 #include <Deliberation/Core/StreamUtils.h>
 
 #include <Deliberation/Physics/CollisionShape.h>
@@ -73,12 +74,17 @@ void PhysicsWorld::removeRigidBody(const std::shared_ptr<RigidBody> & body)
 
 float PhysicsWorld::update(float seconds)
 {
+    DELIBERATION_SCOPE("PhysicsWorld::update()");
+
     for (auto & body : m_rigidBodies)
     {
         body->adaptShape();
     }
 
-    const auto numPerformedSteps = m_dynamicsWorld->stepSimulation(seconds, 10, m_timestep);
+    const auto numPerformedSteps = [&] () {
+        DELIBERATION_SCOPE("btDiscreteDynamicsWorld::stepSimulation");
+        return m_dynamicsWorld->stepSimulation(seconds, 10, m_timestep);
+    } ();
     const auto simulatedSeconds = numPerformedSteps * m_timestep;
 
     m_numSimulatedSteps += numPerformedSteps;

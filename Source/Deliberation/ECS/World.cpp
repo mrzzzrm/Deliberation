@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <Deliberation/Core/Scope.h>
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/EventListenerProxy.h>
 #include <Deliberation/Core/Log.h>
@@ -78,7 +79,8 @@ Entity World::createEntity(const std::string & name, EntityId parent)
 
 void World::frameBeginPhase()
 {
-    DELIBERATION_LOG_OUTER_SCOPE("FrameBegin");
+    DELIBERATION_SCOPE("World::frameBeginPhase()");
+    DELIBERATION_LOG_OUTER_SCOPE("World::frameBeginPhase()");
 
     /**
      * For all entity removals, schedule all the entities components for removal
@@ -121,6 +123,7 @@ void World::frameBeginPhase()
 
 void World::gameUpdatePhase(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_SCOPE("World::gameUpdatePhase()");
     DELIBERATION_LOG_OUTER_SCOPE("GameUpdate");
 
     for (auto & pair : m_systems)
@@ -142,6 +145,7 @@ void World::gameUpdatePhase(const UpdateFrame & updateFrame)
 
 void World::frameUpdatePhase(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_SCOPE("World::frameUpdatePhase()");
     DELIBERATION_LOG_OUTER_SCOPE("FrameUpdate");
     m_activityManager->invokePhase<FrameUpdatePhase>(updateFrame);
 }
@@ -162,6 +166,7 @@ void World::prePhysicsUpdatePhase(const UpdateFrame & updateFrame)
 
 void World::postPhysicsUpdatePhase(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_SCOPE("World::postPhysicsUpdatePhase()");
     DELIBERATION_LOG_OUTER_SCOPE("PostPhysicsUpdate");
 
     for (auto & pair : m_systems)
@@ -176,6 +181,7 @@ void World::postPhysicsUpdatePhase(const UpdateFrame & updateFrame)
 
 void World::frameCompletePhase(const UpdateFrame & updateFrame)
 {
+    DELIBERATION_SCOPE("World::frameCompletePhase()");
     DELIBERATION_LOG_OUTER_SCOPE("FrameComplete");
 
     m_activityManager->invokePhase<FrameCompletePhase>(updateFrame);

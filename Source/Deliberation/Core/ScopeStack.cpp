@@ -10,39 +10,23 @@ namespace deliberation {
 
 DELIBERATION_DEFINE_GLOBAL(ScopeStack)
 
-ScopeStack::ScopeStack()
-{
-    pushScope("root");
-}
-
 void ScopeStack::pushScope(const char *name) {
-    const auto intptr = static_cast<uintptr_t>(name);
-    const auto prevScopeId = m_scopeIdStack.back();
-    const auto currentScopeId = HashCombine(prevScopeId, intptr);
-    m_scopeIdStack.emplace_back(currentScopeId);
+    const auto id = reinterpret_cast<const uintptr_t>(static_cast<const void*>(name));
 
-    const auto iter = m_nameByScopeId.find(currentScopeId);
-    if (iter == m_nameByScopeId.end()) {
-        const auto iter2 = m_nameByScopeId.find(prevScopeId);
-        Assert(iter2 != m_nameByScopeId.end());
-        m_nameByScopeId.emplace(currentScopeId, iter2->second + ":" + name);
+    auto iter = m_scopesById.find(id);
+    if (iter == m_scopesById.end()) {
+        iter = m_scopesById.emplace(id, std::make_shared<Scope>(name)).first;
     }
+
+    m_scopeStack.emplace_back(iter->second);
+
+    iter->second->begin();
 }
 
 void ScopeStack::popScope() {
-    Assert(!m_scopeIdStack.empty());
-    m_scopeIdStack.pop_back();
-}
-
-ScopeId ScopeStack::currentScopeId() const {
-    Assert(!m_scopeIdStack.empty());
-    return m_scopeIdStack.back();
-}
-
-const std::string &ScopeStack::currentScopeName() const {
-    const auto iter = m_nameByScopeId.find(currentScopeId());
-    Assert(iter != m_nameByScopeId.end());
-    return iter->second;
+    Assert(!m_scopeStack.empty());
+    m_scopeStack.back()->end();
+    m_scopeStack.pop_back();
 }
 
 }

@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <Deliberation/Core/Scope.h>
+
 #include <Deliberation/Draw/DrawContext.h>
 
 #include <Deliberation/ECS/World.h>
@@ -33,6 +35,8 @@ void RenderManager::registerRenderNode(
 
 void RenderManager::render()
 {
+    DELIBERATION_SCOPE("RenderManager::render()");
+
     if (!m_pipelineBuild)
     {
         const auto w = GetGlobal<DrawContext>()->backbuffer().width();

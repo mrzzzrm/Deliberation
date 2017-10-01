@@ -2,32 +2,32 @@
 
 #include <cinttypes>
 #include <cstring>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include <Deliberation/Core/Globals.h>
+#include <Deliberation/Core/Scope.h>
 
 namespace deliberation
 {
 
-using ScopeId = size_t;
+using ScopeId = uintptr_t;
 
 class ScopeStack final
 {
 public:
-    ScopeStack();
+    const std::unordered_map<ScopeId, std::shared_ptr<Scope>> & scopesById() const { return m_scopesById; }
 
     void pushScope(const char * name);
     void popScope();
 
-    ScopeId currentScopeId() const;
-
-    const std::string & currentScopeName() const;
 
 private:
-    std::unordered_map<ScopeId, std::string> m_nameByScopeId;
-    std::vector<size_t> m_scopeIdStack;
+    std::unordered_map<ScopeId, std::shared_ptr<Scope>> m_scopesById;
+    std::vector<std::shared_ptr<Scope>> m_scopeStack;
 };
 
 }
+

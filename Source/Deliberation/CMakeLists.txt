@@ -103,8 +103,6 @@ add_library(Deliberation
 	Core/RingBuffer.h
 	Core/Scope.cpp
 	Core/Scope.h
-	Core/ScopeRAII.cpp
-	Core/ScopeRAII.h
 	Core/ScopeStack.cpp
 	Core/ScopeStack.h
 	Core/ScopeProfiler.cpp
@@ -464,6 +462,6 @@ target_include_directories(Deliberation
     
 target_compile_definitions(Deliberation
     PUBLIC
-    DELIBERATION_BUILD_TYPE_DEBUG=${DELIBERATION_BUILD_TYPE_DEBUG}
-    DELIBERATION_BUILD_TYPE_RELEASE=${DELIBERATION_BUILD_TYPE_RELEASE}
+    DELIBERATION_BUILD_DEBUG=${DELIBERATION_BUILD_DEBUG}
+    DELIBERATION_BUILD_RELEASE=${DELIBERATION_BUILD_RELEASE}
     )

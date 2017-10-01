@@ -1,24 +1,47 @@
 #pragma once
 
+#include <deque>
+
 #include <Deliberation/Core/Chrono.h>
 
-namespace deliberation
-{
+namespace deliberation {
 
-class Scope final
-{
+class Scope final {
 public:
-    Scope(const std::string & name);
+    static constexpr size_t MAX_NUM_CACHED = 30;
 
-    DurationMicros minDuration();
-    DurationMicros maxDuration();
-    DurationMicros medianDuration();
+public:
+    explicit Scope(const std::string &name);
+
+    const std::string &name() const { return m_name; }
+
+    DurationMicros minDuration() const;
+
+    DurationMicros maxDuration() const;
+
+    DurationMicros medianDuration() const;
+
+    void begin();
+
+    void end();
 
     void addInvocation(DurationMicros duration);
 
 private:
     std::string m_name;
-    std::vector<DurationMicros> m_durations;
+    std::deque<DurationMicros> m_durations;
+    std::vector<DurationMicros> m_durationsHalfSorted;
+    TimestampMicros m_beginTimestamp = 0;
+};
+
+class ScopeRAII final {
+public:
+    ScopeRAII(const char *name);
+
+    ~ScopeRAII();
 };
 
 }
+
+#define DELIBERATION_SCOPE(name) \
+    ScopeRAII scopeRAII(name);
