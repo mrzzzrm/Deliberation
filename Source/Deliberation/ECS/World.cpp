@@ -5,7 +5,6 @@
 
 #include <Deliberation/Core/Assert.h>
 #include <Deliberation/Core/EventListenerProxy.h>
-#include <Deliberation/Core/ScopeProfiler.h>
 #include <Deliberation/Core/Log.h>
 
 #include <Deliberation/ECS/ActivityManager.h>
@@ -128,11 +127,7 @@ void World::gameUpdatePhase(const UpdateFrame & updateFrame)
     {
         auto & system = *pair.second;
 
-        ScopeProfiler profiler;
         system.beforeGameUpdate();
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "BeforeUpdate", micros});
     }
 
     m_activityManager->invokePhase<GameUpdatePhase>(updateFrame);
@@ -141,11 +136,7 @@ void World::gameUpdatePhase(const UpdateFrame & updateFrame)
     {
         auto & system = *pair.second;
 
-        ScopeProfiler profiler;
         system.gameUpdate(updateFrame);
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "GameUpdate", micros});
     }
 }
 
@@ -163,11 +154,7 @@ void World::prePhysicsUpdatePhase(const UpdateFrame & updateFrame)
     {
         auto & system = *pair.second;
 
-        ScopeProfiler profiler;
         system.prePhysicsUpdate(updateFrame);
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "PrePhysicsUpdate", micros});
     }
 
     m_activityManager->invokePhase<PrePhysicsUpdatePhase>(updateFrame);
@@ -181,11 +168,7 @@ void World::postPhysicsUpdatePhase(const UpdateFrame & updateFrame)
     {
         auto & system = *pair.second;
 
-        ScopeProfiler profiler;
         system.postPhysicsUpdate(updateFrame);
-        const auto micros = profiler.stop();
-
-        m_profiler.addScope({system, "PostPhysicsUpdate", micros});
     }
 
     m_activityManager->invokePhase<PostPhysicsUpdatePhase>(updateFrame);

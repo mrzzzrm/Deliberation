@@ -8,13 +8,11 @@
 
 namespace deliberation
 {
-class ScopeProfiler
+class ScopeProfiler final
 {
 public:
-    ScopeProfiler(const std::string & name = {});
-    ~ScopeProfiler();
-
-    DurationMicros stop();
+    void startScope();
+    void stopScope();
 
 private:
     std::string     m_name;

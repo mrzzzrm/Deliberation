@@ -12,6 +12,8 @@ namespace deliberation
 template<typename T, typename ... Args>
 void ActivityManager::invokePhase(Args &&... args)
 {
+    DELIBERATION_PROFILE_SCOPE("FrameBegin");
+
     auto iter = m_containersByPhaseTypeId.find(T::phaseTypeId());
 
     // No registered invokers in this phase - can happen, not an error

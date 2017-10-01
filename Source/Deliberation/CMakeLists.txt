@@ -101,6 +101,12 @@ add_library(Deliberation
 	Core/RefCounted.h
 	Core/RefPtr.h
 	Core/RingBuffer.h
+	Core/Scope.cpp
+	Core/Scope.h
+	Core/ScopeRAII.cpp
+	Core/ScopeRAII.h
+	Core/ScopeStack.cpp
+	Core/ScopeStack.h
 	Core/ScopeProfiler.cpp
 	Core/ScopeProfiler.h
 	Core/Span.h
